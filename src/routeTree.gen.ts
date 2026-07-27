@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRolePermissionsRoleIdRouteImport } from './routes/_authenticated/role-permissions.$roleId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -46,6 +47,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRolePermissionsRoleIdRoute =
+  AuthenticatedRolePermissionsRoleIdRouteImport.update({
+    id: '/role-permissions/$roleId',
+    path: '/role-permissions/$roleId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
+  '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -60,6 +68,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
+  '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,12 +78,25 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
+  '/_authenticated/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/system-modules' | '/user-types'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/system-modules'
+    | '/user-types'
+    | '/role-permissions/$roleId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/system-modules' | '/user-types'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/system-modules'
+    | '/user-types'
+    | '/role-permissions/$roleId'
   id:
     | '__root__'
     | '/'
@@ -83,6 +105,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
+    | '/_authenticated/role-permissions/$roleId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -135,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/role-permissions/$roleId': {
+      id: '/_authenticated/role-permissions/$roleId'
+      path: '/role-permissions/$roleId'
+      fullPath: '/role-permissions/$roleId'
+      preLoaderRoute: typeof AuthenticatedRolePermissionsRoleIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -142,12 +172,15 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedUserTypesRoute: typeof AuthenticatedUserTypesRoute
+  AuthenticatedRolePermissionsRoleIdRoute: typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
   AuthenticatedUserTypesRoute: AuthenticatedUserTypesRoute,
+  AuthenticatedRolePermissionsRoleIdRoute:
+    AuthenticatedRolePermissionsRoleIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
