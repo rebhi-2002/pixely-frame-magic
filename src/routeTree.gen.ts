@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedUserTypesRoute = AuthenticatedUserTypesRouteImport.update({
+  id: '/user-types',
+  path: '/user-types',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSystemModulesRoute =
   AuthenticatedSystemModulesRouteImport.update({
@@ -46,12 +52,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/user-types': typeof AuthenticatedUserTypesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/user-types': typeof AuthenticatedUserTypesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -60,12 +68,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/system-modules'
+  fullPaths: '/' | '/auth' | '/dashboard' | '/system-modules' | '/user-types'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/system-modules'
+  to: '/' | '/auth' | '/dashboard' | '/system-modules' | '/user-types'
   id:
     | '__root__'
     | '/'
@@ -73,6 +82,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/system-modules'
+    | '/_authenticated/user-types'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,6 +114,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/user-types': {
+      id: '/_authenticated/user-types'
+      path: '/user-types'
+      fullPath: '/user-types'
+      preLoaderRoute: typeof AuthenticatedUserTypesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/system-modules': {
       id: '/_authenticated/system-modules'
       path: '/system-modules'
@@ -124,11 +141,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
+  AuthenticatedUserTypesRoute: typeof AuthenticatedUserTypesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
+  AuthenticatedUserTypesRoute: AuthenticatedUserTypesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
