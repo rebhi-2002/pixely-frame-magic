@@ -77,10 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "نظام إدارة الصلاحيات" },
-      { name: "description", content: "لوحة تحكم إدارية بصلاحيات ديناميكية باللغة العربية." },
+      { title: "نظام لوحة التحكم بالصلاحيات | RBAC" },
+      { name: "description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "نظام لوحة التحكم بالصلاحيات | RBAC" },
+      { name: "twitter:title", content: "نظام لوحة التحكم بالصلاحيات | RBAC" },
+      { property: "og:description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
+      { name: "twitter:description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/554897e7-b234-4c7d-a3f4-64a56a78e4b2/id-preview-76f7fccc--4c5ee9bd-51b9-4b7a-921e-f75e6cfc4987.lovable.app-1785188840357.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/554897e7-b234-4c7d-a3f4-64a56a78e4b2/id-preview-76f7fccc--4c5ee9bd-51b9-4b7a-921e-f75e6cfc4987.lovable.app-1785188840357.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
