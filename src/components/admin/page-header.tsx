@@ -1,18 +1,31 @@
 import type { ReactNode } from "react";
+import { ChevronLeft } from "lucide-react";
 import { DynamicIcon } from "./dynamic-icon";
 
 export function PageHeader({
   title,
   icon,
   actions,
+  onBack,
 }: {
   title: string;
   icon: string;
   actions?: ReactNode;
+  onBack?: () => void;
 }) {
   return (
     <header className="flex items-center justify-between gap-4 border-b border-border bg-card px-5 py-4">
       <div className="flex items-center gap-3">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="رجوع"
+            className="flex size-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent"
+          >
+            <ChevronLeft className="size-4 rotate-180" />
+          </button>
+        )}
         <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
           <DynamicIcon name={icon} className="size-5" />
         </span>
@@ -22,6 +35,7 @@ export function PageHeader({
     </header>
   );
 }
+
 
 export function Toolbar({ children }: { children: ReactNode }) {
   return (
