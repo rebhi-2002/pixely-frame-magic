@@ -77,16 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "نظام لوحة التحكم بالصلاحيات | RBAC" },
-      { name: "description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
+      { title: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { name: "description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "نظام لوحة التحكم بالصلاحيات | RBAC" },
-      { name: "twitter:title", content: "نظام لوحة التحكم بالصلاحيات | RBAC" },
-      { property: "og:description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
-      { name: "twitter:description", content: "لوحة تحكم إدارية عربية بصلاحيات ديناميكية: وحدات نظام، شجرة صلاحيات، أنواع مستخدمين وإدارة مستخدمين." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/554897e7-b234-4c7d-a3f4-64a56a78e4b2/id-preview-76f7fccc--4c5ee9bd-51b9-4b7a-921e-f75e6cfc4987.lovable.app-1785188840357.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/554897e7-b234-4c7d-a3f4-64a56a78e4b2/id-preview-76f7fccc--4c5ee9bd-51b9-4b7a-921e-f75e6cfc4987.lovable.app-1785188840357.png" },
+      { property: "og:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { name: "twitter:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { property: "og:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
+      { name: "twitter:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -94,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
@@ -107,7 +105,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" className="dark">
+
       <head>
         <HeadContent />
       </head>
