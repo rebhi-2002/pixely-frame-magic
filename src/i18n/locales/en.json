@@ -53,17 +53,44 @@
     "featuresTitle": "Everything you need in one place",
     "featuresSub": "Not a file archive — real tools that help you finish and master, built around how you actually study.",
     "features": {
-      "library": { "title": "Smart library", "text": "A strict tree: term → subject → unit → lesson. Advanced search and favorites." },
-      "community": { "title": "Subject communities", "text": "A channel per subject, Q&A with a pinned correct answer, and quiet hours at night." },
-      "tracker": { "title": "Achievement tracking", "text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson." },
-      "simulator": { "title": "National exam simulator", "text": "Same format and timing, instant grading and weak-point analysis per unit." },
-      "mistakes": { "title": "My mistake bank", "text": "Every question you get wrong is saved automatically so you can review it until you master it." },
-      "review": { "title": "15-minute review", "text": "Smart flashcards suggested from your weakest point, before bed or before the exam." }
+      "library": {
+        "title": "Smart library",
+        "text": "A strict tree: term → subject → unit → lesson. Advanced search and favorites."
+      },
+      "community": {
+        "title": "Subject communities",
+        "text": "A channel per subject, Q&A with a pinned correct answer, and quiet hours at night."
+      },
+      "tracker": {
+        "title": "Achievement tracking",
+        "text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson."
+      },
+      "simulator": {
+        "title": "National exam simulator",
+        "text": "Same format and timing, instant grading and weak-point analysis per unit."
+      },
+      "mistakes": {
+        "title": "My mistake bank",
+        "text": "Every question you get wrong is saved automatically so you can review it until you master it."
+      },
+      "review": {
+        "title": "15-minute review",
+        "text": "Smart flashcards suggested from your weakest point, before bed or before the exam."
+      }
     },
     "roles": {
-      "student": { "t": "Student", "d": "A Dashboard with today's tasks, your progress, and your badges." },
-      "teacher": { "t": "Teacher", "d": "Upload your content, build Quizzes, and follow your sections' performance." },
-      "parent": { "t": "Parent", "d": "A short weekly report on consistency and achievement." }
+      "student": {
+        "t": "Student",
+        "d": "A Dashboard with today's tasks, your progress, and your badges."
+      },
+      "teacher": {
+        "t": "Teacher",
+        "d": "Upload your content, build Quizzes, and follow your sections' performance."
+      },
+      "parent": {
+        "t": "Parent",
+        "d": "A short weekly report on consistency and achievement."
+      }
     },
     "ctaTitle": "Ready to start?",
     "ctaSub": "Sign up in a minute, pick your subjects, set your first weekly goal — we handle the rest.",
@@ -77,34 +104,104 @@
     "h1": "How does Acadimia work?",
     "sub": "From your first sign-in, four quick steps (skippable anytime) and you're ready.",
     "steps": {
-      "role": { "t": "Pick your role", "d": "Student, teacher, or parent — each role opens a completely different space with its own permissions." },
-      "system": { "t": "System and grade", "d": "Palestinian or Jordanian, the track (scientific/literary), and the grade — so the right content is tailored to you." },
-      "subjects": { "t": "Pick your subjects", "d": "Choose the subjects you follow, and your Dashboard and library are built around them right away." },
-      "goal": { "t": "First weekly goal", "d": "A simple goal that starts the achievement counter from minute one, and kicks off your Streak." }
+      "role": {
+        "t": "Pick your role",
+        "d": "Student, teacher, or parent — each role opens a completely different space with its own permissions."
+      },
+      "system": {
+        "t": "System and grade",
+        "d": "Palestinian or Jordanian, the track (scientific/literary), and the grade — so the right content is tailored to you."
+      },
+      "subjects": {
+        "t": "Pick your subjects",
+        "d": "Choose the subjects you follow, and your Dashboard and library are built around them right away."
+      },
+      "goal": {
+        "t": "First weekly goal",
+        "d": "A simple goal that starts the achievement counter from minute one, and kicks off your Streak."
+      }
     },
-    "cta": "Start now for free"
+    "cta": "Start now for free",
+    "nextTitle": "And then?",
+    "next": [
+      "Finish a lesson, hit “Got it” and take a short Quiz.",
+      "Every mistake is saved to your mistake bank for later review.",
+      "Before the exam, the national-exam simulator tests you with real timing.",
+      "Your parent gets a short weekly report without digging into your daily privacy."
+    ]
   },
   "pricing": {
     "meta": {
       "title": "Acadimia pricing | Start free",
       "description": "A fully free plan to start, and a premium plan for the exam simulator, mistake bank and advanced reports."
     },
-    "h1": "Simple, clear plans",
-    "sub": "Start completely free, and upgrade when you need the advanced review tools.",
+    "h1": "Simple plans, no complexity",
+    "sub": "Start completely free. Upgrade to Premium whenever you need the exam-prep tools.",
     "perMonth": "/ month",
-    "free": { "name": "Free", "price": "0", "cta": "Start free" },
-    "plus": { "name": "Premium", "price": "5", "cta": "Subscribe now", "badge": "Most popular" },
-    "teacher": { "name": "Teacher", "price": "9", "cta": "Start as a teacher" },
-    "note": "Prices in US dollars. Cancel anytime."
+    "free": {
+      "name": "Free",
+      "price": "0",
+      "note": "forever",
+      "cta": "Start free",
+      "features": [
+        "Smart library and access to every subject",
+        "Save lessons to favorites",
+        "Subject communities and Q&A",
+        "Interactive study schedule",
+        "Basic achievement counter"
+      ]
+    },
+    "plus": {
+      "name": "Premium",
+      "price": "29",
+      "note": "per month",
+      "cta": "Get Premium",
+      "badge": "Most popular",
+      "features": [
+        "Everything in the free plan",
+        "AI national-exam simulator",
+        "Your own mistake bank + spaced repetition",
+        "15-minute review (smart flashcards)",
+        "Weekly parent report",
+        "Digital certificates on subject completion"
+      ]
+    },
+    "teacher": {
+      "name": "Teacher",
+      "price": "9",
+      "cta": "Start as a teacher"
+    },
+    "note": "Prices in US dollars. Cancel anytime.",
+    "currency": "ILS",
+    "forever": "forever",
+    "monthly": "per month"
   },
   "forTeachers": {
     "meta": {
       "title": "Acadimia for teachers | Organizing and assessment tools",
       "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
     },
-    "h1": "Teacher space",
-    "sub": "A work tool that saves your time: organized content, automatic assessment, and ready reports for every section.",
-    "cta": "Start as a teacher"
+    "h1": "Teach more, grade less, reach more students.",
+    "sub": "Acadimia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
+    "cta": "Sign up as a teacher",
+    "benefits": {
+      "upload": {
+        "t": "Your content, organized",
+        "d": "Upload files and videos once; they are classified automatically by term, subject, unit and lesson."
+      },
+      "analytics": {
+        "t": "Analytics per student and section",
+        "d": "See who understood and who is struggling, and exactly which unit is the weak point."
+      },
+      "income": {
+        "t": "Income from your work",
+        "d": "A commission on the subscriptions of students linked to you, with a clear payouts dashboard."
+      },
+      "verified": {
+        "t": "Verified account",
+        "d": "Verify by uploading an ID/certificate; once approved your badge appears next to your name."
+      }
+    }
   },
   "legal": {
     "privacyTitle": "Privacy policy",
@@ -136,5 +233,63 @@
     "retry": "Retry",
     "forbiddenTitle": "You don't have access",
     "forbiddenText": "This page requires a permission your account doesn't have."
+  },
+  "privacy": {
+    "h1": "Privacy policy",
+    "intro": "Last updated: platform launch. Written in plain language because it actually concerns you.",
+    "sections": [
+      {
+        "t": "Data we collect",
+        "d": "Your name, email, the system, grade and subjects you pick, and your activity on the platform (lessons completed and Quiz results)."
+      },
+      {
+        "t": "How we use it",
+        "d": "To tailor your content, compute your achievement rate, and suggest the right reviews. We never sell your data to third parties."
+      },
+      {
+        "t": "Student privacy toward parents",
+        "d": "A parent sees only a weekly summary of consistency and achievement — not your community chats or daily activity details."
+      },
+      {
+        "t": "Uploaded content",
+        "d": "Teachers are responsible for the rights to the content they upload. Reported content is reviewed by moderation and may be removed."
+      },
+      {
+        "t": "Your rights",
+        "d": "You can request deletion of your account and data at any time from settings or by contacting support."
+      }
+    ]
+  },
+  "terms": {
+    "h1": "Terms of use",
+    "intro": "By using Acadimia, you agree to the following.",
+    "sections": [
+      {
+        "t": "Account",
+        "d": "One account per person, with accurate details. Sharing your account may lead to suspension."
+      },
+      {
+        "t": "Community conduct",
+        "d": "Questions and answers are for learning. Abuse or inappropriate content is reported and reviewed by moderation."
+      },
+      {
+        "t": "Content rights",
+        "d": "Do not upload content you don't own the rights to. Violating content is removed; repeats may suspend the account."
+      },
+      {
+        "t": "Subscriptions",
+        "d": "The monthly subscription renews automatically and can be cancelled anytime, staying active until the paid period ends."
+      },
+      {
+        "t": "Service limits",
+        "d": "The exam simulator is an AI-based practice tool, not an official substitute for ministry resources."
+      }
+    ]
+  },
+  "forbidden": {
+    "code": "403",
+    "title": "This section isn't yours",
+    "text": "Your account permissions don't allow access to this page. Head back to your Dashboard and continue from there.",
+    "cta": "Back to Dashboard"
   }
 }
