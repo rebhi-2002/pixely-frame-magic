@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
 const title = "شروط الاستخدام | أكاديميا";
-const description =
-  "قواعد استخدام أكاديميا: حساب واحد لكل مستخدم، احترام المجتمع، حقوق المحتوى، وسياسة الاشتراكات.";
+const description = "قواعد استخدام أكاديميا: حساب واحد لكل مستخدم، احترام المجتمع، حقوق المحتوى، وسياسة الاشتراكات.";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -14,40 +14,18 @@ export const Route = createFileRoute("/terms")({
       { property: "og:description", content: description },
     ],
   }),
-  component: Terms,
+  component: LegalPage,
 });
 
-const sections = [
-  {
-    t: "الحساب",
-    d: "حساب واحد لكل شخص، وبمعلومات صحيحة. مشاركة الحساب مع غيرك قد تؤدي لتعليقه.",
-  },
-  {
-    t: "سلوك المجتمع",
-    d: "الأسئلة والإجابات للتعلّم. أي إساءة أو محتوى غير لائق يُبلَّغ عنه ويُراجع من فريق الإشراف.",
-  },
-  {
-    t: "حقوق المحتوى",
-    d: "لا ترفع محتوى لا تملك حقوقه. المحتوى المخالف يُحذف، والتكرار قد يؤدي لإيقاف الحساب.",
-  },
-  {
-    t: "الاشتراكات",
-    d: "الاشتراك الشهري يتجدد تلقائياً ويمكن إلغاؤه بأي وقت، ويبقى فعّالاً حتى نهاية الفترة المدفوعة.",
-  },
-  {
-    t: "حدود الخدمة",
-    d: "محاكي الامتحان أداة تدريب مبنية على الذكاء الاصطناعي، وليس بديلاً رسمياً عن مصادر الوزارة.",
-  },
-];
+function LegalPage() {
+  const { t } = useTranslation();
+  const sections = t("terms.sections", { returnObjects: true }) as { t: string; d: string }[];
 
-function Terms() {
   return (
     <PublicLayout>
       <section className="mx-auto max-w-3xl px-5 py-16">
-        <h1 className="text-4xl font-bold text-foreground">شروط الاستخدام</h1>
-        <p className="mt-3 text-muted-foreground">
-          باستخدامك أكاديميا، أنت موافق على النقاط التالية.
-        </p>
+        <h1 className="text-4xl font-bold text-foreground">{t("terms.h1")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("terms.intro")}</p>
         <div className="mt-10 space-y-5">
           {sections.map((s) => (
             <section key={s.t} className="rounded-2xl border border-border bg-card p-6">
