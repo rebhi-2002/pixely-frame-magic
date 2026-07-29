@@ -111,10 +111,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" className="dark">
-
+    <html lang="ar" dir="rtl" data-theme="dark" className="dark">
       <head>
         <HeadContent />
+        {/* القسم 06 — تطبيق الثيم/اللغة المحفوظين قبل الرسم لتفادي الوميض */}
+        <script dangerouslySetInnerHTML={{ __html: preferencesBootScript }} />
       </head>
       <body>
         {children}
@@ -145,10 +146,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthSync />
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <Toaster position="top-center" richColors />
+      <PreferencesProvider>
+        <AuthSync />
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Toaster position="top-center" richColors />
+      </PreferencesProvider>
     </QueryClientProvider>
+
   );
 }
