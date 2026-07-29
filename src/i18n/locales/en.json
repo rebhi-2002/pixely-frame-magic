@@ -1,0 +1,140 @@
+{
+  "common": {
+    "brand": "Acadimia",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "back": "Back",
+    "themeToggle": "Toggle theme (light/dark)",
+    "languageToggle": "Toggle language",
+    "skipToContent": "Skip to main content",
+    "theme": {
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "auto": "Auto (system)"
+    },
+    "language": {
+      "ar": "العربية",
+      "en": "English"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "forTeachers": "For teachers",
+    "platform": "Platform",
+    "legal": "Legal",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "tagline": "An Arabic-first platform helping high-school students organize their subjects, track achievement, and prepare for the national exam with confidence.",
+    "rights": "© {{year}} Acadimia — All rights reserved."
+  },
+  "home": {
+    "meta": {
+      "title": "Acadimia | The student platform for focus and achievement",
+      "description": "Acadimia: an organized smart library, subject communities, achievement tracking, a mistake bank and a national-exam simulator — all your studying in one place."
+    },
+    "badge": "For students aged 16 to 18",
+    "h1a": "Files lost in WhatsApp?",
+    "h1b": "Acadimia",
+    "h1c": "organizes them so you get things done.",
+    "sub": "One place for every subject: a tidy library, questions that actually get answered, a schedule that reminds you, and practice exams that expose your weak spots before the real one.",
+    "ctaPrimary": "Start free now",
+    "ctaSecondary": "See how it works",
+    "stats": {
+      "levels": "content classification levels",
+      "rtl": "Arabic-first with RTL interface",
+      "spaces": "spaces: student, teacher, parent"
+    },
+    "featuresTitle": "Everything you need in one place",
+    "featuresSub": "Not a file archive — real tools that help you finish and master, built around how you actually study.",
+    "features": {
+      "library": { "title": "Smart library", "text": "A strict tree: term → subject → unit → lesson. Advanced search and favorites." },
+      "community": { "title": "Subject communities", "text": "A channel per subject, Q&A with a pinned correct answer, and quiet hours at night." },
+      "tracker": { "title": "Achievement tracking", "text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson." },
+      "simulator": { "title": "National exam simulator", "text": "Same format and timing, instant grading and weak-point analysis per unit." },
+      "mistakes": { "title": "My mistake bank", "text": "Every question you get wrong is saved automatically so you can review it until you master it." },
+      "review": { "title": "15-minute review", "text": "Smart flashcards suggested from your weakest point, before bed or before the exam." }
+    },
+    "roles": {
+      "student": { "t": "Student", "d": "A Dashboard with today's tasks, your progress, and your badges." },
+      "teacher": { "t": "Teacher", "d": "Upload your content, build Quizzes, and follow your sections' performance." },
+      "parent": { "t": "Parent", "d": "A short weekly report on consistency and achievement." }
+    },
+    "ctaTitle": "Ready to start?",
+    "ctaSub": "Sign up in a minute, pick your subjects, set your first weekly goal — we handle the rest.",
+    "ctaButton": "Create a free account"
+  },
+  "howItWorks": {
+    "meta": {
+      "title": "How Acadimia works | Getting started",
+      "description": "Four steps only: sign up and pick your role, set your system, grade and subjects, start from the organized library, and track your progress weekly."
+    },
+    "h1": "How does Acadimia work?",
+    "sub": "From your first sign-in, four quick steps (skippable anytime) and you're ready.",
+    "steps": {
+      "role": { "t": "Pick your role", "d": "Student, teacher, or parent — each role opens a completely different space with its own permissions." },
+      "system": { "t": "System and grade", "d": "Palestinian or Jordanian, the track (scientific/literary), and the grade — so the right content is tailored to you." },
+      "subjects": { "t": "Pick your subjects", "d": "Choose the subjects you follow, and your Dashboard and library are built around them right away." },
+      "goal": { "t": "First weekly goal", "d": "A simple goal that starts the achievement counter from minute one, and kicks off your Streak." }
+    },
+    "cta": "Start now for free"
+  },
+  "pricing": {
+    "meta": {
+      "title": "Acadimia pricing | Start free",
+      "description": "A fully free plan to start, and a premium plan for the exam simulator, mistake bank and advanced reports."
+    },
+    "h1": "Simple, clear plans",
+    "sub": "Start completely free, and upgrade when you need the advanced review tools.",
+    "perMonth": "/ month",
+    "free": { "name": "Free", "price": "0", "cta": "Start free" },
+    "plus": { "name": "Premium", "price": "5", "cta": "Subscribe now", "badge": "Most popular" },
+    "teacher": { "name": "Teacher", "price": "9", "cta": "Start as a teacher" },
+    "note": "Prices in US dollars. Cancel anytime."
+  },
+  "forTeachers": {
+    "meta": {
+      "title": "Acadimia for teachers | Organizing and assessment tools",
+      "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
+    },
+    "h1": "Teacher space",
+    "sub": "A work tool that saves your time: organized content, automatic assessment, and ready reports for every section.",
+    "cta": "Start as a teacher"
+  },
+  "legal": {
+    "privacyTitle": "Privacy policy",
+    "termsTitle": "Terms of use",
+    "lastUpdated": "Last updated: {{date}}"
+  },
+  "auth": {
+    "meta": {
+      "title": "Sign in | Acadimia",
+      "description": "Sign in or create a new account to reach your space in Acadimia."
+    },
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create an account",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "signInAction": "Sign in",
+    "signUpAction": "Create account",
+    "toSignUp": "No account? Create one",
+    "toSignIn": "Already have an account? Sign in",
+    "google": "Continue with Google"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to home",
+    "crashTitle": "Couldn't load the page",
+    "crashText": "An unexpected error occurred. You can retry or go back home.",
+    "retry": "Retry",
+    "forbiddenTitle": "You don't have access",
+    "forbiddenText": "This page requires a permission your account doesn't have."
+  }
+}
