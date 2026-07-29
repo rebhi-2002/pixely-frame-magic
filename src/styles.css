@@ -64,94 +64,116 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Light mode — "ورق" */
-:root {
+/* الوضع الغامق — الافتراضي (القسم 04 + القسم 06) */
+:root,
+:root[data-theme="dark"] {
   --radius: 0.875rem;
-  --background: oklch(0.97 0.006 264.5);
-  --foreground: oklch(0.278 0.03 256.8);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.278 0.03 256.8);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.278 0.03 256.8);
-  --primary: oklch(0.703 0.143 71.3);
-  --primary-foreground: oklch(0.171 0.028 267.4);
-  --secondary: oklch(0.936 0.009 264.5);
-  --secondary-foreground: oklch(0.278 0.03 256.8);
-  --muted: oklch(0.945 0.008 264.5);
-  --muted-foreground: oklch(0.52 0.03 265);
-  --accent: oklch(0.93 0.02 251);
-  --accent-foreground: oklch(0.3 0.05 256);
-  --destructive: oklch(0.639 0.181 32.5);
-  --destructive-foreground: oklch(0.99 0.005 90);
-  --success: oklch(0.576 0.123 161.7);
-  --success-foreground: oklch(0.99 0.005 90);
-  --info: oklch(0.635 0.144 251.1);
-  --info-foreground: oklch(0.99 0.005 90);
-  --tools: oklch(0.635 0.144 251.1);
-  --tools-foreground: oklch(0.99 0.005 90);
-  --section: oklch(0.925 0.009 264.5);
-  --section-foreground: oklch(0.278 0.03 256.8);
-  --border: oklch(0.9 0.01 264.5);
-  --input: oklch(0.9 0.01 264.5);
-  --ring: oklch(0.703 0.143 71.3);
-  --chart-1: oklch(0.703 0.143 71.3);
-  --chart-2: oklch(0.576 0.123 161.7);
-  --chart-3: oklch(0.635 0.144 251.1);
-  --chart-4: oklch(0.639 0.181 32.5);
-  --chart-5: oklch(0.55 0.14 300);
-  --sidebar: oklch(0.188 0.03 265.9);
-  --sidebar-foreground: oklch(0.958 0.01 93.6);
-  --sidebar-primary: oklch(0.778 0.152 73.8);
-  --sidebar-primary-foreground: oklch(0.171 0.028 267.4);
-  --sidebar-accent: oklch(0.268 0.045 267.1);
-  --sidebar-accent-foreground: oklch(0.958 0.01 93.6);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.778 0.152 73.8);
+  --ink-950: #0a0f1c;
+  --ink-900: #0d1321;
+  --ink-800: #141b2e;
+  --background: var(--ink-950);
+  --foreground: #f3f1ea;
+  --card: var(--ink-800);
+  --card-foreground: #f3f1ea;
+  --popover: var(--ink-900);
+  --popover-foreground: #f3f1ea;
+  --primary: #f0a62e;
+  --primary-foreground: var(--ink-950);
+  --secondary: #1b2338;
+  --secondary-foreground: #f3f1ea;
+  --muted: #1b2338;
+  --muted-foreground: #a6b0c3;
+  --muted-3: #6e7893;
+  --accent: #202a42;
+  --accent-foreground: #f3f1ea;
+  --destructive: #e4573d;
+  --destructive-foreground: #f3f1ea;
+  --success: #17a672;
+  --success-foreground: var(--ink-950);
+  --info: #3e8ede;
+  --info-foreground: var(--ink-950);
+  --tools: #3e8ede;
+  --tools-foreground: var(--ink-950);
+  --section: var(--ink-800);
+  --section-foreground: #f3f1ea;
+  --border: rgba(180, 190, 210, 0.13);
+  --input: rgba(180, 190, 210, 0.2);
+  --ring: #f0a62e;
+  --chart-1: #f0a62e;
+  --chart-2: #17a672;
+  --chart-3: #3e8ede;
+  --chart-4: #e4573d;
+  --chart-5: #9a6ad6;
+  --sidebar: var(--ink-900);
+  --sidebar-foreground: #f3f1ea;
+  --sidebar-primary: #f0a62e;
+  --sidebar-primary-foreground: var(--ink-950);
+  --sidebar-accent: #1b2338;
+  --sidebar-accent-foreground: #f3f1ea;
+  --sidebar-border: rgba(180, 190, 210, 0.13);
+  --sidebar-ring: #f0a62e;
 }
 
-/* Dark mode — "حبر" (الوضع الأساسي) */
-.dark {
-  --background: oklch(0.171 0.028 267.4);
-  --foreground: oklch(0.958 0.01 93.6);
-  --card: oklch(0.226 0.039 267.9);
-  --card-foreground: oklch(0.958 0.01 93.6);
-  --popover: oklch(0.226 0.039 267.9);
-  --popover-foreground: oklch(0.958 0.01 93.6);
-  --primary: oklch(0.778 0.152 73.8);
-  --primary-foreground: oklch(0.171 0.028 267.4);
-  --secondary: oklch(0.268 0.045 267.1);
-  --secondary-foreground: oklch(0.958 0.01 93.6);
-  --muted: oklch(0.268 0.045 267.1);
-  --muted-foreground: oklch(0.755 0.029 263.4);
-  --accent: oklch(0.3 0.05 267);
-  --accent-foreground: oklch(0.958 0.01 93.6);
-  --destructive: oklch(0.639 0.181 32.5);
-  --destructive-foreground: oklch(0.98 0.01 90);
-  --success: oklch(0.643 0.137 161.5);
-  --success-foreground: oklch(0.171 0.028 267.4);
-  --info: oklch(0.635 0.144 251.1);
-  --info-foreground: oklch(0.171 0.028 267.4);
-  --tools: oklch(0.635 0.144 251.1);
-  --tools-foreground: oklch(0.171 0.028 267.4);
-  --section: oklch(0.226 0.039 267.9);
-  --section-foreground: oklch(0.958 0.01 93.6);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.778 0.152 73.8);
-  --chart-1: oklch(0.778 0.152 73.8);
-  --chart-2: oklch(0.643 0.137 161.5);
-  --chart-3: oklch(0.635 0.144 251.1);
-  --chart-4: oklch(0.639 0.181 32.5);
-  --chart-5: oklch(0.65 0.14 300);
-  --sidebar: oklch(0.188 0.03 265.9);
-  --sidebar-foreground: oklch(0.958 0.01 93.6);
-  --sidebar-primary: oklch(0.778 0.152 73.8);
-  --sidebar-primary-foreground: oklch(0.171 0.028 267.4);
-  --sidebar-accent: oklch(0.268 0.045 267.1);
-  --sidebar-accent-foreground: oklch(0.958 0.01 93.6);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.778 0.152 73.8);
+/* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
+:root[data-theme="light"] {
+  --paper-50: #f3f5f9;
+  --paper-100: #ffffff;
+  --paper-200: #e7eaf0;
+  --background: var(--paper-50);
+  --foreground: #1f2937;
+  --card: var(--paper-100);
+  --card-foreground: #1f2937;
+  --popover: var(--paper-100);
+  --popover-foreground: #1f2937;
+  --primary: #d68e1e;
+  --primary-foreground: #ffffff;
+  --secondary: var(--paper-200);
+  --secondary-foreground: #1f2937;
+  --muted: var(--paper-200);
+  --muted-foreground: #52606d;
+  --muted-3: #8a94a3;
+  --accent: var(--paper-200);
+  --accent-foreground: #1f2937;
+  --destructive: #c9402a;
+  --destructive-foreground: #ffffff;
+  --success: #128f62;
+  --success-foreground: #ffffff;
+  --info: #2f74bb;
+  --info-foreground: #ffffff;
+  --tools: #2f74bb;
+  --tools-foreground: #ffffff;
+  --section: var(--paper-200);
+  --section-foreground: #1f2937;
+  --border: rgba(15, 23, 42, 0.1);
+  --input: rgba(15, 23, 42, 0.16);
+  --ring: #d68e1e;
+  --chart-1: #d68e1e;
+  --chart-2: #128f62;
+  --chart-3: #2f74bb;
+  --chart-4: #c9402a;
+  --chart-5: #7a4fbe;
+  --sidebar: #0d1321;
+  --sidebar-foreground: #f3f1ea;
+  --sidebar-primary: #f0a62e;
+  --sidebar-primary-foreground: #0a0f1c;
+  --sidebar-accent: #1b2338;
+  --sidebar-accent-foreground: #f3f1ea;
+  --sidebar-border: rgba(180, 190, 210, 0.13);
+  --sidebar-ring: #f0a62e;
 }
+
+/* القسم 06 + القسم 10 — احترام prefers-reduced-motion بشكل مستقل عن الثيم */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 
 @layer base {
   * {
