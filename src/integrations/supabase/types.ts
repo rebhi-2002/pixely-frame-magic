@@ -125,8 +125,10 @@ export type Database = {
           gender: string
           id: string
           is_active: boolean
+          locale: string
           phone: string | null
           role_id: string | null
+          theme_pref: string
           updated_at: string
           user_id: string | null
         }
@@ -138,8 +140,10 @@ export type Database = {
           gender?: string
           id?: string
           is_active?: boolean
+          locale?: string
           phone?: string | null
           role_id?: string | null
+          theme_pref?: string
           updated_at?: string
           user_id?: string | null
         }
@@ -151,8 +155,10 @@ export type Database = {
           gender?: string
           id?: string
           is_active?: boolean
+          locale?: string
           phone?: string | null
           role_id?: string | null
+          theme_pref?: string
           updated_at?: string
           user_id?: string | null
         }
