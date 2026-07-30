@@ -54,17 +54,18 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             <PreferenceToggles />
             <Link
               to="/auth"
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              className="hidden rounded-lg px-3 py-2 text-sm font-semibold whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
             >
               {t("common.signIn")}
             </Link>
             <Link
               to="/auth"
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+              className="rounded-xl bg-primary px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-foreground transition-opacity hover:opacity-90 sm:px-4"
             >
               {t("common.startFree")}
             </Link>
           </div>
+
         </div>
       </header>
 

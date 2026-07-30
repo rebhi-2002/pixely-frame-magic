@@ -3,6 +3,8 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/admin/app-sidebar";
+import { BottomNav } from "@/components/admin/bottom-nav";
+
 import { useAccess } from "@/hooks/use-access";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -39,14 +41,18 @@ function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <AppSidebar
-        access={access}
-        collapsed={collapsed}
-        onToggle={() => setCollapsed((c) => !c)}
-      />
-      <main className="min-w-0 flex-1">
+      <div className="hidden md:flex">
+        <AppSidebar
+          access={access}
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((c) => !c)}
+        />
+      </div>
+      <main className="min-w-0 flex-1 pb-16 md:pb-0">
         <Outlet />
       </main>
+      <BottomNav access={access} />
     </div>
   );
 }
+
