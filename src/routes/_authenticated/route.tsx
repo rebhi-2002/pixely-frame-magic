@@ -39,14 +39,18 @@ function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <AppSidebar
-        access={access}
-        collapsed={collapsed}
-        onToggle={() => setCollapsed((c) => !c)}
-      />
-      <main className="min-w-0 flex-1">
+      <div className="hidden md:flex">
+        <AppSidebar
+          access={access}
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((c) => !c)}
+        />
+      </div>
+      <main className="min-w-0 flex-1 pb-16 md:pb-0">
         <Outlet />
       </main>
+      <BottomNav access={access} />
     </div>
   );
 }
+
