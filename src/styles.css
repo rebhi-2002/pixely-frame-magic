@@ -211,7 +211,7 @@
   h2,
   h3,
   .font-display {
-    font-family: "Reem Kufi", "Cairo", ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-display-family);
   }
 }
 
