@@ -19,7 +19,10 @@
     "language": {
       "ar": "العربية",
       "en": "English"
-    }
+    },
+    "more": "More",
+    "menu": "Menu",
+    "signOut": "Sign out"
   },
   "nav": {
     "home": "Home",
