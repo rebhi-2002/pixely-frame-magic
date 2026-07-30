@@ -3,6 +3,8 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/admin/app-sidebar";
+import { BottomNav } from "@/components/admin/bottom-nav";
+
 import { useAccess } from "@/hooks/use-access";
 
 export const Route = createFileRoute("/_authenticated")({
