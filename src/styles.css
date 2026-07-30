@@ -10,10 +10,21 @@
  * azure info, coral destructive. Never hardcode colors in components.
  */
 
+/* خط العناوين: عربي = Tajawal (قرار المستخدم)، إنجليزي = يبقى كما هو */
+:root,
+:root[lang="ar"] {
+  --font-display-family: "Tajawal", "Cairo", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root[lang="en"] {
+  --font-display-family: "Reem Kufi", ui-sans-serif, system-ui, sans-serif;
+}
+
 @theme inline {
   --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Reem Kufi", "Cairo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-family);
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
