@@ -180,6 +180,16 @@
     border-color: var(--color-border);
   }
 
+  /* القسم 06 — تبديل الثيم/اللغة يتم بانتقال ناعم لا قفزة مفاجئة
+     (يُلغى تلقائياً عبر prefers-reduced-motion أعلاه) */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 260ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -193,6 +203,7 @@
     font-family: "Reem Kufi", "Cairo", ui-sans-serif, system-ui, sans-serif;
   }
 }
+
 
 @utility glow-primary {
   box-shadow: 0 18px 50px -22px color-mix(in oklab, var(--color-primary) 70%, transparent);
