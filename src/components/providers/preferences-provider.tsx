@@ -45,7 +45,10 @@ type PreferencesValue = {
   setLocale: (locale: Locale) => void;
   toggleLocale: () => void;
   dir: "rtl" | "ltr";
+  /** true أثناء انتقال تبديل اللغة (تلاشٍ ناعم بدل القفزة) */
+  switchingLocale: boolean;
 };
+
 
 const PreferencesContext = createContext<PreferencesValue | null>(null);
 
