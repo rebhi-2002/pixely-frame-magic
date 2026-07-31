@@ -109,10 +109,30 @@ function PreferencesState({ children }: { children: ReactNode }) {
     void persistToProfile({ theme_pref: pref });
   }, []);
 
+  /* القسم 06 — تبديل اللغة بانتقال ناعم (تلاشٍ) بدل التغيير المفاجئ.
+     يُحترم prefers-reduced-motion فيُطبَّق فوراً بلا حركة. */
   const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
-    localStorage.setItem(LOCALE_STORAGE_KEY, next);
-    void persistToProfile({ locale: next });
+    const persist = (value: Locale) => {
+      localStorage.setItem(LOCALE_STORAGE_KEY, value);
+      void persistToProfile({ locale: value });
+    };
+
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduced) {
+      setLocaleState(next);
+      persist(next);
+      return;
+    }
+
+    setSwitchingLocale(true);
+    window.setTimeout(() => {
+      setLocaleState(next);
+      persist(next);
+      window.setTimeout(() => setSwitchingLocale(false), 240);
+    }, 220);
   }, []);
 
   const value = useMemo<PreferencesValue>(
@@ -125,12 +145,31 @@ function PreferencesState({ children }: { children: ReactNode }) {
       setLocale,
       toggleLocale: () => setLocale(locale === "ar" ? "en" : "ar"),
       dir: LOCALE_DIR[locale],
+      switchingLocale,
     }),
-    [theme, resolvedTheme, setTheme, locale, setLocale],
+    [theme, resolvedTheme, setTheme, locale, setLocale, switchingLocale],
   );
 
-  return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
+  return (
+    <PreferencesContext.Provider value={value}>
+      <div
+        data-locale-switching={switchingLocale ? "true" : "false"}
+        className="locale-fade contents"
+      >
+        {children}
+      </div>
+      {switchingLocale && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[80] flex items-center justify-center bg-background/45 backdrop-blur-[2px]"
+        >
+          <span className="size-6 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+        </div>
+      )}
+    </PreferencesContext.Provider>
+  );
 }
+
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
   return (
