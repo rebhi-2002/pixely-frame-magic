@@ -69,6 +69,8 @@ function PreferencesState({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemePref>("auto");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
   const [locale, setLocaleState] = useState<Locale>("ar");
+  const [switchingLocale, setSwitchingLocale] = useState(false);
+
 
   // Read the persisted values written by the boot script (client only).
   useEffect(() => {
