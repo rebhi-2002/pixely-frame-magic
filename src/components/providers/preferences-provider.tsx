@@ -156,10 +156,11 @@ function PreferencesState({ children }: { children: ReactNode }) {
     <PreferencesContext.Provider value={value}>
       <div
         data-locale-switching={switchingLocale ? "true" : "false"}
-        className="locale-fade contents"
+        className="locale-fade"
       >
         {children}
       </div>
+
       {switchingLocale && (
         <div
           aria-hidden="true"
