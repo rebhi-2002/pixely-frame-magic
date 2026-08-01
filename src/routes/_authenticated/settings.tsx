@@ -125,6 +125,7 @@ function SettingsPage() {
           {t("settings.signOut")}
         </button>
       </section>
+      </div>
     </div>
   );
 }

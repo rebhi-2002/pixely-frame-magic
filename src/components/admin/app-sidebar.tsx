@@ -64,7 +64,7 @@ export function AppSidebar({
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/login", replace: true });
   }
 
   const isActive = (path: string | null) => Boolean(path && pathname === path);

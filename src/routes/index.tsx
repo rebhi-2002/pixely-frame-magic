@@ -70,7 +70,7 @@ function Landing() {
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
-              to="/auth"
+              to="/signup"
               className="glow-primary inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
             >
               {t("home.ctaPrimary")}
@@ -133,7 +133,7 @@ function Landing() {
         <h2 className="text-3xl font-bold text-foreground">{t("home.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
         <Link
-          to="/auth"
+          to="/signup"
           className="glow-primary mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           {t("home.ctaButton")}

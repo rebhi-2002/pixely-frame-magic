@@ -70,7 +70,7 @@ function Pricing() {
                 ))}
               </ul>
               <Link
-                to="/auth"
+                to="/signup"
                 className={`mt-7 inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-bold transition-opacity hover:opacity-90 ${
                   p.highlight
                     ? "bg-primary text-primary-foreground"

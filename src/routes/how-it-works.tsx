@@ -59,7 +59,7 @@ function HowItWorks() {
             ))}
           </ul>
           <Link
-            to="/auth"
+            to="/signup"
             className="mt-7 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           >
             {t("howItWorks.cta")}
