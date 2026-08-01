@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -17,6 +18,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
 import { Route as CoursesRouteImport } from './routes/courses'
@@ -27,6 +29,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
+import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
@@ -37,6 +40,11 @@ import { Route as AuthenticatedRolePermissionsRoleIdRouteImport } from './routes
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -72,6 +80,11 @@ const LoginRoute = LoginRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -123,6 +136,11 @@ const TeacherIdRoute = TeacherIdRouteImport.update({
   path: '/teacher/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InviteCodeRoute = InviteCodeRouteImport.update({
+  id: '/invite/$code',
+  path: '/invite/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CertificateIdRoute = CertificateIdRouteImport.update({
   id: '/certificate/$id',
   path: '/certificate/$id',
@@ -164,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -171,12 +190,14 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
@@ -189,6 +210,7 @@ export interface FileRoutesByTo {
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -196,12 +218,14 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
@@ -216,6 +240,7 @@ export interface FileRoutesById {
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -223,12 +248,14 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
@@ -243,6 +270,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -250,12 +278,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
     | '/system-modules'
     | '/user-types'
     | '/users'
     | '/certificate/$id'
+    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
@@ -268,6 +298,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -275,12 +306,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
     | '/system-modules'
     | '/user-types'
     | '/users'
     | '/certificate/$id'
+    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
@@ -294,6 +327,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -301,12 +335,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/_authenticated/dashboard'
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
     | '/certificate/$id'
+    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/_authenticated/role-permissions/$roleId'
@@ -321,6 +357,7 @@ export interface RootRouteChildren {
   CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HelpRoute: typeof HelpRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
@@ -328,8 +365,10 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   CertificateIdRoute: typeof CertificateIdRoute
+  InviteCodeRoute: typeof InviteCodeRoute
   TeacherIdRoute: typeof TeacherIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
@@ -341,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -390,6 +436,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -460,6 +513,13 @@ declare module '@tanstack/react-router' {
       path: '/teacher/$id'
       fullPath: '/teacher/$id'
       preLoaderRoute: typeof TeacherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$code': {
+      id: '/invite/$code'
+      path: '/invite/$code'
+      fullPath: '/invite/$code'
+      preLoaderRoute: typeof InviteCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/certificate/$id': {
@@ -536,6 +596,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  HelpRoute: HelpRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
@@ -543,8 +604,10 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   CertificateIdRoute: CertificateIdRoute,
+  InviteCodeRoute: InviteCodeRoute,
   TeacherIdRoute: TeacherIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }
