@@ -6,12 +6,13 @@ import { AppSidebar } from "@/components/admin/app-sidebar";
 import { BottomNav } from "@/components/admin/bottom-nav";
 
 import { useAccess } from "@/hooks/use-access";
+import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/auth" });
+    if (error || !data.user) throw redirect({ to: "/login" });
     return { user: data.user };
   },
   component: AuthenticatedLayout,
@@ -41,6 +42,7 @@ function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
+      <IdleLogoutWatcher />
       <div className="hidden md:flex">
         <AppSidebar
           access={access}

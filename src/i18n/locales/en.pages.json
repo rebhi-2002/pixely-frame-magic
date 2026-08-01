@@ -3,11 +3,13 @@
     "about": "About",
     "courses": "Courses",
     "help": "Help",
-    "support": "Support"
+    "support": "Support",
+    "certificateVerify": "Verify a certificate",
+    "unsubscribe": "Email preferences"
   },
   "cookie": {
     "title": "We use cookies",
-    "text": "We use analytics cookies to understand how Acadimia is used and improve it. No tracking runs before you agree.",
+    "text": "We use analytics cookies to understand how Academia is used and improve it. No tracking runs before you agree.",
     "accept": "Accept",
     "decline": "Essential only",
     "more": "Privacy policy"
@@ -15,8 +17,8 @@
   "authPages": {
     "login": {
       "meta": {
-        "title": "Sign in | Acadimia",
-        "description": "Sign in to your Acadimia account and pick up your studying where you left off."
+        "title": "Sign in | Academia",
+        "description": "Sign in to your Academia account and pick up your studying where you left off."
       },
       "h1": "Welcome back",
       "sub": "Sign in to continue where you stopped.",
@@ -34,8 +36,8 @@
     },
     "signup": {
       "meta": {
-        "title": "Create account | Acadimia",
-        "description": "Create your Acadimia account and pick your role: student, parent, or teacher."
+        "title": "Create account | Academia",
+        "description": "Create your Academia account and pick your role: student, parent, or teacher."
       },
       "h1": "Pick your role to start",
       "sub": "Each role opens a completely different space, content and permissions.",
@@ -69,8 +71,8 @@
     },
     "teacherRegister": {
       "meta": {
-        "title": "Teacher registration | Acadimia",
-        "description": "Register as a teacher on Acadimia and upload your verification document for review."
+        "title": "Teacher registration | Academia",
+        "description": "Register as a teacher on Academia and upload your verification document for review."
       },
       "h1": "Teacher registration",
       "sub": "A few extra details so we can verify you before your content goes live.",
@@ -90,7 +92,7 @@
     },
     "forgot": {
       "meta": {
-        "title": "Reset password | Acadimia",
+        "title": "Reset password | Academia",
         "description": "Send a password reset link to your email."
       },
       "h1": "Forgot your password?",
@@ -102,8 +104,8 @@
     },
     "reset": {
       "meta": {
-        "title": "Set a new password | Acadimia",
-        "description": "Choose a new password for your Acadimia account."
+        "title": "Set a new password | Academia",
+        "description": "Choose a new password for your Academia account."
       },
       "h1": "New password",
       "sub": "Pick a strong password you don't use anywhere else.",
@@ -117,8 +119,8 @@
     },
     "verify": {
       "meta": {
-        "title": "Verify your email | Acadimia",
-        "description": "Activate your Acadimia account from the link sent to your inbox."
+        "title": "Verify your email | Academia",
+        "description": "Activate your Academia account from the link sent to your inbox."
       },
       "h1": "Verify your email",
       "sub": "We sent an activation link to your inbox. Open it, then come back here.",
@@ -132,10 +134,10 @@
   },
   "about": {
     "meta": {
-      "title": "About us | Acadimia",
-      "description": "The Acadimia story: an Arabic-first team building an organization and achievement platform for high-school students."
+      "title": "About us | Academia",
+      "description": "The Academia story: an Arabic-first team building an organization and achievement platform for high-school students."
     },
-    "h1": "We built Acadimia because we lived the chaos",
+    "h1": "We built Academia because we lived the chaos",
     "sub": "Files lost in group chats, questions with no answers, and a national exam getting closer. So we built the tidy place we wished we had.",
     "missionTitle": "Our mission",
     "mission": "Help every Arabic-speaking student turn a pile of files into a clear plan they can actually finish, step by step.",
@@ -160,9 +162,18 @@
     "teamTitle": "The team",
     "teamSub": "A small team of engineers, teachers and designers working close to students and schools.",
     "team": [
-      { "t": "Product & design", "d": "Research with real students before any screen ships." },
-      { "t": "Engineering", "d": "A fast platform that works on weak networks and mid-range devices." },
-      { "t": "Academic content", "d": "Teachers review the taxonomy and question bank before publishing." }
+      {
+        "t": "Product & design",
+        "d": "Research with real students before any screen ships."
+      },
+      {
+        "t": "Engineering",
+        "d": "A fast platform that works on weak networks and mid-range devices."
+      },
+      {
+        "t": "Academic content",
+        "d": "Teachers review the taxonomy and question bank before publishing."
+      }
     ],
     "ctaTitle": "Want to be part of the story?",
     "ctaSub": "Start free as a student, or register as a teacher and share your content.",
@@ -171,8 +182,8 @@
   },
   "courses": {
     "meta": {
-      "title": "Courses | Acadimia",
-      "description": "Browse courses from verified Acadimia teachers by subject and level before creating an account."
+      "title": "Courses | Academia",
+      "description": "Browse courses from verified Academia teachers by subject and level before creating an account."
     },
     "h1": "Course marketplace",
     "sub": "Courses from verified teachers — browse without an account, sign up when you enroll.",
@@ -184,44 +195,104 @@
     "enroll": "View & enroll",
     "byTeacher": "Teacher",
     "items": [
-      { "id": "math-tawjihi", "title": "Mathematics — Calculus", "teacher": "Sami Khalil", "teacherId": "sami-khalil", "subject": "Math", "lessons": "42", "price": "35", "level": "Science track" },
-      { "id": "physics-mechanics", "title": "Physics — Full mechanics", "teacher": "Rana Haddad", "teacherId": "rana-haddad", "subject": "Physics", "lessons": "36", "price": "30", "level": "Science track" },
-      { "id": "arabic-grammar", "title": "Arabic — Grammar & rhetoric", "teacher": "Maha Zeidan", "teacherId": "maha-zeidan", "subject": "Arabic", "lessons": "28", "price": "0", "level": "General track" },
-      { "id": "english-exam", "title": "English — Exam preparation", "teacher": "Luay Darwish", "teacherId": "luay-darwish", "subject": "English", "lessons": "24", "price": "25", "level": "General track" },
-      { "id": "chem-organic", "title": "Organic chemistry from zero", "teacher": "Noor Abed", "teacherId": "noor-abed", "subject": "Chemistry", "lessons": "31", "price": "28", "level": "Science track" },
-      { "id": "islamic-studies", "title": "Islamic studies — Full review", "teacher": "Omar Sharif", "teacherId": "omar-sharif", "subject": "Islamic", "lessons": "18", "price": "0", "level": "General track" }
+      {
+        "id": "math-tawjihi",
+        "title": "Mathematics — Calculus",
+        "teacher": "Sami Khalil",
+        "teacherId": "sami-khalil",
+        "subject": "Math",
+        "lessons": "42",
+        "price": "35",
+        "level": "Science track"
+      },
+      {
+        "id": "physics-mechanics",
+        "title": "Physics — Full mechanics",
+        "teacher": "Rana Haddad",
+        "teacherId": "rana-haddad",
+        "subject": "Physics",
+        "lessons": "36",
+        "price": "30",
+        "level": "Science track"
+      },
+      {
+        "id": "arabic-grammar",
+        "title": "Arabic — Grammar & rhetoric",
+        "teacher": "Maha Zeidan",
+        "teacherId": "maha-zeidan",
+        "subject": "Arabic",
+        "lessons": "28",
+        "price": "0",
+        "level": "General track"
+      },
+      {
+        "id": "english-exam",
+        "title": "English — Exam preparation",
+        "teacher": "Luay Darwish",
+        "teacherId": "luay-darwish",
+        "subject": "English",
+        "lessons": "24",
+        "price": "25",
+        "level": "General track"
+      },
+      {
+        "id": "chem-organic",
+        "title": "Organic chemistry from zero",
+        "teacher": "Noor Abed",
+        "teacherId": "noor-abed",
+        "subject": "Chemistry",
+        "lessons": "31",
+        "price": "28",
+        "level": "Science track"
+      },
+      {
+        "id": "islamic-studies",
+        "title": "Islamic studies — Full review",
+        "teacher": "Omar Sharif",
+        "teacherId": "omar-sharif",
+        "subject": "Islamic",
+        "lessons": "18",
+        "price": "0",
+        "level": "General track"
+      }
     ]
   },
   "teacherProfile": {
     "meta": {
-      "title": "Teacher profile | Acadimia",
-      "description": "Meet the teacher, their courses, and student reviews on Acadimia."
+      "title": "Teacher profile | Academia",
+      "description": "Meet the teacher, their courses, and student reviews on Academia."
     },
     "verified": "Verified account",
     "students": "students",
     "courses": "courses",
     "rating": "Rating",
     "aboutTitle": "About",
-    "about": "An Acadimia teacher who uploads content classified by term, subject, unit and lesson, and tracks student performance through quizzes and periodic reports.",
+    "about": "An Academia teacher who uploads content classified by term, subject, unit and lesson, and tracks student performance through quizzes and periodic reports.",
     "coursesTitle": "Courses by this teacher",
     "reviewsTitle": "Student reviews",
     "reviews": [
-      { "n": "Science-track student", "d": "The explanation is organized and the quizzes after each lesson made it stick." },
-      { "n": "General-track student", "d": "First time I'm not lost between files — every unit is where it should be." }
+      {
+        "n": "Science-track student",
+        "d": "The explanation is organized and the quizzes after each lesson made it stick."
+      },
+      {
+        "n": "General-track student",
+        "d": "First time I'm not lost between files — every unit is where it should be."
+      }
     ],
     "cta": "Sign up to follow this teacher",
     "notFound": "We couldn't find this teacher."
   },
   "certificate": {
     "meta": {
-      "title": "Verify a certificate | Acadimia",
-      "description": "Verify the authenticity of a digital certificate issued by Acadimia using its ID."
+      "title": "Verify a certificate | Academia",
+      "description": "Verify the authenticity of a digital certificate issued by Academia using its ID."
     },
     "h1": "Certificate verification",
     "sub": "Enter the certificate ID or open the verification link printed on it.",
     "placeholder": "Certificate ID (e.g. ACD-2026-00184)",
     "check": "Verify",
-    "valid": "Valid certificate issued by Acadimia",
+    "valid": "Valid certificate issued by Academia",
     "invalid": "No certificate found with this ID. Check it and try again.",
     "holder": "Holder name",
     "course": "Subject / course",
@@ -231,11 +302,11 @@
   },
   "invite": {
     "meta": {
-      "title": "An invite to Acadimia",
-      "description": "Join Acadimia through an invite link and get starter perks."
+      "title": "An invite to Academia",
+      "description": "Join Academia through an invite link and get starter perks."
     },
-    "h1": "You've been invited to Acadimia",
-    "sub": "Your friend uses Acadimia to organize their studying. Join through their link and get a free premium month.",
+    "h1": "You've been invited to Academia",
+    "sub": "Your friend uses Academia to organize their studying. Join through their link and get a free premium month.",
     "codeLabel": "Invite code",
     "perks": [
       "A free premium month once you finish signing up",
@@ -248,8 +319,8 @@
   },
   "help": {
     "meta": {
-      "title": "Help center | Acadimia",
-      "description": "Quick answers about accounts, subscriptions, the library, and privacy on Acadimia."
+      "title": "Help center | Academia",
+      "description": "Quick answers about accounts, subscriptions, the library, and privacy on Academia."
     },
     "h1": "Help center",
     "sub": "Short answers to the most common questions. Can't find yours? Contact us.",
@@ -262,38 +333,65 @@
       {
         "t": "Account & sign in",
         "items": [
-          { "q": "How do I create an account?", "a": "On the sign-up page pick your role (student or parent) then fill in your name, email and password. Teachers register from the teacher page because their account needs verification." },
-          { "q": "I forgot my password, what now?", "a": "Open the reset page, enter your email, and you'll get a link to set a new password." },
-          { "q": "Do I stay signed in after closing the browser?", "a": "Yes, your session is saved. For your security you're signed out automatically after two hours of inactivity." }
+          {
+            "q": "How do I create an account?",
+            "a": "On the sign-up page pick your role (student or parent) then fill in your name, email and password. Teachers register from the teacher page because their account needs verification."
+          },
+          {
+            "q": "I forgot my password, what now?",
+            "a": "Open the reset page, enter your email, and you'll get a link to set a new password."
+          },
+          {
+            "q": "Do I stay signed in after closing the browser?",
+            "a": "Yes, your session is saved. For your security you're signed out automatically after two hours of inactivity."
+          }
         ]
       },
       {
         "t": "Subscription & payment",
         "items": [
-          { "q": "What's the difference between Free and Premium?", "a": "Free includes the library, communities, schedule and the progress counter. Premium adds the exam simulator, mistake bank, the 15-minute review, and the parent report." },
-          { "q": "Can I cancel?", "a": "Yes, any time. Your subscription stays active until the end of the paid period." }
+          {
+            "q": "What's the difference between Free and Premium?",
+            "a": "Free includes the library, communities, schedule and the progress counter. Premium adds the exam simulator, mistake bank, the 15-minute review, and the parent report."
+          },
+          {
+            "q": "Can I cancel?",
+            "a": "Yes, any time. Your subscription stays active until the end of the paid period."
+          }
         ]
       },
       {
         "t": "Library & content",
         "items": [
-          { "q": "How is content classified?", "a": "In a strict tree: term → subject → unit → lesson, with advanced search and favorites." },
-          { "q": "I found violating content, what do I do?", "a": "Use the report button on the lesson; our moderation team reviews it and violating content may be removed." }
+          {
+            "q": "How is content classified?",
+            "a": "In a strict tree: term → subject → unit → lesson, with advanced search and favorites."
+          },
+          {
+            "q": "I found violating content, what do I do?",
+            "a": "Use the report button on the lesson; our moderation team reviews it and violating content may be removed."
+          }
         ]
       },
       {
         "t": "Privacy",
         "items": [
-          { "q": "What can a parent see?", "a": "A weekly summary of consistency and progress only — not your community chats or daily activity details." },
-          { "q": "How do I delete my account?", "a": "From the settings page, or by contacting support; your account and related data are removed." }
+          {
+            "q": "What can a parent see?",
+            "a": "A weekly summary of consistency and progress only — not your community chats or daily activity details."
+          },
+          {
+            "q": "How do I delete my account?",
+            "a": "From the settings page, or by contacting support; your account and related data are removed."
+          }
         ]
       }
     ]
   },
   "unsubscribe": {
     "meta": {
-      "title": "Unsubscribe | Acadimia",
-      "description": "Stop Acadimia emails without signing in."
+      "title": "Unsubscribe | Academia",
+      "description": "Stop Academia emails without signing in."
     },
     "h1": "Unsubscribe from notifications",
     "sub": "Pick what you want to stop — no sign-in needed.",
@@ -312,7 +410,7 @@
   },
   "notFound": {
     "meta": {
-      "title": "Page not found | Acadimia",
+      "title": "Page not found | Academia",
       "description": "The page you're looking for doesn't exist or was moved."
     },
     "code": "404",
@@ -323,8 +421,8 @@
   },
   "settings": {
     "meta": {
-      "title": "Settings | Acadimia",
-      "description": "Language, theme, and your account details on Acadimia."
+      "title": "Settings | Academia",
+      "description": "Language, theme, and your account details on Academia."
     },
     "h1": "Settings",
     "sub": "Your preferences are saved on this device and to your account.",

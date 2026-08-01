@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { MoreHorizontal, X } from "lucide-react";
+import { MoreHorizontal, Settings, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
+import { PreferenceToggles } from "@/components/site/preference-toggles";
 
 type Item = { key: string; name: string; icon: string; path: string };
 
@@ -48,7 +49,7 @@ export function BottomNav({ access }: { access: MyAccess }) {
 
   const visible = primary.slice(0, 4);
   const overflowModules = access.modules.filter((m) => !visible.some((v) => v.key === m.key));
-  const hasOverflow = overflowModules.length > 0;
+  const hasOverflow = true;
 
   if (visible.length === 0) return null;
 
@@ -94,6 +95,20 @@ export function BottomNav({ access }: { access: MyAccess }) {
                   </ul>
                 </div>
               ))}
+
+              <div className="border-t border-sidebar-border pt-3">
+                <Link
+                  to="/settings"
+                  onClick={() => setSheetOpen(false)}
+                  className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm hover:bg-sidebar-accent"
+                >
+                  <Settings className="size-4 shrink-0" />
+                  <span>{t("settings.h1")}</span>
+                </Link>
+                <div className="mt-2 flex items-center gap-1 px-1.5">
+                  <PreferenceToggles />
+                </div>
+              </div>
             </div>
           </div>
         </div>

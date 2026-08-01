@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -17,22 +18,33 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
-import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
+import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
+import { Route as InviteCodeRouteImport } from './routes/invite.$code'
+import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedRolePermissionsRoleIdRouteImport } from './routes/_authenticated/role-permissions.$roleId'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -70,6 +82,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -80,9 +97,14 @@ const ForTeachersRoute = ForTeachersRouteImport.update({
   path: '/for-teachers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const CoursesRoute = CoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R403Route = R403RouteImport.update({
@@ -104,6 +126,21 @@ const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
   path: '/teacher/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeacherIdRoute = TeacherIdRouteImport.update({
+  id: '/teacher/$id',
+  path: '/teacher/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteCodeRoute = InviteCodeRouteImport.update({
+  id: '/invite/$code',
+  path: '/invite/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificateIdRoute = CertificateIdRouteImport.update({
+  id: '/certificate/$id',
+  path: '/certificate/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -120,6 +157,11 @@ const AuthenticatedSystemModulesRoute =
     path: '/system-modules',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -135,9 +177,11 @@ const AuthenticatedRolePermissionsRoleIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -145,20 +189,27 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -166,11 +217,16 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
@@ -179,9 +235,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -189,11 +247,16 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/invite/$code': typeof InviteCodeRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
@@ -202,9 +265,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/403'
-    | '/auth'
+    | '/about'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -212,20 +277,27 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
+    | '/settings'
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/certificate/$id'
+    | '/invite/$code'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/403'
-    | '/auth'
+    | '/about'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -233,11 +305,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
+    | '/settings'
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/certificate/$id'
+    | '/invite/$code'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
   id:
@@ -245,9 +322,11 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/403'
-    | '/auth'
+    | '/about'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
+    | '/help'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -255,11 +334,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms'
+    | '/unsubscribe'
     | '/verify-email'
     | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
+    | '/certificate/$id'
+    | '/invite/$code'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/_authenticated/role-permissions/$roleId'
   fileRoutesById: FileRoutesById
@@ -268,9 +352,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
-  AuthRoute: typeof AuthRoute
+  AboutRoute: typeof AboutRoute
+  CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HelpRoute: typeof HelpRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
@@ -278,7 +364,11 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  CertificateIdRoute: typeof CertificateIdRoute
+  InviteCodeRoute: typeof InviteCodeRoute
+  TeacherIdRoute: typeof TeacherIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
 
@@ -289,6 +379,13 @@ declare module '@tanstack/react-router' {
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -340,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
@@ -354,11 +458,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForTeachersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/courses': {
+      id: '/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof CoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/403': {
@@ -389,6 +500,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeacherRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teacher/$id': {
+      id: '/teacher/$id'
+      path: '/teacher/$id'
+      fullPath: '/teacher/$id'
+      preLoaderRoute: typeof TeacherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$code': {
+      id: '/invite/$code'
+      path: '/invite/$code'
+      fullPath: '/invite/$code'
+      preLoaderRoute: typeof InviteCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificate/$id': {
+      id: '/certificate/$id'
+      path: '/certificate/$id'
+      fullPath: '/certificate/$id'
+      preLoaderRoute: typeof CertificateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/users': {
       id: '/_authenticated/users'
       path: '/users'
@@ -410,6 +542,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSystemModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -429,6 +568,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedUserTypesRoute: typeof AuthenticatedUserTypesRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
@@ -437,6 +577,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
   AuthenticatedUserTypesRoute: AuthenticatedUserTypesRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
@@ -451,9 +592,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
-  AuthRoute: AuthRoute,
+  AboutRoute: AboutRoute,
+  CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  HelpRoute: HelpRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
@@ -461,7 +604,11 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  CertificateIdRoute: CertificateIdRoute,
+  InviteCodeRoute: InviteCodeRoute,
+  TeacherIdRoute: TeacherIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }
 export const routeTree = rootRouteImport
