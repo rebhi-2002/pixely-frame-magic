@@ -34,6 +34,7 @@ import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedRolePermissionsRoleIdRouteImport } from './routes/_authenticated/role-permissions.$roleId'
 
@@ -162,6 +163,11 @@ const AuthenticatedSystemModulesRoute =
     path: '/system-modules',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -193,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -251,6 +259,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
@@ -281,6 +290,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
+    | '/settings'
     | '/system-modules'
     | '/user-types'
     | '/users'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/verify-email'
     | '/dashboard'
+    | '/settings'
     | '/system-modules'
     | '/user-types'
     | '/users'
@@ -338,6 +349,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/verify-email'
     | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
@@ -550,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSystemModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -569,6 +588,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedUserTypesRoute: typeof AuthenticatedUserTypesRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
@@ -577,6 +597,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
   AuthenticatedUserTypesRoute: AuthenticatedUserTypesRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
