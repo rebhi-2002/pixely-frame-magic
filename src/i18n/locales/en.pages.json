@@ -3,7 +3,9 @@
     "about": "About",
     "courses": "Courses",
     "help": "Help",
-    "support": "Support"
+    "support": "Support",
+    "certificateVerify": "Verify a certificate",
+    "unsubscribe": "Email preferences"
   },
   "cookie": {
     "title": "We use cookies",
