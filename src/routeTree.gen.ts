@@ -19,11 +19,15 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
+import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
+import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
+import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
@@ -80,9 +84,19 @@ const ForTeachersRoute = ForTeachersRouteImport.update({
   path: '/for-teachers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoursesRoute = CoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R403Route = R403RouteImport.update({
@@ -102,6 +116,16 @@ const IndexRoute = IndexRouteImport.update({
 const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
   id: '/teacher/register',
   path: '/teacher/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeacherIdRoute = TeacherIdRouteImport.update({
+  id: '/teacher/$id',
+  path: '/teacher/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificateIdRoute = CertificateIdRouteImport.update({
+  id: '/certificate/$id',
+  path: '/certificate/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
@@ -135,7 +159,9 @@ const AuthenticatedRolePermissionsRoleIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -150,13 +176,17 @@ export interface FileRoutesByFullPath {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -171,6 +201,8 @@ export interface FileRoutesByTo {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
@@ -179,7 +211,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -194,6 +228,8 @@ export interface FileRoutesById {
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/certificate/$id': typeof CertificateIdRoute
+  '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
 }
@@ -202,7 +238,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/403'
+    | '/about'
     | '/auth'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
     | '/how-it-works'
@@ -217,13 +255,17 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/certificate/$id'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/403'
+    | '/about'
     | '/auth'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
     | '/how-it-works'
@@ -238,6 +280,8 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/certificate/$id'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/role-permissions/$roleId'
   id:
@@ -245,7 +289,9 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/403'
+    | '/about'
     | '/auth'
+    | '/courses'
     | '/for-teachers'
     | '/forgot-password'
     | '/how-it-works'
@@ -260,6 +306,8 @@ export interface FileRouteTypes {
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
+    | '/certificate/$id'
+    | '/teacher/$id'
     | '/teacher/register'
     | '/_authenticated/role-permissions/$roleId'
   fileRoutesById: FileRoutesById
@@ -268,7 +316,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -279,6 +329,8 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  CertificateIdRoute: typeof CertificateIdRoute
+  TeacherIdRoute: typeof TeacherIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
 
@@ -354,11 +406,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForTeachersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/courses': {
+      id: '/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof CoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/403': {
@@ -387,6 +453,20 @@ declare module '@tanstack/react-router' {
       path: '/teacher/register'
       fullPath: '/teacher/register'
       preLoaderRoute: typeof TeacherRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teacher/$id': {
+      id: '/teacher/$id'
+      path: '/teacher/$id'
+      fullPath: '/teacher/$id'
+      preLoaderRoute: typeof TeacherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificate/$id': {
+      id: '/certificate/$id'
+      path: '/certificate/$id'
+      fullPath: '/certificate/$id'
+      preLoaderRoute: typeof CertificateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/users': {
@@ -451,7 +531,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,
@@ -462,6 +544,8 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  CertificateIdRoute: CertificateIdRoute,
+  TeacherIdRoute: TeacherIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }
 export const routeTree = rootRouteImport
