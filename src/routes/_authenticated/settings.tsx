@@ -37,8 +37,10 @@ function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-5 py-6">
-      <PageHeader title={t("settings.h1")} description={t("settings.sub")} />
+    <div>
+      <PageHeader title={t("settings.h1")} icon="Settings" />
+      <div className="mx-auto max-w-3xl px-5 py-6">
+        <p className="text-sm text-muted-foreground">{t("settings.sub")}</p>
 
       <section className="mt-6 rounded-2xl border border-border bg-card p-6">
         <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
