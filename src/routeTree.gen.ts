@@ -22,7 +22,6 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
 import { Route as CoursesRouteImport } from './routes/courses'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -103,11 +102,6 @@ const CoursesRoute = CoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -184,7 +178,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/auth': typeof AuthRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -213,7 +206,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/auth': typeof AuthRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -244,7 +236,6 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/auth': typeof AuthRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -275,7 +266,6 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
-    | '/auth'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -304,7 +294,6 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
-    | '/auth'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -334,7 +323,6 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/403'
     | '/about'
-    | '/auth'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -365,7 +353,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
   AboutRoute: typeof AboutRoute
-  AuthRoute: typeof AuthRoute
   CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -476,13 +463,6 @@ declare module '@tanstack/react-router' {
       path: '/courses'
       fullPath: '/courses'
       preLoaderRoute: typeof CoursesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -613,7 +593,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
   AboutRoute: AboutRoute,
-  AuthRoute: AuthRoute,
   CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,

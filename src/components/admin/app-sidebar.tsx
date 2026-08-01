@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronDown, LogOut, PanelRightClose, PanelRightOpen, Search } from "lucide-react";
+import { ChevronLeft, ChevronDown, LogOut, PanelRightClose, PanelRightOpen, Search, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { PreferenceToggles } from "@/components/site/preference-toggles";
 
 function collectPaths(pages: AccessPage[]): string[] {
   return pages.flatMap((p) => [...(p.path ? [p.path] : []), ...collectPaths(p.children)]);
@@ -182,6 +183,20 @@ export function AppSidebar({
             </p>
           </div>
         )}
+        <div className={cn("mb-2 flex items-center gap-1", collapsed && "flex-col")}>
+          <PreferenceToggles />
+        </div>
+        <Link
+          to="/settings"
+          className={cn(
+            "mb-1 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            collapsed && "justify-center px-0",
+            pathname === "/settings" && "bg-sidebar-primary text-sidebar-primary-foreground",
+          )}
+        >
+          <Settings className="size-4" />
+          {!collapsed && "الإعدادات"}
+        </Link>
         <Button
           variant="ghost"
           onClick={handleSignOut}
