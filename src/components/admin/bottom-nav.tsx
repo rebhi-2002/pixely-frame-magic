@@ -49,7 +49,7 @@ export function BottomNav({ access }: { access: MyAccess }) {
 
   const visible = primary.slice(0, 4);
   const overflowModules = access.modules.filter((m) => !visible.some((v) => v.key === m.key));
-  const hasOverflow = overflowModules.length > 0;
+  const hasOverflow = true;
 
   if (visible.length === 0) return null;
 
