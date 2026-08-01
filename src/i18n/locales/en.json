@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "Acadimia",
+    "brand": "Academia",
     "signIn": "Sign in",
     "startFree": "Start free",
     "loading": "Loading…",
@@ -34,16 +34,16 @@
     "privacy": "Privacy policy",
     "terms": "Terms of use",
     "tagline": "An Arabic-first platform helping high-school students organize their subjects, track achievement, and prepare for the national exam with confidence.",
-    "rights": "© {{year}} Acadimia — All rights reserved."
+    "rights": "© {{year}} Academia — All rights reserved."
   },
   "home": {
     "meta": {
-      "title": "Acadimia | The student platform for focus and achievement",
-      "description": "Acadimia: an organized smart library, subject communities, achievement tracking, a mistake bank and a national-exam simulator — all your studying in one place."
+      "title": "Academia | The student platform for focus and achievement",
+      "description": "Academia: an organized smart library, subject communities, achievement tracking, a mistake bank and a national-exam simulator — all your studying in one place."
     },
     "badge": "For students aged 16 to 18",
     "h1a": "Files lost in WhatsApp?",
-    "h1b": "Acadimia",
+    "h1b": "Academia",
     "h1c": "organizes them so you get things done.",
     "sub": "One place for every subject: a tidy library, questions that actually get answered, a schedule that reminds you, and practice exams that expose your weak spots before the real one.",
     "ctaPrimary": "Start free now",
@@ -101,10 +101,10 @@
   },
   "howItWorks": {
     "meta": {
-      "title": "How Acadimia works | Getting started",
+      "title": "How Academia works | Getting started",
       "description": "Four steps only: sign up and pick your role, set your system, grade and subjects, start from the organized library, and track your progress weekly."
     },
-    "h1": "How does Acadimia work?",
+    "h1": "How does Academia work?",
     "sub": "From your first sign-in, four quick steps (skippable anytime) and you're ready.",
     "steps": {
       "role": {
@@ -135,7 +135,7 @@
   },
   "pricing": {
     "meta": {
-      "title": "Acadimia pricing | Start free",
+      "title": "Academia pricing | Start free",
       "description": "A fully free plan to start, and a premium plan for the exam simulator, mistake bank and advanced reports."
     },
     "h1": "Simple plans, no complexity",
@@ -181,11 +181,11 @@
   },
   "forTeachers": {
     "meta": {
-      "title": "Acadimia for teachers | Organizing and assessment tools",
+      "title": "Academia for teachers | Organizing and assessment tools",
       "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
     },
     "h1": "Teach more, grade less, reach more students.",
-    "sub": "Acadimia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
+    "sub": "Academia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
     "cta": "Sign up as a teacher",
     "benefits": {
       "upload": {
@@ -213,8 +213,8 @@
   },
   "auth": {
     "meta": {
-      "title": "Sign in | Acadimia",
-      "description": "Sign in or create a new account to reach your space in Acadimia."
+      "title": "Sign in | Academia",
+      "description": "Sign in or create a new account to reach your space in Academia."
     },
     "signInTitle": "Sign in",
     "signUpTitle": "Create an account",
@@ -265,7 +265,7 @@
   },
   "terms": {
     "h1": "Terms of use",
-    "intro": "By using Acadimia, you agree to the following.",
+    "intro": "By using Academia, you agree to the following.",
     "sections": [
       {
         "t": "Account",
