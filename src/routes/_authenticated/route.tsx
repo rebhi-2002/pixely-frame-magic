@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/admin/app-sidebar";
 import { BottomNav } from "@/components/admin/bottom-nav";
 
 import { useAccess } from "@/hooks/use-access";
+import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -41,6 +42,7 @@ function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
+      <IdleLogoutWatcher />
       <div className="hidden md:flex">
         <AppSidebar
           access={access}
