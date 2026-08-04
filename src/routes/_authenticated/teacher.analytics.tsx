@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Users", label: bi("طلاب نشطون", "Active students"), value: "112" }},
-          {{ icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "68%" }},
-          {{ icon: "TrendingUp", label: bi("تحسّن الشهر", "Monthly gain"), value: "+9%" }},
-          {{ icon: "AlertTriangle", label: bi("وحدات ضعيفة", "Weak units"), value: "3" }},
+          { icon: "Users", label: bi("طلاب نشطون", "Active students"), value: "112" },
+          { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "68%" },
+          { icon: "TrendingUp", label: bi("تحسّن الشهر", "Monthly gain"), value: "+9%" },
+          { icon: "AlertTriangle", label: bi("وحدات ضعيفة", "Weak units"), value: "3" },
         ]}
       />
       <Panel title={bi("إتقان الوحدات", "Unit mastery")} icon="LineChart">
@@ -54,9 +54,9 @@ function Body() {
       <Panel title={bi("الأسئلة الأكثر خطأً", "Most-missed questions")} icon="XCircle">
         <RowList
           rows={[
-            {{ title: bi("تكامل بالتجزيء — سؤال 7", "Integration by parts — Q7"), meta: bi("68% أخطأوا", "68% wrong"), value: bi("أولوية", "Priority"), tone: "danger" }},
-            {{ title: bi("قاعدة السلسلة — سؤال 3", "Chain rule — Q3"), meta: bi("54% أخطأوا", "54% wrong"), value: bi("مراجعة", "Review"), tone: "primary" }},
-            {{ title: bi("النهايات اللانهائية — سؤال 11", "Infinite limits — Q11"), meta: bi("41% أخطأوا", "41% wrong"), value: bi("مراجعة", "Review"), tone: "primary" }},
+            { title: bi("تكامل بالتجزيء — سؤال 7", "Integration by parts — Q7"), meta: bi("68% أخطأوا", "68% wrong"), value: bi("أولوية", "Priority"), tone: "danger" },
+            { title: bi("قاعدة السلسلة — سؤال 3", "Chain rule — Q3"), meta: bi("54% أخطأوا", "54% wrong"), value: bi("مراجعة", "Review"), tone: "primary" },
+            { title: bi("النهايات اللانهائية — سؤال 11", "Infinite limits — Q11"), meta: bi("41% أخطأوا", "41% wrong"), value: bi("مراجعة", "Review"), tone: "primary" },
           ]}
         />
       </Panel>

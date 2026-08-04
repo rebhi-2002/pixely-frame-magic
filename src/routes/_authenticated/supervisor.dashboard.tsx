@@ -39,27 +39,27 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Presentation", label: bi("معلمون", "Teachers"), value: "18" }},
-          {{ icon: "Users", label: bi("طلاب", "Students"), value: "1,240" }},
-          {{ icon: "AlertTriangle", label: bi("تنبيهات جودة", "Quality alerts"), value: "4" }},
-          {{ icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "67%" }},
+          { icon: "Presentation", label: bi("معلمون", "Teachers"), value: "18" },
+          { icon: "Users", label: bi("طلاب", "Students"), value: "1,240" },
+          { icon: "AlertTriangle", label: bi("تنبيهات جودة", "Quality alerts"), value: "4" },
+          { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "67%" },
         ]}
       />
       <Panel title={bi("إجراءات", "Actions")} icon="Zap">
         <QuickLinks
           items={[
-            {{ to: "/supervisor/teachers", label: bi("المعلمون", "Teachers"), icon: "Presentation" }},
-            {{ to: "/supervisor/students-overview", label: bi("نظرة الطلاب", "Students overview"), icon: "Users" }},
-            {{ to: "/supervisor/reports", label: bi("التقارير", "Reports"), icon: "FileBarChart" }},
+            { to: "/supervisor/teachers", label: bi("المعلمون", "Teachers"), icon: "Presentation" },
+            { to: "/supervisor/students-overview", label: bi("نظرة الطلاب", "Students overview"), icon: "Users" },
+            { to: "/supervisor/reports", label: bi("التقارير", "Reports"), icon: "FileBarChart" },
           ]}
         />
       </Panel>
       <Panel title={bi("تنبيهات تحتاج متابعة", "Alerts to follow up")} icon="AlertTriangle">
         <RowList
           rows={[
-            {{ title: bi("تأخّر تصحيح لدى أ. ريم", "Grading delay — Ms. Reem"), meta: bi("18 ورقة > 5 أيام", "18 papers > 5 days"), value: bi("عاجل", "Urgent"), tone: "danger" }},
-            {{ title: bi("إتقان منخفض — كيمياء صف 9", "Low mastery — Chemistry grade 9"), meta: bi("38%", "38%"), value: bi("متابعة", "Follow up"), tone: "primary" }},
-            {{ title: bi("محتوى بانتظار المراجعة", "Content pending review"), meta: bi("5 عناصر", "5 items"), value: bi("مراجعة", "Review"), tone: "muted" }},
+            { title: bi("تأخّر تصحيح لدى أ. ريم", "Grading delay — Ms. Reem"), meta: bi("18 ورقة > 5 أيام", "18 papers > 5 days"), value: bi("عاجل", "Urgent"), tone: "danger" },
+            { title: bi("إتقان منخفض — كيمياء صف 9", "Low mastery — Chemistry grade 9"), meta: bi("38%", "38%"), value: bi("متابعة", "Follow up"), tone: "primary" },
+            { title: bi("محتوى بانتظار المراجعة", "Content pending review"), meta: bi("5 عناصر", "5 items"), value: bi("مراجعة", "Review"), tone: "muted" },
           ]}
         />
       </Panel>

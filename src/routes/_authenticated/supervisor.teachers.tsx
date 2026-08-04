@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Presentation", label: bi("معلمون نشطون", "Active teachers"), value: "18" }},
-          {{ icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: "5 س" }},
-          {{ icon: "PenSquare", label: bi("متوسط زمن التصحيح", "Avg. grading"), value: "1.8 يوم" }},
-          {{ icon: "Star", label: bi("متوسط التقييم", "Avg. rating"), value: "4.6" }},
+          { icon: "Presentation", label: bi("معلمون نشطون", "Active teachers"), value: "18" },
+          { icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: "5 س" },
+          { icon: "PenSquare", label: bi("متوسط زمن التصحيح", "Avg. grading"), value: "1.8 يوم" },
+          { icon: "Star", label: bi("متوسط التقييم", "Avg. rating"), value: "4.6" },
         ]}
       />
       <Panel title={bi("قائمة المعلمين", "Teacher list")} icon="Presentation">

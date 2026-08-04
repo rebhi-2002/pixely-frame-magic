@@ -39,21 +39,21 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Flame", label: bi("أيام متتالية", "Streak days"), value: "12" }},
-          {{ icon: "Timer", label: bi("دقائق دراسة اليوم", "Minutes studied today"), value: "45" }},
-          {{ icon: "ListChecks", label: bi("مهام مكتملة", "Tasks done"), value: "8/11" }},
-          {{ icon: "Trophy", label: bi("نقاط الإنجاز", "Achievement points"), value: "1,240" }},
+          { icon: "Flame", label: bi("أيام متتالية", "Streak days"), value: "12" },
+          { icon: "Timer", label: bi("دقائق دراسة اليوم", "Minutes studied today"), value: "45" },
+          { icon: "ListChecks", label: bi("مهام مكتملة", "Tasks done"), value: "8/11" },
+          { icon: "Trophy", label: bi("نقاط الإنجاز", "Achievement points"), value: "1,240" },
         ]}
       />
       <Panel title={bi("ابدأ الآن", "Start now")} icon="Zap">
         <QuickLinks
           items={[
-            {{ to: "/library", label: bi("المكتبة", "Library"), icon: "Library" }},
-            {{ to: "/exam-simulator", label: bi("محاكي امتحان", "Exam simulator"), icon: "Timer" }},
-            {{ to: "/mistakes-bank", label: bi("بنك الأخطاء", "Mistakes bank"), icon: "XCircle" }},
-            {{ to: "/flashcards", label: bi("بطاقات مراجعة", "Flashcards"), icon: "Layers" }},
-            {{ to: "/schedule", label: bi("جدولي", "My schedule"), icon: "CalendarDays" }},
-            {{ to: "/my-courses", label: bi("كورساتي", "My courses"), icon: "BookOpenCheck" }},
+            { to: "/library", label: bi("المكتبة", "Library"), icon: "Library" },
+            { to: "/exam-simulator", label: bi("محاكي امتحان", "Exam simulator"), icon: "Timer" },
+            { to: "/mistakes-bank", label: bi("بنك الأخطاء", "Mistakes bank"), icon: "XCircle" },
+            { to: "/flashcards", label: bi("بطاقات مراجعة", "Flashcards"), icon: "Layers" },
+            { to: "/schedule", label: bi("جدولي", "My schedule"), icon: "CalendarDays" },
+            { to: "/my-courses", label: bi("كورساتي", "My courses"), icon: "BookOpenCheck" },
           ]}
         />
       </Panel>
@@ -66,9 +66,9 @@ function Body() {
       <Panel title={bi("قريباً", "Coming up")} icon="CalendarClock">
         <RowList
           rows={[
-            {{ title: bi("امتحان فيزياء — وحدة 3", "Physics quiz — unit 3"), meta: bi("غداً 9:00", "Tomorrow 9:00"), value: bi("امتحان", "Quiz"), tone: "primary" }},
-            {{ title: bi("تسليم ورقة عمل رياضيات", "Math worksheet due"), meta: bi("بعد يومين", "In 2 days"), value: bi("واجب", "Homework"), tone: "muted" }},
-            {{ title: bi("مراجعة بطاقات كيمياء", "Chemistry flashcards review"), meta: bi("اليوم", "Today"), value: bi("مراجعة", "Review"), tone: "success" }},
+            { title: bi("امتحان فيزياء — وحدة 3", "Physics quiz — unit 3"), meta: bi("غداً 9:00", "Tomorrow 9:00"), value: bi("امتحان", "Quiz"), tone: "primary" },
+            { title: bi("تسليم ورقة عمل رياضيات", "Math worksheet due"), meta: bi("بعد يومين", "In 2 days"), value: bi("واجب", "Homework"), tone: "muted" },
+            { title: bi("مراجعة بطاقات كيمياء", "Chemistry flashcards review"), meta: bi("اليوم", "Today"), value: bi("مراجعة", "Review"), tone: "success" },
           ]}
         />
       </Panel>

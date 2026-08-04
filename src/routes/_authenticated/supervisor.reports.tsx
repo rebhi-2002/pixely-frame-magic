@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "FileBarChart", label: bi("تقارير جاهزة", "Ready reports"), value: "6" }},
-          {{ icon: "CalendarDays", label: bi("دورية", "Frequency"), value: "أسبوعي" }},
-          {{ icon: "Download", label: bi("تنزيلات", "Downloads"), value: "42" }},
-          {{ icon: "ShieldCheck", label: bi("بيانات مجهولة الهوية", "Anonymised"), value: "نعم" }},
+          { icon: "FileBarChart", label: bi("تقارير جاهزة", "Ready reports"), value: "6" },
+          { icon: "CalendarDays", label: bi("دورية", "Frequency"), value: "أسبوعي" },
+          { icon: "Download", label: bi("تنزيلات", "Downloads"), value: "42" },
+          { icon: "ShieldCheck", label: bi("بيانات مجهولة الهوية", "Anonymised"), value: "نعم" },
         ]}
       />
       <Panel title={bi("التقارير", "Reports")} icon="FileBarChart">
         <RowList
           rows={[
-            {{ title: bi("تقرير جودة التدريس — يوليو", "Teaching quality — July"), meta: bi("PDF · 12 صفحة", "PDF · 12 pages"), value: bi("تنزيل", "Download"), tone: "primary" }},
-            {{ title: bi("تقرير الإتقان بالمواد", "Mastery by subject"), meta: bi("XLSX", "XLSX"), value: bi("تنزيل", "Download"), tone: "primary" }},
-            {{ title: bi("تقرير الالتزام الأسبوعي", "Weekly consistency"), meta: bi("PDF · 6 صفحات", "PDF · 6 pages"), value: bi("تنزيل", "Download"), tone: "primary" }},
+            { title: bi("تقرير جودة التدريس — يوليو", "Teaching quality — July"), meta: bi("PDF · 12 صفحة", "PDF · 12 pages"), value: bi("تنزيل", "Download"), tone: "primary" },
+            { title: bi("تقرير الإتقان بالمواد", "Mastery by subject"), meta: bi("XLSX", "XLSX"), value: bi("تنزيل", "Download"), tone: "primary" },
+            { title: bi("تقرير الالتزام الأسبوعي", "Weekly consistency"), meta: bi("PDF · 6 صفحات", "PDF · 6 pages"), value: bi("تنزيل", "Download"), tone: "primary" },
           ]}
         />
       </Panel>

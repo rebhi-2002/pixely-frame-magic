@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "User", label: bi("الابن المتابَع", "Child"), value: "أحمد" }},
-          {{ icon: "Flame", label: bi("أيام دراسة", "Study days"), value: "5/7" }},
-          {{ icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "66%" }},
-          {{ icon: "AlertTriangle", label: bi("مواد تحتاج دعم", "Needs support"), value: "1" }},
+          { icon: "User", label: bi("الابن المتابَع", "Child"), value: "أحمد" },
+          { icon: "Flame", label: bi("أيام دراسة", "Study days"), value: "5/7" },
+          { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "66%" },
+          { icon: "AlertTriangle", label: bi("مواد تحتاج دعم", "Needs support"), value: "1" },
         ]}
       />
       <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
@@ -54,9 +54,9 @@ function Body() {
       <Panel title={bi("ملخّص الأسبوع", "Week summary")} icon="Activity">
         <RowList
           rows={[
-            {{ title: bi("ساعات الدراسة", "Study hours"), meta: bi("9 ساعات و20 دقيقة", "9h 20m"), value: bi("+12%", "+12%"), tone: "success" }},
-            {{ title: bi("امتحانات تدريبية", "Mock exams"), meta: bi("امتحانان", "2 exams"), value: bi("72%", "72%"), tone: "primary" }},
-            {{ title: bi("الكيمياء تحتاج متابعة", "Chemistry needs attention"), meta: bi("أخطاء متكرّرة في التفاعلات", "Repeated reaction mistakes"), value: bi("تنبيه", "Alert"), tone: "danger" }},
+            { title: bi("ساعات الدراسة", "Study hours"), meta: bi("9 ساعات و20 دقيقة", "9h 20m"), value: bi("+12%", "+12%"), tone: "success" },
+            { title: bi("امتحانات تدريبية", "Mock exams"), meta: bi("امتحانان", "2 exams"), value: bi("72%", "72%"), tone: "primary" },
+            { title: bi("الكيمياء تحتاج متابعة", "Chemistry needs attention"), meta: bi("أخطاء متكرّرة في التفاعلات", "Repeated reaction mistakes"), value: bi("تنبيه", "Alert"), tone: "danger" },
           ]}
         />
       </Panel>

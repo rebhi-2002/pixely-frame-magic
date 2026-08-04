@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Link", label: bi("رابطك", "Your link"), value: "acadimia/r/AH12" }},
-          {{ icon: "UserPlus", label: bi("دعوات مُرسلة", "Invites sent"), value: "9" }},
-          {{ icon: "CheckCircle2", label: bi("سجّلوا فعلياً", "Joined"), value: "4" }},
-          {{ icon: "Gift", label: bi("مكافآتك", "Rewards"), value: "2 شهور" }},
+          { icon: "Link", label: bi("رابطك", "Your link"), value: "acadimia/r/AH12" },
+          { icon: "UserPlus", label: bi("دعوات مُرسلة", "Invites sent"), value: "9" },
+          { icon: "CheckCircle2", label: bi("سجّلوا فعلياً", "Joined"), value: "4" },
+          { icon: "Gift", label: bi("مكافآتك", "Rewards"), value: "2 شهور" },
         ]}
       />
       <Panel title={bi("من دعوتهم", "People you invited")} icon="Users">
         <RowList to="/invite/AH12"
           rows={[
-            {{ title: bi("لؤي ع.", "Loai A."), meta: bi("سجّل 2026/07/12", "Joined 2026/07/12"), value: bi("مكافأة", "Rewarded"), tone: "success" }},
-            {{ title: bi("سما ح.", "Sama H."), meta: bi("سجّل 2026/07/03", "Joined 2026/07/03"), value: bi("مكافأة", "Rewarded"), tone: "success" }},
-            {{ title: bi("يزن م.", "Yazan M."), meta: bi("الدعوة مفتوحة", "Invite pending"), value: bi("معلّق", "Pending"), tone: "muted" }},
+            { title: bi("لؤي ع.", "Loai A."), meta: bi("سجّل 2026/07/12", "Joined 2026/07/12"), value: bi("مكافأة", "Rewarded"), tone: "success" },
+            { title: bi("سما ح.", "Sama H."), meta: bi("سجّل 2026/07/03", "Joined 2026/07/03"), value: bi("مكافأة", "Rewarded"), tone: "success" },
+            { title: bi("يزن م.", "Yazan M."), meta: bi("الدعوة مفتوحة", "Invite pending"), value: bi("معلّق", "Pending"), tone: "muted" },
           ]}
         />
       </Panel>

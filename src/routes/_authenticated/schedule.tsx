@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "CalendarDays", label: bi("أحداث هذا الأسبوع", "This week"), value: "14" }},
-          {{ icon: "BellRing", label: bi("تذكيرات مفعّلة", "Reminders on"), value: "9" }},
-          {{ icon: "ListChecks", label: bi("مهام متأخرة", "Overdue"), value: "2" }},
-          {{ icon: "Timer", label: bi("ساعات مخطّطة", "Planned hours"), value: "11" }},
+          { icon: "CalendarDays", label: bi("أحداث هذا الأسبوع", "This week"), value: "14" },
+          { icon: "BellRing", label: bi("تذكيرات مفعّلة", "Reminders on"), value: "9" },
+          { icon: "ListChecks", label: bi("مهام متأخرة", "Overdue"), value: "2" },
+          { icon: "Timer", label: bi("ساعات مخطّطة", "Planned hours"), value: "11" },
         ]}
       />
       <Panel title={bi("أسبوعك", "Your week")} icon="CalendarDays">

@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Layers", label: bi("بطاقات اليوم", "Due today"), value: "34" }},
-          {{ icon: "Flame", label: bi("أيام متتالية", "Streak"), value: "12" }},
-          {{ icon: "CheckCircle2", label: bi("بطاقات مُتقنة", "Mastered"), value: "212" }},
-          {{ icon: "Percent", label: bi("دقّة التذكّر", "Recall accuracy"), value: "86%" }},
+          { icon: "Layers", label: bi("بطاقات اليوم", "Due today"), value: "34" },
+          { icon: "Flame", label: bi("أيام متتالية", "Streak"), value: "12" },
+          { icon: "CheckCircle2", label: bi("بطاقات مُتقنة", "Mastered"), value: "212" },
+          { icon: "Percent", label: bi("دقّة التذكّر", "Recall accuracy"), value: "86%" },
         ]}
       />
       <Panel title={bi("مجموعاتك", "Your decks")} icon="Layers">
         <RowList
           rows={[
-            {{ title: bi("رياضيات — مشتقات", "Math — derivatives"), meta: bi("48 بطاقة · 12 مستحقة", "48 cards · 12 due"), value: bi("ابدأ", "Start"), tone: "primary" }},
-            {{ title: bi("فيزياء — الحركة", "Physics — motion"), meta: bi("36 بطاقة · 14 مستحقة", "36 cards · 14 due"), value: bi("ابدأ", "Start"), tone: "primary" }},
-            {{ title: bi("عربي — بلاغة", "Arabic — rhetoric"), meta: bi("60 بطاقة · 8 مستحقة", "60 cards · 8 due"), value: bi("ابدأ", "Start"), tone: "primary" }},
+            { title: bi("رياضيات — مشتقات", "Math — derivatives"), meta: bi("48 بطاقة · 12 مستحقة", "48 cards · 12 due"), value: bi("ابدأ", "Start"), tone: "primary" },
+            { title: bi("فيزياء — الحركة", "Physics — motion"), meta: bi("36 بطاقة · 14 مستحقة", "36 cards · 14 due"), value: bi("ابدأ", "Start"), tone: "primary" },
+            { title: bi("عربي — بلاغة", "Arabic — rhetoric"), meta: bi("60 بطاقة · 8 مستحقة", "60 cards · 8 due"), value: bi("ابدأ", "Start"), tone: "primary" },
           ]}
         />
       </Panel>

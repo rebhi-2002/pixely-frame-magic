@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "FileCheck2", label: bi("امتحانات أنهيتها", "Exams taken"), value: "7" }},
-          {{ icon: "Percent", label: bi("أفضل نتيجة", "Best score"), value: "88%" }},
-          {{ icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: "42 د" }},
-          {{ icon: "Target", label: bi("الهدف", "Target"), value: "90%" }},
+          { icon: "FileCheck2", label: bi("امتحانات أنهيتها", "Exams taken"), value: "7" },
+          { icon: "Percent", label: bi("أفضل نتيجة", "Best score"), value: "88%" },
+          { icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: "42 د" },
+          { icon: "Target", label: bi("الهدف", "Target"), value: "90%" },
         ]}
       />
       <Panel title={bi("امتحانات جاهزة", "Ready mock exams")} icon="FileText">
         <RowList
           rows={[
-            {{ title: bi("رياضيات — نموذج وزاري كامل", "Math — full ministry model"), meta: bi("40 سؤالاً · 60 دقيقة", "40 questions · 60 min"), value: bi("ابدأ", "Start"), tone: "primary" }},
-            {{ title: bi("فيزياء — الوحدات 1-3", "Physics — units 1-3"), meta: bi("25 سؤالاً · 35 دقيقة", "25 questions · 35 min"), value: bi("ابدأ", "Start"), tone: "primary" }},
-            {{ title: bi("كيمياء — امتحان سريع", "Chemistry — quick quiz"), meta: bi("10 أسئلة · 12 دقيقة", "10 questions · 12 min"), value: bi("ابدأ", "Start"), tone: "primary" }},
+            { title: bi("رياضيات — نموذج وزاري كامل", "Math — full ministry model"), meta: bi("40 سؤالاً · 60 دقيقة", "40 questions · 60 min"), value: bi("ابدأ", "Start"), tone: "primary" },
+            { title: bi("فيزياء — الوحدات 1-3", "Physics — units 1-3"), meta: bi("25 سؤالاً · 35 دقيقة", "25 questions · 35 min"), value: bi("ابدأ", "Start"), tone: "primary" },
+            { title: bi("كيمياء — امتحان سريع", "Chemistry — quick quiz"), meta: bi("10 أسئلة · 12 دقيقة", "10 questions · 12 min"), value: bi("ابدأ", "Start"), tone: "primary" },
           ]}
         />
       </Panel>

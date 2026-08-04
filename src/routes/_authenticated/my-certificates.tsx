@@ -39,17 +39,17 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Award", label: bi("شهادات", "Certificates"), value: "2" }},
-          {{ icon: "ShieldCheck", label: bi("قابلة للتحقّق", "Verifiable"), value: "2" }},
-          {{ icon: "Share2", label: bi("مشاركات", "Shares"), value: "5" }},
-          {{ icon: "Clock", label: bi("قيد الإصدار", "Pending"), value: "1" }},
+          { icon: "Award", label: bi("شهادات", "Certificates"), value: "2" },
+          { icon: "ShieldCheck", label: bi("قابلة للتحقّق", "Verifiable"), value: "2" },
+          { icon: "Share2", label: bi("مشاركات", "Shares"), value: "5" },
+          { icon: "Clock", label: bi("قيد الإصدار", "Pending"), value: "1" },
         ]}
       />
       <Panel title={bi("شهاداتك", "Your certificates")} icon="Award">
         <RowList to="/certificate/ACD-2026-0142"
           rows={[
-            {{ title: bi("مهارات المراجعة الذكية", "Smart revision skills"), meta: bi("ACD-2026-0142", "ACD-2026-0142"), value: bi("تحقّق", "Verify"), tone: "success" }},
-            {{ title: bi("أساسيات الكيمياء", "Chemistry basics"), meta: bi("ACD-2026-0091", "ACD-2026-0091"), value: bi("تحقّق", "Verify"), tone: "success" }},
+            { title: bi("مهارات المراجعة الذكية", "Smart revision skills"), meta: bi("ACD-2026-0142", "ACD-2026-0142"), value: bi("تحقّق", "Verify"), tone: "success" },
+            { title: bi("أساسيات الكيمياء", "Chemistry basics"), meta: bi("ACD-2026-0091", "ACD-2026-0091"), value: bi("تحقّق", "Verify"), tone: "success" },
           ]}
         />
       </Panel>

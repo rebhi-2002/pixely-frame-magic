@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Users", label: bi("طلاب", "Students"), value: "1,240" }},
-          {{ icon: "AlertTriangle", label: bi("متعثّرون", "At risk"), value: "63" }},
-          {{ icon: "Flame", label: bi("منتظمون", "Consistent"), value: "812" }},
-          {{ icon: "TrendingUp", label: bi("تحسّنوا هذا الشهر", "Improved"), value: "184" }},
+          { icon: "Users", label: bi("طلاب", "Students"), value: "1,240" },
+          { icon: "AlertTriangle", label: bi("متعثّرون", "At risk"), value: "63" },
+          { icon: "Flame", label: bi("منتظمون", "Consistent"), value: "812" },
+          { icon: "TrendingUp", label: bi("تحسّنوا هذا الشهر", "Improved"), value: "184" },
         ]}
       />
       <Panel title={bi("يحتاجون تدخّلاً", "Needs intervention")} icon="Users">

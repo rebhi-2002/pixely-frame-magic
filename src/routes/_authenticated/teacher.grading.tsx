@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "PenSquare", label: bi("بانتظار التصحيح", "Pending"), value: "18" }},
-          {{ icon: "CheckCheck", label: bi("صُحّحت اليوم", "Graded today"), value: "11" }},
-          {{ icon: "Clock", label: bi("متوسط وقت التصحيح", "Avg. time"), value: "3.4 د" }},
-          {{ icon: "AlertTriangle", label: bi("متأخّرة", "Overdue"), value: "2" }},
+          { icon: "PenSquare", label: bi("بانتظار التصحيح", "Pending"), value: "18" },
+          { icon: "CheckCheck", label: bi("صُحّحت اليوم", "Graded today"), value: "11" },
+          { icon: "Clock", label: bi("متوسط وقت التصحيح", "Avg. time"), value: "3.4 د" },
+          { icon: "AlertTriangle", label: bi("متأخّرة", "Overdue"), value: "2" },
         ]}
       />
       <Panel title={bi("طابور التصحيح", "Grading queue")} icon="PenSquare">

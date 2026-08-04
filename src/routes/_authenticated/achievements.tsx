@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Trophy", label: bi("نقاط الإنجاز", "Points"), value: "1,240" }},
-          {{ icon: "Medal", label: bi("شارات", "Badges"), value: "9" }},
-          {{ icon: "Flame", label: bi("أطول سلسلة", "Longest streak"), value: "21" }},
-          {{ icon: "TrendingUp", label: bi("تحسّن الشهر", "Monthly gain"), value: "+18%" }},
+          { icon: "Trophy", label: bi("نقاط الإنجاز", "Points"), value: "1,240" },
+          { icon: "Medal", label: bi("شارات", "Badges"), value: "9" },
+          { icon: "Flame", label: bi("أطول سلسلة", "Longest streak"), value: "21" },
+          { icon: "TrendingUp", label: bi("تحسّن الشهر", "Monthly gain"), value: "+18%" },
         ]}
       />
       <Panel title={bi("شاراتك", "Your badges")} icon="Medal">
         <RowList
           rows={[
-            {{ title: bi("مُتقن المشتقات", "Derivatives master"), meta: bi("رياضيات · وحدة 4", "Math · unit 4"), value: bi("مفتوحة", "Unlocked"), tone: "success" }},
-            {{ title: bi("21 يوم متتالي", "21-day streak"), meta: bi("انتظام", "Consistency"), value: bi("مفتوحة", "Unlocked"), tone: "success" }},
-            {{ title: bi("صائد الأخطاء", "Mistake hunter"), meta: bi("أتقن 50 خطأ", "Master 50 mistakes"), value: bi("قريباً", "Almost"), tone: "primary" }},
+            { title: bi("مُتقن المشتقات", "Derivatives master"), meta: bi("رياضيات · وحدة 4", "Math · unit 4"), value: bi("مفتوحة", "Unlocked"), tone: "success" },
+            { title: bi("21 يوم متتالي", "21-day streak"), meta: bi("انتظام", "Consistency"), value: bi("مفتوحة", "Unlocked"), tone: "success" },
+            { title: bi("صائد الأخطاء", "Mistake hunter"), meta: bi("أتقن 50 خطأ", "Master 50 mistakes"), value: bi("قريباً", "Almost"), tone: "primary" },
           ]}
         />
       </Panel>

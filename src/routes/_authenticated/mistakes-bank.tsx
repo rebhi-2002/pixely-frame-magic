@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "XCircle", label: bi("أخطاء مفتوحة", "Open mistakes"), value: "23" }},
-          {{ icon: "RefreshCw", label: bi("قيد التكرار", "In rotation"), value: "9" }},
-          {{ icon: "CheckCircle2", label: bi("أُتقنت", "Mastered"), value: "57" }},
-          {{ icon: "TrendingDown", label: bi("تراجع الأخطاء", "Mistakes trend"), value: "-32%" }},
+          { icon: "XCircle", label: bi("أخطاء مفتوحة", "Open mistakes"), value: "23" },
+          { icon: "RefreshCw", label: bi("قيد التكرار", "In rotation"), value: "9" },
+          { icon: "CheckCircle2", label: bi("أُتقنت", "Mastered"), value: "57" },
+          { icon: "TrendingDown", label: bi("تراجع الأخطاء", "Mistakes trend"), value: "-32%" },
         ]}
       />
       <Panel title={bi("الأكثر تكراراً", "Most repeated")} icon="XCircle">
         <RowList
           rows={[
-            {{ title: bi("قوانين نيوتن — الاحتكاك", "Newton's laws — friction"), meta: bi("الفيزياء · أخطأت 4 مرات", "Physics · wrong 4 times"), value: bi("أولوية", "Priority"), tone: "danger" }},
-            {{ title: bi("المعادلات التربيعية", "Quadratic equations"), meta: bi("الرياضيات · أخطأت 3 مرات", "Math · wrong 3 times"), value: bi("أولوية", "Priority"), tone: "danger" }},
-            {{ title: bi("التفاعلات الطاردة", "Exothermic reactions"), meta: bi("الكيمياء · أخطأت مرتين", "Chemistry · wrong twice"), value: bi("مراجعة", "Review"), tone: "primary" }},
+            { title: bi("قوانين نيوتن — الاحتكاك", "Newton's laws — friction"), meta: bi("الفيزياء · أخطأت 4 مرات", "Physics · wrong 4 times"), value: bi("أولوية", "Priority"), tone: "danger" },
+            { title: bi("المعادلات التربيعية", "Quadratic equations"), meta: bi("الرياضيات · أخطأت 3 مرات", "Math · wrong 3 times"), value: bi("أولوية", "Priority"), tone: "danger" },
+            { title: bi("التفاعلات الطاردة", "Exothermic reactions"), meta: bi("الكيمياء · أخطأت مرتين", "Chemistry · wrong twice"), value: bi("مراجعة", "Review"), tone: "primary" },
           ]}
         />
       </Panel>

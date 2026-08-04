@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "Wallet", label: bi("الرصيد المتاح", "Available"), value: "620 د.أ" }},
-          {{ icon: "Hourglass", label: bi("قيد التسوية", "Pending"), value: "200 د.أ" }},
-          {{ icon: "BadgePercent", label: bi("عمولة المنصة", "Platform fee"), value: "15%" }},
-          {{ icon: "Banknote", label: bi("إجمالي مسحوب", "Total paid out"), value: "3,450 د.أ" }},
+          { icon: "Wallet", label: bi("الرصيد المتاح", "Available"), value: "620 د.أ" },
+          { icon: "Hourglass", label: bi("قيد التسوية", "Pending"), value: "200 د.أ" },
+          { icon: "BadgePercent", label: bi("عمولة المنصة", "Platform fee"), value: "15%" },
+          { icon: "Banknote", label: bi("إجمالي مسحوب", "Total paid out"), value: "3,450 د.أ" },
         ]}
       />
       <Panel title={bi("آخر الحركات", "Recent transactions")} icon="Receipt">

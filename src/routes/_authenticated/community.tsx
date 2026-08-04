@@ -39,18 +39,18 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "MessagesSquare", label: bi("أسئلة هذا الأسبوع", "Questions this week"), value: "48" }},
-          {{ icon: "CheckCheck", label: bi("إجابات معتمدة", "Verified answers"), value: "31" }},
-          {{ icon: "Users", label: bi("أعضاء مادّتك", "Members"), value: "312" }},
-          {{ icon: "Star", label: bi("سمعتك", "Your reputation"), value: "150" }},
+          { icon: "MessagesSquare", label: bi("أسئلة هذا الأسبوع", "Questions this week"), value: "48" },
+          { icon: "CheckCheck", label: bi("إجابات معتمدة", "Verified answers"), value: "31" },
+          { icon: "Users", label: bi("أعضاء مادّتك", "Members"), value: "312" },
+          { icon: "Star", label: bi("سمعتك", "Your reputation"), value: "150" },
         ]}
       />
       <Panel title={bi("أحدث الأسئلة", "Latest questions")} icon="MessagesSquare">
         <RowList
           rows={[
-            {{ title: bi("كيف نحلّ تكامل بالتجزيء؟", "How to solve integration by parts?"), meta: bi("رياضيات · 6 إجابات", "Math · 6 answers"), value: bi("إجابة معلم", "Teacher answer"), tone: "success" }},
-            {{ title: bi("فرق الجهد في التوالي والتوازي", "Voltage in series vs parallel"), meta: bi("فيزياء · 3 إجابات", "Physics · 3 answers"), value: bi("مفتوح", "Open"), tone: "primary" }},
-            {{ title: bi("مراجعة قواعد الهمزة", "Hamza rules review"), meta: bi("عربي · 9 إجابات", "Arabic · 9 answers"), value: bi("مُغلق", "Closed"), tone: "muted" }},
+            { title: bi("كيف نحلّ تكامل بالتجزيء؟", "How to solve integration by parts?"), meta: bi("رياضيات · 6 إجابات", "Math · 6 answers"), value: bi("إجابة معلم", "Teacher answer"), tone: "success" },
+            { title: bi("فرق الجهد في التوالي والتوازي", "Voltage in series vs parallel"), meta: bi("فيزياء · 3 إجابات", "Physics · 3 answers"), value: bi("مفتوح", "Open"), tone: "primary" },
+            { title: bi("مراجعة قواعد الهمزة", "Hamza rules review"), meta: bi("عربي · 9 إجابات", "Arabic · 9 answers"), value: bi("مُغلق", "Closed"), tone: "muted" },
           ]}
         />
       </Panel>

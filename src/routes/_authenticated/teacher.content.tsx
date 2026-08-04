@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "FileStack", label: bi("دروس منشورة", "Published"), value: "42" }},
-          {{ icon: "Clock", label: bi("قيد المراجعة", "In review"), value: "5" }},
-          {{ icon: "FileEdit", label: bi("مسوّدات", "Drafts"), value: "8" }},
-          {{ icon: "Eye", label: bi("مشاهدات الشهر", "Views this month"), value: "3,140" }},
+          { icon: "FileStack", label: bi("دروس منشورة", "Published"), value: "42" },
+          { icon: "Clock", label: bi("قيد المراجعة", "In review"), value: "5" },
+          { icon: "FileEdit", label: bi("مسوّدات", "Drafts"), value: "8" },
+          { icon: "Eye", label: bi("مشاهدات الشهر", "Views this month"), value: "3,140" },
         ]}
       />
       <Panel title={bi("أحدث المحتوى", "Recent content")} icon="FileStack">

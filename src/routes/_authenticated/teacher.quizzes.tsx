@@ -39,10 +39,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "ListChecks", label: bi("اختبارات", "Quizzes"), value: "14" }},
-          {{ icon: "HelpCircle", label: bi("أسئلة في البنك", "Questions in bank"), value: "268" }},
-          {{ icon: "Users", label: bi("محاولات هذا الأسبوع", "Attempts this week"), value: "312" }},
-          {{ icon: "Percent", label: bi("متوسط النتائج", "Average score"), value: "71%" }},
+          { icon: "ListChecks", label: bi("اختبارات", "Quizzes"), value: "14" },
+          { icon: "HelpCircle", label: bi("أسئلة في البنك", "Questions in bank"), value: "268" },
+          { icon: "Users", label: bi("محاولات هذا الأسبوع", "Attempts this week"), value: "312" },
+          { icon: "Percent", label: bi("متوسط النتائج", "Average score"), value: "71%" },
         ]}
       />
       <Panel title={bi("اختباراتك", "Your quizzes")} icon="ListChecks">

@@ -39,19 +39,19 @@ function Body() {
     >
       <StatGrid
         items={[
-          {{ icon: "BadgeCheck", label: bi("حالة التوثيق", "Verification"), value: "موثّق" }},
-          {{ icon: "Eye", label: bi("زيارات الملف", "Profile views"), value: "1,860" }},
-          {{ icon: "Star", label: bi("التقييم", "Rating"), value: "4.8" }},
-          {{ icon: "Users", label: bi("طلاب", "Students"), value: "126" }},
+          { icon: "BadgeCheck", label: bi("حالة التوثيق", "Verification"), value: "موثّق" },
+          { icon: "Eye", label: bi("زيارات الملف", "Profile views"), value: "1,860" },
+          { icon: "Star", label: bi("التقييم", "Rating"), value: "4.8" },
+          { icon: "Users", label: bi("طلاب", "Students"), value: "126" },
         ]}
       />
       <Panel title={bi("بيانات الملف", "Profile fields")} icon="UserCog">
         <RowList
           rows={[
-            {{ title: bi("الاسم المعروض", "Display name"), meta: bi("أ. سامي خالد", "Mr. Sami Khaled"), value: bi("تعديل", "Edit"), tone: "primary" }},
-            {{ title: bi("النبذة", "Bio"), meta: bi("معلم رياضيات — 12 سنة خبرة", "Math teacher — 12 years"), value: bi("تعديل", "Edit"), tone: "primary" }},
-            {{ title: bi("المواد", "Subjects"), meta: bi("رياضيات · فيزياء", "Math · Physics"), value: bi("تعديل", "Edit"), tone: "primary" }},
-            {{ title: bi("الشهادات", "Credentials"), meta: bi("بكالوريوس رياضيات — موثّقة", "BSc Mathematics — verified"), value: bi("موثّقة", "Verified"), tone: "success" }},
+            { title: bi("الاسم المعروض", "Display name"), meta: bi("أ. سامي خالد", "Mr. Sami Khaled"), value: bi("تعديل", "Edit"), tone: "primary" },
+            { title: bi("النبذة", "Bio"), meta: bi("معلم رياضيات — 12 سنة خبرة", "Math teacher — 12 years"), value: bi("تعديل", "Edit"), tone: "primary" },
+            { title: bi("المواد", "Subjects"), meta: bi("رياضيات · فيزياء", "Math · Physics"), value: bi("تعديل", "Edit"), tone: "primary" },
+            { title: bi("الشهادات", "Credentials"), meta: bi("بكالوريوس رياضيات — موثّقة", "BSc Mathematics — verified"), value: bi("موثّقة", "Verified"), tone: "success" },
           ]}
         />
       </Panel>
