@@ -84,13 +84,15 @@ export function AppSidebar({
         {!collapsed && (
           <BrandLockup />
         )}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onToggle}
           aria-label={collapsed ? "توسيع القائمة" : "طي القائمة"}
-          className="rounded-lg p-2 text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
         >
           {collapsed ? <PanelRightOpen className="size-5" /> : <PanelRightClose className="size-5" />}
-        </button>
+        </Button>
       </div>
 
       <div className="px-3 pb-3">

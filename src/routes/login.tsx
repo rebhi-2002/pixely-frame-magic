@@ -9,8 +9,8 @@ import { lovable } from "@/integrations/lovable";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
-const title = "تسجيل الدخول | أكاديميا";
-const description = "سجّل الدخول إلى حسابك في أكاديميا وتابع دراستك من حيث توقفت.";
+const title = "تسجيل الدخول | Academia";
+const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";
 
 export const Route = createFileRoute("/login")({
   ssr: false,

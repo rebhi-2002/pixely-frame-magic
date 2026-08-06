@@ -15,7 +15,7 @@ import { currentUserHome } from "@/lib/session-home";
 
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
-  "أكاديميا: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد.";
+  "Academia: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد.";
 
 export const Route = createFileRoute("/")({
   ssr: false,
