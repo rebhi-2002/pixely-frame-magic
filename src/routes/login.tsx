@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { LogIn } from "lucide-react";
@@ -7,11 +7,17 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "تسجيل الدخول | أكاديميا";
 const description = "سجّل الدخول إلى حسابك في أكاديميا وتابع دراستك من حيث توقفت.";
 
 export const Route = createFileRoute("/login")({
+  ssr: false,
+  beforeLoad: async () => {
+    const home = await currentUserHome();
+    if (home) throw redirect({ href: home });
+  },
   head: () => ({
     meta: [
       { title },
@@ -49,7 +55,7 @@ function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword(parsed.data);
       if (error) throw error;
       toast.success(t("authPages.login.success"));
-      navigate({ to: "/dashboard" });
+      navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "…");
     } finally {
@@ -68,7 +74,7 @@ function LoginPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/dashboard" });
+    navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
   }
 
   return (

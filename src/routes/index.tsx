@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   BookOpenCheck,
   MessagesSquare,
@@ -11,12 +11,18 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { currentUserHome } from "@/lib/session-home";
 
-const title = "أكاديميا | منصة الطالب للتنظيم والإنجاز";
+const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
   "أكاديميا: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد.";
 
 export const Route = createFileRoute("/")({
+  ssr: false,
+  beforeLoad: async () => {
+    const home = await currentUserHome();
+    if (home) throw redirect({ href: home });
+  },
   head: () => ({
     meta: [
       { title },
