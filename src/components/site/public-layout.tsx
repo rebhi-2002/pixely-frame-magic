@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
-import { BrandLogo } from "@/components/site/brand-logo";
+import { BrandLockup } from "@/components/site/brand-logo";
 
 const navItems = [
   { to: "/", key: "nav.home" },
@@ -22,7 +22,7 @@ const footerPlatform = [
 
 const footerLegal = [
   { to: "/help", key: "nav.help" },
-  { to: "/certificate/verify", key: "nav.certificateVerify" },
+  { to: "/certificate/$id", params: { id: "verify" }, key: "nav.certificateVerify" },
   { to: "/privacy", key: "nav.privacy" },
   { to: "/terms", key: "nav.terms" },
   { to: "/unsubscribe", key: "nav.unsubscribe" },
@@ -32,8 +32,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
   const { t } = useTranslation();
   return (
     <Link to="/" className={`flex items-center gap-2 ${className}`}>
-      <BrandLogo className="size-9 shrink-0" />
-      <span className="font-display text-xl font-bold text-foreground">{t("common.brand")}</span>
+      <BrandLockup />
     </Link>
   );
 }
@@ -113,6 +112,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <Link
                   key={i.to}
                   to={i.to}
+                  params={"params" in i ? i.params : undefined}
                   className="block text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {t(i.key)}

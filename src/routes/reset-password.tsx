@@ -5,6 +5,7 @@ import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "تعيين كلمة مرور جديدة | أكاديميا";
 const description = "اختر كلمة مرور جديدة لحسابك في أكاديميا.";
@@ -70,7 +71,7 @@ function ResetPasswordPage() {
       return;
     }
     toast.success(t("authPages.reset.success"));
-    navigate({ to: "/dashboard" });
+    navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
   }
 
   return (

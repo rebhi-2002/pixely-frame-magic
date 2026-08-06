@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/admin/page-header";
 import { usePreferences } from "@/components/providers/preferences-provider";
 import { useAccess } from "@/hooks/use-access";
+import { Guard } from "@/components/app/guard";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/settings")({
       { property: "og:description", content: "تفضيلاتك تُحفظ على جهازك وعلى حسابك معاً." },
     ],
   }),
-  component: SettingsPage,
+  component: () => <Guard pageKey="account_settings"><SettingsPage /></Guard>,
 });
 
 const THEMES = ["light", "dark", "auto"] as const;

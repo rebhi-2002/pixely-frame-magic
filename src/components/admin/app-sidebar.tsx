@@ -9,6 +9,7 @@ import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
+import { BrandLockup } from "@/components/site/brand-logo";
 
 function collectPaths(pages: AccessPage[]): string[] {
   return pages.flatMap((p) => [...(p.path ? [p.path] : []), ...collectPaths(p.children)]);
@@ -18,10 +19,12 @@ export function AppSidebar({
   access,
   collapsed,
   onToggle,
+  onNavigate,
 }: {
   access: MyAccess;
   collapsed: boolean;
   onToggle: () => void;
+  onNavigate?: () => void;
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
@@ -79,20 +82,17 @@ export function AppSidebar({
     >
       <div className="flex items-center justify-between gap-2 px-3 py-4">
         {!collapsed && (
-          <div className="flex items-center gap-2">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground font-bold">
-              ن
-            </span>
-            <span className="text-sm font-bold">لوحة التحكم</span>
-          </div>
+          <BrandLockup />
         )}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onToggle}
           aria-label={collapsed ? "توسيع القائمة" : "طي القائمة"}
-          className="rounded-lg p-2 text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
         >
           {collapsed ? <PanelRightOpen className="size-5" /> : <PanelRightClose className="size-5" />}
-        </button>
+        </Button>
       </div>
 
       <div className="px-3 pb-3">
@@ -154,7 +154,7 @@ export function AppSidebar({
                     isActive={isActive}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
-                    onNavigate={() => setFlyout(null)}
+                    onNavigate={() => { setFlyout(null); onNavigate?.(); }}
                   />
                 </div>
               )}
@@ -166,6 +166,7 @@ export function AppSidebar({
                     isActive={isActive}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
+                    onNavigate={onNavigate}
                   />
                 </div>
               )}
@@ -188,6 +189,7 @@ export function AppSidebar({
         </div>
         <Link
           to="/settings"
+          onClick={onNavigate}
           className={cn(
             "mb-1 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground",
             collapsed && "justify-center px-0",

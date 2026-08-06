@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { MailCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "تفعيل الحساب | أكاديميا";
 const description = "فعّل حسابك في أكاديميا من الرابط المرسل إلى بريدك.";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/verify-email")({
 
 function VerifyEmailPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { email: initialEmail } = Route.useSearch();
   const [email, setEmail] = useState(initialEmail ?? "");
   const [verified, setVerified] = useState(false);
@@ -70,12 +72,13 @@ function VerifyEmailPage() {
       subtitle={verified ? t("authPages.verify.verified") : t("authPages.verify.sub")}
     >
       {verified ? (
-        <Link
-          to="/dashboard"
+        <button
+          type="button"
+          onClick={async () => navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true })}
           className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           {t("authPages.verify.goDashboard")}
-        </Link>
+        </button>
       ) : (
         <div className="space-y-4">
           <AuthField

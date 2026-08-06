@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/admin/app-sidebar";
-import { BottomNav } from "@/components/admin/bottom-nav";
+import { Button } from "@/components/ui/button";
 
 import { useAccess } from "@/hooks/use-access";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { access, isLoading, error } = useAccess();
 
   if (isLoading) {
@@ -43,17 +44,31 @@ function AuthenticatedLayout() {
   return (
     <div className="flex min-h-screen w-full bg-background">
       <IdleLogoutWatcher />
-      <div className="hidden md:flex">
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="إغلاق القائمة"
+          className="fixed inset-0 z-40 bg-background/70 backdrop-blur-sm md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+      <div className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 md:static md:z-auto md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}>
         <AppSidebar
           access={access}
-          collapsed={collapsed}
+          collapsed={mobileOpen ? false : collapsed}
           onToggle={() => setCollapsed((c) => !c)}
+          onNavigate={() => setMobileOpen(false)}
         />
       </div>
-      <main className="min-w-0 flex-1 pb-16 md:pb-0">
+      <main className="min-w-0 flex-1">
+        <div className="sticky top-0 z-30 flex h-12 items-center border-b border-border bg-background/90 px-3 backdrop-blur md:hidden">
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="فتح القائمة">
+            <Menu className="size-5" />
+          </Button>
+          <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
+        </div>
         <Outlet />
       </main>
-      <BottomNav access={access} />
     </div>
   );
 }

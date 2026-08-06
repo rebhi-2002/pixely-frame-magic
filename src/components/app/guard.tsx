@@ -1,12 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { ShieldAlert } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
-import { useBi, roleHome } from "@/lib/bi";
+import { pageMatchesRole, roleHome, roleKeyFromName, useBi } from "@/lib/bi";
 
 /** حراسة الصفحة على الواجهة (الحراسة الحقيقية على السيرفر في rbac.server.ts). */
 export function useCanView(pageKey: string) {
   const { access, can, isLoading } = useAccess();
-  return { loading: isLoading, allowed: can(pageKey, "view_list"), access };
+  const role = roleKeyFromName(access?.profile?.role_name, access?.isAdmin);
+  return {
+    loading: isLoading,
+    allowed: can(pageKey, "view_list") && pageMatchesRole(pageKey, role),
+    access,
+  };
 }
 
 export function Forbidden() {

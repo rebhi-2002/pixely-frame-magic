@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { DynamicIcon } from "./dynamic-icon";
+import { Button } from "@/components/ui/button";
 
 export function PageHeader({
   title,
@@ -17,14 +18,16 @@ export function PageHeader({
     <header className="flex items-center justify-between gap-4 border-b border-border bg-card px-5 py-4">
       <div className="flex items-center gap-3">
         {onBack && (
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="icon"
             onClick={onBack}
             aria-label="رجوع"
-            className="flex size-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent"
+            className="text-muted-foreground"
           >
             <ChevronLeft className="size-4 rotate-180" />
-          </button>
+          </Button>
         )}
         <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
           <DynamicIcon name={icon} className="size-5" />

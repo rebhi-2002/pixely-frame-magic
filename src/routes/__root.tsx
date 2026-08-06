@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -19,9 +19,14 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { CookieConsent } from "@/components/site/cookie-consent";
+import { currentUserHome } from "@/lib/session-home";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
+  const [home, setHome] = useState("/");
+  useEffect(() => {
+    void currentUserHome().then((next) => setHome(next ?? "/"));
+  }, []);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -29,12 +34,12 @@ function NotFoundComponent() {
         <h2 className="mt-4 text-xl font-semibold text-foreground">{t("errors.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
         <div className="mt-6">
-          <Link
-            to="/"
+          <a
+            href={home}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             {t("errors.backHome")}
-          </Link>
+          </a>
         </div>
       </div>
     </div>
@@ -84,12 +89,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { title: "Academia | منصة الطالب للتنظيم والإنجاز" },
       { name: "description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
-      { name: "twitter:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { property: "og:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
+      { name: "twitter:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
       { property: "og:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
       { name: "twitter:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
     ],
@@ -113,7 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" data-theme="dark" className="dark">
+    <html lang="ar" dir="rtl" data-theme="dark" className="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
         {/* القسم 06 — تطبيق الثيم/اللغة المحفوظين قبل الرسم لتفادي الوميض */}

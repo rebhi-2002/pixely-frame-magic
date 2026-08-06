@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { AdminFeaturePage } from "@/components/admin/admin-feature";
+export const Route = createFileRoute("/_authenticated/admin/roles")({ head: () => ({ meta: [{ title: "الأدوار والصلاحيات | Academia" }, { name: "description", content: "إدارة أدوار وصلاحيات Academia." }, { property: "og:title", content: "الأدوار والصلاحيات" }, { property: "og:description", content: "إدارة أدوار وصلاحيات Academia." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <AdminFeaturePage feature="roles" /> });
