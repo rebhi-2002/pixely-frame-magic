@@ -34,12 +34,12 @@ function NotFoundComponent() {
         <h2 className="mt-4 text-xl font-semibold text-foreground">{t("errors.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
         <div className="mt-6">
-          <Link
+          <a
             href={home}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             {t("errors.backHome")}
-          </Link>
+          </a>
         </div>
       </div>
     </div>
@@ -89,12 +89,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { title: "Academia | منصة الطالب للتنظيم والإنجاز" },
       { name: "description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
-      { name: "twitter:title", content: "أكاديميا | منصة الطالب للتنظيم والإنجاز" },
+      { property: "og:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
+      { name: "twitter:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
       { property: "og:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
       { name: "twitter:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
     ],
