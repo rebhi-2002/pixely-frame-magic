@@ -255,7 +255,8 @@
         "price": "0",
         "level": "توجيهي عام"
       }
-    ]
+    ],
+    "open": "افتح الكورس"
   },
   "teacherProfile": {
     "meta": {
