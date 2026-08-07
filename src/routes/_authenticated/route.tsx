@@ -4,6 +4,7 @@ import { Loader2, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/site/page-transition";
 
 import { useAccess } from "@/hooks/use-access";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
@@ -67,7 +68,9 @@ function AuthenticatedLayout() {
           </Button>
           <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
         </div>
-        <Outlet />
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
       </main>
     </div>
   );
