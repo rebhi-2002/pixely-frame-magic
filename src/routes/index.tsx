@@ -54,6 +54,8 @@ const roles = [
 
 function Landing() {
   const { t } = useTranslation();
+  const { session } = useSession();
+  const role = session?.roleKey;
 
   return (
     <PublicLayout>
@@ -61,33 +63,64 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-primary">
             <Trophy className="size-4" />
-            {t("home.badge")}
+            {session
+              ? t("home.signedIn.welcome", { name: session.fullName })
+              : t("home.badge")}
           </span>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
-            {t("home.h1a")} <span className="text-primary">{t("home.h1b")}</span> {t("home.h1c")}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            {t("home.sub")}
-          </p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link
-              to="/signup"
-              className="glow-primary inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              {t("home.ctaPrimary")}
-            </Link>
-            <Link
-              to="/how-it-works"
-              className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
-            >
-              {t("home.ctaSecondary")}
-            </Link>
-          </div>
+          {session && role ? (
+            <>
+              <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
+                {t(`home.signedIn.${role}.h1`)}
+              </h1>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                {t(`home.signedIn.${role}.sub`)}
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link
+                  to={session.home}
+                  className="glow-primary hover-press inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+                >
+                  <LayoutDashboard className="size-4" />
+                  {t("home.signedIn.cta")}
+                </Link>
+                <Link
+                  to="/courses"
+                  className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+                >
+                  {t("home.signedIn.browse")}
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
+                {t("home.h1a")} <span className="text-primary">{t("home.h1b")}</span>{" "}
+                {t("home.h1c")}
+              </h1>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                {t("home.sub")}
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link
+                  to="/signup"
+                  className="glow-primary hover-press inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+                >
+                  {t("home.ctaPrimary")}
+                </Link>
+                <Link
+                  to="/how-it-works"
+                  className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+                >
+                  {t("home.ctaSecondary")}
+                </Link>
+              </div>
+            </>
+          )}
 
           <div className="mt-14 grid gap-4 sm:grid-cols-3">
             {stats.map((s) => (
-              <div key={s.key} className="rounded-2xl border border-border bg-card p-5">
+              <div key={s.key} className="hover-lift rounded-2xl border border-border bg-card p-5">
                 <p className="font-display text-3xl font-bold text-primary">{s.value}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{t(`home.stats.${s.key}`)}</p>
               </div>
