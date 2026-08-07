@@ -245,3 +245,96 @@
   opacity: 0.25;
   filter: blur(2px);
 }
+
+/* ——— انتقال الصفحات (الهيدر/الفوتر/التبويبات) ——— */
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.route-fade {
+  animation: route-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* لوح النتائج عند تبديل التبويبات/الفلاتر */
+@utility panel-swap {
+  animation: panel-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* تحويم موحّد للبطاقات والعناصر التفاعلية في كل الموقع */
+@utility hover-lift {
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms ease;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px -20px color-mix(in oklab, var(--color-foreground) 45%, transparent);
+    border-color: color-mix(in oklab, var(--color-primary) 45%, transparent);
+  }
+}
+
+@utility hover-press {
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    box-shadow 180ms ease;
+  &:hover {
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0) scale(0.985);
+  }
+}
+
+/* شارة/رابط في الهيدر مع خط سفلي متحرك */
+@utility nav-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 12px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: inline-end;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  &:hover::after,
+  &[data-status="active"]::after {
+    transform: scaleX(1);
+    transform-origin: inline-start;
+  }
+}
+
+/* روابط وأزرار عامة: انتقال افتراضي لطيف */
+@layer base {
+  a,
+  button,
+  summary,
+  [role="button"] {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, transform,
+      box-shadow;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
