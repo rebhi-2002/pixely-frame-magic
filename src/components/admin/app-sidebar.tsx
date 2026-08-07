@@ -1,14 +1,27 @@
 import { useMemo, useState } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronDown, LogOut, PanelRightClose, PanelRightOpen, Search, Settings } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  Home,
+  Languages,
+  LogOut,
+  Moon,
+  PanelRightClose,
+  PanelRightOpen,
+  Search,
+  Settings,
+  Sun,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { usePreferences } from "@/components/providers/preferences-provider";
 import { supabase } from "@/integrations/supabase/client";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PreferenceToggles } from "@/components/site/preference-toggles";
 import { BrandLockup } from "@/components/site/brand-logo";
 
 function collectPaths(pages: AccessPage[]): string[] {
@@ -26,6 +39,8 @@ export function AppSidebar({
   onToggle: () => void;
   onNavigate?: () => void;
 }) {
+  const { t } = useTranslation();
+  const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
