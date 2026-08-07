@@ -52,7 +52,7 @@ function AuthenticatedLayout() {
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <div className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 md:static md:z-auto md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}>
+      <div className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:sticky md:top-0 md:z-auto md:h-screen md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}>
         <AppSidebar
           access={access}
           collapsed={mobileOpen ? false : collapsed}
