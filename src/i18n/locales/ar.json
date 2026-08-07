@@ -22,7 +22,13 @@
     },
     "more": "المزيد",
     "menu": "القائمة",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات",
+    "backToSite": "العودة للموقع",
+    "account": "حسابي",
+    "preferences": "التفضيلات",
+    "navigation": "التنقّل"
   },
   "nav": {
     "home": "الرئيسية",
