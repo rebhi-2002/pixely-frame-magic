@@ -72,7 +72,7 @@ function CoursesPage() {
                   key={s}
                   type="button"
                   onClick={() => setSubject(s)}
-                  className={`rounded-lg border px-3 py-2 text-xs font-bold transition-colors ${
+                  className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
                     subject === s
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-muted-foreground hover:text-foreground"
@@ -87,6 +87,7 @@ function CoursesPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
+        <div key={`${subject}-${filtered.length}`} className="panel-swap">
         {filtered.length === 0 ? (
           <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
             {t("courses.empty")}
@@ -96,7 +97,7 @@ function CoursesPage() {
             {filtered.map((c) => (
               <article
                 key={c.id}
-                className="flex flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40"
+                className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
