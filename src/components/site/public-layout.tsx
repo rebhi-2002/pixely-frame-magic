@@ -44,7 +44,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-background">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:inset-inline-start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-primary-foreground"
+        className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-primary-foreground"
       >
         {t("common.skipToContent")}
       </a>

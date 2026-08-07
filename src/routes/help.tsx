@@ -44,7 +44,7 @@ function HelpPage() {
           <h1 className="mt-5 text-4xl font-bold text-foreground">{t("help.h1")}</h1>
           <p className="mt-3 text-lg text-muted-foreground">{t("help.sub")}</p>
           <div className="relative mt-7">
-            <Search className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
