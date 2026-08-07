@@ -44,8 +44,8 @@ function UnsubscribePage() {
             toast.success(t("unsubscribe.done"));
           }}
         >
-          <div className="space-y-1.5">
-            <label htmlFor="email" className="text-sm font-semibold text-foreground">
+          <div>
+            <label htmlFor="email" className="mb-2.5 block text-sm font-semibold text-foreground">
               {t("unsubscribe.email")}
             </label>
             <input

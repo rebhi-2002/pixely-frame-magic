@@ -15,8 +15,8 @@ const description = "سجّل الدخول إلى حسابك في Academia وت�
 export const Route = createFileRoute("/login")({
   ssr: false,
   beforeLoad: async () => {
-    const home = await currentUserHome();
-    if (home) throw redirect({ href: home });
+    /* المستخدم المسجّل يعود للموقع العام لا للوحة التحكم مباشرة */
+    if (await currentUserHome()) throw redirect({ to: "/" });
   },
   head: () => ({
     meta: [
