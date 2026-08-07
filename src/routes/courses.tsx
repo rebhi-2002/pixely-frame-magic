@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Search, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/courses")({
   head: () => ({
@@ -38,6 +39,7 @@ function CoursesPage() {
   const items = t("courses.items", { returnObjects: true }) as CourseItem[];
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState<string>("__all");
+  const { isSignedIn } = useSession();
 
   const subjects = useMemo(() => Array.from(new Set(items.map((i) => i.subject))), [items]);
 
@@ -57,7 +59,7 @@ function CoursesPage() {
 
           <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
             <div className="relative flex-1">
-              <Search className="pointer-events-none absolute inset-inline-start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -72,7 +74,7 @@ function CoursesPage() {
                   key={s}
                   type="button"
                   onClick={() => setSubject(s)}
-                  className={`rounded-lg border px-3 py-2 text-xs font-bold transition-colors ${
+                  className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
                     subject === s
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-muted-foreground hover:text-foreground"
@@ -87,6 +89,7 @@ function CoursesPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
+        <div key={`${subject}-${filtered.length}`} className="panel-swap">
         {filtered.length === 0 ? (
           <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
             {t("courses.empty")}
@@ -96,7 +99,7 @@ function CoursesPage() {
             {filtered.map((c) => (
               <article
                 key={c.id}
-                className="flex flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40"
+                className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
@@ -126,15 +129,16 @@ function CoursesPage() {
                   </span>
                 </div>
                 <Link
-                  to="/signup"
-                  className="mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                  to={isSignedIn ? "/my-courses" : "/signup"}
+                  className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
                 >
-                  {t("courses.enroll")}
+                  {t(isSignedIn ? "courses.open" : "courses.enroll")}
                 </Link>
               </article>
             ))}
           </div>
         )}
+        </div>
       </section>
     </PublicLayout>
   );

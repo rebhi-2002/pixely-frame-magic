@@ -15,8 +15,8 @@ const description = "سجّل الدخول إلى حسابك في Academia وت�
 export const Route = createFileRoute("/login")({
   ssr: false,
   beforeLoad: async () => {
-    const home = await currentUserHome();
-    if (home) throw redirect({ href: home });
+    /* المستخدم المسجّل يعود للموقع العام لا للوحة التحكم مباشرة */
+    if (await currentUserHome()) throw redirect({ to: "/" });
   },
   head: () => ({
     meta: [
@@ -55,7 +55,7 @@ function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword(parsed.data);
       if (error) throw error;
       toast.success(t("authPages.login.success"));
-      navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
+      navigate({ to: "/", replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "…");
     } finally {
@@ -74,7 +74,7 @@ function LoginPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
+    navigate({ to: "/", replace: true });
   }
 
   return (

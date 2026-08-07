@@ -22,7 +22,13 @@
     },
     "more": "More",
     "menu": "Menu",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "backToSite": "Back to site",
+    "account": "My account",
+    "preferences": "Preferences",
+    "navigation": "Navigation"
   },
   "nav": {
     "home": "Home",
@@ -97,7 +103,32 @@
     },
     "ctaTitle": "Ready to start?",
     "ctaSub": "Sign up in a minute, pick your subjects, set your first weekly goal — we handle the rest.",
-    "ctaButton": "Create a free account"
+    "ctaButton": "Create a free account",
+    "signedIn": {
+      "welcome": "Welcome, {{name}} 👋",
+      "cta": "Go to dashboard",
+      "browse": "Browse courses",
+      "student": {
+        "h1": "Ready to pick up where you left off?",
+        "sub": "Your library, schedule and mistakes bank are waiting — open your dashboard."
+      },
+      "teacher": {
+        "h1": "Your students are waiting for the next lesson",
+        "sub": "Create a course, grade submissions and track earnings from your dashboard."
+      },
+      "parent": {
+        "h1": "Follow your children's progress live",
+        "sub": "Progress, attendance and grades — all in the parent report."
+      },
+      "supervisor": {
+        "h1": "A full view of academic performance",
+        "sub": "Monitor teachers, students and content quality from the supervision panel."
+      },
+      "admin": {
+        "h1": "Platform operations at your fingertips",
+        "sub": "Users, permissions, curriculum, payments and content review — from the admin panel."
+      }
+    }
   },
   "howItWorks": {
     "meta": {
