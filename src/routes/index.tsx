@@ -136,7 +136,7 @@ function Landing() {
           {features.map((f) => (
             <article
               key={f.key}
-              className="rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40"
+              className="hover-lift rounded-2xl border border-border bg-card p-6"
             >
               <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
                 <f.icon className="size-5" />
@@ -155,7 +155,7 @@ function Landing() {
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
           {roles.map((r) => (
-            <div key={r.key} className="rounded-2xl border border-border bg-background p-6">
+            <div key={r.key} className="hover-lift rounded-2xl border border-border bg-background p-6">
               <r.icon className="size-6 text-success" />
               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
