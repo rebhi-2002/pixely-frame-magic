@@ -73,17 +73,22 @@ export function AppSidebar({
 
   const isActive = (path: string | null) => Boolean(path && pathname === path);
 
+  const accountItem = (extra?: string) =>
+    cn(
+      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-sidebar-foreground/85 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+      collapsed && "justify-center px-0",
+      extra,
+    );
+
   return (
     <aside
       className={cn(
-        "flex shrink-0 flex-col transition-all duration-300",
-        collapsed ? "w-[76px] bg-sidebar text-sidebar-foreground" : "w-72 bg-sidebar text-sidebar-foreground",
+        "flex h-full shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        collapsed ? "w-[76px]" : "w-72",
       )}
     >
       <div className="flex items-center justify-between gap-2 px-3 py-4">
-        {!collapsed && (
-          <BrandLockup />
-        )}
+        {!collapsed && <BrandLockup />}
         <Button
           variant="ghost"
           size="icon"
@@ -95,43 +100,51 @@ export function AppSidebar({
         </Button>
       </div>
 
-      <div className="px-3 pb-3">
-        <div className="relative">
-          <Search className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-sidebar-foreground/50" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={collapsed ? "بحث" : "ابحث في كل الصفحات..."}
-            className="h-9 border-sidebar-border bg-sidebar-accent pr-8 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
-          />
+      {!collapsed && (
+        <div className="px-3 pb-3">
+          <div className="relative">
+            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-sidebar-foreground/50" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="ابحث في كل الصفحات..."
+              className="h-9 border-sidebar-border bg-sidebar-accent ps-9 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
+            />
+          </div>
+          {searchResults.length > 0 && (
+            <ul className="panel-swap mt-2 space-y-1 rounded-lg bg-sidebar-accent p-1">
+              {searchResults.map((r) => (
+                <li key={r.path}>
+                  <Link
+                    to={r.path}
+                    onClick={() => setSearch("")}
+                    className="block rounded-md px-2 py-1.5 text-xs hover:bg-sidebar-primary/20"
+                  >
+                    <span className="font-medium">{r.name}</span>
+                    <span className="ms-1 text-sidebar-foreground/50">— {r.module}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        {searchResults.length > 0 && (
-          <ul className="mt-2 space-y-1 rounded-lg bg-sidebar-accent p-1">
-            {searchResults.map((r) => (
-              <li key={r.path}>
-                <Link
-                  to={r.path}
-                  onClick={() => setSearch("")}
-                  className="block rounded-md px-2 py-1.5 text-xs hover:bg-sidebar-primary/20"
-                >
-                  <span className="font-medium">{r.name}</span>
-                  <span className="mr-1 text-sidebar-foreground/50">— {r.module}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      )}
 
       <nav className="flex-1 overflow-y-auto px-2 pb-4">
+        {!collapsed && (
+          <p className="px-3 pb-1.5 text-[11px] font-bold tracking-wide text-sidebar-foreground/45">
+            {t("common.navigation")}
+          </p>
+        )}
         {access.modules.map((m) => {
           const open = effectiveOpenModules.includes(m.key);
           return (
             <div key={m.key} className="relative mb-1">
               <button
                 onClick={() => (collapsed ? setFlyout(flyout === m.key ? null : m.key) : toggleModule(m.key))}
+                title={collapsed ? m.name : undefined}
                 className={cn(
-                  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors",
+                  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200",
                   "hover:bg-sidebar-accent",
                   open && !collapsed && "bg-sidebar-accent",
                   collapsed && "justify-center px-0",
@@ -140,14 +153,16 @@ export function AppSidebar({
                 <DynamicIcon name={m.icon} className="size-[18px] shrink-0" />
                 {!collapsed && (
                   <>
-                    <span className="flex-1 text-right">{m.name}</span>
-                    {open ? <ChevronDown className="size-4" /> : <ChevronLeft className="size-4" />}
+                    <span className="flex-1 text-start">{m.name}</span>
+                    <ChevronDown
+                      className={cn("size-4 transition-transform duration-200", !open && "-rotate-90 rtl:rotate-90")}
+                    />
                   </>
                 )}
               </button>
 
               {collapsed && flyout === m.key && (
-                <div className="absolute left-full top-0 z-50 mr-2 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl">
+                <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
                   <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{m.name}</p>
                   <PageList
                     pages={m.pages}
@@ -160,7 +175,7 @@ export function AppSidebar({
               )}
 
               {!collapsed && open && (
-                <div className="animate-in slide-in-from-top-1 fade-in mt-1 duration-200">
+                <div className="panel-swap mt-1">
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
@@ -173,44 +188,71 @@ export function AppSidebar({
             </div>
           );
         })}
-      </nav>
 
-      <div className="border-t border-sidebar-border p-3">
-        {!collapsed && (
-          <div className="mb-2 px-1">
-            <p className="truncate text-sm font-semibold">{access.profile?.full_name ?? "مستخدم"}</p>
-            <p className="truncate text-xs text-sidebar-foreground/60">
-              {access.profile?.role_name ?? "بدون نوع"}
-            </p>
-          </div>
-        )}
-        <div className={cn("mb-2 flex items-center gap-1", collapsed && "flex-col")}>
-          <PreferenceToggles />
+        {/* حسابي — التفضيلات والإعدادات والخروج داخل نفس القائمة */}
+        <div className="mt-4 border-t border-sidebar-border pt-3">
+          {!collapsed && (
+            <div className="mb-2 px-3">
+              <p className="text-[11px] font-bold tracking-wide text-sidebar-foreground/45">
+                {t("common.account")}
+              </p>
+              <p className="mt-1.5 truncate text-sm font-semibold">
+                {access.profile?.full_name ?? "مستخدم"}
+              </p>
+              <p className="truncate text-xs text-sidebar-foreground/60">
+                {access.profile?.role_name ?? "بدون نوع"}
+              </p>
+            </div>
+          )}
+
+          <Link to="/" onClick={onNavigate} title={t("common.backToSite")} className={accountItem()}>
+            <Home className="size-4 shrink-0" />
+            {!collapsed && t("common.backToSite")}
+          </Link>
+
+          <Link
+            to="/settings"
+            onClick={onNavigate}
+            title={t("common.settings")}
+            className={accountItem(
+              pathname === "/settings" ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground" : undefined,
+            )}
+          >
+            <Settings className="size-4 shrink-0" />
+            {!collapsed && t("common.settings")}
+          </Link>
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            title={t("common.themeToggle")}
+            className={accountItem()}
+          >
+            {resolvedTheme === "dark" ? <Sun className="size-4 shrink-0" /> : <Moon className="size-4 shrink-0" />}
+            {!collapsed && t(resolvedTheme === "dark" ? "common.theme.light" : "common.theme.dark")}
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleLocale}
+            title={t("common.languageToggle")}
+            className={accountItem()}
+          >
+            <Languages className="size-4 shrink-0" />
+            {!collapsed && t(locale === "ar" ? "common.language.en" : "common.language.ar")}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSignOut}
+            title={t("common.signOut")}
+            className={accountItem("text-destructive hover:bg-destructive/10 hover:text-destructive")}
+          >
+            <LogOut className="size-4 shrink-0" />
+            {!collapsed && t("common.signOut")}
+          </button>
         </div>
-        <Link
-          to="/settings"
-          onClick={onNavigate}
-          className={cn(
-            "mb-1 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground",
-            collapsed && "justify-center px-0",
-            pathname === "/settings" && "bg-sidebar-primary text-sidebar-primary-foreground",
-          )}
-        >
-          <Settings className="size-4" />
-          {!collapsed && "الإعدادات"}
-        </Link>
-        <Button
-          variant="ghost"
-          onClick={handleSignOut}
-          className={cn(
-            "w-full justify-start gap-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          <LogOut className="size-4" />
-          {!collapsed && "تسجيل الخروج"}
-        </Button>
-      </div>
+      </nav>
     </aside>
   );
 }
