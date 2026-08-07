@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Search, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/courses")({
   head: () => ({
@@ -38,6 +39,7 @@ function CoursesPage() {
   const items = t("courses.items", { returnObjects: true }) as CourseItem[];
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState<string>("__all");
+  const { isSignedIn } = useSession();
 
   const subjects = useMemo(() => Array.from(new Set(items.map((i) => i.subject))), [items]);
 
@@ -127,15 +129,16 @@ function CoursesPage() {
                   </span>
                 </div>
                 <Link
-                  to="/signup"
-                  className="mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                  to={isSignedIn ? "/my-courses" : "/signup"}
+                  className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
                 >
-                  {t("courses.enroll")}
+                  {t(isSignedIn ? "courses.open" : "courses.enroll")}
                 </Link>
               </article>
             ))}
           </div>
         )}
+        </div>
       </section>
     </PublicLayout>
   );
