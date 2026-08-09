@@ -138,7 +138,7 @@ export function AppSidebar({
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="ابحث في كل الصفحات..."
+              placeholder={t("common.searchPages")}
               className="h-9 border-sidebar-border bg-sidebar-accent ps-9 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
             />
           </div>
@@ -173,7 +173,7 @@ export function AppSidebar({
             <div key={m.key} className="relative mb-1">
               <button
                 onClick={() => (collapsed ? setFlyout(flyout === m.key ? null : m.key) : toggleModule(m.key))}
-                title={collapsed ? m.name : undefined}
+                title={collapsed ? label(m) : undefined}
                 className={cn(
                   "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200",
                   "hover:bg-sidebar-accent",
@@ -184,7 +184,7 @@ export function AppSidebar({
                 <DynamicIcon name={m.icon} className="size-[18px] shrink-0" />
                 {!collapsed && (
                   <>
-                    <span className="flex-1 text-start">{m.name}</span>
+                    <span className="flex-1 text-start">{label(m)}</span>
                     <ChevronDown
                       className={cn("size-4 transition-transform duration-200", !open && "-rotate-90 rtl:rotate-90")}
                     />
@@ -194,7 +194,7 @@ export function AppSidebar({
 
               {collapsed && flyout === m.key && (
                 <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
-                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{m.name}</p>
+                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{label(m)}</p>
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
