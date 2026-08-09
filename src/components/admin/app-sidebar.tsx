@@ -198,6 +198,7 @@ export function AppSidebar({
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={() => { setFlyout(null); onNavigate?.(); }}
@@ -210,12 +211,14 @@ export function AppSidebar({
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={onNavigate}
                   />
                 </div>
               )}
+
             </div>
           );
         })}
