@@ -47,6 +47,10 @@ export function AppSidebar({
   const [search, setSearch] = useState("");
   const [flyout, setFlyout] = useState<string | null>(null);
 
+  /** اسم القسم/الصفحة بلغة الواجهة الحالية. */
+  const label = (item: { name: string; nameEn: string }) =>
+    locale === "en" ? item.nameEn || item.name : item.name;
+
   const activeModuleKeys = useMemo(
     () =>
       access.modules
@@ -57,33 +61,44 @@ export function AppSidebar({
 
   const [openModules, setOpenModules] = useState<string[]>(activeModuleKeys);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
+  const [closedModules, setClosedModules] = useState<string[]>([]);
 
-  const effectiveOpenModules = Array.from(new Set([...openModules, ...activeModuleKeys]));
+  const effectiveOpenModules = Array.from(
+    new Set([...openModules, ...activeModuleKeys]),
+  ).filter((k) => !closedModules.includes(k));
 
-  const toggleModule = (key: string) =>
-    setOpenModules((prev) =>
-      effectiveOpenModules.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
-    );
+  const toggleModule = (key: string) => {
+    if (effectiveOpenModules.includes(key)) {
+      setClosedModules((prev) => [...prev, key]);
+      setOpenModules((prev) => prev.filter((k) => k !== key));
+    } else {
+      setClosedModules((prev) => prev.filter((k) => k !== key));
+      setOpenModules((prev) => [...prev, key]);
+    }
+  };
 
   const searchResults = useMemo(() => {
-    const term = search.trim();
+    const term = search.trim().toLowerCase();
     if (!term) return [];
     const out: { name: string; path: string; module: string }[] = [];
     const walk = (m: AccessModule, pages: AccessPage[]) => {
       for (const p of pages) {
-        if (p.path && p.name.includes(term)) out.push({ name: p.name, path: p.path, module: m.name });
+        const name = label(p);
+        if (p.path && (p.name.toLowerCase().includes(term) || p.nameEn.toLowerCase().includes(term)))
+          out.push({ name, path: p.path, module: label(m) });
         walk(m, p.children);
       }
     };
     access.modules.forEach((m) => walk(m, m.pages));
     return out.slice(0, 8);
-  }, [search, access.modules]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, access.modules, locale]);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/login", replace: true });
+    navigate({ to: "/", replace: true });
   }
 
   const isActive = (path: string | null) => Boolean(path && pathname === path);
@@ -94,6 +109,7 @@ export function AppSidebar({
       collapsed && "justify-center px-0",
       extra,
     );
+
 
   return (
     <aside
