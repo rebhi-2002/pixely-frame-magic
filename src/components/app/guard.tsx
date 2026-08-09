@@ -18,7 +18,7 @@ export function Forbidden() {
   const bi = useBi();
   const { access } = useAccess();
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center px-5 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-5 text-center">
       <span className="flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
         <ShieldAlert className="size-7" />
       </span>

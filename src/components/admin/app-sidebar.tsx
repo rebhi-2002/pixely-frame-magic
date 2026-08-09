@@ -47,6 +47,10 @@ export function AppSidebar({
   const [search, setSearch] = useState("");
   const [flyout, setFlyout] = useState<string | null>(null);
 
+  /** اسم القسم/الصفحة بلغة الواجهة الحالية. */
+  const label = (item: { name: string; nameEn: string }) =>
+    locale === "en" ? item.nameEn || item.name : item.name;
+
   const activeModuleKeys = useMemo(
     () =>
       access.modules
@@ -57,33 +61,44 @@ export function AppSidebar({
 
   const [openModules, setOpenModules] = useState<string[]>(activeModuleKeys);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
+  const [closedModules, setClosedModules] = useState<string[]>([]);
 
-  const effectiveOpenModules = Array.from(new Set([...openModules, ...activeModuleKeys]));
+  const effectiveOpenModules = Array.from(
+    new Set([...openModules, ...activeModuleKeys]),
+  ).filter((k) => !closedModules.includes(k));
 
-  const toggleModule = (key: string) =>
-    setOpenModules((prev) =>
-      effectiveOpenModules.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
-    );
+  const toggleModule = (key: string) => {
+    if (effectiveOpenModules.includes(key)) {
+      setClosedModules((prev) => [...prev, key]);
+      setOpenModules((prev) => prev.filter((k) => k !== key));
+    } else {
+      setClosedModules((prev) => prev.filter((k) => k !== key));
+      setOpenModules((prev) => [...prev, key]);
+    }
+  };
 
   const searchResults = useMemo(() => {
-    const term = search.trim();
+    const term = search.trim().toLowerCase();
     if (!term) return [];
     const out: { name: string; path: string; module: string }[] = [];
     const walk = (m: AccessModule, pages: AccessPage[]) => {
       for (const p of pages) {
-        if (p.path && p.name.includes(term)) out.push({ name: p.name, path: p.path, module: m.name });
+        const name = label(p);
+        if (p.path && (p.name.toLowerCase().includes(term) || p.nameEn.toLowerCase().includes(term)))
+          out.push({ name, path: p.path, module: label(m) });
         walk(m, p.children);
       }
     };
     access.modules.forEach((m) => walk(m, m.pages));
     return out.slice(0, 8);
-  }, [search, access.modules]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, access.modules, locale]);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/login", replace: true });
+    navigate({ to: "/", replace: true });
   }
 
   const isActive = (path: string | null) => Boolean(path && pathname === path);
@@ -94,6 +109,7 @@ export function AppSidebar({
       collapsed && "justify-center px-0",
       extra,
     );
+
 
   return (
     <aside
@@ -122,7 +138,7 @@ export function AppSidebar({
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="ابحث في كل الصفحات..."
+              placeholder={t("common.searchPages")}
               className="h-9 border-sidebar-border bg-sidebar-accent ps-9 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
             />
           </div>
@@ -157,7 +173,7 @@ export function AppSidebar({
             <div key={m.key} className="relative mb-1">
               <button
                 onClick={() => (collapsed ? setFlyout(flyout === m.key ? null : m.key) : toggleModule(m.key))}
-                title={collapsed ? m.name : undefined}
+                title={collapsed ? label(m) : undefined}
                 className={cn(
                   "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200",
                   "hover:bg-sidebar-accent",
@@ -168,7 +184,7 @@ export function AppSidebar({
                 <DynamicIcon name={m.icon} className="size-[18px] shrink-0" />
                 {!collapsed && (
                   <>
-                    <span className="flex-1 text-start">{m.name}</span>
+                    <span className="flex-1 text-start">{label(m)}</span>
                     <ChevronDown
                       className={cn("size-4 transition-transform duration-200", !open && "-rotate-90 rtl:rotate-90")}
                     />
@@ -178,10 +194,11 @@ export function AppSidebar({
 
               {collapsed && flyout === m.key && (
                 <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
-                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{m.name}</p>
+                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{label(m)}</p>
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={() => { setFlyout(null); onNavigate?.(); }}
@@ -194,12 +211,14 @@ export function AppSidebar({
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={onNavigate}
                   />
                 </div>
               )}
+
             </div>
           );
         })}
@@ -275,6 +294,7 @@ export function AppSidebar({
 function PageList({
   pages,
   isActive,
+  label,
   openGroups,
   setOpenGroups,
   onNavigate,
@@ -282,13 +302,14 @@ function PageList({
 }: {
   pages: AccessPage[];
   isActive: (p: string | null) => boolean;
+  label: (item: { name: string; nameEn: string }) => string;
   openGroups: string[];
   setOpenGroups: React.Dispatch<React.SetStateAction<string[]>>;
   onNavigate?: () => void;
   depth?: number;
 }) {
   return (
-    <ul className={cn("space-y-0.5", depth > 0 && "mr-3 border-r border-sidebar-border pr-2")}>
+    <ul className={cn("space-y-0.5", depth > 0 && "ms-3 border-s border-sidebar-border ps-2")}>
       {pages.map((p) => {
         if (p.children.length > 0) {
           const open = openGroups.includes(p.key) || p.children.some((c) => isActive(c.path));
@@ -300,17 +321,22 @@ function PageList({
                     prev.includes(p.key) ? prev.filter((k) => k !== p.key) : [...prev, p.key],
                   )
                 }
-                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
               >
                 <DynamicIcon name={p.icon} className="size-4 shrink-0" />
-                <span className="flex-1 text-right">{p.name}</span>
-                {open ? <ChevronDown className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
+                <span className="flex-1 text-start">{label(p)}</span>
+                {open ? (
+                  <ChevronDown className="size-3.5" />
+                ) : (
+                  <ChevronLeft className="size-3.5 rtl:rotate-0 ltr:rotate-180" />
+                )}
               </button>
               {open && (
                 <div className="animate-in slide-in-from-top-1 fade-in mt-0.5 duration-200">
                   <PageList
                     pages={p.children}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={onNavigate}
@@ -324,18 +350,22 @@ function PageList({
 
         if (!p.path) return null;
 
+        const active = isActive(p.path);
+
         return (
           <li key={p.key}>
             <Link
               to={p.path}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent",
-                isActive(p.path) && "bg-sidebar-primary font-semibold text-sidebar-primary-foreground",
+                "flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors",
+                active
+                  ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground",
               )}
             >
               <DynamicIcon name={p.icon} className="size-4 shrink-0" />
-              <span>{p.name}</span>
+              <span>{label(p)}</span>
             </Link>
           </li>
         );
@@ -343,3 +373,4 @@ function PageList({
     </ul>
   );
 }
+

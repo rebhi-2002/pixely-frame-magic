@@ -22,6 +22,7 @@ export type Database = {
           id: string
           key: string
           name: string
+          name_en: string | null
           sort_order: number
           updated_at: string
         }
@@ -32,6 +33,7 @@ export type Database = {
           id?: string
           key: string
           name: string
+          name_en?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -42,6 +44,7 @@ export type Database = {
           id?: string
           key?: string
           name?: string
+          name_en?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -55,6 +58,7 @@ export type Database = {
           key: string
           module_id: string
           name: string
+          name_en: string | null
           parent_id: string | null
           path: string | null
           sort_order: number
@@ -66,6 +70,7 @@ export type Database = {
           key: string
           module_id: string
           name: string
+          name_en?: string | null
           parent_id?: string | null
           path?: string | null
           sort_order?: number
@@ -77,6 +82,7 @@ export type Database = {
           key?: string
           module_id?: string
           name?: string
+          name_en?: string | null
           parent_id?: string | null
           path?: string | null
           sort_order?: number

@@ -9,6 +9,8 @@ import type {
   TreePage,
   UserRow,
 } from "./rbac-types";
+import { ROLE_MODULE_SCOPE } from "./rbac-types";
+
 
 export type DB = SupabaseClient<Database>;
 
@@ -27,8 +29,19 @@ interface RawPage {
   parent_id: string | null;
   key: string;
   name: string;
+  name_en: string | null;
   icon: string;
   path: string | null;
+  sort_order: number;
+}
+
+interface RawModule {
+  id: string;
+  key: string;
+  name: string;
+  name_en: string | null;
+  icon: string;
+  enabled: boolean;
   sort_order: number;
 }
 
@@ -48,6 +61,8 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
     ]);
 
   const roleId = profileRow?.role_id ?? null;
+  const roleName =
+    (profileRow as unknown as { roles?: { name: string } | null } | null)?.roles?.name ?? null;
 
   let grants: { page_id: string; permission_key: string }[] = [];
   if (roleId) {
@@ -60,7 +75,7 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
 
   const allPermKeys = (permKeys ?? []).map((p) => p.key);
   const byPageId = new Map<string, Set<string>>();
-  const pages = (pageRows ?? []) as RawPage[];
+  const pages = (pageRows ?? []) as unknown as RawPage[];
 
   if (isAdmin) {
     for (const p of pages) byPageId.set(p.id, new Set(allPermKeys));
@@ -71,7 +86,15 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
     }
   }
 
-  const enabledModules = (moduleRows ?? []).filter((m) => m.enabled);
+  /* نطاق الدور: المستخدم يرى مساحته فقط ولو كان يملك صلاحيات أوسع في القاعدة. */
+  const scope =
+    (roleName ? ROLE_MODULE_SCOPE[roleName] : undefined) ??
+    (isAdmin ? ROLE_MODULE_SCOPE["مدير عام"] : undefined);
+
+  const enabledModules = ((moduleRows ?? []) as unknown as RawModule[])
+    .filter((m) => m.enabled)
+    .filter((m) => !scope || scope.includes(m.key));
+
   const permissions: Record<string, string[]> = {};
   const modules: AccessModule[] = [];
 
@@ -87,6 +110,7 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
             id: p.id,
             key: p.key,
             name: p.name,
+            nameEn: p.name_en ?? p.name,
             icon: p.icon,
             path: p.path,
             permissions: perms,
@@ -106,8 +130,16 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
     };
     collect(tree);
 
-    modules.push({ id: m.id, key: m.key, name: m.name, icon: m.icon, pages: tree });
+    modules.push({
+      id: m.id,
+      key: m.key,
+      name: m.name,
+      nameEn: m.name_en ?? m.name,
+      icon: m.icon,
+      pages: tree,
+    });
   }
+
 
   return {
     userId,

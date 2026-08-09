@@ -28,7 +28,9 @@
     "backToSite": "العودة للموقع",
     "account": "حسابي",
     "preferences": "التفضيلات",
-    "navigation": "التنقّل"
+    "navigation": "التنقّل",
+    "searchPages": "ابحث في كل الصفحات..."
+
   },
   "nav": {
     "home": "الرئيسية",

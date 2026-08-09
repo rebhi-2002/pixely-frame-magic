@@ -26,11 +26,11 @@ const footerPlatform = [
 
 const footerLegal = [
   { to: "/help", key: "nav.help" },
-  { to: "/certificate/$id", params: { id: "verify" }, key: "nav.certificateVerify" },
   { to: "/privacy", key: "nav.privacy" },
   { to: "/terms", key: "nav.terms" },
   { to: "/unsubscribe", key: "nav.unsubscribe" },
 ] as const;
+
 
 export function BrandMark({ className = "" }: { className?: string }) {
   return (
@@ -139,8 +139,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <Link
                   key={i.to}
                   to={i.to}
-                  params={"params" in i ? i.params : undefined}
-                  className="block text-muted-foreground hover:text-primary rtl:hover:-translate-x-1 ltr:hover:translate-x-1"
+                  className="block text-muted-foreground transition-transform duration-200 hover:text-primary rtl:hover:-translate-x-1 ltr:hover:translate-x-1"
                 >
                   {t(i.key)}
                 </Link>

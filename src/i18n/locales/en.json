@@ -28,7 +28,9 @@
     "backToSite": "Back to site",
     "account": "My account",
     "preferences": "Preferences",
-    "navigation": "Navigation"
+    "navigation": "Navigation",
+    "searchPages": "Search all pages..."
+
   },
   "nav": {
     "home": "Home",
