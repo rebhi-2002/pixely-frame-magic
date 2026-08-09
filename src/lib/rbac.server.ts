@@ -9,6 +9,8 @@ import type {
   TreePage,
   UserRow,
 } from "./rbac-types";
+import { ROLE_MODULE_SCOPE } from "./rbac-types";
+
 
 export type DB = SupabaseClient<Database>;
 

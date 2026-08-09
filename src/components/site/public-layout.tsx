@@ -26,11 +26,11 @@ const footerPlatform = [
 
 const footerLegal = [
   { to: "/help", key: "nav.help" },
-  { to: "/certificate/$id", params: { id: "verify" }, key: "nav.certificateVerify" },
   { to: "/privacy", key: "nav.privacy" },
   { to: "/terms", key: "nav.terms" },
   { to: "/unsubscribe", key: "nav.unsubscribe" },
 ] as const;
+
 
 export function BrandMark({ className = "" }: { className?: string }) {
   return (
