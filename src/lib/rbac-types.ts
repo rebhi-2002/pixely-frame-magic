@@ -22,6 +22,7 @@ export interface AccessPage {
   id: string;
   key: string;
   name: string;
+  nameEn: string;
   icon: string;
   path: string | null;
   permissions: string[];
@@ -32,9 +33,20 @@ export interface AccessModule {
   id: string;
   key: string;
   name: string;
+  nameEn: string;
   icon: string;
   pages: AccessPage[];
 }
+
+/** نطاق الوحدات لكل دور — كل مستخدم يرى مساحته فقط (لا مساحات الأدوار الأخرى). */
+export const ROLE_MODULE_SCOPE: Record<string, readonly string[]> = {
+  "طالب": ["student", "shared"],
+  "معلم": ["teacher", "shared"],
+  "ولي أمر": ["parent", "shared"],
+  "مشرف أكاديمي": ["supervisor", "shared"],
+  "مدير عام": ["platform", "shared"],
+};
+
 
 export interface MyAccess {
   userId: string;
