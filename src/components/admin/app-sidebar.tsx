@@ -294,6 +294,7 @@ export function AppSidebar({
 function PageList({
   pages,
   isActive,
+  label,
   openGroups,
   setOpenGroups,
   onNavigate,
@@ -301,13 +302,14 @@ function PageList({
 }: {
   pages: AccessPage[];
   isActive: (p: string | null) => boolean;
+  label: (item: { name: string; nameEn: string }) => string;
   openGroups: string[];
   setOpenGroups: React.Dispatch<React.SetStateAction<string[]>>;
   onNavigate?: () => void;
   depth?: number;
 }) {
   return (
-    <ul className={cn("space-y-0.5", depth > 0 && "mr-3 border-r border-sidebar-border pr-2")}>
+    <ul className={cn("space-y-0.5", depth > 0 && "ms-3 border-s border-sidebar-border ps-2")}>
       {pages.map((p) => {
         if (p.children.length > 0) {
           const open = openGroups.includes(p.key) || p.children.some((c) => isActive(c.path));
@@ -319,17 +321,22 @@ function PageList({
                     prev.includes(p.key) ? prev.filter((k) => k !== p.key) : [...prev, p.key],
                   )
                 }
-                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
               >
                 <DynamicIcon name={p.icon} className="size-4 shrink-0" />
-                <span className="flex-1 text-right">{p.name}</span>
-                {open ? <ChevronDown className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
+                <span className="flex-1 text-start">{label(p)}</span>
+                {open ? (
+                  <ChevronDown className="size-3.5" />
+                ) : (
+                  <ChevronLeft className="size-3.5 rtl:rotate-0 ltr:rotate-180" />
+                )}
               </button>
               {open && (
                 <div className="animate-in slide-in-from-top-1 fade-in mt-0.5 duration-200">
                   <PageList
                     pages={p.children}
                     isActive={isActive}
+                    label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
                     onNavigate={onNavigate}
@@ -343,18 +350,22 @@ function PageList({
 
         if (!p.path) return null;
 
+        const active = isActive(p.path);
+
         return (
           <li key={p.key}>
             <Link
               to={p.path}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors hover:bg-sidebar-accent",
-                isActive(p.path) && "bg-sidebar-primary font-semibold text-sidebar-primary-foreground",
+                "flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors",
+                active
+                  ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground",
               )}
             >
               <DynamicIcon name={p.icon} className="size-4 shrink-0" />
-              <span>{p.name}</span>
+              <span>{label(p)}</span>
             </Link>
           </li>
         );
@@ -362,3 +373,4 @@ function PageList({
     </ul>
   );
 }
+
