@@ -139,7 +139,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <Link
                   key={i.to}
                   to={i.to}
-                  params={"params" in i ? i.params : undefined}
+                  className="block text-muted-foreground transition-transform duration-200 hover:text-primary rtl:hover:-translate-x-1 ltr:hover:translate-x-1"
                   className="block text-muted-foreground hover:text-primary rtl:hover:-translate-x-1 ltr:hover:translate-x-1"
                 >
                   {t(i.key)}
