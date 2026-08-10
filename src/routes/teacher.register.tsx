@@ -1,16 +1,21 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { BadgeCheck, UploadCloud } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "تسجيل معلّم | أكاديميا";
 const description = "سجّل كمعلّم في أكاديميا وارفع وثيقة التوثيق لمراجعة فريق الإشراف.";
 
 export const Route = createFileRoute("/teacher/register")({
+  ssr: false,
+  beforeLoad: async () => {
+    if (await currentUserHome()) throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title },

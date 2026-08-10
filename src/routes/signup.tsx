@@ -1,16 +1,21 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { GraduationCap, UserRound, Users, ArrowLeft, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "إنشاء حساب | أكاديميا";
 const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
 
 export const Route = createFileRoute("/signup")({
+  ssr: false,
+  beforeLoad: async () => {
+    if (await currentUserHome()) throw redirect({ to: "/" });
+  },
   validateSearch: (search: Record<string, unknown>): { invite?: string } =>
     typeof search.invite === "string" ? { invite: search.invite } : {},
 
