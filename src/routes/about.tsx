@@ -3,6 +3,7 @@ import { Compass, HeartHandshake, Languages, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -27,6 +28,7 @@ const valueIcons = [Compass, HeartHandshake, Languages, Target];
 
 function AboutPage() {
   const { t } = useTranslation();
+  const { isSignedIn } = useSession();
   const values = t("about.values", { returnObjects: true }) as { t: string; d: string }[];
   const team = t("about.team", { returnObjects: true }) as { t: string; d: string }[];
 

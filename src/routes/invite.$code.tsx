@@ -3,6 +3,7 @@ import { Check, Gift } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/invite/$code")({
   head: () => ({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/invite/$code")({
 function InvitePage() {
   const { code } = Route.useParams();
   const { t } = useTranslation();
+  const { isSignedIn } = useSession();
   const perks = t("invite.perks", { returnObjects: true }) as string[];
 
   return (
