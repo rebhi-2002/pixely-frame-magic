@@ -122,7 +122,9 @@ function SignupPage() {
 
   return (
     <AuthShell
-      icon={role === "student" ? <GraduationCap className="size-5" /> : <Users className="size-5" />}
+      icon={
+        role === "student" ? <GraduationCap className="size-5" /> : <Users className="size-5" />
+      }
       title={t("authPages.signup.h1")}
       subtitle={`${t("authPages.signup.chosen")}: ${t(`authPages.signup.roles.${role}.t`)}`}
     >

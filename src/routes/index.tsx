@@ -15,7 +15,6 @@ import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { useSession } from "@/hooks/use-session";
 
-
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
   "Academia: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد.";
@@ -65,9 +64,7 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-primary">
             <Trophy className="size-4" />
-            {session
-              ? t("home.signedIn.welcome", { name: session.fullName })
-              : t("home.badge")}
+            {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
           </span>
 
           {session && role ? (
@@ -157,7 +154,10 @@ function Landing() {
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
           {roles.map((r) => (
-            <div key={r.key} className="hover-lift rounded-2xl border border-border bg-background p-6">
+            <div
+              key={r.key}
+              className="hover-lift rounded-2xl border border-border bg-background p-6"
+            >
               <r.icon className="size-6 text-success" />
               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
@@ -174,7 +174,6 @@ function Landing() {
           label={t("home.ctaButton")}
           className="glow-primary mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         />
-
       </section>
     </PublicLayout>
   );

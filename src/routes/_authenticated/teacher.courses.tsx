@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("كورساتي (معلم)", "My courses (teacher)")}
       icon="BookOpenCheck"
-      subtitle={bi("كورساتك المنشورة: الأسعار، المشتركون، والحصص القادمة.", "Your published courses: pricing, enrollments and upcoming sessions.")}
+      subtitle={bi(
+        "كورساتك المنشورة: الأسعار، المشتركون، والحصص القادمة.",
+        "Your published courses: pricing, enrollments and upcoming sessions.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("كورساتك", "Your courses")} icon="BookOpenCheck">
         <DataTable
-          head={[bi("الكورس", "Course"), bi("السعر", "Price"), bi("مشتركون", "Enrolled"), bi("الحالة", "Status")]}
+          head={[
+            bi("الكورس", "Course"),
+            bi("السعر", "Price"),
+            bi("مشتركون", "Enrolled"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("تفاضل وتكامل — الوزاري", "Calculus — ministry"), bi("45 د.أ", "45 JOD"), "96", <Badge tone="success">{bi("منشور", "Published")}</Badge>],
-            [bi("مراجعة ليلة الامتحان", "Exam-night review"), bi("15 د.أ", "15 JOD"), "74", <Badge tone="success">{bi("منشور", "Published")}</Badge>],
-            [bi("أساسيات الجبر", "Algebra basics"), bi("مجاني", "Free"), "48", <Badge tone="primary">{bi("مسوّدة", "Draft")}</Badge>],
+            [
+              bi("تفاضل وتكامل — الوزاري", "Calculus — ministry"),
+              bi("45 د.أ", "45 JOD"),
+              "96",
+              <Badge tone="success">{bi("منشور", "Published")}</Badge>,
+            ],
+            [
+              bi("مراجعة ليلة الامتحان", "Exam-night review"),
+              bi("15 د.أ", "15 JOD"),
+              "74",
+              <Badge tone="success">{bi("منشور", "Published")}</Badge>,
+            ],
+            [
+              bi("أساسيات الجبر", "Algebra basics"),
+              bi("مجاني", "Free"),
+              "48",
+              <Badge tone="primary">{bi("مسوّدة", "Draft")}</Badge>,
+            ],
           ]}
         />
       </Panel>

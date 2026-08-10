@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("نظرة الطلاب", "Students overview")}
       icon="Users"
-      subtitle={bi("الطلاب المتعثّرون أولاً: من يحتاج تدخّلاً الآن ولماذا.", "Struggling students first: who needs intervention now, and why.")}
+      subtitle={bi(
+        "الطلاب المتعثّرون أولاً: من يحتاج تدخّلاً الآن ولماذا.",
+        "Struggling students first: who needs intervention now, and why.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("يحتاجون تدخّلاً", "Needs intervention")} icon="Users">
         <DataTable
-          head={[bi("الطالب", "Student"), bi("الصف", "Grade"), bi("أضعف مادة", "Weakest"), bi("الحالة", "Status")]}
+          head={[
+            bi("الطالب", "Student"),
+            bi("الصف", "Grade"),
+            bi("أضعف مادة", "Weakest"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("أحمد ع.", "Ahmad A."), bi("11", "11"), bi("كيمياء 40%", "Chemistry 40%"), <Badge tone="danger">{bi("متعثّر", "At risk")}</Badge>],
-            [bi("سما ح.", "Sama H."), bi("9", "9"), bi("رياضيات 48%", "Math 48%"), <Badge tone="danger">{bi("متعثّر", "At risk")}</Badge>],
-            [bi("يزن م.", "Yazan M."), bi("10", "10"), bi("فيزياء 58%", "Physics 58%"), <Badge tone="primary">{bi("مراقبة", "Watch")}</Badge>],
+            [
+              bi("أحمد ع.", "Ahmad A."),
+              bi("11", "11"),
+              bi("كيمياء 40%", "Chemistry 40%"),
+              <Badge tone="danger">{bi("متعثّر", "At risk")}</Badge>,
+            ],
+            [
+              bi("سما ح.", "Sama H."),
+              bi("9", "9"),
+              bi("رياضيات 48%", "Math 48%"),
+              <Badge tone="danger">{bi("متعثّر", "At risk")}</Badge>,
+            ],
+            [
+              bi("يزن م.", "Yazan M."),
+              bi("10", "10"),
+              bi("فيزياء 58%", "Physics 58%"),
+              <Badge tone="primary">{bi("مراقبة", "Watch")}</Badge>,
+            ],
           ]}
         />
       </Panel>

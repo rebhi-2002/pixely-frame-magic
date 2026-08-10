@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("المحتوى", "Content")}
       icon="FileStack"
-      subtitle={bi("دروسك وملفاتك: ارفع، رتّب على شجرة المنهاج، وأرسل للمراجعة قبل النشر.", "Your lessons and files: upload, place on the curriculum tree, submit for review.")}
+      subtitle={bi(
+        "دروسك وملفاتك: ارفع، رتّب على شجرة المنهاج، وأرسل للمراجعة قبل النشر.",
+        "Your lessons and files: upload, place on the curriculum tree, submit for review.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("أحدث المحتوى", "Recent content")} icon="FileStack">
         <DataTable
-          head={[bi("العنوان", "Title"), bi("المادة", "Subject"), bi("الحالة", "Status"), bi("مشاهدات", "Views")]}
+          head={[
+            bi("العنوان", "Title"),
+            bi("المادة", "Subject"),
+            bi("الحالة", "Status"),
+            bi("مشاهدات", "Views"),
+          ]}
           rows={[
-            [bi("الدوال — شرح كامل", "Functions — full lesson"), bi("رياضيات", "Math"), <Badge tone="muted">{bi("قيد المراجعة", "In review")}</Badge>, "—"],
-            [bi("قوانين نيوتن", "Newton's laws"), bi("فيزياء", "Physics"), <Badge tone="success">{bi("منشور", "Published")}</Badge>, "1,204"],
-            [bi("ورقة تدريب المشتقات", "Derivatives worksheet"), bi("رياضيات", "Math"), <Badge tone="primary">{bi("مسوّدة", "Draft")}</Badge>, "—"],
+            [
+              bi("الدوال — شرح كامل", "Functions — full lesson"),
+              bi("رياضيات", "Math"),
+              <Badge tone="muted">{bi("قيد المراجعة", "In review")}</Badge>,
+              "—",
+            ],
+            [
+              bi("قوانين نيوتن", "Newton's laws"),
+              bi("فيزياء", "Physics"),
+              <Badge tone="success">{bi("منشور", "Published")}</Badge>,
+              "1,204",
+            ],
+            [
+              bi("ورقة تدريب المشتقات", "Derivatives worksheet"),
+              bi("رياضيات", "Math"),
+              <Badge tone="primary">{bi("مسوّدة", "Draft")}</Badge>,
+              "—",
+            ],
           ]}
         />
       </Panel>

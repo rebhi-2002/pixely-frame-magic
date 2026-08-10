@@ -78,7 +78,11 @@ function LoginPage() {
   }
 
   return (
-    <AuthShell icon={<LogIn className="size-5" />} title={t("authPages.login.h1")} subtitle={t("authPages.login.sub")}>
+    <AuthShell
+      icon={<LogIn className="size-5" />}
+      title={t("authPages.login.h1")}
+      subtitle={t("authPages.login.sub")}
+    >
       <form onSubmit={submit} className="space-y-4">
         <AuthField
           id="email"
@@ -97,7 +101,10 @@ function LoginPage() {
           autoComplete="current-password"
         />
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-xs font-semibold text-primary hover:underline">
+          <Link
+            to="/forgot-password"
+            className="text-xs font-semibold text-primary hover:underline"
+          >
             {t("authPages.login.forgot")}
           </Link>
         </div>

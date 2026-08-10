@@ -17,7 +17,8 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "من نحن | أكاديميا" },
       {
         property: "og:description",
-        content: "قصة أكاديميا ومهمتنا وقيمنا: الوضوح، خصوصية الطالب، عربي أولاً، وإنجاز قابل للقياس.",
+        content:
+          "قصة أكاديميا ومهمتنا وقيمنا: الوضوح، خصوصية الطالب، عربي أولاً، وإنجاز قابل للقياس.",
       },
     ],
   }),
@@ -96,7 +97,6 @@ function AboutPage() {
             </Link>
           )}
         </div>
-
       </section>
     </PublicLayout>
   );

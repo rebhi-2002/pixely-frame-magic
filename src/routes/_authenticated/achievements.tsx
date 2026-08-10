@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("الإنجاز", "Achievements")}
       icon="Trophy"
-      subtitle={bi("تقدّمك يُقاس بالإتقان لا بالساعات: شارات، سلاسل أيام، ونسب إتقان لكل مادة.", "Progress measured by mastery, not hours: badges, streaks and per-subject mastery.")}
+      subtitle={bi(
+        "تقدّمك يُقاس بالإتقان لا بالساعات: شارات، سلاسل أيام، ونسب إتقان لكل مادة.",
+        "Progress measured by mastery, not hours: badges, streaks and per-subject mastery.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,9 +61,24 @@ function Body() {
       <Panel title={bi("شاراتك", "Your badges")} icon="Medal">
         <RowList
           rows={[
-            { title: bi("مُتقن المشتقات", "Derivatives master"), meta: bi("رياضيات · وحدة 4", "Math · unit 4"), value: bi("مفتوحة", "Unlocked"), tone: "success" },
-            { title: bi("21 يوم متتالي", "21-day streak"), meta: bi("انتظام", "Consistency"), value: bi("مفتوحة", "Unlocked"), tone: "success" },
-            { title: bi("صائد الأخطاء", "Mistake hunter"), meta: bi("أتقن 50 خطأ", "Master 50 mistakes"), value: bi("قريباً", "Almost"), tone: "primary" },
+            {
+              title: bi("مُتقن المشتقات", "Derivatives master"),
+              meta: bi("رياضيات · وحدة 4", "Math · unit 4"),
+              value: bi("مفتوحة", "Unlocked"),
+              tone: "success",
+            },
+            {
+              title: bi("21 يوم متتالي", "21-day streak"),
+              meta: bi("انتظام", "Consistency"),
+              value: bi("مفتوحة", "Unlocked"),
+              tone: "success",
+            },
+            {
+              title: bi("صائد الأخطاء", "Mistake hunter"),
+              meta: bi("أتقن 50 خطأ", "Master 50 mistakes"),
+              value: bi("قريباً", "Almost"),
+              tone: "primary",
+            },
           ]}
         />
       </Panel>

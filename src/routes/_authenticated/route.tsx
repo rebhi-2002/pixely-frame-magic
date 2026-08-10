@@ -51,7 +51,9 @@ function AuthenticatedLayout() {
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <div className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:sticky md:top-0 md:z-auto md:h-screen md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}>
+      <div
+        className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:sticky md:top-0 md:z-auto md:h-screen md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}
+      >
         <AppSidebar
           access={access}
           collapsed={mobileOpen ? false : collapsed}
@@ -61,7 +63,12 @@ function AuthenticatedLayout() {
       </div>
       <main className="min-w-0 flex-1">
         <div className="sticky top-0 z-30 flex h-12 items-center border-b border-border bg-background/90 px-3 backdrop-blur md:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="فتح القائمة">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(true)}
+            aria-label="فتح القائمة"
+          >
             <Menu className="size-5" />
           </Button>
           <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
@@ -73,4 +80,3 @@ function AuthenticatedLayout() {
     </div>
   );
 }
-

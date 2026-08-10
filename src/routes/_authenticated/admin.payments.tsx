@@ -1,3 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminFeaturePage } from "@/components/admin/admin-feature";
-export const Route = createFileRoute("/_authenticated/admin/payments")({ head: () => ({ meta: [{ title: "المدفوعات | Academia" }, { name: "description", content: "متابعة مدفوعات Academia." }, { property: "og:title", content: "المدفوعات" }, { property: "og:description", content: "متابعة مدفوعات Academia." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <AdminFeaturePage feature="payments" /> });
+export const Route = createFileRoute("/_authenticated/admin/payments")({
+  head: () => ({
+    meta: [
+      { title: "المدفوعات | Academia" },
+      { name: "description", content: "متابعة مدفوعات Academia." },
+      { property: "og:title", content: "المدفوعات" },
+      { property: "og:description", content: "متابعة مدفوعات Academia." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: () => <AdminFeaturePage feature="payments" />,
+});

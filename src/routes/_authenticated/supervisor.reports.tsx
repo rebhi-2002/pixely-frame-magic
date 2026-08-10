@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("تقارير الإشراف", "Supervision reports")}
       icon="FileBarChart"
-      subtitle={bi("تقارير دورية جاهزة للتصدير: جودة التدريس، الإتقان، والالتزام.", "Periodic exportable reports: teaching quality, mastery and consistency.")}
+      subtitle={bi(
+        "تقارير دورية جاهزة للتصدير: جودة التدريس، الإتقان، والالتزام.",
+        "Periodic exportable reports: teaching quality, mastery and consistency.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,9 +61,24 @@ function Body() {
       <Panel title={bi("التقارير", "Reports")} icon="FileBarChart">
         <RowList
           rows={[
-            { title: bi("تقرير جودة التدريس — يوليو", "Teaching quality — July"), meta: bi("PDF · 12 صفحة", "PDF · 12 pages"), value: bi("تنزيل", "Download"), tone: "primary" },
-            { title: bi("تقرير الإتقان بالمواد", "Mastery by subject"), meta: bi("XLSX", "XLSX"), value: bi("تنزيل", "Download"), tone: "primary" },
-            { title: bi("تقرير الالتزام الأسبوعي", "Weekly consistency"), meta: bi("PDF · 6 صفحات", "PDF · 6 pages"), value: bi("تنزيل", "Download"), tone: "primary" },
+            {
+              title: bi("تقرير جودة التدريس — يوليو", "Teaching quality — July"),
+              meta: bi("PDF · 12 صفحة", "PDF · 12 pages"),
+              value: bi("تنزيل", "Download"),
+              tone: "primary",
+            },
+            {
+              title: bi("تقرير الإتقان بالمواد", "Mastery by subject"),
+              meta: bi("XLSX", "XLSX"),
+              value: bi("تنزيل", "Download"),
+              tone: "primary",
+            },
+            {
+              title: bi("تقرير الالتزام الأسبوعي", "Weekly consistency"),
+              meta: bi("PDF · 6 صفحات", "PDF · 6 pages"),
+              value: bi("تنزيل", "Download"),
+              tone: "primary",
+            },
           ]}
         />
       </Panel>

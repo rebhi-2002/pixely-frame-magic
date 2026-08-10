@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("المحفوظات", "Bookmarks")}
       icon="Bookmark"
-      subtitle={bi("كل ما حفظته: دروس، أسئلة، ونقاشات — بمكان واحد للرجوع السريع.", "Everything you saved: lessons, questions and threads — in one quick-access place.")}
+      subtitle={bi(
+        "كل ما حفظته: دروس، أسئلة، ونقاشات — بمكان واحد للرجوع السريع.",
+        "Everything you saved: lessons, questions and threads — in one quick-access place.",
+      )}
     >
       <StatGrid
         items={[
@@ -46,11 +59,27 @@ function Body() {
         ]}
       />
       <Panel title={bi("محفوظاتك", "Your bookmarks")} icon="Bookmark">
-        <RowList to="/library"
+        <RowList
+          to="/library"
           rows={[
-            { title: bi("درس: تكامل بالتجزيء", "Lesson: integration by parts"), meta: bi("رياضيات", "Math"), value: bi("درس", "Lesson"), tone: "primary" },
-            { title: bi("سؤال: قانون أوم", "Question: Ohm's law"), meta: bi("فيزياء", "Physics"), value: bi("سؤال", "Question"), tone: "muted" },
-            { title: bi("نقاش: تنظيم وقت المراجعة", "Thread: planning review time"), meta: bi("عام", "General"), value: bi("نقاش", "Thread"), tone: "muted" },
+            {
+              title: bi("درس: تكامل بالتجزيء", "Lesson: integration by parts"),
+              meta: bi("رياضيات", "Math"),
+              value: bi("درس", "Lesson"),
+              tone: "primary",
+            },
+            {
+              title: bi("سؤال: قانون أوم", "Question: Ohm's law"),
+              meta: bi("فيزياء", "Physics"),
+              value: bi("سؤال", "Question"),
+              tone: "muted",
+            },
+            {
+              title: bi("نقاش: تنظيم وقت المراجعة", "Thread: planning review time"),
+              meta: bi("عام", "General"),
+              value: bi("نقاش", "Thread"),
+              tone: "muted",
+            },
           ]}
         />
       </Panel>

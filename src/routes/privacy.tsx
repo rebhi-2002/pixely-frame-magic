@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
 const title = "سياسة الخصوصية | أكاديميا";
-const description = "كيف نجمع بيانات الطلاب والمعلمين، وكيف نحميها، وما الذي يظهر لولي الأمر — بوضوح وبدون لغة قانونية معقدة.";
+const description =
+  "كيف نجمع بيانات الطلاب والمعلمين، وكيف نحميها، وما الذي يظهر لولي الأمر — بوضوح وبدون لغة قانونية معقدة.";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({

@@ -63,7 +63,6 @@ function InvitePage() {
           )}
         </div>
 
-
         <p className="mt-6 text-xs text-muted-foreground">{t("invite.disclaimer")}</p>
       </section>
     </PublicLayout>

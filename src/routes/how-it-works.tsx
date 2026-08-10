@@ -43,7 +43,9 @@ function HowItWorks() {
                 {i + 1}
               </span>
               <div>
-                <h2 className="text-lg font-bold text-foreground">{t(`howItWorks.steps.${s}.t`)}</h2>
+                <h2 className="text-lg font-bold text-foreground">
+                  {t(`howItWorks.steps.${s}.t`)}
+                </h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t(`howItWorks.steps.${s}.d`)}
                 </p>
@@ -64,7 +66,6 @@ function HowItWorks() {
             label={t("howItWorks.cta")}
             className="mt-7 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           />
-
         </div>
       </section>
     </PublicLayout>

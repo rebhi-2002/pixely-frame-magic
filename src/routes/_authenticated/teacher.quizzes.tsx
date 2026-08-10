@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("الاختبارات", "Quizzes")}
       icon="ListChecks"
-      subtitle={bi("بنك أسئلتك واختباراتك: اختيار متعدد، صح/خطأ، ومقالي — مع تصحيح آلي حيث ينفع.", "Your question bank and quizzes: MCQ, true/false and essay — auto-graded where possible.")}
+      subtitle={bi(
+        "بنك أسئلتك واختباراتك: اختيار متعدد، صح/خطأ، ومقالي — مع تصحيح آلي حيث ينفع.",
+        "Your question bank and quizzes: MCQ, true/false and essay — auto-graded where possible.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("اختباراتك", "Your quizzes")} icon="ListChecks">
         <DataTable
-          head={[bi("الاختبار", "Quiz"), bi("الأسئلة", "Questions"), bi("المحاولات", "Attempts"), bi("الحالة", "Status")]}
+          head={[
+            bi("الاختبار", "Quiz"),
+            bi("الأسئلة", "Questions"),
+            bi("المحاولات", "Attempts"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("رياضيات — وحدة 4", "Math — unit 4"), "20", "96", <Badge tone="success">{bi("نشط", "Live")}</Badge>],
-            [bi("فيزياء — الحركة", "Physics — motion"), "15", "74", <Badge tone="success">{bi("نشط", "Live")}</Badge>],
-            [bi("كيمياء — تدريب سريع", "Chemistry — quick drill"), "10", "0", <Badge tone="muted">{bi("مسوّدة", "Draft")}</Badge>],
+            [
+              bi("رياضيات — وحدة 4", "Math — unit 4"),
+              "20",
+              "96",
+              <Badge tone="success">{bi("نشط", "Live")}</Badge>,
+            ],
+            [
+              bi("فيزياء — الحركة", "Physics — motion"),
+              "15",
+              "74",
+              <Badge tone="success">{bi("نشط", "Live")}</Badge>,
+            ],
+            [
+              bi("كيمياء — تدريب سريع", "Chemistry — quick drill"),
+              "10",
+              "0",
+              <Badge tone="muted">{bi("مسوّدة", "Draft")}</Badge>,
+            ],
           ]}
         />
       </Panel>

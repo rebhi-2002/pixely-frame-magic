@@ -31,7 +31,6 @@ const footerLegal = [
   { to: "/unsubscribe", key: "nav.unsubscribe" },
 ] as const;
 
-
 export function BrandMark({ className = "" }: { className?: string }) {
   return (
     <Link to="/" className={`flex items-center gap-2 ${className}`}>

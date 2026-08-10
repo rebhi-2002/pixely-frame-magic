@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("تقرير الابن", "Child report")}
       icon="FileBarChart"
-      subtitle={bi("تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.", "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.")}
+      subtitle={bi(
+        "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.",
+        "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.",
+      )}
     >
       <StatGrid
         items={[
@@ -54,9 +67,24 @@ function Body() {
       <Panel title={bi("ملخّص الأسبوع", "Week summary")} icon="Activity">
         <RowList
           rows={[
-            { title: bi("ساعات الدراسة", "Study hours"), meta: bi("9 ساعات و20 دقيقة", "9h 20m"), value: bi("+12%", "+12%"), tone: "success" },
-            { title: bi("امتحانات تدريبية", "Mock exams"), meta: bi("امتحانان", "2 exams"), value: bi("72%", "72%"), tone: "primary" },
-            { title: bi("الكيمياء تحتاج متابعة", "Chemistry needs attention"), meta: bi("أخطاء متكرّرة في التفاعلات", "Repeated reaction mistakes"), value: bi("تنبيه", "Alert"), tone: "danger" },
+            {
+              title: bi("ساعات الدراسة", "Study hours"),
+              meta: bi("9 ساعات و20 دقيقة", "9h 20m"),
+              value: bi("+12%", "+12%"),
+              tone: "success",
+            },
+            {
+              title: bi("امتحانات تدريبية", "Mock exams"),
+              meta: bi("امتحانان", "2 exams"),
+              value: bi("72%", "72%"),
+              tone: "primary",
+            },
+            {
+              title: bi("الكيمياء تحتاج متابعة", "Chemistry needs attention"),
+              meta: bi("أخطاء متكرّرة في التفاعلات", "Repeated reaction mistakes"),
+              value: bi("تنبيه", "Alert"),
+              tone: "danger",
+            },
           ]}
         />
       </Panel>

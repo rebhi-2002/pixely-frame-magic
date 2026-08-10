@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("الأرباح", "Earnings")}
       icon="Wallet"
-      subtitle={bi("أرباحك، عمولة المنصة، وطلبات السحب — كل شي واضح بلا مفاجآت.", "Your earnings, platform fee and payout requests — all transparent.")}
+      subtitle={bi(
+        "أرباحك، عمولة المنصة، وطلبات السحب — كل شي واضح بلا مفاجآت.",
+        "Your earnings, platform fee and payout requests — all transparent.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("آخر الحركات", "Recent transactions")} icon="Receipt">
         <DataTable
-          head={[bi("التاريخ", "Date"), bi("الوصف", "Description"), bi("المبلغ", "Amount"), bi("الحالة", "Status")]}
+          head={[
+            bi("التاريخ", "Date"),
+            bi("الوصف", "Description"),
+            bi("المبلغ", "Amount"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("2026/07/30", "2026/07/30"), bi("اشتراك كورس تفاضل", "Calculus enrollment"), bi("+45 د.أ", "+45 JOD"), <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>],
-            [bi("2026/07/28", "2026/07/28"), bi("طلب سحب", "Payout request"), bi("-500 د.أ", "-500 JOD"), <Badge tone="primary">{bi("قيد التنفيذ", "Processing")}</Badge>],
-            [bi("2026/07/25", "2026/07/25"), bi("اشتراك مراجعة", "Review enrollment"), bi("+15 د.أ", "+15 JOD"), <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>],
+            [
+              bi("2026/07/30", "2026/07/30"),
+              bi("اشتراك كورس تفاضل", "Calculus enrollment"),
+              bi("+45 د.أ", "+45 JOD"),
+              <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>,
+            ],
+            [
+              bi("2026/07/28", "2026/07/28"),
+              bi("طلب سحب", "Payout request"),
+              bi("-500 د.أ", "-500 JOD"),
+              <Badge tone="primary">{bi("قيد التنفيذ", "Processing")}</Badge>,
+            ],
+            [
+              bi("2026/07/25", "2026/07/25"),
+              bi("اشتراك مراجعة", "Review enrollment"),
+              bi("+15 د.أ", "+15 JOD"),
+              <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>,
+            ],
           ]}
         />
       </Panel>

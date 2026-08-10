@@ -25,7 +25,10 @@ function TeacherProfilePage() {
   const { t } = useTranslation();
   const items = t("courses.items", { returnObjects: true }) as CourseItem[];
   const courses = items.filter((c) => c.teacherId === id);
-  const reviews = t("teacherProfile.reviews", { returnObjects: true }) as { n: string; d: string }[];
+  const reviews = t("teacherProfile.reviews", { returnObjects: true }) as {
+    n: string;
+    d: string;
+  }[];
 
   if (courses.length === 0) {
     return (
@@ -64,13 +67,21 @@ function TeacherProfilePage() {
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <Stat icon={<Users className="size-4" />} value="1,240" label={t("teacherProfile.students")} />
+            <Stat
+              icon={<Users className="size-4" />}
+              value="1,240"
+              label={t("teacherProfile.students")}
+            />
             <Stat
               icon={<BookOpen className="size-4" />}
               value={String(courses.length)}
               label={t("teacherProfile.courses")}
             />
-            <Stat icon={<Star className="size-4" />} value="4.8" label={t("teacherProfile.rating")} />
+            <Stat
+              icon={<Star className="size-4" />}
+              value="4.8"
+              label={t("teacherProfile.rating")}
+            />
           </div>
         </div>
       </section>
@@ -79,7 +90,9 @@ function TeacherProfilePage() {
         <h2 className="text-xl font-bold text-foreground">{t("teacherProfile.aboutTitle")}</h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">{t("teacherProfile.about")}</p>
 
-        <h2 className="mt-12 text-xl font-bold text-foreground">{t("teacherProfile.coursesTitle")}</h2>
+        <h2 className="mt-12 text-xl font-bold text-foreground">
+          {t("teacherProfile.coursesTitle")}
+        </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {lessons} {t("courses.lessons")}
         </p>
@@ -98,7 +111,9 @@ function TeacherProfilePage() {
           ))}
         </div>
 
-        <h2 className="mt-12 text-xl font-bold text-foreground">{t("teacherProfile.reviewsTitle")}</h2>
+        <h2 className="mt-12 text-xl font-bold text-foreground">
+          {t("teacherProfile.reviewsTitle")}
+        </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {reviews.map((r) => (
             <blockquote key={r.n} className="rounded-2xl border border-border bg-card p-6">
@@ -114,7 +129,6 @@ function TeacherProfilePage() {
             label={t("teacherProfile.cta")}
             className="glow-primary inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           />
-
         </div>
       </section>
     </PublicLayout>

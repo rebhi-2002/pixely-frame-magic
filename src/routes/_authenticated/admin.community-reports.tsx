@@ -1,3 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminFeaturePage } from "@/components/admin/admin-feature";
-export const Route = createFileRoute("/_authenticated/admin/community-reports")({ head: () => ({ meta: [{ title: "بلاغات المجتمع | Academia" }, { name: "description", content: "إدارة بلاغات مجتمعات Academia." }, { property: "og:title", content: "بلاغات المجتمع" }, { property: "og:description", content: "إدارة بلاغات مجتمعات Academia." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <AdminFeaturePage feature="community-reports" /> });
+export const Route = createFileRoute("/_authenticated/admin/community-reports")({
+  head: () => ({
+    meta: [
+      { title: "بلاغات المجتمع | Academia" },
+      { name: "description", content: "إدارة بلاغات مجتمعات Academia." },
+      { property: "og:title", content: "بلاغات المجتمع" },
+      { property: "og:description", content: "إدارة بلاغات مجتمعات Academia." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: () => <AdminFeaturePage feature="community-reports" />,
+});

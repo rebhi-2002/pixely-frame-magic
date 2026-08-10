@@ -79,7 +79,6 @@ function Pricing() {
                     : "border border-border bg-background text-foreground"
                 }`}
               />
-
             </div>
           );
         })}

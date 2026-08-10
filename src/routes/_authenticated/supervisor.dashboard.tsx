@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("لوحة الإشراف", "Supervision dashboard")}
       icon="LayoutDashboard"
-      subtitle={bi("جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.", "Teaching quality across teachers and classes: alerts, follow-ups and mastery signals.")}
+      subtitle={bi(
+        "جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.",
+        "Teaching quality across teachers and classes: alerts, follow-ups and mastery signals.",
+      )}
     >
       <StatGrid
         items={[
@@ -49,7 +62,11 @@ function Body() {
         <QuickLinks
           items={[
             { to: "/supervisor/teachers", label: bi("المعلمون", "Teachers"), icon: "Presentation" },
-            { to: "/supervisor/students-overview", label: bi("نظرة الطلاب", "Students overview"), icon: "Users" },
+            {
+              to: "/supervisor/students-overview",
+              label: bi("نظرة الطلاب", "Students overview"),
+              icon: "Users",
+            },
             { to: "/supervisor/reports", label: bi("التقارير", "Reports"), icon: "FileBarChart" },
           ]}
         />
@@ -57,9 +74,24 @@ function Body() {
       <Panel title={bi("تنبيهات تحتاج متابعة", "Alerts to follow up")} icon="AlertTriangle">
         <RowList
           rows={[
-            { title: bi("تأخّر تصحيح لدى أ. ريم", "Grading delay — Ms. Reem"), meta: bi("18 ورقة > 5 أيام", "18 papers > 5 days"), value: bi("عاجل", "Urgent"), tone: "danger" },
-            { title: bi("إتقان منخفض — كيمياء صف 9", "Low mastery — Chemistry grade 9"), meta: bi("38%", "38%"), value: bi("متابعة", "Follow up"), tone: "primary" },
-            { title: bi("محتوى بانتظار المراجعة", "Content pending review"), meta: bi("5 عناصر", "5 items"), value: bi("مراجعة", "Review"), tone: "muted" },
+            {
+              title: bi("تأخّر تصحيح لدى أ. ريم", "Grading delay — Ms. Reem"),
+              meta: bi("18 ورقة > 5 أيام", "18 papers > 5 days"),
+              value: bi("عاجل", "Urgent"),
+              tone: "danger",
+            },
+            {
+              title: bi("إتقان منخفض — كيمياء صف 9", "Low mastery — Chemistry grade 9"),
+              meta: bi("38%", "38%"),
+              value: bi("متابعة", "Follow up"),
+              tone: "primary",
+            },
+            {
+              title: bi("محتوى بانتظار المراجعة", "Content pending review"),
+              meta: bi("5 عناصر", "5 items"),
+              value: bi("مراجعة", "Review"),
+              tone: "muted",
+            },
           ]}
         />
       </Panel>

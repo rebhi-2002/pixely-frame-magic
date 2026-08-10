@@ -43,7 +43,6 @@ function ForTeachers() {
             label={t("forTeachers.cta")}
             className="glow-primary mt-8 inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           />
-
         </div>
       </section>
 
