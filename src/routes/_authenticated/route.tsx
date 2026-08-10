@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
 
 import { useAccess } from "@/hooks/use-access";
-import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -44,7 +43,6 @@ function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <IdleLogoutWatcher />
       {mobileOpen && (
         <button
           type="button"
