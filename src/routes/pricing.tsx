@@ -71,7 +71,7 @@ function Pricing() {
               </ul>
               <SessionCta
                 to="/signup"
-                label={t(`pricing.plans.${p.key}.cta`)}
+                label={t(`pricing.${p.key}.cta`)}
                 className={`mt-7 inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-bold transition-opacity hover:opacity-90 ${
                   p.highlight
                     ? "bg-primary text-primary-foreground"
@@ -79,8 +79,6 @@ function Pricing() {
                 }`}
               />
 
-                {t(`pricing.${p.key}.cta`)}
-              </Link>
             </div>
           );
         })}
