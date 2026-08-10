@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("شهاداتي", "My certificates")}
       icon="Award"
-      subtitle={bi("شهاداتك القابلة للتحقّق — شارك الرابط، وأي شخص يتأكد من صحّتها.", "Your verifiable certificates — share the link and anyone can validate it.")}
+      subtitle={bi(
+        "شهاداتك القابلة للتحقّق — شارك الرابط، وأي شخص يتأكد من صحّتها.",
+        "Your verifiable certificates — share the link and anyone can validate it.",
+      )}
     >
       <StatGrid
         items={[
@@ -46,10 +59,21 @@ function Body() {
         ]}
       />
       <Panel title={bi("شهاداتك", "Your certificates")} icon="Award">
-        <RowList to="/certificate/ACD-2026-0142"
+        <RowList
+          to="/certificate/ACD-2026-0142"
           rows={[
-            { title: bi("مهارات المراجعة الذكية", "Smart revision skills"), meta: bi("ACD-2026-0142", "ACD-2026-0142"), value: bi("تحقّق", "Verify"), tone: "success" },
-            { title: bi("أساسيات الكيمياء", "Chemistry basics"), meta: bi("ACD-2026-0091", "ACD-2026-0091"), value: bi("تحقّق", "Verify"), tone: "success" },
+            {
+              title: bi("مهارات المراجعة الذكية", "Smart revision skills"),
+              meta: bi("ACD-2026-0142", "ACD-2026-0142"),
+              value: bi("تحقّق", "Verify"),
+              tone: "success",
+            },
+            {
+              title: bi("أساسيات الكيمياء", "Chemistry basics"),
+              meta: bi("ACD-2026-0091", "ACD-2026-0091"),
+              value: bi("تحقّق", "Verify"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>

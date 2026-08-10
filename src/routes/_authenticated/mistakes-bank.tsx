@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("بنك الأخطاء", "Mistakes bank")}
       icon="XCircle"
-      subtitle={bi("كل سؤال أخطأت فيه يُحفظ هنا تلقائياً، ويُعاد عليك حتى تُتقنه.", "Every question you got wrong is saved here and repeated until you master it.")}
+      subtitle={bi(
+        "كل سؤال أخطأت فيه يُحفظ هنا تلقائياً، ويُعاد عليك حتى تُتقنه.",
+        "Every question you got wrong is saved here and repeated until you master it.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,9 +61,24 @@ function Body() {
       <Panel title={bi("الأكثر تكراراً", "Most repeated")} icon="XCircle">
         <RowList
           rows={[
-            { title: bi("قوانين نيوتن — الاحتكاك", "Newton's laws — friction"), meta: bi("الفيزياء · أخطأت 4 مرات", "Physics · wrong 4 times"), value: bi("أولوية", "Priority"), tone: "danger" },
-            { title: bi("المعادلات التربيعية", "Quadratic equations"), meta: bi("الرياضيات · أخطأت 3 مرات", "Math · wrong 3 times"), value: bi("أولوية", "Priority"), tone: "danger" },
-            { title: bi("التفاعلات الطاردة", "Exothermic reactions"), meta: bi("الكيمياء · أخطأت مرتين", "Chemistry · wrong twice"), value: bi("مراجعة", "Review"), tone: "primary" },
+            {
+              title: bi("قوانين نيوتن — الاحتكاك", "Newton's laws — friction"),
+              meta: bi("الفيزياء · أخطأت 4 مرات", "Physics · wrong 4 times"),
+              value: bi("أولوية", "Priority"),
+              tone: "danger",
+            },
+            {
+              title: bi("المعادلات التربيعية", "Quadratic equations"),
+              meta: bi("الرياضيات · أخطأت 3 مرات", "Math · wrong 3 times"),
+              value: bi("أولوية", "Priority"),
+              tone: "danger",
+            },
+            {
+              title: bi("التفاعلات الطاردة", "Exothermic reactions"),
+              meta: bi("الكيمياء · أخطأت مرتين", "Chemistry · wrong twice"),
+              value: bi("مراجعة", "Review"),
+              tone: "primary",
+            },
           ]}
         />
       </Panel>

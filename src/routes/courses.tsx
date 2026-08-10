@@ -11,7 +11,8 @@ export const Route = createFileRoute("/courses")({
       { title: "الكورسات | أكاديميا" },
       {
         name: "description",
-        content: "تصفّح كورسات المعلّمين المعتمدين في أكاديميا حسب المادة والمستوى قبل إنشاء حسابك.",
+        content:
+          "تصفّح كورسات المعلّمين المعتمدين في أكاديميا حسب المادة والمستوى قبل إنشاء حسابك.",
       },
       { property: "og:title", content: "الكورسات | أكاديميا" },
       {
@@ -90,54 +91,54 @@ function CoursesPage() {
 
       <section className="mx-auto max-w-6xl px-5 py-14">
         <div key={`${subject}-${filtered.length}`} className="panel-swap">
-        {filtered.length === 0 ? (
-          <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-            {t("courses.empty")}
-          </p>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((c) => (
-              <article
-                key={c.id}
-                className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
-                    {c.subject}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{c.level}</span>
-                </div>
-                <h2 className="mt-4 text-base font-bold text-foreground">{c.title}</h2>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {t("courses.byTeacher")}:{" "}
-                  <Link
-                    to="/teacher/$id"
-                    params={{ id: c.teacherId }}
-                    className="font-semibold text-primary hover:underline"
-                  >
-                    {c.teacher}
-                  </Link>
-                </p>
-                <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    <BookOpen className="size-4" />
-                    {c.lessons} {t("courses.lessons")}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Star className="size-4 text-primary" />
-                    {c.price === "0" ? t("courses.free") : `${c.price} JOD`}
-                  </span>
-                </div>
-                <Link
-                  to={isSignedIn ? "/my-courses" : "/signup"}
-                  className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+          {filtered.length === 0 ? (
+            <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+              {t("courses.empty")}
+            </p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((c) => (
+                <article
+                  key={c.id}
+                  className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
                 >
-                  {t(isSignedIn ? "courses.open" : "courses.enroll")}
-                </Link>
-              </article>
-            ))}
-          </div>
-        )}
+                  <div className="flex items-center justify-between">
+                    <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+                      {c.subject}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{c.level}</span>
+                  </div>
+                  <h2 className="mt-4 text-base font-bold text-foreground">{c.title}</h2>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    {t("courses.byTeacher")}:{" "}
+                    <Link
+                      to="/teacher/$id"
+                      params={{ id: c.teacherId }}
+                      className="font-semibold text-primary hover:underline"
+                    >
+                      {c.teacher}
+                    </Link>
+                  </p>
+                  <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
+                      <BookOpen className="size-4" />
+                      {c.lessons} {t("courses.lessons")}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Star className="size-4 text-primary" />
+                      {c.price === "0" ? t("courses.free") : `${c.price} JOD`}
+                    </span>
+                  </div>
+                  <Link
+                    to={isSignedIn ? "/my-courses" : "/signup"}
+                    className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+                  >
+                    {t(isSignedIn ? "courses.open" : "courses.enroll")}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </PublicLayout>

@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("التحليلات", "Analytics")}
       icon="LineChart"
-      subtitle={bi("أين يتعثّر طلابك بالضبط: أسئلة يخطئ فيها الأكثر، وإتقان كل وحدة.", "Exactly where students struggle: most-missed questions and per-unit mastery.")}
+      subtitle={bi(
+        "أين يتعثّر طلابك بالضبط: أسئلة يخطئ فيها الأكثر، وإتقان كل وحدة.",
+        "Exactly where students struggle: most-missed questions and per-unit mastery.",
+      )}
     >
       <StatGrid
         items={[
@@ -54,9 +67,24 @@ function Body() {
       <Panel title={bi("الأسئلة الأكثر خطأً", "Most-missed questions")} icon="XCircle">
         <RowList
           rows={[
-            { title: bi("تكامل بالتجزيء — سؤال 7", "Integration by parts — Q7"), meta: bi("68% أخطأوا", "68% wrong"), value: bi("أولوية", "Priority"), tone: "danger" },
-            { title: bi("قاعدة السلسلة — سؤال 3", "Chain rule — Q3"), meta: bi("54% أخطأوا", "54% wrong"), value: bi("مراجعة", "Review"), tone: "primary" },
-            { title: bi("النهايات اللانهائية — سؤال 11", "Infinite limits — Q11"), meta: bi("41% أخطأوا", "41% wrong"), value: bi("مراجعة", "Review"), tone: "primary" },
+            {
+              title: bi("تكامل بالتجزيء — سؤال 7", "Integration by parts — Q7"),
+              meta: bi("68% أخطأوا", "68% wrong"),
+              value: bi("أولوية", "Priority"),
+              tone: "danger",
+            },
+            {
+              title: bi("قاعدة السلسلة — سؤال 3", "Chain rule — Q3"),
+              meta: bi("54% أخطأوا", "54% wrong"),
+              value: bi("مراجعة", "Review"),
+              tone: "primary",
+            },
+            {
+              title: bi("النهايات اللانهائية — سؤال 11", "Infinite limits — Q11"),
+              meta: bi("41% أخطأوا", "41% wrong"),
+              value: bi("مراجعة", "Review"),
+              tone: "primary",
+            },
           ]}
         />
       </Panel>

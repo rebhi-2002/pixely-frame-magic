@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("كورساتي", "My courses")}
       icon="BookOpenCheck"
-      subtitle={bi("الكورسات التي اشتركت فيها فعلياً — تقدّمك، الحصة القادمة، وشهادة الإتمام.", "Courses you actually enrolled in — progress, next session and completion certificate.")}
+      subtitle={bi(
+        "الكورسات التي اشتركت فيها فعلياً — تقدّمك، الحصة القادمة، وشهادة الإتمام.",
+        "Courses you actually enrolled in — progress, next session and completion certificate.",
+      )}
     >
       <StatGrid
         items={[
@@ -46,19 +59,46 @@ function Body() {
         ]}
       />
       <Panel title={bi("كورساتك النشطة", "Active courses")} icon="BookOpenCheck">
-        <RowList to="/courses"
+        <RowList
+          to="/courses"
           rows={[
-            { title: bi("تفاضل وتكامل — أ. سامي", "Calculus — Mr. Sami"), meta: bi("الحصة القادمة: الأحد 18:00", "Next: Sunday 18:00"), value: bi("62%", "62%"), tone: "primary" },
-            { title: bi("فيزياء الوزاري — أ. ريم", "Ministry physics — Ms. Reem"), meta: bi("الحصة القادمة: الثلاثاء 19:30", "Next: Tuesday 19:30"), value: bi("45%", "45%"), tone: "primary" },
-            { title: bi("عربي — بلاغة وتحليل", "Arabic — rhetoric"), meta: bi("مُسجّل مسبقاً", "Pre-recorded"), value: bi("88%", "88%"), tone: "success" },
+            {
+              title: bi("تفاضل وتكامل — أ. سامي", "Calculus — Mr. Sami"),
+              meta: bi("الحصة القادمة: الأحد 18:00", "Next: Sunday 18:00"),
+              value: bi("62%", "62%"),
+              tone: "primary",
+            },
+            {
+              title: bi("فيزياء الوزاري — أ. ريم", "Ministry physics — Ms. Reem"),
+              meta: bi("الحصة القادمة: الثلاثاء 19:30", "Next: Tuesday 19:30"),
+              value: bi("45%", "45%"),
+              tone: "primary",
+            },
+            {
+              title: bi("عربي — بلاغة وتحليل", "Arabic — rhetoric"),
+              meta: bi("مُسجّل مسبقاً", "Pre-recorded"),
+              value: bi("88%", "88%"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>
       <Panel title={bi("كورسات أكملتها", "Completed")} icon="CheckCircle2">
-        <RowList to="/my-certificates"
+        <RowList
+          to="/my-certificates"
           rows={[
-            { title: bi("مهارات المراجعة الذكية", "Smart revision skills"), meta: bi("أُنجز 2026/06/10", "Done 2026/06/10"), value: bi("شهادة", "Certificate"), tone: "success" },
-            { title: bi("أساسيات الكيمياء", "Chemistry basics"), meta: bi("أُنجز 2026/05/02", "Done 2026/05/02"), value: bi("شهادة", "Certificate"), tone: "success" },
+            {
+              title: bi("مهارات المراجعة الذكية", "Smart revision skills"),
+              meta: bi("أُنجز 2026/06/10", "Done 2026/06/10"),
+              value: bi("شهادة", "Certificate"),
+              tone: "success",
+            },
+            {
+              title: bi("أساسيات الكيمياء", "Chemistry basics"),
+              meta: bi("أُنجز 2026/05/02", "Done 2026/05/02"),
+              value: bi("شهادة", "Certificate"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>

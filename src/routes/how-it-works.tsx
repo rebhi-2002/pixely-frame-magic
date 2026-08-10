@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { SessionCta } from "@/components/site/session-cta";
 
 const title = "كيف تعمل أكاديميا؟ | خطوات البداية";
 const description =
@@ -42,7 +43,9 @@ function HowItWorks() {
                 {i + 1}
               </span>
               <div>
-                <h2 className="text-lg font-bold text-foreground">{t(`howItWorks.steps.${s}.t`)}</h2>
+                <h2 className="text-lg font-bold text-foreground">
+                  {t(`howItWorks.steps.${s}.t`)}
+                </h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t(`howItWorks.steps.${s}.d`)}
                 </p>
@@ -58,12 +61,11 @@ function HowItWorks() {
               <li key={line}>• {line}</li>
             ))}
           </ul>
-          <Link
+          <SessionCta
             to="/signup"
+            label={t("howItWorks.cta")}
             className="mt-7 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            {t("howItWorks.cta")}
-          </Link>
+          />
         </div>
       </section>
     </PublicLayout>

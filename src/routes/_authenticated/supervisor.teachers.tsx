@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("المعلمون", "Teachers")}
       icon="Presentation"
-      subtitle={bi("أداء كل معلم: سرعة الرد، زمن التصحيح، وإتقان طلابه.", "Per-teacher performance: response time, grading speed and student mastery.")}
+      subtitle={bi(
+        "أداء كل معلم: سرعة الرد، زمن التصحيح، وإتقان طلابه.",
+        "Per-teacher performance: response time, grading speed and student mastery.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("قائمة المعلمين", "Teacher list")} icon="Presentation">
         <DataTable
-          head={[bi("المعلم", "Teacher"), bi("المادة", "Subject"), bi("طلاب", "Students"), bi("الحالة", "Status")]}
+          head={[
+            bi("المعلم", "Teacher"),
+            bi("المادة", "Subject"),
+            bi("طلاب", "Students"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("أ. سامي خالد", "Mr. Sami Khaled"), bi("رياضيات", "Math"), "126", <Badge tone="success">{bi("ممتاز", "Excellent")}</Badge>],
-            [bi("أ. ريم ناصر", "Ms. Reem Nasser"), bi("فيزياء", "Physics"), "98", <Badge tone="danger">{bi("تأخّر تصحيح", "Grading delay")}</Badge>],
-            [bi("أ. هدى سليم", "Ms. Huda Salim"), bi("كيمياء", "Chemistry"), "84", <Badge tone="primary">{bi("جيد", "Good")}</Badge>],
+            [
+              bi("أ. سامي خالد", "Mr. Sami Khaled"),
+              bi("رياضيات", "Math"),
+              "126",
+              <Badge tone="success">{bi("ممتاز", "Excellent")}</Badge>,
+            ],
+            [
+              bi("أ. ريم ناصر", "Ms. Reem Nasser"),
+              bi("فيزياء", "Physics"),
+              "98",
+              <Badge tone="danger">{bi("تأخّر تصحيح", "Grading delay")}</Badge>,
+            ],
+            [
+              bi("أ. هدى سليم", "Ms. Huda Salim"),
+              bi("كيمياء", "Chemistry"),
+              "84",
+              <Badge tone="primary">{bi("جيد", "Good")}</Badge>,
+            ],
           ]}
         />
       </Panel>

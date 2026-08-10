@@ -18,6 +18,7 @@ import {
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
+import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { currentUserHome } from "@/lib/session-home";
 
@@ -83,20 +84,31 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Academia | منصة الطالب للتنظيم والإنجاز" },
-      { name: "description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
+      {
+        name: "description",
+        content:
+          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
       { name: "twitter:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
-      { property: "og:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
-      { name: "twitter:description", content: "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز." },
+      {
+        property: "og:description",
+        content:
+          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -155,6 +167,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <PreferencesProvider>
         <AuthSync />
+        <IdleLogoutWatcher />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CookieConsent />

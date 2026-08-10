@@ -13,7 +13,10 @@ export const Route = createFileRoute("/help")({
         content: "إجابات سريعة عن الحساب، الاشتراك، المكتبة، والخصوصية في أكاديميا.",
       },
       { property: "og:title", content: "مركز المساعدة | أكاديميا" },
-      { property: "og:description", content: "أجوبة مختصرة لأكثر الأسئلة تكراراً على منصة أكاديميا." },
+      {
+        property: "og:description",
+        content: "أجوبة مختصرة لأكثر الأسئلة تكراراً على منصة أكاديميا.",
+      },
     ],
   }),
   component: HelpPage,

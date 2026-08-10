@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Compass, HeartHandshake, Languages, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { SessionCta } from "@/components/site/session-cta";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -15,7 +17,8 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "من نحن | أكاديميا" },
       {
         property: "og:description",
-        content: "قصة أكاديميا ومهمتنا وقيمنا: الوضوح، خصوصية الطالب، عربي أولاً، وإنجاز قابل للقياس.",
+        content:
+          "قصة أكاديميا ومهمتنا وقيمنا: الوضوح، خصوصية الطالب، عربي أولاً، وإنجاز قابل للقياس.",
       },
     ],
   }),
@@ -26,6 +29,7 @@ const valueIcons = [Compass, HeartHandshake, Languages, Target];
 
 function AboutPage() {
   const { t } = useTranslation();
+  const { isSignedIn } = useSession();
   const values = t("about.values", { returnObjects: true }) as { t: string; d: string }[];
   const team = t("about.team", { returnObjects: true }) as { t: string; d: string }[];
 
@@ -79,18 +83,19 @@ function AboutPage() {
         <h2 className="text-3xl font-bold text-foreground">{t("about.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("about.ctaSub")}</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link
+          <SessionCta
             to="/signup"
+            label={t("about.ctaPrimary")}
             className="glow-primary inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            {t("about.ctaPrimary")}
-          </Link>
-          <Link
-            to="/teacher/register"
-            className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
-          >
-            {t("about.ctaSecondary")}
-          </Link>
+          />
+          {!isSignedIn && (
+            <Link
+              to="/teacher/register"
+              className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
+            >
+              {t("about.ctaSecondary")}
+            </Link>
+          )}
         </div>
       </section>
     </PublicLayout>

@@ -257,7 +257,12 @@ function UsersPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         {can("users", "edit") && (
-                          <Button size="icon" variant="ghost" title="تعديل" onClick={() => openDialog(u)}>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            title="تعديل"
+                            onClick={() => openDialog(u)}
+                          >
                             <Pencil className="size-4" />
                           </Button>
                         )}

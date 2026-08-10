@@ -53,8 +53,8 @@ function SystemModulesPage() {
 
       <div className="p-5">
         <p className="mb-4 text-sm text-muted-foreground">
-          كل صف يمثّل وحدة نظام كاملة. تعطيل الوحدة يُخفيها فوراً من القائمة الجانبية لكل
-          المستخدمين مهما كانت صلاحياتهم الفردية.
+          كل صف يمثّل وحدة نظام كاملة. تعطيل الوحدة يُخفيها فوراً من القائمة الجانبية لكل المستخدمين
+          مهما كانت صلاحياتهم الفردية.
         </p>
 
         <div className="overflow-hidden rounded-2xl bg-card">
@@ -85,7 +85,9 @@ function SystemModulesPage() {
                       <Switch
                         checked={m.enabled}
                         disabled={!editable || mutation.isPending}
-                        onCheckedChange={(checked) => mutation.mutate({ id: m.id, enabled: checked })}
+                        onCheckedChange={(checked) =>
+                          mutation.mutate({ id: m.id, enabled: checked })
+                        }
                         aria-label={`تفعيل ${m.name}`}
                       />
                     </td>

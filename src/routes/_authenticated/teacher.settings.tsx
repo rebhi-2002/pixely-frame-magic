@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("إعدادات المعلم", "Teacher settings")}
       icon="Settings"
-      subtitle={bi("التسعير، أوقات التوفّر، بيانات الدفع، وتفضيلات الإشعارات.", "Pricing, availability, payout details and notification preferences.")}
+      subtitle={bi(
+        "التسعير، أوقات التوفّر، بيانات الدفع، وتفضيلات الإشعارات.",
+        "Pricing, availability, payout details and notification preferences.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,17 +61,41 @@ function Body() {
       <Panel title={bi("الإعدادات", "Settings")} icon="Settings">
         <RowList
           rows={[
-            { title: bi("سعر الحصة الخاصة", "Private session price"), meta: bi("20 د.أ / ساعة", "20 JOD / hour"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("أوقات التوفّر", "Availability"), meta: bi("أحد-خميس 17:00-21:00", "Sun-Thu 17:00-21:00"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("بيانات الحوالة", "Bank details"), meta: bi("محفوظة ومشفّرة", "Stored encrypted"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("إشعار سؤال جديد", "New question alert"), meta: bi("فوري", "Instant"), value: bi("مفعّل", "On"), tone: "success" },
+            {
+              title: bi("سعر الحصة الخاصة", "Private session price"),
+              meta: bi("20 د.أ / ساعة", "20 JOD / hour"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("أوقات التوفّر", "Availability"),
+              meta: bi("أحد-خميس 17:00-21:00", "Sun-Thu 17:00-21:00"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("بيانات الحوالة", "Bank details"),
+              meta: bi("محفوظة ومشفّرة", "Stored encrypted"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("إشعار سؤال جديد", "New question alert"),
+              meta: bi("فوري", "Instant"),
+              value: bi("مفعّل", "On"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>
       <Panel title={bi("روابط سريعة", "Quick links")} icon="Settings">
         <QuickLinks
           items={[
-            { to: "/teacher/profile/edit", label: bi("ملفي العام", "Public profile"), icon: "UserCog" },
+            {
+              to: "/teacher/profile/edit",
+              label: bi("ملفي العام", "Public profile"),
+              icon: "UserCog",
+            },
             { to: "/teacher/earnings", label: bi("الأرباح", "Earnings"), icon: "Wallet" },
             { to: "/settings", label: bi("اللغة والثيم", "Language & theme"), icon: "Palette" },
           ]}

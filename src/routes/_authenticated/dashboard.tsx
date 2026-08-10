@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("لوحة الطالب", "Student dashboard")}
       icon="LayoutDashboard"
-      subtitle={bi("كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.", "Everything in one place: today's progress, upcoming tasks, and subjects that need review.")}
+      subtitle={bi(
+        "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.",
+        "Everything in one place: today's progress, upcoming tasks, and subjects that need review.",
+      )}
     >
       <StatGrid
         items={[
@@ -66,9 +79,24 @@ function Body() {
       <Panel title={bi("قريباً", "Coming up")} icon="CalendarClock">
         <RowList
           rows={[
-            { title: bi("امتحان فيزياء — وحدة 3", "Physics quiz — unit 3"), meta: bi("غداً 9:00", "Tomorrow 9:00"), value: bi("امتحان", "Quiz"), tone: "primary" },
-            { title: bi("تسليم ورقة عمل رياضيات", "Math worksheet due"), meta: bi("بعد يومين", "In 2 days"), value: bi("واجب", "Homework"), tone: "muted" },
-            { title: bi("مراجعة بطاقات كيمياء", "Chemistry flashcards review"), meta: bi("اليوم", "Today"), value: bi("مراجعة", "Review"), tone: "success" },
+            {
+              title: bi("امتحان فيزياء — وحدة 3", "Physics quiz — unit 3"),
+              meta: bi("غداً 9:00", "Tomorrow 9:00"),
+              value: bi("امتحان", "Quiz"),
+              tone: "primary",
+            },
+            {
+              title: bi("تسليم ورقة عمل رياضيات", "Math worksheet due"),
+              meta: bi("بعد يومين", "In 2 days"),
+              value: bi("واجب", "Homework"),
+              tone: "muted",
+            },
+            {
+              title: bi("مراجعة بطاقات كيمياء", "Chemistry flashcards review"),
+              meta: bi("اليوم", "Today"),
+              value: bi("مراجعة", "Review"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>

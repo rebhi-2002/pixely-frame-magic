@@ -1,10 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
 const title = "البطاقات | أكاديميا";
-const description = "مراجعة متباعدة (Spaced repetition): البطاقة ترجع لك في الوقت الذي تنساها فيه بالضبط.";
+const description =
+  "مراجعة متباعدة (Spaced repetition): البطاقة ترجع لك في الوقت الذي تنساها فيه بالضبط.";
 
 export const Route = createFileRoute("/_authenticated/flashcards")({
   head: () => ({
@@ -35,7 +46,10 @@ function Body() {
     <AppPage
       title={bi("البطاقات", "Flashcards")}
       icon="Layers"
-      subtitle={bi("مراجعة متباعدة (Spaced repetition): البطاقة ترجع لك في الوقت الذي تنساها فيه بالضبط.", "Spaced repetition: each card returns exactly when you're about to forget it.")}
+      subtitle={bi(
+        "مراجعة متباعدة (Spaced repetition): البطاقة ترجع لك في الوقت الذي تنساها فيه بالضبط.",
+        "Spaced repetition: each card returns exactly when you're about to forget it.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,9 +62,24 @@ function Body() {
       <Panel title={bi("مجموعاتك", "Your decks")} icon="Layers">
         <RowList
           rows={[
-            { title: bi("رياضيات — مشتقات", "Math — derivatives"), meta: bi("48 بطاقة · 12 مستحقة", "48 cards · 12 due"), value: bi("ابدأ", "Start"), tone: "primary" },
-            { title: bi("فيزياء — الحركة", "Physics — motion"), meta: bi("36 بطاقة · 14 مستحقة", "36 cards · 14 due"), value: bi("ابدأ", "Start"), tone: "primary" },
-            { title: bi("عربي — بلاغة", "Arabic — rhetoric"), meta: bi("60 بطاقة · 8 مستحقة", "60 cards · 8 due"), value: bi("ابدأ", "Start"), tone: "primary" },
+            {
+              title: bi("رياضيات — مشتقات", "Math — derivatives"),
+              meta: bi("48 بطاقة · 12 مستحقة", "48 cards · 12 due"),
+              value: bi("ابدأ", "Start"),
+              tone: "primary",
+            },
+            {
+              title: bi("فيزياء — الحركة", "Physics — motion"),
+              meta: bi("36 بطاقة · 14 مستحقة", "36 cards · 14 due"),
+              value: bi("ابدأ", "Start"),
+              tone: "primary",
+            },
+            {
+              title: bi("عربي — بلاغة", "Arabic — rhetoric"),
+              meta: bi("60 بطاقة · 8 مستحقة", "60 cards · 8 due"),
+              value: bi("ابدأ", "Start"),
+              tone: "primary",
+            },
           ]}
         />
       </Panel>

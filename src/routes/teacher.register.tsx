@@ -1,16 +1,21 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { BadgeCheck, UploadCloud } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { currentUserHome } from "@/lib/session-home";
 
 const title = "تسجيل معلّم | أكاديميا";
 const description = "سجّل كمعلّم في أكاديميا وارفع وثيقة التوثيق لمراجعة فريق الإشراف.";
 
 export const Route = createFileRoute("/teacher/register")({
+  ssr: false,
+  beforeLoad: async () => {
+    if (await currentUserHome()) throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title },
@@ -91,12 +96,48 @@ function TeacherRegisterPage() {
       wide
     >
       <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-        <AuthField id="name" label={t("authPages.teacherRegister.fullName")} value={fullName} onChange={setFullName} autoComplete="name" />
-        <AuthField id="phone" label={t("authPages.teacherRegister.phone")} value={phone} onChange={setPhone} autoComplete="tel" />
-        <AuthField id="email" label={t("authPages.teacherRegister.email")} type="email" value={email} onChange={setEmail} autoComplete="email" />
-        <AuthField id="password" label={t("authPages.teacherRegister.password")} type="password" value={password} onChange={setPassword} autoComplete="new-password" />
-        <AuthField id="subject" label={t("authPages.teacherRegister.subject")} value={subject} onChange={setSubject} />
-        <AuthField id="experience" label={t("authPages.teacherRegister.experience")} value={experience} onChange={setExperience} />
+        <AuthField
+          id="name"
+          label={t("authPages.teacherRegister.fullName")}
+          value={fullName}
+          onChange={setFullName}
+          autoComplete="name"
+        />
+        <AuthField
+          id="phone"
+          label={t("authPages.teacherRegister.phone")}
+          value={phone}
+          onChange={setPhone}
+          autoComplete="tel"
+        />
+        <AuthField
+          id="email"
+          label={t("authPages.teacherRegister.email")}
+          type="email"
+          value={email}
+          onChange={setEmail}
+          autoComplete="email"
+        />
+        <AuthField
+          id="password"
+          label={t("authPages.teacherRegister.password")}
+          type="password"
+          value={password}
+          onChange={setPassword}
+          autoComplete="new-password"
+        />
+        <AuthField
+          id="subject"
+          label={t("authPages.teacherRegister.subject")}
+          value={subject}
+          onChange={setSubject}
+        />
+        <AuthField
+          id="experience"
+          label={t("authPages.teacherRegister.experience")}
+          value={experience}
+          onChange={setExperience}
+        />
 
         <div className="space-y-1.5 sm:col-span-2">
           <label htmlFor="bio" className="block text-sm font-semibold text-foreground">
@@ -121,7 +162,9 @@ function TeacherRegisterPage() {
             className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-background px-3.5 py-4 text-sm text-muted-foreground transition-colors hover:border-primary"
           >
             <UploadCloud className="size-5 shrink-0 text-primary" />
-            <span className="min-w-0 truncate">{docName || t("authPages.teacherRegister.documentHint")}</span>
+            <span className="min-w-0 truncate">
+              {docName || t("authPages.teacherRegister.documentHint")}
+            </span>
           </label>
           <input
             id="doc"

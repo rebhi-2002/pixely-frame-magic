@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("التصحيح", "Grading")}
       icon="PenSquare"
-      subtitle={bi("قائمة التصحيح: الأسئلة المقالية والملفات المرفوعة، مع ملاحظات لكل طالب.", "The grading queue: essay answers and uploaded files, with per-student feedback.")}
+      subtitle={bi(
+        "قائمة التصحيح: الأسئلة المقالية والملفات المرفوعة، مع ملاحظات لكل طالب.",
+        "The grading queue: essay answers and uploaded files, with per-student feedback.",
+      )}
     >
       <StatGrid
         items={[
@@ -47,11 +60,31 @@ function Body() {
       />
       <Panel title={bi("طابور التصحيح", "Grading queue")} icon="PenSquare">
         <DataTable
-          head={[bi("الطالب", "Student"), bi("العمل", "Item"), bi("أُرسل", "Submitted"), bi("الحالة", "Status")]}
+          head={[
+            bi("الطالب", "Student"),
+            bi("العمل", "Item"),
+            bi("أُرسل", "Submitted"),
+            bi("الحالة", "Status"),
+          ]}
           rows={[
-            [bi("أحمد ع.", "Ahmad A."), bi("امتحان وحدة 4 — مقالي", "Unit 4 exam — essay"), bi("اليوم 10:12", "Today 10:12"), <Badge tone="danger">{bi("بانتظار", "Pending")}</Badge>],
-            [bi("سما ح.", "Sama H."), bi("ورقة عمل مرفوعة", "Uploaded worksheet"), bi("أمس", "Yesterday"), <Badge tone="danger">{bi("بانتظار", "Pending")}</Badge>],
-            [bi("يزن م.", "Yazan M."), bi("امتحان وحدة 3", "Unit 3 exam"), bi("2026/07/28", "2026/07/28"), <Badge tone="success">{bi("مُصحّح", "Graded")}</Badge>],
+            [
+              bi("أحمد ع.", "Ahmad A."),
+              bi("امتحان وحدة 4 — مقالي", "Unit 4 exam — essay"),
+              bi("اليوم 10:12", "Today 10:12"),
+              <Badge tone="danger">{bi("بانتظار", "Pending")}</Badge>,
+            ],
+            [
+              bi("سما ح.", "Sama H."),
+              bi("ورقة عمل مرفوعة", "Uploaded worksheet"),
+              bi("أمس", "Yesterday"),
+              <Badge tone="danger">{bi("بانتظار", "Pending")}</Badge>,
+            ],
+            [
+              bi("يزن م.", "Yazan M."),
+              bi("امتحان وحدة 3", "Unit 3 exam"),
+              bi("2026/07/28", "2026/07/28"),
+              <Badge tone="success">{bi("مُصحّح", "Graded")}</Badge>,
+            ],
           ]}
         />
       </Panel>

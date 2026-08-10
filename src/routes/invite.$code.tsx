@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Gift } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { SessionCta } from "@/components/site/session-cta";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/invite/$code")({
   head: () => ({
@@ -18,6 +20,7 @@ export const Route = createFileRoute("/invite/$code")({
 function InvitePage() {
   const { code } = Route.useParams();
   const { t } = useTranslation();
+  const { isSignedIn } = useSession();
   const perks = t("invite.perks", { returnObjects: true }) as string[];
 
   return (
@@ -44,19 +47,20 @@ function InvitePage() {
         </ul>
 
         <div className="mt-9 flex flex-wrap gap-3">
-          <Link
+          <SessionCta
             to="/signup"
             search={{ invite: code }}
+            label={t("invite.cta")}
             className="glow-primary inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            {t("invite.cta")}
-          </Link>
-          <Link
-            to="/login"
-            className="inline-flex rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
-          >
-            {t("invite.login")}
-          </Link>
+          />
+          {!isSignedIn && (
+            <Link
+              to="/login"
+              className="inline-flex rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
+            >
+              {t("invite.login")}
+            </Link>
+          )}
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground">{t("invite.disclaimer")}</p>

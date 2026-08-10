@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppPage, StatGrid, Panel, RowList, Progress, DataTable, QuickLinks, Badge, EmptyState } from "@/components/app/kit";
+import {
+  AppPage,
+  StatGrid,
+  Panel,
+  RowList,
+  Progress,
+  DataTable,
+  QuickLinks,
+  Badge,
+  EmptyState,
+} from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 
@@ -35,7 +45,10 @@ function Body() {
     <AppPage
       title={bi("ملفي العام", "Public profile")}
       icon="UserCog"
-      subtitle={bi("هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.", "This is what students and parents see: your bio, subjects and verified credentials.")}
+      subtitle={bi(
+        "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.",
+        "This is what students and parents see: your bio, subjects and verified credentials.",
+      )}
     >
       <StatGrid
         items={[
@@ -48,10 +61,30 @@ function Body() {
       <Panel title={bi("بيانات الملف", "Profile fields")} icon="UserCog">
         <RowList
           rows={[
-            { title: bi("الاسم المعروض", "Display name"), meta: bi("أ. سامي خالد", "Mr. Sami Khaled"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("النبذة", "Bio"), meta: bi("معلم رياضيات — 12 سنة خبرة", "Math teacher — 12 years"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("المواد", "Subjects"), meta: bi("رياضيات · فيزياء", "Math · Physics"), value: bi("تعديل", "Edit"), tone: "primary" },
-            { title: bi("الشهادات", "Credentials"), meta: bi("بكالوريوس رياضيات — موثّقة", "BSc Mathematics — verified"), value: bi("موثّقة", "Verified"), tone: "success" },
+            {
+              title: bi("الاسم المعروض", "Display name"),
+              meta: bi("أ. سامي خالد", "Mr. Sami Khaled"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("النبذة", "Bio"),
+              meta: bi("معلم رياضيات — 12 سنة خبرة", "Math teacher — 12 years"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("المواد", "Subjects"),
+              meta: bi("رياضيات · فيزياء", "Math · Physics"),
+              value: bi("تعديل", "Edit"),
+              tone: "primary",
+            },
+            {
+              title: bi("الشهادات", "Credentials"),
+              meta: bi("بكالوريوس رياضيات — موثّقة", "BSc Mathematics — verified"),
+              value: bi("موثّقة", "Verified"),
+              tone: "success",
+            },
           ]}
         />
       </Panel>

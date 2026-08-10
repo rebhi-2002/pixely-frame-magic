@@ -65,7 +65,9 @@ function UnsubscribePage() {
                   type="checkbox"
                   checked={off.includes(k)}
                   onChange={(e) =>
-                    setOff((prev) => (e.target.checked ? [...prev, k] : prev.filter((p) => p !== k)))
+                    setOff((prev) =>
+                      e.target.checked ? [...prev, k] : prev.filter((p) => p !== k),
+                    )
                   }
                   className="size-4 accent-[var(--color-primary)]"
                 />
