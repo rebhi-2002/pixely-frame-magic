@@ -12,7 +12,9 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { SessionCta } from "@/components/site/session-cta";
 import { useSession } from "@/hooks/use-session";
+
 
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
@@ -167,12 +169,12 @@ function Landing() {
       <section className="mx-auto max-w-4xl px-5 py-20 text-center">
         <h2 className="text-3xl font-bold text-foreground">{t("home.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
-        <Link
+        <SessionCta
           to="/signup"
+          label={t("home.ctaButton")}
           className="glow-primary mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          {t("home.ctaButton")}
-        </Link>
+        />
+
       </section>
     </PublicLayout>
   );
