@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { SessionCta } from "@/components/site/session-cta";
 
 const title = "الأسعار | أكاديميا مجاناً أو بريميوم";
 const description =
