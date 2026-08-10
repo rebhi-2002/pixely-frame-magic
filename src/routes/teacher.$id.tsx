@@ -108,12 +108,12 @@ function TeacherProfilePage() {
         </div>
 
         <div className="mt-12 text-center">
-          <Link
+          <SessionCta
             to="/signup"
+            label={t("teacherProfile.cta")}
             className="glow-primary inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            {t("teacherProfile.cta")}
-          </Link>
+          />
+
         </div>
       </section>
     </PublicLayout>

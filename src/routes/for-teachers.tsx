@@ -37,12 +37,12 @@ function ForTeachers() {
             {t("forTeachers.h1")}
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forTeachers.sub")}</p>
-          <Link
+          <SessionCta
             to="/signup"
+            label={t("forTeachers.cta")}
             className="glow-primary mt-8 inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            {t("forTeachers.cta")}
-          </Link>
+          />
+
         </div>
       </section>
 
