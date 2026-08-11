@@ -7,6 +7,7 @@ import { BrandLockup } from "@/components/site/brand-logo";
 import { PageTransition } from "@/components/site/page-transition";
 import { UserMenu } from "@/components/site/user-menu";
 import { useSession } from "@/hooks/use-session";
+import { allowedPublicPaths } from "@/lib/bi";
 
 const navItems = [
   { to: "/", key: "nav.home" },
@@ -42,6 +43,10 @@ export function BrandMark({ className = "" }: { className?: string }) {
 export function PublicLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { session, isSignedIn } = useSession();
+  const allowed = allowedPublicPaths(session?.roleKey ?? null);
+  const visible = <T extends { to: string }>(items: readonly T[]) =>
+    allowed ? items.filter((i) => allowed.includes(i.to)) : items;
+  const nav = visible(navItems);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -55,7 +60,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
           <BrandMark />
           <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.map((item) => (
+            {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -98,27 +103,29 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             )}
           </div>
         </div>
-        <nav className="flex items-center gap-1 overflow-x-auto border-t border-border px-4 py-1.5 lg:hidden">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
-              activeProps={{ className: "bg-secondary text-foreground" }}
-              className="rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap text-muted-foreground"
-            >
-              {t(item.key)}
-            </Link>
-          ))}
-          {isSignedIn && session && (
-            <Link
-              to={session.home}
-              className="rounded-lg bg-primary/15 px-2.5 py-1.5 text-xs font-bold whitespace-nowrap text-primary"
-            >
-              {t("common.dashboard")}
-            </Link>
-          )}
-        </nav>
+        <div className="border-t border-border px-3 py-2 lg:hidden">
+          <nav className="segmented-nav">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                activeOptions={{ exact: item.to === "/" }}
+                activeProps={{ className: "bg-background text-foreground shadow-sm" }}
+                className="rounded-[10px] px-3 py-1.5 text-xs font-bold whitespace-nowrap text-muted-foreground transition-all duration-200"
+              >
+                {t(item.key)}
+              </Link>
+            ))}
+            {isSignedIn && session && (
+              <Link
+                to={session.home}
+                className="rounded-[10px] bg-primary px-3 py-1.5 text-xs font-bold whitespace-nowrap text-primary-foreground"
+              >
+                {t("common.dashboard")}
+              </Link>
+            )}
+          </nav>
+        </div>
       </header>
 
       <main id="main" className="flex-1">
@@ -134,7 +141,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           <div className="grid grid-cols-2 gap-8 text-sm">
             <div className="space-y-2">
               <p className="font-bold text-foreground">{t("nav.platform")}</p>
-              {footerPlatform.map((i) => (
+              {visible(footerPlatform).map((i) => (
                 <Link
                   key={i.to}
                   to={i.to}
