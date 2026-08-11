@@ -36,7 +36,7 @@ export function SystemModulesPage() {
 
   return (
     <div>
-      <PageHeader title=bi("وحدات النظام", "System modules") icon="ToggleRight" />
+      <PageHeader title={bi("وحدات النظام", "System modules")} icon="ToggleRight" />
 
       <div className="p-5">
         <p className="mb-4 text-sm text-muted-foreground">

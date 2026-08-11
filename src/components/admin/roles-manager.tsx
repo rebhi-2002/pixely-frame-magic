@@ -80,7 +80,7 @@ export function UserTypesPage() {
 
   return (
     <div>
-      <PageHeader title=bi("أنواع المستخدم", "User roles") icon="ShieldCheck" />
+      <PageHeader title={bi("أنواع المستخدم", "User roles")} icon="ShieldCheck" />
 
       <div className="p-5">
         {can("admin_roles", "show_add_form") && (
