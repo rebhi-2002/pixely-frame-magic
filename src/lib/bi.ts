@@ -44,3 +44,19 @@ export const ROLE_HOME: Record<RoleKey, string> = {
 export function roleHome(name?: string | null, isAdmin = false): string {
   return ROLE_HOME[roleKeyFromName(name, isAdmin)];
 }
+
+/**
+ * البند 9 — الروابط العامة المسموحة لكل دور بعد تسجيل الدخول.
+ * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
+ */
+export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
+  student: ["/", "/courses", "/how-it-works", "/pricing"],
+  teacher: ["/", "/for-teachers", "/how-it-works"],
+  parent: ["/", "/how-it-works", "/pricing"],
+  supervisor: ["/", "/how-it-works"],
+  admin: ["/"],
+};
+
+export function allowedPublicPaths(role: RoleKey | null): readonly string[] | null {
+  return role ? PUBLIC_NAV_FOR_ROLE[role] : null;
+}
