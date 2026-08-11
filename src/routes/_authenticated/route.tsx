@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Loader2, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,7 +19,14 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
+  /* البند 6 — حالة القائمة محفوظة بين الجلسات */
   const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    setCollapsed(localStorage.getItem("academia.sidebar") === "collapsed");
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("academia.sidebar", collapsed ? "collapsed" : "expanded");
+  }, [collapsed]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { access, isLoading, error } = useAccess();
 
