@@ -12,6 +12,7 @@ import {
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
+import { TrendChart } from "@/components/app/charts";
 
 const title = "لوحة الطالب | أكاديميا";
 const description = "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.";
@@ -69,6 +70,9 @@ function Body() {
             { to: "/my-courses", label: bi("كورساتي", "My courses"), icon: "BookOpenCheck" },
           ]}
         />
+      </Panel>
+      <Panel title={bi("دقائق الدراسة الأسبوعية", "Weekly study minutes")} icon="ChartSpline">
+        <TrendChart data={[{ label: bi("سبت", "Sat"), value: 35 }, { label: bi("أحد", "Sun"), value: 50 }, { label: bi("اثنين", "Mon"), value: 42 }, { label: bi("ثلاثاء", "Tue"), value: 68 }, { label: bi("أربعاء", "Wed"), value: 55 }, { label: bi("خميس", "Thu"), value: 72 }, { label: bi("جمعة", "Fri"), value: 30 }]} />
       </Panel>
       <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
         <Progress label={bi("الرياضيات", "Math")} value={78} />

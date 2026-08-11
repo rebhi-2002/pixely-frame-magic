@@ -12,6 +12,7 @@ import {
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
+import { ComparisonChart } from "@/components/app/charts";
 
 const title = "لوحة الإشراف | أكاديميا";
 const description = "جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.";
@@ -58,6 +59,9 @@ function Body() {
           { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "67%" },
         ]}
       />
+      <Panel title={bi("متوسط الإتقان بالصفوف", "Average mastery by grade")} icon="ChartSpline">
+        <ComparisonChart data={[{ label: bi("عاشر", "G10"), value: 64 }, { label: bi("حادي عشر", "G11"), value: 71 }, { label: bi("ثاني عشر", "G12"), value: 78 }]} />
+      </Panel>
       <Panel title={bi("إجراءات", "Actions")} icon="Zap">
         <QuickLinks
           items={[
