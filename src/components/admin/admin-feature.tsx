@@ -5,6 +5,7 @@ import { AppPage, Badge, DataTable, Panel, StatGrid } from "@/components/app/kit
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useBi } from "@/lib/bi";
+import { ComparisonChart, SplitChart, TrendChart } from "@/components/app/charts";
 
 export type AdminFeature =
   | "dashboard"
@@ -137,15 +138,26 @@ export function AdminFeaturePage({ feature }: { feature: AdminFeature }) {
   const bi = useBi();
   const config = CONFIG[feature];
   const [query, setQuery] = useState("");
+  const sourceRows = bi(config.rows, config.rowsEn);
   const visibleRows = useMemo(
-    () => config.rows.filter((row) => row.some((cell) => cell.toLowerCase().includes(query.trim().toLowerCase()))),
-    [config.rows, query],
+    () => sourceRows.filter((row) => row.some((cell) => cell.toLowerCase().includes(query.trim().toLowerCase()))),
+    [sourceRows, query],
   );
+  const chartData = config.chart.data.map(([ar, en, value]) => ({ label: bi(ar, en), value }));
 
   return (
     <Guard pageKey={config.pageKey}>
       <AppPage title={bi(...config.title)} icon={config.icon} subtitle={bi(...config.subtitle)}>
         <StatGrid items={config.stats.map(([icon, ar, en, value]) => ({ icon, label: bi(ar, en), value }))} />
+        <Panel
+          title={bi("مؤشرات مرئية", "Visual insights")}
+          icon="ChartSpline"
+          action={<Badge tone="primary">{bi("آخر 6 فترات", "Last 6 periods")}</Badge>}
+        >
+          {config.chart.kind === "trend" && <TrendChart data={chartData} />}
+          {config.chart.kind === "bar" && <ComparisonChart data={chartData} />}
+          {config.chart.kind === "split" && <SplitChart data={chartData} />}
+        </Panel>
         <Panel
           title={bi("السجل التشغيلي", "Operational records")}
           icon={config.icon}
