@@ -3,7 +3,7 @@ import { usePreferences } from "@/components/providers/preferences-provider";
 /** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
 export function useBi() {
   const { locale } = usePreferences();
-  return (ar: string, en: string) => (locale === "en" ? en : ar);
+  return <T,>(ar: T, en: T): T => (locale === "en" ? en : ar);
 }
 
 export type RoleKey = "student" | "teacher" | "parent" | "supervisor" | "admin";
