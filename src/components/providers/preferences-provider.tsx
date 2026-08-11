@@ -49,7 +49,6 @@ type PreferencesValue = {
   switchingLocale: boolean;
 };
 
-
 const PreferencesContext = createContext<PreferencesValue | null>(null);
 
 /** Persist to the signed-in user's profile (theme_pref / locale). Silent no-op when signed out. */
@@ -70,7 +69,6 @@ function PreferencesState({ children }: { children: ReactNode }) {
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
   const [locale, setLocaleState] = useState<Locale>("ar");
   const [switchingLocale, setSwitchingLocale] = useState(false);
-
 
   // Read the persisted values written by the boot script (client only).
   useEffect(() => {
@@ -154,10 +152,7 @@ function PreferencesState({ children }: { children: ReactNode }) {
 
   return (
     <PreferencesContext.Provider value={value}>
-      <div
-        data-locale-switching={switchingLocale ? "true" : "false"}
-        className="locale-fade"
-      >
+      <div data-locale-switching={switchingLocale ? "true" : "false"} className="locale-fade">
         {children}
       </div>
 
@@ -172,7 +167,6 @@ function PreferencesState({ children }: { children: ReactNode }) {
     </PreferencesContext.Provider>
   );
 }
-
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
   return (

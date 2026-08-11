@@ -3,14 +3,14 @@ import { usePreferences } from "@/components/providers/preferences-provider";
 /** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
 export function useBi() {
   const { locale } = usePreferences();
-  return <T,>(ar: T, en: T): T => (locale === "en" ? en : ar);
+  return <T>(ar: T, en: T): T => (locale === "en" ? en : ar);
 }
 
 export type RoleKey = "student" | "teacher" | "parent" | "supervisor" | "admin";
 
 const ROLE_BY_NAME: Record<string, RoleKey> = {
-  "طالب": "student",
-  "معلم": "teacher",
+  طالب: "student",
+  معلم: "teacher",
   "ولي أمر": "parent",
   "مشرف أكاديمي": "supervisor",
   "مدير عام": "admin",
@@ -25,7 +25,9 @@ export const ROLE_PAGE_PREFIXES: Record<RoleKey, readonly string[]> = {
 };
 
 export function pageMatchesRole(pageKey: string, role: RoleKey): boolean {
-  return ROLE_PAGE_PREFIXES[role].some((prefix) => pageKey === prefix || pageKey.startsWith(prefix));
+  return ROLE_PAGE_PREFIXES[role].some(
+    (prefix) => pageKey === prefix || pageKey.startsWith(prefix),
+  );
 }
 
 export function roleKeyFromName(name?: string | null, isAdmin = false): RoleKey {

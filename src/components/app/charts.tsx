@@ -78,7 +78,10 @@ export function ComparisonChart({
           <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 5" vertical={false} />
           <XAxis dataKey="label" tick={AXIS} axisLine={false} tickLine={false} />
           <YAxis tick={AXIS} axisLine={false} tickLine={false} width={44} />
-          <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "var(--color-accent)", opacity: 0.35 }} />
+          <Tooltip
+            contentStyle={TOOLTIP_STYLE}
+            cursor={{ fill: "var(--color-accent)", opacity: 0.35 }}
+          />
           <Bar dataKey="value" radius={[8, 8, 4, 4]} fill="var(--color-primary)" barSize={28} />
         </BarChart>
       </ResponsiveContainer>

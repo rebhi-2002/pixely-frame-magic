@@ -60,7 +60,14 @@ function Body() {
         ]}
       />
       <Panel title={bi("تقدّم الأسبوع", "Weekly progress")} icon="ChartSpline">
-        <TrendChart data={[{ label: bi("أسبوع 1", "W1"), value: 58 }, { label: bi("أسبوع 2", "W2"), value: 64 }, { label: bi("أسبوع 3", "W3"), value: 61 }, { label: bi("أسبوع 4", "W4"), value: 73 }]} />
+        <TrendChart
+          data={[
+            { label: bi("أسبوع 1", "W1"), value: 58 },
+            { label: bi("أسبوع 2", "W2"), value: 64 },
+            { label: bi("أسبوع 3", "W3"), value: 61 },
+            { label: bi("أسبوع 4", "W4"), value: 73 },
+          ]}
+        />
       </Panel>
       <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
         <Progress label={bi("الرياضيات", "Math")} value={78} />

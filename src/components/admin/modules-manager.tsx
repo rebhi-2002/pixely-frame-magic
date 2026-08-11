@@ -9,7 +9,6 @@ import { listModules, setModuleEnabled } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY, useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 
-
 export function SystemModulesPage() {
   const queryClient = useQueryClient();
   const { can } = useAccess();

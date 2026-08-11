@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Link} from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -30,7 +30,6 @@ import { deleteRole, listRoles, saveRole } from "@/lib/rbac.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import type { RoleRow } from "@/lib/rbac-types";
-
 
 export function UserTypesPage() {
   const queryClient = useQueryClient();
@@ -115,7 +114,12 @@ export function UserTypesPage() {
                     <td className="px-4 py-3 text-muted-foreground">{role.description ?? "—"}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <Button asChild size="icon" variant="ghost" title={bi("الصلاحيات", "Permissions")}>
+                        <Button
+                          asChild
+                          size="icon"
+                          variant="ghost"
+                          title={bi("الصلاحيات", "Permissions")}
+                        >
                           <Link to="/role-permissions/$roleId" params={{ roleId: role.id }}>
                             <Settings2 className="size-4" />
                           </Link>
@@ -161,7 +165,9 @@ export function UserTypesPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent dir="rtl" className="text-right">
           <DialogHeader>
-            <DialogTitle>{editing ? bi("تعديل نوع المستخدم", "Edit role") : bi("إضافة نوع مستخدم", "Add role")}</DialogTitle>
+            <DialogTitle>
+              {editing ? bi("تعديل نوع المستخدم", "Edit role") : bi("إضافة نوع مستخدم", "Add role")}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1.5">
@@ -192,9 +198,14 @@ export function UserTypesPage() {
       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
         <AlertDialogContent dir="rtl" className="text-right">
           <AlertDialogHeader>
-            <AlertDialogTitle>{bi(`حذف «${pendingDelete?.name}»؟`, `Delete “${pendingDelete?.name}”?`)}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {bi(`حذف «${pendingDelete?.name}»؟`, `Delete “${pendingDelete?.name}”?`)}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              {bi("سيتم حذف النوع وكل صلاحياته. لا يمكن التراجع عن هذا الإجراء.", "The role and all of its permissions will be deleted. This cannot be undone.")}
+              {bi(
+                "سيتم حذف النوع وكل صلاحياته. لا يمكن التراجع عن هذا الإجراء.",
+                "The role and all of its permissions will be deleted. This cannot be undone.",
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:justify-start">

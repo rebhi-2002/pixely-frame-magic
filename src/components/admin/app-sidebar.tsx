@@ -63,9 +63,9 @@ export function AppSidebar({
   const [openGroups, setOpenGroups] = useState<string[]>([]);
   const [closedModules, setClosedModules] = useState<string[]>([]);
 
-  const effectiveOpenModules = Array.from(
-    new Set([...openModules, ...activeModuleKeys]),
-  ).filter((k) => !closedModules.includes(k));
+  const effectiveOpenModules = Array.from(new Set([...openModules, ...activeModuleKeys])).filter(
+    (k) => !closedModules.includes(k),
+  );
 
   const toggleModule = (key: string) => {
     if (effectiveOpenModules.includes(key)) {
@@ -84,7 +84,10 @@ export function AppSidebar({
     const walk = (m: AccessModule, pages: AccessPage[]) => {
       for (const p of pages) {
         const name = label(p);
-        if (p.path && (p.name.toLowerCase().includes(term) || p.nameEn.toLowerCase().includes(term)))
+        if (
+          p.path &&
+          (p.name.toLowerCase().includes(term) || p.nameEn.toLowerCase().includes(term))
+        )
           out.push({ name, path: p.path, module: label(m) });
         walk(m, p.children);
       }
@@ -110,7 +113,6 @@ export function AppSidebar({
       extra,
     );
 
-
   return (
     <aside
       className={cn(
@@ -127,7 +129,11 @@ export function AppSidebar({
           aria-label={collapsed ? "توسيع القائمة" : "طي القائمة"}
           className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
         >
-          {collapsed ? <PanelRightOpen className="size-5" /> : <PanelRightClose className="size-5" />}
+          {collapsed ? (
+            <PanelRightOpen className="size-5" />
+          ) : (
+            <PanelRightClose className="size-5" />
+          )}
         </Button>
       </div>
 
@@ -172,7 +178,9 @@ export function AppSidebar({
           return (
             <div key={m.key} className="relative mb-1">
               <button
-                onClick={() => (collapsed ? setFlyout(flyout === m.key ? null : m.key) : toggleModule(m.key))}
+                onClick={() =>
+                  collapsed ? setFlyout(flyout === m.key ? null : m.key) : toggleModule(m.key)
+                }
                 title={collapsed ? label(m) : undefined}
                 className={cn(
                   "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200",
@@ -186,7 +194,10 @@ export function AppSidebar({
                   <>
                     <span className="flex-1 text-start">{label(m)}</span>
                     <ChevronDown
-                      className={cn("size-4 transition-transform duration-200", !open && "-rotate-90 rtl:rotate-90")}
+                      className={cn(
+                        "size-4 transition-transform duration-200",
+                        !open && "-rotate-90 rtl:rotate-90",
+                      )}
                     />
                   </>
                 )}
@@ -194,14 +205,19 @@ export function AppSidebar({
 
               {collapsed && flyout === m.key && (
                 <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
-                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">{label(m)}</p>
+                  <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">
+                    {label(m)}
+                  </p>
                   <PageList
                     pages={m.pages}
                     isActive={isActive}
                     label={label}
                     openGroups={openGroups}
                     setOpenGroups={setOpenGroups}
-                    onNavigate={() => { setFlyout(null); onNavigate?.(); }}
+                    onNavigate={() => {
+                      setFlyout(null);
+                      onNavigate?.();
+                    }}
                   />
                 </div>
               )}
@@ -218,7 +234,6 @@ export function AppSidebar({
                   />
                 </div>
               )}
-
             </div>
           );
         })}
@@ -239,7 +254,12 @@ export function AppSidebar({
             </div>
           )}
 
-          <Link to="/" onClick={onNavigate} title={t("common.backToSite")} className={accountItem()}>
+          <Link
+            to="/"
+            onClick={onNavigate}
+            title={t("common.backToSite")}
+            className={accountItem()}
+          >
             <Home className="size-4 shrink-0" />
             {!collapsed && t("common.backToSite")}
           </Link>
@@ -249,7 +269,9 @@ export function AppSidebar({
             onClick={onNavigate}
             title={t("common.settings")}
             className={accountItem(
-              pathname === "/settings" ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground" : undefined,
+              pathname === "/settings"
+                ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground"
+                : undefined,
             )}
           >
             <Settings className="size-4 shrink-0" />
@@ -262,7 +284,11 @@ export function AppSidebar({
             title={t("common.themeToggle")}
             className={accountItem()}
           >
-            {resolvedTheme === "dark" ? <Sun className="size-4 shrink-0" /> : <Moon className="size-4 shrink-0" />}
+            {resolvedTheme === "dark" ? (
+              <Sun className="size-4 shrink-0" />
+            ) : (
+              <Moon className="size-4 shrink-0" />
+            )}
             {!collapsed && t(resolvedTheme === "dark" ? "common.theme.light" : "common.theme.dark")}
           </button>
 
@@ -280,7 +306,9 @@ export function AppSidebar({
             type="button"
             onClick={handleSignOut}
             title={t("common.signOut")}
-            className={accountItem("text-destructive hover:bg-destructive/10 hover:text-destructive")}
+            className={accountItem(
+              "text-destructive hover:bg-destructive/10 hover:text-destructive",
+            )}
           >
             <LogOut className="size-4 shrink-0" />
             {!collapsed && t("common.signOut")}
@@ -373,4 +401,3 @@ function PageList({
     </ul>
   );
 }
-

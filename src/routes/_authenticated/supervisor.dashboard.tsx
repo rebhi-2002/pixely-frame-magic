@@ -60,7 +60,13 @@ function Body() {
         ]}
       />
       <Panel title={bi("متوسط الإتقان بالصفوف", "Average mastery by grade")} icon="ChartSpline">
-        <ComparisonChart data={[{ label: bi("عاشر", "G10"), value: 64 }, { label: bi("حادي عشر", "G11"), value: 71 }, { label: bi("ثاني عشر", "G12"), value: 78 }]} />
+        <ComparisonChart
+          data={[
+            { label: bi("عاشر", "G10"), value: 64 },
+            { label: bi("حادي عشر", "G11"), value: 71 },
+            { label: bi("ثاني عشر", "G12"), value: 78 },
+          ]}
+        />
       </Panel>
       <Panel title={bi("إجراءات", "Actions")} icon="Zap">
         <QuickLinks

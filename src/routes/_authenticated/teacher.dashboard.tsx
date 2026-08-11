@@ -64,7 +64,14 @@ function Body() {
         ]}
       />
       <Panel title={bi("تفاعل الطلاب بالمادة", "Student engagement by subject")} icon="ChartSpline">
-        <ComparisonChart data={[{ label: bi("رياضيات", "Math"), value: 320 }, { label: bi("فيزياء", "Physics"), value: 245 }, { label: bi("كيمياء", "Chemistry"), value: 180 }, { label: bi("عربي", "Arabic"), value: 210 }]} />
+        <ComparisonChart
+          data={[
+            { label: bi("رياضيات", "Math"), value: 320 },
+            { label: bi("فيزياء", "Physics"), value: 245 },
+            { label: bi("كيمياء", "Chemistry"), value: 180 },
+            { label: bi("عربي", "Arabic"), value: 210 },
+          ]}
+        />
       </Panel>
       <Panel title={bi("إجراءات سريعة", "Quick actions")} icon="Zap">
         <QuickLinks

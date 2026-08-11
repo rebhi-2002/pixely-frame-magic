@@ -44,7 +44,6 @@ import {
 import { useAccess } from "@/hooks/use-access";
 import { GENDER_LABELS, type UserRow } from "@/lib/rbac-types";
 
-
 const EMPTY_FORM = {
   full_name: "",
   email: "",
