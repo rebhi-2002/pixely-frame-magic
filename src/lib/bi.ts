@@ -3,14 +3,14 @@ import { usePreferences } from "@/components/providers/preferences-provider";
 /** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
 export function useBi() {
   const { locale } = usePreferences();
-  return (ar: string, en: string) => (locale === "en" ? en : ar);
+  return <T>(ar: T, en: T): T => (locale === "en" ? en : ar);
 }
 
 export type RoleKey = "student" | "teacher" | "parent" | "supervisor" | "admin";
 
 const ROLE_BY_NAME: Record<string, RoleKey> = {
-  "طالب": "student",
-  "معلم": "teacher",
+  طالب: "student",
+  معلم: "teacher",
   "ولي أمر": "parent",
   "مشرف أكاديمي": "supervisor",
   "مدير عام": "admin",
@@ -25,7 +25,9 @@ export const ROLE_PAGE_PREFIXES: Record<RoleKey, readonly string[]> = {
 };
 
 export function pageMatchesRole(pageKey: string, role: RoleKey): boolean {
-  return ROLE_PAGE_PREFIXES[role].some((prefix) => pageKey === prefix || pageKey.startsWith(prefix));
+  return ROLE_PAGE_PREFIXES[role].some(
+    (prefix) => pageKey === prefix || pageKey.startsWith(prefix),
+  );
 }
 
 export function roleKeyFromName(name?: string | null, isAdmin = false): RoleKey {
@@ -43,4 +45,20 @@ export const ROLE_HOME: Record<RoleKey, string> = {
 
 export function roleHome(name?: string | null, isAdmin = false): string {
   return ROLE_HOME[roleKeyFromName(name, isAdmin)];
+}
+
+/**
+ * البند 9 — الروابط العامة المسموحة لكل دور بعد تسجيل الدخول.
+ * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
+ */
+export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
+  student: ["/", "/courses", "/how-it-works", "/pricing"],
+  teacher: ["/", "/for-teachers", "/how-it-works"],
+  parent: ["/", "/how-it-works", "/pricing"],
+  supervisor: ["/", "/how-it-works"],
+  admin: ["/"],
+};
+
+export function allowedPublicPaths(role: RoleKey | null): readonly string[] | null {
+  return role ? PUBLIC_NAV_FOR_ROLE[role] : null;
 }

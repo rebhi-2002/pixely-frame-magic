@@ -92,7 +92,12 @@ export function Badge({
   );
 }
 
-export type Row = { title: string; meta?: string; value?: string; tone?: "muted" | "primary" | "success" | "danger" };
+export type Row = {
+  title: string;
+  meta?: string;
+  value?: string;
+  tone?: "muted" | "primary" | "success" | "danger";
+};
 
 export function RowList({ rows, to }: { rows: Row[]; to?: string }) {
   if (rows.length === 0) return <EmptyState text="—" />;

@@ -12,6 +12,7 @@ import {
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
+import { ComparisonChart } from "@/components/app/charts";
 
 const title = "لوحة المعلم | أكاديميا";
 const description = "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.";
@@ -62,6 +63,16 @@ function Body() {
           { icon: "Wallet", label: bi("أرباح الشهر", "This month"), value: "820 د.أ" },
         ]}
       />
+      <Panel title={bi("تفاعل الطلاب بالمادة", "Student engagement by subject")} icon="ChartSpline">
+        <ComparisonChart
+          data={[
+            { label: bi("رياضيات", "Math"), value: 320 },
+            { label: bi("فيزياء", "Physics"), value: 245 },
+            { label: bi("كيمياء", "Chemistry"), value: 180 },
+            { label: bi("عربي", "Arabic"), value: 210 },
+          ]}
+        />
+      </Panel>
       <Panel title={bi("إجراءات سريعة", "Quick actions")} icon="Zap">
         <QuickLinks
           items={[

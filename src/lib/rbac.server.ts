@@ -11,7 +11,6 @@ import type {
 } from "./rbac-types";
 import { ROLE_MODULE_SCOPE } from "./rbac-types";
 
-
 export type DB = SupabaseClient<Database>;
 
 export async function checkIsAdmin(sb: DB, userId: string): Promise<boolean> {
@@ -140,7 +139,6 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
     });
   }
 
-
   return {
     userId,
     isAdmin,
@@ -208,14 +206,19 @@ export async function requireAdmin(sb: DB, userId: string): Promise<void> {
 }
 
 export async function loadPermissionMatrix(sb: DB, roleId: string): Promise<PermissionMatrix> {
-  const [{ data: role }, { data: moduleRows }, { data: pageRows }, { data: keys }, { data: grants }] =
-    await Promise.all([
-      sb.from("roles").select("id, name").eq("id", roleId).maybeSingle(),
-      sb.from("modules").select("*").order("sort_order"),
-      sb.from("pages").select("*").order("sort_order"),
-      sb.from("permission_keys").select("*").order("sort_order"),
-      sb.from("role_permissions").select("page_id, permission_key").eq("role_id", roleId),
-    ]);
+  const [
+    { data: role },
+    { data: moduleRows },
+    { data: pageRows },
+    { data: keys },
+    { data: grants },
+  ] = await Promise.all([
+    sb.from("roles").select("id, name").eq("id", roleId).maybeSingle(),
+    sb.from("modules").select("*").order("sort_order"),
+    sb.from("pages").select("*").order("sort_order"),
+    sb.from("permission_keys").select("*").order("sort_order"),
+    sb.from("role_permissions").select("page_id, permission_key").eq("role_id", roleId),
+  ]);
 
   if (!role) throw new Error("نوع المستخدم غير موجود");
 

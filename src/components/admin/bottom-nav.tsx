@@ -119,7 +119,12 @@ export function BottomNav({ access }: { access: MyAccess }) {
         className="fixed inset-x-0 bottom-0 z-50 border-t border-sidebar-border bg-sidebar text-sidebar-foreground md:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <ul className="grid" style={{ gridTemplateColumns: `repeat(${visible.length + (hasOverflow ? 1 : 0)}, minmax(0,1fr))` }}>
+        <ul
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${visible.length + (hasOverflow ? 1 : 0)}, minmax(0,1fr))`,
+          }}
+        >
           {visible.map((item) => {
             const active = pathname.startsWith(item.path);
             return (

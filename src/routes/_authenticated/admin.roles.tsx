@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { UserTypesPage } from "@/components/admin/roles-manager";
+
 export const Route = createFileRoute("/_authenticated/admin/roles")({
   head: () => ({
     meta: [
@@ -12,5 +14,9 @@ export const Route = createFileRoute("/_authenticated/admin/roles")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="roles" />,
+  component: () => (
+    <Guard pageKey="admin_roles">
+      <UserTypesPage />
+    </Guard>
+  ),
 });
