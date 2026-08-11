@@ -7,11 +7,13 @@ import { DynamicIcon } from "@/components/admin/dynamic-icon";
 import { Switch } from "@/components/ui/switch";
 import { listModules, setModuleEnabled } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY, useAccess } from "@/hooks/use-access";
+import { useBi } from "@/lib/bi";
 
 
 export function SystemModulesPage() {
   const queryClient = useQueryClient();
   const { can } = useAccess();
+  const bi = useBi();
   const fetchModules = useServerFn(listModules);
   const toggle = useServerFn(setModuleEnabled);
 
@@ -34,12 +36,14 @@ export function SystemModulesPage() {
 
   return (
     <div>
-      <PageHeader title="وحدات النظام" icon="ToggleRight" />
+      <PageHeader title=bi("وحدات النظام", "System modules") icon="ToggleRight" />
 
       <div className="p-5">
         <p className="mb-4 text-sm text-muted-foreground">
-          كل صف يمثّل وحدة نظام كاملة. تعطيل الوحدة يُخفيها فوراً من القائمة الجانبية لكل المستخدمين
-          مهما كانت صلاحياتهم الفردية.
+          {bi(
+            "كل صف يمثّل وحدة نظام كاملة. تعطيل الوحدة يُخفيها فوراً من القائمة الجانبية لكل المستخدمين مهما كانت صلاحياتهم الفردية.",
+            "Each row is a whole system module. Disabling it hides it instantly from every user's sidebar, regardless of their individual permissions.",
+          )}
         </p>
 
         <div className="overflow-hidden rounded-2xl bg-card">
@@ -52,8 +56,8 @@ export function SystemModulesPage() {
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
                   <th className="w-16 px-4 py-3 font-semibold">#</th>
-                  <th className="px-4 py-3 font-semibold">الاسم</th>
-                  <th className="w-32 px-4 py-3 font-semibold">الحالة</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الاسم", "Name")}</th>
+                  <th className="w-32 px-4 py-3 font-semibold">{bi("الحالة", "Status")}</th>
                 </tr>
               </thead>
               <tbody>
