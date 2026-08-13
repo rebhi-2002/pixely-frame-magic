@@ -70,6 +70,7 @@ import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminTeachersRouteImport } from './routes/_authenticated/admin.teachers'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin.roles'
+import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as AuthenticatedAdminCurriculumRequestsRouteImport } from './routes/_authenticated/admin.curriculum-requests'
@@ -407,6 +408,12 @@ const AuthenticatedAdminRolesRoute = AuthenticatedAdminRolesRouteImport.update({
   path: '/admin/roles',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminPermissionsRoute =
+  AuthenticatedAdminPermissionsRouteImport.update({
+    id: '/admin/permissions',
+    path: '/admin/permissions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminPaymentsRoute =
   AuthenticatedAdminPaymentsRouteImport.update({
     id: '/admin/payments',
@@ -503,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -573,6 +581,7 @@ export interface FileRoutesByTo {
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -645,6 +654,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/payments'
+    | '/admin/permissions'
     | '/admin/roles'
     | '/admin/settings'
     | '/admin/teachers'
@@ -787,6 +798,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/payments'
+    | '/admin/permissions'
     | '/admin/roles'
     | '/admin/settings'
     | '/admin/teachers'
@@ -858,6 +870,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/curriculum-requests'
     | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/payments'
+    | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/roles'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/teachers'
@@ -1337,6 +1350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRolesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/permissions': {
+      id: '/_authenticated/admin/permissions'
+      path: '/admin/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AuthenticatedAdminPermissionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/payments': {
       id: '/_authenticated/admin/payments'
       path: '/admin/payments'
@@ -1431,6 +1451,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminCurriculumRequestsRoute: typeof AuthenticatedAdminCurriculumRequestsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
+  AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
   AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminTeachersRoute: typeof AuthenticatedAdminTeachersRoute
@@ -1480,6 +1501,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAdminCurriculumRequestsRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
+  AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
   AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedAdminTeachersRoute: AuthenticatedAdminTeachersRoute,

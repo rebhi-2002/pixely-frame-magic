@@ -157,7 +157,7 @@ export const addPageToModule = createServerFn({ method: "POST" })
 export const listUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await requirePermission(context.supabase, context.userId, "users", "view_list");
+    await requirePermission(context.supabase, context.userId, "admin_users", "view_list");
     return loadUsers(context.supabase);
   });
 
@@ -205,7 +205,7 @@ export const toggleUserStatus = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), is_active: z.boolean() }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "users", "edit");
+    await requirePermission(context.supabase, context.userId, "admin_users", "edit");
     const { error } = await context.supabase
       .from("profiles")
       .update({ is_active: data.is_active })
@@ -218,7 +218,7 @@ export const deleteUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "users", "delete");
+    await requirePermission(context.supabase, context.userId, "admin_users", "delete");
     const { error } = await context.supabase.from("profiles").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -230,7 +230,7 @@ export const sendPasswordReset = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), redirectTo: z.string().url() }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "users", "change_password");
+    await requirePermission(context.supabase, context.userId, "admin_users", "change_password");
     const { data: profile } = await context.supabase
       .from("profiles")
       .select("email")
