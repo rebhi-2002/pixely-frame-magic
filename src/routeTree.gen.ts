@@ -22,6 +22,8 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -30,6 +32,7 @@ import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
@@ -141,6 +144,16 @@ const CoursesRoute = CoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -179,6 +192,11 @@ const CertificateIdRoute = CertificateIdRouteImport.update({
   id: '/certificate/$id',
   path: '/certificate/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   id: '/users',
@@ -442,6 +460,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -472,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -509,6 +530,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -539,6 +562,7 @@ export interface FileRoutesByTo {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -578,6 +602,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -608,6 +634,7 @@ export interface FileRoutesById {
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -647,6 +674,8 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -677,6 +706,7 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -714,6 +744,8 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -744,6 +776,7 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -782,6 +815,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -812,6 +847,7 @@ export interface FileRouteTypes {
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -851,6 +887,8 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
   AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -963,6 +1001,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -1018,6 +1070,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/certificate/$id'
       preLoaderRoute: typeof CertificateIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/users': {
       id: '/_authenticated/users'
@@ -1449,11 +1508,23 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
   AboutRoute: AboutRoute,
+  BlogRoute: BlogRouteWithChildren,
+  ContactRoute: ContactRoute,
   CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
