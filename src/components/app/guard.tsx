@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ShieldAlert } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
 import { pageMatchesRole, roleHome, roleKeyFromName, useBi } from "@/lib/bi";
+import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 
 /** حراسة الصفحة على الواجهة (الحراسة الحقيقية على السيرفر في rbac.server.ts). */
 export function useCanView(pageKey: string) {
@@ -43,7 +44,7 @@ export function Forbidden() {
 
 export function Guard({ pageKey, children }: { pageKey: string; children: React.ReactNode }) {
   const { loading, allowed } = useCanView(pageKey);
-  if (loading) return null;
+  if (loading) return <DashboardSkeleton />;
   if (!allowed) return <Forbidden />;
   return <>{children}</>;
 }

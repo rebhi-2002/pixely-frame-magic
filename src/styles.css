@@ -98,7 +98,9 @@
   --accent: #202a42;
   --accent-foreground: #f3f1ea;
   --destructive: #e4573d;
-  --destructive-foreground: #f3f1ea;
+  /* WCAG AA: نص فاتح (#f3f1ea) على هالأحمر كان 3.24:1 (فاشل). نفس نمط باقي
+     الألوان الدلالية بالوضع الغامق (نص ink-950 غامق) بيوصلها لـ5.23:1. */
+  --destructive-foreground: var(--ink-950);
   --success: #17a672;
   --success-foreground: var(--ink-950);
   --info: #3e8ede;
@@ -136,7 +138,9 @@
   --card-foreground: #1f2937;
   --popover: var(--paper-100);
   --popover-foreground: #1f2937;
-  --primary: #d68e1e;
+  /* WCAG AA: كانت #d68e1e بنسبة تباين 2.71:1 (فاشلة)؛ عدّلناها لـ5.26:1 على أبيض
+     مع الحفاظ على نفس العائلة اللونية (كهرماني/ذهبي) لهوية العلامة التجارية. */
+  --primary: #976006;
   --primary-foreground: #ffffff;
   --secondary: var(--paper-200);
   --secondary-foreground: #1f2937;
@@ -147,9 +151,11 @@
   --accent-foreground: #1f2937;
   --destructive: #c9402a;
   --destructive-foreground: #ffffff;
-  --success: #128f62;
+  /* WCAG AA: كانت #128f62 بنسبة 3.75-4.09:1 (فاشلة كنص عادي). عدّلناها لـ4.71-5.14:1. */
+  --success: #0f7d55;
   --success-foreground: #ffffff;
-  --info: #2f74bb;
+  /* WCAG AA: كانت #2f74bb بنسبة 4.44:1 (على الحافة). عدّلناها لـ5.36-5.85:1. */
+  --info: #2a67a6;
   --info-foreground: #ffffff;
   --tools: #2f74bb;
   --tools-foreground: #ffffff;
@@ -232,6 +238,157 @@
       color-mix(in oklab, var(--color-success) 14%, transparent),
       transparent 45%
     );
+}
+
+/* ——— طبقة الارتفاع (Elevation) — ظلال متدرجة بدل الاعتماد فقط على الحدود ——— */
+@utility shadow-elevation-1 {
+  box-shadow:
+    0 1px 2px -1px color-mix(in oklab, var(--color-foreground) 12%, transparent),
+    0 1px 1px -1px color-mix(in oklab, var(--color-foreground) 6%, transparent);
+}
+
+@utility shadow-elevation-2 {
+  box-shadow:
+    0 8px 24px -12px color-mix(in oklab, var(--color-foreground) 30%, transparent),
+    0 2px 6px -2px color-mix(in oklab, var(--color-foreground) 14%, transparent);
+}
+
+@utility shadow-elevation-3 {
+  box-shadow:
+    0 24px 60px -20px color-mix(in oklab, var(--color-foreground) 38%, transparent),
+    0 6px 16px -6px color-mix(in oklab, var(--color-foreground) 18%, transparent);
+}
+
+/* ——— نص بتدرّج لوني — للكلمة/الجملة المميّزة داخل العناوين ——— */
+@utility text-gradient {
+  background: linear-gradient(
+    to left,
+    var(--color-primary),
+    color-mix(in oklab, var(--color-primary) 55%, var(--color-success))
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ——— */
+@utility surface-mesh {
+  position: relative;
+  background-image:
+    radial-gradient(
+      circle at 88% 8%,
+      color-mix(in oklab, var(--color-primary) 22%, transparent),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 6% 18%,
+      color-mix(in oklab, var(--color-info) 16%, transparent),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 20% 92%,
+      color-mix(in oklab, var(--color-success) 14%, transparent),
+      transparent 45%
+    );
+}
+
+@utility surface-mesh-fade {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--color-background), transparent 60%);
+  }
+}
+
+/* ——— سطح زجاجي (Glassmorphism) — للبطاقات فوق الخلفيات المتدرجة ——— */
+@utility glass-surface {
+  background: color-mix(in oklab, var(--color-card) 62%, transparent);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 10%, transparent);
+}
+
+/* ——— تأثير "لمعة" يمر فوق الزر الأساسي عند التحويم ——— */
+@utility btn-shine {
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -30%;
+    width: 30%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      color-mix(in oklab, white 55%, transparent),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: inset-inline-start 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  &:hover::before {
+    inset-inline-start: 130%;
+  }
+}
+
+/* ——— تعويم لطيف — لعناصر الـ Hero البصرية (mockup/illustration) ——— */
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@utility animate-float {
+  animation: gentle-float 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+}
+
+/* ——— نقطة نبض حيّة — لمؤشرات "مباشر/جديد" ——— */
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-primary) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 8px color-mix(in oklab, var(--color-primary) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-primary) 0%, transparent);
+  }
+}
+
+@utility pulse-dot {
+  animation: pulse-dot 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ——— حالة أولية لعناصر Reveal عبر GSAP (JS يزيل data-revealed) ———
+   بدون JS أو مع prefers-reduced-motion، يبقى العنصر ظاهراً بالكامل (تحسين تدريجي) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+[data-reveal][data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* القسم 06/08 — تبديل اللغة بانتقال ناعم بدل التغيير المفاجئ */

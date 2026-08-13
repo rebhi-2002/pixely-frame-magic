@@ -5,7 +5,9 @@
     "help": "Help",
     "support": "Support",
     "certificateVerify": "Verify a certificate",
-    "unsubscribe": "Email preferences"
+    "unsubscribe": "Email preferences",
+    "contact": "Contact",
+    "blog": "Blog"
   },
   "cookie": {
     "title": "We use cookies",
@@ -441,5 +443,64 @@
   },
   "session": {
     "expired": "Your session ended after two hours of inactivity. Please sign in again."
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact us | Academia",
+      "description": "Have a question, a suggestion, or want a school partnership? The Academia team is ready to listen."
+    },
+    "h1": "Contact us",
+    "sub": "Whether it's a quick question, a suggestion, or a partnership with your school — reach out and we'll get back to you fast.",
+    "form": {
+      "name": "Full name",
+      "email": "Email address",
+      "topic": "Subject",
+      "topics": {
+        "student": "Student support / account",
+        "teacher": "Joining as a teacher",
+        "school": "School or group partnership",
+        "press": "Press & media",
+        "other": "Something else"
+      },
+      "message": "Message",
+      "messagePlaceholder": "Write the details of your message here…",
+      "submit": "Send message",
+      "sending": "Sending…"
+    },
+    "errors": {
+      "name": "Name must be at least 2 characters",
+      "email": "Invalid email address",
+      "message": "Message is too short — add a bit more detail (10+ characters)"
+    },
+    "success": {
+      "title": "Your message is in! ✅",
+      "sub": "Our team will review it and reply to your email within 1–2 business days.",
+      "again": "Send another message"
+    },
+    "sidebar": {
+      "emailTitle": "Email us directly",
+      "emailSub": "For any general inquiry",
+      "responseTitle": "Expected response time",
+      "responseSub": "Within 1–2 business days",
+      "helpTitle": "Looking for a quick answer?",
+      "helpSub": "Check the Help Center — your question might already be answered there.",
+      "helpCta": "Visit the Help Center"
+    }
+  },
+  "blog": {
+    "h1": "Academia Blog",
+    "sub": "Practical articles on study organization and exam prep — no fluff.",
+    "readMinutes_one": "{{count}} min read",
+    "readMinutes_other": "{{count}} min read",
+    "notFound": "We couldn't find that article",
+    "notFoundSub": "The link might be wrong, or the article was removed.",
+    "backToBlog": "Back to blog",
+    "ctaTitle": "Want to put these ideas into practice?",
+    "ctaSub": "Academia has a study schedule, a mistake bank, and an exam simulator to help you apply all this daily.",
+    "ctaButton": "Try Academia for free",
+    "moreTitle": "More articles you'll like",
+    "teaserTitle": "From our blog",
+    "teaserSub": "Practical tips for studying and exam prep.",
+    "teaserCta": "Visit the blog"
   }
 }

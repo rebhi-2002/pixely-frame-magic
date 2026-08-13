@@ -22,6 +22,8 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -30,6 +32,7 @@ import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
@@ -67,6 +70,7 @@ import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminTeachersRouteImport } from './routes/_authenticated/admin.teachers'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin.roles'
+import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as AuthenticatedAdminCurriculumRequestsRouteImport } from './routes/_authenticated/admin.curriculum-requests'
@@ -141,6 +145,16 @@ const CoursesRoute = CoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -179,6 +193,11 @@ const CertificateIdRoute = CertificateIdRouteImport.update({
   id: '/certificate/$id',
   path: '/certificate/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   id: '/users',
@@ -389,6 +408,12 @@ const AuthenticatedAdminRolesRoute = AuthenticatedAdminRolesRouteImport.update({
   path: '/admin/roles',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminPermissionsRoute =
+  AuthenticatedAdminPermissionsRouteImport.update({
+    id: '/admin/permissions',
+    path: '/admin/permissions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminPaymentsRoute =
   AuthenticatedAdminPaymentsRouteImport.update({
     id: '/admin/payments',
@@ -442,6 +467,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -472,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -482,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -509,6 +538,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -539,6 +570,7 @@ export interface FileRoutesByTo {
   '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/user-types': typeof AuthenticatedUserTypesRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -549,6 +581,7 @@ export interface FileRoutesByTo {
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -578,6 +611,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -608,6 +643,7 @@ export interface FileRoutesById {
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -618,6 +654,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
+  '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/teachers': typeof AuthenticatedAdminTeachersRoute
@@ -647,6 +684,8 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -677,6 +716,7 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -687,6 +727,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/payments'
+    | '/admin/permissions'
     | '/admin/roles'
     | '/admin/settings'
     | '/admin/teachers'
@@ -714,6 +755,8 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -744,6 +787,7 @@ export interface FileRouteTypes {
     | '/system-modules'
     | '/user-types'
     | '/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -754,6 +798,7 @@ export interface FileRouteTypes {
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/payments'
+    | '/admin/permissions'
     | '/admin/roles'
     | '/admin/settings'
     | '/admin/teachers'
@@ -782,6 +827,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/403'
     | '/about'
+    | '/blog'
+    | '/contact'
     | '/courses'
     | '/for-teachers'
     | '/forgot-password'
@@ -812,6 +859,7 @@ export interface FileRouteTypes {
     | '/_authenticated/system-modules'
     | '/_authenticated/user-types'
     | '/_authenticated/users'
+    | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
@@ -822,6 +870,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/curriculum-requests'
     | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/payments'
+    | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/roles'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/teachers'
@@ -851,6 +900,8 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
   AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -963,6 +1014,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -1018,6 +1083,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/certificate/$id'
       preLoaderRoute: typeof CertificateIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/users': {
       id: '/_authenticated/users'
@@ -1278,6 +1350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRolesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/permissions': {
+      id: '/_authenticated/admin/permissions'
+      path: '/admin/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AuthenticatedAdminPermissionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/payments': {
       id: '/_authenticated/admin/payments'
       path: '/admin/payments'
@@ -1372,6 +1451,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminCurriculumRequestsRoute: typeof AuthenticatedAdminCurriculumRequestsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
+  AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
   AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminTeachersRoute: typeof AuthenticatedAdminTeachersRoute
@@ -1421,6 +1501,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAdminCurriculumRequestsRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
+  AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
   AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedAdminTeachersRoute: AuthenticatedAdminTeachersRoute,
@@ -1449,11 +1530,23 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
   AboutRoute: AboutRoute,
+  BlogRoute: BlogRouteWithChildren,
+  ContactRoute: ContactRoute,
   CoursesRoute: CoursesRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
@@ -1475,3 +1568,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

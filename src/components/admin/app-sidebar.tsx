@@ -108,7 +108,7 @@ export function AppSidebar({
 
   const accountItem = (extra?: string) =>
     cn(
-      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-sidebar-foreground/85 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+      "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-medium text-sidebar-foreground/85 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-foreground",
       collapsed && "justify-center px-0",
       extra,
     );
@@ -116,7 +116,7 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "flex h-full shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "shadow-elevation-2 flex h-full shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         collapsed ? "w-[76px]" : "w-72",
       )}
     >
@@ -183,9 +183,9 @@ export function AppSidebar({
                 }
                 title={collapsed ? label(m) : undefined}
                 className={cn(
-                  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200",
+                  "flex w-full items-center gap-2.5 rounded-xl border-s-2 border-transparent px-3 py-2.5 text-sm font-semibold transition-all duration-200",
                   "hover:bg-sidebar-accent",
-                  open && !collapsed && "bg-sidebar-accent",
+                  open && !collapsed && "border-sidebar-primary bg-sidebar-accent",
                   collapsed && "justify-center px-0",
                 )}
               >
@@ -270,7 +270,7 @@ export function AppSidebar({
             title={t("common.settings")}
             className={accountItem(
               pathname === "/settings"
-                ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground"
+                ? "bg-sidebar-primary/12 font-bold text-sidebar-primary"
                 : undefined,
             )}
           >
@@ -386,10 +386,10 @@ function PageList({
               to={p.path}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors",
+                "flex items-center gap-2 rounded-xl border-s-2 px-3 py-2 text-[13px] transition-all duration-200",
                 active
-                  ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
-                  : "text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                  ? "border-sidebar-primary bg-sidebar-primary/12 font-bold text-sidebar-primary"
+                  : "border-transparent text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground",
               )}
             >
               <DynamicIcon name={p.icon} className="size-4 shrink-0" />

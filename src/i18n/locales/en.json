@@ -29,8 +29,9 @@
     "account": "My account",
     "preferences": "Preferences",
     "navigation": "Navigation",
-    "searchPages": "Search all pages..."
-
+    "searchPages": "Search all pages...",
+    "faqBadge": "FAQ",
+    "faqTitle": "Have a question? It's probably answered here"
   },
   "nav": {
     "home": "Home",
@@ -210,7 +211,117 @@
     "note": "Prices in US dollars. Cancel anytime.",
     "currency": "ILS",
     "forever": "forever",
-    "monthly": "per month"
+    "monthly": "per month",
+    "faq": [
+      {
+        "q": "Is Academia really free?",
+        "a": "Yes — the free plan is complete with no time limit: the library, communities, schedule, and basic achievement counter. Premium is optional for advanced exam-prep tools."
+      },
+      {
+        "q": "Can I cancel anytime?",
+        "a": "Absolutely. Cancel your Premium subscription anytime from your account settings, no conditions or cancellation fees, and you'll keep access until the end of your paid period."
+      },
+      {
+        "q": "What's the difference between the student and teacher plans?",
+        "a": "The student plan (free/premium) gives access to content and tools. The teacher plan is separate and lets you upload content, build quizzes, and track your students' performance."
+      },
+      {
+        "q": "Do you offer discounts for school groups?",
+        "a": "We're currently building special packages for schools and groups. Reach out via the Help page and we'll get back to you with details."
+      },
+      {
+        "q": "Where is my data stored, and is it secure?",
+        "a": "Your data is stored securely and encrypted, and we never share it with third parties for marketing purposes. Full details are on our Privacy Policy page."
+      }
+    ],
+    "compare": {
+      "title": "Compare the plans in detail",
+      "sub": "See exactly what you get with each plan before deciding.",
+      "colFree": "Free",
+      "colPlus": "Premium",
+      "groups": [
+        {
+          "t": "Content & learning",
+          "rows": [
+            {
+              "l": "Smart library across all subjects",
+              "free": true,
+              "plus": true
+            },
+            {
+              "l": "Save lessons to favorites",
+              "free": true,
+              "plus": true
+            },
+            {
+              "l": "Subject communities & Q&A",
+              "free": true,
+              "plus": true
+            },
+            {
+              "l": "Interactive study schedule",
+              "free": true,
+              "plus": true
+            }
+          ]
+        },
+        {
+          "t": "Exam preparation",
+          "rows": [
+            {
+              "l": "AI-powered ministerial exam simulator",
+              "free": false,
+              "plus": true
+            },
+            {
+              "l": "Personal mistake bank + spaced repetition",
+              "free": false,
+              "plus": true
+            },
+            {
+              "l": "15-minute review (smart flashcards)",
+              "free": false,
+              "plus": true
+            }
+          ]
+        },
+        {
+          "t": "Tracking & reports",
+          "rows": [
+            {
+              "l": "Basic achievement counter",
+              "free": true,
+              "plus": true
+            },
+            {
+              "l": "Detailed weekly parent report",
+              "free": false,
+              "plus": true
+            },
+            {
+              "l": "Digital certificates on subject completion",
+              "free": false,
+              "plus": true
+            }
+          ]
+        },
+        {
+          "t": "Support",
+          "rows": [
+            {
+              "l": "Help center support",
+              "free": true,
+              "plus": true
+            },
+            {
+              "l": "Priority email support",
+              "free": false,
+              "plus": true
+            }
+          ]
+        }
+      ]
+    }
   },
   "forTeachers": {
     "meta": {
@@ -237,7 +348,21 @@
         "t": "Verified account",
         "d": "Verify by uploading an ID/certificate; once approved your badge appears next to your name."
       }
-    }
+    },
+    "faq": [
+      {
+        "q": "How do I become a verified teacher?",
+        "a": "Sign up via \"Start as a teacher\", fill in your details and qualifications, and our team reviews your application within a few days."
+      },
+      {
+        "q": "How does the revenue share work?",
+        "a": "You earn a share of the subscription revenue from students who take your courses, and you can track your earnings anytime from the teacher dashboard."
+      },
+      {
+        "q": "What kind of content can I upload?",
+        "a": "Written lessons, PDF files, question banks, and short quizzes — all organized by grade, subject, and unit."
+      }
+    ]
   },
   "legal": {
     "privacyTitle": "Privacy policy",
@@ -327,5 +452,11 @@
     "title": "This section isn't yours",
     "text": "Your account permissions don't allow access to this page. Head back to your Dashboard and continue from there.",
     "cta": "Back to Dashboard"
+  },
+  "testimonials": {
+    "badge": "Coming soon",
+    "title": "Stories from students and teachers",
+    "sub": "We're still building the Academia community. Once our first users are in, real stories will show up right here.",
+    "placeholder": "Reviews from our students and teachers will appear here soon."
   }
 }
