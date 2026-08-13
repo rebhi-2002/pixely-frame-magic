@@ -148,7 +148,10 @@ function RolePermissionsPage() {
             modPages.every((p) => keys.every((k) => granted.has(`${p.id}:${k.key}`)));
 
           return (
-            <div key={mod.id} className="overflow-hidden rounded-2xl border border-border bg-card">
+            <div
+              key={mod.id}
+              className="shadow-elevation-1 overflow-hidden rounded-2xl border border-border bg-card"
+            >
               <div className="flex items-center gap-3 border-b border-border px-4 py-3">
                 <Checkbox
                   checked={modAll ? true : modOn ? "indeterminate" : false}

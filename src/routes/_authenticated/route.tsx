@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { Loader2, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
+import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 
 import { useAccess } from "@/hooks/use-access";
 
@@ -31,11 +32,7 @@ function AuthenticatedLayout() {
   const { access, isLoading, error } = useAccess();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="size-6 animate-spin text-primary" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (error || !access) {
@@ -69,7 +66,7 @@ function AuthenticatedLayout() {
         />
       </div>
       <main className="min-w-0 flex-1">
-        <div className="sticky top-0 z-30 flex h-12 items-center border-b border-border bg-background/90 px-3 backdrop-blur md:hidden">
+        <div className="shadow-elevation-1 sticky top-0 z-30 flex h-12 items-center border-b border-border bg-background/90 px-3 backdrop-blur md:hidden">
           <Button
             variant="ghost"
             size="icon"

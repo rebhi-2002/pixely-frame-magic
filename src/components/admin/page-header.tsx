@@ -15,7 +15,7 @@ export function PageHeader({
   onBack?: () => void;
 }) {
   return (
-    <header className="flex items-center justify-between gap-4 border-b border-border bg-card px-5 py-4">
+    <header className="shadow-elevation-1 static z-20 flex items-center justify-between gap-4 border-b border-border bg-card/95 px-5 py-4 backdrop-blur md:sticky md:top-0">
       <div className="flex items-center gap-3">
         {onBack && (
           <Button

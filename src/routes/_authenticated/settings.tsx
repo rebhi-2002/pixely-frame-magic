@@ -47,7 +47,7 @@ function SettingsPage() {
       <div className="mx-auto max-w-3xl px-5 py-6">
         <p className="text-sm text-muted-foreground">{t("settings.sub")}</p>
 
-        <section className="mt-6 rounded-2xl border border-border bg-card p-6">
+        <section className="shadow-elevation-1 mt-6 rounded-2xl border border-border bg-card p-6">
           <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
             <Palette className="size-4 text-primary" />
             {t("settings.langThemeTab")}
@@ -94,7 +94,7 @@ function SettingsPage() {
           </div>
         </section>
 
-        <section className="mt-4 rounded-2xl border border-border bg-card p-6">
+        <section className="shadow-elevation-1 mt-4 rounded-2xl border border-border bg-card p-6">
           <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
             <UserRound className="size-4 text-primary" />
             {t("settings.account")}
@@ -115,7 +115,7 @@ function SettingsPage() {
           </dl>
         </section>
 
-        <section className="mt-4 rounded-2xl border border-border bg-card p-6">
+        <section className="shadow-elevation-1 mt-4 rounded-2xl border border-border bg-card p-6">
           <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
             <ShieldCheck className="size-4 text-primary" />
             {t("settings.security")}

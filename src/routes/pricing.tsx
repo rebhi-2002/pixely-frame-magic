@@ -3,6 +3,9 @@ import { Check, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
+import { FAQSection } from "@/components/site/faq-section";
+import { PricingCompareTable } from "@/components/site/pricing-compare-table";
+import { Reveal } from "@/components/ui/reveal";
 
 const title = "الأسعار | أكاديميا مجاناً أو بريميوم";
 const description =
@@ -30,7 +33,7 @@ function Pricing() {
 
   return (
     <PublicLayout>
-      <section className="surface-grid border-b border-border">
+      <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-4xl px-5 py-16 text-center">
           <h1 className="text-4xl font-bold text-foreground">{t("pricing.h1")}</h1>
           <p className="mt-4 text-lg text-muted-foreground">{t("pricing.sub")}</p>
@@ -38,51 +41,63 @@ function Pricing() {
       </section>
 
       <section className="mx-auto grid max-w-4xl gap-5 px-5 py-16 md:grid-cols-2">
-        {plans.map((p) => {
+        {plans.map((p, i) => {
           const features = t(`pricing.${p.key}.features`, { returnObjects: true }) as string[];
           return (
-            <div
-              key={p.key}
-              className={`flex flex-col rounded-2xl border p-7 ${
-                p.highlight ? "glow-primary border-primary/50 bg-card" : "border-border bg-card/60"
-              }`}
-            >
-              {p.highlight && (
-                <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary">
-                  <Sparkles className="size-3.5" />
-                  {t("pricing.plus.badge")}
-                </span>
-              )}
-              <h2 className="text-xl font-bold text-foreground">{t(`pricing.${p.key}.name`)}</h2>
-              <p className="mt-3 flex items-baseline gap-2">
-                <span className="font-display text-4xl font-bold text-foreground">
-                  {t(`pricing.${p.key}.price`)}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {t("pricing.currency")} / {t(`pricing.${p.key}.note`)}
-                </span>
-              </p>
-              <ul className="mt-6 flex-1 space-y-3">
-                {features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                    <Check className="mt-0.5 size-4 shrink-0 text-success" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <SessionCta
-                to="/signup"
-                label={t(`pricing.${p.key}.cta`)}
-                className={`mt-7 inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-bold transition-opacity hover:opacity-90 ${
+            <Reveal key={p.key} delay={i * 0.08}>
+              <div
+                className={`shadow-elevation-2 flex h-full flex-col rounded-2xl border p-7 ${
                   p.highlight
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border bg-background text-foreground"
+                    ? "glow-primary border-primary/50 bg-card"
+                    : "border-border bg-card/60"
                 }`}
-              />
-            </div>
+              >
+                {p.highlight && (
+                  <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary">
+                    <Sparkles className="size-3.5" />
+                    {t("pricing.plus.badge")}
+                  </span>
+                )}
+                <h2 className="text-xl font-bold text-foreground">{t(`pricing.${p.key}.name`)}</h2>
+                <p className="mt-3 flex items-baseline gap-2">
+                  <span className="font-display text-4xl font-bold text-foreground">
+                    {t(`pricing.${p.key}.price`)}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {t("pricing.currency")} / {t(`pricing.${p.key}.note`)}
+                  </span>
+                </p>
+                <ul className="mt-6 flex-1 space-y-3">
+                  {features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                      <Check className="mt-0.5 size-4 shrink-0 text-success" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <SessionCta
+                  to="/signup"
+                  label={t(`pricing.${p.key}.cta`)}
+                  className={`hover-press mt-7 inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-bold ${
+                    p.highlight
+                      ? "btn-shine bg-primary text-primary-foreground"
+                      : "border border-border bg-background text-foreground hover:bg-secondary"
+                  }`}
+                />
+              </div>
+            </Reveal>
           );
         })}
       </section>
+
+      <Reveal>
+        <p className="mx-auto -mt-8 max-w-4xl px-5 pb-4 text-center text-xs text-muted-foreground">
+          {t("pricing.note")}
+        </p>
+      </Reveal>
+
+      <PricingCompareTable />
+      <FAQSection i18nKey="pricing.faq" className="border-t border-border bg-card/40" />
     </PublicLayout>
   );
 }

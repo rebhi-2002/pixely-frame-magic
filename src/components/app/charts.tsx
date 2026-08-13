@@ -20,9 +20,11 @@ const AXIS = { fontSize: 11, fill: "var(--color-muted-foreground)" } as const;
 const TOOLTIP_STYLE = {
   background: "var(--color-card)",
   border: "1px solid var(--color-border)",
-  borderRadius: 12,
+  borderRadius: 14,
   fontSize: 12,
   color: "var(--color-foreground)",
+  boxShadow: "0 12px 32px -12px color-mix(in oklab, var(--color-foreground) 30%, transparent)",
+  padding: "8px 12px",
 } as const;
 
 /** منحنى تراكمي (نمو/نشاط) — البند 16. */
@@ -92,7 +94,7 @@ export function ComparisonChart({
 const DONUT_COLORS = [
   "var(--color-primary)",
   "var(--color-success)",
-  "var(--color-info, var(--color-primary))",
+  "var(--color-info)",
   "var(--color-muted-foreground)",
 ];
 

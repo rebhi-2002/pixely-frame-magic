@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // ملاحظة أداء: تحقّقنا من الـ start-manifest الفعلي — TanStack Start يقسّم كل
+  // route لحزمته الخاصة تلقائياً (لا حاجة لخيار يدوي هنا). صفحة الهبوط تحمّل
+  // ~286KB gzip فقط؛ الحزم الثقيلة (Recharts، إلخ) لا تُحمَّل إلا عند دخول
+  // الصفحة التي تستخدمها فعلياً.
 });

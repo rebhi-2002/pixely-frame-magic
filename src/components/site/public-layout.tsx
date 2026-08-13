@@ -7,7 +7,9 @@ import { BrandLockup } from "@/components/site/brand-logo";
 import { PageTransition } from "@/components/site/page-transition";
 import { UserMenu } from "@/components/site/user-menu";
 import { useSession } from "@/hooks/use-session";
+import { useScrolled } from "@/hooks/use-scrolled";
 import { allowedPublicPaths } from "@/lib/bi";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/", key: "nav.home" },
@@ -22,11 +24,13 @@ const footerPlatform = [
   { to: "/how-it-works", key: "nav.howItWorks" },
   { to: "/pricing", key: "nav.pricing" },
   { to: "/for-teachers", key: "nav.forTeachers" },
+  { to: "/blog", key: "nav.blog" },
   { to: "/about", key: "nav.about" },
 ] as const;
 
 const footerLegal = [
   { to: "/help", key: "nav.help" },
+  { to: "/contact", key: "nav.contact" },
   { to: "/privacy", key: "nav.privacy" },
   { to: "/terms", key: "nav.terms" },
   { to: "/unsubscribe", key: "nav.unsubscribe" },
@@ -43,6 +47,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
 export function PublicLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { session, isSignedIn } = useSession();
+  const scrolled = useScrolled();
   const allowed = allowedPublicPaths(session?.roleKey ?? null);
   const visible = <T extends { to: string }>(items: readonly T[]) =>
     allowed ? items.filter((i) => allowed.includes(i.to)) : items;
@@ -56,7 +61,14 @@ export function PublicLayout({ children }: { children: ReactNode }) {
       >
         {t("common.skipToContent")}
       </a>
-      <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+      <header
+        className={cn(
+          "sticky top-0 z-40 border-b transition-all duration-300",
+          scrolled
+            ? "shadow-elevation-2 border-border bg-background/85 backdrop-blur"
+            : "border-transparent bg-transparent",
+        )}
+      >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
           <BrandMark />
           <nav className="hidden items-center gap-1 lg:flex">
@@ -103,7 +115,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             )}
           </div>
         </div>
-        <div className="border-t border-border px-3 py-2 lg:hidden">
+        <div
+          className={cn(
+            "border-t px-3 py-2 backdrop-blur transition-colors duration-300 lg:hidden",
+            scrolled ? "border-border bg-background/85" : "border-transparent bg-background/60",
+          )}
+        >
           <nav className="segmented-nav">
             {nav.map((item) => (
               <Link

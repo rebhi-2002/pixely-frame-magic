@@ -2,7 +2,19 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { DynamicIcon } from "@/components/admin/dynamic-icon";
 import { PageHeader } from "@/components/admin/page-header";
+import { Reveal } from "@/components/ui/reveal";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { cn } from "@/lib/utils";
+
+/** يفصل رقم القيمة عن البادئة/اللاحقة النصية — مثال: "86%" → {prefix:"", num:86, suffix:"%"} */
+function parseStatValue(value: string) {
+  const match = value.match(/^([^\d-]*)(-?[\d.,]+)(.*)$/);
+  if (!match) return null;
+  const [, prefix, numRaw, suffix] = match;
+  const num = Number(numRaw.replace(/,/g, ""));
+  if (Number.isNaN(num)) return null;
+  return { prefix, num, suffix };
+}
 
 /** غلاف موحّد لكل صفحات المنصة بعد تسجيل الدخول (القسم 07 — الشِل). */
 export function AppPage({
@@ -32,15 +44,30 @@ export function AppPage({
 export function StatGrid({ items }: { items: { icon: string; label: string; value: string }[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {items.map((s) => (
-        <div key={s.label} className="rounded-2xl border border-border bg-card p-4">
-          <span className="inline-flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <DynamicIcon name={s.icon} className="size-4" />
-          </span>
-          <p className="mt-3 font-display text-2xl font-bold text-foreground">{s.value}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{s.label}</p>
-        </div>
-      ))}
+      {items.map((s, i) => {
+        const parsed = parseStatValue(s.value);
+        return (
+          <Reveal key={s.label} delay={i * 0.05}>
+            <div className="hover-lift shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-4">
+              <span className="inline-flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <DynamicIcon name={s.icon} className="size-4" />
+              </span>
+              <p className="mt-3 font-display text-2xl font-bold text-foreground">
+                {parsed ? (
+                  <AnimatedCounter
+                    prefix={parsed.prefix}
+                    value={parsed.num}
+                    suffix={parsed.suffix}
+                  />
+                ) : (
+                  s.value
+                )}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{s.label}</p>
+            </div>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }
@@ -57,7 +84,7 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-border bg-card">
+    <section className="shadow-elevation-1 rounded-2xl border border-border bg-card">
       <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-3.5">
         <h2 className="inline-flex items-center gap-2 font-display text-sm font-bold text-foreground">
           {icon && <DynamicIcon name={icon} className="size-4 text-primary" />}
@@ -116,7 +143,7 @@ export function RowList({ rows, to }: { rows: Row[]; to?: string }) {
         return (
           <li key={`${r.title}-${i}`} className={i === 0 ? "-mt-3" : undefined}>
             {to ? (
-              <Link to={to} className="block transition-colors hover:bg-accent/40">
+              <Link to={to} className="block rounded-xl px-2 transition-colors hover:bg-accent/40">
                 {body}
               </Link>
             ) : (
@@ -159,6 +186,8 @@ export function DataTable({ head, rows }: { head: string[]; rows: (string | Reac
 }
 
 export function Progress({ label, value }: { label: string; value: number }) {
+  const pct = Math.min(100, Math.max(0, value));
+  const tone = pct >= 70 ? "bg-success" : pct >= 40 ? "bg-primary" : "bg-destructive";
   return (
     <div className="py-2">
       <div className="flex items-center justify-between text-xs">
@@ -167,8 +196,8 @@ export function Progress({ label, value }: { label: string; value: number }) {
       </div>
       <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-success transition-all duration-500"
-          style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+          className={cn("h-full rounded-full transition-all duration-700 ease-out", tone)}
+          style={{ width: `${pct}%` }}
         />
       </div>
     </div>
@@ -177,8 +206,10 @@ export function Progress({ label, value }: { label: string; value: number }) {
 
 export function EmptyState({ text, icon = "Inbox" }: { text: string; icon?: string }) {
   return (
-    <div className="flex flex-col items-center gap-2 py-8 text-center">
-      <DynamicIcon name={icon} className="size-6 text-muted-foreground" />
+    <div className="flex flex-col items-center gap-2.5 rounded-2xl border border-dashed border-border bg-secondary/20 py-10 text-center">
+      <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <DynamicIcon name={icon} className="size-5" />
+      </span>
       <p className="text-sm text-muted-foreground">{text}</p>
     </div>
   );
@@ -191,7 +222,7 @@ export function QuickLinks({ items }: { items: { to: string; label: string; icon
         <Link
           key={i.to}
           to={i.to}
-          className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/50 hover:bg-accent/40"
+          className="hover-lift flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary/50"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <DynamicIcon name={i.icon} className="size-4" />

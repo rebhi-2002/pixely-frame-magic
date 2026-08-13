@@ -39,7 +39,7 @@ function HelpPage() {
 
   return (
     <PublicLayout>
-      <section className="surface-grid border-b border-border">
+      <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-3xl px-5 py-16">
           <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
             <LifeBuoy className="size-6" />
@@ -53,7 +53,7 @@ function HelpPage() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("help.searchPlaceholder")}
               aria-label={t("help.searchPlaceholder")}
-              className="h-12 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+              className="shadow-elevation-1 h-12 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
             />
           </div>
         </div>
@@ -61,7 +61,7 @@ function HelpPage() {
 
       <section className="mx-auto max-w-3xl px-5 py-14">
         {filtered.length === 0 ? (
-          <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+          <p className="shadow-elevation-1 rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
             {t("help.empty")}
           </p>
         ) : (
@@ -73,7 +73,7 @@ function HelpPage() {
                   {topic.items.map((item) => (
                     <details
                       key={item.q}
-                      className="group rounded-2xl border border-border bg-card p-5 open:border-primary/40"
+                      className="group shadow-elevation-1 rounded-2xl border border-border bg-card p-5 open:border-primary/40"
                     >
                       <summary className="cursor-pointer text-sm font-bold text-foreground">
                         {item.q}
@@ -87,15 +87,15 @@ function HelpPage() {
           </div>
         )}
 
-        <div className="mt-14 rounded-2xl border border-border bg-card/60 p-8 text-center">
+        <div className="shadow-elevation-1 mt-14 rounded-2xl border border-border bg-card/60 p-8 text-center">
           <h2 className="text-xl font-bold text-foreground">{t("help.contactTitle")}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{t("help.contactSub")}</p>
-          <a
-            href="mailto:support@academia.app"
-            className="mt-5 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+          <Link
+            to="/contact"
+            className="btn-shine hover-press mt-5 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
           >
             {t("help.contactCta")}
-          </a>
+          </Link>
           <p className="mt-4 text-xs text-muted-foreground">
             <Link to="/privacy" className="hover:underline">
               {t("nav.privacy")}
