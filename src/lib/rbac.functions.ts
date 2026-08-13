@@ -16,7 +16,7 @@ export const getMyAccess = createServerFn({ method: "GET" })
 export const listModules = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await requirePermission(context.supabase, context.userId, "system_modules", "view_list");
+    await requirePermission(context.supabase, context.userId, "admin_settings", "view_list");
     const { data, error } = await context.supabase
       .from("modules")
       .select("id, key, name, icon, enabled, sort_order")
@@ -29,7 +29,7 @@ export const setModuleEnabled = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ id: z.string().uuid(), enabled: z.boolean() }).parse(input))
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "system_modules", "edit");
+    await requirePermission(context.supabase, context.userId, "admin_settings", "edit");
     const { error } = await context.supabase
       .from("modules")
       .update({ enabled: data.enabled })
@@ -41,7 +41,7 @@ export const setModuleEnabled = createServerFn({ method: "POST" })
 export const listRoles = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await requirePermission(context.supabase, context.userId, "user_types", "view_list");
+    await requirePermission(context.supabase, context.userId, "admin_roles", "view_list");
     const { data, error } = await context.supabase
       .from("roles")
       .select("id, name, description, created_at")
@@ -65,7 +65,7 @@ export const saveRole = createServerFn({ method: "POST" })
     await requirePermission(
       context.supabase,
       context.userId,
-      "user_types",
+      "admin_roles",
       data.id ? "edit" : "execute_add",
     );
     const payload = { name: data.name, description: data.description ?? null };
@@ -81,7 +81,7 @@ export const deleteRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "user_types", "delete");
+    await requirePermission(context.supabase, context.userId, "admin_roles", "delete");
     const { error } = await context.supabase.from("roles").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -91,7 +91,7 @@ export const getPermissionMatrix = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ roleId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await requirePermission(context.supabase, context.userId, "user_types", "view_list");
+    await requirePermission(context.supabase, context.userId, "admin_roles", "view_list");
     return loadPermissionMatrix(context.supabase, data.roleId);
   });
 
@@ -180,7 +180,7 @@ export const saveUser = createServerFn({ method: "POST" })
     await requirePermission(
       context.supabase,
       context.userId,
-      "users",
+      "admin_users",
       data.id ? "edit" : "execute_add",
     );
     const payload = {
