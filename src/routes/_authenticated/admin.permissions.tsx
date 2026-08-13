@@ -36,14 +36,8 @@ function PermissionsMatrixPage() {
 
   return (
     <div className="pb-24">
-      <PageHeader
-        icon={<ShieldCheck className="size-5" />}
-        title={bi("مصفوفة الصلاحيات", "Permission matrix")}
-        subtitle={bi(
-          "اختر نوع المستخدم لتحرير الوحدات والصفحات والأدوات المتاحة له.",
-          "Pick a user type to edit its modules, pages and tools.",
-        )}
-      />
+      <PageHeader icon="ShieldCheck" title={bi("مصفوفة الصلاحيات", "Permission matrix")} />
+
 
       <div className="px-4 py-5 md:px-6">
         {isLoading ? (
