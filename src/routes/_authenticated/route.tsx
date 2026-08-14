@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
+import { BottomNav } from "@/components/admin/bottom-nav";
 
 import { useAccess } from "@/hooks/use-access";
 
@@ -56,7 +57,7 @@ function AuthenticatedLayout() {
         />
       )}
       <div
-        className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:sticky md:top-0 md:z-auto md:h-screen md:translate-x-0 ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"}`}
+        className={`fixed inset-y-0 start-0 z-50 flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:sticky md:top-0 md:z-auto md:h-screen md:translate-x-0 ${mobileOpen ? "translate-x-0" : "max-md:ltr:-translate-x-full max-md:rtl:translate-x-full"}`}
       >
         <AppSidebar
           access={access}
@@ -78,9 +79,13 @@ function AuthenticatedLayout() {
           <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
         </div>
         <PageTransition>
-          <Outlet />
+          <div className="pb-20 md:pb-0">
+            <Outlet />
+          </div>
         </PageTransition>
       </main>
+      {/* البند 13 — شريط سفلي للجوال مبني على صلاحيات الدور */}
+      <BottomNav access={access} />
     </div>
   );
 }

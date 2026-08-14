@@ -6,6 +6,7 @@ import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
+import { useBi } from "@/lib/bi";
 
 type Item = { key: string; name: string; icon: string; path: string };
 
@@ -18,11 +19,12 @@ function firstPath(pages: AccessPage[]): string | null {
   return null;
 }
 
-function flatten(module: AccessModule): Item[] {
+function flatten(module: AccessModule, label: (ar: string, en: string) => string): Item[] {
   const out: Item[] = [];
   const walk = (pages: AccessPage[]) => {
     for (const p of pages) {
-      if (p.path) out.push({ key: p.key, name: p.name, icon: p.icon, path: p.path });
+      if (p.path)
+        out.push({ key: p.key, name: label(p.name, p.nameEn), icon: p.icon, path: p.path });
       walk(p.children);
     }
   };
@@ -33,6 +35,7 @@ function flatten(module: AccessModule): Item[] {
 /** شريط تنقّل سفلي للجوال — يظهر فقط بعد تسجيل الدخول (قرار المستخدم). */
 export function BottomNav({ access }: { access: MyAccess }) {
   const { t } = useTranslation();
+  const bi = useBi();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -41,10 +44,10 @@ export function BottomNav({ access }: { access: MyAccess }) {
       access.modules
         .map((m) => {
           const path = firstPath(m.pages);
-          return path ? { key: m.key, name: m.name, icon: m.icon, path } : null;
+          return path ? { key: m.key, name: bi(m.name, m.nameEn), icon: m.icon, path } : null;
         })
         .filter((i): i is Item => i !== null),
-    [access.modules],
+    [access.modules, bi],
   );
 
   const visible = primary.slice(0, 4);
@@ -78,9 +81,11 @@ export function BottomNav({ access }: { access: MyAccess }) {
             <div className="space-y-4">
               {overflowModules.map((m) => (
                 <div key={m.key}>
-                  <p className="mb-1.5 text-xs font-bold text-sidebar-foreground/60">{m.name}</p>
+                  <p className="mb-1.5 text-xs font-bold text-sidebar-foreground/60">
+                    {bi(m.name, m.nameEn)}
+                  </p>
                   <ul className="space-y-1">
-                    {flatten(m).map((item) => (
+                    {flatten(m, bi).map((item) => (
                       <li key={item.path}>
                         <Link
                           to={item.path}

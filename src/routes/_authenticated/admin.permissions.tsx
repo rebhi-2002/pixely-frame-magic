@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, ShieldCheck, Settings2 } from "lucide-react";
+import { Loader2, Settings2 } from "lucide-react";
 import { Guard } from "@/components/app/guard";
 import { PageHeader } from "@/components/admin/page-header";
 import { listRoles } from "@/lib/rbac.functions";
@@ -37,7 +37,6 @@ function PermissionsMatrixPage() {
   return (
     <div className="pb-24">
       <PageHeader icon="ShieldCheck" title={bi("مصفوفة الصلاحيات", "Permission matrix")} />
-
 
       <div className="px-4 py-5 md:px-6">
         {isLoading ? (
