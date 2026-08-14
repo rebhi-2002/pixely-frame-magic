@@ -8,6 +8,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
+import { ensureDemoAccount } from "@/lib/demo-auth.functions";
+import { useServerFn } from "@tanstack/react-start";
+
+/* أزرار دخول سريعة للاختبار فقط — تُحذف قبل النشر النهائي. */
+const DEMO_ROLES = [
+  { role: "admin", label: "أدمن" },
+  { role: "supervisor", label: "مشرف" },
+  { role: "teacher", label: "معلم" },
+  { role: "parent", label: "ولي أمر" },
+  { role: "student", label: "طالب" },
+] as const;
 
 const title = "تسجيل الدخول | Academia";
 const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";
