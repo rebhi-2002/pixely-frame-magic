@@ -38,7 +38,6 @@ function PermissionsMatrixPage() {
     <div className="pb-24">
       <PageHeader icon="ShieldCheck" title={bi("مصفوفة الصلاحيات", "Permission matrix")} />
 
-
       <div className="px-4 py-5 md:px-6">
         {isLoading ? (
           <div className="flex justify-center py-16">

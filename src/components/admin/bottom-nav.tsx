@@ -23,7 +23,8 @@ function flatten(module: AccessModule, label: (ar: string, en: string) => string
   const out: Item[] = [];
   const walk = (pages: AccessPage[]) => {
     for (const p of pages) {
-      if (p.path) out.push({ key: p.key, name: label(p.name, p.nameEn), icon: p.icon, path: p.path });
+      if (p.path)
+        out.push({ key: p.key, name: label(p.name, p.nameEn), icon: p.icon, path: p.path });
       walk(p.children);
     }
   };
@@ -80,7 +81,9 @@ export function BottomNav({ access }: { access: MyAccess }) {
             <div className="space-y-4">
               {overflowModules.map((m) => (
                 <div key={m.key}>
-                  <p className="mb-1.5 text-xs font-bold text-sidebar-foreground/60">{bi(m.name, m.nameEn)}</p>
+                  <p className="mb-1.5 text-xs font-bold text-sidebar-foreground/60">
+                    {bi(m.name, m.nameEn)}
+                  </p>
                   <ul className="space-y-1">
                     {flatten(m, bi).map((item) => (
                       <li key={item.path}>
