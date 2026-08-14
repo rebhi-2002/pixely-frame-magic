@@ -24,8 +24,10 @@ export function BrandLogo({ className = "size-9" }: { className?: string }) {
 export function BrandLockup({ className = "" }: { className?: string }) {
   return (
     <span className={`group inline-flex items-center gap-3 ${className}`}>
-      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 lg:size-9">
-        <BrandLogo className="size-[26px] lg:size-6" />
+      <span className="relative grid size-14 shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 lg:size-11 lg:rounded-xl">
+        <BrandLogo className="size-9 lg:size-7" />
+        <span className="absolute end-1 top-1 size-1.5 rounded-full bg-primary" aria-hidden />
+
       </span>
       <span className="font-display text-lg font-extrabold text-foreground">Academia</span>
     </span>
