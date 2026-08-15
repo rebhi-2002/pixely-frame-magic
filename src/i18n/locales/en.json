@@ -31,7 +31,8 @@
     "navigation": "Navigation",
     "searchPages": "Search all pages...",
     "faqBadge": "FAQ",
-    "faqTitle": "Have a question? It's probably answered here"
+    "faqTitle": "Have a question? It's probably answered here",
+    "signingOut": "Signing out…"
   },
   "nav": {
     "home": "Home",
