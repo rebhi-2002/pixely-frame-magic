@@ -85,10 +85,18 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
     }
   }
 
-  /* نطاق الدور: المستخدم يرى مساحته فقط ولو كان يملك صلاحيات أوسع في القاعدة. */
-  const scope =
-    (roleName ? ROLE_MODULE_SCOPE[roleName] : undefined) ??
-    (isAdmin ? ROLE_MODULE_SCOPE["مدير عام"] : undefined);
+  /* ما يظهر في القائمة الجانبية = ما مُنح فعلاً في شجرة الصلاحيات للدور.
+     أي إضافة صلاحية «عرض» لأي صفحة تنعكس مباشرة على تنقّل الدور.
+     الاستثناء الوحيد: دور لم تُضبط له أي صلاحية عرض بعد — نستخدم نطاق
+     الدور الافتراضي حتى لا تظهر لوحة فارغة. */
+  const viewable = new Set(
+    grants.filter((g) => g.permission_key === "view_list").map((g) => g.page_id),
+  );
+  const useDefaultScope = viewable.size === 0;
+  const scope = useDefaultScope
+    ? ((roleName ? ROLE_MODULE_SCOPE[roleName] : undefined) ??
+      (isAdmin ? ROLE_MODULE_SCOPE["مدير عام"] : undefined))
+    : undefined;
 
   const enabledModules = ((moduleRows ?? []) as unknown as RawModule[])
     .filter((m) => m.enabled)
@@ -105,6 +113,9 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
         .map((p) => {
           const children = build(p.id);
           const perms = Array.from(byPageId.get(p.id) ?? []);
+          const canView = useDefaultScope
+            ? perms.includes("view_list")
+            : viewable.has(p.id) || (isAdmin && perms.includes("view_list") && false);
           return {
             id: p.id,
             key: p.key,
@@ -113,10 +124,11 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
             icon: p.icon,
             path: p.path,
             permissions: perms,
+            canView,
             children,
           };
         })
-        .filter((p) => p.permissions.includes("view_list") || p.children.length > 0);
+        .filter((p) => p.canView || p.children.length > 0);
 
     const tree = build(null);
     if (tree.length === 0) continue;
