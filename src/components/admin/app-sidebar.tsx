@@ -217,6 +217,30 @@ export function AppSidebar({
                 )}
               </button>
 
+              {/* مطويّة على الشاشات الكبيرة: تظهر أيقونات كل الصفحات الداخلية أيضاً */}
+              {collapsed && (
+                <ul className="mt-0.5 mb-1 space-y-0.5">
+                  {collectLeaves(m.pages).map((p) => (
+                    <li key={p.key}>
+                      <Link
+                        to={p.path!}
+                        onClick={onNavigate}
+                        title={label(p)}
+                        aria-label={label(p)}
+                        className={cn(
+                          "flex items-center justify-center rounded-lg py-2 transition-colors",
+                          isActive(p.path)
+                            ? "bg-sidebar-primary/15 text-sidebar-primary"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                        )}
+                      >
+                        <DynamicIcon name={p.icon} className="size-4 shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
               {collapsed && flyout === m.key && (
                 <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
                   <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">
@@ -235,6 +259,7 @@ export function AppSidebar({
                   />
                 </div>
               )}
+
 
               {!collapsed && open && (
                 <div className="panel-swap mt-1">
