@@ -20,14 +20,18 @@ export function BrandLogo({ className = "size-9" }: { className?: string }) {
   );
 }
 
-/** العلامة + الاسم الرسمي الثابت. */
+/** العلامة + الاسم الرسمي الثابت.
+ *  المربّع يبقى بحجمه الصغير، والشعار نفسه هو الذي كُبِّر (يتجاوز حدود المربّع
+ *  قليلاً)، والنقطة الدلالية على الحافة الأقرب لطرف الشاشة في كلتا اللغتين. */
 export function BrandLockup({ className = "" }: { className?: string }) {
   return (
     <span className={`group inline-flex items-center gap-3 ${className}`}>
-      <span className="relative grid size-14 shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 lg:size-11 lg:rounded-xl">
-        <BrandLogo className="size-9 lg:size-7" />
-        <span className="absolute end-1 top-1 size-1.5 rounded-full bg-primary" aria-hidden />
-
+      <span className="relative grid size-10 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 lg:size-9">
+        <BrandLogo className="size-11 lg:size-10" />
+        <span
+          className="absolute -start-0.5 -top-0.5 size-1.5 rounded-full bg-primary"
+          aria-hidden
+        />
       </span>
       <span className="font-display text-lg font-extrabold text-foreground">Academia</span>
     </span>

@@ -52,7 +52,7 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "BadgeCheck", label: bi("حالة التوثيق", "Verification"), value: "موثّق" },
+          { icon: "BadgeCheck", label: bi("حالة التوثيق", "Verification"), value: bi("موثّق", "Verified") },
           { icon: "Eye", label: bi("زيارات الملف", "Profile views"), value: "1,860" },
           { icon: "Star", label: bi("التقييم", "Rating"), value: "4.8" },
           { icon: "Users", label: bi("طلاب", "Students"), value: "126" },

@@ -26,6 +26,8 @@ export interface AccessPage {
   icon: string;
   path: string | null;
   permissions: string[];
+  /** هل مُنح الدور صلاحية «عرض» لهذه الصفحة (يحدّد ظهورها في التنقّل). */
+  canView?: boolean;
   children: AccessPage[];
 }
 

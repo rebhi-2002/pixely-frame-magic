@@ -31,7 +31,12 @@
     "navigation": "Navigation",
     "searchPages": "Search all pages...",
     "faqBadge": "FAQ",
-    "faqTitle": "Have a question? It's probably answered here"
+    "faqTitle": "Have a question? It's probably answered here",
+    "signingOut": "Signing out…",
+    "closeMenu": "Close menu",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "openMenu": "Open menu"
   },
   "nav": {
     "home": "Home",
@@ -208,7 +213,7 @@
       "price": "9",
       "cta": "Start as a teacher"
     },
-    "note": "Prices in US dollars. Cancel anytime.",
+    "note": "Prices in Israeli shekels (ILS). Cancel anytime.",
     "currency": "ILS",
     "forever": "forever",
     "monthly": "per month",

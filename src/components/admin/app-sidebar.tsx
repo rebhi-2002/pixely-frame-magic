@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ChevronDown,
   ChevronLeft,
@@ -13,10 +12,11 @@ import {
   Search,
   Settings,
   Sun,
+  X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { usePreferences } from "@/components/providers/preferences-provider";
-import { supabase } from "@/integrations/supabase/client";
+import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
@@ -28,22 +28,29 @@ function collectPaths(pages: AccessPage[]): string[] {
   return pages.flatMap((p) => [...(p.path ? [p.path] : []), ...collectPaths(p.children)]);
 }
 
+/** كل الصفحات القابلة للفتح داخل قسم — تُستخدم لعرض الأيقونات في الحالة المطويّة. */
+function collectLeaves(pages: AccessPage[]): AccessPage[] {
+  return pages.flatMap((p) => (p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children)));
+}
+
 export function AppSidebar({
   access,
   collapsed,
   onToggle,
+  onClose,
   onNavigate,
 }: {
   access: MyAccess;
   collapsed: boolean;
   onToggle: () => void;
+  /** إغلاق القائمة على الجوال (زر × أعلى القائمة). */
+  onClose?: () => void;
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
   const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { signOut, pending: signingOut } = useSignOut("/");
   const [search, setSearch] = useState("");
   const [flyout, setFlyout] = useState<string | null>(null);
 
@@ -97,13 +104,6 @@ export function AppSidebar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, access.modules, locale]);
 
-  async function handleSignOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/", replace: true });
-  }
-
   const isActive = (path: string | null) => Boolean(path && pathname === path);
 
   const accountItem = (extra?: string) =>
@@ -120,14 +120,27 @@ export function AppSidebar({
         collapsed ? "w-[76px]" : "w-72",
       )}
     >
+      <SignOutOverlay pending={signingOut} />
       <div className="flex items-center justify-between gap-2 px-3 py-4">
         {!collapsed && <BrandLockup />}
+        {/* الجوال: زر إغلاق صريح — الطيّ غير مُتاح على الشاشات الصغيرة */}
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            aria-label={t("common.closeMenu")}
+            className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground md:hidden"
+          >
+            <X className="size-5" />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggle}
-          aria-label={collapsed ? "توسيع القائمة" : "طي القائمة"}
-          className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          aria-label={collapsed ? t("common.expandMenu") : t("common.collapseMenu")}
+          className="hidden text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground md:inline-flex"
         >
           {collapsed ? (
             <PanelRightOpen className="size-5" />
@@ -136,6 +149,7 @@ export function AppSidebar({
           )}
         </Button>
       </div>
+
 
       {!collapsed && (
         <div className="px-3 pb-3">
@@ -203,6 +217,30 @@ export function AppSidebar({
                 )}
               </button>
 
+              {/* مطويّة على الشاشات الكبيرة: تظهر أيقونات كل الصفحات الداخلية أيضاً */}
+              {collapsed && (
+                <ul className="mt-0.5 mb-1 space-y-0.5">
+                  {collectLeaves(m.pages).map((p) => (
+                    <li key={p.key}>
+                      <Link
+                        to={p.path!}
+                        onClick={onNavigate}
+                        title={label(p)}
+                        aria-label={label(p)}
+                        className={cn(
+                          "flex items-center justify-center rounded-lg py-2 transition-colors",
+                          isActive(p.path)
+                            ? "bg-sidebar-primary/15 text-sidebar-primary"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                        )}
+                      >
+                        <DynamicIcon name={p.icon} className="size-4 shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
               {collapsed && flyout === m.key && (
                 <div className="panel-swap absolute top-0 z-50 w-56 rounded-xl border border-sidebar-border bg-sidebar p-2 shadow-xl ltr:left-full ltr:ml-2 rtl:right-full rtl:mr-2">
                   <p className="px-2 py-1 text-xs font-bold text-sidebar-foreground/60">
@@ -221,6 +259,7 @@ export function AppSidebar({
                   />
                 </div>
               )}
+
 
               {!collapsed && open && (
                 <div className="panel-swap mt-1">
@@ -304,14 +343,14 @@ export function AppSidebar({
 
           <button
             type="button"
-            onClick={handleSignOut}
+            onClick={() => void signOut()}
             title={t("common.signOut")}
             className={accountItem(
               "text-destructive hover:bg-destructive/10 hover:text-destructive",
             )}
           >
             <LogOut className="size-4 shrink-0" />
-            {!collapsed && t("common.signOut")}
+            {!collapsed && t(signingOut ? "common.signingOut" : "common.signOut")}
           </button>
         </div>
       </nav>

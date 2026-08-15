@@ -53,9 +53,9 @@ function Body() {
       <StatGrid
         items={[
           { icon: "Users", label: bi("أبناء مرتبطون", "Linked children"), value: "2" },
-          { icon: "Mail", label: bi("تقرير أسبوعي", "Weekly report"), value: "مفعّل" },
-          { icon: "BellRing", label: bi("تنبيهات فورية", "Instant alerts"), value: "مفعّلة" },
-          { icon: "ShieldCheck", label: bi("حالة الحساب", "Account status"), value: "موثّق" },
+          { icon: "Mail", label: bi("تقرير أسبوعي", "Weekly report"), value: bi("مفعّل", "On") },
+          { icon: "BellRing", label: bi("تنبيهات فورية", "Instant alerts"), value: bi("مفعّلة", "On") },
+          { icon: "ShieldCheck", label: bi("حالة الحساب", "Account status"), value: bi("موثّق", "Verified") },
         ]}
       />
       <Panel title={bi("الأبناء المرتبطون", "Linked children")} icon="Users">

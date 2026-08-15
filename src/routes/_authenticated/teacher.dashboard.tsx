@@ -60,7 +60,7 @@ function Body() {
             label: bi("أسئلة بلا جواب", "Unanswered questions"),
             value: "7",
           },
-          { icon: "Wallet", label: bi("أرباح الشهر", "This month"), value: "820 د.أ" },
+          { icon: "Wallet", label: bi("أرباح الشهر", "This month"), value: bi("820 ₪", "820 ILS") },
         ]}
       />
       <Panel title={bi("تفاعل الطلاب بالمادة", "Student engagement by subject")} icon="ChartSpline">

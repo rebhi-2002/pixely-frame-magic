@@ -52,10 +52,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "BadgePercent", label: bi("نموذج التسعير", "Pricing model"), value: "لكل كورس" },
+          { icon: "BadgePercent", label: bi("نموذج التسعير", "Pricing model"), value: bi("لكل كورس", "Per course") },
           { icon: "CalendarClock", label: bi("أوقات التوفّر", "Availability"), value: "5 فترات" },
-          { icon: "Banknote", label: bi("طريقة السحب", "Payout method"), value: "حوالة بنكية" },
-          { icon: "BellRing", label: bi("الإشعارات", "Notifications"), value: "مفعّلة" },
+          { icon: "Banknote", label: bi("طريقة السحب", "Payout method"), value: bi("حوالة بنكية", "Bank transfer") },
+          { icon: "BellRing", label: bi("الإشعارات", "Notifications"), value: bi("مفعّلة", "On") },
         ]}
       />
       <Panel title={bi("الإعدادات", "Settings")} icon="Settings">
@@ -63,7 +63,7 @@ function Body() {
           rows={[
             {
               title: bi("سعر الحصة الخاصة", "Private session price"),
-              meta: bi("20 د.أ / ساعة", "20 JOD / hour"),
+              meta: bi("20 ₪ / ساعة", "20 ILS / hour"),
               value: bi("تعديل", "Edit"),
               tone: "primary",
             },
