@@ -104,13 +104,6 @@ export function AppSidebar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, access.modules, locale]);
 
-  async function handleSignOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/", replace: true });
-  }
-
   const isActive = (path: string | null) => Boolean(path && pathname === path);
 
   const accountItem = (extra?: string) =>
@@ -127,14 +120,27 @@ export function AppSidebar({
         collapsed ? "w-[76px]" : "w-72",
       )}
     >
+      <SignOutOverlay pending={signingOut} />
       <div className="flex items-center justify-between gap-2 px-3 py-4">
         {!collapsed && <BrandLockup />}
+        {/* الجوال: زر إغلاق صريح — الطيّ غير مُتاح على الشاشات الصغيرة */}
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            aria-label={t("common.closeMenu")}
+            className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground md:hidden"
+          >
+            <X className="size-5" />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggle}
-          aria-label={collapsed ? "توسيع القائمة" : "طي القائمة"}
-          className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          aria-label={collapsed ? t("common.expandMenu") : t("common.collapseMenu")}
+          className="hidden text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground md:inline-flex"
         >
           {collapsed ? (
             <PanelRightOpen className="size-5" />
@@ -143,6 +149,7 @@ export function AppSidebar({
           )}
         </Button>
       </div>
+
 
       {!collapsed && (
         <div className="px-3 pb-3">
