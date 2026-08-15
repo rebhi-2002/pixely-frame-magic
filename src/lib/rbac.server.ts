@@ -115,7 +115,7 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
           const perms = Array.from(byPageId.get(p.id) ?? []);
           const canView = useDefaultScope
             ? perms.includes("view_list")
-            : viewable.has(p.id) || (isAdmin && perms.includes("view_list") && false);
+            : viewable.has(p.id);
           return {
             id: p.id,
             key: p.key,
