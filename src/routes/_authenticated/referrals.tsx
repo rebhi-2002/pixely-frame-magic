@@ -55,7 +55,7 @@ function Body() {
           { icon: "Link", label: bi("رابطك", "Your link"), value: "acadimia/r/AH12" },
           { icon: "UserPlus", label: bi("دعوات مُرسلة", "Invites sent"), value: "9" },
           { icon: "CheckCircle2", label: bi("سجّلوا فعلياً", "Joined"), value: "4" },
-          { icon: "Gift", label: bi("مكافآتك", "Rewards"), value: "2 شهور" },
+          { icon: "Gift", label: bi("مكافآتك", "Rewards"), value: bi("2 شهور", "2 months") },
         ]}
       />
       <Panel title={bi("من دعوتهم", "People you invited")} icon="Users">

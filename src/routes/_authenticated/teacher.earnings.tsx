@@ -52,10 +52,10 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "Wallet", label: bi("الرصيد المتاح", "Available"), value: "620 د.أ" },
-          { icon: "Hourglass", label: bi("قيد التسوية", "Pending"), value: "200 د.أ" },
+          { icon: "Wallet", label: bi("الرصيد المتاح", "Available"), value: bi("620 ₪", "620 ILS") },
+          { icon: "Hourglass", label: bi("قيد التسوية", "Pending"), value: bi("200 ₪", "200 ILS") },
           { icon: "BadgePercent", label: bi("عمولة المنصة", "Platform fee"), value: "15%" },
-          { icon: "Banknote", label: bi("إجمالي مسحوب", "Total paid out"), value: "3,450 د.أ" },
+          { icon: "Banknote", label: bi("إجمالي مسحوب", "Total paid out"), value: bi("3,450 ₪", "3,450 ILS") },
         ]}
       />
       <Panel title={bi("آخر الحركات", "Recent transactions")} icon="Receipt">
@@ -70,19 +70,19 @@ function Body() {
             [
               bi("2026/07/30", "2026/07/30"),
               bi("اشتراك كورس تفاضل", "Calculus enrollment"),
-              bi("+45 د.أ", "+45 JOD"),
+              bi("+45 ₪", "+45 ILS"),
               <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>,
             ],
             [
               bi("2026/07/28", "2026/07/28"),
               bi("طلب سحب", "Payout request"),
-              bi("-500 د.أ", "-500 JOD"),
+              bi("-500 ₪", "-500 ILS"),
               <Badge tone="primary">{bi("قيد التنفيذ", "Processing")}</Badge>,
             ],
             [
               bi("2026/07/25", "2026/07/25"),
               bi("اشتراك مراجعة", "Review enrollment"),
-              bi("+15 د.أ", "+15 JOD"),
+              bi("+15 ₪", "+15 ILS"),
               <Badge tone="success">{bi("مؤكد", "Cleared")}</Badge>,
             ],
           ]}

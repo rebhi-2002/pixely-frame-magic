@@ -53,7 +53,7 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "User", label: bi("الابن المتابَع", "Child"), value: "أحمد" },
+          { icon: "User", label: bi("الابن المتابَع", "Child"), value: bi("أحمد", "Ahmad") },
           { icon: "Flame", label: bi("أيام دراسة", "Study days"), value: "5/7" },
           { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "66%" },
           { icon: "AlertTriangle", label: bi("مواد تحتاج دعم", "Needs support"), value: "1" },

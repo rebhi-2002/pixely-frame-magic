@@ -53,9 +53,9 @@ function Body() {
       <StatGrid
         items={[
           { icon: "FileBarChart", label: bi("تقارير جاهزة", "Ready reports"), value: "6" },
-          { icon: "CalendarDays", label: bi("دورية", "Frequency"), value: "أسبوعي" },
+          { icon: "CalendarDays", label: bi("دورية", "Frequency"), value: bi("أسبوعي", "Weekly") },
           { icon: "Download", label: bi("تنزيلات", "Downloads"), value: "42" },
-          { icon: "ShieldCheck", label: bi("بيانات مجهولة الهوية", "Anonymised"), value: "نعم" },
+          { icon: "ShieldCheck", label: bi("بيانات مجهولة الهوية", "Anonymised"), value: bi("نعم", "Yes") },
         ]}
       />
       <Panel title={bi("التقارير", "Reports")} icon="FileBarChart">
