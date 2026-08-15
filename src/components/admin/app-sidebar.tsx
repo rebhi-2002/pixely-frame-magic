@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ChevronDown,
   ChevronLeft,
@@ -13,10 +12,11 @@ import {
   Search,
   Settings,
   Sun,
+  X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { usePreferences } from "@/components/providers/preferences-provider";
-import { supabase } from "@/integrations/supabase/client";
+import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
@@ -28,22 +28,29 @@ function collectPaths(pages: AccessPage[]): string[] {
   return pages.flatMap((p) => [...(p.path ? [p.path] : []), ...collectPaths(p.children)]);
 }
 
+/** كل الصفحات القابلة للفتح داخل قسم — تُستخدم لعرض الأيقونات في الحالة المطويّة. */
+function collectLeaves(pages: AccessPage[]): AccessPage[] {
+  return pages.flatMap((p) => (p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children)));
+}
+
 export function AppSidebar({
   access,
   collapsed,
   onToggle,
+  onClose,
   onNavigate,
 }: {
   access: MyAccess;
   collapsed: boolean;
   onToggle: () => void;
+  /** إغلاق القائمة على الجوال (زر × أعلى القائمة). */
+  onClose?: () => void;
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
   const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { signOut, pending: signingOut } = useSignOut("/");
   const [search, setSearch] = useState("");
   const [flyout, setFlyout] = useState<string | null>(null);
 
