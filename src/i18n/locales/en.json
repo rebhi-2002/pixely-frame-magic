@@ -32,7 +32,11 @@
     "searchPages": "Search all pages...",
     "faqBadge": "FAQ",
     "faqTitle": "Have a question? It's probably answered here",
-    "signingOut": "Signing out…"
+    "signingOut": "Signing out…",
+    "closeMenu": "Close menu",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "openMenu": "Open menu"
   },
   "nav": {
     "home": "Home",

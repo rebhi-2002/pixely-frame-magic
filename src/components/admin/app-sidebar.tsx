@@ -343,14 +343,14 @@ export function AppSidebar({
 
           <button
             type="button"
-            onClick={handleSignOut}
+            onClick={() => void signOut()}
             title={t("common.signOut")}
             className={accountItem(
               "text-destructive hover:bg-destructive/10 hover:text-destructive",
             )}
           >
             <LogOut className="size-4 shrink-0" />
-            {!collapsed && t("common.signOut")}
+            {!collapsed && t(signingOut ? "common.signingOut" : "common.signOut")}
           </button>
         </div>
       </nav>
