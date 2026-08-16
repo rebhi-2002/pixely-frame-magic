@@ -118,7 +118,7 @@ function BlogPostPage() {
                   params={{ slug: o.slug }}
                   className="hover-lift shadow-elevation-1 rounded-2xl border border-border bg-card p-5"
                 >
-                  <p className="text-sm font-bold leading-snug text-foreground">{o.title}</p>
+                  <p className="text-sm font-bold leading-snug text-foreground">{bi(o.title, o.titleEn)}</p>
                 </Link>
               ))}
             </div>
