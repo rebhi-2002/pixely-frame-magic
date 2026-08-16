@@ -63,6 +63,7 @@ function AuthenticatedLayout() {
           access={access}
           collapsed={mobileOpen ? false : collapsed}
           onToggle={() => setCollapsed((c) => !c)}
+          onClose={() => setMobileOpen(false)}
           onNavigate={() => setMobileOpen(false)}
         />
       </div>
@@ -79,13 +80,9 @@ function AuthenticatedLayout() {
           <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
         </div>
         <PageTransition>
-          <div className="pb-20 md:pb-0">
-            <Outlet />
-          </div>
+          <Outlet />
         </PageTransition>
       </main>
-      {/* البند 13 — شريط سفلي للجوال مبني على صلاحيات الدور */}
-      <BottomNav access={access} />
     </div>
   );
 }
