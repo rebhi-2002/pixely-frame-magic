@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import { Guard } from "@/components/app/guard";
 import { AppPage, Badge, DataTable, Panel, StatGrid } from "@/components/app/kit";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart, SplitChart, TrendChart } from "@/components/app/charts";
@@ -284,7 +283,7 @@ const CONFIG: Record<AdminFeature, Config> = {
       ["Shield", "الأدوار", "Roles", "5"],
       ["PanelLeft", "مساحات منفصلة", "Isolated spaces", "5"],
       ["KeyRound", "أدوات صلاحية", "Permission actions", "9"],
-      ["CircleCheck", "العزل", "Isolation", "مفعّل"],
+      ["CircleCheck", "العزل", "Isolation", "5 / 5"],
     ],
     headers: [
       ["الدور", "Role"],
@@ -409,7 +408,7 @@ const CONFIG: Record<AdminFeature, Config> = {
       ["Languages", "اللغات", "Languages", "2"],
       ["Palette", "الثيمات", "Themes", "3"],
       ["Timer", "مهلة الخمول", "Idle timeout", "2h"],
-      ["ShieldCheck", "توثيق المعلم", "Teacher review", "مطلوب"],
+      ["ShieldCheck", "توثيق المعلم", "Teacher review", "100%"],
     ],
     headers: [
       ["الإعداد", "Setting"],
@@ -483,9 +482,6 @@ export function AdminFeaturePage({ feature }: { feature: AdminFeature }) {
                 className="ps-9"
               />
             </div>
-            <Button variant="outline" size="icon" title={bi("الفلاتر", "Filters")}>
-              <SlidersHorizontal className="size-4" />
-            </Button>
           </div>
           <DataTable head={config.headers.map(([ar, en]) => bi(ar, en))} rows={visibleRows} />
         </Panel>

@@ -7,6 +7,7 @@ import { BlogRenderer } from "@/components/site/blog-renderer";
 import { Reveal } from "@/components/ui/reveal";
 import { usePreferences } from "@/components/providers/preferences-provider";
 import { blogPosts, getBlogPost } from "@/content/blog-posts";
+import { useBi } from "@/lib/bi";
 
 export const Route = createFileRoute("/blog/$slug")({
   head: ({ params }) => {
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogPostPage() {
   const { slug } = Route.useParams();
   const { t } = useTranslation();
+  const bi = useBi();
   const { locale } = usePreferences();
   const post = getBlogPost(slug);
 
@@ -70,10 +72,10 @@ function BlogPostPage() {
 
         <Reveal>
           <span className="mt-6 inline-block w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
-            {post.category}
+            {bi(post.category, post.categoryEn)}
           </span>
           <h1 className="mt-4 text-3xl font-bold leading-[1.35] text-foreground sm:text-4xl">
-            {post.title}
+            {bi(post.title, post.titleEn)}
           </h1>
           <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
@@ -116,7 +118,7 @@ function BlogPostPage() {
                   params={{ slug: o.slug }}
                   className="hover-lift shadow-elevation-1 rounded-2xl border border-border bg-card p-5"
                 >
-                  <p className="text-sm font-bold leading-snug text-foreground">{o.title}</p>
+                  <p className="text-sm font-bold leading-snug text-foreground">{bi(o.title, o.titleEn)}</p>
                 </Link>
               ))}
             </div>

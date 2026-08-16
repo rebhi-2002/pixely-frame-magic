@@ -20,6 +20,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
+import { useBi } from "@/lib/bi";
 
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
@@ -63,6 +64,7 @@ const latestPosts = blogPosts.slice(-2).reverse();
 
 function Landing() {
   const { t } = useTranslation();
+  const bi = useBi();
   const { session } = useSession();
   const role = session?.roleKey;
 
@@ -127,10 +129,10 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-14 grid gap-4 sm:grid-cols-3">
+              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
                 {stats.map((s, i) => (
-                  <Reveal key={s.key} delay={i * 0.08}>
-                    <div className="hover-lift shadow-elevation-1 rounded-2xl border border-border bg-card p-5">
+                  <Reveal key={s.key} delay={i * 0.08} className="h-full">
+                    <div className="hover-lift shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
                       <p className="font-display text-3xl font-bold text-primary">
                         <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
                       </p>
@@ -232,12 +234,12 @@ function Landing() {
                 className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
               >
                 <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
-                  {post.category}
+                  {bi(post.category, post.categoryEn)}
                 </span>
                 <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
-                  {post.title}
+                  {bi(post.title, post.titleEn)}
                 </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bi(post.excerpt, post.excerptEn)}</p>
               </Link>
             </Reveal>
           ))}

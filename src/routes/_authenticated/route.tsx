@@ -6,7 +6,6 @@ import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
-import { BottomNav } from "@/components/admin/bottom-nav";
 
 import { useAccess } from "@/hooks/use-access";
 
@@ -63,6 +62,7 @@ function AuthenticatedLayout() {
           access={access}
           collapsed={mobileOpen ? false : collapsed}
           onToggle={() => setCollapsed((c) => !c)}
+          onClose={() => setMobileOpen(false)}
           onNavigate={() => setMobileOpen(false)}
         />
       </div>
@@ -79,13 +79,9 @@ function AuthenticatedLayout() {
           <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
         </div>
         <PageTransition>
-          <div className="pb-20 md:pb-0">
-            <Outlet />
-          </div>
+          <Outlet />
         </PageTransition>
       </main>
-      {/* البند 13 — شريط سفلي للجوال مبني على صلاحيات الدور */}
-      <BottomNav access={access} />
     </div>
   );
 }

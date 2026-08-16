@@ -5,6 +5,7 @@ import { PublicLayout } from "@/components/site/public-layout";
 import { Reveal } from "@/components/ui/reveal";
 import { blogPosts } from "@/content/blog-posts";
 import { usePreferences } from "@/components/providers/preferences-provider";
+import { useBi } from "@/lib/bi";
 
 const title = "مدونة أكاديميا | نصائح دراسة وتحضير للامتحان الوزاري";
 const description =
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/blog")({
 function BlogIndex() {
   const { t } = useTranslation();
   const { locale } = usePreferences();
+  const bi = useBi();
   const fmt = new Intl.DateTimeFormat(locale === "en" ? "en-US" : "ar", {
     year: "numeric",
     month: "long",
@@ -56,13 +58,13 @@ function BlogIndex() {
                   className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
                 >
                   <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
-                    {post.category}
+                    {bi(post.category, post.categoryEn)}
                   </span>
                   <h2 className="mt-4 text-lg font-bold leading-snug text-foreground">
-                    {post.title}
+                    {bi(post.title, post.titleEn)}
                   </h2>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                    {post.excerpt}
+                    {bi(post.excerpt, post.excerptEn)}
                   </p>
                   <div className="mt-5 flex items-center gap-4 border-t border-border pt-4 text-xs text-muted-foreground">
                     <span className="inline-flex items-center gap-1.5">
