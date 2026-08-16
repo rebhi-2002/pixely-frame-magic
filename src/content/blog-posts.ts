@@ -7,8 +7,12 @@ export type BlogBlock =
 export type BlogPost = {
   slug: string;
   title: string;
+  /** العنوان بالإنجليزية — يُستخدم في نسخة EN من الموقع. */
+  titleEn: string;
   excerpt: string;
+  excerptEn: string;
   category: string;
+  categoryEn: string;
   readMinutes: number;
   publishedAt: string; // YYYY-MM-DD
   body: BlogBlock[];
@@ -22,9 +26,13 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "جدول-مذاكرة-يضبط-فعلاً",
     title: "جدول المذاكرة يلي بيضبط، مش يلي بيبين حلو على الورقة",
+    titleEn: "A study schedule that actually holds, not one that looks good on paper",
     excerpt:
       "أغلب جداول المذاكرة بتنكسر باليوم التالت. المشكلة مو فيك، المشكلة إنك بتبني الجدول على الوقت المتوفر مش على طاقتك الفعلية. هيك تبني جدول تلتزم فيه.",
+    excerptEn:
+      "Most study schedules break on day three. The problem isn't you — you built the plan around available hours instead of your real energy. Here's how to build one you'll stick to.",
     category: "تنظيم الوقت",
+    categoryEn: "Time management",
     readMinutes: 6,
     publishedAt: "2026-06-02",
     body: [
@@ -73,9 +81,13 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "الاستدعاء-النشط-وليش-القراءة-مش-كافية",
     title: "ليش تعيد قراءة الدرس مرتين ما بيثبته، والاستدعاء النشط بيثبته",
+    titleEn: "Why rereading a lesson twice doesn't stick, but active recall does",
     excerpt:
       "بتحس إنك فاهم وقت بتقرأ، وبتنسى وقت الامتحان؟ هاي أشهر خدعة بيلعبها دماغك عليك. في طريقة أثبتت علمياً إنها أقوى بكتير — وهي أبسط مما تتخيل.",
+    excerptEn:
+      "Rereading feels productive and teaches you almost nothing. Active recall feels hard and is what actually moves knowledge into long-term memory.",
     category: "أساليب المذاكرة",
+    categoryEn: "Study methods",
     readMinutes: 7,
     publishedAt: "2026-06-18",
     body: [
@@ -120,9 +132,13 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "مادة-بتكرهها-كيف-تتحملها-لنهاية-السنة",
     title: "مادة بتكرهها بس لازم تذاكرها؟ هيك تتحمّلها لنهاية السنة",
+    titleEn: "A subject you hate but still have to study? Here's how to survive it",
     excerpt:
       "كل طالب عنده مادة بتحس تجاهها بحائط. مش لازم تحبها عشان تنجح فيها، بس لازم تغيّر طريقة تعاملك معها. هاي خطوات عملية جربها طلاب كتير قبلك.",
+    excerptEn:
+      "You don't need to love the subject. You need a system that gets you through it without wrecking the rest of your schedule.",
     category: "الجانب النفسي",
+    categoryEn: "Mindset",
     readMinutes: 5,
     publishedAt: "2026-07-05",
     body: [
@@ -168,9 +184,13 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "بنك-الأخطاء-أذكى-أداة-ما-بتستخدمها",
     title: "بنك الأخطاء: أذكى أداة مذاكرة موجودة، وأغلب الطلاب ما بيستخدموها",
+    titleEn: "The mistake bank: the smartest study tool out there, and most students skip it",
     excerpt:
       "مو كل المراجعة نفس القيمة. مراجعة عامة بتاخد وقت وبترجع فايدة قليلة، بينما ورقة صغيرة فيها أخطاءك الفعلية بتوفرلك أسابيع من التخبيط. هيك تبنيها من الصفر.",
+    excerptEn:
+      "Every wrong answer is a precise map of what you don't know yet. Logging mistakes turns them into your highest-return revision list.",
     category: "أساليب المذاكرة",
+    categoryEn: "Study methods",
     readMinutes: 6,
     publishedAt: "2026-07-22",
     body: [
