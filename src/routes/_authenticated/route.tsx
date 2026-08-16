@@ -6,7 +6,6 @@ import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
-import { BottomNav } from "@/components/admin/bottom-nav";
 
 import { useAccess } from "@/hooks/use-access";
 
