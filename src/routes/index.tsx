@@ -127,10 +127,10 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-14 grid gap-4 sm:grid-cols-3">
+              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
                 {stats.map((s, i) => (
-                  <Reveal key={s.key} delay={i * 0.08}>
-                    <div className="hover-lift shadow-elevation-1 rounded-2xl border border-border bg-card p-5">
+                  <Reveal key={s.key} delay={i * 0.08} className="h-full">
+                    <div className="hover-lift shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
                       <p className="font-display text-3xl font-bold text-primary">
                         <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
                       </p>

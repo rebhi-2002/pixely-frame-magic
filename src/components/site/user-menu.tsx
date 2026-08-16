@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { ChevronDown, LayoutDashboard, Languages, LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { usePreferences } from "@/components/providers/preferences-provider";
+import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import type { PublicSession } from "@/hooks/use-session";
 
 const item =
@@ -15,8 +14,7 @@ export function UserMenu({ session }: { session: PublicSession }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { signOut, pending: signingOut } = useSignOut("/");
   const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
 
   useEffect(() => {
@@ -28,17 +26,11 @@ export function UserMenu({ session }: { session: PublicSession }) {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/", replace: true });
-  }
-
   const initial = session.fullName.trim().charAt(0) || "A";
 
   return (
     <div ref={ref} className="relative">
+      <SignOutOverlay pending={signingOut} />
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -86,11 +78,11 @@ export function UserMenu({ session }: { session: PublicSession }) {
           <div className="mt-1.5 border-t border-border pt-1.5">
             <button
               type="button"
-              onClick={signOut}
+              onClick={() => void signOut()}
               className={`${item} text-destructive hover:bg-destructive/10 hover:text-destructive`}
             >
               <LogOut className="size-4" />
-              {t("common.signOut")}
+              {t(signingOut ? "common.signingOut" : "common.signOut")}
             </button>
           </div>
         </div>

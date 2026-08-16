@@ -283,7 +283,7 @@ const CONFIG: Record<AdminFeature, Config> = {
       ["Shield", "الأدوار", "Roles", "5"],
       ["PanelLeft", "مساحات منفصلة", "Isolated spaces", "5"],
       ["KeyRound", "أدوات صلاحية", "Permission actions", "9"],
-      ["CircleCheck", "العزل", "Isolation", "Enabled"],
+      ["CircleCheck", "العزل", "Isolation", "5 / 5"],
     ],
     headers: [
       ["الدور", "Role"],
@@ -408,7 +408,7 @@ const CONFIG: Record<AdminFeature, Config> = {
       ["Languages", "اللغات", "Languages", "2"],
       ["Palette", "الثيمات", "Themes", "3"],
       ["Timer", "مهلة الخمول", "Idle timeout", "2h"],
-      ["ShieldCheck", "توثيق المعلم", "Teacher review", "Required"],
+      ["ShieldCheck", "توثيق المعلم", "Teacher review", "100%"],
     ],
     headers: [
       ["الإعداد", "Setting"],

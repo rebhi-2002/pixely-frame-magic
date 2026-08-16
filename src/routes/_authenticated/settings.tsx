@@ -1,10 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { LogOut, Palette, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/admin/page-header";
 import { usePreferences } from "@/components/providers/preferences-provider";
+import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import { useAccess } from "@/hooks/use-access";
 import { Guard } from "@/components/app/guard";
 
@@ -29,20 +28,13 @@ const LOCALES = ["ar", "en"] as const;
 
 function SettingsPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { access } = useAccess();
+  const { signOut, pending: signingOut } = useSignOut("/login");
   const { theme, setTheme, locale, setLocale } = usePreferences();
-
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/login", replace: true });
-  }
 
   return (
     <div>
+      <SignOutOverlay pending={signingOut} />
       <PageHeader title={t("settings.h1")} icon="Settings" />
       <div className="mx-auto max-w-3xl px-5 py-6">
         <p className="text-sm text-muted-foreground">{t("settings.sub")}</p>
@@ -123,11 +115,11 @@ function SettingsPage() {
           <p className="mt-3 text-sm text-muted-foreground">{t("settings.idleNote")}</p>
           <button
             type="button"
-            onClick={signOut}
+            onClick={() => void signOut()}
             className="mt-5 inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
           >
             <LogOut className="size-4" />
-            {t("settings.signOut")}
+            {t(signingOut ? "common.signingOut" : "settings.signOut")}
           </button>
         </section>
       </div>
