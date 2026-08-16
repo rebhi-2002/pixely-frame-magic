@@ -232,12 +232,12 @@ function Landing() {
                 className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
               >
                 <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
-                  {post.category}
+                  {bi(post.category, post.categoryEn)}
                 </span>
                 <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
-                  {post.title}
+                  {bi(post.title, post.titleEn)}
                 </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bi(post.excerpt, post.excerptEn)}</p>
               </Link>
             </Reveal>
           ))}
