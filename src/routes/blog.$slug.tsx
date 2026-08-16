@@ -7,6 +7,7 @@ import { BlogRenderer } from "@/components/site/blog-renderer";
 import { Reveal } from "@/components/ui/reveal";
 import { usePreferences } from "@/components/providers/preferences-provider";
 import { blogPosts, getBlogPost } from "@/content/blog-posts";
+import { useBi } from "@/lib/bi";
 
 export const Route = createFileRoute("/blog/$slug")({
   head: ({ params }) => {
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogPostPage() {
   const { slug } = Route.useParams();
   const { t } = useTranslation();
+  const bi = useBi();
   const { locale } = usePreferences();
   const post = getBlogPost(slug);
 

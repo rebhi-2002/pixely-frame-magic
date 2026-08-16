@@ -20,6 +20,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
+import { useBi } from "@/lib/bi";
 
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
@@ -63,6 +64,7 @@ const latestPosts = blogPosts.slice(-2).reverse();
 
 function Landing() {
   const { t } = useTranslation();
+  const bi = useBi();
   const { session } = useSession();
   const role = session?.roleKey;
 
