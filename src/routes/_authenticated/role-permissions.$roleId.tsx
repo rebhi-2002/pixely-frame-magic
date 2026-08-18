@@ -10,7 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getPermissionMatrix, saveRolePermissions } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY } from "@/hooks/use-access";
-import type { PermissionMatrix, TreePage } from "@/lib/rbac-types";
+import {
+  PERMISSION_LABEL_EN,
+  ROLE_NAME_EN,
+  type PermissionMatrix,
+  type TreePage,
+} from "@/lib/rbac-types";
+import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
@@ -34,6 +40,7 @@ function collectPages(pages: TreePage[]): TreePage[] {
 
 function RolePermissionsPage() {
   const { roleId } = Route.useParams();
+  const bi = useBi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const fetchMatrix = useServerFn(getPermissionMatrix);
@@ -64,9 +71,10 @@ function RolePermissionsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["permission-matrix", roleId] });
       queryClient.invalidateQueries({ queryKey: ACCESS_QUERY_KEY });
-      toast.success("تم حفظ الصلاحيات");
+      toast.success(bi("تم حفظ الصلاحيات", "Permissions saved"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
   });
 
   const keys = data?.permissionKeys ?? [];
@@ -117,7 +125,7 @@ function RolePermissionsPage() {
   if (isLoading || !data) {
     return (
       <div>
-        <PageHeader title="الصلاحيات" icon="ShieldCheck" />
+        <PageHeader title={bi("الصلاحيات", "Permissions")} icon="ShieldCheck" />
         <div className="flex justify-center p-16">
           <Loader2 className="size-6 animate-spin text-primary" />
         </div>
@@ -125,18 +133,22 @@ function RolePermissionsPage() {
     );
   }
 
+  const roleName = bi(data.roleName, ROLE_NAME_EN[data.roleName] ?? data.roleName);
+
   return (
     <div className="pb-24">
       <PageHeader
-        title={`صلاحيات: ${data.roleName}`}
+        title={bi(`صلاحيات: ${data.roleName}`, `Permissions: ${roleName}`)}
         icon="ShieldCheck"
         onBack={() => navigate({ to: "/user-types" })}
       />
 
       <div className="space-y-3 p-5">
         <p className="text-sm text-muted-foreground">
-          تحديد الوحدة يفعّل كل صفحاتها وأدواتها، ويمكنك بعدها إلغاء أي أداة بشكل مستقل. الحفظ لا
-          يتم إلا بالضغط على زر الحفظ بالأسفل.
+          {bi(
+            "تحديد الوحدة يفعّل كل صفحاتها وأدواتها، ويمكنك بعدها إلغاء أي أداة بشكل مستقل. الحفظ لا يتم إلا بالضغط على زر الحفظ بالأسفل.",
+            "Selecting a module enables all its pages and tools; you can then disable any tool individually. Nothing is saved until you press the save button below.",
+          )}
         </p>
 
         {data.modules.map((mod) => {
@@ -156,11 +168,11 @@ function RolePermissionsPage() {
                 <Checkbox
                   checked={modAll ? true : modOn ? "indeterminate" : false}
                   onCheckedChange={(v) => toggleModule(mod.id, v === true)}
-                  aria-label={mod.name}
+                  aria-label={bi(mod.name, mod.nameEn)}
                 />
                 <button
                   type="button"
-                  className="flex flex-1 items-center gap-2 text-right"
+                  className="flex flex-1 items-center gap-2 text-start"
                   onClick={() =>
                     setOpenModules((prev) => {
                       const next = new Set(prev);
@@ -171,15 +183,17 @@ function RolePermissionsPage() {
                   }
                 >
                   <DynamicIcon name={mod.icon} className="size-4 text-primary" />
-                  <span className="text-sm font-bold text-foreground">{mod.name}</span>
+                  <span className="text-sm font-bold text-foreground">
+                    {bi(mod.name, mod.nameEn)}
+                  </span>
                   {!mod.enabled && (
                     <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                      الوحدة معطّلة بالنظام
+                      {bi("الوحدة معطّلة بالنظام", "Module disabled system-wide")}
                     </span>
                   )}
                   <ChevronDown
                     className={cn(
-                      "mr-auto size-4 text-muted-foreground transition-transform",
+                      "ms-auto size-4 text-muted-foreground transition-transform",
                       isOpen && "rotate-180",
                     )}
                   />
@@ -210,15 +224,20 @@ function RolePermissionsPage() {
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 p-4 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground">
-            {granted.size} صلاحية محددة عبر {allPages.length} صفحة
+            {bi(
+              `${granted.size} صلاحية محددة عبر ${allPages.length} صفحة`,
+              `${granted.size} permissions set across ${allPages.length} pages`,
+            )}
           </span>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => setGranted(new Set(data.granted))}>
-              تراجع
+              {bi("تراجع", "Reset")}
             </Button>
             <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
               <Save className="size-4" />
-              {saveMutation.isPending ? "جارٍ الحفظ..." : "حفظ الصلاحيات"}
+              {saveMutation.isPending
+                ? bi("جارٍ الحفظ...", "Saving...")
+                : bi("حفظ الصلاحيات", "Save permissions")}
             </Button>
           </div>
         </div>
@@ -244,21 +263,25 @@ function PageRow({
   onTogglePage: (page: TreePage, on: boolean) => void;
   pageState: (page: TreePage) => "all" | "some" | "none";
 }) {
+  const bi = useBi();
   const state = pageState(page);
   return (
     <>
-      <div className="px-4 py-3" style={{ paddingRight: 16 + depth * 24 }}>
+      {/* paddingInlineStart (منطقي) بدل paddingRight الثابت — يعمل صح بـRTL وLTR معاً */}
+      <div className="px-4 py-3" style={{ paddingInlineStart: 16 + depth * 24 }}>
         <div className="flex items-center gap-3">
           <Checkbox
             checked={state === "all" ? true : state === "some" ? "indeterminate" : false}
             onCheckedChange={(v) => onTogglePage(page, v === true)}
-            aria-label={page.name}
+            aria-label={bi(page.name, page.nameEn)}
           />
           <DynamicIcon name={page.icon} className="size-4 text-muted-foreground" />
-          <span className="text-sm font-semibold text-foreground">{page.name}</span>
+          <span className="text-sm font-semibold text-foreground">
+            {bi(page.name, page.nameEn)}
+          </span>
         </div>
 
-        <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 pr-8">
+        <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 ps-8">
           {keys.map((k) => {
             const entry = `${page.id}:${k.key}`;
             return (
@@ -267,7 +290,9 @@ function PageRow({
                   checked={granted.has(entry)}
                   onCheckedChange={(v) => onToggleEntry(entry, v === true)}
                 />
-                <span className="text-muted-foreground">{k.label}</span>
+                <span className="text-muted-foreground">
+                  {bi(k.label, PERMISSION_LABEL_EN[k.key] ?? k.label)}
+                </span>
               </label>
             );
           })}

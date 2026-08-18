@@ -11,6 +11,7 @@ import {
   EmptyState,
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
+import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 
@@ -51,6 +52,16 @@ function Body() {
         "Everything in one place: today's progress, upcoming tasks, and subjects that need review.",
       )}
     >
+      <WelcomeBanner
+        subtitle={[
+          "خطتك اليوم جاهزة — راجع مهامك القريبة وكمّل سلسلة أيامك المتتالية.",
+          "Your plan for today is ready — check upcoming tasks and keep your streak going.",
+        ]}
+        tip={[
+          "12 يوم متتالي 🔥 — لا تكسر السلسلة اليوم",
+          "12-day streak 🔥 — don't break it today",
+        ]}
+      />
       <StatGrid
         items={[
           { icon: "Flame", label: bi("أيام متتالية", "Streak days"), value: "12" },

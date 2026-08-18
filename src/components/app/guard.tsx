@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ShieldAlert } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
 import { pageMatchesRole, roleHome, roleKeyFromName, useBi } from "@/lib/bi";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
+import { ForbiddenIllustration } from "@/components/site/illustrations";
 
 /** حراسة الصفحة على الواجهة (الحراسة الحقيقية على السيرفر في rbac.server.ts). */
 export function useCanView(pageKey: string) {
@@ -19,11 +19,9 @@ export function Forbidden() {
   const bi = useBi();
   const { access } = useAccess();
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-5 text-center">
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
-        <ShieldAlert className="size-7" />
-      </span>
-      <h1 className="mt-4 font-display text-xl font-bold text-foreground">
+    <div className="surface-mesh flex min-h-screen flex-col items-center justify-center bg-background px-5 text-center">
+      <ForbiddenIllustration className="h-32 w-auto" />
+      <h1 className="mt-2 font-display text-xl font-bold text-foreground">
         {bi("هذه الصفحة ليست جزءاً من مساحتك", "This page is not part of your space")}
       </h1>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
@@ -34,7 +32,7 @@ export function Forbidden() {
       </p>
       <Link
         to={roleHome(access?.profile?.role_name, access?.isAdmin)}
-        className="mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90"
+        className="btn-shine hover-press mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
       >
         {bi("رجوع إلى مساحتي", "Back to my space")}
       </Link>

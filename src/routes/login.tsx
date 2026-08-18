@@ -10,14 +10,15 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { ensureDemoAccount } from "@/lib/demo-auth.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { useBi } from "@/lib/bi";
 
 /* أزرار دخول سريعة للاختبار فقط — تُحذف قبل النشر النهائي. */
 const DEMO_ROLES = [
-  { role: "admin", label: "أدمن" },
-  { role: "supervisor", label: "مشرف" },
-  { role: "teacher", label: "معلم" },
-  { role: "parent", label: "ولي أمر" },
-  { role: "student", label: "طالب" },
+  { role: "admin", ar: "أدمن", en: "Admin" },
+  { role: "supervisor", ar: "مشرف", en: "Supervisor" },
+  { role: "teacher", ar: "معلم", en: "Teacher" },
+  { role: "parent", ar: "ولي أمر", en: "Parent" },
+  { role: "student", ar: "طالب", en: "Student" },
 ] as const;
 
 const title = "تسجيل الدخول | Academia";
@@ -49,6 +50,7 @@ const schema = z.object({
 
 function LoginPage() {
   const { t } = useTranslation();
+  const bi = useBi();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -65,7 +67,9 @@ function LoginPage() {
       toast.success(t("authPages.login.success"));
       navigate({ to: "/", replace: true });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "تعذّر الدخول التجريبي");
+      toast.error(
+        err instanceof Error ? err.message : bi("تعذّر الدخول التجريبي", "Demo login failed"),
+      );
     } finally {
       setDemoBusy(null);
     }
@@ -139,7 +143,7 @@ function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="btn-shine hover-press w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
         >
           {loading ? t("common.loading") : t("authPages.login.submit")}
         </button>
@@ -155,14 +159,14 @@ function LoginPage() {
         type="button"
         onClick={google}
         disabled={loading}
-        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold text-foreground transition-colors hover:bg-secondary disabled:opacity-60"
+        className="hover-press w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary disabled:opacity-60"
       >
         {t("authPages.login.google")}
       </button>
 
       <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
         <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
-          دخول سريع للاختبار (مؤقت)
+          {bi("دخول سريع للاختبار (مؤقت)", "Quick test login (temporary)")}
         </p>
         <div className="flex flex-wrap justify-center gap-2">
           {DEMO_ROLES.map((d) => (
@@ -173,7 +177,7 @@ function LoginPage() {
               onClick={() => quickLogin(d.role)}
               className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
             >
-              {demoBusy === d.role ? "…" : d.label}
+              {demoBusy === d.role ? "…" : bi(d.ar, d.en)}
             </button>
           ))}
         </div>

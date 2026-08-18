@@ -26,9 +26,10 @@ export function SystemModulesPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["modules"] });
       queryClient.invalidateQueries({ queryKey: ACCESS_QUERY_KEY });
-      toast.success("تم حفظ حالة الوحدة");
+      toast.success(bi("تم حفظ حالة الوحدة", "Module status saved"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
   });
 
   const editable = can("admin_settings", "edit");
@@ -51,7 +52,7 @@ export function SystemModulesPage() {
               <Loader2 className="size-5 animate-spin text-primary" />
             </div>
           ) : (
-            <table className="w-full text-right text-sm">
+            <table className="w-full text-start text-sm">
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
                   <th className="w-16 px-4 py-3 font-semibold">#</th>
@@ -66,7 +67,7 @@ export function SystemModulesPage() {
                     <td className="px-4 py-3">
                       <span className="flex items-center gap-2 font-semibold text-foreground">
                         <DynamicIcon name={m.icon} className="size-4 text-muted-foreground" />
-                        {m.name}
+                        {bi(m.name, m.nameEn)}
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -76,7 +77,7 @@ export function SystemModulesPage() {
                         onCheckedChange={(checked) =>
                           mutation.mutate({ id: m.id, enabled: checked })
                         }
-                        aria-label={`تفعيل ${m.name}`}
+                        aria-label={bi(`تفعيل ${m.name}`, `Enable ${m.nameEn}`)}
                       />
                     </td>
                   </tr>

@@ -11,6 +11,7 @@ import {
   EmptyState,
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
+import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart } from "@/components/app/charts";
 
@@ -51,6 +52,13 @@ function Body() {
         "Your classes today: what needs grading, questions awaiting you, and student performance.",
       )}
     >
+      <WelcomeBanner
+        subtitle={[
+          "عندك أسئلة بانتظار الرد وطلاب بانتظار تصحيح — خلّي صفوفك بأفضل حال.",
+          "You have questions waiting and grading pending — keep your classes running smoothly.",
+        ]}
+        tip={["3 أسئلة جديدة بمجتمع الصف", "3 new questions in the class community"]}
+      />
       <StatGrid
         items={[
           { icon: "Users", label: bi("طلابك", "Students"), value: "126" },

@@ -4,6 +4,7 @@ import { DynamicIcon } from "@/components/admin/dynamic-icon";
 import { PageHeader } from "@/components/admin/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { EmptyIllustration } from "@/components/site/illustrations";
 import { cn } from "@/lib/utils";
 
 /** يفصل رقم القيمة عن البادئة/اللاحقة النصية — مثال: "86%" → {prefix:"", num:86, suffix:"%"} */
@@ -204,13 +205,17 @@ export function Progress({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function EmptyState({ text, icon = "Inbox" }: { text: string; icon?: string }) {
+export function EmptyState({ text, icon }: { text: string; icon?: string }) {
   return (
-    <div className="flex flex-col items-center gap-2.5 rounded-2xl border border-dashed border-border bg-secondary/20 py-10 text-center">
-      <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
-        <DynamicIcon name={icon} className="size-5" />
-      </span>
-      <p className="text-sm text-muted-foreground">{text}</p>
+    <div className="flex flex-col items-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 py-8 text-center">
+      {icon ? (
+        <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
+          <DynamicIcon name={icon} className="size-5" />
+        </span>
+      ) : (
+        <EmptyIllustration className="h-20 w-auto" />
+      )}
+      <p className="mt-1 text-sm text-muted-foreground">{text}</p>
     </div>
   );
 }

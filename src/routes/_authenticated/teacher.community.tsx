@@ -55,7 +55,11 @@ function Body() {
           { icon: "MessagesSquare", label: bi("أسئلة مفتوحة", "Open questions"), value: "7" },
           { icon: "CheckCheck", label: bi("أجبت هذا الأسبوع", "Answered this week"), value: "23" },
           { icon: "Flag", label: bi("بلاغات", "Reports"), value: "1" },
-          { icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: "4 س" },
+          {
+            icon: "Clock",
+            label: bi("متوسط زمن الرد", "Avg. response"),
+            value: bi("4 س", "4 hrs"),
+          },
         ]}
       />
       <Panel title={bi("بانتظار جوابك", "Awaiting your answer")} icon="MessagesSquare">

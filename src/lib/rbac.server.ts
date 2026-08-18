@@ -113,9 +113,7 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
         .map((p) => {
           const children = build(p.id);
           const perms = Array.from(byPageId.get(p.id) ?? []);
-          const canView = useDefaultScope
-            ? perms.includes("view_list")
-            : viewable.has(p.id);
+          const canView = useDefaultScope ? perms.includes("view_list") : viewable.has(p.id);
           return {
             id: p.id,
             key: p.key,
@@ -243,6 +241,7 @@ export async function loadPermissionMatrix(sb: DB, roleId: string): Promise<Perm
           id: p.id,
           key: p.key,
           name: p.name,
+          nameEn: p.name_en ?? p.name,
           icon: p.icon,
           path: p.path,
           children: build(p.id),
@@ -251,6 +250,7 @@ export async function loadPermissionMatrix(sb: DB, roleId: string): Promise<Perm
       id: m.id,
       key: m.key,
       name: m.name,
+      nameEn: m.name_en ?? m.name,
       icon: m.icon,
       enabled: m.enabled,
       pages: build(null),

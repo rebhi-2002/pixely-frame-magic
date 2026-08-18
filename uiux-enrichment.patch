@@ -1,0 +1,649 @@
+diff --git a/src/components/admin/admin-feature.tsx b/src/components/admin/admin-feature.tsx
+index 31e6715..65198ad 100644
+--- a/src/components/admin/admin-feature.tsx
++++ b/src/components/admin/admin-feature.tsx
+@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
+ import { Search } from "lucide-react";
+ import { Guard } from "@/components/app/guard";
+ import { AppPage, Badge, DataTable, Panel, StatGrid } from "@/components/app/kit";
++import { WelcomeBanner } from "@/components/app/welcome-banner";
+ import { Input } from "@/components/ui/input";
+ import { useBi } from "@/lib/bi";
+ import { ComparisonChart, SplitChart, TrendChart } from "@/components/app/charts";
+@@ -455,6 +456,15 @@ export function AdminFeaturePage({ feature }: { feature: AdminFeature }) {
+   return (
+     <Guard pageKey={config.pageKey}>
+       <AppPage title={bi(...config.title)} icon={config.icon} subtitle={bi(...config.subtitle)}>
++        {feature === "dashboard" && (
++          <WelcomeBanner
++            subtitle={[
++              "نظرة تشغيلية شاملة على منصة أكاديميا — المستخدمين، الوحدات، والأداء العام.",
++              "A full operational view of Academia — users, modules, and overall performance.",
++            ]}
++            tip={["كل الأنظمة تعمل بشكل طبيعي ✅", "All systems operating normally ✅"]}
++          />
++        )}
+         <StatGrid
+           items={config.stats.map(([icon, ar, en, value]) => ({ icon, label: bi(ar, en), value }))}
+         />
+diff --git a/src/components/app/guard.tsx b/src/components/app/guard.tsx
+index 063e43d..406efb1 100644
+--- a/src/components/app/guard.tsx
++++ b/src/components/app/guard.tsx
+@@ -1,8 +1,8 @@
+ import { Link } from "@tanstack/react-router";
+-import { ShieldAlert } from "lucide-react";
+ import { useAccess } from "@/hooks/use-access";
+ import { pageMatchesRole, roleHome, roleKeyFromName, useBi } from "@/lib/bi";
+ import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
++import { ForbiddenIllustration } from "@/components/site/illustrations";
+ 
+ /** حراسة الصفحة على الواجهة (الحراسة الحقيقية على السيرفر في rbac.server.ts). */
+ export function useCanView(pageKey: string) {
+@@ -19,11 +19,9 @@ export function Forbidden() {
+   const bi = useBi();
+   const { access } = useAccess();
+   return (
+-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-5 text-center">
+-      <span className="flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
+-        <ShieldAlert className="size-7" />
+-      </span>
+-      <h1 className="mt-4 font-display text-xl font-bold text-foreground">
++    <div className="surface-mesh flex min-h-screen flex-col items-center justify-center bg-background px-5 text-center">
++      <ForbiddenIllustration className="h-32 w-auto" />
++      <h1 className="mt-2 font-display text-xl font-bold text-foreground">
+         {bi("هذه الصفحة ليست جزءاً من مساحتك", "This page is not part of your space")}
+       </h1>
+       <p className="mt-2 max-w-md text-sm text-muted-foreground">
+@@ -34,7 +32,7 @@ export function Forbidden() {
+       </p>
+       <Link
+         to={roleHome(access?.profile?.role_name, access?.isAdmin)}
+-        className="mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90"
++        className="btn-shine hover-press mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+       >
+         {bi("رجوع إلى مساحتي", "Back to my space")}
+       </Link>
+diff --git a/src/components/app/kit.tsx b/src/components/app/kit.tsx
+index d8a2cbf..dc6bbc3 100644
+--- a/src/components/app/kit.tsx
++++ b/src/components/app/kit.tsx
+@@ -4,6 +4,7 @@ import { DynamicIcon } from "@/components/admin/dynamic-icon";
+ import { PageHeader } from "@/components/admin/page-header";
+ import { Reveal } from "@/components/ui/reveal";
+ import { AnimatedCounter } from "@/components/ui/animated-counter";
++import { EmptyIllustration } from "@/components/site/illustrations";
+ import { cn } from "@/lib/utils";
+ 
+ /** يفصل رقم القيمة عن البادئة/اللاحقة النصية — مثال: "86%" → {prefix:"", num:86, suffix:"%"} */
+@@ -204,13 +205,17 @@ export function Progress({ label, value }: { label: string; value: number }) {
+   );
+ }
+ 
+-export function EmptyState({ text, icon = "Inbox" }: { text: string; icon?: string }) {
++export function EmptyState({ text, icon }: { text: string; icon?: string }) {
+   return (
+-    <div className="flex flex-col items-center gap-2.5 rounded-2xl border border-dashed border-border bg-secondary/20 py-10 text-center">
+-      <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
+-        <DynamicIcon name={icon} className="size-5" />
+-      </span>
+-      <p className="text-sm text-muted-foreground">{text}</p>
++    <div className="flex flex-col items-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 py-8 text-center">
++      {icon ? (
++        <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
++          <DynamicIcon name={icon} className="size-5" />
++        </span>
++      ) : (
++        <EmptyIllustration className="h-20 w-auto" />
++      )}
++      <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+     </div>
+   );
+ }
+diff --git a/src/components/app/welcome-banner.tsx b/src/components/app/welcome-banner.tsx
+new file mode 100644
+index 0000000..3380f6f
+--- /dev/null
++++ b/src/components/app/welcome-banner.tsx
+@@ -0,0 +1,50 @@
++import type { ReactNode } from "react";
++import { WelcomeIllustration } from "@/components/site/illustrations";
++import { Reveal } from "@/components/ui/reveal";
++import { useSession } from "@/hooks/use-session";
++import { useBi } from "@/lib/bi";
++
++/**
++ * WelcomeBanner — بانر شخصي بأعلى كل لوحة تحكم (طالب/معلم/ولي أمر/مشرف/أدمن).
++ * الاسم حقيقي (من الجلسة)؛ العنوان الفرعي والنصيحة مخصّصة لكل دور عبر props.
++ */
++export function WelcomeBanner({
++  subtitle,
++  tip,
++}: {
++  /** جملة ثانوية مخصّصة للدور — [عربي, إنجليزي] */
++  subtitle: readonly [string, string];
++  /** نصيحة/تلميح قصير يظهر كشارة صغيرة تحت العنوان — اختياري */
++  tip?: readonly [string, string];
++}) {
++  const { session } = useSession();
++  const bi = useBi();
++  const firstName = session?.fullName?.trim().split(/\s+/)[0];
++  const greeting = firstName
++    ? bi(`أهلاً ${firstName} 👋`, `Hi ${firstName} 👋`)
++    : bi("أهلاً بيك 👋", "Welcome 👋");
++
++  return (
++    <Reveal>
++      <div className="surface-mesh shadow-elevation-1 relative overflow-hidden rounded-2xl border border-border">
++        <div className="relative flex items-center gap-6 px-6 py-6">
++          <div className="min-w-0 flex-1">
++            <h2 className="text-xl font-bold text-foreground sm:text-2xl">{greeting}</h2>
++            <p className="mt-1.5 max-w-md text-sm text-muted-foreground">{bi(...subtitle)}</p>
++            {tip && (
++              <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary/12 px-3 py-1 text-xs font-semibold text-primary">
++                {bi(...tip)}
++              </span>
++            )}
++          </div>
++          <WelcomeIllustration className="hidden h-28 w-auto shrink-0 sm:block" />
++        </div>
++      </div>
++    </Reveal>
++  );
++}
++
++/** غلاف بسيط لإضافة محتوى إضافي (مثل بطاقات سريعة) بجانب البانر عند الحاجة. */
++export function WelcomeBannerRow({ children }: { children: ReactNode }) {
++  return <div className="space-y-5">{children}</div>;
++}
+diff --git a/src/components/site/auth-shell.tsx b/src/components/site/auth-shell.tsx
+index c650fb0..558b489 100644
+--- a/src/components/site/auth-shell.tsx
++++ b/src/components/site/auth-shell.tsx
+@@ -1,8 +1,25 @@
+ import type { ReactNode } from "react";
+ import { Link } from "@tanstack/react-router";
+ import { useTranslation } from "react-i18next";
++import { BookOpenCheck, LineChart, XCircle } from "lucide-react";
+ import { BrandMark } from "@/components/site/public-layout";
+ import { PreferenceToggles } from "@/components/site/preference-toggles";
++import { WelcomeIllustration } from "@/components/site/illustrations";
++import { useBi } from "@/lib/bi";
++
++const sidePoints = [
++  {
++    icon: BookOpenCheck,
++    ar: "مكتبة ذكية منظّمة حسب المنهاج",
++    en: "A smart library organized by curriculum",
++  },
++  { icon: LineChart, ar: "متابعة تقدّم يومية بدون تعقيد", en: "Simple daily progress tracking" },
++  {
++    icon: XCircle,
++    ar: "بنك أخطاء يذكّرك بنقاط ضعفك",
++    en: "A mistake bank that flags your weak spots",
++  },
++] as const;
+ 
+ /** غلاف موحّد لكل صفحات المصادقة (هوية أكاديميا: سطح داكن + شبكة خفيفة). */
+ export function AuthShell({
+@@ -19,31 +36,56 @@ export function AuthShell({
+   wide?: boolean;
+ }) {
+   const { t } = useTranslation();
++  const bi = useBi();
+   return (
+-    <div className="surface-grid flex min-h-screen flex-col bg-background">
++    <div className="surface-mesh flex min-h-screen flex-col bg-background">
+       <header className="flex items-center justify-between px-5 py-4">
+         <BrandMark />
+         <PreferenceToggles />
+       </header>
+ 
+       <main className="flex flex-1 items-center justify-center px-4 py-8">
+-        <div
+-          className={`w-full rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8 ${
+-            wide ? "max-w-2xl" : "max-w-md"
+-          }`}
+-        >
+-          <div className="mb-6 flex items-start gap-3">
+-            {icon && (
+-              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+-                {icon}
+-              </span>
+-            )}
+-            <div className="min-w-0">
+-              <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
+-              {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
++        <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
++          {/* لوحة زخرفية — تظهر بالشاشات الكبيرة بس، تعطي إحساس منتج حقيقي بدل
++              فراغ حوالين الفورم */}
++          <div className="hidden lg:block">
++            <WelcomeIllustration className="h-40 w-auto" />
++            <h2 className="mt-6 max-w-sm text-2xl font-bold leading-snug text-foreground">
++              {bi(
++                "كل أدوات التنظيم والتحضير بمكان واحد",
++                "Every study and exam-prep tool, in one place",
++              )}
++            </h2>
++            <ul className="mt-6 space-y-4">
++              {sidePoints.map((p) => (
++                <li key={p.ar} className="flex items-center gap-3">
++                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
++                    <p.icon className="size-4" />
++                  </span>
++                  <span className="text-sm text-muted-foreground">{bi(p.ar, p.en)}</span>
++                </li>
++              ))}
++            </ul>
++          </div>
++
++          <div
++            className={`shadow-elevation-2 mx-auto w-full rounded-2xl border border-border bg-card p-6 sm:p-8 ${
++              wide ? "max-w-2xl lg:max-w-none" : "max-w-md lg:max-w-md"
++            }`}
++          >
++            <div className="mb-6 flex items-start gap-3">
++              {icon && (
++                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
++                  {icon}
++                </span>
++              )}
++              <div className="min-w-0">
++                <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
++                {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
++              </div>
+             </div>
++            {children}
+           </div>
+-          {children}
+         </div>
+       </main>
+ 
+diff --git a/src/components/site/illustrations.tsx b/src/components/site/illustrations.tsx
+new file mode 100644
+index 0000000..1055da7
+--- /dev/null
++++ b/src/components/site/illustrations.tsx
+@@ -0,0 +1,120 @@
++/**
++ * مكتبة رسومات SVG خفيفة مبنية بهوية الموقع (ألوان عبر currentColor/CSS vars
++ * فبتتبدّل تلقائيًا مع dark/light) — بديل عن الصور الفوتوغرافية الحقيقية غير
++ * المتوفرة حاليًا. كل رسمة عبارة عن مكوّن React بسيط، صفر طلبات شبكة إضافية.
++ */
++
++type IllustrationProps = { className?: string };
++
++/** رسمة ترحيبية عامة — سطح مكتب + رسم بياني صاعد. تُستخدم ببانرات لوحات التحكم. */
++export function WelcomeIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 200 160" fill="none" className={className} aria-hidden>
++      <ellipse cx="100" cy="146" rx="72" ry="8" className="fill-foreground/5" />
++      <rect
++        x="34"
++        y="34"
++        width="132"
++        height="88"
++        rx="12"
++        className="fill-card stroke-border"
++        strokeWidth="2"
++      />
++      <rect x="34" y="34" width="132" height="22" rx="12" className="fill-secondary" />
++      <circle cx="46" cy="45" r="3" className="fill-destructive/60" />
++      <circle cx="56" cy="45" r="3" className="fill-primary/60" />
++      <circle cx="66" cy="45" r="3" className="fill-success/60" />
++      <path
++        d="M52 100 L74 82 L94 96 L120 66 L146 78"
++        className="stroke-primary"
++        strokeWidth="4"
++        strokeLinecap="round"
++        strokeLinejoin="round"
++        fill="none"
++      />
++      <circle cx="146" cy="78" r="5" className="fill-primary" />
++      <rect x="52" y="104" width="20" height="10" rx="3" className="fill-info/25" />
++      <rect x="78" y="104" width="20" height="10" rx="3" className="fill-success/25" />
++      <rect x="104" y="104" width="20" height="10" rx="3" className="fill-primary/25" />
++      <circle cx="164" cy="30" r="14" className="fill-primary/15" />
++      <circle cx="26" cy="120" r="10" className="fill-success/15" />
++    </svg>
++  );
++}
++
++/** رسمة "صندوق فاضي" — لحالات عدم وجود بيانات (EmptyState). */
++export function EmptyIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 160 120" fill="none" className={className} aria-hidden>
++      <ellipse cx="80" cy="100" rx="46" ry="7" className="fill-foreground/5" />
++      <path
++        d="M40 44 L80 28 L120 44 L120 84 L80 100 L40 84 Z"
++        className="fill-card stroke-border"
++        strokeWidth="2"
++        strokeLinejoin="round"
++      />
++      <path d="M40 44 L80 60 L120 44" className="stroke-border" strokeWidth="2" fill="none" />
++      <path d="M80 60 L80 100" className="stroke-border" strokeWidth="2" />
++      <circle cx="80" cy="60" r="16" className="fill-primary/12" />
++      <path
++        d="M73 60 L78 65 L88 54"
++        className="stroke-primary"
++        strokeWidth="2.5"
++        strokeLinecap="round"
++        strokeLinejoin="round"
++        fill="none"
++        opacity="0.4"
++      />
++    </svg>
++  );
++}
++
++/** رسمة 404 — بوصلة ضائعة. لصفحة "غير موجود". */
++export function NotFoundIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 200 160" fill="none" className={className} aria-hidden>
++      <ellipse cx="100" cy="146" rx="60" ry="7" className="fill-foreground/5" />
++      <circle cx="100" cy="80" r="52" className="fill-card stroke-border" strokeWidth="2" />
++      <circle cx="100" cy="80" r="38" className="stroke-border" strokeWidth="1.5" fill="none" />
++      <path d="M84 96 L92 68 L120 60 L108 92 Z" className="fill-primary/70" />
++      <circle cx="100" cy="80" r="5" className="fill-primary" />
++      <circle cx="150" cy="40" r="10" className="fill-info/20" />
++      <circle cx="42" cy="112" r="8" className="fill-success/20" />
++      <path
++        d="M100 20 L100 28 M100 132 L100 140 M40 80 L48 80 M152 80 L160 80"
++        className="stroke-muted-foreground"
++        strokeWidth="2"
++        strokeLinecap="round"
++      />
++    </svg>
++  );
++}
++
++/** رسمة "غير مصرح" — قفل. لصفحة Forbidden. */
++export function ForbiddenIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 160 140" fill="none" className={className} aria-hidden>
++      <ellipse cx="80" cy="122" rx="50" ry="7" className="fill-foreground/5" />
++      <rect
++        x="46"
++        y="62"
++        width="68"
++        height="52"
++        rx="10"
++        className="fill-card stroke-border"
++        strokeWidth="2"
++      />
++      <path
++        d="M58 62 V46 a22 22 0 0 1 44 0 V62"
++        className="stroke-border"
++        strokeWidth="6"
++        fill="none"
++        strokeLinecap="round"
++      />
++      <circle cx="80" cy="86" r="8" className="fill-destructive/70" />
++      <rect x="76" y="90" width="8" height="14" rx="3" className="fill-destructive/70" />
++      <circle cx="130" cy="34" r="9" className="fill-primary/15" />
++      <circle cx="28" cy="100" r="7" className="fill-info/15" />
++    </svg>
++  );
++}
+diff --git a/src/routes/__root.tsx b/src/routes/__root.tsx
+index 1ca6b99..4257116 100644
+--- a/src/routes/__root.tsx
++++ b/src/routes/__root.tsx
+@@ -20,6 +20,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
+ import { supabase } from "@/integrations/supabase/client";
+ import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
+ import { CookieConsent } from "@/components/site/cookie-consent";
++import { NotFoundIllustration } from "@/components/site/illustrations";
+ import { currentUserHome } from "@/lib/session-home";
+ 
+ function NotFoundComponent() {
+@@ -29,15 +30,16 @@ function NotFoundComponent() {
+     void currentUserHome().then((next) => setHome(next ?? "/"));
+   }, []);
+   return (
+-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+-      <div className="max-w-md text-center">
+-        <h1 className="text-7xl font-bold text-foreground">404</h1>
+-        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("errors.notFoundTitle")}</h2>
++    <div className="surface-mesh flex min-h-screen items-center justify-center bg-background px-4">
++      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
++        <NotFoundIllustration className="mx-auto h-32 w-auto" />
++        <h1 className="mt-4 font-display text-6xl font-bold text-foreground">404</h1>
++        <h2 className="mt-3 text-xl font-bold text-foreground">{t("errors.notFoundTitle")}</h2>
+         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
+-        <div className="mt-6">
++        <div className="mt-7">
+           <a
+             href={home}
+-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
++            className="btn-shine hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+           >
+             {t("errors.backHome")}
+           </a>
+@@ -57,24 +59,33 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+ 
+   return (
+     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+-      <div className="max-w-md text-center">
+-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+-          {t("errors.crashTitle")}
+-        </h1>
++      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
++        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-destructive/12 text-destructive">
++          <svg viewBox="0 0 24 24" fill="none" className="size-7" aria-hidden>
++            <path
++              d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"
++              stroke="currentColor"
++              strokeWidth="2"
++              strokeLinecap="round"
++              strokeLinejoin="round"
++            />
++          </svg>
++        </span>
++        <h1 className="mt-4 text-xl font-bold text-foreground">{t("errors.crashTitle")}</h1>
+         <p className="mt-2 text-sm text-muted-foreground">{t("errors.crashText")}</p>
+-        <div className="mt-6 flex flex-wrap justify-center gap-2">
++        <div className="mt-7 flex flex-wrap justify-center gap-2.5">
+           <button
+             onClick={() => {
+               router.invalidate();
+               reset();
+             }}
+-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
++            className="hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+           >
+             {t("errors.retry")}
+           </button>
+           <a
+             href="/"
+-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
++            className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-background px-6 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+           >
+             {t("errors.backHome")}
+           </a>
+diff --git a/src/routes/_authenticated/dashboard.tsx b/src/routes/_authenticated/dashboard.tsx
+index eaf4bd6..b6be53e 100644
+--- a/src/routes/_authenticated/dashboard.tsx
++++ b/src/routes/_authenticated/dashboard.tsx
+@@ -11,6 +11,7 @@ import {
+   EmptyState,
+ } from "@/components/app/kit";
+ import { Guard } from "@/components/app/guard";
++import { WelcomeBanner } from "@/components/app/welcome-banner";
+ import { useBi } from "@/lib/bi";
+ import { TrendChart } from "@/components/app/charts";
+ 
+@@ -51,6 +52,16 @@ function Body() {
+         "Everything in one place: today's progress, upcoming tasks, and subjects that need review.",
+       )}
+     >
++      <WelcomeBanner
++        subtitle={[
++          "خطتك اليوم جاهزة — راجع مهامك القريبة وكمّل سلسلة أيامك المتتالية.",
++          "Your plan for today is ready — check upcoming tasks and keep your streak going.",
++        ]}
++        tip={[
++          "12 يوم متتالي 🔥 — لا تكسر السلسلة اليوم",
++          "12-day streak 🔥 — don't break it today",
++        ]}
++      />
+       <StatGrid
+         items={[
+           { icon: "Flame", label: bi("أيام متتالية", "Streak days"), value: "12" },
+diff --git a/src/routes/_authenticated/parent.report.tsx b/src/routes/_authenticated/parent.report.tsx
+index fc3adcb..76852f5 100644
+--- a/src/routes/_authenticated/parent.report.tsx
++++ b/src/routes/_authenticated/parent.report.tsx
+@@ -11,6 +11,7 @@ import {
+   EmptyState,
+ } from "@/components/app/kit";
+ import { Guard } from "@/components/app/guard";
++import { WelcomeBanner } from "@/components/app/welcome-banner";
+ import { useBi } from "@/lib/bi";
+ import { TrendChart } from "@/components/app/charts";
+ 
+@@ -51,6 +52,13 @@ function Body() {
+         "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.",
+       )}
+     >
++      <WelcomeBanner
++        subtitle={[
++          "تابع التزام ابنك وإتقانه أسبوعيًا، بدون أرقام مضلّلة — بس الصورة الواقعية.",
++          "Follow your child's consistency and mastery weekly — no vanity metrics, just the real picture.",
++        ]}
++        tip={["تقرير هالأسبوع جاهز", "This week's report is ready"]}
++      />
+       <StatGrid
+         items={[
+           { icon: "User", label: bi("الابن المتابَع", "Child"), value: bi("أحمد", "Ahmad") },
+diff --git a/src/routes/_authenticated/supervisor.dashboard.tsx b/src/routes/_authenticated/supervisor.dashboard.tsx
+index b594fbf..4192c40 100644
+--- a/src/routes/_authenticated/supervisor.dashboard.tsx
++++ b/src/routes/_authenticated/supervisor.dashboard.tsx
+@@ -11,6 +11,7 @@ import {
+   EmptyState,
+ } from "@/components/app/kit";
+ import { Guard } from "@/components/app/guard";
++import { WelcomeBanner } from "@/components/app/welcome-banner";
+ import { useBi } from "@/lib/bi";
+ import { ComparisonChart } from "@/components/app/charts";
+ 
+@@ -51,6 +52,13 @@ function Body() {
+         "Teaching quality across teachers and classes: alerts, follow-ups and mastery signals.",
+       )}
+     >
++      <WelcomeBanner
++        subtitle={[
++          "نظرة شاملة على جودة التعليم عبر كل المعلمين والصفوف اليوم.",
++          "A full overview of teaching quality across every teacher and class today.",
++        ]}
++        tip={["2 تنبيه يحتاج متابعتك", "2 alerts need your attention"]}
++      />
+       <StatGrid
+         items={[
+           { icon: "Presentation", label: bi("معلمون", "Teachers"), value: "18" },
+diff --git a/src/routes/_authenticated/teacher.dashboard.tsx b/src/routes/_authenticated/teacher.dashboard.tsx
+index b3bd5a6..706b84f 100644
+--- a/src/routes/_authenticated/teacher.dashboard.tsx
++++ b/src/routes/_authenticated/teacher.dashboard.tsx
+@@ -11,6 +11,7 @@ import {
+   EmptyState,
+ } from "@/components/app/kit";
+ import { Guard } from "@/components/app/guard";
++import { WelcomeBanner } from "@/components/app/welcome-banner";
+ import { useBi } from "@/lib/bi";
+ import { ComparisonChart } from "@/components/app/charts";
+ 
+@@ -51,6 +52,13 @@ function Body() {
+         "Your classes today: what needs grading, questions awaiting you, and student performance.",
+       )}
+     >
++      <WelcomeBanner
++        subtitle={[
++          "عندك أسئلة بانتظار الرد وطلاب بانتظار تصحيح — خلّي صفوفك بأفضل حال.",
++          "You have questions waiting and grading pending — keep your classes running smoothly.",
++        ]}
++        tip={["3 أسئلة جديدة بمجتمع الصف", "3 new questions in the class community"]}
++      />
+       <StatGrid
+         items={[
+           { icon: "Users", label: bi("طلابك", "Students"), value: "126" },
+diff --git a/src/routes/login.tsx b/src/routes/login.tsx
+index 5e9f61d..dde3b00 100644
+--- a/src/routes/login.tsx
++++ b/src/routes/login.tsx
+@@ -10,14 +10,15 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
+ import { currentUserHome } from "@/lib/session-home";
+ import { ensureDemoAccount } from "@/lib/demo-auth.functions";
+ import { useServerFn } from "@tanstack/react-start";
++import { useBi } from "@/lib/bi";
+ 
+ /* أزرار دخول سريعة للاختبار فقط — تُحذف قبل النشر النهائي. */
+ const DEMO_ROLES = [
+-  { role: "admin", label: "أدمن" },
+-  { role: "supervisor", label: "مشرف" },
+-  { role: "teacher", label: "معلم" },
+-  { role: "parent", label: "ولي أمر" },
+-  { role: "student", label: "طالب" },
++  { role: "admin", ar: "أدمن", en: "Admin" },
++  { role: "supervisor", ar: "مشرف", en: "Supervisor" },
++  { role: "teacher", ar: "معلم", en: "Teacher" },
++  { role: "parent", ar: "ولي أمر", en: "Parent" },
++  { role: "student", ar: "طالب", en: "Student" },
+ ] as const;
+ 
+ const title = "تسجيل الدخول | Academia";
+@@ -49,6 +50,7 @@ const schema = z.object({
+ 
+ function LoginPage() {
+   const { t } = useTranslation();
++  const bi = useBi();
+   const navigate = useNavigate();
+   const [loading, setLoading] = useState(false);
+   const [email, setEmail] = useState("");
+@@ -65,7 +67,9 @@ function LoginPage() {
+       toast.success(t("authPages.login.success"));
+       navigate({ to: "/", replace: true });
+     } catch (err) {
+-      toast.error(err instanceof Error ? err.message : "تعذّر الدخول التجريبي");
++      toast.error(
++        err instanceof Error ? err.message : bi("تعذّر الدخول التجريبي", "Demo login failed"),
++      );
+     } finally {
+       setDemoBusy(null);
+     }
+@@ -139,7 +143,7 @@ function LoginPage() {
+         <button
+           type="submit"
+           disabled={loading}
+-          className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
++          className="btn-shine hover-press w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
+         >
+           {loading ? t("common.loading") : t("authPages.login.submit")}
+         </button>
+@@ -155,14 +159,14 @@ function LoginPage() {
+         type="button"
+         onClick={google}
+         disabled={loading}
+-        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold text-foreground transition-colors hover:bg-secondary disabled:opacity-60"
++        className="hover-press w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary disabled:opacity-60"
+       >
+         {t("authPages.login.google")}
+       </button>
+ 
+       <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
+         <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
+-          دخول سريع للاختبار (مؤقت)
++          {bi("دخول سريع للاختبار (مؤقت)", "Quick test login (temporary)")}
+         </p>
+         <div className="flex flex-wrap justify-center gap-2">
+           {DEMO_ROLES.map((d) => (
+@@ -173,7 +177,7 @@ function LoginPage() {
+               onClick={() => quickLogin(d.role)}
+               className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
+             >
+-              {demoBusy === d.role ? "…" : d.label}
++              {demoBusy === d.role ? "…" : bi(d.ar, d.en)}
+             </button>
+           ))}
+         </div>

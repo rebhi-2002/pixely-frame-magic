@@ -55,7 +55,7 @@ function Body() {
         items={[
           { icon: "FileCheck2", label: bi("امتحانات أنهيتها", "Exams taken"), value: "7" },
           { icon: "Percent", label: bi("أفضل نتيجة", "Best score"), value: "88%" },
-          { icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: "42 د" },
+          { icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: bi("42 د", "42 min") },
           { icon: "Target", label: bi("الهدف", "Target"), value: "90%" },
         ]}
       />

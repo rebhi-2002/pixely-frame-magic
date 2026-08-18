@@ -6,6 +6,8 @@ import { usePreferences } from "@/components/providers/preferences-provider";
 import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import { useAccess } from "@/hooks/use-access";
 import { Guard } from "@/components/app/guard";
+import { ROLE_NAME_EN } from "@/lib/rbac-types";
+import { useBi } from "@/lib/bi";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -28,6 +30,7 @@ const LOCALES = ["ar", "en"] as const;
 
 function SettingsPage() {
   const { t } = useTranslation();
+  const bi = useBi();
   const { access } = useAccess();
   const { signOut, pending: signingOut } = useSignOut("/login");
   const { theme, setTheme, locale, setLocale } = usePreferences();
@@ -102,7 +105,14 @@ function SettingsPage() {
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">{t("settings.role")}</dt>
-              <dd className="font-semibold text-foreground">{access?.profile?.role_name ?? "—"}</dd>
+              <dd className="font-semibold text-foreground">
+                {access?.profile?.role_name
+                  ? bi(
+                      access.profile.role_name,
+                      ROLE_NAME_EN[access.profile.role_name] ?? access.profile.role_name,
+                    )
+                  : "—"}
+              </dd>
             </div>
           </dl>
         </section>

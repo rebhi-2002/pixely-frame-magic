@@ -1,5 +1,6 @@
 import { Bell, CheckCircle2, Flame, TrendingUp } from "lucide-react";
 import { useBi } from "@/lib/bi";
+import type { PublicSession } from "@/hooks/use-session";
 
 const subjects = [
   { icon: "📐", pct: 78, tone: "bg-primary" },
@@ -13,10 +14,18 @@ const weekBars = [22, 34, 18, 40, 28, 46, 32];
 /**
  * HeroMockup — معاينة بصرية حقيقية للوحة تحكم الطالب، مبنية بالكامل من عناصر
  * الواجهة (لا صورة/سكرين‌شوت). تُستخدم في الـ Hero لإعطاء إحساس "منتج حقيقي"
- * بدل نص فاضٍ. زخرفية بالكامل (aria-hidden) ولا تعرض بيانات مستخدم فعلية.
+ * بدل نص فاضٍ.
+ *
+ * الاسم/الحرف الأول شخصي (من جلسة المستخدم الحقيقية) بعد تسجيل الدخول؛ الأرقام
+ * والإحصائيات تبقى توضيحية (demo) لعدم وجود مصدر بيانات تحليلية حقيقي بعد —
+ * تُستبدل لاحقاً بأرقام حقيقية بمجرد ربط الباك إند بهالمكوّن.
  */
-export function HeroMockup() {
+export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const bi = useBi();
+  const firstName = session?.fullName?.trim().split(/\s+/)[0];
+  const displayName = firstName || bi("سارة", "Sarah");
+  const initial = displayName.charAt(0).toUpperCase();
+  const greeting = bi(`أهلاً ${displayName} 👋`, `Hi ${displayName} 👋`);
 
   return (
     <div aria-hidden className="relative hidden select-none lg:block">
@@ -37,12 +46,10 @@ export function HeroMockup() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="flex size-9 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary">
-                {bi("سا", "S")}
+                {initial}
               </span>
               <div>
-                <p className="text-xs font-bold text-foreground">
-                  {bi("أهلاً سارة 👋", "Hi Sarah 👋")}
-                </p>
+                <p className="text-xs font-bold text-foreground">{greeting}</p>
                 <p className="text-[10px] text-muted-foreground">
                   {bi("جاهزة لمتابعة إنجازك اليوم", "Ready to keep your streak going")}
                 </p>

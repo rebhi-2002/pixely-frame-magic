@@ -20,6 +20,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
+import { NotFoundIllustration } from "@/components/site/illustrations";
 import { currentUserHome } from "@/lib/session-home";
 
 function NotFoundComponent() {
@@ -29,15 +30,16 @@ function NotFoundComponent() {
     void currentUserHome().then((next) => setHome(next ?? "/"));
   }, []);
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("errors.notFoundTitle")}</h2>
+    <div className="surface-mesh flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
+        <NotFoundIllustration className="mx-auto h-32 w-auto" />
+        <h1 className="mt-4 font-display text-6xl font-bold text-foreground">404</h1>
+        <h2 className="mt-3 text-xl font-bold text-foreground">{t("errors.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
-        <div className="mt-6">
+        <div className="mt-7">
           <a
             href={home}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="btn-shine hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
           >
             {t("errors.backHome")}
           </a>
@@ -57,24 +59,33 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          {t("errors.crashTitle")}
-        </h1>
+      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-destructive/12 text-destructive">
+          <svg viewBox="0 0 24 24" fill="none" className="size-7" aria-hidden>
+            <path
+              d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+        <h1 className="mt-4 text-xl font-bold text-foreground">{t("errors.crashTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.crashText")}</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-7 flex flex-wrap justify-center gap-2.5">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
           >
             {t("errors.retry")}
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-background px-6 py-3 text-sm font-bold text-foreground hover:bg-secondary"
           >
             {t("errors.backHome")}
           </a>

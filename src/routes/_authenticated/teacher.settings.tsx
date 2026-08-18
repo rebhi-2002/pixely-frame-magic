@@ -52,9 +52,21 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "BadgePercent", label: bi("نموذج التسعير", "Pricing model"), value: bi("لكل كورس", "Per course") },
-          { icon: "CalendarClock", label: bi("أوقات التوفّر", "Availability"), value: "5 فترات" },
-          { icon: "Banknote", label: bi("طريقة السحب", "Payout method"), value: bi("حوالة بنكية", "Bank transfer") },
+          {
+            icon: "BadgePercent",
+            label: bi("نموذج التسعير", "Pricing model"),
+            value: bi("لكل كورس", "Per course"),
+          },
+          {
+            icon: "CalendarClock",
+            label: bi("أوقات التوفّر", "Availability"),
+            value: bi("5 فترات", "5 slots"),
+          },
+          {
+            icon: "Banknote",
+            label: bi("طريقة السحب", "Payout method"),
+            value: bi("حوالة بنكية", "Bank transfer"),
+          },
           { icon: "BellRing", label: bi("الإشعارات", "Notifications"), value: bi("مفعّلة", "On") },
         ]}
       />

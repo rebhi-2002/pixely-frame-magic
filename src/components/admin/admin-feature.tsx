@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Guard } from "@/components/app/guard";
 import { AppPage, Badge, DataTable, Panel, StatGrid } from "@/components/app/kit";
+import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { Input } from "@/components/ui/input";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart, SplitChart, TrendChart } from "@/components/app/charts";
@@ -455,6 +456,15 @@ export function AdminFeaturePage({ feature }: { feature: AdminFeature }) {
   return (
     <Guard pageKey={config.pageKey}>
       <AppPage title={bi(...config.title)} icon={config.icon} subtitle={bi(...config.subtitle)}>
+        {feature === "dashboard" && (
+          <WelcomeBanner
+            subtitle={[
+              "نظرة تشغيلية شاملة على منصة أكاديميا — المستخدمين، الوحدات، والأداء العام.",
+              "A full operational view of Academia — users, modules, and overall performance.",
+            ]}
+            tip={["كل الأنظمة تعمل بشكل طبيعي ✅", "All systems operating normally ✅"]}
+          />
+        )}
         <StatGrid
           items={config.stats.map(([icon, ar, en, value]) => ({ icon, label: bi(ar, en), value }))}
         />

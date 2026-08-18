@@ -19,10 +19,18 @@ export const listModules = createServerFn({ method: "GET" })
     await requirePermission(context.supabase, context.userId, "admin_settings", "view_list");
     const { data, error } = await context.supabase
       .from("modules")
-      .select("id, key, name, icon, enabled, sort_order")
+      .select("id, key, name, name_en, icon, enabled, sort_order")
       .order("sort_order");
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return (data ?? []).map((m) => ({
+      id: m.id,
+      key: m.key,
+      name: m.name,
+      nameEn: m.name_en ?? m.name,
+      icon: m.icon,
+      enabled: m.enabled,
+      sort_order: m.sort_order,
+    }));
   });
 
 export const setModuleEnabled = createServerFn({ method: "POST" })

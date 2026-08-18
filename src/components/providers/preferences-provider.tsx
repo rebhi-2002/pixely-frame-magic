@@ -63,21 +63,30 @@ async function persistToProfile(patch: { theme_pref?: ThemePref; locale?: Locale
   }
 }
 
+function readStoredTheme(): ThemePref {
+  if (typeof window === "undefined") return "auto";
+  const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null;
+  return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
+}
+
+function readStoredLocale(): Locale {
+  if (typeof window === "undefined") return "ar";
+  const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+  return stored && SUPPORTED_LOCALES.includes(stored) ? stored : "ar";
+}
+
 function PreferencesState({ children }: { children: ReactNode }) {
   const { i18n: instance } = useTranslation();
-  const [theme, setThemeState] = useState<ThemePref>("auto");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
-  const [locale, setLocaleState] = useState<Locale>("ar");
+  // القراءة المباشرة (lazy initializer) بدل useEffect منفصل — كان في سباق (race)
+  // بين effect قراءة localStorage وeffect متابعة تفضيل نظام التشغيل: كلاهما
+  // يعمل بنفس الـ commit الأول، وeffect النظام كان يكتب فوق القيمة المحفوظة
+  // الصحيحة قبل ما توصل، فيرجع الثيم لـdark حتى لو localStorage فيها "light".
+  const [theme, setThemeState] = useState<ThemePref>(readStoredTheme);
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() =>
+    resolveDark(readStoredTheme()) ? "dark" : "light",
+  );
+  const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
   const [switchingLocale, setSwitchingLocale] = useState(false);
-
-  // Read the persisted values written by the boot script (client only).
-  useEffect(() => {
-    const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null) ?? "auto";
-    const storedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
-    setThemeState(storedTheme);
-    setResolvedTheme(resolveDark(storedTheme) ? "dark" : "light");
-    if (storedLocale && SUPPORTED_LOCALES.includes(storedLocale)) setLocaleState(storedLocale);
-  }, []);
 
   // Follow the device when the user never chose manually.
   useEffect(() => {

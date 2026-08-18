@@ -53,7 +53,7 @@ function Body() {
     >
       <StatGrid
         items={[
-          { icon: "Clock", label: bi("مدة الدرس", "Duration"), value: "18 د" },
+          { icon: "Clock", label: bi("مدة الدرس", "Duration"), value: bi("18 د", "18 min") },
           { icon: "ListChecks", label: bi("أسئلة", "Questions"), value: "10" },
           { icon: "Layers", label: bi("بطاقات", "Flashcards"), value: "12" },
           { icon: "Target", label: bi("نتيجتك", "Your score"), value: "80%" },

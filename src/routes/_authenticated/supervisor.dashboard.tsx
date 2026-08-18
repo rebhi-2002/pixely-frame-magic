@@ -11,6 +11,7 @@ import {
   EmptyState,
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
+import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart } from "@/components/app/charts";
 
@@ -51,6 +52,13 @@ function Body() {
         "Teaching quality across teachers and classes: alerts, follow-ups and mastery signals.",
       )}
     >
+      <WelcomeBanner
+        subtitle={[
+          "نظرة شاملة على جودة التعليم عبر كل المعلمين والصفوف اليوم.",
+          "A full overview of teaching quality across every teacher and class today.",
+        ]}
+        tip={["2 تنبيه يحتاج متابعتك", "2 alerts need your attention"]}
+      />
       <StatGrid
         items={[
           { icon: "Presentation", label: bi("معلمون", "Teachers"), value: "18" },

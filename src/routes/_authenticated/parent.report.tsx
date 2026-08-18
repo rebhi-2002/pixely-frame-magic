@@ -11,6 +11,7 @@ import {
   EmptyState,
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
+import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 
@@ -51,6 +52,13 @@ function Body() {
         "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.",
       )}
     >
+      <WelcomeBanner
+        subtitle={[
+          "تابع التزام ابنك وإتقانه أسبوعيًا، بدون أرقام مضلّلة — بس الصورة الواقعية.",
+          "Follow your child's consistency and mastery weekly — no vanity metrics, just the real picture.",
+        ]}
+        tip={["تقرير هالأسبوع جاهز", "This week's report is ready"]}
+      />
       <StatGrid
         items={[
           { icon: "User", label: bi("الابن المتابَع", "Child"), value: bi("أحمد", "Ahmad") },

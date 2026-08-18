@@ -54,7 +54,11 @@ function Body() {
         items={[
           { icon: "PenSquare", label: bi("بانتظار التصحيح", "Pending"), value: "18" },
           { icon: "CheckCheck", label: bi("صُحّحت اليوم", "Graded today"), value: "11" },
-          { icon: "Clock", label: bi("متوسط وقت التصحيح", "Avg. time"), value: "3.4 د" },
+          {
+            icon: "Clock",
+            label: bi("متوسط وقت التصحيح", "Avg. time"),
+            value: bi("3.4 د", "3.4 min"),
+          },
           { icon: "AlertTriangle", label: bi("متأخّرة", "Overdue"), value: "2" },
         ]}
       />

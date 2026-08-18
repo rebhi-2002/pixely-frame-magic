@@ -42,7 +42,8 @@ import {
   toggleUserStatus,
 } from "@/lib/rbac.functions";
 import { useAccess } from "@/hooks/use-access";
-import { GENDER_LABELS, type UserRow } from "@/lib/rbac-types";
+import type { UserRow } from "@/lib/rbac-types";
+import { useBi } from "@/lib/bi";
 
 const EMPTY_FORM = {
   full_name: "",
@@ -54,6 +55,7 @@ const EMPTY_FORM = {
 };
 
 export function UsersPage() {
+  const bi = useBi();
   const queryClient = useQueryClient();
   const { can } = useAccess();
   const fetchUsers = useServerFn(listUsers);
@@ -99,18 +101,20 @@ export function UsersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setOpen(false);
-      toast.success("تم الحفظ");
+      toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
   });
 
   const statusMutation = useMutation({
     mutationFn: (vars: { id: string; is_active: boolean }) => toggleStatus({ data: vars }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("تم تحديث الحالة");
+      toast.success(bi("تم تحديث الحالة", "Status updated"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر التحديث"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
   });
 
   const deleteMutation = useMutation({
@@ -118,16 +122,18 @@ export function UsersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setPendingDelete(null);
-      toast.success("تم الحذف");
+      toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
   });
 
   const resetMutation = useMutation({
     mutationFn: (id: string) =>
       resetPassword({ data: { id, redirectTo: `${window.location.origin}/auth` } }),
-    onSuccess: () => toast.success("تم إرسال رابط تغيير كلمة المرور"),
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الإرسال"),
+    onSuccess: () => toast.success(bi("تم إرسال رابط تغيير كلمة المرور", "Reset link sent")),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الإرسال", "Failed to send")),
   });
 
   function openDialog(user: UserRow | null) {
@@ -149,54 +155,54 @@ export function UsersPage() {
 
   return (
     <div>
-      <PageHeader title="المستخدمين" icon="Users2" />
+      <PageHeader title={bi("المستخدمين", "Users")} icon="Users2" />
 
       <div className="p-5">
         <Toolbar>
           <div className="relative min-w-56 flex-1">
-            <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="بحث بالاسم أو البريد أو الجوال"
+              placeholder={bi("بحث بالاسم أو البريد أو الجوال", "Search by name, email, or phone")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pr-9"
+              className="ps-9"
             />
           </div>
 
           <FilterSelect
             value={status}
             onChange={setStatus}
-            placeholder="الحالة"
+            placeholder={bi("الحالة", "Status")}
             options={[
-              { value: "all", label: "كل الحالات" },
-              { value: "active", label: "نشط" },
-              { value: "inactive", label: "غير نشط" },
+              { value: "all", label: bi("كل الحالات", "All statuses") },
+              { value: "active", label: bi("نشط", "Active") },
+              { value: "inactive", label: bi("غير نشط", "Inactive") },
             ]}
           />
           <FilterSelect
             value={gender}
             onChange={setGender}
-            placeholder="الجنس"
+            placeholder={bi("الجنس", "Gender")}
             options={[
-              { value: "all", label: "الكل" },
-              { value: "male", label: "ذكر" },
-              { value: "female", label: "أنثى" },
+              { value: "all", label: bi("الكل", "All") },
+              { value: "male", label: bi("ذكر", "Male") },
+              { value: "female", label: bi("أنثى", "Female") },
             ]}
           />
           <FilterSelect
             value={roleFilter}
             onChange={setRoleFilter}
-            placeholder="نوع المستخدم"
+            placeholder={bi("نوع المستخدم", "User type")}
             options={[
-              { value: "all", label: "كل الأنواع" },
+              { value: "all", label: bi("كل الأنواع", "All types") },
               ...(roles ?? []).map((r) => ({ value: r.id, label: r.name })),
             ]}
           />
 
           {can("admin_users", "show_add_form") && (
-            <Button className="mr-auto" onClick={() => openDialog(null)}>
+            <Button className="ms-auto" onClick={() => openDialog(null)}>
               <Plus className="size-4" />
-              إضافة مستخدم
+              {bi("إضافة مستخدم", "Add user")}
             </Button>
           )}
         </Toolbar>
@@ -207,17 +213,17 @@ export function UsersPage() {
               <Loader2 className="size-5 animate-spin text-primary" />
             </div>
           ) : (
-            <table className="w-full min-w-3xl text-right text-sm">
+            <table className="w-full min-w-3xl text-start text-sm">
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
                   <th className="w-14 px-4 py-3 font-semibold">#</th>
-                  <th className="px-4 py-3 font-semibold">الاسم</th>
-                  <th className="px-4 py-3 font-semibold">البريد</th>
-                  <th className="px-4 py-3 font-semibold">الجوال</th>
-                  <th className="px-4 py-3 font-semibold">الجنس</th>
-                  <th className="px-4 py-3 font-semibold">النوع</th>
-                  <th className="px-4 py-3 font-semibold">الحالة</th>
-                  <th className="w-36 px-4 py-3 font-semibold">إجراءات</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الاسم", "Name")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("البريد", "Email")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الجوال", "Phone")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الجنس", "Gender")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("النوع", "Type")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الحالة", "Status")}</th>
+                  <th className="w-36 px-4 py-3 font-semibold">{bi("إجراءات", "Actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -228,7 +234,11 @@ export function UsersPage() {
                     <td className="px-4 py-3 text-muted-foreground">{u.email ?? "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground">{u.phone ?? "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {GENDER_LABELS[u.gender] ?? u.gender}
+                      {u.gender === "male"
+                        ? bi("ذكر", "Male")
+                        : u.gender === "female"
+                          ? bi("أنثى", "Female")
+                          : (u.gender ?? "—")}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{u.role_name ?? "—"}</td>
                     <td className="px-4 py-3">
@@ -236,7 +246,7 @@ export function UsersPage() {
                         checked={u.is_active}
                         disabled={!can("admin_users", "edit")}
                         onCheckedChange={(v) => statusMutation.mutate({ id: u.id, is_active: v })}
-                        aria-label={`حالة ${u.full_name}`}
+                        aria-label={bi(`حالة ${u.full_name}`, `Status for ${u.full_name}`)}
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -245,7 +255,7 @@ export function UsersPage() {
                           <Button
                             size="icon"
                             variant="ghost"
-                            title="تعديل"
+                            title={bi("تعديل", "Edit")}
                             onClick={() => openDialog(u)}
                           >
                             <Pencil className="size-4" />
@@ -255,7 +265,7 @@ export function UsersPage() {
                           <Button
                             size="icon"
                             variant="ghost"
-                            title="إرسال رابط كلمة المرور"
+                            title={bi("إرسال رابط كلمة المرور", "Send password reset link")}
                             onClick={() => resetMutation.mutate(u.id)}
                           >
                             <KeyRound className="size-4" />
@@ -265,7 +275,7 @@ export function UsersPage() {
                           <Button
                             size="icon"
                             variant="ghost"
-                            title="حذف"
+                            title={bi("حذف", "Delete")}
                             className="text-destructive"
                             onClick={() => setPendingDelete(u)}
                           >
@@ -279,7 +289,7 @@ export function UsersPage() {
                 {!filtered.length && (
                   <tr>
                     <td colSpan={8} className="p-8 text-center text-muted-foreground">
-                      لا توجد نتائج مطابقة.
+                      {bi("لا توجد نتائج مطابقة.", "No matching results.")}
                     </td>
                   </tr>
                 )}
@@ -290,13 +300,15 @@ export function UsersPage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent dir="rtl" className="text-right">
+        <DialogContent className="text-start">
           <DialogHeader>
-            <DialogTitle>{editingId ? "تعديل مستخدم" : "إضافة مستخدم"}</DialogTitle>
+            <DialogTitle>
+              {editingId ? bi("تعديل مستخدم", "Edit user") : bi("إضافة مستخدم", "Add user")}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
-              <Label htmlFor="u-name">الاسم الكامل</Label>
+              <Label htmlFor="u-name">{bi("الاسم الكامل", "Full name")}</Label>
               <Input
                 id="u-name"
                 value={form.full_name}
@@ -304,7 +316,7 @@ export function UsersPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="u-email">البريد الإلكتروني</Label>
+              <Label htmlFor="u-email">{bi("البريد الإلكتروني", "Email address")}</Label>
               <Input
                 id="u-email"
                 type="email"
@@ -313,7 +325,7 @@ export function UsersPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="u-phone">رقم الجوال</Label>
+              <Label htmlFor="u-phone">{bi("رقم الجوال", "Phone number")}</Label>
               <Input
                 id="u-phone"
                 value={form.phone}
@@ -321,7 +333,7 @@ export function UsersPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label>الجنس</Label>
+              <Label>{bi("الجنس", "Gender")}</Label>
               <Select
                 value={form.gender}
                 onValueChange={(v) => setForm((f) => ({ ...f, gender: v as "male" | "female" }))}
@@ -330,22 +342,22 @@ export function UsersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">ذكر</SelectItem>
-                  <SelectItem value="female">أنثى</SelectItem>
+                  <SelectItem value="male">{bi("ذكر", "Male")}</SelectItem>
+                  <SelectItem value="female">{bi("أنثى", "Female")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>نوع المستخدم</Label>
+              <Label>{bi("نوع المستخدم", "User type")}</Label>
               <Select
                 value={form.role_id ?? "none"}
                 onValueChange={(v) => setForm((f) => ({ ...f, role_id: v === "none" ? null : v }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="بدون" />
+                  <SelectValue placeholder={bi("بدون", "None")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">بدون</SelectItem>
+                  <SelectItem value="none">{bi("بدون", "None")}</SelectItem>
                   {(roles ?? []).map((r) => (
                     <SelectItem key={r.id} value={r.id}>
                       {r.name}
@@ -360,33 +372,37 @@ export function UsersPage() {
                 onCheckedChange={(v) => setForm((f) => ({ ...f, is_active: v }))}
                 id="u-active"
               />
-              <Label htmlFor="u-active">الحساب نشط</Label>
+              <Label htmlFor="u-active">{bi("الحساب نشط", "Account active")}</Label>
             </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
             <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
-              حفظ
+              {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              إلغاء
+              {bi("إلغاء", "Cancel")}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
-        <AlertDialogContent dir="rtl" className="text-right">
+        <AlertDialogContent className="text-start">
           <AlertDialogHeader>
-            <AlertDialogTitle>حذف «{pendingDelete?.full_name}»؟</AlertDialogTitle>
-            <AlertDialogDescription>لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
+            <AlertDialogTitle>
+              {bi(`حذف «${pendingDelete?.full_name}»؟`, `Delete "${pendingDelete?.full_name}"?`)}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {bi("لا يمكن التراجع عن هذا الإجراء.", "This action cannot be undone.")}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:justify-start">
             <AlertDialogAction
               onClick={() => pendingDelete && deleteMutation.mutate(pendingDelete.id)}
             >
-              حذف
+              {bi("حذف", "Delete")}
             </AlertDialogAction>
-            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogCancel>{bi("إلغاء", "Cancel")}</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

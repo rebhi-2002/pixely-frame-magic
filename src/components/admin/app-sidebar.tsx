@@ -19,7 +19,8 @@ import { usePreferences } from "@/components/providers/preferences-provider";
 import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
-import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
+import { ROLE_NAME_EN, type AccessModule, type AccessPage, type MyAccess } from "@/lib/rbac-types";
+import { useBi } from "@/lib/bi";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BrandLockup } from "@/components/site/brand-logo";
@@ -30,7 +31,9 @@ function collectPaths(pages: AccessPage[]): string[] {
 
 /** كل الصفحات القابلة للفتح داخل قسم — تُستخدم لعرض الأيقونات في الحالة المطويّة. */
 function collectLeaves(pages: AccessPage[]): AccessPage[] {
-  return pages.flatMap((p) => (p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children)));
+  return pages.flatMap((p) =>
+    p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children),
+  );
 }
 
 export function AppSidebar({
@@ -48,6 +51,7 @@ export function AppSidebar({
   onNavigate?: () => void;
 }) {
   const { t } = useTranslation();
+  const bi = useBi();
   const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { signOut, pending: signingOut } = useSignOut("/");
@@ -149,7 +153,6 @@ export function AppSidebar({
           )}
         </Button>
       </div>
-
 
       {!collapsed && (
         <div className="px-3 pb-3">
@@ -260,7 +263,6 @@ export function AppSidebar({
                 </div>
               )}
 
-
               {!collapsed && open && (
                 <div className="panel-swap mt-1">
                   <PageList
@@ -285,10 +287,15 @@ export function AppSidebar({
                 {t("common.account")}
               </p>
               <p className="mt-1.5 truncate text-sm font-semibold">
-                {access.profile?.full_name ?? "مستخدم"}
+                {access.profile?.full_name ?? bi("مستخدم", "User")}
               </p>
               <p className="truncate text-xs text-sidebar-foreground/60">
-                {access.profile?.role_name ?? "بدون نوع"}
+                {access.profile?.role_name
+                  ? bi(
+                      access.profile.role_name,
+                      ROLE_NAME_EN[access.profile.role_name] ?? access.profile.role_name,
+                    )
+                  : bi("بدون نوع", "No role")}
               </p>
             </div>
           )}

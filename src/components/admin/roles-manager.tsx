@@ -29,7 +29,7 @@ import {
 import { deleteRole, listRoles, saveRole } from "@/lib/rbac.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
-import type { RoleRow } from "@/lib/rbac-types";
+import { ROLE_NAME_EN, type RoleRow } from "@/lib/rbac-types";
 
 export function UserTypesPage() {
   const queryClient = useQueryClient();
@@ -55,9 +55,10 @@ export function UserTypesPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       setOpen(false);
-      toast.success("تم الحفظ بنجاح");
+      toast.success(bi("تم الحفظ بنجاح", "Saved successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
   });
 
   const deleteMutation = useMutation({
@@ -65,9 +66,10 @@ export function UserTypesPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       setPendingDelete(null);
-      toast.success("تم الحذف");
+      toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
   });
 
   function openDialog(role: RoleRow | null) {
@@ -97,7 +99,7 @@ export function UserTypesPage() {
               <Loader2 className="size-5 animate-spin text-primary" />
             </div>
           ) : (
-            <table className="w-full text-right text-sm">
+            <table className="w-full text-start text-sm">
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
                   <th className="w-16 px-4 py-3 font-semibold">#</th>
@@ -110,7 +112,9 @@ export function UserTypesPage() {
                 {(data ?? []).map((role, i) => (
                   <tr key={role.id} className="border-b border-border/60 last:border-0">
                     <td className="px-4 py-3 text-muted-foreground">{i + 1}</td>
-                    <td className="px-4 py-3 font-semibold text-foreground">{role.name}</td>
+                    <td className="px-4 py-3 font-semibold text-foreground">
+                      {bi(role.name, ROLE_NAME_EN[role.name] ?? role.name)}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">{role.description ?? "—"}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
@@ -163,7 +167,7 @@ export function UserTypesPage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent dir="rtl" className="text-right">
+        <DialogContent className="text-start">
           <DialogHeader>
             <DialogTitle>
               {editing ? bi("تعديل نوع المستخدم", "Edit role") : bi("إضافة نوع مستخدم", "Add role")}
@@ -196,10 +200,15 @@ export function UserTypesPage() {
       </Dialog>
 
       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
-        <AlertDialogContent dir="rtl" className="text-right">
+        <AlertDialogContent className="text-start">
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {bi(`حذف «${pendingDelete?.name}»؟`, `Delete “${pendingDelete?.name}”?`)}
+              {(() => {
+                const n = pendingDelete
+                  ? bi(pendingDelete.name, ROLE_NAME_EN[pendingDelete.name] ?? pendingDelete.name)
+                  : "";
+                return bi(`حذف «${n}»؟`, `Delete "${n}"?`);
+              })()}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {bi(

@@ -1,0 +1,1141 @@
+diff --git a/src/components/admin/app-sidebar.tsx b/src/components/admin/app-sidebar.tsx
+index 44afcd9..9c6949d 100644
+--- a/src/components/admin/app-sidebar.tsx
++++ b/src/components/admin/app-sidebar.tsx
+@@ -19,7 +19,8 @@ import { usePreferences } from "@/components/providers/preferences-provider";
+ import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
+ import { DynamicIcon } from "./dynamic-icon";
+ import { cn } from "@/lib/utils";
+-import type { AccessModule, AccessPage, MyAccess } from "@/lib/rbac-types";
++import { ROLE_NAME_EN, type AccessModule, type AccessPage, type MyAccess } from "@/lib/rbac-types";
++import { useBi } from "@/lib/bi";
+ import { Input } from "@/components/ui/input";
+ import { Button } from "@/components/ui/button";
+ import { BrandLockup } from "@/components/site/brand-logo";
+@@ -30,7 +31,9 @@ function collectPaths(pages: AccessPage[]): string[] {
+ 
+ /** كل الصفحات القابلة للفتح داخل قسم — تُستخدم لعرض الأيقونات في الحالة المطويّة. */
+ function collectLeaves(pages: AccessPage[]): AccessPage[] {
+-  return pages.flatMap((p) => (p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children)));
++  return pages.flatMap((p) =>
++    p.path ? [p, ...collectLeaves(p.children)] : collectLeaves(p.children),
++  );
+ }
+ 
+ export function AppSidebar({
+@@ -48,6 +51,7 @@ export function AppSidebar({
+   onNavigate?: () => void;
+ }) {
+   const { t } = useTranslation();
++  const bi = useBi();
+   const { resolvedTheme, toggleTheme, locale, toggleLocale } = usePreferences();
+   const pathname = useRouterState({ select: (s) => s.location.pathname });
+   const { signOut, pending: signingOut } = useSignOut("/");
+@@ -150,7 +154,6 @@ export function AppSidebar({
+         </Button>
+       </div>
+ 
+-
+       {!collapsed && (
+         <div className="px-3 pb-3">
+           <div className="relative">
+@@ -260,7 +263,6 @@ export function AppSidebar({
+                 </div>
+               )}
+ 
+-
+               {!collapsed && open && (
+                 <div className="panel-swap mt-1">
+                   <PageList
+@@ -285,10 +287,15 @@ export function AppSidebar({
+                 {t("common.account")}
+               </p>
+               <p className="mt-1.5 truncate text-sm font-semibold">
+-                {access.profile?.full_name ?? "مستخدم"}
++                {access.profile?.full_name ?? bi("مستخدم", "User")}
+               </p>
+               <p className="truncate text-xs text-sidebar-foreground/60">
+-                {access.profile?.role_name ?? "بدون نوع"}
++                {access.profile?.role_name
++                  ? bi(
++                      access.profile.role_name,
++                      ROLE_NAME_EN[access.profile.role_name] ?? access.profile.role_name,
++                    )
++                  : bi("بدون نوع", "No role")}
+               </p>
+             </div>
+           )}
+diff --git a/src/components/admin/modules-manager.tsx b/src/components/admin/modules-manager.tsx
+index f4bee33..ee08e4e 100644
+--- a/src/components/admin/modules-manager.tsx
++++ b/src/components/admin/modules-manager.tsx
+@@ -26,9 +26,10 @@ export function SystemModulesPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["modules"] });
+       queryClient.invalidateQueries({ queryKey: ACCESS_QUERY_KEY });
+-      toast.success("تم حفظ حالة الوحدة");
++      toast.success(bi("تم حفظ حالة الوحدة", "Module status saved"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+   });
+ 
+   const editable = can("admin_settings", "edit");
+@@ -51,7 +52,7 @@ export function SystemModulesPage() {
+               <Loader2 className="size-5 animate-spin text-primary" />
+             </div>
+           ) : (
+-            <table className="w-full text-right text-sm">
++            <table className="w-full text-start text-sm">
+               <thead>
+                 <tr className="border-b border-border text-xs text-muted-foreground">
+                   <th className="w-16 px-4 py-3 font-semibold">#</th>
+@@ -66,7 +67,7 @@ export function SystemModulesPage() {
+                     <td className="px-4 py-3">
+                       <span className="flex items-center gap-2 font-semibold text-foreground">
+                         <DynamicIcon name={m.icon} className="size-4 text-muted-foreground" />
+-                        {m.name}
++                        {bi(m.name, m.nameEn)}
+                       </span>
+                     </td>
+                     <td className="px-4 py-3">
+@@ -76,7 +77,7 @@ export function SystemModulesPage() {
+                         onCheckedChange={(checked) =>
+                           mutation.mutate({ id: m.id, enabled: checked })
+                         }
+-                        aria-label={`تفعيل ${m.name}`}
++                        aria-label={bi(`تفعيل ${m.name}`, `Enable ${m.nameEn}`)}
+                       />
+                     </td>
+                   </tr>
+diff --git a/src/components/admin/roles-manager.tsx b/src/components/admin/roles-manager.tsx
+index 5e0c802..34b7878 100644
+--- a/src/components/admin/roles-manager.tsx
++++ b/src/components/admin/roles-manager.tsx
+@@ -29,7 +29,7 @@ import {
+ import { deleteRole, listRoles, saveRole } from "@/lib/rbac.functions";
+ import { useAccess } from "@/hooks/use-access";
+ import { useBi } from "@/lib/bi";
+-import type { RoleRow } from "@/lib/rbac-types";
++import { ROLE_NAME_EN, type RoleRow } from "@/lib/rbac-types";
+ 
+ export function UserTypesPage() {
+   const queryClient = useQueryClient();
+@@ -55,9 +55,10 @@ export function UserTypesPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["roles"] });
+       setOpen(false);
+-      toast.success("تم الحفظ بنجاح");
++      toast.success(bi("تم الحفظ بنجاح", "Saved successfully"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+   });
+ 
+   const deleteMutation = useMutation({
+@@ -65,9 +66,10 @@ export function UserTypesPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["roles"] });
+       setPendingDelete(null);
+-      toast.success("تم الحذف");
++      toast.success(bi("تم الحذف", "Deleted successfully"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+   });
+ 
+   function openDialog(role: RoleRow | null) {
+@@ -97,7 +99,7 @@ export function UserTypesPage() {
+               <Loader2 className="size-5 animate-spin text-primary" />
+             </div>
+           ) : (
+-            <table className="w-full text-right text-sm">
++            <table className="w-full text-start text-sm">
+               <thead>
+                 <tr className="border-b border-border text-xs text-muted-foreground">
+                   <th className="w-16 px-4 py-3 font-semibold">#</th>
+@@ -110,7 +112,9 @@ export function UserTypesPage() {
+                 {(data ?? []).map((role, i) => (
+                   <tr key={role.id} className="border-b border-border/60 last:border-0">
+                     <td className="px-4 py-3 text-muted-foreground">{i + 1}</td>
+-                    <td className="px-4 py-3 font-semibold text-foreground">{role.name}</td>
++                    <td className="px-4 py-3 font-semibold text-foreground">
++                      {bi(role.name, ROLE_NAME_EN[role.name] ?? role.name)}
++                    </td>
+                     <td className="px-4 py-3 text-muted-foreground">{role.description ?? "—"}</td>
+                     <td className="px-4 py-3">
+                       <div className="flex items-center gap-1">
+@@ -163,7 +167,7 @@ export function UserTypesPage() {
+       </div>
+ 
+       <Dialog open={open} onOpenChange={setOpen}>
+-        <DialogContent dir="rtl" className="text-right">
++        <DialogContent className="text-start">
+           <DialogHeader>
+             <DialogTitle>
+               {editing ? bi("تعديل نوع المستخدم", "Edit role") : bi("إضافة نوع مستخدم", "Add role")}
+@@ -196,10 +200,15 @@ export function UserTypesPage() {
+       </Dialog>
+ 
+       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
+-        <AlertDialogContent dir="rtl" className="text-right">
++        <AlertDialogContent className="text-start">
+           <AlertDialogHeader>
+             <AlertDialogTitle>
+-              {bi(`حذف «${pendingDelete?.name}»؟`, `Delete “${pendingDelete?.name}”?`)}
++              {(() => {
++                const n = pendingDelete
++                  ? bi(pendingDelete.name, ROLE_NAME_EN[pendingDelete.name] ?? pendingDelete.name)
++                  : "";
++                return bi(`حذف «${n}»؟`, `Delete "${n}"?`);
++              })()}
+             </AlertDialogTitle>
+             <AlertDialogDescription>
+               {bi(
+diff --git a/src/components/admin/users-manager.tsx b/src/components/admin/users-manager.tsx
+index 0e22c35..640dabe 100644
+--- a/src/components/admin/users-manager.tsx
++++ b/src/components/admin/users-manager.tsx
+@@ -42,7 +42,8 @@ import {
+   toggleUserStatus,
+ } from "@/lib/rbac.functions";
+ import { useAccess } from "@/hooks/use-access";
+-import { GENDER_LABELS, type UserRow } from "@/lib/rbac-types";
++import type { UserRow } from "@/lib/rbac-types";
++import { useBi } from "@/lib/bi";
+ 
+ const EMPTY_FORM = {
+   full_name: "",
+@@ -54,6 +55,7 @@ const EMPTY_FORM = {
+ };
+ 
+ export function UsersPage() {
++  const bi = useBi();
+   const queryClient = useQueryClient();
+   const { can } = useAccess();
+   const fetchUsers = useServerFn(listUsers);
+@@ -99,18 +101,20 @@ export function UsersPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+       setOpen(false);
+-      toast.success("تم الحفظ");
++      toast.success(bi("تم الحفظ", "Saved successfully"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+   });
+ 
+   const statusMutation = useMutation({
+     mutationFn: (vars: { id: string; is_active: boolean }) => toggleStatus({ data: vars }),
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+-      toast.success("تم تحديث الحالة");
++      toast.success(bi("تم تحديث الحالة", "Status updated"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر التحديث"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+   });
+ 
+   const deleteMutation = useMutation({
+@@ -118,16 +122,18 @@ export function UsersPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+       setPendingDelete(null);
+-      toast.success("تم الحذف");
++      toast.success(bi("تم الحذف", "Deleted successfully"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحذف"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+   });
+ 
+   const resetMutation = useMutation({
+     mutationFn: (id: string) =>
+       resetPassword({ data: { id, redirectTo: `${window.location.origin}/auth` } }),
+-    onSuccess: () => toast.success("تم إرسال رابط تغيير كلمة المرور"),
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الإرسال"),
++    onSuccess: () => toast.success(bi("تم إرسال رابط تغيير كلمة المرور", "Reset link sent")),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الإرسال", "Failed to send")),
+   });
+ 
+   function openDialog(user: UserRow | null) {
+@@ -149,54 +155,54 @@ export function UsersPage() {
+ 
+   return (
+     <div>
+-      <PageHeader title="المستخدمين" icon="Users2" />
++      <PageHeader title={bi("المستخدمين", "Users")} icon="Users2" />
+ 
+       <div className="p-5">
+         <Toolbar>
+           <div className="relative min-w-56 flex-1">
+-            <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
++            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+             <Input
+-              placeholder="بحث بالاسم أو البريد أو الجوال"
++              placeholder={bi("بحث بالاسم أو البريد أو الجوال", "Search by name, email, or phone")}
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+-              className="pr-9"
++              className="ps-9"
+             />
+           </div>
+ 
+           <FilterSelect
+             value={status}
+             onChange={setStatus}
+-            placeholder="الحالة"
++            placeholder={bi("الحالة", "Status")}
+             options={[
+-              { value: "all", label: "كل الحالات" },
+-              { value: "active", label: "نشط" },
+-              { value: "inactive", label: "غير نشط" },
++              { value: "all", label: bi("كل الحالات", "All statuses") },
++              { value: "active", label: bi("نشط", "Active") },
++              { value: "inactive", label: bi("غير نشط", "Inactive") },
+             ]}
+           />
+           <FilterSelect
+             value={gender}
+             onChange={setGender}
+-            placeholder="الجنس"
++            placeholder={bi("الجنس", "Gender")}
+             options={[
+-              { value: "all", label: "الكل" },
+-              { value: "male", label: "ذكر" },
+-              { value: "female", label: "أنثى" },
++              { value: "all", label: bi("الكل", "All") },
++              { value: "male", label: bi("ذكر", "Male") },
++              { value: "female", label: bi("أنثى", "Female") },
+             ]}
+           />
+           <FilterSelect
+             value={roleFilter}
+             onChange={setRoleFilter}
+-            placeholder="نوع المستخدم"
++            placeholder={bi("نوع المستخدم", "User type")}
+             options={[
+-              { value: "all", label: "كل الأنواع" },
++              { value: "all", label: bi("كل الأنواع", "All types") },
+               ...(roles ?? []).map((r) => ({ value: r.id, label: r.name })),
+             ]}
+           />
+ 
+           {can("admin_users", "show_add_form") && (
+-            <Button className="mr-auto" onClick={() => openDialog(null)}>
++            <Button className="ms-auto" onClick={() => openDialog(null)}>
+               <Plus className="size-4" />
+-              إضافة مستخدم
++              {bi("إضافة مستخدم", "Add user")}
+             </Button>
+           )}
+         </Toolbar>
+@@ -207,17 +213,17 @@ export function UsersPage() {
+               <Loader2 className="size-5 animate-spin text-primary" />
+             </div>
+           ) : (
+-            <table className="w-full min-w-3xl text-right text-sm">
++            <table className="w-full min-w-3xl text-start text-sm">
+               <thead>
+                 <tr className="border-b border-border text-xs text-muted-foreground">
+                   <th className="w-14 px-4 py-3 font-semibold">#</th>
+-                  <th className="px-4 py-3 font-semibold">الاسم</th>
+-                  <th className="px-4 py-3 font-semibold">البريد</th>
+-                  <th className="px-4 py-3 font-semibold">الجوال</th>
+-                  <th className="px-4 py-3 font-semibold">الجنس</th>
+-                  <th className="px-4 py-3 font-semibold">النوع</th>
+-                  <th className="px-4 py-3 font-semibold">الحالة</th>
+-                  <th className="w-36 px-4 py-3 font-semibold">إجراءات</th>
++                  <th className="px-4 py-3 font-semibold">{bi("الاسم", "Name")}</th>
++                  <th className="px-4 py-3 font-semibold">{bi("البريد", "Email")}</th>
++                  <th className="px-4 py-3 font-semibold">{bi("الجوال", "Phone")}</th>
++                  <th className="px-4 py-3 font-semibold">{bi("الجنس", "Gender")}</th>
++                  <th className="px-4 py-3 font-semibold">{bi("النوع", "Type")}</th>
++                  <th className="px-4 py-3 font-semibold">{bi("الحالة", "Status")}</th>
++                  <th className="w-36 px-4 py-3 font-semibold">{bi("إجراءات", "Actions")}</th>
+                 </tr>
+               </thead>
+               <tbody>
+@@ -228,7 +234,11 @@ export function UsersPage() {
+                     <td className="px-4 py-3 text-muted-foreground">{u.email ?? "—"}</td>
+                     <td className="px-4 py-3 text-muted-foreground">{u.phone ?? "—"}</td>
+                     <td className="px-4 py-3 text-muted-foreground">
+-                      {GENDER_LABELS[u.gender] ?? u.gender}
++                      {u.gender === "male"
++                        ? bi("ذكر", "Male")
++                        : u.gender === "female"
++                          ? bi("أنثى", "Female")
++                          : (u.gender ?? "—")}
+                     </td>
+                     <td className="px-4 py-3 text-muted-foreground">{u.role_name ?? "—"}</td>
+                     <td className="px-4 py-3">
+@@ -236,7 +246,7 @@ export function UsersPage() {
+                         checked={u.is_active}
+                         disabled={!can("admin_users", "edit")}
+                         onCheckedChange={(v) => statusMutation.mutate({ id: u.id, is_active: v })}
+-                        aria-label={`حالة ${u.full_name}`}
++                        aria-label={bi(`حالة ${u.full_name}`, `Status for ${u.full_name}`)}
+                       />
+                     </td>
+                     <td className="px-4 py-3">
+@@ -245,7 +255,7 @@ export function UsersPage() {
+                           <Button
+                             size="icon"
+                             variant="ghost"
+-                            title="تعديل"
++                            title={bi("تعديل", "Edit")}
+                             onClick={() => openDialog(u)}
+                           >
+                             <Pencil className="size-4" />
+@@ -255,7 +265,7 @@ export function UsersPage() {
+                           <Button
+                             size="icon"
+                             variant="ghost"
+-                            title="إرسال رابط كلمة المرور"
++                            title={bi("إرسال رابط كلمة المرور", "Send password reset link")}
+                             onClick={() => resetMutation.mutate(u.id)}
+                           >
+                             <KeyRound className="size-4" />
+@@ -265,7 +275,7 @@ export function UsersPage() {
+                           <Button
+                             size="icon"
+                             variant="ghost"
+-                            title="حذف"
++                            title={bi("حذف", "Delete")}
+                             className="text-destructive"
+                             onClick={() => setPendingDelete(u)}
+                           >
+@@ -279,7 +289,7 @@ export function UsersPage() {
+                 {!filtered.length && (
+                   <tr>
+                     <td colSpan={8} className="p-8 text-center text-muted-foreground">
+-                      لا توجد نتائج مطابقة.
++                      {bi("لا توجد نتائج مطابقة.", "No matching results.")}
+                     </td>
+                   </tr>
+                 )}
+@@ -290,13 +300,15 @@ export function UsersPage() {
+       </div>
+ 
+       <Dialog open={open} onOpenChange={setOpen}>
+-        <DialogContent dir="rtl" className="text-right">
++        <DialogContent className="text-start">
+           <DialogHeader>
+-            <DialogTitle>{editingId ? "تعديل مستخدم" : "إضافة مستخدم"}</DialogTitle>
++            <DialogTitle>
++              {editingId ? bi("تعديل مستخدم", "Edit user") : bi("إضافة مستخدم", "Add user")}
++            </DialogTitle>
+           </DialogHeader>
+           <div className="grid gap-4 sm:grid-cols-2">
+             <div className="space-y-1.5 sm:col-span-2">
+-              <Label htmlFor="u-name">الاسم الكامل</Label>
++              <Label htmlFor="u-name">{bi("الاسم الكامل", "Full name")}</Label>
+               <Input
+                 id="u-name"
+                 value={form.full_name}
+@@ -304,7 +316,7 @@ export function UsersPage() {
+               />
+             </div>
+             <div className="space-y-1.5">
+-              <Label htmlFor="u-email">البريد الإلكتروني</Label>
++              <Label htmlFor="u-email">{bi("البريد الإلكتروني", "Email address")}</Label>
+               <Input
+                 id="u-email"
+                 type="email"
+@@ -313,7 +325,7 @@ export function UsersPage() {
+               />
+             </div>
+             <div className="space-y-1.5">
+-              <Label htmlFor="u-phone">رقم الجوال</Label>
++              <Label htmlFor="u-phone">{bi("رقم الجوال", "Phone number")}</Label>
+               <Input
+                 id="u-phone"
+                 value={form.phone}
+@@ -321,7 +333,7 @@ export function UsersPage() {
+               />
+             </div>
+             <div className="space-y-1.5">
+-              <Label>الجنس</Label>
++              <Label>{bi("الجنس", "Gender")}</Label>
+               <Select
+                 value={form.gender}
+                 onValueChange={(v) => setForm((f) => ({ ...f, gender: v as "male" | "female" }))}
+@@ -330,22 +342,22 @@ export function UsersPage() {
+                   <SelectValue />
+                 </SelectTrigger>
+                 <SelectContent>
+-                  <SelectItem value="male">ذكر</SelectItem>
+-                  <SelectItem value="female">أنثى</SelectItem>
++                  <SelectItem value="male">{bi("ذكر", "Male")}</SelectItem>
++                  <SelectItem value="female">{bi("أنثى", "Female")}</SelectItem>
+                 </SelectContent>
+               </Select>
+             </div>
+             <div className="space-y-1.5">
+-              <Label>نوع المستخدم</Label>
++              <Label>{bi("نوع المستخدم", "User type")}</Label>
+               <Select
+                 value={form.role_id ?? "none"}
+                 onValueChange={(v) => setForm((f) => ({ ...f, role_id: v === "none" ? null : v }))}
+               >
+                 <SelectTrigger>
+-                  <SelectValue placeholder="بدون" />
++                  <SelectValue placeholder={bi("بدون", "None")} />
+                 </SelectTrigger>
+                 <SelectContent>
+-                  <SelectItem value="none">بدون</SelectItem>
++                  <SelectItem value="none">{bi("بدون", "None")}</SelectItem>
+                   {(roles ?? []).map((r) => (
+                     <SelectItem key={r.id} value={r.id}>
+                       {r.name}
+@@ -360,33 +372,37 @@ export function UsersPage() {
+                 onCheckedChange={(v) => setForm((f) => ({ ...f, is_active: v }))}
+                 id="u-active"
+               />
+-              <Label htmlFor="u-active">الحساب نشط</Label>
++              <Label htmlFor="u-active">{bi("الحساب نشط", "Account active")}</Label>
+             </div>
+           </div>
+           <DialogFooter className="gap-2 sm:justify-start">
+             <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+-              حفظ
++              {bi("حفظ", "Save")}
+             </Button>
+             <Button variant="outline" onClick={() => setOpen(false)}>
+-              إلغاء
++              {bi("إلغاء", "Cancel")}
+             </Button>
+           </DialogFooter>
+         </DialogContent>
+       </Dialog>
+ 
+       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
+-        <AlertDialogContent dir="rtl" className="text-right">
++        <AlertDialogContent className="text-start">
+           <AlertDialogHeader>
+-            <AlertDialogTitle>حذف «{pendingDelete?.full_name}»؟</AlertDialogTitle>
+-            <AlertDialogDescription>لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
++            <AlertDialogTitle>
++              {bi(`حذف «${pendingDelete?.full_name}»؟`, `Delete "${pendingDelete?.full_name}"?`)}
++            </AlertDialogTitle>
++            <AlertDialogDescription>
++              {bi("لا يمكن التراجع عن هذا الإجراء.", "This action cannot be undone.")}
++            </AlertDialogDescription>
+           </AlertDialogHeader>
+           <AlertDialogFooter className="gap-2 sm:justify-start">
+             <AlertDialogAction
+               onClick={() => pendingDelete && deleteMutation.mutate(pendingDelete.id)}
+             >
+-              حذف
++              {bi("حذف", "Delete")}
+             </AlertDialogAction>
+-            <AlertDialogCancel>إلغاء</AlertDialogCancel>
++            <AlertDialogCancel>{bi("إلغاء", "Cancel")}</AlertDialogCancel>
+           </AlertDialogFooter>
+         </AlertDialogContent>
+       </AlertDialog>
+diff --git a/src/components/providers/preferences-provider.tsx b/src/components/providers/preferences-provider.tsx
+index eb6e188..8e735de 100644
+--- a/src/components/providers/preferences-provider.tsx
++++ b/src/components/providers/preferences-provider.tsx
+@@ -63,22 +63,31 @@ async function persistToProfile(patch: { theme_pref?: ThemePref; locale?: Locale
+   }
+ }
+ 
++function readStoredTheme(): ThemePref {
++  if (typeof window === "undefined") return "auto";
++  const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null;
++  return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
++}
++
++function readStoredLocale(): Locale {
++  if (typeof window === "undefined") return "ar";
++  const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
++  return stored && SUPPORTED_LOCALES.includes(stored) ? stored : "ar";
++}
++
+ function PreferencesState({ children }: { children: ReactNode }) {
+   const { i18n: instance } = useTranslation();
+-  const [theme, setThemeState] = useState<ThemePref>("auto");
+-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
+-  const [locale, setLocaleState] = useState<Locale>("ar");
++  // القراءة المباشرة (lazy initializer) بدل useEffect منفصل — كان في سباق (race)
++  // بين effect قراءة localStorage وeffect متابعة تفضيل نظام التشغيل: كلاهما
++  // يعمل بنفس الـ commit الأول، وeffect النظام كان يكتب فوق القيمة المحفوظة
++  // الصحيحة قبل ما توصل، فيرجع الثيم لـdark حتى لو localStorage فيها "light".
++  const [theme, setThemeState] = useState<ThemePref>(readStoredTheme);
++  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() =>
++    resolveDark(readStoredTheme()) ? "dark" : "light",
++  );
++  const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
+   const [switchingLocale, setSwitchingLocale] = useState(false);
+ 
+-  // Read the persisted values written by the boot script (client only).
+-  useEffect(() => {
+-    const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null) ?? "auto";
+-    const storedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+-    setThemeState(storedTheme);
+-    setResolvedTheme(resolveDark(storedTheme) ? "dark" : "light");
+-    if (storedLocale && SUPPORTED_LOCALES.includes(storedLocale)) setLocaleState(storedLocale);
+-  }, []);
+-
+   // Follow the device when the user never chose manually.
+   useEffect(() => {
+     if (theme !== "auto") return;
+diff --git a/src/components/site/hero-mockup.tsx b/src/components/site/hero-mockup.tsx
+index e5b2dde..b7c6239 100644
+--- a/src/components/site/hero-mockup.tsx
++++ b/src/components/site/hero-mockup.tsx
+@@ -1,5 +1,6 @@
+ import { Bell, CheckCircle2, Flame, TrendingUp } from "lucide-react";
+ import { useBi } from "@/lib/bi";
++import type { PublicSession } from "@/hooks/use-session";
+ 
+ const subjects = [
+   { icon: "📐", pct: 78, tone: "bg-primary" },
+@@ -13,10 +14,18 @@ const weekBars = [22, 34, 18, 40, 28, 46, 32];
+ /**
+  * HeroMockup — معاينة بصرية حقيقية للوحة تحكم الطالب، مبنية بالكامل من عناصر
+  * الواجهة (لا صورة/سكرين‌شوت). تُستخدم في الـ Hero لإعطاء إحساس "منتج حقيقي"
+- * بدل نص فاضٍ. زخرفية بالكامل (aria-hidden) ولا تعرض بيانات مستخدم فعلية.
++ * بدل نص فاضٍ.
++ *
++ * الاسم/الحرف الأول شخصي (من جلسة المستخدم الحقيقية) بعد تسجيل الدخول؛ الأرقام
++ * والإحصائيات تبقى توضيحية (demo) لعدم وجود مصدر بيانات تحليلية حقيقي بعد —
++ * تُستبدل لاحقاً بأرقام حقيقية بمجرد ربط الباك إند بهالمكوّن.
+  */
+-export function HeroMockup() {
++export function HeroMockup({ session }: { session?: PublicSession | null }) {
+   const bi = useBi();
++  const firstName = session?.fullName?.trim().split(/\s+/)[0];
++  const displayName = firstName || bi("سارة", "Sarah");
++  const initial = displayName.charAt(0).toUpperCase();
++  const greeting = bi(`أهلاً ${displayName} 👋`, `Hi ${displayName} 👋`);
+ 
+   return (
+     <div aria-hidden className="relative hidden select-none lg:block">
+@@ -37,12 +46,10 @@ export function HeroMockup() {
+           <div className="flex items-center justify-between">
+             <div className="flex items-center gap-2.5">
+               <span className="flex size-9 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary">
+-                {bi("سا", "S")}
++                {initial}
+               </span>
+               <div>
+-                <p className="text-xs font-bold text-foreground">
+-                  {bi("أهلاً سارة 👋", "Hi Sarah 👋")}
+-                </p>
++                <p className="text-xs font-bold text-foreground">{greeting}</p>
+                 <p className="text-[10px] text-muted-foreground">
+                   {bi("جاهزة لمتابعة إنجازك اليوم", "Ready to keep your streak going")}
+                 </p>
+diff --git a/src/lib/rbac-types.ts b/src/lib/rbac-types.ts
+index f2cfa92..d769017 100644
+--- a/src/lib/rbac-types.ts
++++ b/src/lib/rbac-types.ts
+@@ -12,6 +12,37 @@ export const PERMISSION_ORDER = [
+ 
+ export type PermissionKey = (typeof PERMISSION_ORDER)[number] | string;
+ 
++/**
++ * ترجمة عرضية مؤقتة (frontend-only) لتسميات الصلاحيات — جدول `permission_keys`
++ * بقاعدة البيانات ما فيه عمود إنجليزي (`label_en`) حالياً. مبنية على المفتاح
++ * الثابت (`key`) مش على نص `label`، فهي آمنة وما بتتأثر لو تغيّر نص العرض العربي.
++ * تُحذف تلقائياً بمجرد ما الباك إند يضيف `label_en` (استبدل بـ`bi(label, labelEn)`).
++ */
++export const PERMISSION_LABEL_EN: Record<string, string> = {
++  view_list: "View list",
++  show_add_form: "Show add form",
++  execute_add: "Create",
++  edit: "Edit",
++  delete: "Delete",
++  view_profile: "View profile",
++  edit_profile: "Edit profile",
++  show_password_form: "Show password form",
++  change_password: "Change password",
++};
++
++/**
++ * ترجمة عرضية مؤقتة (frontend-only) لأسماء الأدوار — جدول `roles` ما فيه عمود
++ * `name_en` حالياً (بخلاف `modules`/`pages` اللي فيهم). تُحذف بمجرد ما الباك إند
++ * يضيف العمود.
++ */
++export const ROLE_NAME_EN: Record<string, string> = {
++  طالب: "Student",
++  معلم: "Teacher",
++  "ولي أمر": "Parent",
++  "مشرف أكاديمي": "Academic Supervisor",
++  "مدير عام": "General Admin",
++};
++
+ export interface PermissionKeyRow {
+   key: string;
+   label: string;
+@@ -69,6 +100,7 @@ export interface TreePage {
+   id: string;
+   key: string;
+   name: string;
++  nameEn: string;
+   icon: string;
+   path: string | null;
+   children: TreePage[];
+@@ -78,6 +110,7 @@ export interface TreeModule {
+   id: string;
+   key: string;
+   name: string;
++  nameEn: string;
+   icon: string;
+   enabled: boolean;
+   pages: TreePage[];
+@@ -96,6 +129,7 @@ export interface ModuleRow {
+   id: string;
+   key: string;
+   name: string;
++  nameEn: string;
+   icon: string;
+   enabled: boolean;
+   sort_order: number;
+diff --git a/src/lib/rbac.functions.ts b/src/lib/rbac.functions.ts
+index d2ac052..4252af4 100644
+--- a/src/lib/rbac.functions.ts
++++ b/src/lib/rbac.functions.ts
+@@ -19,10 +19,18 @@ export const listModules = createServerFn({ method: "GET" })
+     await requirePermission(context.supabase, context.userId, "admin_settings", "view_list");
+     const { data, error } = await context.supabase
+       .from("modules")
+-      .select("id, key, name, icon, enabled, sort_order")
++      .select("id, key, name, name_en, icon, enabled, sort_order")
+       .order("sort_order");
+     if (error) throw new Error(error.message);
+-    return data ?? [];
++    return (data ?? []).map((m) => ({
++      id: m.id,
++      key: m.key,
++      name: m.name,
++      nameEn: m.name_en ?? m.name,
++      icon: m.icon,
++      enabled: m.enabled,
++      sort_order: m.sort_order,
++    }));
+   });
+ 
+ export const setModuleEnabled = createServerFn({ method: "POST" })
+diff --git a/src/lib/rbac.server.ts b/src/lib/rbac.server.ts
+index 8306b02..03c07fa 100644
+--- a/src/lib/rbac.server.ts
++++ b/src/lib/rbac.server.ts
+@@ -113,9 +113,7 @@ export async function loadAccess(sb: DB, userId: string): Promise<MyAccess> {
+         .map((p) => {
+           const children = build(p.id);
+           const perms = Array.from(byPageId.get(p.id) ?? []);
+-          const canView = useDefaultScope
+-            ? perms.includes("view_list")
+-            : viewable.has(p.id);
++          const canView = useDefaultScope ? perms.includes("view_list") : viewable.has(p.id);
+           return {
+             id: p.id,
+             key: p.key,
+@@ -243,6 +241,7 @@ export async function loadPermissionMatrix(sb: DB, roleId: string): Promise<Perm
+           id: p.id,
+           key: p.key,
+           name: p.name,
++          nameEn: p.name_en ?? p.name,
+           icon: p.icon,
+           path: p.path,
+           children: build(p.id),
+@@ -251,6 +250,7 @@ export async function loadPermissionMatrix(sb: DB, roleId: string): Promise<Perm
+       id: m.id,
+       key: m.key,
+       name: m.name,
++      nameEn: m.name_en ?? m.name,
+       icon: m.icon,
+       enabled: m.enabled,
+       pages: build(null),
+diff --git a/src/routes/_authenticated/exam-simulator.tsx b/src/routes/_authenticated/exam-simulator.tsx
+index bda2e36..c0707b7 100644
+--- a/src/routes/_authenticated/exam-simulator.tsx
++++ b/src/routes/_authenticated/exam-simulator.tsx
+@@ -55,7 +55,7 @@ function Body() {
+         items={[
+           { icon: "FileCheck2", label: bi("امتحانات أنهيتها", "Exams taken"), value: "7" },
+           { icon: "Percent", label: bi("أفضل نتيجة", "Best score"), value: "88%" },
+-          { icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: "42 د" },
++          { icon: "Timer", label: bi("متوسط الوقت", "Avg. time"), value: bi("42 د", "42 min") },
+           { icon: "Target", label: bi("الهدف", "Target"), value: "90%" },
+         ]}
+       />
+diff --git a/src/routes/_authenticated/library.lesson.$id.tsx b/src/routes/_authenticated/library.lesson.$id.tsx
+index 6b7ebba..0f56bdf 100644
+--- a/src/routes/_authenticated/library.lesson.$id.tsx
++++ b/src/routes/_authenticated/library.lesson.$id.tsx
+@@ -53,7 +53,7 @@ function Body() {
+     >
+       <StatGrid
+         items={[
+-          { icon: "Clock", label: bi("مدة الدرس", "Duration"), value: "18 د" },
++          { icon: "Clock", label: bi("مدة الدرس", "Duration"), value: bi("18 د", "18 min") },
+           { icon: "ListChecks", label: bi("أسئلة", "Questions"), value: "10" },
+           { icon: "Layers", label: bi("بطاقات", "Flashcards"), value: "12" },
+           { icon: "Target", label: bi("نتيجتك", "Your score"), value: "80%" },
+diff --git a/src/routes/_authenticated/role-permissions.$roleId.tsx b/src/routes/_authenticated/role-permissions.$roleId.tsx
+index 205e670..9c09ea7 100644
+--- a/src/routes/_authenticated/role-permissions.$roleId.tsx
++++ b/src/routes/_authenticated/role-permissions.$roleId.tsx
+@@ -10,7 +10,13 @@ import { Button } from "@/components/ui/button";
+ import { Checkbox } from "@/components/ui/checkbox";
+ import { getPermissionMatrix, saveRolePermissions } from "@/lib/rbac.functions";
+ import { ACCESS_QUERY_KEY } from "@/hooks/use-access";
+-import type { PermissionMatrix, TreePage } from "@/lib/rbac-types";
++import {
++  PERMISSION_LABEL_EN,
++  ROLE_NAME_EN,
++  type PermissionMatrix,
++  type TreePage,
++} from "@/lib/rbac-types";
++import { useBi } from "@/lib/bi";
+ import { cn } from "@/lib/utils";
+ 
+ export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
+@@ -34,6 +40,7 @@ function collectPages(pages: TreePage[]): TreePage[] {
+ 
+ function RolePermissionsPage() {
+   const { roleId } = Route.useParams();
++  const bi = useBi();
+   const navigate = useNavigate();
+   const queryClient = useQueryClient();
+   const fetchMatrix = useServerFn(getPermissionMatrix);
+@@ -64,9 +71,10 @@ function RolePermissionsPage() {
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["permission-matrix", roleId] });
+       queryClient.invalidateQueries({ queryKey: ACCESS_QUERY_KEY });
+-      toast.success("تم حفظ الصلاحيات");
++      toast.success(bi("تم حفظ الصلاحيات", "Permissions saved"));
+     },
+-    onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر الحفظ"),
++    onError: (e) =>
++      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+   });
+ 
+   const keys = data?.permissionKeys ?? [];
+@@ -117,7 +125,7 @@ function RolePermissionsPage() {
+   if (isLoading || !data) {
+     return (
+       <div>
+-        <PageHeader title="الصلاحيات" icon="ShieldCheck" />
++        <PageHeader title={bi("الصلاحيات", "Permissions")} icon="ShieldCheck" />
+         <div className="flex justify-center p-16">
+           <Loader2 className="size-6 animate-spin text-primary" />
+         </div>
+@@ -125,18 +133,22 @@ function RolePermissionsPage() {
+     );
+   }
+ 
++  const roleName = bi(data.roleName, ROLE_NAME_EN[data.roleName] ?? data.roleName);
++
+   return (
+     <div className="pb-24">
+       <PageHeader
+-        title={`صلاحيات: ${data.roleName}`}
++        title={bi(`صلاحيات: ${data.roleName}`, `Permissions: ${roleName}`)}
+         icon="ShieldCheck"
+         onBack={() => navigate({ to: "/user-types" })}
+       />
+ 
+       <div className="space-y-3 p-5">
+         <p className="text-sm text-muted-foreground">
+-          تحديد الوحدة يفعّل كل صفحاتها وأدواتها، ويمكنك بعدها إلغاء أي أداة بشكل مستقل. الحفظ لا
+-          يتم إلا بالضغط على زر الحفظ بالأسفل.
++          {bi(
++            "تحديد الوحدة يفعّل كل صفحاتها وأدواتها، ويمكنك بعدها إلغاء أي أداة بشكل مستقل. الحفظ لا يتم إلا بالضغط على زر الحفظ بالأسفل.",
++            "Selecting a module enables all its pages and tools; you can then disable any tool individually. Nothing is saved until you press the save button below.",
++          )}
+         </p>
+ 
+         {data.modules.map((mod) => {
+@@ -156,11 +168,11 @@ function RolePermissionsPage() {
+                 <Checkbox
+                   checked={modAll ? true : modOn ? "indeterminate" : false}
+                   onCheckedChange={(v) => toggleModule(mod.id, v === true)}
+-                  aria-label={mod.name}
++                  aria-label={bi(mod.name, mod.nameEn)}
+                 />
+                 <button
+                   type="button"
+-                  className="flex flex-1 items-center gap-2 text-right"
++                  className="flex flex-1 items-center gap-2 text-start"
+                   onClick={() =>
+                     setOpenModules((prev) => {
+                       const next = new Set(prev);
+@@ -171,15 +183,17 @@ function RolePermissionsPage() {
+                   }
+                 >
+                   <DynamicIcon name={mod.icon} className="size-4 text-primary" />
+-                  <span className="text-sm font-bold text-foreground">{mod.name}</span>
++                  <span className="text-sm font-bold text-foreground">
++                    {bi(mod.name, mod.nameEn)}
++                  </span>
+                   {!mod.enabled && (
+                     <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+-                      الوحدة معطّلة بالنظام
++                      {bi("الوحدة معطّلة بالنظام", "Module disabled system-wide")}
+                     </span>
+                   )}
+                   <ChevronDown
+                     className={cn(
+-                      "mr-auto size-4 text-muted-foreground transition-transform",
++                      "ms-auto size-4 text-muted-foreground transition-transform",
+                       isOpen && "rotate-180",
+                     )}
+                   />
+@@ -210,15 +224,20 @@ function RolePermissionsPage() {
+       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 p-4 backdrop-blur">
+         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
+           <span className="text-xs text-muted-foreground">
+-            {granted.size} صلاحية محددة عبر {allPages.length} صفحة
++            {bi(
++              `${granted.size} صلاحية محددة عبر ${allPages.length} صفحة`,
++              `${granted.size} permissions set across ${allPages.length} pages`,
++            )}
+           </span>
+           <div className="flex gap-2">
+             <Button variant="outline" onClick={() => setGranted(new Set(data.granted))}>
+-              تراجع
++              {bi("تراجع", "Reset")}
+             </Button>
+             <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+               <Save className="size-4" />
+-              {saveMutation.isPending ? "جارٍ الحفظ..." : "حفظ الصلاحيات"}
++              {saveMutation.isPending
++                ? bi("جارٍ الحفظ...", "Saving...")
++                : bi("حفظ الصلاحيات", "Save permissions")}
+             </Button>
+           </div>
+         </div>
+@@ -244,21 +263,25 @@ function PageRow({
+   onTogglePage: (page: TreePage, on: boolean) => void;
+   pageState: (page: TreePage) => "all" | "some" | "none";
+ }) {
++  const bi = useBi();
+   const state = pageState(page);
+   return (
+     <>
+-      <div className="px-4 py-3" style={{ paddingRight: 16 + depth * 24 }}>
++      {/* paddingInlineStart (منطقي) بدل paddingRight الثابت — يعمل صح بـRTL وLTR معاً */}
++      <div className="px-4 py-3" style={{ paddingInlineStart: 16 + depth * 24 }}>
+         <div className="flex items-center gap-3">
+           <Checkbox
+             checked={state === "all" ? true : state === "some" ? "indeterminate" : false}
+             onCheckedChange={(v) => onTogglePage(page, v === true)}
+-            aria-label={page.name}
++            aria-label={bi(page.name, page.nameEn)}
+           />
+           <DynamicIcon name={page.icon} className="size-4 text-muted-foreground" />
+-          <span className="text-sm font-semibold text-foreground">{page.name}</span>
++          <span className="text-sm font-semibold text-foreground">
++            {bi(page.name, page.nameEn)}
++          </span>
+         </div>
+ 
+-        <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 pr-8">
++        <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 ps-8">
+           {keys.map((k) => {
+             const entry = `${page.id}:${k.key}`;
+             return (
+@@ -267,7 +290,9 @@ function PageRow({
+                   checked={granted.has(entry)}
+                   onCheckedChange={(v) => onToggleEntry(entry, v === true)}
+                 />
+-                <span className="text-muted-foreground">{k.label}</span>
++                <span className="text-muted-foreground">
++                  {bi(k.label, PERMISSION_LABEL_EN[k.key] ?? k.label)}
++                </span>
+               </label>
+             );
+           })}
+diff --git a/src/routes/_authenticated/settings.tsx b/src/routes/_authenticated/settings.tsx
+index 915528c..dced078 100644
+--- a/src/routes/_authenticated/settings.tsx
++++ b/src/routes/_authenticated/settings.tsx
+@@ -6,6 +6,8 @@ import { usePreferences } from "@/components/providers/preferences-provider";
+ import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
+ import { useAccess } from "@/hooks/use-access";
+ import { Guard } from "@/components/app/guard";
++import { ROLE_NAME_EN } from "@/lib/rbac-types";
++import { useBi } from "@/lib/bi";
+ 
+ export const Route = createFileRoute("/_authenticated/settings")({
+   head: () => ({
+@@ -28,6 +30,7 @@ const LOCALES = ["ar", "en"] as const;
+ 
+ function SettingsPage() {
+   const { t } = useTranslation();
++  const bi = useBi();
+   const { access } = useAccess();
+   const { signOut, pending: signingOut } = useSignOut("/login");
+   const { theme, setTheme, locale, setLocale } = usePreferences();
+@@ -102,7 +105,14 @@ function SettingsPage() {
+             </div>
+             <div>
+               <dt className="text-xs text-muted-foreground">{t("settings.role")}</dt>
+-              <dd className="font-semibold text-foreground">{access?.profile?.role_name ?? "—"}</dd>
++              <dd className="font-semibold text-foreground">
++                {access?.profile?.role_name
++                  ? bi(
++                      access.profile.role_name,
++                      ROLE_NAME_EN[access.profile.role_name] ?? access.profile.role_name,
++                    )
++                  : "—"}
++              </dd>
+             </div>
+           </dl>
+         </section>
+diff --git a/src/routes/_authenticated/supervisor.teachers.tsx b/src/routes/_authenticated/supervisor.teachers.tsx
+index 1083430..6c833c1 100644
+--- a/src/routes/_authenticated/supervisor.teachers.tsx
++++ b/src/routes/_authenticated/supervisor.teachers.tsx
+@@ -54,7 +54,11 @@ function Body() {
+         items={[
+           { icon: "Presentation", label: bi("معلمون نشطون", "Active teachers"), value: "18" },
+           { icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: bi("5 س", "5h") },
+-          { icon: "PenSquare", label: bi("متوسط زمن التصحيح", "Avg. grading"), value: "1.8 يوم" },
++          {
++            icon: "PenSquare",
++            label: bi("متوسط زمن التصحيح", "Avg. grading"),
++            value: bi("1.8 يوم", "1.8 days"),
++          },
+           { icon: "Star", label: bi("متوسط التقييم", "Avg. rating"), value: "4.6" },
+         ]}
+       />
+diff --git a/src/routes/_authenticated/teacher.community.tsx b/src/routes/_authenticated/teacher.community.tsx
+index fd8c61a..a9b5bf9 100644
+--- a/src/routes/_authenticated/teacher.community.tsx
++++ b/src/routes/_authenticated/teacher.community.tsx
+@@ -55,7 +55,11 @@ function Body() {
+           { icon: "MessagesSquare", label: bi("أسئلة مفتوحة", "Open questions"), value: "7" },
+           { icon: "CheckCheck", label: bi("أجبت هذا الأسبوع", "Answered this week"), value: "23" },
+           { icon: "Flag", label: bi("بلاغات", "Reports"), value: "1" },
+-          { icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: "4 س" },
++          {
++            icon: "Clock",
++            label: bi("متوسط زمن الرد", "Avg. response"),
++            value: bi("4 س", "4 hrs"),
++          },
+         ]}
+       />
+       <Panel title={bi("بانتظار جوابك", "Awaiting your answer")} icon="MessagesSquare">
+diff --git a/src/routes/_authenticated/teacher.grading.tsx b/src/routes/_authenticated/teacher.grading.tsx
+index 3cddcfa..7e8e3ba 100644
+--- a/src/routes/_authenticated/teacher.grading.tsx
++++ b/src/routes/_authenticated/teacher.grading.tsx
+@@ -54,7 +54,11 @@ function Body() {
+         items={[
+           { icon: "PenSquare", label: bi("بانتظار التصحيح", "Pending"), value: "18" },
+           { icon: "CheckCheck", label: bi("صُحّحت اليوم", "Graded today"), value: "11" },
+-          { icon: "Clock", label: bi("متوسط وقت التصحيح", "Avg. time"), value: "3.4 د" },
++          {
++            icon: "Clock",
++            label: bi("متوسط وقت التصحيح", "Avg. time"),
++            value: bi("3.4 د", "3.4 min"),
++          },
+           { icon: "AlertTriangle", label: bi("متأخّرة", "Overdue"), value: "2" },
+         ]}
+       />
+diff --git a/src/routes/_authenticated/teacher.settings.tsx b/src/routes/_authenticated/teacher.settings.tsx
+index 5e10c27..a7c1cd5 100644
+--- a/src/routes/_authenticated/teacher.settings.tsx
++++ b/src/routes/_authenticated/teacher.settings.tsx
+@@ -52,9 +52,21 @@ function Body() {
+     >
+       <StatGrid
+         items={[
+-          { icon: "BadgePercent", label: bi("نموذج التسعير", "Pricing model"), value: bi("لكل كورس", "Per course") },
+-          { icon: "CalendarClock", label: bi("أوقات التوفّر", "Availability"), value: "5 فترات" },
+-          { icon: "Banknote", label: bi("طريقة السحب", "Payout method"), value: bi("حوالة بنكية", "Bank transfer") },
++          {
++            icon: "BadgePercent",
++            label: bi("نموذج التسعير", "Pricing model"),
++            value: bi("لكل كورس", "Per course"),
++          },
++          {
++            icon: "CalendarClock",
++            label: bi("أوقات التوفّر", "Availability"),
++            value: bi("5 فترات", "5 slots"),
++          },
++          {
++            icon: "Banknote",
++            label: bi("طريقة السحب", "Payout method"),
++            value: bi("حوالة بنكية", "Bank transfer"),
++          },
+           { icon: "BellRing", label: bi("الإشعارات", "Notifications"), value: bi("مفعّلة", "On") },
+         ]}
+       />
+diff --git a/src/routes/index.tsx b/src/routes/index.tsx
+index e311e0a..9efe04f 100644
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -20,7 +20,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
+ import { useSession } from "@/hooks/use-session";
+ import { blogPosts } from "@/content/blog-posts";
+ import { cn } from "@/lib/utils";
+-import { useBi } from "@/lib/bi";
++import { allowedPublicPaths, useBi } from "@/lib/bi";
+ 
+ const title = "Academia | منصة الطالب للتنظيم والإنجاز";
+ const description =
+@@ -67,6 +67,9 @@ function Landing() {
+   const bi = useBi();
+   const { session } = useSession();
+   const role = session?.roleKey;
++  // زر "تصفح الكورسات" مخصص للطالب بس — لباقي الأدوار (معلم/ولي أمر/مشرف/أدمن)
++  // صفحة /courses مو من صلاحياتهم، فما لازم يظهرلهم زر يودّيهم لصفحة "غير مصرح".
++  const canBrowseCourses = role ? (allowedPublicPaths(role) ?? []).includes("/courses") : false;
+ 
+   return (
+     <PublicLayout>
+@@ -95,12 +98,14 @@ function Landing() {
+                       <LayoutDashboard className="size-4" />
+                       {t("home.signedIn.cta")}
+                     </Link>
+-                    <Link
+-                      to="/courses"
+-                      className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+-                    >
+-                      {t("home.signedIn.browse")}
+-                    </Link>
++                    {canBrowseCourses && (
++                      <Link
++                        to="/courses"
++                        className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
++                      >
++                        {t("home.signedIn.browse")}
++                      </Link>
++                    )}
+                   </div>
+                 </>
+               ) : (
+@@ -146,7 +151,7 @@ function Landing() {
+             </div>
+ 
+             <Reveal delay={0.15} y={16}>
+-              <HeroMockup />
++              <HeroMockup session={session} />
+             </Reveal>
+           </div>
+         </div>
+@@ -239,7 +244,9 @@ function Landing() {
+                 <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
+                   {bi(post.title, post.titleEn)}
+                 </h3>
+-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bi(post.excerpt, post.excerptEn)}</p>
++                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
++                  {bi(post.excerpt, post.excerptEn)}
++                </p>
+               </Link>
+             </Reveal>
+           ))}

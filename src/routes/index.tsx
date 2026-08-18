@@ -20,7 +20,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
-import { useBi } from "@/lib/bi";
+import { allowedPublicPaths, useBi } from "@/lib/bi";
 
 const title = "Academia | منصة الطالب للتنظيم والإنجاز";
 const description =
@@ -67,6 +67,9 @@ function Landing() {
   const bi = useBi();
   const { session } = useSession();
   const role = session?.roleKey;
+  // زر "تصفح الكورسات" مخصص للطالب بس — لباقي الأدوار (معلم/ولي أمر/مشرف/أدمن)
+  // صفحة /courses مو من صلاحياتهم، فما لازم يظهرلهم زر يودّيهم لصفحة "غير مصرح".
+  const canBrowseCourses = role ? (allowedPublicPaths(role) ?? []).includes("/courses") : false;
 
   return (
     <PublicLayout>
@@ -95,12 +98,14 @@ function Landing() {
                       <LayoutDashboard className="size-4" />
                       {t("home.signedIn.cta")}
                     </Link>
-                    <Link
-                      to="/courses"
-                      className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
-                    >
-                      {t("home.signedIn.browse")}
-                    </Link>
+                    {canBrowseCourses && (
+                      <Link
+                        to="/courses"
+                        className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+                      >
+                        {t("home.signedIn.browse")}
+                      </Link>
+                    )}
                   </div>
                 </>
               ) : (
@@ -146,7 +151,7 @@ function Landing() {
             </div>
 
             <Reveal delay={0.15} y={16}>
-              <HeroMockup />
+              <HeroMockup session={session} />
             </Reveal>
           </div>
         </div>
@@ -239,7 +244,9 @@ function Landing() {
                 <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
                   {bi(post.title, post.titleEn)}
                 </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bi(post.excerpt, post.excerptEn)}</p>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                  {bi(post.excerpt, post.excerptEn)}
+                </p>
               </Link>
             </Reveal>
           ))}

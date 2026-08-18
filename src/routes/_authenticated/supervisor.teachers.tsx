@@ -54,7 +54,11 @@ function Body() {
         items={[
           { icon: "Presentation", label: bi("معلمون نشطون", "Active teachers"), value: "18" },
           { icon: "Clock", label: bi("متوسط زمن الرد", "Avg. response"), value: bi("5 س", "5h") },
-          { icon: "PenSquare", label: bi("متوسط زمن التصحيح", "Avg. grading"), value: "1.8 يوم" },
+          {
+            icon: "PenSquare",
+            label: bi("متوسط زمن التصحيح", "Avg. grading"),
+            value: bi("1.8 يوم", "1.8 days"),
+          },
           { icon: "Star", label: bi("متوسط التقييم", "Avg. rating"), value: "4.6" },
         ]}
       />

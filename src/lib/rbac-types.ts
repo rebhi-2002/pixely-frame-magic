@@ -12,6 +12,37 @@ export const PERMISSION_ORDER = [
 
 export type PermissionKey = (typeof PERMISSION_ORDER)[number] | string;
 
+/**
+ * ترجمة عرضية مؤقتة (frontend-only) لتسميات الصلاحيات — جدول `permission_keys`
+ * بقاعدة البيانات ما فيه عمود إنجليزي (`label_en`) حالياً. مبنية على المفتاح
+ * الثابت (`key`) مش على نص `label`، فهي آمنة وما بتتأثر لو تغيّر نص العرض العربي.
+ * تُحذف تلقائياً بمجرد ما الباك إند يضيف `label_en` (استبدل بـ`bi(label, labelEn)`).
+ */
+export const PERMISSION_LABEL_EN: Record<string, string> = {
+  view_list: "View list",
+  show_add_form: "Show add form",
+  execute_add: "Create",
+  edit: "Edit",
+  delete: "Delete",
+  view_profile: "View profile",
+  edit_profile: "Edit profile",
+  show_password_form: "Show password form",
+  change_password: "Change password",
+};
+
+/**
+ * ترجمة عرضية مؤقتة (frontend-only) لأسماء الأدوار — جدول `roles` ما فيه عمود
+ * `name_en` حالياً (بخلاف `modules`/`pages` اللي فيهم). تُحذف بمجرد ما الباك إند
+ * يضيف العمود.
+ */
+export const ROLE_NAME_EN: Record<string, string> = {
+  طالب: "Student",
+  معلم: "Teacher",
+  "ولي أمر": "Parent",
+  "مشرف أكاديمي": "Academic Supervisor",
+  "مدير عام": "General Admin",
+};
+
 export interface PermissionKeyRow {
   key: string;
   label: string;
@@ -69,6 +100,7 @@ export interface TreePage {
   id: string;
   key: string;
   name: string;
+  nameEn: string;
   icon: string;
   path: string | null;
   children: TreePage[];
@@ -78,6 +110,7 @@ export interface TreeModule {
   id: string;
   key: string;
   name: string;
+  nameEn: string;
   icon: string;
   enabled: boolean;
   pages: TreePage[];
@@ -96,6 +129,7 @@ export interface ModuleRow {
   id: string;
   key: string;
   name: string;
+  nameEn: string;
   icon: string;
   enabled: boolean;
   sort_order: number;
