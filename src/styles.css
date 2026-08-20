@@ -191,7 +191,6 @@
   }
 }
 
-
 @layer base {
   * {
     border-color: var(--color-border);
@@ -220,7 +219,6 @@
     font-family: var(--font-display-family);
   }
 }
-
 
 @utility glow-primary {
   box-shadow: 0 18px 50px -22px color-mix(in oklab, var(--color-primary) 70%, transparent);
@@ -489,8 +487,8 @@
   button,
   summary,
   [role="button"] {
-    transition-property: background-color, border-color, color, fill, stroke, opacity, transform,
-      box-shadow;
+    transition-property:
+      background-color, border-color, color, fill, stroke, opacity, transform, box-shadow;
     transition-duration: 220ms;
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }

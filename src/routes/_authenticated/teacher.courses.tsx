@@ -55,7 +55,11 @@ function Body() {
           { icon: "BookOpenCheck", label: bi("كورسات منشورة", "Published"), value: "4" },
           { icon: "Users", label: bi("مشتركون", "Enrollments"), value: "218" },
           { icon: "Star", label: bi("التقييم", "Rating"), value: "4.8" },
-          { icon: "Wallet", label: bi("إيراد الشهر", "Monthly revenue"), value: bi("820 ₪", "820 ILS") },
+          {
+            icon: "Wallet",
+            label: bi("إيراد الشهر", "Monthly revenue"),
+            value: bi("820 ₪", "820 ILS"),
+          },
         ]}
       />
       <Panel title={bi("كورساتك", "Your courses")} icon="BookOpenCheck">
