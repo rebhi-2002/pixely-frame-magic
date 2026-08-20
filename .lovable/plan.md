@@ -5,6 +5,7 @@ Full Arabic RTL admin dashboard with two-layer access control: system module tog
 ## Backend (Lovable Cloud)
 
 Tables:
+
 - `modules` — system modules (الإدارة، إدارة العملاء، المالية…) with `enabled` toggle, icon, sort order.
 - `pages` — sub-items and individual pages inside a module (2 levels deep via `parent_id`), each with a route path and icon.
 - `permission_keys` — the fine-grained "Tools" actions per page: `view_list`, `show_add_form`, `execute_add`, `edit`, `delete`, `view_profile`, `edit_profile`, `show_password_form`, `change_password`. Independent — no automatic dependency between "show form" and "execute".
