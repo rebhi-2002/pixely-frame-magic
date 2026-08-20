@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "read profiles" ON public.profiles;
+CREATE POLICY "read own or admin profiles" ON public.profiles FOR SELECT TO authenticated USING (auth.uid() = user_id OR has_role(auth.uid(), 'admin'::app_role));
