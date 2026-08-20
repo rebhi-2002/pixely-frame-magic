@@ -43,8 +43,6 @@ import { Route as AuthenticatedReferralsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
-import { Route as AuthenticatedUserTypesRouteImport } from './routes/_authenticated/user-types'
-import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
@@ -255,16 +253,6 @@ const AuthenticatedSystemModulesRoute =
     path: '/system-modules',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedUserTypesRoute = AuthenticatedUserTypesRouteImport.update({
-  id: '/user-types',
-  path: '/user-types',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -497,8 +485,6 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
-  '/user-types': typeof AuthenticatedUserTypesRoute
-  '/users': typeof AuthenticatedUsersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -568,8 +554,6 @@ export interface FileRoutesByTo {
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
-  '/user-types': typeof AuthenticatedUserTypesRoute
-  '/users': typeof AuthenticatedUsersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -641,8 +625,6 @@ export interface FileRoutesById {
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
-  '/_authenticated/user-types': typeof AuthenticatedUserTypesRoute
-  '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -714,8 +696,6 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/system-modules'
-    | '/user-types'
-    | '/users'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -785,8 +765,6 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/system-modules'
-    | '/user-types'
-    | '/users'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -857,8 +835,6 @@ export interface FileRouteTypes {
     | '/_authenticated/schedule'
     | '/_authenticated/settings'
     | '/_authenticated/system-modules'
-    | '/_authenticated/user-types'
-    | '/_authenticated/users'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -1161,20 +1137,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSystemModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/user-types': {
-      id: '/_authenticated/user-types'
-      path: '/user-types'
-      fullPath: '/user-types'
-      preLoaderRoute: typeof AuthenticatedUserTypesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/users': {
-      id: '/_authenticated/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof AuthenticatedUsersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -1443,8 +1405,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
-  AuthenticatedUserTypesRoute: typeof AuthenticatedUserTypesRoute
-  AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
   AuthenticatedAdminContentReviewRoute: typeof AuthenticatedAdminContentReviewRoute
   AuthenticatedAdminCurriculumRoute: typeof AuthenticatedAdminCurriculumRoute
@@ -1491,8 +1451,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
-  AuthenticatedUserTypesRoute: AuthenticatedUserTypesRoute,
-  AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedAdminCommunityReportsRoute:
     AuthenticatedAdminCommunityReportsRoute,
   AuthenticatedAdminContentReviewRoute: AuthenticatedAdminContentReviewRoute,

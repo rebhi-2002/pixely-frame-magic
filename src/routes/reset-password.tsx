@@ -3,7 +3,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
@@ -34,23 +33,10 @@ function ResetPasswordPage() {
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // رابط الاستعادة يُنشئ جلسة recovery؛ بدونها الرابط منتهٍ أو غير صالح.
+  // إعادة تعيين كلمة المرور غير متاحة بعد على الباك اند الجديد (لا يوجد
+  // تدفّق recovery حالياً) — راجع src/routes/forgot-password.tsx.
   useEffect(() => {
-    let active = true;
-    const check = async () => {
-      const hash = window.location.hash;
-      const { data } = await supabase.auth.getSession();
-      if (!active) return;
-      setReady(Boolean(data.session) || hash.includes("type=recovery"));
-    };
-    void check();
-    const { data } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(true);
-    });
-    return () => {
-      active = false;
-      data.subscription.unsubscribe();
-    };
+    setReady(false);
   }, []);
 
   async function submit(e: React.FormEvent) {
@@ -64,14 +50,8 @@ function ResetPasswordPage() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success(t("authPages.reset.success"));
-    navigate({ href: (await currentUserHome()) ?? "/dashboard", replace: true });
+    toast.error("إعادة تعيين كلمة المرور غير متاحة حالياً — قيد الربط مع الباك اند الجديد.");
   }
 
   return (

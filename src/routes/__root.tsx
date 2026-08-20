@@ -17,7 +17,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { supabase } from "@/integrations/supabase/client";
+import { AUTH_EVENT } from "@/integrations/backend/auth";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { NotFoundIllustration } from "@/components/site/illustrations";
@@ -160,12 +160,12 @@ function AuthSync() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+    const onAuthChanged = () => {
       router.invalidate();
-      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
-    });
-    return () => data.subscription.unsubscribe();
+      queryClient.invalidateQueries();
+    };
+    window.addEventListener(AUTH_EVENT, onAuthChanged);
+    return () => window.removeEventListener(AUTH_EVENT, onAuthChanged);
   }, [router, queryClient]);
 
   return null;

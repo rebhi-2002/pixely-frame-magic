@@ -4,7 +4,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { KeyRound, MailCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 
 const title = "استعادة كلمة المرور | أكاديميا";
@@ -38,12 +37,9 @@ function ForgotPasswordPage() {
       return;
     }
     setLoading(true);
-    await supabase.auth.resetPasswordForEmail(parsed.data, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    // استعادة كلمة المرور غير متاحة بعد على الباك اند الجديد — قيد الربط.
     setLoading(false);
-    setSent(true);
-    toast.success(t("authPages.forgot.sent"));
+    toast.error("استعادة كلمة المرور غير متاحة حالياً — قيد الربط مع الباك اند الجديد.");
   }
 
   return (

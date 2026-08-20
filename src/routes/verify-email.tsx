@@ -4,7 +4,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { MailCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
@@ -39,10 +38,8 @@ function VerifyEmailPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    void supabase.auth.getUser().then(({ data }) => {
-      if (data.user?.email_confirmed_at) setVerified(true);
-      if (data.user?.email && !initialEmail) setEmail(data.user.email);
-    });
+    // تفعيل البريد غير مطلوب حالياً — التسجيل بالكامل موقوف مؤقتاً (راجع
+    // src/routes/signup.tsx) لحد ما يضيف الباك اند الجديد endpoints له.
   }, [initialEmail]);
 
   async function resend() {
@@ -52,17 +49,8 @@ function VerifyEmailPage() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: parsed.data,
-      options: { emailRedirectTo: `${window.location.origin}/verify-email` },
-    });
     setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success(t("authPages.verify.resent"));
+    toast.error("إعادة إرسال رابط التفعيل غير متاح حالياً — قيد الربط مع الباك اند الجديد.");
   }
 
   return (

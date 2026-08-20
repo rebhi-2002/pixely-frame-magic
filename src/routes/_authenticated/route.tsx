@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { isAuthenticated } from "@/integrations/backend/auth";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
@@ -12,9 +12,9 @@ import { useAccess } from "@/hooks/use-access";
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/login" });
-    return { user: data.user };
+    // فحص محلي فقط (بدون نداء شبكة) — راجع ملاحظة src/integrations/backend/auth.ts
+    if (!isAuthenticated()) throw redirect({ to: "/login" });
+    return { user: { id: "u-admin" } };
   },
   component: AuthenticatedLayout,
 });

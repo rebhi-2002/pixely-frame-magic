@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { roleHome, roleKeyFromName, type RoleKey } from "@/lib/bi";
+import { useEffect, useState } from "react";
+import { AUTH_EVENT, getStoredEmail, isAuthenticated } from "@/integrations/backend/auth";
+import { roleHome, type RoleKey } from "@/lib/bi";
 
 export interface PublicSession {
   userId: string;
@@ -13,45 +13,44 @@ export interface PublicSession {
   home: string;
 }
 
-async function fetchSession(): Promise<PublicSession | null> {
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user) return null;
-
-  const [{ data: profile }, { data: admin }] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select("full_name, email, avatar_url, role_id, roles(name)")
-      .eq("user_id", data.user.id)
-      .maybeSingle(),
-    supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" }),
-  ]);
-
-  const roleName = (profile as { roles?: { name: string } | null } | null)?.roles?.name ?? null;
-  const isAdmin = Boolean(admin);
-
+/**
+ * حالياً كل جلسة مسجّلة = أدمن (راجع src/integrations/backend/auth.ts —
+ * الباك اند لسا ما بيرجع بيانات مستخدم/دور). لما يتوفر endpoint حقيقي
+ * لبيانات المستخدم الحالي، استبدل هذا ببناء الجلسة من استجابته.
+ */
+function buildSession(): PublicSession | null {
+  if (!isAuthenticated()) return null;
+  const email = getStoredEmail();
   return {
-    userId: data.user.id,
-    email: profile?.email ?? data.user.email ?? null,
-    fullName: profile?.full_name || (data.user.email ?? "").split("@")[0] || "",
-    avatarUrl: profile?.avatar_url ?? null,
-    roleName,
-    roleKey: roleKeyFromName(roleName, isAdmin),
-    isAdmin,
-    home: roleHome(roleName, isAdmin),
+    userId: "u-admin",
+    email,
+    fullName: email?.split("@")[0] || "الأدمن",
+    avatarUrl: null,
+    roleName: "مدير عام",
+    roleKey: "admin",
+    isAdmin: true,
+    home: roleHome("مدير عام", true),
   };
 }
 
 /** جلسة المستخدم للصفحات العامة — تُستخدم لتبديل محتوى الهيدر والأزرار. */
 export function useSession() {
-  const query = useQuery({
-    queryKey: ["public-session"],
-    queryFn: fetchSession,
-    staleTime: 60_000,
-  });
+  const [session, setSession] = useState<PublicSession | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const sync = () => {
+      setSession(buildSession());
+      setIsLoading(false);
+    };
+    sync();
+    window.addEventListener(AUTH_EVENT, sync);
+    return () => window.removeEventListener(AUTH_EVENT, sync);
+  }, []);
 
   return {
-    session: query.data ?? null,
-    isSignedIn: Boolean(query.data),
-    isLoading: query.isLoading,
+    session,
+    isSignedIn: Boolean(session),
+    isLoading,
   };
 }

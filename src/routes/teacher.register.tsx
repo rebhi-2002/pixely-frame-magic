@@ -4,7 +4,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { BadgeCheck, UploadCloud } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
@@ -61,26 +60,8 @@ function TeacherRegisterPage() {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
-        email: parsed.data.email,
-        password: parsed.data.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/verify-email`,
-          data: {
-            full_name: parsed.data.fullName,
-            requested_role: "teacher",
-            phone: parsed.data.phone,
-            subject: parsed.data.subject,
-            experience_years: parsed.data.experience,
-            bio: parsed.data.bio,
-            verification_document: docName || null,
-            verification_status: "pending",
-          },
-        },
-      });
-      if (error) throw error;
-      toast.success(t("authPages.teacherRegister.pending"));
-      navigate({ to: "/verify-email", search: { email: parsed.data.email } });
+      // تسجيل المعلّمين غير متاح بعد على الباك اند الجديد — قيد الربط.
+      throw new Error("تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "…");
     } finally {

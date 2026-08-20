@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
+import { isAuthenticated, logout } from "@/integrations/backend/auth";
 
 /** ساعتان — تسجيل خروج تلقائي عند الخمول (قرار أمان متفق عليه مع المستخدم). */
 export const IDLE_LIMIT_MS = 2 * 60 * 60 * 1000;
@@ -31,13 +31,12 @@ export function useIdleLogout() {
     const expire = async () => {
       if (signingOut.current) return;
       signingOut.current = true;
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
+      if (!isAuthenticated()) {
         signingOut.current = false;
         return;
       }
       localStorage.removeItem(LAST_ACTIVITY_KEY);
-      await supabase.auth.signOut();
+      await logout();
       toast.warning(t("session.expired"));
       navigate({ to: "/login", replace: true });
       signingOut.current = false;

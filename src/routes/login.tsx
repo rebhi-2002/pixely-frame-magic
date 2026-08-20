@@ -4,22 +4,9 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { login } from "@/integrations/backend/auth";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
-import { ensureDemoAccount } from "@/lib/demo-auth.functions";
-import { useServerFn } from "@tanstack/react-start";
-import { useBi } from "@/lib/bi";
-
-/* أزرار دخول سريعة للاختبار فقط — تُحذف قبل النشر النهائي. */
-const DEMO_ROLES = [
-  { role: "admin", ar: "أدمن", en: "Admin" },
-  { role: "supervisor", ar: "مشرف", en: "Supervisor" },
-  { role: "teacher", ar: "معلم", en: "Teacher" },
-  { role: "parent", ar: "ولي أمر", en: "Parent" },
-  { role: "student", ar: "طالب", en: "Student" },
-] as const;
 
 const title = "تسجيل الدخول | Academia";
 const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";
@@ -50,30 +37,10 @@ const schema = z.object({
 
 function LoginPage() {
   const { t } = useTranslation();
-  const bi = useBi();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [demoBusy, setDemoBusy] = useState<string | null>(null);
-  const prepareDemo = useServerFn(ensureDemoAccount);
-
-  async function quickLogin(role: (typeof DEMO_ROLES)[number]["role"]) {
-    setDemoBusy(role);
-    try {
-      const creds = await prepareDemo({ data: { role } });
-      const { error } = await supabase.auth.signInWithPassword(creds);
-      if (error) throw error;
-      toast.success(t("authPages.login.success"));
-      navigate({ to: "/", replace: true });
-    } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : bi("تعذّر الدخول التجريبي", "Demo login failed"),
-      );
-    } finally {
-      setDemoBusy(null);
-    }
-  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -84,8 +51,7 @@ function LoginPage() {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword(parsed.data);
-      if (error) throw error;
+      await login(parsed.data.email, parsed.data.password);
       toast.success(t("authPages.login.success"));
       navigate({ to: "/", replace: true });
     } catch (err) {
@@ -93,20 +59,6 @@ function LoginPage() {
     } finally {
       setLoading(false);
     }
-  }
-
-  async function google() {
-    setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setLoading(false);
-      toast.error(result.error.message ?? "Google");
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: "/", replace: true });
   }
 
   return (
@@ -148,40 +100,6 @@ function LoginPage() {
           {loading ? t("common.loading") : t("authPages.login.submit")}
         </button>
       </form>
-
-      <div className="my-5 flex items-center gap-3">
-        <span className="h-px flex-1 bg-border" />
-        <span className="text-xs text-muted-foreground">{t("authPages.login.or")}</span>
-        <span className="h-px flex-1 bg-border" />
-      </div>
-
-      <button
-        type="button"
-        onClick={google}
-        disabled={loading}
-        className="hover-press w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary disabled:opacity-60"
-      >
-        {t("authPages.login.google")}
-      </button>
-
-      <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
-        <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
-          {bi("دخول سريع للاختبار (مؤقت)", "Quick test login (temporary)")}
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {DEMO_ROLES.map((d) => (
-            <button
-              key={d.role}
-              type="button"
-              disabled={loading || demoBusy !== null}
-              onClick={() => quickLogin(d.role)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
-            >
-              {demoBusy === d.role ? "…" : bi(d.ar, d.en)}
-            </button>
-          ))}
-        </div>
-      </div>
 
       <div className="mt-6 space-y-1.5 text-center text-xs text-muted-foreground">
         <p>

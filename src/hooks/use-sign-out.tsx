@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
+import { logout } from "@/integrations/backend/auth";
 import { BrandLogo } from "@/components/site/brand-logo";
 
 /**
@@ -20,7 +20,7 @@ export function useSignOut(to = "/") {
     try {
       await queryClient.cancelQueries();
       queryClient.clear();
-      await supabase.auth.signOut();
+      await logout();
       navigate({ to, replace: true });
     } finally {
       // نُبقي الطبقة ظاهرة لحظة قصيرة حتى يكتمل التنقّل بسلاسة

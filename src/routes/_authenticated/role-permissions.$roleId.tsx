@@ -140,7 +140,7 @@ function RolePermissionsPage() {
       <PageHeader
         title={bi(`صلاحيات: ${data.roleName}`, `Permissions: ${roleName}`)}
         icon="ShieldCheck"
-        onBack={() => navigate({ to: "/user-types" })}
+        onBack={() => navigate({ to: "/admin/roles" })}
       />
 
       <div className="space-y-3 p-5">

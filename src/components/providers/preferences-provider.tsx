@@ -51,16 +51,13 @@ type PreferencesValue = {
 
 const PreferencesContext = createContext<PreferencesValue | null>(null);
 
-/** Persist to the signed-in user's profile (theme_pref / locale). Silent no-op when signed out. */
-async function persistToProfile(patch: { theme_pref?: ThemePref; locale?: Locale }) {
-  try {
-    const { supabase } = await import("@/integrations/supabase/client");
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) return;
-    await supabase.from("profiles").update(patch).eq("user_id", data.user.id);
-  } catch {
-    /* preferences are best-effort; local storage remains the source of truth */
-  }
+/**
+ * سابقاً كان هذا يحفظ التفضيل بجدول profiles على Supabase أيضاً. الباك اند
+ * الجديد ما عنده endpoint مكافئ بعد، فـ localStorage هو المصدر الوحيد للحقيقة
+ * حالياً — التفضيل بيضل شغال محلياً وبس. أعد الربط هنا لما يتوفر endpoint.
+ */
+function persistToProfile(_patch: { theme_pref?: ThemePref; locale?: Locale }) {
+  /* no-op مؤقتاً — راجع التعليق أعلاه */
 }
 
 function readStoredTheme(): ThemePref {
