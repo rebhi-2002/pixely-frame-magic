@@ -4,6 +4,7 @@ import { requireAuth } from "@/integrations/backend/auth-middleware";
 import {
   MODULES,
   ROLES,
+  ROLE_PERMISSION_GRANTS,
   USERS,
   loadAccess,
   loadPermissionMatrix,
@@ -80,6 +81,7 @@ export const deleteRole = createServerFn({ method: "POST" })
     await requirePermission(context.userId, "admin_roles", "delete");
     const idx = ROLES.findIndex((r) => r.id === data.id);
     if (idx !== -1) ROLES.splice(idx, 1);
+    delete ROLE_PERMISSION_GRANTS[data.id];
     return { ok: true };
   });
 
@@ -103,10 +105,16 @@ export const saveRolePermissions = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await requireAdmin(context.userId);
-    // البيانات ثابتة حالياً (كل الأدوار الحقيقية = "مدير عام" بكل الصلاحيات) —
-    // ما في تخزين فعلي لمصفوفة الصلاحيات المخصصة بعد. نُرجع نجاح بدون تعديل
-    // حتى ما تنكسر شاشة "شجرة الصلاحيات"، وبنربطها بجدول حقيقي أول ما
-    // الباك اند يضيف الأدوار المتعددة.
+    const role = ROLES.find((r) => r.id === data.roleId);
+    if (!role) throw new Error("نوع المستخدم غير موجود");
+    if (role.name === "مدير عام") {
+      // "مدير عام" ثابت دايماً بكل الصلاحيات (بايباس) — ما بيتعدّل من هون،
+      // متل ما كان بالـ SQL الأصلي: "super admin gets everything".
+      return { ok: true, count: data.granted.length };
+    }
+    // تخزين فعلي بالذاكرة — بيضل موجود طول ما السيرفر شغّال (راجع تعليق
+    // ROLE_PERMISSION_GRANTS بملف rbac-static-data.ts).
+    ROLE_PERMISSION_GRANTS[data.roleId] = new Set(data.granted);
     return { ok: true, count: data.granted.length };
   });
 

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { TeacherVerificationPage } from "@/components/admin/teacher-verification-manager";
 export const Route = createFileRoute("/_authenticated/admin/teachers")({
   head: () => ({
     meta: [
@@ -12,5 +13,9 @@ export const Route = createFileRoute("/_authenticated/admin/teachers")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="teachers" />,
+  component: () => (
+    <Guard pageKey="admin_teachers">
+      <TeacherVerificationPage />
+    </Guard>
+  ),
 });

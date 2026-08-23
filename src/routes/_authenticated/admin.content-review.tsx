@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { ContentReviewPage } from "@/components/admin/content-review-manager";
 export const Route = createFileRoute("/_authenticated/admin/content-review")({
   head: () => ({
     meta: [
@@ -12,5 +13,9 @@ export const Route = createFileRoute("/_authenticated/admin/content-review")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="content-review" />,
+  component: () => (
+    <Guard pageKey="admin_content_review">
+      <ContentReviewPage />
+    </Guard>
+  ),
 });

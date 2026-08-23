@@ -125,6 +125,8 @@ export type Row = {
   meta?: string;
   value?: string;
   tone?: "muted" | "primary" | "success" | "danger";
+  /** أزرار إجراءات اختيارية (تعديل/حذف...) تظهر بجانب القيمة — لا تُستخدم مع `to` بنفس الصف. */
+  actions?: ReactNode;
 };
 
 export function RowList({ rows, to }: { rows: Row[]; to?: string }) {
@@ -138,7 +140,10 @@ export function RowList({ rows, to }: { rows: Row[]; to?: string }) {
               <p className="truncate text-sm font-semibold text-foreground">{r.title}</p>
               {r.meta && <p className="mt-0.5 truncate text-xs text-muted-foreground">{r.meta}</p>}
             </div>
-            {r.value && <Badge tone={r.tone ?? "muted"}>{r.value}</Badge>}
+            <div className="flex shrink-0 items-center gap-2">
+              {r.value && <Badge tone={r.tone ?? "muted"}>{r.value}</Badge>}
+              {r.actions}
+            </div>
           </div>
         );
         return (

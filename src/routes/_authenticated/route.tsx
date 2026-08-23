@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { isAuthenticated } from "@/integrations/backend/auth";
+import { getStoredUserId, isAuthenticated } from "@/integrations/backend/auth";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {
     // فحص محلي فقط (بدون نداء شبكة) — راجع ملاحظة src/integrations/backend/auth.ts
     if (!isAuthenticated()) throw redirect({ to: "/login" });
-    return { user: { id: "u-admin" } };
+    return { user: { id: getStoredUserId() ?? "u-admin" } };
   },
   component: AuthenticatedLayout,
 });

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { AdminDashboardPage } from "@/components/admin/admin-dashboard";
 
 export const Route = createFileRoute("/_authenticated/admin/dashboard")({
   head: () => ({
@@ -13,5 +14,9 @@ export const Route = createFileRoute("/_authenticated/admin/dashboard")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="dashboard" />,
+  component: () => (
+    <Guard pageKey="admin_dashboard">
+      <AdminDashboardPage />
+    </Guard>
+  ),
 });

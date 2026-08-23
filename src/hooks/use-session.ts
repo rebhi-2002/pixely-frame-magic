@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { AUTH_EVENT, getStoredEmail, isAuthenticated } from "@/integrations/backend/auth";
+import {
+  AUTH_EVENT,
+  getStoredEmail,
+  getStoredUserId,
+  isAuthenticated,
+} from "@/integrations/backend/auth";
 import { roleHome, type RoleKey } from "@/lib/bi";
+import { ROLES, USERS } from "@/lib/rbac-static-data";
 
 export interface PublicSession {
   userId: string;
@@ -13,23 +19,30 @@ export interface PublicSession {
   home: string;
 }
 
-/**
- * حالياً كل جلسة مسجّلة = أدمن (راجع src/integrations/backend/auth.ts —
- * الباك اند لسا ما بيرجع بيانات مستخدم/دور). لما يتوفر endpoint حقيقي
- * لبيانات المستخدم الحالي، استبدل هذا ببناء الجلسة من استجابته.
- */
+const ROLE_KEY_BY_ID: Record<string, RoleKey> = {
+  "r-admin": "admin",
+  "r-supervisor": "supervisor",
+  "r-teacher": "teacher",
+  "r-parent": "parent",
+  "r-student": "student",
+};
+
 function buildSession(): PublicSession | null {
   if (!isAuthenticated()) return null;
-  const email = getStoredEmail();
+  const userId = getStoredUserId() ?? "u-admin";
+  const user = USERS.find((u) => u.id === userId) ?? USERS[0];
+  const role = ROLES.find((r) => r.id === user.role_id);
+  const isAdmin = role?.name === "مدير عام";
+  const email = getStoredEmail() ?? user.email;
   return {
-    userId: "u-admin",
+    userId: user.id,
     email,
-    fullName: email?.split("@")[0] || "الأدمن",
-    avatarUrl: null,
-    roleName: "مدير عام",
-    roleKey: "admin",
-    isAdmin: true,
-    home: roleHome("مدير عام", true),
+    fullName: user.full_name,
+    avatarUrl: user.avatar_url,
+    roleName: role?.name ?? null,
+    roleKey: (user.role_id && ROLE_KEY_BY_ID[user.role_id]) || "student",
+    isAdmin,
+    home: roleHome(role?.name, isAdmin),
   };
 }
 

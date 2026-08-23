@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { CurriculumPage } from "@/components/admin/curriculum-manager";
 export const Route = createFileRoute("/_authenticated/admin/curriculum")({
   head: () => ({
     meta: [
@@ -12,5 +13,9 @@ export const Route = createFileRoute("/_authenticated/admin/curriculum")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="curriculum" />,
+  component: () => (
+    <Guard pageKey="admin_curriculum">
+      <CurriculumPage />
+    </Guard>
+  ),
 });

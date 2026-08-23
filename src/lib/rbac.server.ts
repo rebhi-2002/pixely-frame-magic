@@ -12,20 +12,38 @@ import type {
   TreePage,
   UserRow,
 } from "./rbac-types";
-import { MODULES, PAGES, PERMISSION_KEYS, ROLES, USERS, nextId } from "./rbac-static-data";
+import { pageMatchesRole, roleKeyFromName } from "./bi";
+import {
+  MODULES,
+  PAGES,
+  PERMISSION_KEYS,
+  ROLES,
+  ROLE_PERMISSION_GRANTS,
+  USERS,
+  nextId,
+} from "./rbac-static-data";
+
+function resolveUserAndRole(userId: string) {
+  const user = USERS.find((u) => u.id === userId) ?? USERS[0] ?? null;
+  const role = user ? ROLES.find((r) => r.id === user.role_id) : null;
+  const isAdmin = role?.name === "مدير عام";
+  return { user, role, isAdmin };
+}
 
 /**
- * حالياً كل جلسة مسجّلة دخول = أدمن (راجع ملاحظة src/integrations/backend/auth.ts).
- * لما الباك اند يضيف endpoint لبيانات المستخدم/الدور، بدّل هذا التحقق باستدعاء
- * حقيقي بدل `true` الثابتة.
+ * الأدمن الحقيقي (مدير عام) دايماً بيرجع true. باقي الأدوار (معلم/مشرف/ولي
+ * أمر/طالب) — سواء حساب تجريبي محلي أو حساب حقيقي لاحقاً من الباك اند —
+ * بيرجع false، وبيتحدد وصولهم عبر ROLE_PERMISSION_GRANTS + pageMatchesRole.
  */
-export async function checkIsAdmin(_userId: string): Promise<boolean> {
-  return true;
+export async function checkIsAdmin(userId: string): Promise<boolean> {
+  return resolveUserAndRole(userId).isAdmin;
 }
 
 export async function loadAccess(userId: string): Promise<MyAccess> {
-  const isAdmin = await checkIsAdmin(userId);
+  const { user, role, isAdmin } = resolveUserAndRole(userId);
   const allPermKeys = PERMISSION_KEYS.map((p) => p.key);
+  const sessionRoleKey = roleKeyFromName(role?.name, isAdmin);
+  const grantedSet = isAdmin ? null : (ROLE_PERMISSION_GRANTS[role?.id ?? ""] ?? new Set<string>());
 
   const enabledModules = MODULES.filter((m) => m.enabled).sort(
     (a, b) => a.sort_order - b.sort_order,
@@ -44,7 +62,12 @@ export async function loadAccess(userId: string): Promise<MyAccess> {
         .filter((p) => p.parent_id === parentId)
         .map((p) => {
           const children = build(p.id);
-          const perms = isAdmin ? allPermKeys : [];
+          const roleOk = pageMatchesRole(p.key, sessionRoleKey);
+          const perms = isAdmin
+            ? allPermKeys
+            : roleOk
+              ? allPermKeys.filter((k) => grantedSet?.has(`${p.id}:${k}`))
+              : [];
           return {
             id: p.id,
             key: p.key,
@@ -53,7 +76,7 @@ export async function loadAccess(userId: string): Promise<MyAccess> {
             icon: p.icon,
             path: p.path,
             permissions: perms,
-            canView: isAdmin,
+            canView: perms.includes("view_list"),
             children,
           };
         })
@@ -80,8 +103,6 @@ export async function loadAccess(userId: string): Promise<MyAccess> {
     });
   }
 
-  const user = USERS.find((u) => u.id === userId) ?? USERS[0] ?? null;
-
   return {
     userId,
     isAdmin,
@@ -101,9 +122,9 @@ export async function loadAccess(userId: string): Promise<MyAccess> {
 }
 
 /**
- * تحقّق صلاحية على مستوى السيرفر. بما إنه حالياً كل جلسة = أدمن، هاي دايماً
- * بتعدّي — أبقيناها كنقطة تجميع واحدة حتى تكون سهلة الاستبدال لاحقاً بتحقق
- * حقيقي مبني على جلسة/دور فعلي من الباك اند.
+ * تحقّق صلاحية على مستوى السيرفر لإجراءات "الإدارة" (صفحات admin_*) — مقصورة
+ * على دور "مدير عام" فقط، بغض النظر عن ROLE_PERMISSION_GRANTS لباقي الأدوار
+ * (هيدول عندهم صلاحيات على مساحتهم الخاصة بس، مش على شاشات إدارة النظام).
  */
 export async function requirePermission(
   userId: string,
@@ -118,6 +139,27 @@ export async function requirePermission(
 export async function requireAdmin(userId: string): Promise<void> {
   if (!(await checkIsAdmin(userId))) {
     throw new Error("هذا الإجراء متاح لمدير النظام فقط");
+  }
+}
+
+/**
+ * تحقّق صلاحية لإجراءات "مساحة الدور" (صفحات بادئتها student_ أو teacher_
+ * أو parent_ أو supervisor_) — بعكس requirePermission (المقصورة على admin_
+ * بس)، هاي بتسمح لصاحب الدور نفسه يدير بيانات مساحته حسب ROLE_PERMISSION_GRANTS
+ * (نفس المصفوفة يلي شاشة "مصفوفة الصلاحيات" بتعدّلها). الأدمن دايماً مسموحله.
+ */
+export async function requirePageAction(
+  userId: string,
+  pageKey: string,
+  permissionKey: string,
+): Promise<void> {
+  const { role, isAdmin } = resolveUserAndRole(userId);
+  if (isAdmin) return;
+  const roleKey = roleKeyFromName(role?.name, isAdmin);
+  const page = PAGES.find((p) => p.key === pageKey);
+  const granted = role ? ROLE_PERMISSION_GRANTS[role.id] : undefined;
+  if (!page || !pageMatchesRole(pageKey, roleKey) || !granted?.has(`${page.id}:${permissionKey}`)) {
+    throw new Error("ليس لديك صلاحية لتنفيذ هذا الإجراء");
   }
 }
 
@@ -153,11 +195,13 @@ export async function loadPermissionMatrix(roleId: string): Promise<PermissionMa
       };
     });
 
-  // "مدير عام" يملك كل الصلاحيات على كل الصفحات دائماً بهذا النموذج الثابت.
+  // "مدير عام" دايماً كل الصلاحيات (بايباس ثابت). باقي الأدوار بتُقرأ من
+  // ROLE_PERMISSION_GRANTS — المخزن الفعلي يلي saveRolePermissions بيكتب
+  // فيه (راجع src/lib/rbac.functions.ts).
   const granted =
     role.name === "مدير عام"
       ? PAGES.flatMap((p) => PERMISSION_KEYS.map((k) => `${p.id}:${k.key}`))
-      : [];
+      : Array.from(ROLE_PERMISSION_GRANTS[role.id] ?? []);
 
   return {
     roleId: role.id,
@@ -172,4 +216,4 @@ export async function loadUsers(): Promise<UserRow[]> {
   return USERS;
 }
 
-export { MODULES, PAGES, ROLES, USERS, nextId };
+export { MODULES, PAGES, ROLES, ROLE_PERMISSION_GRANTS, USERS, nextId };

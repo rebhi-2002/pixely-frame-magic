@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminFeaturePage } from "@/components/admin/admin-feature";
+import { Guard } from "@/components/app/guard";
+import { CommunityReportsPage } from "@/components/admin/community-reports-manager";
 export const Route = createFileRoute("/_authenticated/admin/community-reports")({
   head: () => ({
     meta: [
@@ -12,5 +13,9 @@ export const Route = createFileRoute("/_authenticated/admin/community-reports")(
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <AdminFeaturePage feature="community-reports" />,
+  component: () => (
+    <Guard pageKey="admin_community_reports">
+      <CommunityReportsPage />
+    </Guard>
+  ),
 });
