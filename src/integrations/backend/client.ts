@@ -63,4 +63,5 @@ function safeParseJson(text: string): unknown {
 export const apiClient = {
   get: <T>(path: string) => request<T>(path, { method: "GET" }),
   post: <T>(path: string, json?: unknown) => request<T>(path, { method: "POST", json }),
+  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };

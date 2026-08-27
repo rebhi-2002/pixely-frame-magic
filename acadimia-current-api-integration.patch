@@ -1,0 +1,652 @@
+diff --git a/.env.example b/.env.example
+index d75ff4e..d7572a0 100644
+--- a/.env.example
++++ b/.env.example
+@@ -1 +1,2 @@
+-VITE_API_BASE_URL="https://localhost:7176"
++# أصل الباك إند فقط — لا تضف /api أو endpoint إلى القيمة.
++VITE_API_BASE_URL="https://ziadkamalaln2842-001-site1.etempurl.com"
+diff --git a/src/components/admin/users-manager.tsx b/src/components/admin/users-manager.tsx
+index 640dabe..635c93f 100644
+--- a/src/components/admin/users-manager.tsx
++++ b/src/components/admin/users-manager.tsx
+@@ -1,9 +1,8 @@
+ import { useMemo, useState } from "react";
+ 
+ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+-import { useServerFn } from "@tanstack/react-start";
+ import { toast } from "sonner";
+-import { KeyRound, Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
++import { Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
+ import { PageHeader, Toolbar } from "@/components/admin/page-header";
+ import { Button } from "@/components/ui/button";
+ import { Input } from "@/components/ui/input";
+@@ -34,13 +33,12 @@ import {
+   AlertDialogTitle,
+ } from "@/components/ui/alert-dialog";
+ import {
+-  deleteUser,
+-  listRoles,
+-  listUsers,
+-  saveUser,
+-  sendPasswordReset,
+-  toggleUserStatus,
+-} from "@/lib/rbac.functions";
++  deleteBackendUser,
++  listBackendUsers,
++  loadBackendUserOptions,
++  saveBackendUser,
++  updateBackendUserStatus,
++} from "@/integrations/backend/admin-users";
+ import { useAccess } from "@/hooks/use-access";
+ import type { UserRow } from "@/lib/rbac-types";
+ import { useBi } from "@/lib/bi";
+@@ -50,20 +48,17 @@ const EMPTY_FORM = {
+   email: "",
+   phone: "",
+   gender: "male" as "male" | "female",
++  gender_id: null as number | null,
+   role_id: null as string | null,
+   is_active: true,
++  password: "",
++  confirmPassword: "",
+ };
+ 
+ export function UsersPage() {
+   const bi = useBi();
+   const queryClient = useQueryClient();
+   const { can } = useAccess();
+-  const fetchUsers = useServerFn(listUsers);
+-  const fetchRoles = useServerFn(listRoles);
+-  const persist = useServerFn(saveUser);
+-  const toggleStatus = useServerFn(toggleUserStatus);
+-  const remove = useServerFn(deleteUser);
+-  const resetPassword = useServerFn(sendPasswordReset);
+ 
+   const [search, setSearch] = useState("");
+   const [status, setStatus] = useState("all");
+@@ -75,12 +70,21 @@ export function UsersPage() {
+   const [form, setForm] = useState(EMPTY_FORM);
+   const [pendingDelete, setPendingDelete] = useState<UserRow | null>(null);
+ 
+-  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: () => fetchUsers() });
+-  const { data: roles } = useQuery({
+-    queryKey: ["roles"],
+-    queryFn: () => fetchRoles(),
++  const { data: users, isLoading } = useQuery({
++    queryKey: ["users"],
++    queryFn: listBackendUsers,
++  });
++  const { data: options } = useQuery({
++    queryKey: ["backend-user-options"],
++    queryFn: loadBackendUserOptions,
++    staleTime: 5 * 60_000,
+     retry: false,
+   });
++  const roles = (options?.roles ?? []).map((role) => ({
++    id: String(role.id),
++    name: role.name,
++  }));
++  const genders = options?.genders ?? [];
+ 
+   const filtered = useMemo(() => {
+     return (users ?? []).filter((u) => {
+@@ -97,7 +101,7 @@ export function UsersPage() {
+   }, [users, status, gender, roleFilter, search]);
+ 
+   const saveMutation = useMutation({
+-    mutationFn: () => persist({ data: { ...form, id: editingId ?? undefined } }),
++    mutationFn: () => saveBackendUser({ ...form, id: editingId ?? undefined }),
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+       setOpen(false);
+@@ -108,7 +112,8 @@ export function UsersPage() {
+   });
+ 
+   const statusMutation = useMutation({
+-    mutationFn: (vars: { id: string; is_active: boolean }) => toggleStatus({ data: vars }),
++    mutationFn: (vars: { id: string; is_active: boolean }) =>
++      updateBackendUserStatus(vars.id, vars.is_active),
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+       toast.success(bi("تم تحديث الحالة", "Status updated"));
+@@ -118,7 +123,7 @@ export function UsersPage() {
+   });
+ 
+   const deleteMutation = useMutation({
+-    mutationFn: (id: string) => remove({ data: { id } }),
++    mutationFn: deleteBackendUser,
+     onSuccess: () => {
+       queryClient.invalidateQueries({ queryKey: ["users"] });
+       setPendingDelete(null);
+@@ -128,14 +133,6 @@ export function UsersPage() {
+       toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+   });
+ 
+-  const resetMutation = useMutation({
+-    mutationFn: (id: string) =>
+-      resetPassword({ data: { id, redirectTo: `${window.location.origin}/auth` } }),
+-    onSuccess: () => toast.success(bi("تم إرسال رابط تغيير كلمة المرور", "Reset link sent")),
+-    onError: (e) =>
+-      toast.error(e instanceof Error ? e.message : bi("تعذّر الإرسال", "Failed to send")),
+-  });
+-
+   function openDialog(user: UserRow | null) {
+     setEditingId(user?.id ?? null);
+     setForm(
+@@ -145,8 +142,11 @@ export function UsersPage() {
+             email: user.email ?? "",
+             phone: user.phone ?? "",
+             gender: (user.gender as "male" | "female") ?? "male",
++            gender_id: user.gender_id ?? null,
+             role_id: user.role_id,
+             is_active: user.is_active,
++            password: "",
++            confirmPassword: "",
+           }
+         : EMPTY_FORM,
+     );
+@@ -261,16 +261,6 @@ export function UsersPage() {
+                             <Pencil className="size-4" />
+                           </Button>
+                         )}
+-                        {can("admin_users", "change_password") && (
+-                          <Button
+-                            size="icon"
+-                            variant="ghost"
+-                            title={bi("إرسال رابط كلمة المرور", "Send password reset link")}
+-                            onClick={() => resetMutation.mutate(u.id)}
+-                          >
+-                            <KeyRound className="size-4" />
+-                          </Button>
+-                        )}
+                         {can("admin_users", "delete") && (
+                           <Button
+                             size="icon"
+@@ -335,18 +325,55 @@ export function UsersPage() {
+             <div className="space-y-1.5">
+               <Label>{bi("الجنس", "Gender")}</Label>
+               <Select
+-                value={form.gender}
+-                onValueChange={(v) => setForm((f) => ({ ...f, gender: v as "male" | "female" }))}
++                value={form.gender_id == null ? "none" : String(form.gender_id)}
++                onValueChange={(value) => {
++                  const gender = genders.find((item) => String(item.id) === value);
++                  setForm((f) => ({
++                    ...f,
++                    gender_id: gender?.id ?? null,
++                    gender: gender?.name.includes("أنث") ? "female" : "male",
++                  }));
++                }}
+               >
+                 <SelectTrigger>
+-                  <SelectValue />
++                  <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+                 </SelectTrigger>
+                 <SelectContent>
+-                  <SelectItem value="male">{bi("ذكر", "Male")}</SelectItem>
+-                  <SelectItem value="female">{bi("أنثى", "Female")}</SelectItem>
++                  <SelectItem value="none" disabled>
++                    {bi("اختر الجنس", "Select gender")}
++                  </SelectItem>
++                  {genders.map((gender) => (
++                    <SelectItem key={gender.id} value={String(gender.id)}>
++                      {gender.name}
++                    </SelectItem>
++                  ))}
+                 </SelectContent>
+               </Select>
+             </div>
++            {!editingId && (
++              <>
++                <div className="space-y-1.5">
++                  <Label htmlFor="u-password">{bi("كلمة المرور", "Password")}</Label>
++                  <Input
++                    id="u-password"
++                    type="password"
++                    value={form.password}
++                    onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
++                  />
++                </div>
++                <div className="space-y-1.5">
++                  <Label htmlFor="u-confirm-password">
++                    {bi("تأكيد كلمة المرور", "Confirm password")}
++                  </Label>
++                  <Input
++                    id="u-confirm-password"
++                    type="password"
++                    value={form.confirmPassword}
++                    onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
++                  />
++                </div>
++              </>
++            )}
+             <div className="space-y-1.5">
+               <Label>{bi("نوع المستخدم", "User type")}</Label>
+               <Select
+diff --git a/src/hooks/use-session.ts b/src/hooks/use-session.ts
+index 6cbbba4..df4ca37 100644
+--- a/src/hooks/use-session.ts
++++ b/src/hooks/use-session.ts
+@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
+ import {
+   AUTH_EVENT,
+   getStoredEmail,
++  getStoredProfile,
+   getStoredUserId,
+   isAuthenticated,
+ } from "@/integrations/backend/auth";
+@@ -30,15 +31,16 @@ const ROLE_KEY_BY_ID: Record<string, RoleKey> = {
+ function buildSession(): PublicSession | null {
+   if (!isAuthenticated()) return null;
+   const userId = getStoredUserId() ?? "u-admin";
++  const profile = getStoredProfile();
+   const user = USERS.find((u) => u.id === userId) ?? USERS[0];
+   const role = ROLES.find((r) => r.id === user.role_id);
+   const isAdmin = role?.name === "مدير عام";
+-  const email = getStoredEmail() ?? user.email;
++  const email = profile?.email ?? getStoredEmail() ?? user.email;
+   return {
+-    userId: user.id,
++    userId,
+     email,
+-    fullName: user.full_name,
+-    avatarUrl: user.avatar_url,
++    fullName: profile?.name ?? user.full_name,
++    avatarUrl: profile?.avatar ?? user.avatar_url,
+     roleName: role?.name ?? null,
+     roleKey: (user.role_id && ROLE_KEY_BY_ID[user.role_id]) || "student",
+     isAdmin,
+diff --git a/src/integrations/backend/admin-users.ts b/src/integrations/backend/admin-users.ts
+new file mode 100644
+index 0000000..419ee32
+--- /dev/null
++++ b/src/integrations/backend/admin-users.ts
+@@ -0,0 +1,170 @@
++import { apiClient } from "./client";
++import type { UserRow } from "@/lib/rbac-types";
++
++export interface BackendUserType {
++  id: number;
++  name: string;
++}
++
++export interface BackendGender {
++  id: number;
++  name: string;
++}
++
++interface BackendUserDto {
++  id?: string | null;
++  name?: string | null;
++  email?: string | null;
++  phoneNumber?: string | null;
++  genderId?: number | null;
++  gender?: BackendGender | null;
++  userTypeId?: number | null;
++  userType?: BackendUserType | null;
++  isActive?: boolean;
++  avatar?: string | null;
++}
++
++interface UserTableResponse {
++  data?: BackendUserDto[] | null;
++}
++
++interface UserFormResponse {
++  user?: BackendUserDto | null;
++  userTypes?: BackendUserType[] | null;
++  genders?: BackendGender[] | null;
++}
++
++export interface BackendUserForm {
++  id?: string;
++  full_name: string;
++  email: string;
++  phone: string;
++  gender_id: number | null;
++  role_id: string | null;
++  is_active: boolean;
++  password: string;
++  confirmPassword: string;
++}
++
++export interface BackendUserOptions {
++  roles: BackendUserType[];
++  genders: BackendGender[];
++}
++
++function mapGender(name: string | null | undefined): "male" | "female" {
++  if (!name) return "male";
++  const normalized = name.toLowerCase();
++  return normalized.includes("أنث") || normalized.includes("female") ? "female" : "male";
++}
++
++function mapUser(user: BackendUserDto): UserRow {
++  return {
++    id: user.id ?? "",
++    full_name: user.name ?? "",
++    email: user.email ?? null,
++    phone: user.phoneNumber ?? null,
++    gender: mapGender(user.gender?.name),
++    avatar_url: user.avatar ?? null,
++    is_active: user.isActive ?? false,
++    role_id: user.userTypeId == null ? null : String(user.userTypeId),
++    role_name: user.userType?.name ?? null,
++    gender_id: user.genderId ?? user.gender?.id ?? null,
++    user_type_id: user.userTypeId ?? user.userType?.id ?? null,
++  };
++}
++
++async function loadFormData(id?: string): Promise<UserFormResponse> {
++  const query = id ? `?id=${encodeURIComponent(id)}` : "?id=";
++  return apiClient.get<UserFormResponse>(`/api/User/CreateEditModal${query}`);
++}
++
++export async function listBackendUsers(): Promise<UserRow[]> {
++  const result = await apiClient.post<UserTableResponse>("/api/User/GetAll", {
++    searchValue: "",
++    sortColumn: "",
++    sortColumnDirection: "",
++    pageSize: 1000,
++    skip: 0,
++    userTypeId: null,
++    genderId: null,
++    isActiveSearch: null,
++  });
++  return (result.data ?? []).map(mapUser).filter((user) => user.id.length > 0);
++}
++
++export async function loadBackendUserOptions(): Promise<BackendUserOptions> {
++  const result = await loadFormData();
++  return {
++    roles: result.userTypes ?? [],
++    genders: result.genders ?? [],
++  };
++}
++
++function requiredId(value: number | null, label: string): number {
++  if (value == null || value <= 0) throw new Error(`يجب اختيار ${label}`);
++  return value;
++}
++
++export async function saveBackendUser(form: BackendUserForm): Promise<void> {
++  const existing = form.id ? await loadFormData(form.id) : null;
++  const existingUser = existing?.user;
++  const genderId = requiredId(form.gender_id ?? existingUser?.genderId ?? null, "الجنس");
++  const userTypeId = requiredId(form.role_id ? Number(form.role_id) : existingUser?.userTypeId ?? null, "نوع المستخدم");
++
++  if (!form.id && (!form.password || !form.confirmPassword)) {
++    throw new Error("كلمة المرور وتأكيدها مطلوبان عند إضافة مستخدم");
++  }
++
++  const result = await apiClient.post<{ success: boolean; message?: string | null }>(
++    "/api/User/CreateEdit",
++    {
++      id: form.id ?? null,
++      name: form.full_name,
++      email: form.email,
++      phoneNumber: form.phone,
++      genderId,
++      userTypeId,
++      isActive: form.is_active,
++      avatar: existingUser?.avatar ?? null,
++      password: form.id ? null : form.password,
++      confirmPassword: form.id ? null : form.confirmPassword,
++    },
++  );
++
++  if (!result.success) throw new Error(result.message || "تعذر حفظ المستخدم");
++}
++
++export async function updateBackendUserStatus(id: string, isActive: boolean): Promise<void> {
++  const result = await loadFormData(id);
++  const user = result.user;
++  if (!user?.id || !user.name || !user.email || !user.phoneNumber) {
++    throw new Error("تعذر تحميل بيانات المستخدم قبل تحديث حالته");
++  }
++
++  const genderId = requiredId(user.genderId ?? user.gender?.id ?? null, "الجنس");
++  const userTypeId = requiredId(user.userTypeId ?? user.userType?.id ?? null, "نوع المستخدم");
++  const saved = await apiClient.post<{ success: boolean; message?: string | null }>(
++    "/api/User/CreateEdit",
++    {
++      id: user.id,
++      name: user.name,
++      email: user.email,
++      phoneNumber: user.phoneNumber,
++      genderId,
++      userTypeId,
++      isActive,
++      avatar: user.avatar ?? null,
++      password: null,
++      confirmPassword: null,
++    },
++  );
++
++  if (!saved.success) throw new Error(saved.message || "تعذر تحديث حالة المستخدم");
++}
++
++export async function deleteBackendUser(id: string): Promise<void> {
++  const result = await apiClient.delete<{ success: boolean; message?: string | null }>(
++    `/api/User/Delete?id=${encodeURIComponent(id)}`,
++  );
++  if (!result.success) throw new Error(result.message || "تعذر حذف المستخدم");
++}
+diff --git a/src/integrations/backend/auth.ts b/src/integrations/backend/auth.ts
+index 77dbab5..f5cd7e5 100644
+--- a/src/integrations/backend/auth.ts
++++ b/src/integrations/backend/auth.ts
+@@ -1,24 +1,7 @@
+-// طبقة تسجيل الدخول/الخروج الجديدة — تستبدل Supabase Auth بالكامل.
+-//
+-// حالياً الباك اند (راجع swagger) بيوفر فقط:
+-//   POST /api/Auth/Login   { email, password, returnUrl } -> OperationResult
+-//   GET  /api/Auth/Logout
+-// ما في أي endpoint لجلب بيانات المستخدم الحالي (لا "/me" ولا role بالاستجابة).
+-// أي تسجيل دخول حقيقي ناجح (success: true) بيتعامل معه التطبيق كـ "مدير عام"
+-// (u-admin بملف rbac-static-data.ts).
+-//
+-// الجلسة الفعلية (هل الطلبات القادمة للباك اند مصرّح فيها) بيقررها كوكي
+-// الـ ASP.NET نفسه اللي المفروض ينضبط تلقائياً عند نجاح /api/Auth/Login
+-// (`credentials: "include"` بملف client.ts).
+-//
+-// ── دخول تجريبي محلي (Demo login) ──────────────────────────────────────
+-// عشان تقدروا تجربوا لوحات التحكم الخمسة كلها (مدير عام/مشرف/معلم/ولي أمر/
+-// طالب) بدون باك اند حقيقي لكل دور، في `loginAsDemo()` تحت — محلي بالكامل،
+-// صفر نداءات شبكة، صفر Lovable، صفر Supabase. بس بيضبط علم محلي (localStorage)
+-// + كوكي بسيط (`academia_demo_user`) عشان دوال السيرفر (rbac.functions.ts)
+-// تعرف مين "الهوية الحالية" وقت تحسب الصلاحيات/القائمة الجانبية. احذف
+-// loginAsDemo + أزرار "دخول سريع" بصفحة /login أول ما يصير عندكم تسجيل دخول
+-// حقيقي متعدد الأدوار من الباك اند.
++// تكامل المصادقة الحالي مع ASP.NET Identity في باك إند Acadimia.
++// المتاح حاليًا: Login وLogout وMyProfileModal.
++// إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
++// المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
+ 
+ import { apiClient, ApiError } from "./client";
+ 
+@@ -28,14 +11,25 @@ export const DEMO_USER_COOKIE = "academia_demo_user";
+ 
+ export interface OperationResult {
+   success: boolean;
+-  message: string;
++  message?: string | null;
+   returnId?: number;
+   isNameChanged?: boolean;
+-  newName?: string;
++  newName?: string | null;
+   isAvatarChanged?: boolean;
+-  newAvatar?: string;
+-  oldAvatar?: string;
+-  fileName?: string;
++  newAvatar?: string | null;
++  oldAvatar?: string | null;
++  fileName?: string | null;
++}
++
++export interface StoredProfile {
++  id: string;
++  name: string;
++  email: string;
++  phoneNumber?: string | null;
++  genderId?: number | null;
++  avatar?: string | null;
++  roleId?: number | string | null;
++  roleName?: string | null;
+ }
+ 
+ interface StoredSession {
+@@ -43,8 +37,14 @@ interface StoredSession {
+   loggedInAt: number;
+   userId: string;
+   isDemo: boolean;
++  profile: StoredProfile | null;
+ }
+ 
++type ProfileEnvelope = {
++  myProfileDto?: Partial<StoredProfile> | null;
++  MyProfileDto?: Partial<StoredProfile> | null;
++};
++
+ function readStoredSession(): StoredSession | null {
+   if (typeof window === "undefined") return null;
+   try {
+@@ -57,18 +57,40 @@ function readStoredSession(): StoredSession | null {
+ 
+ function writeStoredSession(session: StoredSession | null) {
+   if (typeof window === "undefined") return;
++
+   if (session) {
+     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+-    // كوكي بسيط غير httpOnly — بس عشان server functions تعرف الهوية الحالية
+-    // (راجع src/integrations/backend/auth-middleware.ts). عمر يوم واحد.
+-    document.cookie = `${DEMO_USER_COOKIE}=${session.userId}; path=/; max-age=86400; samesite=lax`;
++    // هذه الكوكي مؤقتة لحراسة الواجهة المحلية فقط، وليست حدًا أمنيًا.
++    document.cookie = `${DEMO_USER_COOKIE}=${encodeURIComponent(session.userId)}; path=/; max-age=86400; samesite=lax`;
+   } else {
+     localStorage.removeItem(AUTH_STORAGE_KEY);
+-    document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0`;
++    document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0; samesite=lax`;
+   }
++
+   window.dispatchEvent(new Event(AUTH_EVENT));
+ }
+ 
++function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
++  const raw = payload?.myProfileDto ?? payload?.MyProfileDto;
++  if (!raw || typeof raw !== "object") return null;
++
++  const id = typeof raw.id === "string" ? raw.id : "";
++  const name = typeof raw.name === "string" ? raw.name : "";
++  const email = typeof raw.email === "string" ? raw.email : "";
++  if (!id || !name || !email) return null;
++
++  return {
++    id,
++    name,
++    email,
++    phoneNumber: typeof raw.phoneNumber === "string" ? raw.phoneNumber : null,
++    genderId: typeof raw.genderId === "number" ? raw.genderId : null,
++    avatar: typeof raw.avatar === "string" ? raw.avatar : null,
++    roleId: raw.roleId ?? null,
++    roleName: typeof raw.roleName === "string" ? raw.roleName : null,
++  };
++}
++
+ export async function login(email: string, password: string): Promise<void> {
+   const result = await apiClient.post<OperationResult>("/api/Auth/Login", {
+     email,
+@@ -80,33 +102,49 @@ export async function login(email: string, password: string): Promise<void> {
+     throw new Error(result?.message || "تعذّر تسجيل الدخول");
+   }
+ 
+-  writeStoredSession({ email, loggedInAt: Date.now(), userId: "u-admin", isDemo: false });
++  let profile: StoredProfile | null = null;
++  try {
++    const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
++    profile = normalizeProfile(payload);
++  } catch {
++    // Login نفسه نجح؛ لا نمنع الدخول إذا كان endpoint الملف غير جاهز.
++  }
++
++  writeStoredSession({
++    email: profile?.email ?? email,
++    loggedInAt: Date.now(),
++    userId: profile?.id ?? "u-admin",
++    isDemo: false,
++    profile,
++  });
+ }
+ 
+-/**
+- * دخول تجريبي محلي بالكامل — بدون أي نداء شبكة. راجع الشرح فوق.
+- * @param userId معرّف المستخدم التجريبي من USERS بملف rbac-static-data.ts
+- */
++/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد. */
+ export function loginAsDemo(userId: string): void {
+-  writeStoredSession({ email: null, loggedInAt: Date.now(), userId, isDemo: true });
++  writeStoredSession({
++    email: null,
++    loggedInAt: Date.now(),
++    userId,
++    isDemo: true,
++    profile: null,
++  });
+ }
+ 
+ export async function logout(): Promise<void> {
+   const wasDemo = readStoredSession()?.isDemo;
+   try {
+-    // حسابات الدخول التجريبي محلية بالكامل — ما في داعي نبلّغ الباك اند
+-    // الحقيقي عنها أصلاً.
+-    if (!wasDemo) await apiClient.get<void>("/api/Auth/Logout");
++    if (!wasDemo) {
++      // الباك إند يعرّف Logout كـ POST.
++      await apiClient.post<OperationResult>("/api/Auth/Logout");
++    }
+   } catch (err) {
+-    // ما نوقف تسجيل الخروج محلياً حتى لو فشل نداء السيرفر (مثلاً الجلسة
+-    // منتهية أصلاً) — أهم شي نظّف الحالة المحلية.
+     if (!(err instanceof ApiError)) console.error(err);
+   } finally {
+     writeStoredSession(null);
+   }
+ }
+ 
+-/** فحص محلي سريع (بدون نداء شبكة) — يُستخدم لحراسة المسارات وواجهة الهيدر. */
++/** فحص محلي للواجهة فقط؛ التحقق الأمني يجب أن يبقى في الباك إند. */
+ export function isAuthenticated(): boolean {
+   return readStoredSession() !== null;
+ }
+@@ -118,3 +156,7 @@ export function getStoredEmail(): string | null {
+ export function getStoredUserId(): string | null {
+   return readStoredSession()?.userId ?? null;
+ }
++
++export function getStoredProfile(): StoredProfile | null {
++  return readStoredSession()?.profile ?? null;
++}
+diff --git a/src/integrations/backend/client.ts b/src/integrations/backend/client.ts
+index 5b8aa29..86fa48e 100644
+--- a/src/integrations/backend/client.ts
++++ b/src/integrations/backend/client.ts
+@@ -63,4 +63,5 @@ function safeParseJson(text: string): unknown {
+ export const apiClient = {
+   get: <T>(path: string) => request<T>(path, { method: "GET" }),
+   post: <T>(path: string, json?: unknown) => request<T>(path, { method: "POST", json }),
++  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+ };
+diff --git a/src/lib/rbac-types.ts b/src/lib/rbac-types.ts
+index d769017..c530a3c 100644
+--- a/src/lib/rbac-types.ts
++++ b/src/lib/rbac-types.ts
+@@ -152,6 +152,8 @@ export interface UserRow {
+   is_active: boolean;
+   role_id: string | null;
+   role_name: string | null;
++  gender_id?: number | null;
++  user_type_id?: number | null;
+ }
+ 
+ export const GENDER_LABELS: Record<string, string> = {

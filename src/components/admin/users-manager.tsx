@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { KeyRound, Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,13 +33,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  deleteUser,
-  listRoles,
-  listUsers,
-  saveUser,
-  sendPasswordReset,
-  toggleUserStatus,
-} from "@/lib/rbac.functions";
+  deleteBackendUser,
+  listBackendUsers,
+  loadBackendUserOptions,
+  saveBackendUser,
+  updateBackendUserStatus,
+} from "@/integrations/backend/admin-users";
 import { useAccess } from "@/hooks/use-access";
 import type { UserRow } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
@@ -50,20 +48,17 @@ const EMPTY_FORM = {
   email: "",
   phone: "",
   gender: "male" as "male" | "female",
+  gender_id: null as number | null,
   role_id: null as string | null,
   is_active: true,
+  password: "",
+  confirmPassword: "",
 };
 
 export function UsersPage() {
   const bi = useBi();
   const queryClient = useQueryClient();
   const { can } = useAccess();
-  const fetchUsers = useServerFn(listUsers);
-  const fetchRoles = useServerFn(listRoles);
-  const persist = useServerFn(saveUser);
-  const toggleStatus = useServerFn(toggleUserStatus);
-  const remove = useServerFn(deleteUser);
-  const resetPassword = useServerFn(sendPasswordReset);
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -75,12 +70,21 @@ export function UsersPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<UserRow | null>(null);
 
-  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: () => fetchUsers() });
-  const { data: roles } = useQuery({
-    queryKey: ["roles"],
-    queryFn: () => fetchRoles(),
+  const { data: users, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: listBackendUsers,
+  });
+  const { data: options } = useQuery({
+    queryKey: ["backend-user-options"],
+    queryFn: loadBackendUserOptions,
+    staleTime: 5 * 60_000,
     retry: false,
   });
+  const roles = (options?.roles ?? []).map((role) => ({
+    id: String(role.id),
+    name: role.name,
+  }));
+  const genders = options?.genders ?? [];
 
   const filtered = useMemo(() => {
     return (users ?? []).filter((u) => {
@@ -97,7 +101,7 @@ export function UsersPage() {
   }, [users, status, gender, roleFilter, search]);
 
   const saveMutation = useMutation({
-    mutationFn: () => persist({ data: { ...form, id: editingId ?? undefined } }),
+    mutationFn: () => saveBackendUser({ ...form, id: editingId ?? undefined }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setOpen(false);
@@ -108,7 +112,8 @@ export function UsersPage() {
   });
 
   const statusMutation = useMutation({
-    mutationFn: (vars: { id: string; is_active: boolean }) => toggleStatus({ data: vars }),
+    mutationFn: (vars: { id: string; is_active: boolean }) =>
+      updateBackendUserStatus(vars.id, vars.is_active),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success(bi("تم تحديث الحالة", "Status updated"));
@@ -118,7 +123,7 @@ export function UsersPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => remove({ data: { id } }),
+    mutationFn: deleteBackendUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setPendingDelete(null);
@@ -126,14 +131,6 @@ export function UsersPage() {
     },
     onError: (e) =>
       toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
-  });
-
-  const resetMutation = useMutation({
-    mutationFn: (id: string) =>
-      resetPassword({ data: { id, redirectTo: `${window.location.origin}/auth` } }),
-    onSuccess: () => toast.success(bi("تم إرسال رابط تغيير كلمة المرور", "Reset link sent")),
-    onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الإرسال", "Failed to send")),
   });
 
   function openDialog(user: UserRow | null) {
@@ -145,8 +142,11 @@ export function UsersPage() {
             email: user.email ?? "",
             phone: user.phone ?? "",
             gender: (user.gender as "male" | "female") ?? "male",
+            gender_id: user.gender_id ?? null,
             role_id: user.role_id,
             is_active: user.is_active,
+            password: "",
+            confirmPassword: "",
           }
         : EMPTY_FORM,
     );
@@ -261,16 +261,6 @@ export function UsersPage() {
                             <Pencil className="size-4" />
                           </Button>
                         )}
-                        {can("admin_users", "change_password") && (
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            title={bi("إرسال رابط كلمة المرور", "Send password reset link")}
-                            onClick={() => resetMutation.mutate(u.id)}
-                          >
-                            <KeyRound className="size-4" />
-                          </Button>
-                        )}
                         {can("admin_users", "delete") && (
                           <Button
                             size="icon"
@@ -335,18 +325,55 @@ export function UsersPage() {
             <div className="space-y-1.5">
               <Label>{bi("الجنس", "Gender")}</Label>
               <Select
-                value={form.gender}
-                onValueChange={(v) => setForm((f) => ({ ...f, gender: v as "male" | "female" }))}
+                value={form.gender_id == null ? "none" : String(form.gender_id)}
+                onValueChange={(value) => {
+                  const gender = genders.find((item) => String(item.id) === value);
+                  setForm((f) => ({
+                    ...f,
+                    gender_id: gender?.id ?? null,
+                    gender: gender?.name.includes("أنث") ? "female" : "male",
+                  }));
+                }}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">{bi("ذكر", "Male")}</SelectItem>
-                  <SelectItem value="female">{bi("أنثى", "Female")}</SelectItem>
+                  <SelectItem value="none" disabled>
+                    {bi("اختر الجنس", "Select gender")}
+                  </SelectItem>
+                  {genders.map((gender) => (
+                    <SelectItem key={gender.id} value={String(gender.id)}>
+                      {gender.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
+            {!editingId && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="u-password">{bi("كلمة المرور", "Password")}</Label>
+                  <Input
+                    id="u-password"
+                    type="password"
+                    value={form.password}
+                    onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="u-confirm-password">
+                    {bi("تأكيد كلمة المرور", "Confirm password")}
+                  </Label>
+                  <Input
+                    id="u-confirm-password"
+                    type="password"
+                    value={form.confirmPassword}
+                    onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                  />
+                </div>
+              </>
+            )}
             <div className="space-y-1.5">
               <Label>{bi("نوع المستخدم", "User type")}</Label>
               <Select

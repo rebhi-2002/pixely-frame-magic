@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   AUTH_EVENT,
   getStoredEmail,
+  getStoredProfile,
   getStoredUserId,
   isAuthenticated,
 } from "@/integrations/backend/auth";
@@ -30,15 +31,16 @@ const ROLE_KEY_BY_ID: Record<string, RoleKey> = {
 function buildSession(): PublicSession | null {
   if (!isAuthenticated()) return null;
   const userId = getStoredUserId() ?? "u-admin";
+  const profile = getStoredProfile();
   const user = USERS.find((u) => u.id === userId) ?? USERS[0];
   const role = ROLES.find((r) => r.id === user.role_id);
   const isAdmin = role?.name === "مدير عام";
-  const email = getStoredEmail() ?? user.email;
+  const email = profile?.email ?? getStoredEmail() ?? user.email;
   return {
-    userId: user.id,
+    userId,
     email,
-    fullName: user.full_name,
-    avatarUrl: user.avatar_url,
+    fullName: profile?.name ?? user.full_name,
+    avatarUrl: profile?.avatar ?? user.avatar_url,
     roleName: role?.name ?? null,
     roleKey: (user.role_id && ROLE_KEY_BY_ID[user.role_id]) || "student",
     isAdmin,

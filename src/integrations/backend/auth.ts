@@ -1,24 +1,7 @@
-// طبقة تسجيل الدخول/الخروج الجديدة — تستبدل Supabase Auth بالكامل.
-//
-// حالياً الباك اند (راجع swagger) بيوفر فقط:
-//   POST /api/Auth/Login   { email, password, returnUrl } -> OperationResult
-//   GET  /api/Auth/Logout
-// ما في أي endpoint لجلب بيانات المستخدم الحالي (لا "/me" ولا role بالاستجابة).
-// أي تسجيل دخول حقيقي ناجح (success: true) بيتعامل معه التطبيق كـ "مدير عام"
-// (u-admin بملف rbac-static-data.ts).
-//
-// الجلسة الفعلية (هل الطلبات القادمة للباك اند مصرّح فيها) بيقررها كوكي
-// الـ ASP.NET نفسه اللي المفروض ينضبط تلقائياً عند نجاح /api/Auth/Login
-// (`credentials: "include"` بملف client.ts).
-//
-// ── دخول تجريبي محلي (Demo login) ──────────────────────────────────────
-// عشان تقدروا تجربوا لوحات التحكم الخمسة كلها (مدير عام/مشرف/معلم/ولي أمر/
-// طالب) بدون باك اند حقيقي لكل دور، في `loginAsDemo()` تحت — محلي بالكامل،
-// صفر نداءات شبكة، صفر Lovable، صفر Supabase. بس بيضبط علم محلي (localStorage)
-// + كوكي بسيط (`academia_demo_user`) عشان دوال السيرفر (rbac.functions.ts)
-// تعرف مين "الهوية الحالية" وقت تحسب الصلاحيات/القائمة الجانبية. احذف
-// loginAsDemo + أزرار "دخول سريع" بصفحة /login أول ما يصير عندكم تسجيل دخول
-// حقيقي متعدد الأدوار من الباك اند.
+// تكامل المصادقة الحالي مع ASP.NET Identity في باك إند Acadimia.
+// المتاح حاليًا: Login وLogout وMyProfileModal.
+// إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
+// المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
 
 import { apiClient, ApiError } from "./client";
 
@@ -28,14 +11,25 @@ export const DEMO_USER_COOKIE = "academia_demo_user";
 
 export interface OperationResult {
   success: boolean;
-  message: string;
+  message?: string | null;
   returnId?: number;
   isNameChanged?: boolean;
-  newName?: string;
+  newName?: string | null;
   isAvatarChanged?: boolean;
-  newAvatar?: string;
-  oldAvatar?: string;
-  fileName?: string;
+  newAvatar?: string | null;
+  oldAvatar?: string | null;
+  fileName?: string | null;
+}
+
+export interface StoredProfile {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber?: string | null;
+  genderId?: number | null;
+  avatar?: string | null;
+  roleId?: number | string | null;
+  roleName?: string | null;
 }
 
 interface StoredSession {
@@ -43,7 +37,13 @@ interface StoredSession {
   loggedInAt: number;
   userId: string;
   isDemo: boolean;
+  profile: StoredProfile | null;
 }
+
+type ProfileEnvelope = {
+  myProfileDto?: Partial<StoredProfile> | null;
+  MyProfileDto?: Partial<StoredProfile> | null;
+};
 
 function readStoredSession(): StoredSession | null {
   if (typeof window === "undefined") return null;
@@ -57,16 +57,38 @@ function readStoredSession(): StoredSession | null {
 
 function writeStoredSession(session: StoredSession | null) {
   if (typeof window === "undefined") return;
+
   if (session) {
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
-    // كوكي بسيط غير httpOnly — بس عشان server functions تعرف الهوية الحالية
-    // (راجع src/integrations/backend/auth-middleware.ts). عمر يوم واحد.
-    document.cookie = `${DEMO_USER_COOKIE}=${session.userId}; path=/; max-age=86400; samesite=lax`;
+    // هذه الكوكي مؤقتة لحراسة الواجهة المحلية فقط، وليست حدًا أمنيًا.
+    document.cookie = `${DEMO_USER_COOKIE}=${encodeURIComponent(session.userId)}; path=/; max-age=86400; samesite=lax`;
   } else {
     localStorage.removeItem(AUTH_STORAGE_KEY);
-    document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0`;
+    document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0; samesite=lax`;
   }
+
   window.dispatchEvent(new Event(AUTH_EVENT));
+}
+
+function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
+  const raw = payload?.myProfileDto ?? payload?.MyProfileDto;
+  if (!raw || typeof raw !== "object") return null;
+
+  const id = typeof raw.id === "string" ? raw.id : "";
+  const name = typeof raw.name === "string" ? raw.name : "";
+  const email = typeof raw.email === "string" ? raw.email : "";
+  if (!id || !name || !email) return null;
+
+  return {
+    id,
+    name,
+    email,
+    phoneNumber: typeof raw.phoneNumber === "string" ? raw.phoneNumber : null,
+    genderId: typeof raw.genderId === "number" ? raw.genderId : null,
+    avatar: typeof raw.avatar === "string" ? raw.avatar : null,
+    roleId: raw.roleId ?? null,
+    roleName: typeof raw.roleName === "string" ? raw.roleName : null,
+  };
 }
 
 export async function login(email: string, password: string): Promise<void> {
@@ -80,33 +102,49 @@ export async function login(email: string, password: string): Promise<void> {
     throw new Error(result?.message || "تعذّر تسجيل الدخول");
   }
 
-  writeStoredSession({ email, loggedInAt: Date.now(), userId: "u-admin", isDemo: false });
+  let profile: StoredProfile | null = null;
+  try {
+    const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+    profile = normalizeProfile(payload);
+  } catch {
+    // Login نفسه نجح؛ لا نمنع الدخول إذا كان endpoint الملف غير جاهز.
+  }
+
+  writeStoredSession({
+    email: profile?.email ?? email,
+    loggedInAt: Date.now(),
+    userId: profile?.id ?? "u-admin",
+    isDemo: false,
+    profile,
+  });
 }
 
-/**
- * دخول تجريبي محلي بالكامل — بدون أي نداء شبكة. راجع الشرح فوق.
- * @param userId معرّف المستخدم التجريبي من USERS بملف rbac-static-data.ts
- */
+/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد. */
 export function loginAsDemo(userId: string): void {
-  writeStoredSession({ email: null, loggedInAt: Date.now(), userId, isDemo: true });
+  writeStoredSession({
+    email: null,
+    loggedInAt: Date.now(),
+    userId,
+    isDemo: true,
+    profile: null,
+  });
 }
 
 export async function logout(): Promise<void> {
   const wasDemo = readStoredSession()?.isDemo;
   try {
-    // حسابات الدخول التجريبي محلية بالكامل — ما في داعي نبلّغ الباك اند
-    // الحقيقي عنها أصلاً.
-    if (!wasDemo) await apiClient.get<void>("/api/Auth/Logout");
+    if (!wasDemo) {
+      // الباك إند يعرّف Logout كـ POST.
+      await apiClient.post<OperationResult>("/api/Auth/Logout");
+    }
   } catch (err) {
-    // ما نوقف تسجيل الخروج محلياً حتى لو فشل نداء السيرفر (مثلاً الجلسة
-    // منتهية أصلاً) — أهم شي نظّف الحالة المحلية.
     if (!(err instanceof ApiError)) console.error(err);
   } finally {
     writeStoredSession(null);
   }
 }
 
-/** فحص محلي سريع (بدون نداء شبكة) — يُستخدم لحراسة المسارات وواجهة الهيدر. */
+/** فحص محلي للواجهة فقط؛ التحقق الأمني يجب أن يبقى في الباك إند. */
 export function isAuthenticated(): boolean {
   return readStoredSession() !== null;
 }
@@ -117,4 +155,8 @@ export function getStoredEmail(): string | null {
 
 export function getStoredUserId(): string | null {
   return readStoredSession()?.userId ?? null;
+}
+
+export function getStoredProfile(): StoredProfile | null {
+  return readStoredSession()?.profile ?? null;
 }

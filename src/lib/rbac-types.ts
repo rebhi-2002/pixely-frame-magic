@@ -152,6 +152,8 @@ export interface UserRow {
   is_active: boolean;
   role_id: string | null;
   role_name: string | null;
+  gender_id?: number | null;
+  user_type_id?: number | null;
 }
 
 export const GENDER_LABELS: Record<string, string> = {
