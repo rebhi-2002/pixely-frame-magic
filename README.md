@@ -2,21 +2,9 @@
 
 Implement exactly the screenshot and nothing else
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://pixely-frame-magic.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4c5ee9bd-51b9-4b7a-921e-f75e6cfc4987).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js and npm.
 
 ```sh
 git clone <this-repository-url>
@@ -24,3 +12,14 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Deployment
+
+This project targets TanStack Start with Nitro. Set the `NITRO_PRESET`
+environment variable on your hosting platform:
+
+- Vercel: `NITRO_PRESET=vercel`
+- Netlify: `NITRO_PRESET=netlify`
+
+Also set `VITE_API_BASE_URL` to your backend's public URL in the
+platform's environment variables (never commit real secrets to `.env`).

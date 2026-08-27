@@ -1,0 +1,128 @@
+import { i as __toESM } from "../_runtime.mjs";
+import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
+import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { n as useTranslation } from "../_libs/react-i18next.mjs";
+import { t as useSession } from "./use-session-B52gGt5m.mjs";
+import { f as Star, mt as BookOpen, y as Search } from "../_libs/lucide-react.mjs";
+import { r as PublicLayout } from "./public-layout-BxOOhUSq.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/courses-CQbUnZVP.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+function CoursesPage() {
+	const { t } = useTranslation();
+	const items = t("courses.items", { returnObjects: true });
+	const [query, setQuery] = (0, import_react.useState)("");
+	const [subject, setSubject] = (0, import_react.useState)("__all");
+	const { isSignedIn } = useSession();
+	const subjects = (0, import_react.useMemo)(() => Array.from(new Set(items.map((i) => i.subject))), [items]);
+	const filtered = items.filter((i) => {
+		const q = query.trim();
+		const matchQuery = !q || i.title.includes(q) || i.teacher.includes(q);
+		const matchSubject = subject === "__all" || i.subject === subject;
+		return matchQuery && matchSubject;
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PublicLayout, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "surface-grid border-b border-border",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-6xl px-5 py-16",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-4xl font-bold text-foreground md:text-5xl",
+					children: t("courses.h1")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-4 max-w-2xl text-lg text-muted-foreground",
+					children: t("courses.sub")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-8 flex flex-col gap-3 md:flex-row md:items-center",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative flex-1",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							value: query,
+							onChange: (e) => setQuery(e.target.value),
+							placeholder: t("courses.searchPlaceholder"),
+							"aria-label": t("courses.searchPlaceholder"),
+							className: "h-11 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex flex-wrap gap-2",
+						children: ["__all", ...subjects].map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => setSubject(s),
+							className: `hover-press rounded-lg border px-3 py-2 text-xs font-bold ${subject === s ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:text-foreground"}`,
+							children: s === "__all" ? t("courses.all") : s
+						}, s))
+					})]
+				})
+			]
+		})
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "mx-auto max-w-6xl px-5 py-14",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "panel-swap",
+			children: filtered.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground",
+				children: t("courses.empty")
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
+				children: filtered.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+					className: "hover-lift flex flex-col rounded-2xl border border-border bg-card p-6",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary",
+								children: c.subject
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-xs text-muted-foreground",
+								children: c.level
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-4 text-base font-bold text-foreground",
+							children: c.title
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-1.5 text-sm text-muted-foreground",
+							children: [
+								t("courses.byTeacher"),
+								":",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/teacher/$id",
+									params: { id: c.teacherId },
+									className: "font-semibold text-primary hover:underline",
+									children: c.teacher
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-4 flex items-center gap-4 text-xs text-muted-foreground",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-1.5",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BookOpen, { className: "size-4" }),
+									c.lessons,
+									" ",
+									t("courses.lessons")
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "size-4 text-primary" }), c.price === "0" ? t("courses.free") : `${c.price} JOD`]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: isSignedIn ? "/my-courses" : "/signup",
+							className: "hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90",
+							children: t(isSignedIn ? "courses.open" : "courses.enroll")
+						})
+					]
+				}, c.id))
+			})
+		}, `${subject}-${filtered.length}`)
+	})] });
+}
+//#endregion
+export { CoursesPage as component };

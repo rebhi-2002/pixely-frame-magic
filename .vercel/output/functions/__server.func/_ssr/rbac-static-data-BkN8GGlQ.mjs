@@ -1,0 +1,2958 @@
+import { i as __toESM } from "../_runtime.mjs";
+import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
+import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { t as instance } from "../_libs/i18next.mjs";
+import { n as useTranslation, r as initReactI18next, t as I18nextProvider } from "../_libs/react-i18next.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/rbac-static-data-BkN8GGlQ.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+var API_BASE_URL = "http://academiatawjihi.runasp.net/".replace(/\/+$/, "") ?? "https://localhost:7176";
+var ApiError = class extends Error {
+	status;
+	constructor(message, status) {
+		super(message);
+		this.name = "ApiError";
+		this.status = status;
+	}
+};
+async function request(path, init = {}) {
+	const { json, headers, ...rest } = init;
+	const res = await fetch(`${API_BASE_URL}${path}`, {
+		...rest,
+		credentials: "include",
+		headers: {
+			Accept: "application/json, text/plain, */*",
+			...json !== void 0 ? { "Content-Type": "application/json" } : {},
+			...headers
+		},
+		body: json !== void 0 ? JSON.stringify(json) : rest.body
+	});
+	const text = await res.text();
+	const data = text ? safeParseJson(text) : null;
+	if (!res.ok) throw new ApiError((data && typeof data === "object" && "message" in data ? data.message : void 0) || `${res.status} ${res.statusText}`, res.status);
+	return data;
+}
+function safeParseJson(text) {
+	try {
+		return JSON.parse(text);
+	} catch {
+		return text;
+	}
+}
+var apiClient = {
+	get: (path) => request(path, { method: "GET" }),
+	post: (path, json) => request(path, {
+		method: "POST",
+		json
+	})
+};
+var AUTH_STORAGE_KEY = "academia.auth";
+var AUTH_EVENT = "academia-auth-changed";
+var DEMO_USER_COOKIE = "academia_demo_user";
+function readStoredSession() {
+	if (typeof window === "undefined") return null;
+	try {
+		const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+		return raw ? JSON.parse(raw) : null;
+	} catch {
+		return null;
+	}
+}
+function writeStoredSession(session) {
+	if (typeof window === "undefined") return;
+	if (session) {
+		localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+		document.cookie = `${DEMO_USER_COOKIE}=${session.userId}; path=/; max-age=86400; samesite=lax`;
+	} else {
+		localStorage.removeItem(AUTH_STORAGE_KEY);
+		document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0`;
+	}
+	window.dispatchEvent(new Event(AUTH_EVENT));
+}
+async function login(email, password) {
+	const result = await apiClient.post("/api/Auth/Login", {
+		email,
+		password,
+		returnUrl: ""
+	});
+	if (!result?.success) throw new Error(result?.message || "تعذّر تسجيل الدخول");
+	writeStoredSession({
+		email,
+		loggedInAt: Date.now(),
+		userId: "u-admin",
+		isDemo: false
+	});
+}
+/**
+* دخول تجريبي محلي بالكامل — بدون أي نداء شبكة. راجع الشرح فوق.
+* @param userId معرّف المستخدم التجريبي من USERS بملف rbac-static-data.ts
+*/
+function loginAsDemo(userId) {
+	writeStoredSession({
+		email: null,
+		loggedInAt: Date.now(),
+		userId,
+		isDemo: true
+	});
+}
+async function logout() {
+	const wasDemo = readStoredSession()?.isDemo;
+	try {
+		if (!wasDemo) await apiClient.get("/api/Auth/Logout");
+	} catch (err) {
+		if (!(err instanceof ApiError)) console.error(err);
+	} finally {
+		writeStoredSession(null);
+	}
+}
+/** فحص محلي سريع (بدون نداء شبكة) — يُستخدم لحراسة المسارات وواجهة الهيدر. */
+function isAuthenticated() {
+	return readStoredSession() !== null;
+}
+function getStoredEmail() {
+	return readStoredSession()?.email ?? null;
+}
+function getStoredUserId() {
+	return readStoredSession()?.userId ?? null;
+}
+var ar_default = {
+	common: {
+		"brand": "أكاديميا",
+		"signIn": "دخول",
+		"startFree": "ابدأ مجاناً",
+		"loading": "جارٍ التحميل…",
+		"save": "حفظ",
+		"cancel": "إلغاء",
+		"search": "بحث",
+		"back": "رجوع",
+		"themeToggle": "تبديل الوضع (ليل/نهار)",
+		"languageToggle": "تبديل اللغة",
+		"skipToContent": "تخطَّ إلى المحتوى الرئيسي",
+		"theme": {
+			"light": "الوضع الفاتح",
+			"dark": "الوضع الغامق",
+			"auto": "تلقائي (حسب الجهاز)"
+		},
+		"language": {
+			"ar": "العربية",
+			"en": "English"
+		},
+		"more": "المزيد",
+		"menu": "القائمة",
+		"signOut": "تسجيل الخروج",
+		"dashboard": "لوحة التحكم",
+		"settings": "الإعدادات",
+		"backToSite": "العودة للموقع",
+		"account": "حسابي",
+		"preferences": "التفضيلات",
+		"navigation": "التنقّل",
+		"searchPages": "ابحث في كل الصفحات...",
+		"faqBadge": "أسئلة شائعة",
+		"faqTitle": "عندك سؤال؟ يمكن جوابه هون",
+		"signingOut": "جارٍ تسجيل الخروج…",
+		"closeMenu": "إغلاق القائمة",
+		"expandMenu": "توسيع القائمة",
+		"collapseMenu": "طي القائمة",
+		"openMenu": "فتح القائمة"
+	},
+	nav: {
+		"home": "الرئيسية",
+		"howItWorks": "كيف تعمل",
+		"pricing": "الأسعار",
+		"forTeachers": "للمعلمين",
+		"platform": "المنصة",
+		"legal": "قانوني",
+		"privacy": "سياسة الخصوصية",
+		"terms": "شروط الاستخدام",
+		"tagline": "منصة عربية تساعد طلاب الثانوية ينظّموا موادهم، يتابعوا إنجازهم، ويجهّزوا للامتحان الوزاري بثقة.",
+		"rights": "© {{year}} أكاديميا — جميع الحقوق محفوظة."
+	},
+	home: {
+		"meta": {
+			"title": "أكاديميا | منصة الطالب للتنظيم والإنجاز",
+			"description": "أكاديميا: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد."
+		},
+		"badge": "للطلاب من 16 إلى 18 سنة",
+		"h1a": "ملفاتك ضايعة بالواتساب؟",
+		"h1b": "أكاديميا",
+		"h1c": "ترتّبها وتخلّيك تنجز.",
+		"sub": "مكان واحد لكل موادك: مكتبة مرتّبة، أسئلة تتجاوب عليها، جدول يذكّرك، وامتحانات تدريب تكشف نقاط ضعفك قبل الامتحان الحقيقي.",
+		"ctaPrimary": "ابدأ مجاناً الآن",
+		"ctaSecondary": "شوف كيف بتشتغل",
+		"stats": {
+			"levels": "مستويات تصنيف للمحتوى",
+			"rtl": "عربي وواجهة RTL",
+			"spaces": "مساحات: طالب، معلم، ولي أمر"
+		},
+		"featuresTitle": "كل شي بتحتاجه بمكان واحد",
+		"featuresSub": "مش أرشيف ملفات — أدوات فعلية تساعدك تنجز وتتقن، مبنية على طريقة دراستك الحقيقية.",
+		"features": {
+			"library": {
+				"title": "المكتبة الذكية",
+				"text": "تصنيف شجري صارم: فصل ← مادة ← وحدة ← درس. بحث متقدم وحفظ للمفضلة."
+			},
+			"community": {
+				"title": "مجتمعات المواد",
+				"text": "قناة لكل مادة، سؤال وجواب مع تثبيت الإجابة الصحيحة، وساعات هدوء ليلاً."
+			},
+			"tracker": {
+				"title": "متابعة الإنجاز",
+				"text": "عدّاد إنجاز لكل مادة، جدول دراسي تفاعلي، وQuiz قصير بعد كل درس."
+			},
+			"simulator": {
+				"title": "محاكي الامتحان الوزاري",
+				"text": "امتحان بنفس النمط والتوقيت، تصحيح فوري وتحليل نقاط الضعف حسب الوحدة."
+			},
+			"mistakes": {
+				"title": "بنك أخطائي",
+				"text": "كل سؤال تخطئ فيه يُحفظ تلقائياً لتراجعه دورياً حتى تتقنه."
+			},
+			"review": {
+				"title": "مراجعة الـ15 دقيقة",
+				"text": "فلاش كاردز ذكية تُقترح حسب أضعف نقطة عندك قبل النوم أو قبل الامتحان."
+			}
+		},
+		"roles": {
+			"student": {
+				"t": "طالب",
+				"d": "Dashboard بمهام اليوم، إنجازك، وشاراتك."
+			},
+			"teacher": {
+				"t": "معلّم",
+				"d": "ارفع محتواك، جهّز Quizzes، وتابع أداء شُعبك."
+			},
+			"parent": {
+				"t": "ولي أمر",
+				"d": "تقرير أسبوعي مختصر عن الانتظام والإنجاز."
+			}
+		},
+		"ctaTitle": "جاهز تبلّش؟",
+		"ctaSub": "سجّل بدقيقة، اختار موادك، وحدّد أول هدف أسبوعي — والباقي علينا.",
+		"ctaButton": "إنشاء حساب مجاني",
+		"signedIn": {
+			"welcome": "أهلاً {{name}} 👋",
+			"cta": "اذهب إلى لوحة التحكم",
+			"browse": "تصفّح الكورسات",
+			"student": {
+				"h1": "جاهز تكمل من حيث وقفت؟",
+				"sub": "مكتبتك، جدولك، وبنك أخطائك بانتظارك — افتح لوحتك وأكمل خطة اليوم."
+			},
+			"teacher": {
+				"h1": "طلابك بانتظار درسك الجديد",
+				"sub": "أنشئ كورساً، صحّح التسليمات، وتابع أرباحك وتحليلات صفوفك من لوحتك."
+			},
+			"parent": {
+				"h1": "تابع تقدّم أبنائك بلحظتها",
+				"sub": "تقارير الإنجاز، الحضور، والدرجات — كلها في تقرير ولي الأمر."
+			},
+			"supervisor": {
+				"h1": "نظرة شاملة على الأداء الأكاديمي",
+				"sub": "راقب المعلمين والطلاب وجودة المحتوى من لوحة الإشراف."
+			},
+			"admin": {
+				"h1": "تشغيل المنصة بين يديك",
+				"sub": "المستخدمون، الصلاحيات، المنهاج، المدفوعات، ومراجعة المحتوى — من لوحة الإدارة."
+			}
+		}
+	},
+	howItWorks: {
+		"meta": {
+			"title": "كيف تعمل أكاديميا؟ | خطوات البداية",
+			"description": "أربع خطوات فقط: سجّل واختر دورك، حدّد نظامك وصفك وموادك، ابدأ من المكتبة المرتّبة، وتابع إنجازك أسبوعياً."
+		},
+		"h1": "كيف بتشتغل أكاديميا؟",
+		"sub": "من أول تسجيل دخول، أربع خطوات سريعة (وبتقدر تتخطاها بأي وقت) وبتصير جاهز.",
+		"steps": {
+			"role": {
+				"t": "اختر دورك",
+				"d": "طالب، معلّم، أو ولي أمر — كل دور يفتح مساحة مختلفة كلياً بصلاحياتها الخاصة."
+			},
+			"system": {
+				"t": "النظام والصف",
+				"d": "فلسطيني أو أردني، الفرع (علمي/أدبي)، والصف — عشان يتخصّص لك المحتوى الصح."
+			},
+			"subjects": {
+				"t": "اختر موادك",
+				"d": "حدّد المواد اللي بتتابعها، وتنبني Dashboard ومكتبتك على أساسها مباشرة."
+			},
+			"goal": {
+				"t": "أول هدف أسبوعي",
+				"d": "هدف بسيط يشغّل عدّاد الإنجاز من أول لحظة، وتبدأ سلسلة الأيام (Streak)."
+			}
+		},
+		"cta": "ابدأ الآن مجاناً",
+		"nextTitle": "وبعدين؟",
+		"next": [
+			"كل درس تخلّصه بتضغط «تم الفهم» وبتحل Quiz قصير.",
+			"كل غلطة بتنحفظ ببنك أخطائك لتراجعها لاحقاً.",
+			"قبل الامتحان، محاكي الامتحان الوزاري بيقيسك بنفس التوقيت الحقيقي.",
+			"ولي أمرك بيوصله تقرير أسبوعي مختصر بدون ما ينبش بخصوصيتك اليومية."
+		]
+	},
+	pricing: {
+		"meta": {
+			"title": "أسعار أكاديميا | ابدأ مجاناً",
+			"description": "خطة مجانية كاملة للبداية، وخطة مميزة لمحاكي الامتحان وبنك الأخطاء والتقارير المتقدمة."
+		},
+		"h1": "خطط بسيطة، بدون تعقيد",
+		"sub": "ابدأ مجاناً بالكامل. ارفع لبريميوم وقت ما تحس إنك بحاجة لأدوات التحضير للامتحان.",
+		"perMonth": "/ شهرياً",
+		"free": {
+			"name": "المجاني",
+			"price": "0",
+			"note": "للأبد",
+			"cta": "ابدأ مجاناً",
+			"features": [
+				"المكتبة الذكية وتصفح كل المواد",
+				"حفظ الدروس بالمفضلة",
+				"مجتمعات المواد وسؤال وجواب",
+				"الجدول الدراسي التفاعلي",
+				"عدّاد إنجاز أساسي"
+			]
+		},
+		"plus": {
+			"name": "بريميوم",
+			"price": "29",
+			"note": "شهرياً",
+			"cta": "اشترك ببريميوم",
+			"badge": "الأكثر اختياراً",
+			"features": [
+				"كل مزايا الخطة المجانية",
+				"محاكي الامتحان الوزاري بالذكاء الاصطناعي",
+				"بنك أخطائي الخاص + التكرار المتباعد",
+				"مراجعة الـ15 دقيقة (فلاش كاردز ذكية)",
+				"تقرير أسبوعي لولي الأمر",
+				"شهادات رقمية عند إتمام مادة"
+			]
+		},
+		"teacher": {
+			"name": "المعلّم",
+			"price": "9",
+			"cta": "ابدأ كمعلّم"
+		},
+		"note": "الأسعار بالدولار الأمريكي. يمكنك الإلغاء بأي وقت.",
+		"currency": "شيكل",
+		"forever": "للأبد",
+		"monthly": "شهرياً",
+		"faq": [
+			{
+				"q": "هل أكاديميا مجانية فعلاً؟",
+				"a": "أيوا، الخطة المجانية كاملة وبدون حد زمني: المكتبة، المجتمعات، الجدول، وعدّاد الإنجاز الأساسي. بريميوم اختياري لمن بده أدوات تحضير الامتحان المتقدمة."
+			},
+			{
+				"q": "هل بقدر ألغي الاشتراك بأي وقت؟",
+				"a": "أكيد. تقدر تلغي اشتراك بريميوم من إعدادات حسابك بأي لحظة بدون أي شرط أو رسوم إلغاء، وبتضل مشترك لحد نهاية الفترة المدفوعة."
+			},
+			{
+				"q": "شو الفرق بين خطة الطالب وخطة المعلّم؟",
+				"a": "خطة الطالب (مجاني/بريميوم) للوصول للمحتوى والأدوات. خطة المعلّم منفصلة وبتسمحلك ترفع محتوى، تجهّز اختبارات، وتتابع أداء طلابك."
+			},
+			{
+				"q": "هل في خصم لمجموعات الطلاب أو المدارس؟",
+				"a": "نشتغل حالياً على باقات خاصة للمدارس والمجموعات. تواصل معنا من صفحة المساعدة وبنرجعلك بالتفاصيل."
+			},
+			{
+				"q": "وين بتنحفظ بياناتي وهل هي آمنة؟",
+				"a": "بياناتك محفوظة بشكل آمن ومشفّر، وما منشاركها مع أي طرف ثالث لأغراض تسويقية. التفاصيل الكاملة بصفحة سياسة الخصوصية."
+			}
+		],
+		"compare": {
+			"title": "قارن الخطتين بالتفصيل",
+			"sub": "شوف بالضبط شو بتاخد بكل خطة قبل ما تقرر.",
+			"colFree": "المجاني",
+			"colPlus": "بريميوم",
+			"groups": [
+				{
+					"t": "المحتوى والتعلّم",
+					"rows": [
+						{
+							"l": "المكتبة الذكية وتصفح كل المواد",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "حفظ الدروس بالمفضلة",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "مجتمعات المواد وسؤال وجواب",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "الجدول الدراسي التفاعلي",
+							"free": true,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "التحضير للامتحان",
+					"rows": [
+						{
+							"l": "محاكي الامتحان الوزاري بالذكاء الاصطناعي",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "بنك أخطائي الخاص + التكرار المتباعد",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "مراجعة الـ15 دقيقة (فلاش كاردز ذكية)",
+							"free": false,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "المتابعة والتقارير",
+					"rows": [
+						{
+							"l": "عدّاد إنجاز أساسي",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "تقرير أسبوعي مفصّل لولي الأمر",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "شهادات رقمية عند إتمام مادة",
+							"free": false,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "الدعم",
+					"rows": [{
+						"l": "الدعم عبر مركز المساعدة",
+						"free": true,
+						"plus": true
+					}, {
+						"l": "دعم أولوية عبر البريد الإلكتروني",
+						"free": false,
+						"plus": true
+					}]
+				}
+			]
+		}
+	},
+	forTeachers: {
+		"meta": {
+			"title": "أكاديميا للمعلمين | أدوات تنظيم وتقييم",
+			"description": "ارفع محتواك مرة واحدة، جهّز Quizzes تُصحَّح تلقائياً، وتابع أداء طلابك بتقارير واضحة."
+		},
+		"h1": "علّم أكتر، صحّح أقل، ووصل لطلاب أكتر.",
+		"sub": "أكاديميا بتعطيك مكان منظّم لمحتواك، تصحيح آلي للـQuizzes، وتحليلات تخليك تعرف بالضبط وين تركّز جهدك.",
+		"cta": "سجّل كمعلّم",
+		"benefits": {
+			"upload": {
+				"t": "محتواك مرتّب ومحفوظ",
+				"d": "ارفع ملفاتك وفيديوهاتك مرة وحدة، وتنصنّف تلقائياً حسب الفصل والمادة والوحدة والدرس."
+			},
+			"analytics": {
+				"t": "تحليلات لكل طالب وشعبة",
+				"d": "شوف مين فهم ومين متعثّر، وأي وحدة بالضبط بتشكّل نقطة ضعف عند شعبتك."
+			},
+			"income": {
+				"t": "دخل من عملك",
+				"d": "عمولة على اشتراكات الطلاب المرتبطين فيك، مع لوحة واضحة للمدفوعات."
+			},
+			"verified": {
+				"t": "حساب موثّق",
+				"d": "توثيق الحساب برفع بطاقة/شهادة، وبعد الموافقة بيظهر توثيقك جنب اسمك."
+			}
+		},
+		"faq": [
+			{
+				"q": "كيف بصير عندي حساب معلّم موثّق؟",
+				"a": "سجّل من زر \"ابدأ كمعلّم\"، عبّي بياناتك ومؤهلاتك، وفريقنا بيراجع الطلب ويفعّل حسابك خلال أيام قليلة."
+			},
+			{
+				"q": "كيف بوصلني الدخل من اشتراكات المنصة؟",
+				"a": "بتحصل على نسبة من اشتراكات الطلاب اللي بياخدوا كورساتك، وبتقدر تتابع أرباحك أول بأول من لوحة تحكم المعلّم."
+			},
+			{
+				"q": "شو أنواع المحتوى اللي بقدر أرفعها؟",
+				"a": "دروس مكتوبة، ملفات PDF، بنوك أسئلة، واختبارات قصيرة (Quizzes) — كلها منظّمة حسب الفصل والمادة والوحدة."
+			}
+		]
+	},
+	legal: {
+		"privacyTitle": "سياسة الخصوصية",
+		"termsTitle": "شروط الاستخدام",
+		"lastUpdated": "آخر تحديث: {{date}}"
+	},
+	auth: {
+		"meta": {
+			"title": "تسجيل الدخول | أكاديميا",
+			"description": "سجّل الدخول أو أنشئ حساباً جديداً للوصول إلى مساحتك في أكاديميا."
+		},
+		"signInTitle": "تسجيل الدخول",
+		"signUpTitle": "إنشاء حساب",
+		"fullName": "الاسم الكامل",
+		"email": "البريد الإلكتروني",
+		"password": "كلمة المرور",
+		"signInAction": "دخول",
+		"signUpAction": "إنشاء حساب",
+		"toSignUp": "ما عندك حساب؟ أنشئ واحداً",
+		"toSignIn": "عندك حساب؟ سجّل الدخول",
+		"google": "المتابعة عبر Google"
+	},
+	errors: {
+		"notFoundTitle": "الصفحة غير موجودة",
+		"notFoundText": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+		"backHome": "العودة للرئيسية",
+		"crashTitle": "تعذّر تحميل الصفحة",
+		"crashText": "حدث خطأ غير متوقع. يمكنك المحاولة مجدداً أو العودة للرئيسية.",
+		"retry": "إعادة المحاولة",
+		"forbiddenTitle": "لا تملك صلاحية الوصول",
+		"forbiddenText": "هذه الصفحة تتطلب صلاحية غير متوفرة في حسابك."
+	},
+	privacy: {
+		"h1": "سياسة الخصوصية",
+		"intro": "آخر تحديث: بداية إطلاق المنصة. نكتبها بلغة مفهومة لأنها تخصّك فعلاً.",
+		"sections": [
+			{
+				"t": "البيانات التي نجمعها",
+				"d": "الاسم، البريد الإلكتروني، النظام والصف والمواد التي تختارها، ونشاطك داخل المنصة (الدروس التي أنهيتها ونتائج الـQuizzes)."
+			},
+			{
+				"t": "كيف نستخدمها",
+				"d": "لتخصيص محتواك، لحساب نسبة إنجازك، ولاقتراح المراجعات المناسبة لك. لا نبيع بياناتك لأي طرف ثالث."
+			},
+			{
+				"t": "خصوصية الطالب أمام ولي الأمر",
+				"d": "ولي الأمر يرى ملخصاً أسبوعياً للانتظام ونسبة الإنجاز فقط — لا يرى محادثاتك في المجتمعات ولا تفاصيل نشاطك اليومي."
+			},
+			{
+				"t": "المحتوى المرفوع",
+				"d": "المعلّم مسؤول عن حقوق المحتوى الذي يرفعه. أي محتوى مُبلَّغ عنه يخضع لمراجعة فريق الإشراف وقد يُحذف."
+			},
+			{
+				"t": "حقوقك",
+				"d": "تقدر تطلب حذف حسابك وبياناتك بأي وقت من صفحة الإعدادات أو بالتواصل مع فريق الدعم."
+			}
+		]
+	},
+	terms: {
+		"h1": "شروط الاستخدام",
+		"intro": "باستخدامك أكاديميا، أنت موافق على النقاط التالية.",
+		"sections": [
+			{
+				"t": "الحساب",
+				"d": "حساب واحد لكل شخص، وبمعلومات صحيحة. مشاركة الحساب مع غيرك قد تؤدي لتعليقه."
+			},
+			{
+				"t": "سلوك المجتمع",
+				"d": "الأسئلة والإجابات للتعلّم. أي إساءة أو محتوى غير لائق يُبلَّغ عنه ويُراجع من فريق الإشراف."
+			},
+			{
+				"t": "حقوق المحتوى",
+				"d": "لا ترفع محتوى لا تملك حقوقه. المحتوى المخالف يُحذف، والتكرار قد يؤدي لإيقاف الحساب."
+			},
+			{
+				"t": "الاشتراكات",
+				"d": "الاشتراك الشهري يتجدد تلقائياً ويمكن إلغاؤه بأي وقت، ويبقى فعّالاً حتى نهاية الفترة المدفوعة."
+			},
+			{
+				"t": "حدود الخدمة",
+				"d": "محاكي الامتحان أداة تدريب مبنية على الذكاء الاصطناعي، وليس بديلاً رسمياً عن مصادر الوزارة."
+			}
+		]
+	},
+	forbidden: {
+		"code": "403",
+		"title": "هاد القسم مش إلك",
+		"text": "صلاحيات حسابك ما بتسمح بالوصول لهذه الصفحة. ارجع للوحة تحكمك وكمّل من هناك.",
+		"cta": "الرجوع للوحة التحكم"
+	},
+	testimonials: {
+		"badge": "قريباً",
+		"title": "قصص الطلاب والمعلّمين",
+		"sub": "لسا عم نبني مجتمع أكاديميا. بعد أول دفعة من المستخدمين، رح نشارك هون تجاربهم الحقيقية.",
+		"placeholder": "آراء طلابنا ومعلّمينا رح تنعرض هون قريباً."
+	}
+};
+var en_default = {
+	common: {
+		"brand": "Academia",
+		"signIn": "Sign in",
+		"startFree": "Start free",
+		"loading": "Loading…",
+		"save": "Save",
+		"cancel": "Cancel",
+		"search": "Search",
+		"back": "Back",
+		"themeToggle": "Toggle theme (light/dark)",
+		"languageToggle": "Toggle language",
+		"skipToContent": "Skip to main content",
+		"theme": {
+			"light": "Light mode",
+			"dark": "Dark mode",
+			"auto": "Auto (system)"
+		},
+		"language": {
+			"ar": "العربية",
+			"en": "English"
+		},
+		"more": "More",
+		"menu": "Menu",
+		"signOut": "Sign out",
+		"dashboard": "Dashboard",
+		"settings": "Settings",
+		"backToSite": "Back to site",
+		"account": "My account",
+		"preferences": "Preferences",
+		"navigation": "Navigation",
+		"searchPages": "Search all pages...",
+		"faqBadge": "FAQ",
+		"faqTitle": "Have a question? It's probably answered here",
+		"signingOut": "Signing out…",
+		"closeMenu": "Close menu",
+		"expandMenu": "Expand menu",
+		"collapseMenu": "Collapse menu",
+		"openMenu": "Open menu"
+	},
+	nav: {
+		"home": "Home",
+		"howItWorks": "How it works",
+		"pricing": "Pricing",
+		"forTeachers": "For teachers",
+		"platform": "Platform",
+		"legal": "Legal",
+		"privacy": "Privacy policy",
+		"terms": "Terms of use",
+		"tagline": "An Arabic-first platform helping high-school students organize their subjects, track achievement, and prepare for the national exam with confidence.",
+		"rights": "© {{year}} Academia — All rights reserved."
+	},
+	home: {
+		"meta": {
+			"title": "Academia | The student platform for focus and achievement",
+			"description": "Academia: an organized smart library, subject communities, achievement tracking, a mistake bank and a national-exam simulator — all your studying in one place."
+		},
+		"badge": "For students aged 16 to 18",
+		"h1a": "Files lost in WhatsApp?",
+		"h1b": "Academia",
+		"h1c": "organizes them so you get things done.",
+		"sub": "One place for every subject: a tidy library, questions that actually get answered, a schedule that reminds you, and practice exams that expose your weak spots before the real one.",
+		"ctaPrimary": "Start free now",
+		"ctaSecondary": "See how it works",
+		"stats": {
+			"levels": "content classification levels",
+			"rtl": "Arabic-first with RTL interface",
+			"spaces": "spaces: student, teacher, parent"
+		},
+		"featuresTitle": "Everything you need in one place",
+		"featuresSub": "Not a file archive — real tools that help you finish and master, built around how you actually study.",
+		"features": {
+			"library": {
+				"title": "Smart library",
+				"text": "A strict tree: term → subject → unit → lesson. Advanced search and favorites."
+			},
+			"community": {
+				"title": "Subject communities",
+				"text": "A channel per subject, Q&A with a pinned correct answer, and quiet hours at night."
+			},
+			"tracker": {
+				"title": "Achievement tracking",
+				"text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson."
+			},
+			"simulator": {
+				"title": "National exam simulator",
+				"text": "Same format and timing, instant grading and weak-point analysis per unit."
+			},
+			"mistakes": {
+				"title": "My mistake bank",
+				"text": "Every question you get wrong is saved automatically so you can review it until you master it."
+			},
+			"review": {
+				"title": "15-minute review",
+				"text": "Smart flashcards suggested from your weakest point, before bed or before the exam."
+			}
+		},
+		"roles": {
+			"student": {
+				"t": "Student",
+				"d": "A Dashboard with today's tasks, your progress, and your badges."
+			},
+			"teacher": {
+				"t": "Teacher",
+				"d": "Upload your content, build Quizzes, and follow your sections' performance."
+			},
+			"parent": {
+				"t": "Parent",
+				"d": "A short weekly report on consistency and achievement."
+			}
+		},
+		"ctaTitle": "Ready to start?",
+		"ctaSub": "Sign up in a minute, pick your subjects, set your first weekly goal — we handle the rest.",
+		"ctaButton": "Create a free account",
+		"signedIn": {
+			"welcome": "Welcome, {{name}} 👋",
+			"cta": "Go to dashboard",
+			"browse": "Browse courses",
+			"student": {
+				"h1": "Ready to pick up where you left off?",
+				"sub": "Your library, schedule and mistakes bank are waiting — open your dashboard."
+			},
+			"teacher": {
+				"h1": "Your students are waiting for the next lesson",
+				"sub": "Create a course, grade submissions and track earnings from your dashboard."
+			},
+			"parent": {
+				"h1": "Follow your children's progress live",
+				"sub": "Progress, attendance and grades — all in the parent report."
+			},
+			"supervisor": {
+				"h1": "A full view of academic performance",
+				"sub": "Monitor teachers, students and content quality from the supervision panel."
+			},
+			"admin": {
+				"h1": "Platform operations at your fingertips",
+				"sub": "Users, permissions, curriculum, payments and content review — from the admin panel."
+			}
+		}
+	},
+	howItWorks: {
+		"meta": {
+			"title": "How Academia works | Getting started",
+			"description": "Four steps only: sign up and pick your role, set your system, grade and subjects, start from the organized library, and track your progress weekly."
+		},
+		"h1": "How does Academia work?",
+		"sub": "From your first sign-in, four quick steps (skippable anytime) and you're ready.",
+		"steps": {
+			"role": {
+				"t": "Pick your role",
+				"d": "Student, teacher, or parent — each role opens a completely different space with its own permissions."
+			},
+			"system": {
+				"t": "System and grade",
+				"d": "Palestinian or Jordanian, the track (scientific/literary), and the grade — so the right content is tailored to you."
+			},
+			"subjects": {
+				"t": "Pick your subjects",
+				"d": "Choose the subjects you follow, and your Dashboard and library are built around them right away."
+			},
+			"goal": {
+				"t": "First weekly goal",
+				"d": "A simple goal that starts the achievement counter from minute one, and kicks off your Streak."
+			}
+		},
+		"cta": "Start now for free",
+		"nextTitle": "And then?",
+		"next": [
+			"Finish a lesson, hit “Got it” and take a short Quiz.",
+			"Every mistake is saved to your mistake bank for later review.",
+			"Before the exam, the national-exam simulator tests you with real timing.",
+			"Your parent gets a short weekly report without digging into your daily privacy."
+		]
+	},
+	pricing: {
+		"meta": {
+			"title": "Academia pricing | Start free",
+			"description": "A fully free plan to start, and a premium plan for the exam simulator, mistake bank and advanced reports."
+		},
+		"h1": "Simple plans, no complexity",
+		"sub": "Start completely free. Upgrade to Premium whenever you need the exam-prep tools.",
+		"perMonth": "/ month",
+		"free": {
+			"name": "Free",
+			"price": "0",
+			"note": "forever",
+			"cta": "Start free",
+			"features": [
+				"Smart library and access to every subject",
+				"Save lessons to favorites",
+				"Subject communities and Q&A",
+				"Interactive study schedule",
+				"Basic achievement counter"
+			]
+		},
+		"plus": {
+			"name": "Premium",
+			"price": "29",
+			"note": "per month",
+			"cta": "Get Premium",
+			"badge": "Most popular",
+			"features": [
+				"Everything in the free plan",
+				"AI national-exam simulator",
+				"Your own mistake bank + spaced repetition",
+				"15-minute review (smart flashcards)",
+				"Weekly parent report",
+				"Digital certificates on subject completion"
+			]
+		},
+		"teacher": {
+			"name": "Teacher",
+			"price": "9",
+			"cta": "Start as a teacher"
+		},
+		"note": "Prices in Israeli shekels (ILS). Cancel anytime.",
+		"currency": "ILS",
+		"forever": "forever",
+		"monthly": "per month",
+		"faq": [
+			{
+				"q": "Is Academia really free?",
+				"a": "Yes — the free plan is complete with no time limit: the library, communities, schedule, and basic achievement counter. Premium is optional for advanced exam-prep tools."
+			},
+			{
+				"q": "Can I cancel anytime?",
+				"a": "Absolutely. Cancel your Premium subscription anytime from your account settings, no conditions or cancellation fees, and you'll keep access until the end of your paid period."
+			},
+			{
+				"q": "What's the difference between the student and teacher plans?",
+				"a": "The student plan (free/premium) gives access to content and tools. The teacher plan is separate and lets you upload content, build quizzes, and track your students' performance."
+			},
+			{
+				"q": "Do you offer discounts for school groups?",
+				"a": "We're currently building special packages for schools and groups. Reach out via the Help page and we'll get back to you with details."
+			},
+			{
+				"q": "Where is my data stored, and is it secure?",
+				"a": "Your data is stored securely and encrypted, and we never share it with third parties for marketing purposes. Full details are on our Privacy Policy page."
+			}
+		],
+		"compare": {
+			"title": "Compare the plans in detail",
+			"sub": "See exactly what you get with each plan before deciding.",
+			"colFree": "Free",
+			"colPlus": "Premium",
+			"groups": [
+				{
+					"t": "Content & learning",
+					"rows": [
+						{
+							"l": "Smart library across all subjects",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "Save lessons to favorites",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "Subject communities & Q&A",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "Interactive study schedule",
+							"free": true,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "Exam preparation",
+					"rows": [
+						{
+							"l": "AI-powered ministerial exam simulator",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "Personal mistake bank + spaced repetition",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "15-minute review (smart flashcards)",
+							"free": false,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "Tracking & reports",
+					"rows": [
+						{
+							"l": "Basic achievement counter",
+							"free": true,
+							"plus": true
+						},
+						{
+							"l": "Detailed weekly parent report",
+							"free": false,
+							"plus": true
+						},
+						{
+							"l": "Digital certificates on subject completion",
+							"free": false,
+							"plus": true
+						}
+					]
+				},
+				{
+					"t": "Support",
+					"rows": [{
+						"l": "Help center support",
+						"free": true,
+						"plus": true
+					}, {
+						"l": "Priority email support",
+						"free": false,
+						"plus": true
+					}]
+				}
+			]
+		}
+	},
+	forTeachers: {
+		"meta": {
+			"title": "Academia for teachers | Organizing and assessment tools",
+			"description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
+		},
+		"h1": "Teach more, grade less, reach more students.",
+		"sub": "Academia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
+		"cta": "Sign up as a teacher",
+		"benefits": {
+			"upload": {
+				"t": "Your content, organized",
+				"d": "Upload files and videos once; they are classified automatically by term, subject, unit and lesson."
+			},
+			"analytics": {
+				"t": "Analytics per student and section",
+				"d": "See who understood and who is struggling, and exactly which unit is the weak point."
+			},
+			"income": {
+				"t": "Income from your work",
+				"d": "A commission on the subscriptions of students linked to you, with a clear payouts dashboard."
+			},
+			"verified": {
+				"t": "Verified account",
+				"d": "Verify by uploading an ID/certificate; once approved your badge appears next to your name."
+			}
+		},
+		"faq": [
+			{
+				"q": "How do I become a verified teacher?",
+				"a": "Sign up via \"Start as a teacher\", fill in your details and qualifications, and our team reviews your application within a few days."
+			},
+			{
+				"q": "How does the revenue share work?",
+				"a": "You earn a share of the subscription revenue from students who take your courses, and you can track your earnings anytime from the teacher dashboard."
+			},
+			{
+				"q": "What kind of content can I upload?",
+				"a": "Written lessons, PDF files, question banks, and short quizzes — all organized by grade, subject, and unit."
+			}
+		]
+	},
+	legal: {
+		"privacyTitle": "Privacy policy",
+		"termsTitle": "Terms of use",
+		"lastUpdated": "Last updated: {{date}}"
+	},
+	auth: {
+		"meta": {
+			"title": "Sign in | Academia",
+			"description": "Sign in or create a new account to reach your space in Academia."
+		},
+		"signInTitle": "Sign in",
+		"signUpTitle": "Create an account",
+		"fullName": "Full name",
+		"email": "Email",
+		"password": "Password",
+		"signInAction": "Sign in",
+		"signUpAction": "Create account",
+		"toSignUp": "No account? Create one",
+		"toSignIn": "Already have an account? Sign in",
+		"google": "Continue with Google"
+	},
+	errors: {
+		"notFoundTitle": "Page not found",
+		"notFoundText": "The page you are looking for doesn't exist or has been moved.",
+		"backHome": "Back to home",
+		"crashTitle": "Couldn't load the page",
+		"crashText": "An unexpected error occurred. You can retry or go back home.",
+		"retry": "Retry",
+		"forbiddenTitle": "You don't have access",
+		"forbiddenText": "This page requires a permission your account doesn't have."
+	},
+	privacy: {
+		"h1": "Privacy policy",
+		"intro": "Last updated: platform launch. Written in plain language because it actually concerns you.",
+		"sections": [
+			{
+				"t": "Data we collect",
+				"d": "Your name, email, the system, grade and subjects you pick, and your activity on the platform (lessons completed and Quiz results)."
+			},
+			{
+				"t": "How we use it",
+				"d": "To tailor your content, compute your achievement rate, and suggest the right reviews. We never sell your data to third parties."
+			},
+			{
+				"t": "Student privacy toward parents",
+				"d": "A parent sees only a weekly summary of consistency and achievement — not your community chats or daily activity details."
+			},
+			{
+				"t": "Uploaded content",
+				"d": "Teachers are responsible for the rights to the content they upload. Reported content is reviewed by moderation and may be removed."
+			},
+			{
+				"t": "Your rights",
+				"d": "You can request deletion of your account and data at any time from settings or by contacting support."
+			}
+		]
+	},
+	terms: {
+		"h1": "Terms of use",
+		"intro": "By using Academia, you agree to the following.",
+		"sections": [
+			{
+				"t": "Account",
+				"d": "One account per person, with accurate details. Sharing your account may lead to suspension."
+			},
+			{
+				"t": "Community conduct",
+				"d": "Questions and answers are for learning. Abuse or inappropriate content is reported and reviewed by moderation."
+			},
+			{
+				"t": "Content rights",
+				"d": "Do not upload content you don't own the rights to. Violating content is removed; repeats may suspend the account."
+			},
+			{
+				"t": "Subscriptions",
+				"d": "The monthly subscription renews automatically and can be cancelled anytime, staying active until the paid period ends."
+			},
+			{
+				"t": "Service limits",
+				"d": "The exam simulator is an AI-based practice tool, not an official substitute for ministry resources."
+			}
+		]
+	},
+	forbidden: {
+		"code": "403",
+		"title": "This section isn't yours",
+		"text": "Your account permissions don't allow access to this page. Head back to your Dashboard and continue from there.",
+		"cta": "Back to Dashboard"
+	},
+	testimonials: {
+		"badge": "Coming soon",
+		"title": "Stories from students and teachers",
+		"sub": "We're still building the Academia community. Once our first users are in, real stories will show up right here.",
+		"placeholder": "Reviews from our students and teachers will appear here soon."
+	}
+};
+var ar_pages_default = {
+	nav: {
+		"about": "من نحن",
+		"courses": "الكورسات",
+		"help": "المساعدة",
+		"support": "الدعم",
+		"certificateVerify": "التحقق من شهادة",
+		"unsubscribe": "إلغاء الإشعارات",
+		"contact": "تواصل معنا",
+		"blog": "المدونة"
+	},
+	cookie: {
+		"title": "نستخدم ملفات تعريف الارتباط",
+		"text": "نستخدم ملفات تعريف الارتباط التحليلية لفهم كيف تُستخدم أكاديميا وتحسينها. لا نشغّل أي تتبّع قبل موافقتك.",
+		"accept": "أوافق",
+		"decline": "الضروري فقط",
+		"more": "سياسة الخصوصية"
+	},
+	authPages: {
+		"login": {
+			"meta": {
+				"title": "تسجيل الدخول | أكاديميا",
+				"description": "سجّل الدخول إلى حسابك في أكاديميا وتابع دراستك من حيث توقفت."
+			},
+			"h1": "أهلاً بعودتك",
+			"sub": "سجّل الدخول لتكمل من حيث وقفت.",
+			"email": "البريد الإلكتروني",
+			"password": "كلمة المرور",
+			"submit": "تسجيل الدخول",
+			"forgot": "نسيت كلمة المرور؟",
+			"google": "المتابعة عبر Google",
+			"or": "أو",
+			"noAccount": "ما عندك حساب؟",
+			"signupLink": "أنشئ حساباً جديداً",
+			"teacherHint": "معلّم؟",
+			"teacherLink": "سجّل من هنا",
+			"success": "تم تسجيل الدخول"
+		},
+		"signup": {
+			"meta": {
+				"title": "إنشاء حساب | أكاديميا",
+				"description": "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم."
+			},
+			"h1": "اختر دورك للبدء",
+			"sub": "كل دور يفتح مساحة مختلفة كلياً بمحتواها وصلاحياتها.",
+			"roles": {
+				"student": {
+					"t": "طالب",
+					"d": "مكتبة مرتّبة، جدول دراسي، متابعة إنجاز، ومحاكي امتحان."
+				},
+				"parent": {
+					"t": "ولي أمر",
+					"d": "تقرير أسبوعي مختصر عن انتظام ابنك ونسبة إنجازه."
+				},
+				"teacher": {
+					"t": "معلّم",
+					"d": "ارفع محتواك، جهّز Quizzes، وتابع أداء شُعبك — تسجيل موسّع مع توثيق."
+				}
+			},
+			"chosen": "الدور المختار",
+			"change": "تغيير الدور",
+			"fullName": "الاسم الكامل",
+			"email": "البريد الإلكتروني",
+			"password": "كلمة المرور",
+			"passwordHint": "6 أحرف على الأقل.",
+			"submit": "إنشاء الحساب",
+			"haveAccount": "لديك حساب بالفعل؟",
+			"loginLink": "تسجيل الدخول",
+			"teacherHint": "معلّم؟",
+			"teacherLink": "سجّل من هنا",
+			"terms": "بإنشائك حساباً فأنت توافق على الشروط والأحكام وسياسة الخصوصية.",
+			"success": "تم إنشاء الحساب — تفقّد بريدك لتفعيله."
+		},
+		"teacherRegister": {
+			"meta": {
+				"title": "تسجيل معلّم | أكاديميا",
+				"description": "سجّل كمعلّم في أكاديميا وارفع وثيقة التوثيق لمراجعة فريق الإشراف."
+			},
+			"h1": "تسجيل معلّم",
+			"sub": "بيانات إضافية لتوثيق حسابك قبل نشر محتواك.",
+			"fullName": "الاسم الكامل",
+			"email": "البريد الإلكتروني",
+			"password": "كلمة المرور",
+			"phone": "رقم الهاتف",
+			"subject": "المادة الأساسية",
+			"experience": "سنوات الخبرة",
+			"bio": "نبذة قصيرة",
+			"bioPlaceholder": "عرّف الطلاب بخبرتك وأسلوبك بالتدريس.",
+			"document": "وثيقة التوثيق (بطاقة/شهادة)",
+			"documentHint": "PDF أو صورة — تُراجع من فريق الإشراف خلال 48 ساعة.",
+			"submit": "إرسال طلب التسجيل",
+			"pending": "تم استلام طلبك، سيتم إعلامك بعد مراجعة التوثيق.",
+			"back": "تسجيل كطالب أو ولي أمر بدلاً من ذلك"
+		},
+		"forgot": {
+			"meta": {
+				"title": "استعادة كلمة المرور | أكاديميا",
+				"description": "أرسل رابط استعادة كلمة المرور إلى بريدك الإلكتروني."
+			},
+			"h1": "نسيت كلمة المرور؟",
+			"sub": "اكتب بريدك وسنرسل لك رابط تعيين كلمة مرور جديدة.",
+			"email": "البريد الإلكتروني",
+			"submit": "أرسل رابط الاستعادة",
+			"sent": "أرسلنا الرابط إلى بريدك إن كان مسجلاً لدينا.",
+			"back": "العودة لتسجيل الدخول"
+		},
+		"reset": {
+			"meta": {
+				"title": "تعيين كلمة مرور جديدة | أكاديميا",
+				"description": "اختر كلمة مرور جديدة لحسابك في أكاديميا."
+			},
+			"h1": "كلمة مرور جديدة",
+			"sub": "اختر كلمة مرور قوية لن تستخدمها بمكان آخر.",
+			"password": "كلمة المرور الجديدة",
+			"confirm": "تأكيد كلمة المرور",
+			"mismatch": "كلمتا المرور غير متطابقتين",
+			"submit": "حفظ كلمة المرور",
+			"success": "تم تحديث كلمة المرور",
+			"invalid": "الرابط غير صالح أو منتهي. اطلب رابطاً جديداً.",
+			"requestNew": "طلب رابط جديد"
+		},
+		"verify": {
+			"meta": {
+				"title": "تفعيل الحساب | أكاديميا",
+				"description": "فعّل حسابك في أكاديميا من الرابط المرسل إلى بريدك."
+			},
+			"h1": "فعّل بريدك الإلكتروني",
+			"sub": "أرسلنا رابط تفعيل إلى بريدك. افتحه لتفعيل حسابك ثم عُد إلى هنا.",
+			"verified": "تم تفعيل حسابك بنجاح.",
+			"goDashboard": "الذهاب للوحة التحكم",
+			"resend": "إعادة إرسال الرابط",
+			"resent": "أرسلنا رابطاً جديداً.",
+			"emailPlaceholder": "بريدك الإلكتروني",
+			"back": "العودة لتسجيل الدخول"
+		}
+	},
+	about: {
+		"meta": {
+			"title": "من نحن | أكاديميا",
+			"description": "قصة أكاديميا: فريق عربي يبني منصة تنظيم وإنجاز لطلاب الثانوية بدل فوضى مجموعات الواتساب."
+		},
+		"h1": "بنينا أكاديميا لأننا عشنا الفوضى",
+		"sub": "ملفات ضايعة بمجموعات، أسئلة بلا إجابة، وامتحان وزاري بيقرب. قرّرنا نعمل المكان المرتّب اللي كنا نتمناه.",
+		"missionTitle": "مهمتنا",
+		"mission": "نساعد كل طالب عربي يحوّل مواده من كومة ملفات إلى خطة واضحة يقدر ينجزها خطوة خطوة.",
+		"values": [
+			{
+				"t": "الوضوح قبل الكمّية",
+				"d": "تصنيف صارم: فصل ← مادة ← وحدة ← درس. لا شي بيضيع، ولا شي بينحشر بمكان غلط."
+			},
+			{
+				"t": "خصوصية الطالب",
+				"d": "ولي الأمر يشوف ملخص الانتظام والإنجاز فقط — مش محادثاتك ولا تفاصيل يومك."
+			},
+			{
+				"t": "عربي أولاً",
+				"d": "واجهة RTL مصمّمة بالعربية من الصفر، وإنجليزية كاملة كخيار ثانٍ."
+			},
+			{
+				"t": "الإنجاز قابل للقياس",
+				"d": "عدّاد إنجاز، سلسلة أيام، وبنك أخطاء — تقدّم تشوفه بعينك لا تحسّه فقط."
+			}
+		],
+		"teamTitle": "الفريق",
+		"teamSub": "فريق صغير من مطوّرين ومعلّمين ومصمّمين، يشتغل قريب من الطلاب والمدارس.",
+		"team": [
+			{
+				"t": "المنتج والتصميم",
+				"d": "أبحاث مع طلاب حقيقيين قبل أي شاشة نطلقها."
+			},
+			{
+				"t": "الهندسة",
+				"d": "منصة سريعة تشتغل على شبكات ضعيفة وأجهزة متوسطة."
+			},
+			{
+				"t": "المحتوى الأكاديمي",
+				"d": "معلّمون يراجعون التصنيف وبنك الأسئلة قبل النشر."
+			}
+		],
+		"ctaTitle": "بدك تكون جزء من القصة؟",
+		"ctaSub": "ابدأ مجاناً كطالب، أو سجّل كمعلّم وشارك محتواك.",
+		"ctaPrimary": "ابدأ مجاناً",
+		"ctaSecondary": "سجّل كمعلّم"
+	},
+	courses: {
+		"meta": {
+			"title": "الكورسات | أكاديميا",
+			"description": "تصفّح كورسات المعلّمين المعتمدين في أكاديميا حسب المادة والمستوى قبل إنشاء حسابك."
+		},
+		"h1": "سوق الكورسات",
+		"sub": "كورسات من معلّمين موثّقين — تصفّحها بدون حساب، وسجّل عند الاشتراك.",
+		"searchPlaceholder": "ابحث باسم الكورس أو المعلّم…",
+		"all": "الكل",
+		"empty": "لا نتائج مطابقة لبحثك.",
+		"lessons": "درس",
+		"free": "مجاني",
+		"enroll": "التحقّق والاشتراك",
+		"byTeacher": "المعلّم",
+		"items": [
+			{
+				"id": "math-tawjihi",
+				"title": "الرياضيات — تفاضل وتكامل",
+				"teacher": "أ. سامي خليل",
+				"teacherId": "sami-khalil",
+				"subject": "رياضيات",
+				"lessons": "42",
+				"price": "35",
+				"level": "توجيهي علمي"
+			},
+			{
+				"id": "physics-mechanics",
+				"title": "الفيزياء — الميكانيكا الكاملة",
+				"teacher": "أ. رنا حدّاد",
+				"teacherId": "rana-haddad",
+				"subject": "فيزياء",
+				"lessons": "36",
+				"price": "30",
+				"level": "توجيهي علمي"
+			},
+			{
+				"id": "arabic-grammar",
+				"title": "اللغة العربية — النحو والبلاغة",
+				"teacher": "أ. مها زيدان",
+				"teacherId": "maha-zeidan",
+				"subject": "عربي",
+				"lessons": "28",
+				"price": "0",
+				"level": "توجيهي عام"
+			},
+			{
+				"id": "english-exam",
+				"title": "الإنجليزية — تحضير الامتحان",
+				"teacher": "أ. لؤي درويش",
+				"teacherId": "luay-darwish",
+				"subject": "إنجليزي",
+				"lessons": "24",
+				"price": "25",
+				"level": "توجيهي عام"
+			},
+			{
+				"id": "chem-organic",
+				"title": "الكيمياء العضوية من الصفر",
+				"teacher": "أ. نور عابد",
+				"teacherId": "noor-abed",
+				"subject": "كيمياء",
+				"lessons": "31",
+				"price": "28",
+				"level": "توجيهي علمي"
+			},
+			{
+				"id": "islamic-studies",
+				"title": "التربية الإسلامية — مراجعة شاملة",
+				"teacher": "أ. عمر الشريف",
+				"teacherId": "omar-sharif",
+				"subject": "إسلامية",
+				"lessons": "18",
+				"price": "0",
+				"level": "توجيهي عام"
+			}
+		],
+		"open": "افتح الكورس"
+	},
+	teacherProfile: {
+		"meta": {
+			"title": "ملف المعلّم | أكاديميا",
+			"description": "تعرّف على المعلّم، كورساته، وتقييمات طلابه على أكاديميا."
+		},
+		"verified": "حساب موثّق",
+		"students": "طالب",
+		"courses": "كورس",
+		"rating": "التقييم",
+		"aboutTitle": "نبذة",
+		"about": "معلّم على منصة أكاديميا، يرفع محتواه مصنّفاً حسب الفصل والمادة والوحدة والدرس، ويتابع أداء طلابه عبر Quizzes وتقارير دورية.",
+		"coursesTitle": "كورسات المعلّم",
+		"reviewsTitle": "آراء الطلاب",
+		"reviews": [{
+			"n": "طالب توجيهي علمي",
+			"d": "الشرح مرتّب والأسئلة بعد كل درس خلّتني أثبت المعلومة."
+		}, {
+			"n": "طالبة توجيهي عام",
+			"d": "أول مرة ما أضيع بين الملفات — كل وحدة بمكانها."
+		}],
+		"cta": "سجّل لمتابعة هذا المعلّم",
+		"notFound": "لم نجد هذا المعلّم."
+	},
+	certificate: {
+		"meta": {
+			"title": "التحقق من شهادة | أكاديميا",
+			"description": "تحقّق من صحة شهادة رقمية صادرة عن منصة أكاديميا برقم الشهادة."
+		},
+		"h1": "التحقق من الشهادة",
+		"sub": "أدخل رقم الشهادة أو افتح رابط التحقق المطبوع عليها.",
+		"placeholder": "رقم الشهادة (مثال: ACD-2026-00184)",
+		"check": "تحقّق",
+		"valid": "شهادة صحيحة وصادرة عن أكاديميا",
+		"invalid": "لم نجد شهادة بهذا الرقم. تأكد من الرقم وحاول مجدداً.",
+		"holder": "اسم الحامل",
+		"course": "المادة / الكورس",
+		"issued": "تاريخ الإصدار",
+		"id": "رقم الشهادة",
+		"note": "التحقق يتم مقابل سجل الشهادات الرسمي للمنصة."
+	},
+	invite: {
+		"meta": {
+			"title": "دعوة إلى أكاديميا",
+			"description": "انضم إلى أكاديميا عبر رابط دعوة واحصل على مزايا البداية."
+		},
+		"h1": "وصلتك دعوة إلى أكاديميا",
+		"sub": "صديقك يستخدم أكاديميا لينظّم دراسته. انضم عبر رابطه واحصل على شهر بريميوم تجريبي.",
+		"codeLabel": "رمز الدعوة",
+		"perks": [
+			"شهر بريميوم تجريبي عند إتمام التسجيل",
+			"موادك تنبني تلقائياً حسب نظامك وصفك",
+			"تنضم لنفس مجتمعات المواد مع أصدقائك"
+		],
+		"cta": "اقبل الدعوة وسجّل",
+		"login": "عندي حساب — تسجيل الدخول",
+		"disclaimer": "المزايا تُفعَّل بعد تأكيد بريدك الإلكتروني."
+	},
+	help: {
+		"meta": {
+			"title": "مركز المساعدة | أكاديميا",
+			"description": "إجابات سريعة عن الحساب، الاشتراك، المكتبة، والخصوصية في أكاديميا."
+		},
+		"h1": "مركز المساعدة",
+		"sub": "أجوبة مختصرة لأكثر الأسئلة تكراراً. ما لقيت جوابك؟ راسلنا.",
+		"searchPlaceholder": "ابحث في المساعدة…",
+		"empty": "لا نتائج. جرّب كلمة أخرى أو راسل الدعم.",
+		"contactTitle": "لسه محتاج مساعدة؟",
+		"contactSub": "فريق الدعم يرد خلال يوم عمل واحد.",
+		"contactCta": "راسل الدعم",
+		"topics": [
+			{
+				"t": "الحساب والدخول",
+				"items": [
+					{
+						"q": "كيف أنشئ حساباً؟",
+						"a": "من صفحة إنشاء الحساب اختر دورك (طالب أو ولي أمر) ثم أكمل الاسم والبريد وكلمة المرور. المعلّم يسجّل من صفحة تسجيل المعلّم لأن حسابه يحتاج توثيقاً."
+					},
+					{
+						"q": "نسيت كلمة المرور، ماذا أفعل؟",
+						"a": "افتح صفحة استعادة كلمة المرور، أدخل بريدك، وسيصلك رابط لتعيين كلمة مرور جديدة."
+					},
+					{
+						"q": "هل يبقى حسابي مسجّلاً بعد إغلاق المتصفح؟",
+						"a": "نعم، جلستك محفوظة. لأمانك، يتم تسجيل الخروج تلقائياً بعد ساعتين من عدم النشاط."
+					}
+				]
+			},
+			{
+				"t": "الاشتراك والدفع",
+				"items": [{
+					"q": "ما الفرق بين المجاني وبريميوم؟",
+					"a": "المجاني يشمل المكتبة والمجتمعات والجدول وعدّاد الإنجاز. بريميوم يضيف محاكي الامتحان، بنك الأخطاء، مراجعة الـ15 دقيقة، وتقرير ولي الأمر."
+				}, {
+					"q": "هل أقدر ألغي الاشتراك؟",
+					"a": "نعم بأي وقت، ويبقى الاشتراك فعّالاً حتى نهاية الفترة المدفوعة."
+				}]
+			},
+			{
+				"t": "المكتبة والمحتوى",
+				"items": [{
+					"q": "كيف يُصنَّف المحتوى؟",
+					"a": "بتسلسل صارم: فصل ← مادة ← وحدة ← درس، مع بحث متقدم وحفظ بالمفضلة."
+				}, {
+					"q": "وجدت محتوى مخالفاً، ماذا أفعل؟",
+					"a": "استخدم زر الإبلاغ على الدرس؛ فريق الإشراف يراجعه وقد يُحذف المحتوى المخالف."
+				}]
+			},
+			{
+				"t": "الخصوصية",
+				"items": [{
+					"q": "ماذا يرى ولي الأمر؟",
+					"a": "ملخصاً أسبوعياً للانتظام ونسبة الإنجاز فقط — لا يرى محادثاتك في المجتمعات ولا تفاصيل نشاطك اليومي."
+				}, {
+					"q": "كيف أحذف حسابي؟",
+					"a": "من صفحة الإعدادات، أو بمراسلة الدعم، ويُحذف حسابك وبياناتك المرتبطة به."
+				}]
+			}
+		]
+	},
+	unsubscribe: {
+		"meta": {
+			"title": "إلغاء الإشعارات | أكاديميا",
+			"description": "أوقف رسائل أكاديميا البريدية بدون الحاجة لتسجيل الدخول."
+		},
+		"h1": "إلغاء الاشتراك بالإشعارات",
+		"sub": "اختر ما تريد إيقافه — لا حاجة لتسجيل الدخول.",
+		"email": "البريد الإلكتروني",
+		"options": {
+			"weekly": "التقرير الأسبوعي",
+			"reminders": "تذكيرات الجدول الدراسي",
+			"community": "إشعارات مجتمعات المواد",
+			"marketing": "رسائل المنصة والعروض"
+		},
+		"all": "إيقاف كل الرسائل البريدية",
+		"submit": "حفظ التفضيلات",
+		"done": "تم تحديث تفضيلات بريدك.",
+		"note": "الرسائل الأمنية (استعادة كلمة المرور وتأكيد البريد) تبقى فعّالة دائماً.",
+		"back": "العودة للرئيسية"
+	},
+	notFound: {
+		"meta": {
+			"title": "الصفحة غير موجودة | أكاديميا",
+			"description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+		},
+		"code": "404",
+		"title": "الصفحة مش موجودة",
+		"text": "يمكن الرابط قديم أو فيه خطأ مطبعي. جرّب تبدأ من الرئيسية أو من الكورسات.",
+		"home": "العودة للرئيسية",
+		"courses": "تصفّح الكورسات"
+	},
+	settings: {
+		"meta": {
+			"title": "الإعدادات | أكاديميا",
+			"description": "اللغة، الثيم، وبيانات حسابك في أكاديميا."
+		},
+		"h1": "الإعدادات",
+		"sub": "تفضيلاتك تُحفظ على جهازك وعلى حسابك معاً.",
+		"langThemeTab": "اللغة والثيم",
+		"accountTab": "الحساب",
+		"theme": "الثيم",
+		"language": "اللغة",
+		"account": "بيانات الحساب",
+		"role": "الدور",
+		"email": "البريد الإلكتروني",
+		"name": "الاسم",
+		"signOut": "تسجيل الخروج",
+		"security": "الأمان",
+		"idleNote": "يتم تسجيل خروجك تلقائياً بعد ساعتين من عدم النشاط."
+	},
+	session: { "expired": "انتهت جلستك بعد ساعتين من عدم النشاط. سجّل الدخول مجدداً." },
+	contact: {
+		"meta": {
+			"title": "تواصل معنا | أكاديميا",
+			"description": "عندك سؤال، اقتراح، أو بدك تعمل شراكة مدرسية؟ فريق أكاديميا جاهز يسمعك."
+		},
+		"h1": "تواصل معنا",
+		"sub": "سواء سؤال بسيط، اقتراح، أو مشروع شراكة مع مدرستك — راسلنا وبنرجعلك بأسرع وقت.",
+		"form": {
+			"name": "الاسم الكامل",
+			"email": "البريد الإلكتروني",
+			"topic": "موضوع الرسالة",
+			"topics": {
+				"student": "دعم طالب/حساب",
+				"teacher": "الانضمام كمعلّم",
+				"school": "شراكة مع مدرسة أو مجموعة",
+				"press": "إعلام وتغطية صحفية",
+				"other": "شي تاني"
+			},
+			"message": "الرسالة",
+			"messagePlaceholder": "اكتب تفاصيل رسالتك هون…",
+			"submit": "إرسال الرسالة",
+			"sending": "جاري الإرسال…"
+		},
+		"errors": {
+			"name": "الاسم لازم يكون حرفين على الأقل",
+			"email": "بريد إلكتروني غير صالح",
+			"message": "الرسالة قصيرة، أضف تفاصيل أكتر (10 أحرف على الأقل)"
+		},
+		"success": {
+			"title": "وصلتنا رسالتك! ✅",
+			"sub": "فريقنا رح يراجعها ويرجعلك على بريدك خلال يوم إلى يومين عمل.",
+			"again": "إرسال رسالة ثانية"
+		},
+		"sidebar": {
+			"emailTitle": "راسلنا مباشرة",
+			"emailSub": "لأي استفسار عام",
+			"responseTitle": "وقت الرد المتوقع",
+			"responseSub": "خلال يوم إلى يومين عمل",
+			"helpTitle": "بتدوّر جواب سريع؟",
+			"helpSub": "شيك على مركز المساعدة، ممكن يكون سؤالك مجاوب فيه.",
+			"helpCta": "زيارة مركز المساعدة"
+		}
+	},
+	blog: {
+		"h1": "مدونة أكاديميا",
+		"sub": "مقالات عملية عن تنظيم المذاكرة والتحضير للامتحان الوزاري، من غير حشو.",
+		"readMinutes_one": "دقيقة قراءة",
+		"readMinutes_other": "{{count}} دقايق قراءة",
+		"notFound": "ما لقينا هالمقال",
+		"notFoundSub": "ممكن يكون الرابط غلط أو المقال انشال.",
+		"backToBlog": "رجوع للمدونة",
+		"ctaTitle": "بدك تطبق هالأفكار عملياً؟",
+		"ctaSub": "أكاديميا فيها جدول دراسي، بنك أخطاء، ومحاكي امتحان يساعدوك تطبق كل هاد بشكل يومي.",
+		"ctaButton": "جرّب أكاديميا مجاناً",
+		"moreTitle": "مقالات تانية بتهمك",
+		"teaserTitle": "من مدونتنا",
+		"teaserSub": "نصائح عملية للمذاكرة والتحضير للامتحان.",
+		"teaserCta": "زيارة المدونة"
+	}
+};
+var en_pages_default = {
+	nav: {
+		"about": "About",
+		"courses": "Courses",
+		"help": "Help",
+		"support": "Support",
+		"certificateVerify": "Verify a certificate",
+		"unsubscribe": "Email preferences",
+		"contact": "Contact",
+		"blog": "Blog"
+	},
+	cookie: {
+		"title": "We use cookies",
+		"text": "We use analytics cookies to understand how Academia is used and improve it. No tracking runs before you agree.",
+		"accept": "Accept",
+		"decline": "Essential only",
+		"more": "Privacy policy"
+	},
+	authPages: {
+		"login": {
+			"meta": {
+				"title": "Sign in | Academia",
+				"description": "Sign in to your Academia account and pick up your studying where you left off."
+			},
+			"h1": "Welcome back",
+			"sub": "Sign in to continue where you stopped.",
+			"email": "Email",
+			"password": "Password",
+			"submit": "Sign in",
+			"forgot": "Forgot your password?",
+			"google": "Continue with Google",
+			"or": "or",
+			"noAccount": "No account yet?",
+			"signupLink": "Create one",
+			"teacherHint": "A teacher?",
+			"teacherLink": "Register here",
+			"success": "Signed in"
+		},
+		"signup": {
+			"meta": {
+				"title": "Create account | Academia",
+				"description": "Create your Academia account and pick your role: student, parent, or teacher."
+			},
+			"h1": "Pick your role to start",
+			"sub": "Each role opens a completely different space, content and permissions.",
+			"roles": {
+				"student": {
+					"t": "Student",
+					"d": "Tidy library, study schedule, achievement tracking, and an exam simulator."
+				},
+				"parent": {
+					"t": "Parent",
+					"d": "A short weekly report on your child's consistency and progress."
+				},
+				"teacher": {
+					"t": "Teacher",
+					"d": "Upload content, build quizzes, track your sections — extended sign-up with verification."
+				}
+			},
+			"chosen": "Selected role",
+			"change": "Change role",
+			"fullName": "Full name",
+			"email": "Email",
+			"password": "Password",
+			"passwordHint": "At least 6 characters.",
+			"submit": "Create account",
+			"haveAccount": "Already have an account?",
+			"loginLink": "Sign in",
+			"teacherHint": "A teacher?",
+			"teacherLink": "Register here",
+			"terms": "By creating an account you agree to the terms and the privacy policy.",
+			"success": "Account created — check your inbox to activate it."
+		},
+		"teacherRegister": {
+			"meta": {
+				"title": "Teacher registration | Academia",
+				"description": "Register as a teacher on Academia and upload your verification document for review."
+			},
+			"h1": "Teacher registration",
+			"sub": "A few extra details so we can verify you before your content goes live.",
+			"fullName": "Full name",
+			"email": "Email",
+			"password": "Password",
+			"phone": "Phone number",
+			"subject": "Main subject",
+			"experience": "Years of experience",
+			"bio": "Short bio",
+			"bioPlaceholder": "Tell students about your experience and teaching style.",
+			"document": "Verification document (ID/certificate)",
+			"documentHint": "PDF or image — reviewed by our team within 48 hours.",
+			"submit": "Submit registration",
+			"pending": "Request received, we will notify you once verification is reviewed.",
+			"back": "Register as a student or parent instead"
+		},
+		"forgot": {
+			"meta": {
+				"title": "Reset password | Academia",
+				"description": "Send a password reset link to your email."
+			},
+			"h1": "Forgot your password?",
+			"sub": "Enter your email and we'll send you a link to set a new password.",
+			"email": "Email",
+			"submit": "Send reset link",
+			"sent": "If that email is registered, the link is on its way.",
+			"back": "Back to sign in"
+		},
+		"reset": {
+			"meta": {
+				"title": "Set a new password | Academia",
+				"description": "Choose a new password for your Academia account."
+			},
+			"h1": "New password",
+			"sub": "Pick a strong password you don't use anywhere else.",
+			"password": "New password",
+			"confirm": "Confirm password",
+			"mismatch": "Passwords do not match",
+			"submit": "Save password",
+			"success": "Password updated",
+			"invalid": "This link is invalid or expired. Request a new one.",
+			"requestNew": "Request a new link"
+		},
+		"verify": {
+			"meta": {
+				"title": "Verify your email | Academia",
+				"description": "Activate your Academia account from the link sent to your inbox."
+			},
+			"h1": "Verify your email",
+			"sub": "We sent an activation link to your inbox. Open it, then come back here.",
+			"verified": "Your account is verified.",
+			"goDashboard": "Go to dashboard",
+			"resend": "Resend link",
+			"resent": "A new link is on its way.",
+			"emailPlaceholder": "Your email",
+			"back": "Back to sign in"
+		}
+	},
+	about: {
+		"meta": {
+			"title": "About us | Academia",
+			"description": "The Academia story: an Arabic-first team building an organization and achievement platform for high-school students."
+		},
+		"h1": "We built Academia because we lived the chaos",
+		"sub": "Files lost in group chats, questions with no answers, and a national exam getting closer. So we built the tidy place we wished we had.",
+		"missionTitle": "Our mission",
+		"mission": "Help every Arabic-speaking student turn a pile of files into a clear plan they can actually finish, step by step.",
+		"values": [
+			{
+				"t": "Clarity over quantity",
+				"d": "A strict tree: term → subject → unit → lesson. Nothing gets lost, nothing lands in the wrong place."
+			},
+			{
+				"t": "Student privacy",
+				"d": "Parents see consistency and progress summaries only — not your chats or your daily details."
+			},
+			{
+				"t": "Arabic first",
+				"d": "An RTL interface designed in Arabic from scratch, with full English as a second option."
+			},
+			{
+				"t": "Measurable achievement",
+				"d": "A progress counter, a day streak, and a mistake bank — progress you can see, not just feel."
+			}
+		],
+		"teamTitle": "The team",
+		"teamSub": "A small team of engineers, teachers and designers working close to students and schools.",
+		"team": [
+			{
+				"t": "Product & design",
+				"d": "Research with real students before any screen ships."
+			},
+			{
+				"t": "Engineering",
+				"d": "A fast platform that works on weak networks and mid-range devices."
+			},
+			{
+				"t": "Academic content",
+				"d": "Teachers review the taxonomy and question bank before publishing."
+			}
+		],
+		"ctaTitle": "Want to be part of the story?",
+		"ctaSub": "Start free as a student, or register as a teacher and share your content.",
+		"ctaPrimary": "Start free",
+		"ctaSecondary": "Register as a teacher"
+	},
+	courses: {
+		"meta": {
+			"title": "Courses | Academia",
+			"description": "Browse courses from verified Academia teachers by subject and level before creating an account."
+		},
+		"h1": "Course marketplace",
+		"sub": "Courses from verified teachers — browse without an account, sign up when you enroll.",
+		"searchPlaceholder": "Search by course or teacher…",
+		"all": "All",
+		"empty": "No results match your search.",
+		"lessons": "lessons",
+		"free": "Free",
+		"enroll": "View & enroll",
+		"byTeacher": "Teacher",
+		"items": [
+			{
+				"id": "math-tawjihi",
+				"title": "Mathematics — Calculus",
+				"teacher": "Sami Khalil",
+				"teacherId": "sami-khalil",
+				"subject": "Math",
+				"lessons": "42",
+				"price": "35",
+				"level": "Science track"
+			},
+			{
+				"id": "physics-mechanics",
+				"title": "Physics — Full mechanics",
+				"teacher": "Rana Haddad",
+				"teacherId": "rana-haddad",
+				"subject": "Physics",
+				"lessons": "36",
+				"price": "30",
+				"level": "Science track"
+			},
+			{
+				"id": "arabic-grammar",
+				"title": "Arabic — Grammar & rhetoric",
+				"teacher": "Maha Zeidan",
+				"teacherId": "maha-zeidan",
+				"subject": "Arabic",
+				"lessons": "28",
+				"price": "0",
+				"level": "General track"
+			},
+			{
+				"id": "english-exam",
+				"title": "English — Exam preparation",
+				"teacher": "Luay Darwish",
+				"teacherId": "luay-darwish",
+				"subject": "English",
+				"lessons": "24",
+				"price": "25",
+				"level": "General track"
+			},
+			{
+				"id": "chem-organic",
+				"title": "Organic chemistry from zero",
+				"teacher": "Noor Abed",
+				"teacherId": "noor-abed",
+				"subject": "Chemistry",
+				"lessons": "31",
+				"price": "28",
+				"level": "Science track"
+			},
+			{
+				"id": "islamic-studies",
+				"title": "Islamic studies — Full review",
+				"teacher": "Omar Sharif",
+				"teacherId": "omar-sharif",
+				"subject": "Islamic",
+				"lessons": "18",
+				"price": "0",
+				"level": "General track"
+			}
+		],
+		"open": "Open course"
+	},
+	teacherProfile: {
+		"meta": {
+			"title": "Teacher profile | Academia",
+			"description": "Meet the teacher, their courses, and student reviews on Academia."
+		},
+		"verified": "Verified account",
+		"students": "students",
+		"courses": "courses",
+		"rating": "Rating",
+		"aboutTitle": "About",
+		"about": "An Academia teacher who uploads content classified by term, subject, unit and lesson, and tracks student performance through quizzes and periodic reports.",
+		"coursesTitle": "Courses by this teacher",
+		"reviewsTitle": "Student reviews",
+		"reviews": [{
+			"n": "Science-track student",
+			"d": "The explanation is organized and the quizzes after each lesson made it stick."
+		}, {
+			"n": "General-track student",
+			"d": "First time I'm not lost between files — every unit is where it should be."
+		}],
+		"cta": "Sign up to follow this teacher",
+		"notFound": "We couldn't find this teacher."
+	},
+	certificate: {
+		"meta": {
+			"title": "Verify a certificate | Academia",
+			"description": "Verify the authenticity of a digital certificate issued by Academia using its ID."
+		},
+		"h1": "Certificate verification",
+		"sub": "Enter the certificate ID or open the verification link printed on it.",
+		"placeholder": "Certificate ID (e.g. ACD-2026-00184)",
+		"check": "Verify",
+		"valid": "Valid certificate issued by Academia",
+		"invalid": "No certificate found with this ID. Check it and try again.",
+		"holder": "Holder name",
+		"course": "Subject / course",
+		"issued": "Issue date",
+		"id": "Certificate ID",
+		"note": "Verification runs against the platform's official certificate registry."
+	},
+	invite: {
+		"meta": {
+			"title": "An invite to Academia",
+			"description": "Join Academia through an invite link and get starter perks."
+		},
+		"h1": "You've been invited to Academia",
+		"sub": "Your friend uses Academia to organize their studying. Join through their link and get a free premium month.",
+		"codeLabel": "Invite code",
+		"perks": [
+			"A free premium month once you finish signing up",
+			"Your subjects are built automatically from your system and grade",
+			"You join the same subject communities as your friends"
+		],
+		"cta": "Accept invite & sign up",
+		"login": "I have an account — sign in",
+		"disclaimer": "Perks activate after your email is confirmed."
+	},
+	help: {
+		"meta": {
+			"title": "Help center | Academia",
+			"description": "Quick answers about accounts, subscriptions, the library, and privacy on Academia."
+		},
+		"h1": "Help center",
+		"sub": "Short answers to the most common questions. Can't find yours? Contact us.",
+		"searchPlaceholder": "Search help…",
+		"empty": "No results. Try another word or contact support.",
+		"contactTitle": "Still need help?",
+		"contactSub": "Our support team replies within one business day.",
+		"contactCta": "Contact support",
+		"topics": [
+			{
+				"t": "Account & sign in",
+				"items": [
+					{
+						"q": "How do I create an account?",
+						"a": "On the sign-up page pick your role (student or parent) then fill in your name, email and password. Teachers register from the teacher page because their account needs verification."
+					},
+					{
+						"q": "I forgot my password, what now?",
+						"a": "Open the reset page, enter your email, and you'll get a link to set a new password."
+					},
+					{
+						"q": "Do I stay signed in after closing the browser?",
+						"a": "Yes, your session is saved. For your security you're signed out automatically after two hours of inactivity."
+					}
+				]
+			},
+			{
+				"t": "Subscription & payment",
+				"items": [{
+					"q": "What's the difference between Free and Premium?",
+					"a": "Free includes the library, communities, schedule and the progress counter. Premium adds the exam simulator, mistake bank, the 15-minute review, and the parent report."
+				}, {
+					"q": "Can I cancel?",
+					"a": "Yes, any time. Your subscription stays active until the end of the paid period."
+				}]
+			},
+			{
+				"t": "Library & content",
+				"items": [{
+					"q": "How is content classified?",
+					"a": "In a strict tree: term → subject → unit → lesson, with advanced search and favorites."
+				}, {
+					"q": "I found violating content, what do I do?",
+					"a": "Use the report button on the lesson; our moderation team reviews it and violating content may be removed."
+				}]
+			},
+			{
+				"t": "Privacy",
+				"items": [{
+					"q": "What can a parent see?",
+					"a": "A weekly summary of consistency and progress only — not your community chats or daily activity details."
+				}, {
+					"q": "How do I delete my account?",
+					"a": "From the settings page, or by contacting support; your account and related data are removed."
+				}]
+			}
+		]
+	},
+	unsubscribe: {
+		"meta": {
+			"title": "Unsubscribe | Academia",
+			"description": "Stop Academia emails without signing in."
+		},
+		"h1": "Unsubscribe from notifications",
+		"sub": "Pick what you want to stop — no sign-in needed.",
+		"email": "Email",
+		"options": {
+			"weekly": "Weekly report",
+			"reminders": "Study schedule reminders",
+			"community": "Subject community notifications",
+			"marketing": "Platform news and offers"
+		},
+		"all": "Stop all emails",
+		"submit": "Save preferences",
+		"done": "Your email preferences were updated.",
+		"note": "Security emails (password reset and email confirmation) always stay on.",
+		"back": "Back home"
+	},
+	notFound: {
+		"meta": {
+			"title": "Page not found | Academia",
+			"description": "The page you're looking for doesn't exist or was moved."
+		},
+		"code": "404",
+		"title": "This page doesn't exist",
+		"text": "The link may be old or have a typo. Try starting from the home page or the courses.",
+		"home": "Back home",
+		"courses": "Browse courses"
+	},
+	settings: {
+		"meta": {
+			"title": "Settings | Academia",
+			"description": "Language, theme, and your account details on Academia."
+		},
+		"h1": "Settings",
+		"sub": "Your preferences are saved on this device and to your account.",
+		"langThemeTab": "Language & theme",
+		"accountTab": "Account",
+		"theme": "Theme",
+		"language": "Language",
+		"account": "Account details",
+		"role": "Role",
+		"email": "Email",
+		"name": "Name",
+		"signOut": "Sign out",
+		"security": "Security",
+		"idleNote": "You're signed out automatically after two hours of inactivity."
+	},
+	session: { "expired": "Your session ended after two hours of inactivity. Please sign in again." },
+	contact: {
+		"meta": {
+			"title": "Contact us | Academia",
+			"description": "Have a question, a suggestion, or want a school partnership? The Academia team is ready to listen."
+		},
+		"h1": "Contact us",
+		"sub": "Whether it's a quick question, a suggestion, or a partnership with your school — reach out and we'll get back to you fast.",
+		"form": {
+			"name": "Full name",
+			"email": "Email address",
+			"topic": "Subject",
+			"topics": {
+				"student": "Student support / account",
+				"teacher": "Joining as a teacher",
+				"school": "School or group partnership",
+				"press": "Press & media",
+				"other": "Something else"
+			},
+			"message": "Message",
+			"messagePlaceholder": "Write the details of your message here…",
+			"submit": "Send message",
+			"sending": "Sending…"
+		},
+		"errors": {
+			"name": "Name must be at least 2 characters",
+			"email": "Invalid email address",
+			"message": "Message is too short — add a bit more detail (10+ characters)"
+		},
+		"success": {
+			"title": "Your message is in! ✅",
+			"sub": "Our team will review it and reply to your email within 1–2 business days.",
+			"again": "Send another message"
+		},
+		"sidebar": {
+			"emailTitle": "Email us directly",
+			"emailSub": "For any general inquiry",
+			"responseTitle": "Expected response time",
+			"responseSub": "Within 1–2 business days",
+			"helpTitle": "Looking for a quick answer?",
+			"helpSub": "Check the Help Center — your question might already be answered there.",
+			"helpCta": "Visit the Help Center"
+		}
+	},
+	blog: {
+		"h1": "Academia Blog",
+		"sub": "Practical articles on study organization and exam prep — no fluff.",
+		"readMinutes_one": "{{count}} min read",
+		"readMinutes_other": "{{count}} min read",
+		"notFound": "We couldn't find that article",
+		"notFoundSub": "The link might be wrong, or the article was removed.",
+		"backToBlog": "Back to blog",
+		"ctaTitle": "Want to put these ideas into practice?",
+		"ctaSub": "Academia has a study schedule, a mistake bank, and an exam simulator to help you apply all this daily.",
+		"ctaButton": "Try Academia for free",
+		"moreTitle": "More articles you'll like",
+		"teaserTitle": "From our blog",
+		"teaserSub": "Practical tips for studying and exam prep.",
+		"teaserCta": "Visit the blog"
+	}
+};
+var SUPPORTED_LOCALES = ["ar", "en"];
+var LOCALE_DIR = {
+	ar: "rtl",
+	en: "ltr"
+};
+/** Deep merge so page bundles can extend shared sections (e.g. `nav`). */
+function merge(base, extra) {
+	const out = { ...base };
+	for (const [key, value] of Object.entries(extra)) {
+		const current = out[key];
+		if (current && typeof current === "object" && !Array.isArray(current) && value && typeof value === "object" && !Array.isArray(value)) out[key] = merge(current, value);
+		else out[key] = value;
+	}
+	return out;
+}
+if (!instance.isInitialized) instance.use(initReactI18next).init({
+	resources: {
+		ar: { translation: merge(ar_default, ar_pages_default) },
+		en: { translation: merge(en_default, en_pages_default) }
+	},
+	lng: "ar",
+	fallbackLng: "ar",
+	supportedLngs: SUPPORTED_LOCALES,
+	interpolation: { escapeValue: false },
+	react: { useSuspense: false }
+});
+var i18n_default = instance;
+var THEME_STORAGE_KEY = "acadimia.theme";
+var LOCALE_STORAGE_KEY = "acadimia.locale";
+/** Inline, runs before hydration so there is no flash of the wrong theme/dir. */
+var preferencesBootScript = `(function(){try{
+var t=localStorage.getItem("${THEME_STORAGE_KEY}")||"auto";
+var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+var r=document.documentElement;
+r.setAttribute("data-theme",d?"dark":"light");
+r.classList.toggle("dark",d);
+var l=localStorage.getItem("${LOCALE_STORAGE_KEY}")||"ar";
+if(l!=="ar"&&l!=="en")l="ar";
+r.setAttribute("lang",l);
+r.setAttribute("dir",l==="en"?"ltr":"rtl");
+}catch(e){}})();`;
+function resolveDark(pref) {
+	if (pref === "dark") return true;
+	if (pref === "light") return false;
+	return typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)").matches : true;
+}
+var PreferencesContext = (0, import_react.createContext)(null);
+function readStoredTheme() {
+	if (typeof window === "undefined") return "auto";
+	const stored = localStorage.getItem(THEME_STORAGE_KEY);
+	return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
+}
+function readStoredLocale() {
+	if (typeof window === "undefined") return "ar";
+	const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+	return stored && SUPPORTED_LOCALES.includes(stored) ? stored : "ar";
+}
+function PreferencesState({ children }) {
+	const { i18n: instance } = useTranslation();
+	const [theme, setThemeState] = (0, import_react.useState)(readStoredTheme);
+	const [resolvedTheme, setResolvedTheme] = (0, import_react.useState)(() => resolveDark(readStoredTheme()) ? "dark" : "light");
+	const [locale, setLocaleState] = (0, import_react.useState)(readStoredLocale);
+	const [switchingLocale, setSwitchingLocale] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		if (theme !== "auto") return;
+		const mq = window.matchMedia("(prefers-color-scheme: dark)");
+		const apply = () => setResolvedTheme(mq.matches ? "dark" : "light");
+		apply();
+		mq.addEventListener("change", apply);
+		return () => mq.removeEventListener("change", apply);
+	}, [theme]);
+	(0, import_react.useEffect)(() => {
+		const root = document.documentElement;
+		root.setAttribute("data-theme", resolvedTheme);
+		root.classList.toggle("dark", resolvedTheme === "dark");
+	}, [resolvedTheme]);
+	(0, import_react.useEffect)(() => {
+		const root = document.documentElement;
+		root.setAttribute("lang", locale);
+		root.setAttribute("dir", LOCALE_DIR[locale]);
+		if (instance.language !== locale) instance.changeLanguage(locale);
+	}, [locale, instance]);
+	const setTheme = (0, import_react.useCallback)((pref) => {
+		setThemeState(pref);
+		setResolvedTheme(resolveDark(pref) ? "dark" : "light");
+		localStorage.setItem(THEME_STORAGE_KEY, pref);
+	}, []);
+	const setLocale = (0, import_react.useCallback)((next) => {
+		const persist = (value) => {
+			localStorage.setItem(LOCALE_STORAGE_KEY, value);
+		};
+		if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			setLocaleState(next);
+			persist(next);
+			return;
+		}
+		setSwitchingLocale(true);
+		window.setTimeout(() => {
+			setLocaleState(next);
+			persist(next);
+			window.setTimeout(() => setSwitchingLocale(false), 240);
+		}, 220);
+	}, []);
+	const value = (0, import_react.useMemo)(() => ({
+		theme,
+		resolvedTheme,
+		setTheme,
+		toggleTheme: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+		locale,
+		setLocale,
+		toggleLocale: () => setLocale(locale === "ar" ? "en" : "ar"),
+		dir: LOCALE_DIR[locale],
+		switchingLocale
+	}), [
+		theme,
+		resolvedTheme,
+		setTheme,
+		locale,
+		setLocale,
+		switchingLocale
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PreferencesContext.Provider, {
+		value,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-locale-switching": switchingLocale ? "true" : "false",
+			className: "locale-fade",
+			children
+		}), switchingLocale && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"aria-hidden": "true",
+			className: "pointer-events-none fixed inset-0 z-[80] flex items-center justify-center bg-background/45 backdrop-blur-[2px]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "size-6 animate-spin rounded-full border-2 border-primary/30 border-t-primary" })
+		})]
+	});
+}
+function PreferencesProvider({ children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nextProvider, {
+		i18n: i18n_default,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreferencesState, { children })
+	});
+}
+function usePreferences() {
+	const ctx = (0, import_react.useContext)(PreferencesContext);
+	if (!ctx) throw new Error("usePreferences must be used inside PreferencesProvider");
+	return ctx;
+}
+/** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
+function useBi() {
+	const { locale } = usePreferences();
+	return (ar, en) => locale === "en" ? en : ar;
+}
+var ROLE_BY_NAME = {
+	طالب: "student",
+	معلم: "teacher",
+	"ولي أمر": "parent",
+	"مشرف أكاديمي": "supervisor",
+	"مدير عام": "admin"
+};
+var ROLE_PAGE_PREFIXES = {
+	student: [
+		"student_",
+		"notifications",
+		"account_settings"
+	],
+	teacher: [
+		"teacher_",
+		"notifications",
+		"account_settings"
+	],
+	parent: [
+		"parent_",
+		"notifications",
+		"account_settings"
+	],
+	supervisor: [
+		"supervisor_",
+		"notifications",
+		"account_settings"
+	],
+	admin: [
+		"admin_",
+		"notifications",
+		"account_settings"
+	]
+};
+function pageMatchesRole(pageKey, role) {
+	return ROLE_PAGE_PREFIXES[role].some((prefix) => pageKey === prefix || pageKey.startsWith(prefix));
+}
+function roleKeyFromName(name, isAdmin = false) {
+	if (name && ROLE_BY_NAME[name]) return ROLE_BY_NAME[name];
+	return isAdmin ? "admin" : "student";
+}
+var ROLE_HOME = {
+	student: "/dashboard",
+	teacher: "/teacher/dashboard",
+	parent: "/parent/report",
+	supervisor: "/supervisor/dashboard",
+	admin: "/admin/dashboard"
+};
+function roleHome(name, isAdmin = false) {
+	return ROLE_HOME[roleKeyFromName(name, isAdmin)];
+}
+/**
+* البند 9 — الروابط العامة المسموحة لكل دور بعد تسجيل الدخول.
+* لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
+*/
+var PUBLIC_NAV_FOR_ROLE = {
+	student: [
+		"/",
+		"/courses",
+		"/how-it-works",
+		"/pricing",
+		"/blog"
+	],
+	teacher: [
+		"/",
+		"/for-teachers",
+		"/how-it-works",
+		"/blog"
+	],
+	parent: [
+		"/",
+		"/how-it-works",
+		"/pricing",
+		"/blog"
+	],
+	supervisor: [
+		"/",
+		"/how-it-works",
+		"/blog"
+	],
+	admin: ["/", "/blog"]
+};
+function allowedPublicPaths(role) {
+	return role ? PUBLIC_NAV_FOR_ROLE[role] : null;
+}
+var PERMISSION_KEYS = [
+	{
+		key: "view_list",
+		label: "عرض بيانات الجدول",
+		sort_order: 1
+	},
+	{
+		key: "show_add_form",
+		label: "عرض واجهة الإضافة",
+		sort_order: 2
+	},
+	{
+		key: "execute_add",
+		label: "تنفيذ الإضافة",
+		sort_order: 3
+	},
+	{
+		key: "edit",
+		label: "تعديل",
+		sort_order: 4
+	},
+	{
+		key: "delete",
+		label: "حذف",
+		sort_order: 5
+	},
+	{
+		key: "view_profile",
+		label: "عرض الملف الشخصي",
+		sort_order: 6
+	},
+	{
+		key: "edit_profile",
+		label: "تعديل الملف الشخصي",
+		sort_order: 7
+	},
+	{
+		key: "show_password_form",
+		label: "عرض واجهة تغيير كلمة المرور",
+		sort_order: 8
+	},
+	{
+		key: "change_password",
+		label: "تنفيذ تغيير كلمة المرور",
+		sort_order: 9
+	}
+];
+var MODULES = [
+	{
+		id: "m-student",
+		key: "student",
+		name: "مساحة الطالب",
+		nameEn: "Student space",
+		icon: "GraduationCap",
+		enabled: true,
+		sort_order: 1
+	},
+	{
+		id: "m-teacher",
+		key: "teacher",
+		name: "مساحة المعلم",
+		nameEn: "Teacher space",
+		icon: "Presentation",
+		enabled: true,
+		sort_order: 2
+	},
+	{
+		id: "m-supervisor",
+		key: "supervisor",
+		name: "الإشراف الأكاديمي",
+		nameEn: "Academic supervision",
+		icon: "ClipboardCheck",
+		enabled: true,
+		sort_order: 3
+	},
+	{
+		id: "m-parent",
+		key: "parent",
+		name: "مساحة ولي الأمر",
+		nameEn: "Parent space",
+		icon: "Users",
+		enabled: true,
+		sort_order: 4
+	},
+	{
+		id: "m-admin",
+		key: "administration",
+		name: "الإدارة",
+		nameEn: "Administration",
+		icon: "ShieldCheck",
+		enabled: true,
+		sort_order: 5
+	},
+	{
+		id: "m-academic",
+		key: "academic",
+		name: "الشؤون الأكاديمية",
+		nameEn: "Academic",
+		icon: "GraduationCap",
+		enabled: true,
+		sort_order: 6
+	},
+	{
+		id: "m-account",
+		key: "account",
+		name: "الحساب",
+		nameEn: "Account",
+		icon: "Settings",
+		enabled: true,
+		sort_order: 7
+	}
+];
+var PAGES = [
+	{
+		id: "p-student-dashboard",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_dashboard",
+		name: "لوحة المعلومات",
+		name_en: "Dashboard",
+		icon: "LayoutDashboard",
+		path: "/dashboard",
+		sort_order: 1
+	},
+	{
+		id: "p-student-my-courses",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_my_courses",
+		name: "دوراتي",
+		name_en: "My courses",
+		icon: "BookOpen",
+		path: "/my-courses",
+		sort_order: 2
+	},
+	{
+		id: "p-student-library",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_library",
+		name: "المكتبة",
+		name_en: "Library",
+		icon: "Library",
+		path: "/library",
+		sort_order: 3
+	},
+	{
+		id: "p-student-flashcards",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_flashcards",
+		name: "البطاقات التعليمية",
+		name_en: "Flashcards",
+		icon: "Layers",
+		path: "/flashcards",
+		sort_order: 4
+	},
+	{
+		id: "p-student-exam",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_exam",
+		name: "محاكي الامتحان",
+		name_en: "Exam simulator",
+		icon: "FileQuestion",
+		path: "/exam-simulator",
+		sort_order: 5
+	},
+	{
+		id: "p-student-mistakes",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_mistakes",
+		name: "بنك الأخطاء",
+		name_en: "Mistakes bank",
+		icon: "AlertTriangle",
+		path: "/mistakes-bank",
+		sort_order: 6
+	},
+	{
+		id: "p-student-achievements",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_achievements",
+		name: "الإنجازات",
+		name_en: "Achievements",
+		icon: "Trophy",
+		path: "/achievements",
+		sort_order: 7
+	},
+	{
+		id: "p-student-certificates",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_certificates",
+		name: "شهاداتي",
+		name_en: "My certificates",
+		icon: "Award",
+		path: "/my-certificates",
+		sort_order: 8
+	},
+	{
+		id: "p-student-schedule",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_schedule",
+		name: "الجدول",
+		name_en: "Schedule",
+		icon: "Calendar",
+		path: "/schedule",
+		sort_order: 9
+	},
+	{
+		id: "p-student-community",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_community",
+		name: "المجتمع",
+		name_en: "Community",
+		icon: "MessagesSquare",
+		path: "/community",
+		sort_order: 10
+	},
+	{
+		id: "p-student-bookmarks",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_bookmarks",
+		name: "المفضلة",
+		name_en: "Bookmarks",
+		icon: "Bookmark",
+		path: "/bookmarks",
+		sort_order: 11
+	},
+	{
+		id: "p-student-referrals",
+		module_id: "m-student",
+		parent_id: null,
+		key: "student_referrals",
+		name: "الإحالات",
+		name_en: "Referrals",
+		icon: "Gift",
+		path: "/referrals",
+		sort_order: 12
+	},
+	{
+		id: "p-teacher-dashboard",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_dashboard",
+		name: "لوحة المعلم",
+		name_en: "Teacher dashboard",
+		icon: "LayoutDashboard",
+		path: "/teacher/dashboard",
+		sort_order: 1
+	},
+	{
+		id: "p-teacher-courses",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_courses",
+		name: "دوراتي",
+		name_en: "My courses",
+		icon: "BookOpen",
+		path: "/teacher/courses",
+		sort_order: 2
+	},
+	{
+		id: "p-teacher-content",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_content",
+		name: "المحتوى",
+		name_en: "Content",
+		icon: "FileText",
+		path: "/teacher/content",
+		sort_order: 3
+	},
+	{
+		id: "p-teacher-quizzes",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_quizzes",
+		name: "الاختبارات",
+		name_en: "Quizzes",
+		icon: "FileQuestion",
+		path: "/teacher/quizzes",
+		sort_order: 4
+	},
+	{
+		id: "p-teacher-grading",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_grading",
+		name: "التصحيح",
+		name_en: "Grading",
+		icon: "CheckSquare",
+		path: "/teacher/grading",
+		sort_order: 5
+	},
+	{
+		id: "p-teacher-analytics",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_analytics",
+		name: "التحليلات",
+		name_en: "Analytics",
+		icon: "BarChart3",
+		path: "/teacher/analytics",
+		sort_order: 6
+	},
+	{
+		id: "p-teacher-earnings",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_earnings",
+		name: "الأرباح",
+		name_en: "Earnings",
+		icon: "Wallet",
+		path: "/teacher/earnings",
+		sort_order: 7
+	},
+	{
+		id: "p-teacher-community",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_community",
+		name: "المجتمع",
+		name_en: "Community",
+		icon: "MessagesSquare",
+		path: "/teacher/community",
+		sort_order: 8
+	},
+	{
+		id: "p-teacher-profile-edit",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_profile_edit",
+		name: "تعديل الملف الشخصي",
+		name_en: "Edit profile",
+		icon: "UserCog",
+		path: "/teacher/profile/edit",
+		sort_order: 9
+	},
+	{
+		id: "p-teacher-settings",
+		module_id: "m-teacher",
+		parent_id: null,
+		key: "teacher_settings",
+		name: "الإعدادات",
+		name_en: "Settings",
+		icon: "Settings",
+		path: "/teacher/settings",
+		sort_order: 10
+	},
+	{
+		id: "p-supervisor-dashboard",
+		module_id: "m-supervisor",
+		parent_id: null,
+		key: "supervisor_dashboard",
+		name: "لوحة المشرف",
+		name_en: "Supervisor dashboard",
+		icon: "LayoutDashboard",
+		path: "/supervisor/dashboard",
+		sort_order: 1
+	},
+	{
+		id: "p-supervisor-teachers",
+		module_id: "m-supervisor",
+		parent_id: null,
+		key: "supervisor_teachers",
+		name: "المعلمون",
+		name_en: "Teachers",
+		icon: "Users",
+		path: "/supervisor/teachers",
+		sort_order: 2
+	},
+	{
+		id: "p-supervisor-students",
+		module_id: "m-supervisor",
+		parent_id: null,
+		key: "supervisor_students",
+		name: "نظرة عامة على الطلاب",
+		name_en: "Students overview",
+		icon: "GraduationCap",
+		path: "/supervisor/students-overview",
+		sort_order: 3
+	},
+	{
+		id: "p-supervisor-reports",
+		module_id: "m-supervisor",
+		parent_id: null,
+		key: "supervisor_reports",
+		name: "التقارير",
+		name_en: "Reports",
+		icon: "FileBarChart",
+		path: "/supervisor/reports",
+		sort_order: 4
+	},
+	{
+		id: "p-parent-report",
+		module_id: "m-parent",
+		parent_id: null,
+		key: "parent_report",
+		name: "تقرير الأبناء",
+		name_en: "Children report",
+		icon: "FileBarChart",
+		path: "/parent/report",
+		sort_order: 1
+	},
+	{
+		id: "p-parent-settings",
+		module_id: "m-parent",
+		parent_id: null,
+		key: "parent_settings",
+		name: "الإعدادات",
+		name_en: "Settings",
+		icon: "Settings",
+		path: "/parent/settings",
+		sort_order: 2
+	},
+	{
+		id: "p-system-modules",
+		module_id: "m-admin",
+		parent_id: null,
+		key: "admin_settings",
+		name: "وحدات النظام",
+		name_en: "System modules",
+		icon: "ToggleRight",
+		path: "/system-modules",
+		sort_order: 1
+	},
+	{
+		id: "p-user-mgmt",
+		module_id: "m-admin",
+		parent_id: null,
+		key: "admin_users",
+		name: "إدارة المستخدمين",
+		name_en: "User management",
+		icon: "UsersRound",
+		path: null,
+		sort_order: 2
+	},
+	{
+		id: "p-user-types",
+		module_id: "m-admin",
+		parent_id: "p-user-mgmt",
+		key: "admin_roles",
+		name: "الأدوار والصلاحيات",
+		name_en: "Roles",
+		icon: "IdCard",
+		path: "/admin/roles",
+		sort_order: 1
+	},
+	{
+		id: "p-users",
+		module_id: "m-admin",
+		parent_id: "p-user-mgmt",
+		key: "admin_users",
+		name: "المستخدمون",
+		name_en: "Users",
+		icon: "User",
+		path: "/admin/users",
+		sort_order: 2
+	},
+	{
+		id: "p-permissions",
+		module_id: "m-admin",
+		parent_id: "p-user-mgmt",
+		key: "admin_roles",
+		name: "مصفوفة الصلاحيات",
+		name_en: "Permission matrix",
+		icon: "Settings2",
+		path: "/admin/permissions",
+		sort_order: 3
+	},
+	{
+		id: "p-admin-dashboard",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_dashboard",
+		name: "نظرة عامة",
+		name_en: "Overview",
+		icon: "LayoutDashboard",
+		path: "/admin/dashboard",
+		sort_order: 1
+	},
+	{
+		id: "p-admin-teachers",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_teachers",
+		name: "المعلمون",
+		name_en: "Teachers",
+		icon: "Users",
+		path: "/admin/teachers",
+		sort_order: 2
+	},
+	{
+		id: "p-admin-curriculum",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_curriculum",
+		name: "المنهج",
+		name_en: "Curriculum",
+		icon: "BookOpen",
+		path: "/admin/curriculum",
+		sort_order: 3
+	},
+	{
+		id: "p-admin-curriculum-req",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_curriculum_requests",
+		name: "طلبات المنهج",
+		name_en: "Curriculum requests",
+		icon: "FileCheck",
+		path: "/admin/curriculum-requests",
+		sort_order: 4
+	},
+	{
+		id: "p-admin-content-review",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_content_review",
+		name: "مراجعة المحتوى",
+		name_en: "Content review",
+		icon: "FileSearch",
+		path: "/admin/content-review",
+		sort_order: 5
+	},
+	{
+		id: "p-admin-community-reports",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_community_reports",
+		name: "بلاغات المجتمع",
+		name_en: "Community reports",
+		icon: "MessageSquareWarning",
+		path: "/admin/community-reports",
+		sort_order: 6
+	},
+	{
+		id: "p-admin-payments",
+		module_id: "m-academic",
+		parent_id: null,
+		key: "admin_payments",
+		name: "المدفوعات",
+		name_en: "Payments",
+		icon: "CreditCard",
+		path: "/admin/payments",
+		sort_order: 7
+	},
+	{
+		id: "p-notifications",
+		module_id: "m-account",
+		parent_id: null,
+		key: "notifications",
+		name: "الإشعارات",
+		name_en: "Notifications",
+		icon: "Bell",
+		path: "/notifications",
+		sort_order: 1
+	},
+	{
+		id: "p-account-settings",
+		module_id: "m-account",
+		parent_id: null,
+		key: "account_settings",
+		name: "إعدادات الحساب",
+		name_en: "Account settings",
+		icon: "Settings",
+		path: "/settings",
+		sort_order: 2
+	}
+];
+var ROLES = [
+	{
+		id: "r-admin",
+		name: "مدير عام",
+		description: "صلاحيات كاملة على المنصة",
+		created_at: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "r-supervisor",
+		name: "مشرف أكاديمي",
+		description: "متابعة المعلمين والطلاب والتقارير",
+		created_at: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "r-teacher",
+		name: "معلم",
+		description: "إدارة المحتوى والاختبارات والطلاب",
+		created_at: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "r-parent",
+		name: "ولي أمر",
+		description: "متابعة تقارير الأبناء",
+		created_at: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "r-student",
+		name: "طالب",
+		description: "مساحة الطالب: مكتبة، إنجاز، امتحانات",
+		created_at: (/* @__PURE__ */ new Date()).toISOString()
+	}
+];
+function pagesForModule(moduleId) {
+	return PAGES.filter((p) => p.module_id === moduleId);
+}
+function fullGrant(pages) {
+	return pages.flatMap((p) => PERMISSION_KEYS.map((k) => `${p.id}:${k.key}`));
+}
+/**
+* مصفوفة الصلاحيات الفعلية لكل دور — بديل جدول role_permissions بـ Supabase.
+* المفتاح: roleId، القيمة: مجموعة "pageId:permissionKey" الممنوحة.
+*
+* - "مدير عام" دايماً كل الصلاحيات على كل شي (بايباس، متل ما كان بالـ SQL
+*   الأصلي: "super admin gets everything").
+* - باقي الأدوار (مشرف/معلم/ولي أمر/طالب) مبدئياً عندها كل الصلاحيات على
+*   مساحتها الخاصة بس (نفس المبدأ يلي كان بالـ seed الأصلي: كل دور له مساحته
+*   المستقلة بالكامل). الأدمن يقدر يقيّدها لاحقاً من شاشة "مصفوفة الصلاحيات"
+*   وبتنحفظ فعلياً (راجع rbac.functions.ts::saveRolePermissions).
+*/
+var ROLE_PERMISSION_GRANTS = {
+	"r-admin": new Set(fullGrant(PAGES)),
+	"r-supervisor": new Set(fullGrant([...pagesForModule("m-supervisor"), ...pagesForModule("m-account")])),
+	"r-teacher": new Set(fullGrant([...pagesForModule("m-teacher"), ...pagesForModule("m-account")])),
+	"r-parent": new Set(fullGrant([...pagesForModule("m-parent"), ...pagesForModule("m-account")])),
+	"r-student": new Set(fullGrant([...pagesForModule("m-student"), ...pagesForModule("m-account")]))
+};
+var USERS = [
+	{
+		id: "u-admin",
+		full_name: "الأدمن",
+		email: "admin@Academia.com",
+		phone: null,
+		gender: "male",
+		avatar_url: null,
+		is_active: true,
+		role_id: "r-admin",
+		role_name: "مدير عام"
+	},
+	{
+		id: "u-demo-supervisor",
+		full_name: "مشرف (تجريبي)",
+		email: null,
+		phone: null,
+		gender: "male",
+		avatar_url: null,
+		is_active: true,
+		role_id: "r-supervisor",
+		role_name: "مشرف أكاديمي"
+	},
+	{
+		id: "u-demo-teacher",
+		full_name: "معلم (تجريبي)",
+		email: null,
+		phone: null,
+		gender: "male",
+		avatar_url: null,
+		is_active: true,
+		role_id: "r-teacher",
+		role_name: "معلم"
+	},
+	{
+		id: "u-demo-parent",
+		full_name: "ولي أمر (تجريبي)",
+		email: null,
+		phone: null,
+		gender: "male",
+		avatar_url: null,
+		is_active: true,
+		role_id: "r-parent",
+		role_name: "ولي أمر"
+	},
+	{
+		id: "u-demo-student",
+		full_name: "طالب (تجريبي)",
+		email: null,
+		phone: null,
+		gender: "male",
+		avatar_url: null,
+		is_active: true,
+		role_id: "r-student",
+		role_name: "طالب"
+	}
+];
+function nextId(prefix) {
+	return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+}
+//#endregion
+export { usePreferences as S, pageMatchesRole as _, PreferencesProvider as a, roleKeyFromName as b, USERS as c, getStoredUserId as d, isAuthenticated as f, nextId as g, logout as h, PERMISSION_KEYS as i, allowedPublicPaths as l, loginAsDemo as m, MODULES as n, ROLES as o, login as p, PAGES as r, ROLE_PERMISSION_GRANTS as s, AUTH_EVENT as t, getStoredEmail as u, preferencesBootScript as v, useBi as x, roleHome as y };
