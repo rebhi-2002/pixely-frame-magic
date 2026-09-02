@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MailX } from "lucide-react";
@@ -6,14 +7,7 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
 export const Route = createFileRoute("/unsubscribe")({
-  head: () => ({
-    meta: [
-      { title: "إلغاء الإشعارات | أكاديميا" },
-      { name: "description", content: "أوقف رسائل أكاديميا البريدية بدون الحاجة لتسجيل الدخول." },
-      { property: "og:title", content: "إلغاء الإشعارات | أكاديميا" },
-      { property: "og:description", content: "اختر ما تريد إيقافه من رسائل أكاديميا البريدية." },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/unsubscribe", localeFromSearch(ctx.match.search)),
   component: UnsubscribePage,
 });
 

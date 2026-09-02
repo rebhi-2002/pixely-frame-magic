@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -12,14 +13,7 @@ const description =
   "ابدأ مجاناً بالمكتبة والمجتمعات ومتابعة الإنجاز، أو اشترك ببريميوم لمحاكي الامتحان الوزاري وبنك الأخطاء والتقارير.";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/pricing", localeFromSearch(ctx.match.search)),
   component: Pricing,
 });
 

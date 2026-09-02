@@ -7,7 +7,13 @@ import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,26 +57,39 @@ export function CourseCatalogPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<PublicCourseRow | null>(null);
 
-  const { data: rows, isLoading } = useQuery({ queryKey: ["public-courses"], queryFn: () => fetchRows() });
+  const { data: rows, isLoading } = useQuery({
+    queryKey: ["public-courses"],
+    queryFn: () => fetchRows(),
+  });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["public-courses"] });
 
   const filtered = useMemo(() => {
     return (rows ?? []).filter((r) => {
       if (!search.trim()) return true;
       const q = search.trim().toLowerCase();
-      return `${r.title[0]} ${r.title[1]} ${r.teacher[0]} ${r.teacher[1]}`.toLowerCase().includes(q);
+      return `${r.title[0]} ${r.title[1]} ${r.teacher[0]} ${r.teacher[1]}`
+        .toLowerCase()
+        .includes(q);
     });
   }, [rows, search]);
 
   const saveMutation = useMutation({
     mutationFn: () =>
-      persist({ data: { ...form, id: editingId ?? undefined, lessons: Number(form.lessons) || 0, price: Number(form.price) || 0 } }),
+      persist({
+        data: {
+          ...form,
+          id: editingId ?? undefined,
+          lessons: Number(form.lessons) || 0,
+          price: Number(form.price) || 0,
+        },
+      }),
     onSuccess: () => {
       invalidate();
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
   });
 
   const deleteMutation = useMutation({
@@ -80,7 +99,8 @@ export function CourseCatalogPage() {
       setPendingDelete(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
   });
 
   function openDialog(row: PublicCourseRow | null) {
@@ -150,7 +170,9 @@ export function CourseCatalogPage() {
                     <td className="px-4 py-3 font-semibold text-foreground">{bi(...r.title)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{bi(...r.teacher)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{bi(...r.subject)}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{r.price === 0 ? bi("مجاني", "Free") : `${r.price} JOD`}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {r.price === 0 ? bi("مجاني", "Free") : `${r.price} JOD`}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         {can("admin_course_catalog", "edit") && (
@@ -159,7 +181,12 @@ export function CourseCatalogPage() {
                           </Button>
                         )}
                         {can("admin_course_catalog", "delete") && (
-                          <Button size="icon" variant="ghost" className="text-destructive" onClick={() => setPendingDelete(r)}>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="text-destructive"
+                            onClick={() => setPendingDelete(r)}
+                          >
                             <Trash2 className="size-4" />
                           </Button>
                         )}
@@ -183,44 +210,82 @@ export function CourseCatalogPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-h-[85vh] overflow-y-auto text-start">
           <DialogHeader>
-            <DialogTitle>{editingId ? bi("تعديل كورس", "Edit course") : bi("إضافة كورس", "Add course")}</DialogTitle>
+            <DialogTitle>
+              {editingId ? bi("تعديل كورس", "Edit course") : bi("إضافة كورس", "Add course")}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="crs-title-ar">{bi("العنوان (عربي)", "Title (Arabic)")}</Label>
-              <Input id="crs-title-ar" value={form.titleAr} onChange={(e) => setForm((f) => ({ ...f, titleAr: e.target.value }))} />
+              <Input
+                id="crs-title-ar"
+                value={form.titleAr}
+                onChange={(e) => setForm((f) => ({ ...f, titleAr: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-title-en">{bi("العنوان (إنجليزي)", "Title (English)")}</Label>
-              <Input id="crs-title-en" value={form.titleEn} onChange={(e) => setForm((f) => ({ ...f, titleEn: e.target.value }))} />
+              <Input
+                id="crs-title-en"
+                value={form.titleEn}
+                onChange={(e) => setForm((f) => ({ ...f, titleEn: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-teacher-ar">{bi("المعلم (عربي)", "Teacher (Arabic)")}</Label>
-              <Input id="crs-teacher-ar" value={form.teacherAr} onChange={(e) => setForm((f) => ({ ...f, teacherAr: e.target.value }))} />
+              <Input
+                id="crs-teacher-ar"
+                value={form.teacherAr}
+                onChange={(e) => setForm((f) => ({ ...f, teacherAr: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-teacher-en">{bi("المعلم (إنجليزي)", "Teacher (English)")}</Label>
-              <Input id="crs-teacher-en" value={form.teacherEn} onChange={(e) => setForm((f) => ({ ...f, teacherEn: e.target.value }))} />
+              <Input
+                id="crs-teacher-en"
+                value={form.teacherEn}
+                onChange={(e) => setForm((f) => ({ ...f, teacherEn: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
               <Label htmlFor="crs-teacher-id">{bi("معرّف صفحة المعلم", "Teacher page ID")}</Label>
-              <Input id="crs-teacher-id" value={form.teacherId} onChange={(e) => setForm((f) => ({ ...f, teacherId: e.target.value }))} />
+              <Input
+                id="crs-teacher-id"
+                value={form.teacherId}
+                onChange={(e) => setForm((f) => ({ ...f, teacherId: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-subject-ar">{bi("المادة (عربي)", "Subject (Arabic)")}</Label>
-              <Input id="crs-subject-ar" value={form.subjectAr} onChange={(e) => setForm((f) => ({ ...f, subjectAr: e.target.value }))} />
+              <Input
+                id="crs-subject-ar"
+                value={form.subjectAr}
+                onChange={(e) => setForm((f) => ({ ...f, subjectAr: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-subject-en">{bi("المادة (إنجليزي)", "Subject (English)")}</Label>
-              <Input id="crs-subject-en" value={form.subjectEn} onChange={(e) => setForm((f) => ({ ...f, subjectEn: e.target.value }))} />
+              <Input
+                id="crs-subject-en"
+                value={form.subjectEn}
+                onChange={(e) => setForm((f) => ({ ...f, subjectEn: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-level-ar">{bi("المستوى (عربي)", "Level (Arabic)")}</Label>
-              <Input id="crs-level-ar" value={form.levelAr} onChange={(e) => setForm((f) => ({ ...f, levelAr: e.target.value }))} />
+              <Input
+                id="crs-level-ar"
+                value={form.levelAr}
+                onChange={(e) => setForm((f) => ({ ...f, levelAr: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-level-en">{bi("المستوى (إنجليزي)", "Level (English)")}</Label>
-              <Input id="crs-level-en" value={form.levelEn} onChange={(e) => setForm((f) => ({ ...f, levelEn: e.target.value }))} />
+              <Input
+                id="crs-level-en"
+                value={form.levelEn}
+                onChange={(e) => setForm((f) => ({ ...f, levelEn: e.target.value }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-lessons">{bi("عدد الدروس", "Lessons count")}</Label>
@@ -260,11 +325,17 @@ export function CourseCatalogPage() {
       <AlertDialog open={!!pendingDelete} onOpenChange={(v) => !v && setPendingDelete(null)}>
         <AlertDialogContent className="text-start">
           <AlertDialogHeader>
-            <AlertDialogTitle>{bi(`حذف «${pendingDelete?.title[0]}»؟`, `Delete "${pendingDelete?.title[1]}"?`)}</AlertDialogTitle>
-            <AlertDialogDescription>{bi("لا يمكن التراجع عن هذا الإجراء.", "This action cannot be undone.")}</AlertDialogDescription>
+            <AlertDialogTitle>
+              {bi(`حذف «${pendingDelete?.title[0]}»؟`, `Delete "${pendingDelete?.title[1]}"?`)}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {bi("لا يمكن التراجع عن هذا الإجراء.", "This action cannot be undone.")}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:justify-start">
-            <AlertDialogAction onClick={() => pendingDelete && deleteMutation.mutate(pendingDelete.id)}>
+            <AlertDialogAction
+              onClick={() => pendingDelete && deleteMutation.mutate(pendingDelete.id)}
+            >
               {bi("حذف", "Delete")}
             </AlertDialogAction>
             <AlertDialogCancel>{bi("إلغاء", "Cancel")}</AlertDialogCancel>

@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Compass, HeartHandshake, Languages, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -7,22 +8,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "من نحن | أكاديميا" },
-      {
-        name: "description",
-        content:
-          "قصة أكاديميا: فريق عربي يبني منصة تنظيم وإنجاز لطلاب الثانوية بدل فوضى مجموعات الواتساب.",
-      },
-      { property: "og:title", content: "من نحن | أكاديميا" },
-      {
-        property: "og:description",
-        content:
-          "قصة أكاديميا ومهمتنا وقيمنا: الوضوح، خصوصية الطالب، عربي أولاً، وإنجاز قابل للقياس.",
-      },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/about", localeFromSearch(ctx.match.search)),
   component: AboutPage,
 });
 

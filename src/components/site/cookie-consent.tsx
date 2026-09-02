@@ -26,7 +26,7 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-label={t("cookie.title")}
-      className="fixed inset-x-3 bottom-3 z-[60] mx-auto max-w-3xl rounded-2xl border border-border bg-card/95 p-4 shadow-lg backdrop-blur md:inset-x-6 md:bottom-6"
+      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] mx-auto max-h-[calc(100dvh-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl border border-border bg-card/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-lg backdrop-blur md:inset-x-6 md:bottom-6 md:pb-4"
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">

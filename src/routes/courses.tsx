@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -10,21 +11,7 @@ import { useBi } from "@/lib/bi";
 import { listPublicCourses } from "@/lib/public-catalog.functions";
 
 export const Route = createFileRoute("/courses")({
-  head: () => ({
-    meta: [
-      { title: "الكورسات | أكاديميا" },
-      {
-        name: "description",
-        content:
-          "تصفّح كورسات المعلّمين المعتمدين في أكاديميا حسب المادة والمستوى قبل إنشاء حسابك.",
-      },
-      { property: "og:title", content: "الكورسات | أكاديميا" },
-      {
-        property: "og:description",
-        content: "كورسات من معلّمين موثّقين — تصفّحها بدون حساب، وسجّل عند الاشتراك.",
-      },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/courses", localeFromSearch(ctx.match.search)),
   component: CoursesPage,
 });
 
@@ -33,13 +20,19 @@ function CoursesPage() {
   const bi = useBi();
   const { isSignedIn } = useSession();
   const fetchCourses = useServerFn(listPublicCourses);
-  const { data: rows, isLoading } = useQuery({ queryKey: ["public-courses"], queryFn: () => fetchCourses() });
+  const { data: rows, isLoading } = useQuery({
+    queryKey: ["public-courses"],
+    queryFn: () => fetchCourses(),
+  });
 
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState<string>("__all");
 
   const items = rows ?? [];
-  const subjects = useMemo(() => Array.from(new Set(items.map((i) => bi(...i.subject)))), [items, bi]);
+  const subjects = useMemo(
+    () => Array.from(new Set(items.map((i) => bi(...i.subject)))),
+    [items, bi],
+  );
 
   const filtered = items.filter((i) => {
     const q = query.trim();

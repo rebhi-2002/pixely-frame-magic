@@ -11,11 +11,14 @@ import { useBi } from "@/lib/bi";
 export function WelcomeBanner({
   subtitle,
   tip,
+  action,
 }: {
   /** جملة ثانوية مخصّصة للدور — [عربي, إنجليزي] */
   subtitle: readonly [string, string];
   /** نصيحة/تلميح قصير يظهر كشارة صغيرة تحت العنوان — اختياري */
   tip?: readonly [string, string];
+  /** إجراء رئيسي اختياري يقود المستخدم للخطوة التالية. */
+  action?: ReactNode;
 }) {
   const { session } = useSession();
   const bi = useBi();
@@ -36,6 +39,7 @@ export function WelcomeBanner({
                 {bi(...tip)}
               </span>
             )}
+            {action && <div className="mt-4">{action}</div>}
           </div>
           <WelcomeIllustration className="hidden h-28 w-auto shrink-0 sm:block" />
         </div>

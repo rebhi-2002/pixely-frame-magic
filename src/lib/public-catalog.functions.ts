@@ -30,7 +30,11 @@ export const saveCourse = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    await requirePermission(context.userId, "admin_course_catalog", data.id ? "edit" : "execute_add");
+    await requirePermission(
+      context.userId,
+      "admin_course_catalog",
+      data.id ? "edit" : "execute_add",
+    );
     const shaped = {
       title: [data.titleAr, data.titleEn] as [string, string],
       teacher: [data.teacherAr, data.teacherEn] as [string, string],

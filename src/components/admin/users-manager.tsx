@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +42,7 @@ import {
 import { useAccess } from "@/hooks/use-access";
 import type { UserRow } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const EMPTY_FORM = {
   full_name: "",
@@ -70,7 +71,11 @@ export function UsersPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<UserRow | null>(null);
 
-  const { data: users, isLoading } = useQuery({
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["users"],
     queryFn: listBackendUsers,
   });
@@ -80,6 +85,8 @@ export function UsersPage() {
     staleTime: 5 * 60_000,
     retry: false,
   });
+  const hasFilters =
+    Boolean(search.trim()) || status !== "all" || gender !== "all" || roleFilter !== "all";
   const roles = (options?.roles ?? []).map((role) => ({
     id: String(role.id),
     name: role.name,
@@ -206,14 +213,52 @@ export function UsersPage() {
             </Button>
           )}
         </Toolbar>
+        <div
+          className="mt-3 flex items-center justify-between gap-3 text-xs text-muted-foreground"
+          aria-live="polite"
+        >
+          <span>
+            {bi(
+              `${filtered.length} نتيجة`,
+              `${filtered.length} result${filtered.length === 1 ? "" : "s"}`,
+            )}
+          </span>
+          {hasFilters && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSearch("");
+                setStatus("all");
+                setGender("all");
+                setRoleFilter("all");
+              }}
+            >
+              {bi("مسح الفلاتر", "Clear filters")}
+            </Button>
+          )}
+        </div>
 
-        <div className="mt-4 overflow-x-auto rounded-2xl bg-card">
+        <div
+          className="mt-4 overflow-x-auto rounded-2xl bg-card"
+          role="region"
+          aria-label={bi("قائمة المستخدمين", "Users list")}
+        >
           {isLoading ? (
-            <div className="flex justify-center p-10">
-              <Loader2 className="size-5 animate-spin text-primary" />
-            </div>
+            <LoadingState label={bi("عم نحمّل المستخدمين…", "Loading users…")} />
+          ) : isError ? (
+            <ErrorState
+              title={bi("تعذّر تحميل المستخدمين", "Couldn't load users")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Try again")}
+                  onClick={() => void queryClient.invalidateQueries({ queryKey: ["users"] })}
+                />
+              }
+            />
           ) : (
-            <table className="w-full min-w-3xl text-start text-sm">
+            <table className="w-full min-w-[900px] text-start text-sm">
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
                   <th className="w-14 px-4 py-3 font-semibold">#</th>
@@ -279,7 +324,12 @@ export function UsersPage() {
                 {!filtered.length && (
                   <tr>
                     <td colSpan={8} className="p-8 text-center text-muted-foreground">
-                      {bi("لا توجد نتائج مطابقة.", "No matching results.")}
+                      {hasFilters
+                        ? bi(
+                            "لا توجد نتائج مطابقة للفلاتر الحالية.",
+                            "No users match the current filters.",
+                          )
+                        : bi("لا يوجد مستخدمون بعد.", "No users yet.")}
                     </td>
                   </tr>
                 )}
@@ -403,7 +453,7 @@ export function UsersPage() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
-            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+            <Button onClick={() => saveMutation.mutate()} loading={saveMutation.isPending}>
               {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>

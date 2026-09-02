@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2, ShieldQuestion, XCircle } from "lucide-react";
@@ -5,17 +6,13 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
 export const Route = createFileRoute("/certificate/$id")({
-  head: () => ({
-    meta: [
-      { title: "التحقق من شهادة | أكاديميا" },
-      {
-        name: "description",
-        content: "تحقّق من صحة شهادة رقمية صادرة عن منصة أكاديميا برقم الشهادة.",
-      },
-      { property: "og:title", content: "التحقق من شهادة | أكاديميا" },
-      { property: "og:description", content: "التحقق يتم مقابل سجل الشهادات الرسمي للمنصة." },
-    ],
-  }),
+  head: (ctx) => {
+    const { params } = ctx;
+    return createSeoHead(
+      `/certificate/${encodeURIComponent(params.id)}`,
+      localeFromSearch(ctx.match.search),
+    );
+  },
   component: CertificatePage,
 });
 

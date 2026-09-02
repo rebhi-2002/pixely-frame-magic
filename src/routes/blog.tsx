@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarDays, Clock3, NotebookPen } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -12,14 +13,7 @@ const description =
   "مقالات عملية عن تنظيم وقت المذاكرة، تقنيات الاستدعاء النشط، والتحضير للامتحان الوزاري — من فريق أكاديميا.";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/blog", localeFromSearch(ctx.match.search)),
   component: BlogIndex,
 });
 

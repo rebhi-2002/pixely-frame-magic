@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Gift } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -6,14 +7,13 @@ import { SessionCta } from "@/components/site/session-cta";
 import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/invite/$code")({
-  head: () => ({
-    meta: [
-      { title: "دعوة إلى أكاديميا" },
-      { name: "description", content: "انضم إلى أكاديميا عبر رابط دعوة واحصل على مزايا البداية." },
-      { property: "og:title", content: "دعوة إلى أكاديميا" },
-      { property: "og:description", content: "انضم عبر رابط صديقك واحصل على شهر بريميوم تجريبي." },
-    ],
-  }),
+  head: (ctx) => {
+    const { params } = ctx;
+    return createSeoHead(
+      `/invite/${encodeURIComponent(params.code)}`,
+      localeFromSearch(ctx.match.search),
+    );
+  },
   component: InvitePage,
 });
 

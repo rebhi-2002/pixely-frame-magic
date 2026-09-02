@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -10,19 +11,12 @@ import { blogPosts, getBlogPost } from "@/content/blog-posts";
 import { useBi } from "@/lib/bi";
 
 export const Route = createFileRoute("/blog/$slug")({
-  head: ({ params }) => {
-    const post = getBlogPost(params.slug);
-    const title = post ? `${post.title} | مدونة أكاديميا` : "مقال غير موجود | أكاديميا";
-    const description = post?.excerpt ?? "لم نتمكن من إيجاد هذا المقال.";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "article" },
-      ],
-    };
+  head: (ctx) => {
+    const { params } = ctx;
+    return createSeoHead(
+      `/blog/${encodeURIComponent(params.slug)}`,
+      localeFromSearch(ctx.match.search),
+    );
   },
   component: BlogPostPage,
 });
@@ -118,7 +112,9 @@ function BlogPostPage() {
                   params={{ slug: o.slug }}
                   className="hover-lift shadow-elevation-1 rounded-2xl border border-border bg-card p-5"
                 >
-                  <p className="text-sm font-bold leading-snug text-foreground">{bi(o.title, o.titleEn)}</p>
+                  <p className="text-sm font-bold leading-snug text-foreground">
+                    {bi(o.title, o.titleEn)}
+                  </p>
                 </Link>
               ))}
             </div>

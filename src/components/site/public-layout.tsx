@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
 import { BrandLockup } from "@/components/site/brand-logo";
@@ -10,6 +10,15 @@ import { useSession } from "@/hooks/use-session";
 import { useScrolled } from "@/hooks/use-scrolled";
 import { allowedPublicPaths } from "@/lib/bi";
 import { cn } from "@/lib/utils";
+import { usePreferences } from "@/components/providers/preferences-provider";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const navItems = [
   { to: "/", key: "nav.home" },
@@ -47,6 +56,8 @@ export function BrandMark({ className = "" }: { className?: string }) {
 export function PublicLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { session, isSignedIn } = useSession();
+  const { locale } = usePreferences();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
   const allowed = allowedPublicPaths(session?.roleKey ?? null);
   const visible = <T extends { to: string }>(items: readonly T[]) =>
@@ -85,6 +96,70 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="flex items-center gap-2">
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={t("common.openMenu")}
+                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+                >
+                  <Menu aria-hidden="true" className="size-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side={locale === "ar" ? "left" : "right"}
+                className="w-[min(88vw,360px)]"
+              >
+                <SheetHeader className="text-start">
+                  <SheetTitle>{t("common.menu")}</SheetTitle>
+                  <SheetDescription>{t("nav.tagline")}</SheetDescription>
+                </SheetHeader>
+                <nav className="mt-8 grid gap-1" aria-label={t("common.navigation")}>
+                  {nav.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      activeOptions={{ exact: item.to === "/" }}
+                      activeProps={{ className: "bg-secondary text-foreground" }}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-3 py-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="mt-6 grid gap-2 border-t border-border pt-6">
+                  {isSignedIn && session ? (
+                    <Link
+                      to={session.home}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
+                    >
+                      <LayoutDashboard aria-hidden="true" className="size-4" />
+                      {t("common.dashboard")}
+                    </Link>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="inline-flex items-center justify-center rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+                      >
+                        {t("common.signIn")}
+                      </Link>
+                      <Link
+                        to="/signup"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
+                      >
+                        {t("common.startFree")}
+                      </Link>
+                    </>
+                  )}
+                  <PreferenceToggles className="justify-center pt-2" />
+                </div>
+              </SheetContent>
+            </Sheet>
             {isSignedIn && session ? (
               <>
                 <Link
@@ -114,34 +189,6 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               </>
             )}
           </div>
-        </div>
-        <div
-          className={cn(
-            "border-t px-3 py-2 backdrop-blur transition-colors duration-300 lg:hidden",
-            scrolled ? "border-border bg-background/85" : "border-transparent bg-background/60",
-          )}
-        >
-          <nav className="segmented-nav">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                activeOptions={{ exact: item.to === "/" }}
-                activeProps={{ className: "bg-background text-foreground shadow-sm" }}
-                className="rounded-[10px] px-3 py-1.5 text-xs font-bold whitespace-nowrap text-muted-foreground transition-all duration-200"
-              >
-                {t(item.key)}
-              </Link>
-            ))}
-            {isSignedIn && session && (
-              <Link
-                to={session.home}
-                className="rounded-[10px] bg-primary px-3 py-1.5 text-xs font-bold whitespace-nowrap text-primary-foreground"
-              >
-                {t("common.dashboard")}
-              </Link>
-            )}
-          </nav>
         </div>
       </header>
 

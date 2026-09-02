@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,17 +10,13 @@ import { useBi } from "@/lib/bi";
 import { listPublicCourses } from "@/lib/public-catalog.functions";
 
 export const Route = createFileRoute("/teacher/$id")({
-  head: () => ({
-    meta: [
-      { title: "ملف المعلّم | أكاديميا" },
-      {
-        name: "description",
-        content: "تعرّف على المعلّم، كورساته، وتقييمات طلابه على أكاديميا.",
-      },
-      { property: "og:title", content: "ملف المعلّم | أكاديميا" },
-      { property: "og:description", content: "كورسات المعلّم وآراء طلابه على منصة أكاديميا." },
-    ],
-  }),
+  head: (ctx) => {
+    const { params } = ctx;
+    return createSeoHead(
+      `/teacher/${encodeURIComponent(params.id)}`,
+      localeFromSearch(ctx.match.search),
+    );
+  },
   component: TeacherProfilePage,
 });
 
@@ -28,7 +25,10 @@ function TeacherProfilePage() {
   const { t } = useTranslation();
   const bi = useBi();
   const fetchCourses = useServerFn(listPublicCourses);
-  const { data: rows, isLoading } = useQuery({ queryKey: ["public-courses"], queryFn: () => fetchCourses() });
+  const { data: rows, isLoading } = useQuery({
+    queryKey: ["public-courses"],
+    queryFn: () => fetchCourses(),
+  });
   const courses = (rows ?? []).filter((c) => c.teacherId === id);
   const reviews = t("teacherProfile.reviews", { returnObjects: true }) as {
     n: string;

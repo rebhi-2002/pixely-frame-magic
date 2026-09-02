@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
@@ -9,10 +10,12 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { USERS } from "@/lib/rbac-static-data";
 import { roleHome, useBi } from "@/lib/bi";
+import { Button } from "@/components/ui/button";
 
 /* أزرار دخول سريع محلية بالكامل (بدون أي نداء شبكة) للتجربة أثناء التطوير
    فقط — تُحذف قبل النشر النهائي. راجع src/integrations/backend/auth.ts. */
 const DEMO_USERS = USERS.filter((u) => u.id !== "u-admin");
+const demoEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
 
 const title = "تسجيل الدخول | Academia";
 const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";
@@ -23,16 +26,7 @@ export const Route = createFileRoute("/login")({
     /* المستخدم المسجّل يعود للموقع العام لا للوحة التحكم مباشرة */
     if (await currentUserHome()) throw redirect({ to: "/" });
   },
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/login", localeFromSearch(ctx.match.search)),
   component: LoginPage,
 });
 
@@ -48,6 +42,8 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
   function quickLogin(userId: string) {
     const user = USERS.find((u) => u.id === userId);
@@ -58,9 +54,19 @@ function LoginPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    setErrors({});
+    setServerError(null);
     const parsed = schema.safeParse({ email, password });
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
+      const nextErrors: { email?: string; password?: string } = {};
+      for (const issue of parsed.error.issues) {
+        const field = issue.path[0];
+        if ((field === "email" || field === "password") && !nextErrors[field]) {
+          nextErrors[field] = issue.message;
+        }
+      }
+      setErrors(nextErrors);
+      toast.error(bi("راجع الحقول المظللة", "Check the highlighted fields"));
       return;
     }
     setLoading(true);
@@ -69,7 +75,10 @@ function LoginPage() {
       toast.success(t("authPages.login.success"));
       navigate({ to: "/", replace: true });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "…");
+      const message =
+        err instanceof Error ? err.message : bi("تعذّر تسجيل الدخول", "Sign in failed");
+      setServerError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -89,6 +98,7 @@ function LoginPage() {
           value={email}
           onChange={setEmail}
           autoComplete="email"
+          error={errors.email}
         />
         <AuthField
           id="password"
@@ -97,6 +107,7 @@ function LoginPage() {
           value={password}
           onChange={setPassword}
           autoComplete="current-password"
+          error={errors.password}
         />
         <div className="flex justify-end">
           <Link
@@ -106,44 +117,50 @@ function LoginPage() {
             {t("authPages.login.forgot")}
           </Link>
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-shine hover-press w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
-        >
-          {loading ? t("common.loading") : t("authPages.login.submit")}
-        </button>
+        {serverError && (
+          <div
+            role="alert"
+            className="rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm font-semibold text-destructive"
+          >
+            {serverError}
+          </div>
+        )}
+        <Button type="submit" loading={loading} className="w-full">
+          {t("authPages.login.submit")}
+        </Button>
       </form>
 
-      <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
-        <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
-          {bi(
-            "دخول سريع للتجربة (محلي بالكامل — مؤقت)",
-            "Quick test login (fully local — temporary)",
-          )}
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => quickLogin("u-admin")}
-            className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
-          >
-            {bi("أدمن", "Admin")}
-          </button>
-          {DEMO_USERS.map((u) => (
+      {demoEnabled && (
+        <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
+          <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
+            {bi(
+              "دخول سريع للتجربة (محلي بالكامل — مؤقت)",
+              "Quick test login (fully local — temporary)",
+            )}
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
             <button
-              key={u.id}
               type="button"
               disabled={loading}
-              onClick={() => quickLogin(u.id)}
+              onClick={() => quickLogin("u-admin")}
               className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
             >
-              {u.role_name}
+              {bi("أدمن", "Admin")}
             </button>
-          ))}
+            {DEMO_USERS.map((u) => (
+              <button
+                key={u.id}
+                type="button"
+                disabled={loading}
+                onClick={() => quickLogin(u.id)}
+                className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
+              >
+                {u.role_name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="mt-6 space-y-1.5 text-center text-xs text-muted-foreground">
         <p>

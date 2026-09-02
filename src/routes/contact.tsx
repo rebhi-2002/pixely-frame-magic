@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Headset, Mail, MessageSquareText, Send } from "lucide-react";
@@ -11,14 +12,7 @@ const title = "تواصل معنا | أكاديميا";
 const description = "عندك سؤال، اقتراح، أو بدك تعمل شراكة مدرسية؟ فريق أكاديميا جاهز يسمعك.";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/contact", localeFromSearch(ctx.match.search)),
   component: ContactPage,
 });
 

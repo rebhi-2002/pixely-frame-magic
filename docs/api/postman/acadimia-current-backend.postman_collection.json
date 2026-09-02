@@ -1,0 +1,775 @@
+{
+  "info": {
+    "name": "Acadimia API - Current Backend",
+    "_postman_id": "acadimia-current-backend",
+    "description": "Generated from deployed Swagger and backend controllers. Authentication is ASP.NET Identity cookie-based; Postman cookie jar must be enabled.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://ziadkamalaln2842-001-site1.etempurl.com"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "userTypeId",
+      "value": "1"
+    },
+    {
+      "key": "genderId",
+      "value": "1"
+    },
+    {
+      "key": "pageId",
+      "value": "1"
+    },
+    {
+      "key": "categoryId",
+      "value": "1"
+    },
+    {
+      "key": "constantId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/Auth/Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Auth/Login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Auth",
+                "Login"
+              ]
+            },
+            "description": "بدون مصادقة مسبقة. يحفظ Postman cookie الجلسة تلقائيًا من Set-Cookie.\n\nAuthentication uses ASP.NET Identity cookie. Do not add a Bearer token.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"returnUrl\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                    "const json = pm.response.json();",
+                    "pm.test(\"OperationResult is present\", function () { pm.expect(json).to.have.property(\"success\"); });",
+                    "if (json.success) pm.environment.set(\"loginSuccess\", \"true\");"
+                  ]
+                }
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/Auth/Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Auth/Logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Auth",
+                "Logout"
+              ]
+            },
+            "description": "يستخدم cookie الجلسة المحفوظة في Postman."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Constant",
+      "item": [
+        {
+          "name": "POST /api/Constant/GetAll",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Constant/GetAll",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Constant",
+                "GetAll"
+              ]
+            },
+            "description": "يعيد recordsFiltered وtotalCount وdata.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"searchValue\": \"\",\n  \"sortColumn\": \"Name\",\n  \"sortColumnDirection\": \"asc\",\n  \"pageSize\": 10,\n  \"skip\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/Constant/CreateEditModal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Constant/CreateEditModal?id={{constantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Constant",
+                "CreateEditModal"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{constantId}}"
+                }
+              ]
+            },
+            "description": "يعيد Constant وParents."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/Constant/CreateEdit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Constant/CreateEdit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Constant",
+                "CreateEdit"
+              ]
+            },
+            "description": "name بطول 3 إلى 250 حرفًا.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 0,\n  \"name\": \"قيمة تجريبية\",\n  \"comment\": \"وصف اختياري\",\n  \"icon\": \"Circle\",\n  \"parentId\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/Constant/Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Constant/Delete?id={{constantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Constant",
+                "Delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{constantId}}"
+                }
+              ]
+            },
+            "description": "id رقم صحيح."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Page",
+      "item": [
+        {
+          "name": "POST /api/Page/GetAll",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Page/GetAll",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Page",
+                "GetAll"
+              ]
+            },
+            "description": "يعيد recordsFiltered وrecordsTotal وdata.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"searchValue\": \"\",\n  \"sortColumn\": \"Name\",\n  \"sortColumnDirection\": \"asc\",\n  \"pageSize\": 10,\n  \"skip\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/Page/CreateEditModal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Page/CreateEditModal?id={{pageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Page",
+                "CreateEditModal"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{pageId}}"
+                }
+              ]
+            },
+            "description": "يعيد Page وModules وCategories وParents."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/Page/CreateEdit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Page/CreateEdit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Page",
+                "CreateEdit"
+              ]
+            },
+            "description": "name وnameEn وcategoryId مطلوبة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 0,\n  \"name\": \"صفحة تجريبية\",\n  \"nameEn\": \"Demo page\",\n  \"link\": \"/demo\",\n  \"icon\": \"LayoutDashboard\",\n  \"inMenu\": true,\n  \"isActive\": true,\n  \"isAjax\": false,\n  \"parentId\": null,\n  \"moduleId\": null,\n  \"categoryId\": \"{{categoryId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/Page/Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Page/Delete?id={{pageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Page",
+                "Delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{pageId}}"
+                }
+              ]
+            },
+            "description": "id رقم صحيح."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "GET /api/User/MyProfileModal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/MyProfileModal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "MyProfileModal"
+              ]
+            },
+            "description": "يعيد MyProfileDto وGenders."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/User/MyProfile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/MyProfile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "MyProfile"
+              ]
+            },
+            "description": "يتطلب كل الحقول المطلوبة؛ id يجب أن يطابق المستخدم الحالي.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{userId}}\",\n  \"name\": \"اسم المستخدم\",\n  \"email\": \"{{email}}\",\n  \"phoneNumber\": \"0590000000\",\n  \"genderId\": \"{{genderId}}\",\n  \"avatar\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/User/ChangePasswordModal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/ChangePasswordModal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "ChangePasswordModal"
+              ]
+            },
+            "description": "يعيد نموذج ChangePasswordDto فارغًا."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/User/ChangePassword",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/ChangePassword",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "ChangePassword"
+              ]
+            },
+            "description": "كلمة المرور الجديدة يجب أن توافق قواعد Identity في الباك إند.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{password}}\",\n  \"newPassword\": \"NewPass123\",\n  \"confirmPassword\": \"NewPass123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/User/GetAll",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/GetAll",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "GetAll"
+              ]
+            },
+            "description": "يعيد recordsFiltered وtotalCount وdata. الفلاتر اختيارية.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"searchValue\": \"\",\n  \"sortColumn\": \"Name\",\n  \"sortColumnDirection\": \"asc\",\n  \"pageSize\": 10,\n  \"skip\": 0,\n  \"userTypeId\": null,\n  \"genderId\": null,\n  \"isActiveSearch\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/User/CreateEditModal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/CreateEditModal?id={{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "CreateEditModal"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "استخدم id فارغًا أو احذفه للإنشاء، وid مستخدم فعلي للتعديل."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/User/CreateEdit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/CreateEdit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "CreateEdit"
+              ]
+            },
+            "description": "Password وConfirmPassword مطلوبان عند الإنشاء، ويُتجاهلان عند التعديل حسب controller.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"password\": \"TempPass123\",\n  \"confirmPassword\": \"TempPass123\",\n  \"name\": \"مستخدم تجريبي\",\n  \"email\": \"new.user@example.com\",\n  \"phoneNumber\": \"0590000000\",\n  \"genderId\": \"{{genderId}}\",\n  \"userTypeId\": \"{{userTypeId}}\",\n  \"isActive\": true,\n  \"avatar\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/User/Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/User/Delete?id={{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "User",
+                "Delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "لا يمكن حذف الحساب المسجل دخوله حسب controller."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "UserPermission",
+      "item": [
+        {
+          "name": "POST /api/UserPermission/GetUserTypePermissions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/UserPermission/GetUserTypePermissions?userTypeId={{userTypeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "UserPermission",
+                "GetUserTypePermissions"
+              ],
+              "query": [
+                {
+                  "key": "userTypeId",
+                  "value": "{{userTypeId}}"
+                }
+              ]
+            },
+            "description": "يعيد مصفوفة page IDs المسموحة."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/UserPermission/SavePermissions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/UserPermission/SavePermissions?userTypeId={{userTypeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "UserPermission",
+                "SavePermissions"
+              ],
+              "query": [
+                {
+                  "key": "userTypeId",
+                  "value": "{{userTypeId}}"
+                }
+              ]
+            },
+            "description": "يحفظ القائمة كاملة لنوع المستخدم؛ العناصر غير الموجودة في القائمة تُحذف.",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": 0,\n    \"userTypeId\": \"{{userTypeId}}\",\n    \"userType\": {\n      \"id\": \"{{userTypeId}}\"\n    },\n    \"pageId\": \"{{pageId}}\",\n    \"page\": {\n      \"id\": \"{{pageId}}\"\n    }\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

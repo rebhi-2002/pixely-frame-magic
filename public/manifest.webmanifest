@@ -1,0 +1,19 @@
+{
+  "name": "Academia — Student focus and achievement",
+  "short_name": "Academia",
+  "description": "An organized learning platform for students, teachers and parents.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/?lang=ar",
+  "display": "standalone",
+  "theme_color": "#102a43",
+  "background_color": "#102a43",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

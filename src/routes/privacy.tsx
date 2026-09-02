@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
@@ -7,14 +8,7 @@ const description =
   "كيف نجمع بيانات الطلاب والمعلمين، وكيف نحميها، وما الذي يظهر لولي الأمر — بوضوح وبدون لغة قانونية معقدة.";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/privacy", localeFromSearch(ctx.match.search)),
   component: LegalPage,
 });
 

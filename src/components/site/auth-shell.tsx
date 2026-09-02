@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { BookOpenCheck, LineChart, XCircle } from "lucide-react";
+import { BookOpenCheck, Eye, EyeOff, LineChart, XCircle } from "lucide-react";
 import { BrandMark } from "@/components/site/public-layout";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
 import { WelcomeIllustration } from "@/components/site/illustrations";
@@ -107,6 +107,7 @@ export function AuthField({
   placeholder,
   autoComplete,
   hint,
+  error,
 }: {
   id: string;
   label: string;
@@ -116,22 +117,57 @@ export function AuthField({
   placeholder?: string;
   autoComplete?: string;
   hint?: string;
+  error?: string;
 }) {
+  const bi = useBi();
+  const [visible, setVisible] = useState(false);
+  const isPassword = type === "password";
+  const describedBy =
+    [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
+
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-semibold text-foreground">
         {label}
       </label>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary"
-      />
-      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+      <div className="relative">
+        <input
+          id={id}
+          type={isPassword && visible ? "text" : type}
+          value={value}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          onChange={(e) => onChange(e.target.value)}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
+          className="h-10 w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20"
+        />
+        {isPassword && (
+          <button
+            type="button"
+            aria-label={bi("إظهار كلمة المرور", "Show password")}
+            title={bi("إظهار كلمة المرور", "Show password")}
+            onClick={() => setVisible((current) => !current)}
+            className="absolute end-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none"
+          >
+            {visible ? (
+              <EyeOff aria-hidden="true" className="size-4" />
+            ) : (
+              <Eye aria-hidden="true" className="size-4" />
+            )}
+          </button>
+        )}
+      </div>
+      {hint && (
+        <p id={`${id}-hint`} className="text-xs text-muted-foreground">
+          {hint}
+        </p>
+      )}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="text-xs font-semibold text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

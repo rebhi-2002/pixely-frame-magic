@@ -162,14 +162,26 @@ export function RowList({ rows, to }: { rows: Row[]; to?: string }) {
   );
 }
 
-export function DataTable({ head, rows }: { head: string[]; rows: (string | ReactNode)[][] }) {
+export function DataTable({
+  head,
+  rows,
+  caption,
+}: {
+  head: string[];
+  rows: (string | ReactNode)[][];
+  caption?: string;
+}) {
   return (
-    <div className="-mx-5 overflow-x-auto px-5">
-      <table className="w-full min-w-[520px] text-right text-sm">
+    <div className="-mx-5 overflow-x-auto px-5" role="region" aria-label={caption}>
+      <table className="w-full min-w-[520px] text-right text-sm" aria-label={caption}>
         <thead>
           <tr className="border-b border-border text-xs text-muted-foreground">
             {head.map((h) => (
-              <th key={h} className="px-2 pb-2 font-semibold ltr:text-left rtl:text-right">
+              <th
+                scope="col"
+                key={h}
+                className="px-2 pb-2 font-semibold ltr:text-left rtl:text-right"
+              >
                 {h}
               </th>
             ))}
@@ -210,9 +222,21 @@ export function Progress({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function EmptyState({ text, icon }: { text: string; icon?: string }) {
+export function EmptyState({
+  text,
+  icon,
+  title,
+  description,
+  action,
+}: {
+  text?: string;
+  icon?: string;
+  title?: string;
+  description?: string;
+  action?: ReactNode;
+}) {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 py-8 text-center">
+    <div className="flex min-h-40 flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 p-6 text-center">
       {icon ? (
         <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
           <DynamicIcon name={icon} className="size-5" />
@@ -220,7 +244,11 @@ export function EmptyState({ text, icon }: { text: string; icon?: string }) {
       ) : (
         <EmptyIllustration className="h-20 w-auto" />
       )}
-      <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+      {title && <h3 className="mt-1 font-display text-sm font-bold text-foreground">{title}</h3>}
+      {(description ?? text) && (
+        <p className="mt-1 max-w-md text-sm text-muted-foreground">{description ?? text}</p>
+      )}
+      {action && <div className="mt-3">{action}</div>}
     </div>
   );
 }

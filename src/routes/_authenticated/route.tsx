@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { getStoredUserId, isAuthenticated } from "@/integrations/backend/auth";
+import {
+  getStoredUserId,
+  isAuthenticated,
+  isDemoSession,
+  verifyServerSession,
+} from "@/integrations/backend/auth";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
@@ -12,9 +17,18 @@ import { useAccess } from "@/hooks/use-access";
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    // فحص محلي فقط (بدون نداء شبكة) — راجع ملاحظة src/integrations/backend/auth.ts
-    if (!isAuthenticated()) throw redirect({ to: "/login" });
-    return { user: { id: getStoredUserId() ?? "u-admin" } };
+    // Demo routes remain available only in local development.
+    if (import.meta.env.DEV && isDemoSession()) {
+      return { user: { id: getStoredUserId() ?? "u-demo" } };
+    }
+
+    if (!isAuthenticated() || !(await verifyServerSession())) {
+      throw redirect({ to: "/login" });
+    }
+
+    const userId = getStoredUserId();
+    if (!userId) throw redirect({ to: "/login" });
+    return { user: { id: userId } };
   },
   component: AuthenticatedLayout,
 });

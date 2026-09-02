@@ -22,7 +22,8 @@ var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)"
 var r=document.documentElement;
 r.setAttribute("data-theme",d?"dark":"light");
 r.classList.toggle("dark",d);
-var l=localStorage.getItem("${LOCALE_STORAGE_KEY}")||"ar";
+var q=new URLSearchParams(window.location.search).get("lang");
+var l=q==="ar"||q==="en"?q:(localStorage.getItem("${LOCALE_STORAGE_KEY}")||"ar");
 if(l!=="ar"&&l!=="en")l="ar";
 r.setAttribute("lang",l);
 r.setAttribute("dir",l==="en"?"ltr":"rtl");
@@ -60,6 +61,14 @@ function persistToProfile(_patch: { theme_pref?: ThemePref; locale?: Locale }) {
   /* no-op مؤقتاً — راجع التعليق أعلاه */
 }
 
+function syncLocaleUrl(locale: Locale) {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  if (locale === "en") url.searchParams.set("lang", "en");
+  else url.searchParams.delete("lang");
+  window.history.replaceState(window.history.state, "", url);
+}
+
 function readStoredTheme(): ThemePref {
   if (typeof window === "undefined") return "auto";
   const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null;
@@ -68,6 +77,10 @@ function readStoredTheme(): ThemePref {
 
 function readStoredLocale(): Locale {
   if (typeof window === "undefined") return "ar";
+  const queryLocale = new URLSearchParams(window.location.search).get("lang");
+  if (queryLocale && SUPPORTED_LOCALES.includes(queryLocale as Locale)) {
+    return queryLocale as Locale;
+  }
   const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
   return stored && SUPPORTED_LOCALES.includes(stored) ? stored : "ar";
 }
@@ -120,6 +133,7 @@ function PreferencesState({ children }: { children: ReactNode }) {
   const setLocale = useCallback((next: Locale) => {
     const persist = (value: Locale) => {
       localStorage.setItem(LOCALE_STORAGE_KEY, value);
+      syncLocaleUrl(value);
       void persistToProfile({ locale: value });
     };
 

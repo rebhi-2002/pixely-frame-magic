@@ -21,6 +21,8 @@ import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { NotFoundIllustration } from "@/components/site/illustrations";
 import { currentUserHome } from "@/lib/session-home";
+import { SeoManager } from "@/components/app/seo-manager";
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -52,8 +54,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   const { t } = useTranslation();
-  useEffect(() => {
-  }, [error]);
+  useEffect(() => {}, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -94,43 +95,32 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Academia | منصة الطالب للتنظيم والإنجاز" },
-      {
-        name: "description",
-        content:
-          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
-      { name: "twitter:title", content: "Academia | منصة الطالب للتنظيم والإنجاز" },
-      {
-        property: "og:description",
-        content:
-          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "أكاديميا: مكتبة ذكية، مجتمعات مواد، متابعة إنجاز، محاكي امتحان — منصة عربية تساعد الطالب ينظّم دراسته وينجز.",
-      },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
-      },
+  head: (ctx) => {
+    const seo = createSeoHead("/", localeFromSearch(ctx.match.search));
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        ...seo.meta,
+      ],
+      links: [
+        ...seo.links,
+        // القسم PWA — يربط بيانات التثبيت (الاسم/الأيقونات/الألوان) بالصفحة
+        { rel: "manifest", href: "/manifest.json" },
+        { rel: "stylesheet", href: appCss },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+        },
 
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-    ],
-  }),
+        { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+        { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
+      ],
+      scripts: seo.scripts,
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -169,13 +159,29 @@ function AuthSync() {
   return null;
 }
 
+// القسم PWA — يسجّل الـService Worker على المتصفح فقط (لا يعمل شيء أثناء SSR)
+// شرط أساسي حتى يعتبر Chrome/Android الموقع "قابل للتثبيت" كتطبيق PWA/TWA.
+function ServiceWorkerRegistrar() {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // فشل التسجيل لا يكسر الموقع — يبقى يعمل عاديًا كموقع ويب فقط
+      });
+    }
+  }, []);
+
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <PreferencesProvider>
+        <SeoManager />
         <AuthSync />
+        <ServiceWorkerRegistrar />
         <IdleLogoutWatcher />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />

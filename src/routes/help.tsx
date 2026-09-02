@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LifeBuoy, Search } from "lucide-react";
@@ -5,20 +6,7 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
 export const Route = createFileRoute("/help")({
-  head: () => ({
-    meta: [
-      { title: "مركز المساعدة | أكاديميا" },
-      {
-        name: "description",
-        content: "إجابات سريعة عن الحساب، الاشتراك، المكتبة، والخصوصية في أكاديميا.",
-      },
-      { property: "og:title", content: "مركز المساعدة | أكاديميا" },
-      {
-        property: "og:description",
-        content: "أجوبة مختصرة لأكثر الأسئلة تكراراً على منصة أكاديميا.",
-      },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/help", localeFromSearch(ctx.match.search)),
   component: HelpPage,
 });
 

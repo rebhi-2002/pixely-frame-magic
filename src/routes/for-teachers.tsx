@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BadgeCheck, Coins, LineChart, Upload } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -12,14 +13,7 @@ const description =
   "ارفع محتواك التعليمي، جهّز بنوك أسئلة، تابع أداء طلابك بتحليلات دقيقة، واحصل على دخل من اشتراكات المنصة.";
 
 export const Route = createFileRoute("/for-teachers")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/for-teachers", localeFromSearch(ctx.match.search)),
   component: ForTeachers,
 });
 

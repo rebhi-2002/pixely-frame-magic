@@ -426,6 +426,10 @@
     }
   },
   "blog": {
+    "meta": {
+      "title": "Academia Blog | Study organization and exam prep",
+      "description": "Practical study organization, learning and national-exam preparation articles for high-school students."
+    },
     "h1": "Academia Blog",
     "sub": "Practical articles on study organization and exam prep — no fluff.",
     "readMinutes_one": "{{count}} min read",

@@ -26,16 +26,16 @@ export function TestimonialsSection({ className }: { className?: string }) {
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {[0, 1, 2].map((i) => (
-            <Reveal key={i} delay={i * 0.08}>
-              <div className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-8">
-                <Quote className="size-6 text-muted-foreground/50" />
-                <p className="text-xs text-muted-foreground">{t("testimonials.placeholder")}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal delay={0.08}>
+          <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-8 sm:p-10">
+            <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Quote aria-hidden="true" className="size-6" />
+            </span>
+            <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
+              {t("testimonials.placeholder")}
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

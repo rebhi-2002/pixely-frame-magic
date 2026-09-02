@@ -24,16 +24,16 @@ import {
 } from "./rbac-static-data";
 
 function resolveUserAndRole(userId: string) {
-  const user = USERS.find((u) => u.id === userId) ?? USERS[0] ?? null;
+  const user = USERS.find((u) => u.id === userId) ?? null;
   const role = user ? ROLES.find((r) => r.id === user.role_id) : null;
   const isAdmin = role?.name === "مدير عام";
   return { user, role, isAdmin };
 }
 
 /**
- * الأدمن الحقيقي (مدير عام) دايماً بيرجع true. باقي الأدوار (معلم/مشرف/ولي
- * أمر/طالب) — سواء حساب تجريبي محلي أو حساب حقيقي لاحقاً من الباك اند —
- * بيرجع false، وبيتحدد وصولهم عبر ROLE_PERMISSION_GRANTS + pageMatchesRole.
+ * الأدمن في بيانات demo (مدير عام) دايماً بيرجع true. الحسابات الحقيقية
+ * القادمة من الباك إند لا تُطابق static users تلقائيًا، ولذلك لا تحصل على دور
+ * أو صلاحيات من هذا الملف إلى أن يصل عقد موثوق للـrole/permissions.
  */
 export async function checkIsAdmin(userId: string): Promise<boolean> {
   return resolveUserAndRole(userId).isAdmin;
@@ -41,6 +41,20 @@ export async function checkIsAdmin(userId: string): Promise<boolean> {
 
 export async function loadAccess(userId: string): Promise<MyAccess> {
   const { user, role, isAdmin } = resolveUserAndRole(userId);
+
+  // A real backend user is not authorized by the static demo matrix until the
+  // backend supplies a trusted role/permission contract. Never infer a role
+  // from another static user or expose a default student/admin shell.
+  if (!user) {
+    return {
+      userId,
+      isAdmin: false,
+      profile: null,
+      modules: [],
+      permissions: {},
+    };
+  }
+
   const allPermKeys = PERMISSION_KEYS.map((p) => p.key);
   const sessionRoleKey = roleKeyFromName(role?.name, isAdmin);
   const grantedSet = isAdmin ? null : (ROLE_PERMISSION_GRANTS[role?.id ?? ""] ?? new Set<string>());

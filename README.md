@@ -1,25 +1,29 @@
-# Screenshot Perfect
+# Academia Frontend
 
-Implement exactly the screenshot and nothing else
+واجهة منصة Academia التعليمية المبنية على React وTypeScript وVite وTanStack Router/Start.
 
-## Development
+## Quick start
 
-You need Node.js and npm.
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
+npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-## Deployment
+المتغير الأساسي هو `VITE_API_BASE_URL` ويجب أن يكون أصل الباك إند فقط، مثل `https://ziadkamalaln2842-001-site1.etempurl.com`.
 
-This project targets TanStack Start with Nitro. Set the `NITRO_PRESET`
-environment variable on your hosting platform:
+## Commands
 
-- Vercel: `NITRO_PRESET=vercel`
-- Netlify: `NITRO_PRESET=netlify`
+```bash
+npm run dev
+npm run lint
+npm run build
+```
 
-Also set `VITE_API_BASE_URL` to your backend's public URL in the
-platform's environment variables (never commit real secrets to `.env`).
+## Documentation
+
+ابدأ من [`docs/README.md`](docs/README.md). توثيق API وملفات Postman موجودة في [`docs/api/postman`](docs/api/postman)، وتوثيق حماية المسارات في [`docs/architecture/auth-and-route-protection.md`](docs/architecture/auth-and-route-protection.md).
+
+## Current integration boundary
+
+المصادقة وبعض عمليات المستخدمين والصفحات والثوابت والصلاحيات متاحة حاليًا. الكورسات والدروس والاختبارات والتسجيلات والشهادات والإشعارات تنتظر عقود API مكتملة. لا تعتبر UI guards أو localStorage حماية للخادم.

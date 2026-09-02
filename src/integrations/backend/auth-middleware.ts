@@ -1,19 +1,25 @@
-// بديل مؤقت لـ requireSupabaseAuth (integrations/supabase/auth-middleware.ts
-// سابقاً). الباك اند الجديد ما عنده endpoint للتحقق من الجلسة على مستوى
-// السيرفر بعد (لا "/me" ولا JWT نتحقق منه هون).
-//
-// الهوية الحالية بتُقرأ من كوكي محلي بسيط (`academia_demo_user`) بيضبطه
-// الفرونت بعد أي نوع دخول (حقيقي عبر /api/Auth/Login أو تجريبي محلي عبر
-// "دخول سريع") — راجع src/integrations/backend/auth.ts. هاد الكوكي غير
-// httpOnly ومش آمن أمنياً (أي حد يقدر يغيّره من DevTools) — عادي حالياً لأن
-// البيانات وراه كلها ثابتة/تجريبية بلا معلومات حساسة حقيقية. الحماية
-// الحقيقية لازم تصير على مستوى الباك اند نفسه (ASP.NET) بعد ما يضيف endpoint
-// جلسة حقيقي — استبدل هذا الملف حينها.
+// Temporary guard for server functions backed by static demo data.
+// The browser cookie is intentionally not treated as a production identity:
+// it is client-controlled and therefore cannot authorize access to real data.
+// Replace this middleware with server-side ASP.NET Identity propagation when
+// the frontend starts invoking these functions against authenticated backend data.
 
 import { createMiddleware } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { DEMO_USER_COOKIE } from "./auth";
 
-export const requireAuth = createMiddleware({ type: "function" }).server(async ({ next }) =>
-  next({ context: { userId: getCookie(DEMO_USER_COOKIE) || "u-admin" } }),
-);
+export const requireAuth = createMiddleware({ type: "function" }).server(async ({ next }) => {
+  const demoUserId = getCookie(DEMO_USER_COOKIE);
+
+  // Static server functions are available only during local development.
+  // Never fall back to an admin identity and never use this cookie as a
+  // production authorization boundary.
+  if (!import.meta.env.DEV || !demoUserId) {
+    throw new Response("Authenticated server functions are unavailable", {
+      status: 401,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  }
+
+  return next({ context: { userId: demoUserId } });
+});

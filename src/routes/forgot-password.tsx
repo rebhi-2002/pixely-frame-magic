@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
@@ -10,16 +11,7 @@ const title = "استعادة كلمة المرور | أكاديميا";
 const description = "أرسل رابط استعادة كلمة المرور إلى بريدك الإلكتروني.";
 
 export const Route = createFileRoute("/forgot-password")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/forgot-password", localeFromSearch(ctx.match.search)),
   component: ForgotPasswordPage,
 });
 

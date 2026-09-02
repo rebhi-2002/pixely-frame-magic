@@ -1,14 +1,19 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { GraduationCap, UserRound, Users, ArrowLeft, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
+import { FeatureStatus } from "@/components/app/feedback-states";
+import { Button } from "@/components/ui/button";
+import { useBi } from "@/lib/bi";
 
 const title = "إنشاء حساب | أكاديميا";
 const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
+const signupEnabled = import.meta.env.VITE_ENABLE_SIGNUP === "true";
 
 export const Route = createFileRoute("/signup")({
   ssr: false,
@@ -18,16 +23,7 @@ export const Route = createFileRoute("/signup")({
   validateSearch: (search: Record<string, unknown>): { invite?: string } =>
     typeof search.invite === "string" ? { invite: search.invite } : {},
 
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/signup", localeFromSearch(ctx.match.search)),
   component: SignupPage,
 });
 
@@ -41,7 +37,7 @@ const schema = z.object({
 
 function SignupPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const bi = useBi();
   const [role, setRole] = useState<RoleKey | null>(null);
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -128,40 +124,55 @@ function SignupPage() {
         {t("authPages.signup.change")}
       </button>
 
-      <form onSubmit={submit} className="space-y-4">
-        <AuthField
-          id="name"
-          label={t("authPages.signup.fullName")}
-          value={fullName}
-          onChange={setFullName}
-          autoComplete="name"
+      {!signupEnabled ? (
+        <FeatureStatus
+          title={bi("التسجيل قيد التجهيز", "Sign-up is being prepared")}
+          description={bi(
+            "تسجيل الدخول يعمل حاليًا. سنفعّل إنشاء الحسابات بعد اكتمال مسار التسجيل في الباك إند.",
+            "Sign-in is available now. Account creation will open when the backend registration flow is ready.",
+          )}
+          action={
+            <Button asChild variant="outline">
+              <Link to="/login">{bi("الذهاب لتسجيل الدخول", "Go to sign in")}</Link>
+            </Button>
+          }
         />
-        <AuthField
-          id="email"
-          label={t("authPages.signup.email")}
-          type="email"
-          value={email}
-          onChange={setEmail}
-          autoComplete="email"
-        />
-        <AuthField
-          id="password"
-          label={t("authPages.signup.password")}
-          type="password"
-          value={password}
-          onChange={setPassword}
-          autoComplete="new-password"
-          hint={t("authPages.signup.passwordHint")}
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {loading ? t("common.loading") : t("authPages.signup.submit")}
-        </button>
-        <p className="text-center text-xs text-muted-foreground">{t("authPages.signup.terms")}</p>
-      </form>
+      ) : (
+        <form onSubmit={submit} className="space-y-4">
+          <AuthField
+            id="name"
+            label={t("authPages.signup.fullName")}
+            value={fullName}
+            onChange={setFullName}
+            autoComplete="name"
+          />
+          <AuthField
+            id="email"
+            label={t("authPages.signup.email")}
+            type="email"
+            value={email}
+            onChange={setEmail}
+            autoComplete="email"
+          />
+          <AuthField
+            id="password"
+            label={t("authPages.signup.password")}
+            type="password"
+            value={password}
+            onChange={setPassword}
+            autoComplete="new-password"
+            hint={t("authPages.signup.passwordHint")}
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {loading ? t("common.loading") : t("authPages.signup.submit")}
+          </button>
+          <p className="text-center text-xs text-muted-foreground">{t("authPages.signup.terms")}</p>
+        </form>
+      )}
 
       <div className="mt-6 space-y-1.5 text-center text-xs text-muted-foreground">
         <p>

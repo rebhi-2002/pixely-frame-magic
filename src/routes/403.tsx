@@ -1,18 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Forbidden } from "@/components/app/guard";
-
-const title = "غير مصرّح | أكاديميا";
-const description = "هذا القسم غير متاح لدورك الحالي على المنصة.";
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 
 export const Route = createFileRoute("/403")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { name: "robots", content: "noindex" },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/403", localeFromSearch(ctx.match.search)),
   component: Forbidden,
 });

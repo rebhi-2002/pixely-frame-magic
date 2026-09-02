@@ -102,18 +102,16 @@ export async function login(email: string, password: string): Promise<void> {
     throw new Error(result?.message || "تعذّر تسجيل الدخول");
   }
 
-  let profile: StoredProfile | null = null;
-  try {
-    const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
-    profile = normalizeProfile(payload);
-  } catch {
-    // Login نفسه نجح؛ لا نمنع الدخول إذا كان endpoint الملف غير جاهز.
+  const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+  const profile = normalizeProfile(payload);
+  if (!profile) {
+    throw new Error("تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي");
   }
 
   writeStoredSession({
-    email: profile?.email ?? email,
+    email: profile.email,
     loggedInAt: Date.now(),
-    userId: profile?.id ?? "u-admin",
+    userId: profile.id,
     isDemo: false,
     profile,
   });
@@ -121,6 +119,10 @@ export async function login(email: string, password: string): Promise<void> {
 
 /** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد. */
 export function loginAsDemo(userId: string): void {
+  if (!import.meta.env.DEV) {
+    throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
+  }
+
   writeStoredSession({
     email: null,
     loggedInAt: Date.now(),
@@ -128,6 +130,36 @@ export function loginAsDemo(userId: string): void {
     isDemo: true,
     profile: null,
   });
+}
+
+export function isDemoSession(): boolean {
+  return readStoredSession()?.isDemo === true;
+}
+
+/** يتحقق من جلسة ASP.NET Identity من خلال endpoint الخادم. */
+export async function verifyServerSession(): Promise<boolean> {
+  if (typeof window === "undefined" || isDemoSession()) return false;
+
+  try {
+    const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+    const profile = normalizeProfile(payload);
+    if (!profile) return false;
+
+    const current = readStoredSession();
+    writeStoredSession({
+      email: profile.email,
+      loggedInAt: current?.loggedInAt ?? Date.now(),
+      userId: profile.id,
+      isDemo: false,
+      profile,
+    });
+    return true;
+  } catch (err) {
+    if (err instanceof ApiError && [401, 403].includes(err.status)) {
+      writeStoredSession(null);
+    }
+    return false;
+  }
 }
 
 export async function logout(): Promise<void> {

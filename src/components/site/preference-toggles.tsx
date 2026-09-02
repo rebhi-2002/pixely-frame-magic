@@ -33,7 +33,7 @@ export function LanguageToggle() {
       className={`${buttonClass} w-auto gap-1.5 px-2.5 text-xs font-bold`}
     >
       <Languages className="size-4" />
-      {locale === "ar" ? "EN" : "ع"}
+      {locale === "ar" ? "EN" : "AR"}
     </button>
   );
 }

@@ -1,3 +1,4 @@
+import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
@@ -15,16 +16,7 @@ export const Route = createFileRoute("/teacher/register")({
   beforeLoad: async () => {
     if (await currentUserHome()) throw redirect({ to: "/" });
   },
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: (ctx) => createSeoHead("/teacher/register", localeFromSearch(ctx.match.search)),
   component: TeacherRegisterPage,
 });
 

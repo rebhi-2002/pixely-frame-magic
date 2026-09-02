@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus, Settings2, Trash2 } from "lucide-react";
+import { Pencil, Plus, Settings2, Trash2 } from "lucide-react";
 import {
   AppPage,
   StatGrid,
@@ -56,6 +56,7 @@ import {
 import { listLibrarySubjects } from "@/lib/student-learning.functions";
 import type { UpcomingTaskRow, UpcomingTaskType } from "@/lib/student-learning-data";
 import { useAccess } from "@/hooks/use-access";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const title = "لوحة الطالب | أكاديميا";
 const description = "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.";
@@ -176,6 +177,7 @@ function Body() {
 
   const isLoading =
     logQuery.isLoading || tasksQuery.isLoading || statsQuery.isLoading || subjectsQuery.isLoading;
+  const hasError = logQuery.error || tasksQuery.error || statsQuery.error || subjectsQuery.error;
   const log = logQuery.data ?? [];
   const tasks = tasksQuery.data ?? [];
   const stats = statsQuery.data ?? { streakDays: 0, achievementPoints: 0 };
@@ -217,12 +219,29 @@ function Body() {
           `${stats.streakDays} يوم متتالي 🔥 — لا تكسر السلسلة اليوم`,
           `${stats.streakDays}-day streak 🔥 — don't break it today`,
         ]}
+        action={
+          <Button asChild size="sm">
+            <Link to="/library">{bi("افتح مكتبتك", "Open your library")}</Link>
+          </Button>
+        }
       />
 
       {isLoading ? (
-        <div className="flex justify-center py-10">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState label={bi("عم نجهّز لوحتك…", "Preparing your dashboard…")} />
+      ) : hasError ? (
+        <ErrorState
+          title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
       ) : (
         <>
           <StatGrid

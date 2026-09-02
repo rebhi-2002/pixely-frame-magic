@@ -109,7 +109,10 @@ export async function saveBackendUser(form: BackendUserForm): Promise<void> {
   const existing = form.id ? await loadFormData(form.id) : null;
   const existingUser = existing?.user;
   const genderId = requiredId(form.gender_id ?? existingUser?.genderId ?? null, "الجنس");
-  const userTypeId = requiredId(form.role_id ? Number(form.role_id) : existingUser?.userTypeId ?? null, "نوع المستخدم");
+  const userTypeId = requiredId(
+    form.role_id ? Number(form.role_id) : (existingUser?.userTypeId ?? null),
+    "نوع المستخدم",
+  );
 
   if (!form.id && (!form.password || !form.confirmPassword)) {
     throw new Error("كلمة المرور وتأكيدها مطلوبان عند إضافة مستخدم");

@@ -39,6 +39,9 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
           <span className="ms-3 flex-1 truncate rounded-full bg-background/70 px-3 py-1 text-[11px] text-muted-foreground">
             academia.app/dashboard
           </span>
+          <span className="shrink-0 rounded-full bg-primary/12 px-2 py-1 text-[9px] font-bold text-primary">
+            {bi("معاينة", "Preview")}
+          </span>
         </div>
 
         {/* محتوى اللوحة */}

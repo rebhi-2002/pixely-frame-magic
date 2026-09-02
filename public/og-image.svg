@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Academia — Student focus and achievement</title>
+  <desc id="desc">An organized learning platform for students, teachers and parents.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102a43"/>
+      <stop offset="1" stop-color="#1f4f72"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)"/>
+  <circle cx="1040" cy="90" r="210" fill="#38bdf8" opacity=".12"/>
+  <circle cx="160" cy="580" r="260" fill="#7dd3fc" opacity=".08"/>
+  <rect x="82" y="88" width="118" height="118" rx="30" fill="url(#accent)"/>
+  <path d="M112 124h58c10 0 18 8 18 18v48h-58c-10 0-18-8-18-18v-48Z" fill="#102a43" opacity=".92"/>
+  <path d="M130 148h40M130 166h28" stroke="#e0f2fe" stroke-width="8" stroke-linecap="round"/>
+  <text x="82" y="330" fill="#f8fafc" font-family="Arial, sans-serif" font-size="88" font-weight="700">Academia</text>
+  <text x="86" y="407" fill="#bae6fd" font-family="Arial, sans-serif" font-size="34">Student focus. Better progress.</text>
+  <text x="86" y="482" fill="#e0f2fe" font-family="Arial, sans-serif" font-size="25">Library · schedule · practice · achievement</text>
+</svg>

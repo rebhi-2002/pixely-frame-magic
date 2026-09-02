@@ -4,7 +4,8 @@ import { ROLES, USERS } from "@/lib/rbac-static-data";
 
 export async function currentUserHome(): Promise<string | null> {
   if (!isAuthenticated()) return null;
-  const userId = getStoredUserId() ?? "u-admin";
+  const userId = getStoredUserId();
+  if (!userId) return "/";
   const user = USERS.find((u) => u.id === userId);
   const role = user ? ROLES.find((r) => r.id === user.role_id) : null;
   const isAdmin = role?.name === "مدير عام";
