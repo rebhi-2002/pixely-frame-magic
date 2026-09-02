@@ -1,19 +1,19 @@
+import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  AppPage,
-  StatGrid,
-  Panel,
-  RowList,
-  Progress,
-  DataTable,
-  QuickLinks,
-  Badge,
-  EmptyState,
-} from "@/components/app/kit";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2 } from "lucide-react";
+import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart } from "@/components/app/charts";
+import {
+  listContentItems,
+  listOpenClassQuestions,
+  listQuizItems,
+  listTeacherCourses,
+} from "@/lib/teacher-teaching.functions";
 
 const title = "لوحة المعلم | أكاديميا";
 const description = "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.";
@@ -43,92 +43,174 @@ function PageRoute() {
 
 function Body() {
   const bi = useBi();
+
+  const fetchCourses = useServerFn(listTeacherCourses);
+  const fetchContent = useServerFn(listContentItems);
+  const fetchQuizzes = useServerFn(listQuizItems);
+  const fetchQuestions = useServerFn(listOpenClassQuestions);
+
+  const coursesQuery = useQuery({ queryKey: ["teacher-courses"], queryFn: () => fetchCourses() });
+  const contentQuery = useQuery({ queryKey: ["teacher-content"], queryFn: () => fetchContent() });
+  const quizzesQuery = useQuery({ queryKey: ["teacher-quizzes"], queryFn: () => fetchQuizzes() });
+  const questionsQuery = useQuery({
+    queryKey: ["open-class-questions"],
+    queryFn: () => fetchQuestions(),
+  });
+
+  const isLoading =
+    coursesQuery.isLoading ||
+    contentQuery.isLoading ||
+    quizzesQuery.isLoading ||
+    questionsQuery.isLoading;
+  const courses = coursesQuery.data ?? [];
+  const content = contentQuery.data ?? [];
+  const quizzes = quizzesQuery.data ?? [];
+  const openQuestions = questionsQuery.data ?? [];
+
+  const enrolled = courses.reduce((s, c) => s + c.enrolledCount, 0);
+  const revenue = courses.reduce((s, c) => s + c.price * c.enrolledCount, 0);
+  const pendingContent = content.filter((c) => c.status === "قيد المراجعة");
+
+  const bySubject = useMemo(() => {
+    const totals = new Map<string, number>();
+    for (const c of content)
+      totals.set(c.subjectName, (totals.get(c.subjectName) ?? 0) + c.viewsCount);
+    return Array.from(totals.entries()).map(([label, value]) => ({ label, value }));
+  }, [content]);
+
+  const tasks: {
+    title: [string, string];
+    meta: [string, string];
+    tone: "danger" | "primary" | "muted";
+  }[] = [];
+  for (const c of pendingContent) {
+    tasks.push({
+      title: [`«${c.title}» بانتظار مراجعة المحتوى`, `"${c.title}" pending content review`],
+      meta: [c.subjectName, c.subjectName],
+      tone: "muted",
+    });
+  }
+  for (const q of openQuestions) {
+    tasks.push({
+      title: [`سؤال بلا جواب: ${q.questionTitle}`, `Unanswered: ${q.questionTitle}`],
+      meta: [q.subjectName, q.subjectName],
+      tone: "primary",
+    });
+  }
+
   return (
     <AppPage
       title={bi("لوحة المعلم", "Teacher dashboard")}
       icon="LayoutDashboard"
       subtitle={bi(
-        "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.",
+        description,
         "Your classes today: what needs grading, questions awaiting you, and student performance.",
       )}
     >
       <WelcomeBanner
         subtitle={[
-          "عندك أسئلة بانتظار الرد وطلاب بانتظار تصحيح — خلّي صفوفك بأفضل حال.",
-          "You have questions waiting and grading pending — keep your classes running smoothly.",
+          "عندك أسئلة بانتظار الرد ومحتوى بانتظار المراجعة — خلّي صفوفك بأفضل حال.",
+          "You have questions waiting and content pending review — keep your classes running smoothly.",
         ]}
-        tip={["3 أسئلة جديدة بمجتمع الصف", "3 new questions in the class community"]}
-      />
-      <StatGrid
-        items={[
-          { icon: "Users", label: bi("طلابك", "Students"), value: "126" },
-          { icon: "PenSquare", label: bi("بانتظار التصحيح", "Awaiting grading"), value: "18" },
-          {
-            icon: "MessagesSquare",
-            label: bi("أسئلة بلا جواب", "Unanswered questions"),
-            value: "7",
-          },
-          { icon: "Wallet", label: bi("أرباح الشهر", "This month"), value: bi("820 ₪", "820 ILS") },
+        tip={[
+          `${openQuestions.length} أسئلة جديدة بمجتمع الصف`,
+          `${openQuestions.length} new questions in the class community`,
         ]}
       />
-      <Panel title={bi("تفاعل الطلاب بالمادة", "Student engagement by subject")} icon="ChartSpline">
-        <ComparisonChart
-          data={[
-            { label: bi("رياضيات", "Math"), value: 320 },
-            { label: bi("فيزياء", "Physics"), value: 245 },
-            { label: bi("كيمياء", "Chemistry"), value: 180 },
-            { label: bi("عربي", "Arabic"), value: 210 },
-          ]}
-        />
-      </Panel>
-      <Panel title={bi("إجراءات سريعة", "Quick actions")} icon="Zap">
-        <QuickLinks
-          items={[
-            { to: "/teacher/content", label: bi("إضافة محتوى", "Add content"), icon: "FileStack" },
-            {
-              to: "/teacher/quizzes",
-              label: bi("إنشاء اختبار", "Create quiz"),
-              icon: "ListChecks",
-            },
-            {
-              to: "/teacher/grading",
-              label: bi("ابدأ التصحيح", "Start grading"),
-              icon: "PenSquare",
-            },
-            {
-              to: "/teacher/community",
-              label: bi("مجتمع الصف", "Class community"),
-              icon: "MessagesSquare",
-            },
-            { to: "/teacher/analytics", label: bi("التحليلات", "Analytics"), icon: "LineChart" },
-            { to: "/teacher/earnings", label: bi("الأرباح", "Earnings"), icon: "Wallet" },
-          ]}
-        />
-      </Panel>
-      <Panel title={bi("يحتاج انتباهك", "Needs your attention")} icon="Bell">
-        <RowList
-          rows={[
-            {
-              title: bi("18 ورقة رياضيات بانتظار التصحيح", "18 math papers to grade"),
-              meta: bi("الصف الحادي عشر", "Grade 11"),
-              value: bi("عاجل", "Urgent"),
-              tone: "danger",
-            },
-            {
-              title: bi("7 أسئلة في مجتمع الفيزياء", "7 questions in physics community"),
-              meta: bi("منذ يومين", "2 days ago"),
-              value: bi("متابعة", "Follow up"),
-              tone: "primary",
-            },
-            {
-              title: bi("درس «الدوال» بانتظار مراجعة المحتوى", "Functions lesson pending review"),
-              meta: bi("أُرسل 2026/07/29", "Sent 2026/07/29"),
-              value: bi("قيد المراجعة", "In review"),
-              tone: "muted",
-            },
-          ]}
-        />
-      </Panel>
+
+      {isLoading ? (
+        <div className="flex justify-center py-10">
+          <Loader2 className="size-6 animate-spin text-primary" />
+        </div>
+      ) : (
+        <>
+          <StatGrid
+            items={[
+              { icon: "Users", label: bi("طلابك", "Students"), value: String(enrolled) },
+              {
+                icon: "ListChecks",
+                label: bi("اختبارات نشطة", "Live quizzes"),
+                value: String(quizzes.filter((q) => q.status === "نشط").length),
+              },
+              {
+                icon: "MessagesSquare",
+                label: bi("أسئلة بلا جواب", "Unanswered questions"),
+                value: String(openQuestions.length),
+              },
+              {
+                icon: "Wallet",
+                label: bi("أرباح الشهر", "This month"),
+                value: bi(`${revenue} ₪`, `${revenue} ILS`),
+              },
+            ]}
+          />
+
+          <Panel
+            title={bi("مشاهدات المحتوى بالمادة", "Content views by subject")}
+            icon="ChartSpline"
+          >
+            {bySubject.length ? (
+              <ComparisonChart data={bySubject} />
+            ) : (
+              <EmptyState
+                icon="ChartSpline"
+                text={bi("أضف محتوى عشان تظهر البيانات هون.", "Add content to see data here.")}
+              />
+            )}
+          </Panel>
+
+          <Panel title={bi("إجراءات سريعة", "Quick actions")} icon="Zap">
+            <QuickLinks
+              items={[
+                {
+                  to: "/teacher/content",
+                  label: bi("إضافة محتوى", "Add content"),
+                  icon: "FileStack",
+                },
+                {
+                  to: "/teacher/quizzes",
+                  label: bi("إنشاء اختبار", "Create quiz"),
+                  icon: "ListChecks",
+                },
+                {
+                  to: "/teacher/grading",
+                  label: bi("ابدأ التصحيح", "Start grading"),
+                  icon: "PenSquare",
+                },
+                {
+                  to: "/teacher/community",
+                  label: bi("مجتمع الصف", "Class community"),
+                  icon: "MessagesSquare",
+                },
+                {
+                  to: "/teacher/analytics",
+                  label: bi("التحليلات", "Analytics"),
+                  icon: "LineChart",
+                },
+                { to: "/teacher/earnings", label: bi("الأرباح", "Earnings"), icon: "Wallet" },
+              ]}
+            />
+          </Panel>
+
+          <Panel title={bi("يحتاج انتباهك", "Needs your attention")} icon="Bell">
+            {tasks.length ? (
+              <RowList
+                rows={tasks.map((t) => ({
+                  title: bi(...t.title),
+                  meta: bi(...t.meta),
+                  value: bi("متابعة", "Follow up"),
+                  tone: t.tone,
+                }))}
+              />
+            ) : (
+              <EmptyState
+                icon="Bell"
+                text={bi("ولا شي بانتظارك الآن 🎉", "Nothing needs your attention right now 🎉")}
+              />
+            )}
+          </Panel>
+        </>
+      )}
     </AppPage>
   );
 }

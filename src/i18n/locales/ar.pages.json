@@ -196,68 +196,6 @@
     "free": "مجاني",
     "enroll": "التحقّق والاشتراك",
     "byTeacher": "المعلّم",
-    "items": [
-      {
-        "id": "math-tawjihi",
-        "title": "الرياضيات — تفاضل وتكامل",
-        "teacher": "أ. سامي خليل",
-        "teacherId": "sami-khalil",
-        "subject": "رياضيات",
-        "lessons": "42",
-        "price": "35",
-        "level": "توجيهي علمي"
-      },
-      {
-        "id": "physics-mechanics",
-        "title": "الفيزياء — الميكانيكا الكاملة",
-        "teacher": "أ. رنا حدّاد",
-        "teacherId": "rana-haddad",
-        "subject": "فيزياء",
-        "lessons": "36",
-        "price": "30",
-        "level": "توجيهي علمي"
-      },
-      {
-        "id": "arabic-grammar",
-        "title": "اللغة العربية — النحو والبلاغة",
-        "teacher": "أ. مها زيدان",
-        "teacherId": "maha-zeidan",
-        "subject": "عربي",
-        "lessons": "28",
-        "price": "0",
-        "level": "توجيهي عام"
-      },
-      {
-        "id": "english-exam",
-        "title": "الإنجليزية — تحضير الامتحان",
-        "teacher": "أ. لؤي درويش",
-        "teacherId": "luay-darwish",
-        "subject": "إنجليزي",
-        "lessons": "24",
-        "price": "25",
-        "level": "توجيهي عام"
-      },
-      {
-        "id": "chem-organic",
-        "title": "الكيمياء العضوية من الصفر",
-        "teacher": "أ. نور عابد",
-        "teacherId": "noor-abed",
-        "subject": "كيمياء",
-        "lessons": "31",
-        "price": "28",
-        "level": "توجيهي علمي"
-      },
-      {
-        "id": "islamic-studies",
-        "title": "التربية الإسلامية — مراجعة شاملة",
-        "teacher": "أ. عمر الشريف",
-        "teacherId": "omar-sharif",
-        "subject": "إسلامية",
-        "lessons": "18",
-        "price": "0",
-        "level": "توجيهي عام"
-      }
-    ],
     "open": "افتح الكورس"
   },
   "teacherProfile": {

@@ -1,9 +1,13 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BookOpen, Search, Star } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { BookOpen, Loader2, Search, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { useSession } from "@/hooks/use-session";
+import { useBi } from "@/lib/bi";
+import { listPublicCourses } from "@/lib/public-catalog.functions";
 
 export const Route = createFileRoute("/courses")({
   head: () => ({
@@ -24,30 +28,26 @@ export const Route = createFileRoute("/courses")({
   component: CoursesPage,
 });
 
-export type CourseItem = {
-  id: string;
-  title: string;
-  teacher: string;
-  teacherId: string;
-  subject: string;
-  lessons: string;
-  price: string;
-  level: string;
-};
-
 function CoursesPage() {
   const { t } = useTranslation();
-  const items = t("courses.items", { returnObjects: true }) as CourseItem[];
+  const bi = useBi();
+  const { isSignedIn } = useSession();
+  const fetchCourses = useServerFn(listPublicCourses);
+  const { data: rows, isLoading } = useQuery({ queryKey: ["public-courses"], queryFn: () => fetchCourses() });
+
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState<string>("__all");
-  const { isSignedIn } = useSession();
 
-  const subjects = useMemo(() => Array.from(new Set(items.map((i) => i.subject))), [items]);
+  const items = rows ?? [];
+  const subjects = useMemo(() => Array.from(new Set(items.map((i) => bi(...i.subject)))), [items, bi]);
 
   const filtered = items.filter((i) => {
     const q = query.trim();
-    const matchQuery = !q || i.title.includes(q) || i.teacher.includes(q);
-    const matchSubject = subject === "__all" || i.subject === subject;
+    const title = bi(...i.title);
+    const teacher = bi(...i.teacher);
+    const subjectLabel = bi(...i.subject);
+    const matchQuery = !q || title.includes(q) || teacher.includes(q);
+    const matchSubject = subject === "__all" || subjectLabel === subject;
     return matchQuery && matchSubject;
   });
 
@@ -90,56 +90,62 @@ function CoursesPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
-        <div key={`${subject}-${filtered.length}`} className="panel-swap">
-          {filtered.length === 0 ? (
-            <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-              {t("courses.empty")}
-            </p>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((c) => (
-                <article
-                  key={c.id}
-                  className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
-                      {c.subject}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{c.level}</span>
-                  </div>
-                  <h2 className="mt-4 text-base font-bold text-foreground">{c.title}</h2>
-                  <p className="mt-1.5 text-sm text-muted-foreground">
-                    {t("courses.byTeacher")}:{" "}
-                    <Link
-                      to="/teacher/$id"
-                      params={{ id: c.teacherId }}
-                      className="font-semibold text-primary hover:underline"
-                    >
-                      {c.teacher}
-                    </Link>
-                  </p>
-                  <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-1.5">
-                      <BookOpen className="size-4" />
-                      {c.lessons} {t("courses.lessons")}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <Star className="size-4 text-primary" />
-                      {c.price === "0" ? t("courses.free") : `${c.price} JOD`}
-                    </span>
-                  </div>
-                  <Link
-                    to={isSignedIn ? "/my-courses" : "/signup"}
-                    className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 className="size-6 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div key={`${subject}-${filtered.length}`} className="panel-swap">
+            {filtered.length === 0 ? (
+              <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                {t("courses.empty")}
+              </p>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((c) => (
+                  <article
+                    key={c.id}
+                    className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
                   >
-                    {t(isSignedIn ? "courses.open" : "courses.enroll")}
-                  </Link>
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
+                    <div className="flex items-center justify-between">
+                      <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+                        {bi(...c.subject)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{bi(...c.level)}</span>
+                    </div>
+                    <h2 className="mt-4 text-base font-bold text-foreground">{bi(...c.title)}</h2>
+                    <p className="mt-1.5 text-sm text-muted-foreground">
+                      {t("courses.byTeacher")}:{" "}
+                      <Link
+                        to="/teacher/$id"
+                        params={{ id: c.teacherId }}
+                        className="font-semibold text-primary hover:underline"
+                      >
+                        {bi(...c.teacher)}
+                      </Link>
+                    </p>
+                    <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5">
+                        <BookOpen className="size-4" />
+                        {c.lessons} {t("courses.lessons")}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Star className="size-4 text-primary" />
+                        {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+                      </span>
+                    </div>
+                    <Link
+                      to={isSignedIn ? "/my-courses" : "/signup"}
+                      className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+                    >
+                      {t(isSignedIn ? "courses.open" : "courses.enroll")}
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
     </PublicLayout>
   );

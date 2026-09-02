@@ -196,68 +196,6 @@
     "free": "Free",
     "enroll": "View & enroll",
     "byTeacher": "Teacher",
-    "items": [
-      {
-        "id": "math-tawjihi",
-        "title": "Mathematics — Calculus",
-        "teacher": "Sami Khalil",
-        "teacherId": "sami-khalil",
-        "subject": "Math",
-        "lessons": "42",
-        "price": "35",
-        "level": "Science track"
-      },
-      {
-        "id": "physics-mechanics",
-        "title": "Physics — Full mechanics",
-        "teacher": "Rana Haddad",
-        "teacherId": "rana-haddad",
-        "subject": "Physics",
-        "lessons": "36",
-        "price": "30",
-        "level": "Science track"
-      },
-      {
-        "id": "arabic-grammar",
-        "title": "Arabic — Grammar & rhetoric",
-        "teacher": "Maha Zeidan",
-        "teacherId": "maha-zeidan",
-        "subject": "Arabic",
-        "lessons": "28",
-        "price": "0",
-        "level": "General track"
-      },
-      {
-        "id": "english-exam",
-        "title": "English — Exam preparation",
-        "teacher": "Luay Darwish",
-        "teacherId": "luay-darwish",
-        "subject": "English",
-        "lessons": "24",
-        "price": "25",
-        "level": "General track"
-      },
-      {
-        "id": "chem-organic",
-        "title": "Organic chemistry from zero",
-        "teacher": "Noor Abed",
-        "teacherId": "noor-abed",
-        "subject": "Chemistry",
-        "lessons": "31",
-        "price": "28",
-        "level": "Science track"
-      },
-      {
-        "id": "islamic-studies",
-        "title": "Islamic studies — Full review",
-        "teacher": "Omar Sharif",
-        "teacherId": "omar-sharif",
-        "subject": "Islamic",
-        "lessons": "18",
-        "price": "0",
-        "level": "General track"
-      }
-    ],
     "open": "Open course"
   },
   "teacherProfile": {

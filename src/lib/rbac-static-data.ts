@@ -565,6 +565,17 @@ export const PAGES: StaticPageRow[] = [
     path: "/admin/payments",
     sort_order: 7,
   },
+  {
+    id: "p-admin-course-catalog",
+    module_id: "m-academic",
+    parent_id: null,
+    key: "admin_course_catalog",
+    name: "كتالوج الكورسات العام",
+    name_en: "Public course catalog",
+    icon: "Store",
+    path: "/admin/course-catalog",
+    sort_order: 8,
+  },
 
   // ---- الحساب (مشترك بين كل الأدوار) ----
   {

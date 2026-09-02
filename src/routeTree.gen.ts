@@ -50,6 +50,7 @@ import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
 import { Route as AuthenticatedAdminContentReviewRouteImport } from './routes/_authenticated/admin.content-review'
+import { Route as AuthenticatedAdminCourseCatalogRouteImport } from './routes/_authenticated/admin.course-catalog'
 import { Route as AuthenticatedAdminCurriculumRouteImport } from './routes/_authenticated/admin.curriculum'
 import { Route as AuthenticatedAdminCurriculumRequestsRouteImport } from './routes/_authenticated/admin.curriculum-requests'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
@@ -289,6 +290,12 @@ const AuthenticatedAdminContentReviewRoute =
     path: '/admin/content-review',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCourseCatalogRoute =
+  AuthenticatedAdminCourseCatalogRouteImport.update({
+    id: '/admin/course-catalog',
+    path: '/admin/course-catalog',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminCurriculumRoute =
   AuthenticatedAdminCurriculumRouteImport.update({
     id: '/admin/curriculum',
@@ -485,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
+  '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -553,6 +561,7 @@ export interface FileRoutesByTo {
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
+  '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -623,6 +632,7 @@ export interface FileRoutesById {
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/_authenticated/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
+  '/_authenticated/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/_authenticated/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/_authenticated/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -693,6 +703,7 @@ export interface FileRouteTypes {
     | '/teacher/register'
     | '/admin/community-reports'
     | '/admin/content-review'
+    | '/admin/course-catalog'
     | '/admin/curriculum'
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
@@ -761,6 +772,7 @@ export interface FileRouteTypes {
     | '/teacher/register'
     | '/admin/community-reports'
     | '/admin/content-review'
+    | '/admin/course-catalog'
     | '/admin/curriculum'
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
@@ -830,6 +842,7 @@ export interface FileRouteTypes {
     | '/teacher/register'
     | '/_authenticated/admin/community-reports'
     | '/_authenticated/admin/content-review'
+    | '/_authenticated/admin/course-catalog'
     | '/_authenticated/admin/curriculum'
     | '/_authenticated/admin/curriculum-requests'
     | '/_authenticated/admin/dashboard'
@@ -1173,6 +1186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContentReviewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/course-catalog': {
+      id: '/_authenticated/admin/course-catalog'
+      path: '/admin/course-catalog'
+      fullPath: '/admin/course-catalog'
+      preLoaderRoute: typeof AuthenticatedAdminCourseCatalogRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/curriculum': {
       id: '/_authenticated/admin/curriculum'
       path: '/admin/curriculum'
@@ -1387,6 +1407,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
   AuthenticatedAdminContentReviewRoute: typeof AuthenticatedAdminContentReviewRoute
+  AuthenticatedAdminCourseCatalogRoute: typeof AuthenticatedAdminCourseCatalogRoute
   AuthenticatedAdminCurriculumRoute: typeof AuthenticatedAdminCurriculumRoute
   AuthenticatedAdminCurriculumRequestsRoute: typeof AuthenticatedAdminCurriculumRequestsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
@@ -1433,6 +1454,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminCommunityReportsRoute:
     AuthenticatedAdminCommunityReportsRoute,
   AuthenticatedAdminContentReviewRoute: AuthenticatedAdminContentReviewRoute,
+  AuthenticatedAdminCourseCatalogRoute: AuthenticatedAdminCourseCatalogRoute,
   AuthenticatedAdminCurriculumRoute: AuthenticatedAdminCurriculumRoute,
   AuthenticatedAdminCurriculumRequestsRoute:
     AuthenticatedAdminCurriculumRequestsRoute,

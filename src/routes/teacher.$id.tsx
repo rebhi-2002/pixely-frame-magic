@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BadgeCheck, BookOpen, Star, Users } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { BadgeCheck, BookOpen, Loader2, Star, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
-import type { CourseItem } from "./courses";
+import { useBi } from "@/lib/bi";
+import { listPublicCourses } from "@/lib/public-catalog.functions";
 
 export const Route = createFileRoute("/teacher/$id")({
   head: () => ({
@@ -23,12 +26,24 @@ export const Route = createFileRoute("/teacher/$id")({
 function TeacherProfilePage() {
   const { id } = Route.useParams();
   const { t } = useTranslation();
-  const items = t("courses.items", { returnObjects: true }) as CourseItem[];
-  const courses = items.filter((c) => c.teacherId === id);
+  const bi = useBi();
+  const fetchCourses = useServerFn(listPublicCourses);
+  const { data: rows, isLoading } = useQuery({ queryKey: ["public-courses"], queryFn: () => fetchCourses() });
+  const courses = (rows ?? []).filter((c) => c.teacherId === id);
   const reviews = t("teacherProfile.reviews", { returnObjects: true }) as {
     n: string;
     d: string;
   }[];
+
+  if (isLoading) {
+    return (
+      <PublicLayout>
+        <div className="flex justify-center py-24">
+          <Loader2 className="size-6 animate-spin text-primary" />
+        </div>
+      </PublicLayout>
+    );
+  }
 
   if (courses.length === 0) {
     return (
@@ -46,8 +61,8 @@ function TeacherProfilePage() {
     );
   }
 
-  const teacher = courses[0].teacher;
-  const lessons = courses.reduce((sum, c) => sum + Number(c.lessons), 0);
+  const teacher = bi(...courses[0].teacher);
+  const lessons = courses.reduce((sum, c) => sum + c.lessons, 0);
 
   return (
     <PublicLayout>
@@ -100,12 +115,12 @@ function TeacherProfilePage() {
           {courses.map((c) => (
             <article key={c.id} className="rounded-2xl border border-border bg-card p-6">
               <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
-                {c.subject}
+                {bi(...c.subject)}
               </span>
-              <h3 className="mt-3 font-bold text-foreground">{c.title}</h3>
+              <h3 className="mt-3 font-bold text-foreground">{bi(...c.title)}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">
                 {c.lessons} {t("courses.lessons")} —{" "}
-                {c.price === "0" ? t("courses.free") : `${c.price} JOD`}
+                {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
               </p>
             </article>
           ))}

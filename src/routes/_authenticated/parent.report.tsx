@@ -1,19 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  AppPage,
-  StatGrid,
-  Panel,
-  RowList,
-  Progress,
-  DataTable,
-  QuickLinks,
-  Badge,
-  EmptyState,
-} from "@/components/app/kit";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2 } from "lucide-react";
+import { AppPage, StatGrid, Panel, RowList, Progress, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
+import { getChildReport } from "@/lib/supervisor-oversight.functions";
 
 const title = "تقرير الابن | أكاديميا";
 const description = "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.";
@@ -43,12 +37,34 @@ function PageRoute() {
 
 function Body() {
   const bi = useBi();
+  const fetchReport = useServerFn(getChildReport);
+  const { data: report, isLoading } = useQuery({
+    queryKey: ["child-report"],
+    queryFn: () => fetchReport(),
+  });
+
+  if (isLoading || !report) {
+    return (
+      <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
+        <div className="flex justify-center py-16">
+          <Loader2 className="size-6 animate-spin text-primary" />
+        </div>
+      </AppPage>
+    );
+  }
+
+  const avgExamScore = report.examAttempts.length
+    ? Math.round(
+        report.examAttempts.reduce((s, a) => s + a.scorePercent, 0) / report.examAttempts.length,
+      )
+    : 0;
+
   return (
     <AppPage
       title={bi("تقرير الابن", "Child report")}
       icon="FileBarChart"
       subtitle={bi(
-        "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.",
+        description,
         "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.",
       )}
     >
@@ -61,49 +77,68 @@ function Body() {
       />
       <StatGrid
         items={[
-          { icon: "User", label: bi("الابن المتابَع", "Child"), value: bi("أحمد", "Ahmad") },
-          { icon: "Flame", label: bi("أيام دراسة", "Study days"), value: "5/7" },
-          { icon: "Percent", label: bi("متوسط الإتقان", "Avg. mastery"), value: "66%" },
-          { icon: "AlertTriangle", label: bi("مواد تحتاج دعم", "Needs support"), value: "1" },
+          { icon: "User", label: bi("الابن المتابَع", "Child"), value: report.childName },
+          {
+            icon: "Flame",
+            label: bi("أيام دراسة", "Study days"),
+            value: `${report.studyDaysCount}/7`,
+          },
+          {
+            icon: "Percent",
+            label: bi("متوسط الإتقان", "Avg. mastery"),
+            value: `${report.avgMastery}%`,
+          },
+          {
+            icon: "AlertTriangle",
+            label: bi("مواد تحتاج دعم", "Needs support"),
+            value: String(report.weakSubjectsCount),
+          },
         ]}
       />
-      <Panel title={bi("تقدّم الأسبوع", "Weekly progress")} icon="ChartSpline">
+      <Panel title={bi("دقائق الدراسة هذا الأسبوع", "Study minutes this week")} icon="ChartSpline">
         <TrendChart
-          data={[
-            { label: bi("أسبوع 1", "W1"), value: 58 },
-            { label: bi("أسبوع 2", "W2"), value: 64 },
-            { label: bi("أسبوع 3", "W3"), value: 61 },
-            { label: bi("أسبوع 4", "W4"), value: 73 },
-          ]}
+          data={report.weeklyLog.map((d) => ({ label: bi(...d.day), value: d.minutes }))}
         />
       </Panel>
       <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
-        <Progress label={bi("الرياضيات", "Math")} value={78} />
-        <Progress label={bi("الفيزياء", "Physics")} value={54} />
-        <Progress label={bi("الكيمياء", "Chemistry")} value={40} />
-        <Progress label={bi("اللغة العربية", "Arabic")} value={91} />
+        {report.subjects.length ? (
+          report.subjects.map((s) => (
+            <Progress key={s.id} label={s.subjectName} value={s.progressPercent} />
+          ))
+        ) : (
+          <EmptyState
+            icon="LineChart"
+            text={bi("لا مواد مسجّلة بعد.", "No subjects logged yet.")}
+          />
+        )}
       </Panel>
       <Panel title={bi("ملخّص الأسبوع", "Week summary")} icon="Activity">
         <RowList
           rows={[
             {
-              title: bi("ساعات الدراسة", "Study hours"),
-              meta: bi("9 ساعات و20 دقيقة", "9h 20m"),
-              value: bi("+12%", "+12%"),
+              title: bi("دقائق الدراسة", "Study minutes"),
+              meta: bi(
+                `${report.totalMinutes} دقيقة هذا الأسبوع`,
+                `${report.totalMinutes} minutes this week`,
+              ),
+              value: `${report.studyDaysCount}/7`,
               tone: "success",
             },
             {
               title: bi("امتحانات تدريبية", "Mock exams"),
-              meta: bi("امتحانان", "2 exams"),
-              value: bi("72%", "72%"),
+              meta: bi(
+                `${report.examAttempts.length} امتحانات`,
+                `${report.examAttempts.length} exams`,
+              ),
+              value: `${avgExamScore}%`,
               tone: "primary",
             },
-            {
-              title: bi("الكيمياء تحتاج متابعة", "Chemistry needs attention"),
-              meta: bi("أخطاء متكرّرة في التفاعلات", "Repeated reaction mistakes"),
+            ...report.priorityMistakes.map((m) => ({
+              title: bi(`${m.subjectName} تحتاج متابعة`, `${m.subjectName} needs attention`),
+              meta: m.questionTitle,
               value: bi("تنبيه", "Alert"),
-              tone: "danger",
-            },
+              tone: "danger" as const,
+            })),
           ]}
         />
       </Panel>

@@ -12,6 +12,7 @@ import {
   nextId,
   requireAdmin,
   requirePermission,
+  requirePageAction,
 } from "./rbac.server";
 
 export const getMyAccess = createServerFn({ method: "GET" })
@@ -204,4 +205,28 @@ export const sendPasswordReset = createServerFn({ method: "POST" })
     // ما في endpoint "نسيت كلمة السر" بالباك اند الجديد بعد — راجع
     // src/routes/forgot-password.tsx. نرجّع رسالة واضحة بدل استدعاء وهمي.
     throw new Error("إرسال رابط إعادة تعيين كلمة المرور غير متاح بعد — قيد ربطه بالباك اند الجديد");
+  });
+
+/**
+ * تعديل ذاتي — كل مستخدم (أي دور) يقدر يعدّل اسمه/بريده الخاص فقط، بعكس
+ * saveUser فوق (مقصورة على الأدمن، وبتقدر تعدّل أي مستخدم). نفس بيانات
+ * USERS بالضبط — تعديلك هون بينعكس مباشرة بشاشة "المستخدمون" بلوحة الأدمن.
+ */
+export const updateOwnProfile = createServerFn({ method: "POST" })
+  .middleware([requireAuth])
+  .inputValidator((input) =>
+    z
+      .object({
+        full_name: z.string().trim().min(2, "الاسم قصير جداً"),
+        email: z.string().trim().email("بريد غير صالح").optional().or(z.literal("")),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await requirePageAction(context.userId, "account_settings", "edit_profile");
+    const user = USERS.find((u) => u.id === context.userId);
+    if (!user) throw new Error("المستخدم غير موجود");
+    user.full_name = data.full_name;
+    user.email = data.email || null;
+    return { ok: true };
   });

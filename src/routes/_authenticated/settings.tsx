@@ -1,13 +1,28 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { LogOut, Palette, ShieldCheck, UserRound } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { LogOut, Palette, Pencil, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/admin/page-header";
 import { usePreferences } from "@/components/providers/preferences-provider";
 import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
-import { useAccess } from "@/hooks/use-access";
+import { useAccess, useInvalidateAccess } from "@/hooks/use-access";
 import { Guard } from "@/components/app/guard";
 import { ROLE_NAME_EN } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
+import { updateOwnProfile } from "@/lib/rbac.functions";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -31,9 +46,30 @@ const LOCALES = ["ar", "en"] as const;
 function SettingsPage() {
   const { t } = useTranslation();
   const bi = useBi();
-  const { access } = useAccess();
+  const invalidateAccess = useInvalidateAccess();
+  const { access, can } = useAccess();
   const { signOut, pending: signingOut } = useSignOut("/login");
   const { theme, setTheme, locale, setLocale } = usePreferences();
+  const updateProfile = useServerFn(updateOwnProfile);
+
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ full_name: "", email: "" });
+
+  const saveMutation = useMutation({
+    mutationFn: () => updateProfile({ data: form }),
+    onSuccess: () => {
+      invalidateAccess();
+      setOpen(false);
+      toast.success(bi("تم الحفظ", "Saved successfully"));
+    },
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+  });
+
+  function openDialog() {
+    setForm({ full_name: access?.profile?.full_name ?? "", email: access?.profile?.email ?? "" });
+    setOpen(true);
+  }
 
   return (
     <div>
@@ -90,10 +126,18 @@ function SettingsPage() {
         </section>
 
         <section className="shadow-elevation-1 mt-4 rounded-2xl border border-border bg-card p-6">
-          <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
-            <UserRound className="size-4 text-primary" />
-            {t("settings.account")}
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="inline-flex items-center gap-2 font-bold text-foreground">
+              <UserRound className="size-4 text-primary" />
+              {t("settings.account")}
+            </h2>
+            {can("account_settings", "edit_profile") && (
+              <Button size="sm" variant="outline" onClick={openDialog}>
+                <Pencil className="size-4" />
+                {bi("تعديل", "Edit")}
+              </Button>
+            )}
+          </div>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
             <div>
               <dt className="text-xs text-muted-foreground">{t("settings.name")}</dt>
@@ -133,6 +177,44 @@ function SettingsPage() {
           </button>
         </section>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="text-start">
+          <DialogHeader>
+            <DialogTitle>{bi("تعديل بيانات الحساب", "Edit account details")}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="acc-name">{t("settings.name")}</Label>
+              <Input
+                id="acc-name"
+                value={form.full_name}
+                onChange={(e) => setForm((f) => ({ ...f, full_name: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="acc-email">{t("settings.email")}</Label>
+              <Input
+                id="acc-email"
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              />
+            </div>
+          </div>
+          <DialogFooter className="gap-2 sm:justify-start">
+            <Button
+              onClick={() => saveMutation.mutate()}
+              disabled={saveMutation.isPending || !form.full_name.trim()}
+            >
+              {bi("حفظ", "Save")}
+            </Button>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              {bi("إلغاء", "Cancel")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
