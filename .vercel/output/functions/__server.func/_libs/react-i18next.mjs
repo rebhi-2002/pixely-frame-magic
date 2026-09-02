@@ -1,6 +1,6 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { y as require_shim } from "./@tanstack/react-router+[...].mjs";
 import { u as require_react } from "./@floating-ui/react-dom+[...].mjs";
+import { R as require_shim } from "./@tanstack/react-router+[...].mjs";
 //#region node_modules/react-i18next/dist/es/utils.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var warn = (i18n, code, msg, rest) => {

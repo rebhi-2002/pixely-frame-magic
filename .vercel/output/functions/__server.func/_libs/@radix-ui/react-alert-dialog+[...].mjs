@@ -1,6 +1,6 @@
 import { i as __toESM } from "../../_runtime.mjs";
 import { l as require_react_dom, u as require_react } from "../@floating-ui/react-dom+[...].mjs";
-import { _ as useComposedRefs, c as Presence, d as useLayoutEffect2, f as createContextScope, g as createSlot, l as useControllableState, m as dispatchDiscreteCustomEvent, p as Primitive, u as useId, v as require_jsx_runtime } from "./react-accordion+[...].mjs";
+import { _ as useComposedRefs, c as Presence, f as createSlot, g as createContextScope, h as useLayoutEffect2, l as Primitive, m as useId, p as useControllableState, u as dispatchDiscreteCustomEvent, v as require_jsx_runtime } from "./react-accordion+[...].mjs";
 import { t as composeEventHandlers } from "../radix-ui__primitive.mjs";
 import { __assign, __rest, __spreadArray } from "tslib";
 //#region node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs
@@ -1705,4 +1705,4 @@ var Cancel = AlertDialogCancel;
 var Title2 = AlertDialogTitle;
 var Description2 = AlertDialogDescription;
 //#endregion
-export { useCallbackRef$1 as S, ReactRemoveScroll as _, Overlay2 as a, FocusScope as b, Title2 as c, DialogContent as d, DialogDescription as f, hideOthers as g, DialogTitle as h, Description2 as i, Dialog as l, DialogPortal as m, Cancel as n, Portal2 as o, DialogOverlay as p, Content2 as r, Root2 as s, Action as t, DialogClose as u, useFocusGuards as v, DismissableLayer as x, Portal as y };
+export { useCallbackRef$1 as C, DismissableLayer as S, hideOthers as _, Overlay2 as a, Portal as b, Title2 as c, DialogContent as d, DialogDescription as f, DialogTrigger as g, DialogTitle as h, Description2 as i, Dialog as l, DialogPortal as m, Cancel as n, Portal2 as o, DialogOverlay as p, Content2 as r, Root2 as s, Action as t, DialogClose as u, ReactRemoveScroll as v, FocusScope as x, useFocusGuards as y };

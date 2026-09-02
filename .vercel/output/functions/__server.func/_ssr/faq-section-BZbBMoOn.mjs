@@ -4,7 +4,7 @@ import { a as Trigger2, i as Root2, n as Header, r as Item, t as Content2, v as 
 import { n as useTranslation } from "../_libs/react-i18next.mjs";
 import { t as cn } from "./utils-C_uf36nf.mjs";
 import { t as Reveal } from "./reveal-DrTtc6dz.mjs";
-import { at as CircleQuestionMark, lt as ChevronDown } from "../_libs/lucide-react.mjs";
+import { ht as ChevronDown, ut as CircleQuestionMark } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/faq-section-BZbBMoOn.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
