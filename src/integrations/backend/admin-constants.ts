@@ -1,0 +1,107 @@
+import { apiClient } from "./client";
+
+export interface ConstantRow {
+  id: number;
+  name: string;
+  comment: string | null;
+  icon: string | null;
+  parent_id: number | null;
+  parent_name: string | null;
+}
+
+export interface ConstantParentOption {
+  id: number;
+  name: string;
+}
+
+export interface ConstantForm {
+  id?: number;
+  name: string;
+  comment: string;
+  icon: string;
+  parent_id: number | null;
+}
+
+interface BackendConstantDto {
+  id?: number;
+  name?: string | null;
+  comment?: string | null;
+  icon?: string | null;
+  parentId?: number | null;
+  parent?: { id?: number; name?: string | null } | null;
+}
+
+interface ConstantTableResponse {
+  data?: BackendConstantDto[] | null;
+}
+
+interface ConstantFormResponse {
+  constant?: BackendConstantDto | null;
+  parents?: ConstantParentOption[] | null;
+}
+
+function mapConstant(c: BackendConstantDto): ConstantRow {
+  return {
+    id: c.id ?? 0,
+    name: c.name ?? "",
+    comment: c.comment ?? null,
+    icon: c.icon ?? null,
+    parent_id: c.parentId ?? c.parent?.id ?? null,
+    parent_name: c.parent?.name ?? null,
+  };
+}
+
+async function loadFormData(id?: number): Promise<ConstantFormResponse> {
+  return apiClient.get<ConstantFormResponse>(`/api/Constant/CreateEditModal?id=${id ?? 0}`);
+}
+
+export async function listBackendConstants(): Promise<ConstantRow[]> {
+  const result = await apiClient.post<ConstantTableResponse>("/api/Constant/GetAll", {
+    searchValue: "",
+    sortColumn: "",
+    sortColumnDirection: "",
+    pageSize: 1000,
+    skip: 0,
+  });
+  return (result.data ?? []).map(mapConstant).filter((c) => c.id > 0);
+}
+
+export async function loadBackendConstantParents(): Promise<ConstantParentOption[]> {
+  const result = await loadFormData();
+  return result.parents ?? [];
+}
+
+export async function saveBackendConstant(form: ConstantForm): Promise<void> {
+  if (!form.name.trim()) throw new Error("الاسم مطلوب");
+  if (form.name.trim().length < 3) throw new Error("الاسم قصير جدًا (3 أحرف على الأقل)");
+
+  // الباك اند بيرفض الطلب لو الثابت اختار نفسه أبًا له — فحص وقائي بالفرونت
+  // قبل الإرسال، بالإضافة لأي تحقق سيرفري لاحقًا.
+  if (form.id != null && form.parent_id === form.id) {
+    throw new Error("لا يمكن أن يكون الثابت أبًا لنفسه");
+  }
+
+  const result = await apiClient.post<{ success: boolean; message?: string | null }>(
+    "/api/Constant/CreateEdit",
+    {
+      id: form.id ?? 0,
+      name: form.name.trim(),
+      comment: form.comment.trim() || null,
+      icon: form.icon.trim() || null,
+      parentId: form.parent_id,
+    },
+  );
+
+  if (!result.success) throw new Error(result.message || "تعذر حفظ الثابت");
+}
+
+export async function deleteBackendConstant(id: number): Promise<void> {
+  const result = await apiClient.delete<{ success: boolean; message?: string | null }>(
+    `/api/Constant/Delete?id=${id}`,
+  );
+  if (!result.success) {
+    // الباك اند برجّع Messages.ConstantHasChildren لو الثابت إله عناصر فرعية —
+    // رسالة الباك اند نفسها (بالعربي) بتنعرض للمستخدم مباشرة، مافي داعي نكررها.
+    throw new Error(result.message || "تعذر حذف الثابت");
+  }
+}

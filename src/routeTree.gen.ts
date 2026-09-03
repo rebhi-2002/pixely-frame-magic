@@ -49,11 +49,13 @@ import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
+import { Route as AuthenticatedAdminConstantsRouteImport } from './routes/_authenticated/admin.constants'
 import { Route as AuthenticatedAdminContentReviewRouteImport } from './routes/_authenticated/admin.content-review'
 import { Route as AuthenticatedAdminCourseCatalogRouteImport } from './routes/_authenticated/admin.course-catalog'
 import { Route as AuthenticatedAdminCurriculumRouteImport } from './routes/_authenticated/admin.curriculum'
 import { Route as AuthenticatedAdminCurriculumRequestsRouteImport } from './routes/_authenticated/admin.curriculum-requests'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
+import { Route as AuthenticatedAdminPagesRouteImport } from './routes/_authenticated/admin.pages'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
 import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin.roles'
@@ -284,6 +286,12 @@ const AuthenticatedAdminCommunityReportsRoute =
     path: '/admin/community-reports',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminConstantsRoute =
+  AuthenticatedAdminConstantsRouteImport.update({
+    id: '/admin/constants',
+    path: '/admin/constants',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminContentReviewRoute =
   AuthenticatedAdminContentReviewRouteImport.update({
     id: '/admin/content-review',
@@ -314,6 +322,11 @@ const AuthenticatedAdminDashboardRoute =
     path: '/admin/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPagesRoute = AuthenticatedAdminPagesRouteImport.update({
+  id: '/admin/pages',
+  path: '/admin/pages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminPaymentsRoute =
   AuthenticatedAdminPaymentsRouteImport.update({
     id: '/admin/payments',
@@ -491,11 +504,13 @@ export interface FileRoutesByFullPath {
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+  '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
@@ -560,11 +575,13 @@ export interface FileRoutesByTo {
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+  '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/roles': typeof AuthenticatedAdminRolesRoute
@@ -631,11 +648,13 @@ export interface FileRoutesById {
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+  '/_authenticated/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/_authenticated/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/_authenticated/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
   '/_authenticated/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
   '/_authenticated/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/_authenticated/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
@@ -702,11 +721,13 @@ export interface FileRouteTypes {
     | '/teacher/$id'
     | '/teacher/register'
     | '/admin/community-reports'
+    | '/admin/constants'
     | '/admin/content-review'
     | '/admin/course-catalog'
     | '/admin/curriculum'
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
+    | '/admin/pages'
     | '/admin/payments'
     | '/admin/permissions'
     | '/admin/roles'
@@ -771,11 +792,13 @@ export interface FileRouteTypes {
     | '/teacher/$id'
     | '/teacher/register'
     | '/admin/community-reports'
+    | '/admin/constants'
     | '/admin/content-review'
     | '/admin/course-catalog'
     | '/admin/curriculum'
     | '/admin/curriculum-requests'
     | '/admin/dashboard'
+    | '/admin/pages'
     | '/admin/payments'
     | '/admin/permissions'
     | '/admin/roles'
@@ -841,11 +864,13 @@ export interface FileRouteTypes {
     | '/teacher/$id'
     | '/teacher/register'
     | '/_authenticated/admin/community-reports'
+    | '/_authenticated/admin/constants'
     | '/_authenticated/admin/content-review'
     | '/_authenticated/admin/course-catalog'
     | '/_authenticated/admin/curriculum'
     | '/_authenticated/admin/curriculum-requests'
     | '/_authenticated/admin/dashboard'
+    | '/_authenticated/admin/pages'
     | '/_authenticated/admin/payments'
     | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/roles'
@@ -1179,6 +1204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCommunityReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/constants': {
+      id: '/_authenticated/admin/constants'
+      path: '/admin/constants'
+      fullPath: '/admin/constants'
+      preLoaderRoute: typeof AuthenticatedAdminConstantsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/content-review': {
       id: '/_authenticated/admin/content-review'
       path: '/admin/content-review'
@@ -1212,6 +1244,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/pages': {
+      id: '/_authenticated/admin/pages'
+      path: '/admin/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AuthenticatedAdminPagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/payments': {
@@ -1406,11 +1445,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
+  AuthenticatedAdminConstantsRoute: typeof AuthenticatedAdminConstantsRoute
   AuthenticatedAdminContentReviewRoute: typeof AuthenticatedAdminContentReviewRoute
   AuthenticatedAdminCourseCatalogRoute: typeof AuthenticatedAdminCourseCatalogRoute
   AuthenticatedAdminCurriculumRoute: typeof AuthenticatedAdminCurriculumRoute
   AuthenticatedAdminCurriculumRequestsRoute: typeof AuthenticatedAdminCurriculumRequestsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
+  AuthenticatedAdminPagesRoute: typeof AuthenticatedAdminPagesRoute
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
   AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
   AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
@@ -1453,12 +1494,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
   AuthenticatedAdminCommunityReportsRoute:
     AuthenticatedAdminCommunityReportsRoute,
+  AuthenticatedAdminConstantsRoute: AuthenticatedAdminConstantsRoute,
   AuthenticatedAdminContentReviewRoute: AuthenticatedAdminContentReviewRoute,
   AuthenticatedAdminCourseCatalogRoute: AuthenticatedAdminCourseCatalogRoute,
   AuthenticatedAdminCurriculumRoute: AuthenticatedAdminCurriculumRoute,
   AuthenticatedAdminCurriculumRequestsRoute:
     AuthenticatedAdminCurriculumRequestsRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
+  AuthenticatedAdminPagesRoute: AuthenticatedAdminPagesRoute,
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
   AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
   AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,

@@ -39,6 +39,7 @@ import {
   saveBackendUser,
   updateBackendUserStatus,
 } from "@/integrations/backend/admin-users";
+import { getErrorMessage } from "@/integrations/backend/client";
 import { useAccess } from "@/hooks/use-access";
 import type { UserRow } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
@@ -114,8 +115,7 @@ export function UsersPage() {
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const statusMutation = useMutation({
@@ -125,8 +125,7 @@ export function UsersPage() {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success(bi("تم تحديث الحالة", "Status updated"));
     },
-    onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -136,8 +135,7 @@ export function UsersPage() {
       setPendingDelete(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(user: UserRow | null) {

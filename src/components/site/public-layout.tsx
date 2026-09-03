@@ -10,7 +10,6 @@ import { useSession } from "@/hooks/use-session";
 import { useScrolled } from "@/hooks/use-scrolled";
 import { allowedPublicPaths } from "@/lib/bi";
 import { cn } from "@/lib/utils";
-import { usePreferences } from "@/components/providers/preferences-provider";
 import {
   Sheet,
   SheetContent,
@@ -56,7 +55,6 @@ export function BrandMark({ className = "" }: { className?: string }) {
 export function PublicLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { session, isSignedIn } = useSession();
-  const { locale } = usePreferences();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
   const allowed = allowedPublicPaths(session?.roleKey ?? null);
@@ -106,10 +104,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   <Menu aria-hidden="true" className="size-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent
-                side={locale === "ar" ? "left" : "right"}
-                className="w-[min(88vw,360px)]"
-              >
+              {/* "end" = نفس جهة نهاية النص: يسار بالعربي (RTL)، يمين
+                  بالإنجليزي (LTR) — نفس جهة زر الهامبرغر بالهيدر. الانعكاس
+                  بين اللغتين يصير تلقائيًا عبر CSS (dir="rtl"/"ltr" على
+                  <html>) داخل sheet.tsx، فما في داعي نحسبه هون بالجافاسكربت. */}
+              <SheetContent side="end" className="w-[min(88vw,360px)]">
                 <SheetHeader className="text-start">
                   <SheetTitle>{t("common.menu")}</SheetTitle>
                   <SheetDescription>{t("nav.tagline")}</SheetDescription>

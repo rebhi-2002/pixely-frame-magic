@@ -1,1 +1,0 @@
-import{y as e}from"./bi-dOYh6Lfl.js";import{V as t}from"./index-CHSCc0my.js";var n=e();function r({children:e}){let r=t({select:e=>e.location.pathname});return(0,n.jsx)(`div`,{className:`route-fade`,children:e},r)}export{r as t};

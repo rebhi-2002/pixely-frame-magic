@@ -5,7 +5,8 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { login, loginAsDemo } from "@/integrations/backend/auth";
+import { login, loginAsDemo, getStoredProfile } from "@/integrations/backend/auth";
+import { getErrorMessage } from "@/integrations/backend/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { USERS } from "@/lib/rbac-static-data";
@@ -72,13 +73,15 @@ function LoginPage() {
     setLoading(true);
     try {
       await login(parsed.data.email, parsed.data.password);
+      const profile = getStoredProfile();
       toast.success(t("authPages.login.success"));
-      navigate({ to: "/", replace: true });
+      // roleId=1 ("مدير النظام") هو الوحيد المتاح فعليًا على الباك اند حاليًا؛
+      // أي نوع تاني (أو لو تعذّر جلب النوع) بيرجع لصفحة طالب افتراضية —
+      // راجع fetchUserType بملف auth.ts.
+      navigate({ href: roleHome(profile?.roleName ?? null, profile?.roleId === 1), replace: true });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : bi("تعذّر تسجيل الدخول", "Sign in failed");
+      const message = getErrorMessage(err, bi("تعذّر تسجيل الدخول", "Sign in failed"));
       setServerError(message);
-      toast.error(message);
     } finally {
       setLoading(false);
     }

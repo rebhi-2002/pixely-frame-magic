@@ -38,13 +38,30 @@ const sheetVariants = cva(
         top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
         bottom:
           "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-        left: "inset-y-0 start-0 h-full w-3/4 border-e data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+        // "start" = نفس جهة بداية النص (يمين بالعربي RTL / يسار بالإنجليزي LTR).
+        // الموضع (start-0) خاصية منطقية بتنعكس تلقائيًا مع dir، وحركة
+        // الانزلاق الفيزيائية (slide-in-from-left/right) لازم تنعكس بنفس
+        // المنطق يدويًا عبر rtl:/ltr: — الخطأ السابق كان إنه بيستخدم start-0
+        // (منطقي) مع slide-in-from-left (فيزيائي ثابت) بنفس الوقت، فكانت
+        // النتيجة تناقض بين مكان الاستقرار واتجاه الحركة.
+        start:
+          "inset-y-0 start-0 h-full w-3/4 border-e sm:max-w-sm " +
+          "ltr:data-[state=closed]:slide-out-to-left ltr:data-[state=open]:slide-in-from-left " +
+          "rtl:data-[state=closed]:slide-out-to-right rtl:data-[state=open]:slide-in-from-right",
+        // "end" = نفس جهة نهاية النص (يسار بالعربي RTL / يمين بالإنجليزي LTR).
+        end:
+          "inset-y-0 end-0 h-full w-3/4 border-s sm:max-w-sm " +
+          "ltr:data-[state=closed]:slide-out-to-right ltr:data-[state=open]:slide-in-from-right " +
+          "rtl:data-[state=closed]:slide-out-to-left rtl:data-[state=open]:slide-in-from-left",
+        // left/right القديمة: جهة فيزيائية ثابتة بغض النظر عن اللغة (لأي
+        // استخدام آخر بالموقع محتاج ذلك فعلاً، مثل قوائم دايمًا بنفس الجهة).
+        left: "inset-y-0 left-0 h-full w-3/4 border-e data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
-          "inset-y-0 end-0 h-full w-3/4 border-s data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+          "inset-y-0 right-0 h-full w-3/4 border-s data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
     defaultVariants: {
-      side: "right",
+      side: "end",
     },
   },
 );
@@ -57,7 +74,7 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, ...props }, ref) => (
+>(({ side = "end", className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>

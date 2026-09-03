@@ -91,6 +91,33 @@ function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
   };
 }
 
+/**
+ * MyProfileModal ما بيرجع نوع المستخدم (UserTypeId/UserType.Name) — لسا ما
+ * انضافت لـ MyProfileDto بالباك اند. بالانتظار، نجيبها من
+ * /api/User/CreateEditModal?id=... (نفس الـ endpoint يلي شاشة تعديل
+ * المستخدم بتستخدمه، ومتاح لأي جلسة). إذا فشل النداء (باك اند قديم/تعطّل
+ * مؤقت) منرجع null وبيضل تسجيل الدخول نفسه ناجح — بس الراوتينغ بيوجّه
+ * لصفحة طالب افتراضية بدل الأدمن، فمهم ما نكسر الدخول كله بسبب هالنداء
+ * الإضافي.
+ */
+async function fetchUserType(
+  userId: string,
+): Promise<{ roleId: number | null; roleName: string | null }> {
+  try {
+    const modal = await apiClient.get<{
+      user?: { userTypeId?: number | null; userType?: { name?: string | null } | null } | null;
+      User?: { userTypeId?: number | null; userType?: { name?: string | null } | null } | null;
+    }>(`/api/User/CreateEditModal?id=${encodeURIComponent(userId)}`);
+    const u = modal?.user ?? modal?.User;
+    return {
+      roleId: typeof u?.userTypeId === "number" ? u.userTypeId : null,
+      roleName: typeof u?.userType?.name === "string" ? u.userType.name : null,
+    };
+  } catch {
+    return { roleId: null, roleName: null };
+  }
+}
+
 export async function login(email: string, password: string): Promise<void> {
   const result = await apiClient.post<OperationResult>("/api/Auth/Login", {
     email,
@@ -105,8 +132,14 @@ export async function login(email: string, password: string): Promise<void> {
   const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
   const profile = normalizeProfile(payload);
   if (!profile) {
+    // TODO(temp-debug): احذف هالسطر بعد ما نتأكد من شكل الاستجابة الحقيقي.
+    console.error("MyProfileModal payload لم يطابق الشكل المتوقع:", payload);
     throw new Error("تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي");
   }
+
+  const userType = await fetchUserType(profile.id);
+  profile.roleId = userType.roleId;
+  profile.roleName = userType.roleName;
 
   writeStoredSession({
     email: profile.email,
@@ -191,4 +224,10 @@ export function getStoredUserId(): string | null {
 
 export function getStoredProfile(): StoredProfile | null {
   return readStoredSession()?.profile ?? null;
+}
+
+/** UserTypeId=1 ("مدير النظام") — الوحيد المتاح فعليًا على الباك اند حاليًا. */
+export function isRealAdmin(): boolean {
+  const session = readStoredSession();
+  return session?.isDemo === false && session.profile?.roleId === 1;
 }

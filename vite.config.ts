@@ -17,4 +17,8 @@ export default defineConfig({
     viteReact(),
     nitro({ preset: nitroPreset }),
   ],
+  server: {
+    host: true
+  }
 });
+

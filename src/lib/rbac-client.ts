@@ -1,0 +1,87 @@
+// بناء شجرة الصلاحيات بالمتصفح مباشرة لجلسات الباك اند الحقيقية (غير demo).
+//
+// السبب: getMyAccess (server function بـ rbac.functions.ts) بتشتغل على
+// سيرفر Netlify، وما بتقدر تتحقق من كوكي جلسة الباك اند (ASP.NET على
+// دومين etempurl.com منفصل) — المتصفح ما بيبعتها لطلب Netlify-to-Netlify.
+// فبدل ما نحاول نتحقق سيرفريًا من شي المتصفح نفسه شايفه أصلاً (الجلسة
+// شغالة، اتحقق منها بـ verifyServerSession عبر نداء مباشر من المتصفح
+// لـ /api/User/MyProfileModal)، منبني نفس شكل MyAccess هون محليًا.
+//
+// حاليًا الباك اند فيه بس UserTypeId=1 ("مدير النظام") كمستخدم حقيقي، فمنطي
+// صلاحيات كاملة لأي جلسة حقيقية متأكدين إنها أدمن (isRealAdmin())، وأي شي
+// تاني (أو تعذّر تحديد النوع) برجع access فاضي — بالضبط متل سلوك
+// rbac.server.ts لمستخدم حقيقي غير معروف، ما نخترع صلاحيات لأي حد.
+//
+// TODO: لما الباك اند يضيف باقي أنواع المستخدمين (طالب/معلم/ولي أمر/مشرف)
+// ويرجّع UserTypeId ضمن MyProfileModal مباشرة (بدل ما نستنتجه من
+// CreateEditModal بـ auth.ts)، نوسّع هالملف ليبني شجرة كل نوع حسب دوره
+// الحقيقي بدل "أدمن كامل أو ولا شي".
+
+import type { AccessModule, AccessPage, MyAccess } from "./rbac-types";
+import { MODULES, PAGES, PERMISSION_KEYS } from "./rbac-static-data";
+
+export function emptyAccess(userId: string): MyAccess {
+  return { userId, isAdmin: false, profile: null, modules: [], permissions: {} };
+}
+
+export function buildFullAdminAccess(
+  userId: string,
+  profile: { name: string; email: string; avatar: string | null },
+): MyAccess {
+  const allPermKeys = PERMISSION_KEYS.map((p) => p.key);
+  const enabledModules = MODULES.filter((m) => m.enabled).sort(
+    (a, b) => a.sort_order - b.sort_order,
+  );
+
+  const modules: AccessModule[] = [];
+  const permissions: Record<string, string[]> = {};
+
+  for (const m of enabledModules) {
+    const modulePages = PAGES.filter((p) => p.module_id === m.id).sort(
+      (a, b) => a.sort_order - b.sort_order,
+    );
+
+    const build = (parentId: string | null): AccessPage[] =>
+      modulePages
+        .filter((p) => p.parent_id === parentId)
+        .map((p) => ({
+          id: p.id,
+          key: p.key,
+          name: p.name,
+          nameEn: p.name_en,
+          icon: p.icon,
+          path: p.path,
+          permissions: allPermKeys,
+          canView: true,
+          children: build(p.id),
+        }));
+
+    const tree = build(null);
+    if (tree.length === 0) continue;
+
+    const collect = (list: AccessPage[]) => {
+      for (const p of list) {
+        permissions[p.key] = p.permissions;
+        collect(p.children);
+      }
+    };
+    collect(tree);
+
+    modules.push({ id: m.id, key: m.key, name: m.name, nameEn: m.nameEn, icon: m.icon, pages: tree });
+  }
+
+  return {
+    userId,
+    isAdmin: true,
+    profile: {
+      id: userId,
+      full_name: profile.name,
+      email: profile.email,
+      avatar_url: profile.avatar,
+      role_id: "backend-admin",
+      role_name: "مدير النظام",
+    },
+    modules,
+    permissions,
+  };
+}
