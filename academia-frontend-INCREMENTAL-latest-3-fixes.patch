@@ -1,0 +1,55 @@
+--- a/src/integrations/backend/auth.ts
++++ b/src/integrations/backend/auth.ts
+@@ -150,9 +150,13 @@
+   });
+ }
+ 
+-/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد. */
++/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد.
++ * نفس شرط الظهور بالضبط يلي بيتحكم بظهور أزرار الدخول التجريبي بـlogin.tsx
++ * (demoEnabled) — لازم يضلوا متطابقين وإلا الزر بيظهر بس الضغط عليه بيفشل. */
+ export function loginAsDemo(userId: string): void {
+-  if (!import.meta.env.DEV) {
++  const demoAllowed =
++    import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
++  if (!demoAllowed) {
+     throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
+   }
+ 
+--- a/src/integrations/backend/client.ts
++++ b/src/integrations/backend/client.ts
+@@ -8,7 +8,7 @@
+   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/+$/, "") ??
+   "https://localhost:7176";
+ 
+-const REQUEST_TIMEOUT_MS = 20_000;
++const REQUEST_TIMEOUT_MS = 30_000;
+ 
+ export type ApiErrorKind = "network" | "timeout" | "http" | "parse";
+ 
+--- a/public/sw.js
++++ b/public/sw.js
+@@ -34,15 +34,12 @@
+   }
+ 
+   // لباقي الطلبات (GET لنفس الأصل: الصفحات والأصول الثابتة) مرّرها للشبكة
+-  // مباشرة، مع catch يمنع "Uncaught (in promise) TypeError: Failed to fetch"
+-  // من الظهور بالكونسول ومن كسر التنقل بالموقع عند أي انقطاع شبكة مؤقت.
+-  event.respondWith(
+-    fetch(req).catch(
+-      () =>
+-        new Response("", {
+-          status: 504,
+-          statusText: "Network error (service worker passthrough failed)",
+-        }),
+-    ),
+-  );
++  // مباشرة بدون أي تعديل. جرّبنا سابقًا نرجع Response بديلة (504) عند فشل
++  // fetch لتفادي ضجيج الكونسول، بس تبيّن إنه على شبكة غير مستقرة فعليًا هالشي
++  // بيسوء الوضع: بيبدّل فشل طبيعي المتصفح عارف يتعامل معه (retry تلقائي
++  // للـnavigation، رسالة واضحة لاستيراد ديناميكي فاشل) برد فاضي مصطنع بيربك
++  // التطبيق. فهلق منسيب فشل fetch الحقيقي يوصل زي ما هو، بالضبط متل عدم
++  // وجود Service Worker إطلاقًا بالنسبة لحالات الفشل — بس السجل نفسه لسا
++  // مسجَّل (شرط قابلية التثبيت PWA لسا محقَّق).
++  event.respondWith(fetch(req));
+ });

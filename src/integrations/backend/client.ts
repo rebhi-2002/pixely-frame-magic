@@ -8,7 +8,7 @@ export const API_BASE_URL: string =
   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/+$/, "") ??
   "https://localhost:7176";
 
-const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_TIMEOUT_MS = 30_000;
 
 export type ApiErrorKind = "network" | "timeout" | "http" | "parse";
 
