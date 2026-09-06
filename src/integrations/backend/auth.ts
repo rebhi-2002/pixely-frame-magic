@@ -150,9 +150,13 @@ export async function login(email: string, password: string): Promise<void> {
   });
 }
 
-/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد. */
+/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد.
+ * نفس شرط الظهور بالضبط يلي بيتحكم بظهور أزرار الدخول التجريبي بـlogin.tsx
+ * (demoEnabled) — لازم يضلوا متطابقين وإلا الزر بيظهر بس الضغط عليه بيفشل. */
 export function loginAsDemo(userId: string): void {
-  if (!import.meta.env.DEV) {
+  const demoAllowed =
+    import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+  if (!demoAllowed) {
     throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
   }
 
