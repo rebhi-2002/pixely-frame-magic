@@ -48,6 +48,7 @@ import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
+import { Route as AuthenticatedAdminBackendPermissionsRouteImport } from './routes/_authenticated/admin.backend-permissions'
 import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
 import { Route as AuthenticatedAdminConstantsRouteImport } from './routes/_authenticated/admin.constants'
 import { Route as AuthenticatedAdminContentReviewRouteImport } from './routes/_authenticated/admin.content-review'
@@ -280,6 +281,12 @@ const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
   path: '/teacher/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminBackendPermissionsRoute =
+  AuthenticatedAdminBackendPermissionsRouteImport.update({
+    id: '/admin/backend-permissions',
+    path: '/admin/backend-permissions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminCommunityReportsRoute =
   AuthenticatedAdminCommunityReportsRouteImport.update({
     id: '/admin/community-reports',
@@ -503,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
@@ -574,6 +582,7 @@ export interface FileRoutesByTo {
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
@@ -647,6 +656,7 @@ export interface FileRoutesById {
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/_authenticated/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/_authenticated/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
@@ -720,6 +730,7 @@ export interface FileRouteTypes {
     | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/admin/backend-permissions'
     | '/admin/community-reports'
     | '/admin/constants'
     | '/admin/content-review'
@@ -791,6 +802,7 @@ export interface FileRouteTypes {
     | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/admin/backend-permissions'
     | '/admin/community-reports'
     | '/admin/constants'
     | '/admin/content-review'
@@ -863,6 +875,7 @@ export interface FileRouteTypes {
     | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/_authenticated/admin/backend-permissions'
     | '/_authenticated/admin/community-reports'
     | '/_authenticated/admin/constants'
     | '/_authenticated/admin/content-review'
@@ -1197,6 +1210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeacherRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/backend-permissions': {
+      id: '/_authenticated/admin/backend-permissions'
+      path: '/admin/backend-permissions'
+      fullPath: '/admin/backend-permissions'
+      preLoaderRoute: typeof AuthenticatedAdminBackendPermissionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/community-reports': {
       id: '/_authenticated/admin/community-reports'
       path: '/admin/community-reports'
@@ -1444,6 +1464,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
+  AuthenticatedAdminBackendPermissionsRoute: typeof AuthenticatedAdminBackendPermissionsRoute
   AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
   AuthenticatedAdminConstantsRoute: typeof AuthenticatedAdminConstantsRoute
   AuthenticatedAdminContentReviewRoute: typeof AuthenticatedAdminContentReviewRoute
@@ -1492,6 +1513,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
+  AuthenticatedAdminBackendPermissionsRoute:
+    AuthenticatedAdminBackendPermissionsRoute,
   AuthenticatedAdminCommunityReportsRoute:
     AuthenticatedAdminCommunityReportsRoute,
   AuthenticatedAdminConstantsRoute: AuthenticatedAdminConstantsRoute,

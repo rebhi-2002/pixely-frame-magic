@@ -57,6 +57,7 @@ import { listLibrarySubjects } from "@/lib/student-learning.functions";
 import type { UpcomingTaskRow, UpcomingTaskType } from "@/lib/student-learning-data";
 import { useAccess } from "@/hooks/use-access";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "لوحة الطالب | أكاديميا";
 const description = "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.";
@@ -133,7 +134,7 @@ function Body() {
       toast.success(bi("تم التحديث", "Updated"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const statsMutation = useMutation({
@@ -150,7 +151,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const taskSaveMutation = useMutation({
@@ -161,7 +162,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const taskDeleteMutation = useMutation({
@@ -172,7 +173,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   const isLoading =

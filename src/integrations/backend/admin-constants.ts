@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient, throwBilingual } from "./client";
 
 export interface ConstantRow {
   id: number;
@@ -72,13 +72,13 @@ export async function loadBackendConstantParents(): Promise<ConstantParentOption
 }
 
 export async function saveBackendConstant(form: ConstantForm): Promise<void> {
-  if (!form.name.trim()) throw new Error("الاسم مطلوب");
-  if (form.name.trim().length < 3) throw new Error("الاسم قصير جدًا (3 أحرف على الأقل)");
+  if (!form.name.trim()) throwBilingual("الاسم مطلوب", "Name is required");
+  if (form.name.trim().length < 3) throwBilingual("الاسم قصير جدًا (3 أحرف على الأقل)", "Name is too short (at least 3 characters)");
 
   // الباك اند بيرفض الطلب لو الثابت اختار نفسه أبًا له — فحص وقائي بالفرونت
   // قبل الإرسال، بالإضافة لأي تحقق سيرفري لاحقًا.
   if (form.id != null && form.parent_id === form.id) {
-    throw new Error("لا يمكن أن يكون الثابت أبًا لنفسه");
+    throwBilingual("لا يمكن أن يكون الثابت أبًا لنفسه", "A constant can't be its own parent");
   }
 
   const result = await apiClient.post<{ success: boolean; message?: string | null }>(
@@ -92,7 +92,10 @@ export async function saveBackendConstant(form: ConstantForm): Promise<void> {
     },
   );
 
-  if (!result.success) throw new Error(result.message || "تعذر حفظ الثابت");
+  if (!result.success) {
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حفظ الثابت", "Failed to save constant");
+  }
 }
 
 export async function deleteBackendConstant(id: number): Promise<void> {
@@ -102,6 +105,7 @@ export async function deleteBackendConstant(id: number): Promise<void> {
   if (!result.success) {
     // الباك اند برجّع Messages.ConstantHasChildren لو الثابت إله عناصر فرعية —
     // رسالة الباك اند نفسها (بالعربي) بتنعرض للمستخدم مباشرة، مافي داعي نكررها.
-    throw new Error(result.message || "تعذر حذف الثابت");
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حذف الثابت", "Failed to delete constant");
   }
 }

@@ -1,5 +1,5 @@
 import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
-import { u as useRouterState } from "../_libs/@tanstack/react-router+[...].mjs";
+import { f as useRouterState } from "../_libs/@tanstack/react-router+[...].mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/page-transition-Cc_Uhhl7.js
 var import_jsx_runtime = require_jsx_runtime();
 /**

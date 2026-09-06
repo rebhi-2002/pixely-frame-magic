@@ -718,8 +718,10 @@ var OrderedDict = class _OrderedDict extends Map {
 		__instanciated.set(this, true);
 	}
 	set(key, value) {
-		if (__instanciated.get(this)) if (this.has(key)) this.#keys[this.#keys.indexOf(key)] = key;
-		else this.#keys.push(key);
+		if (__instanciated.get(this)) {
+			if (this.has(key)) this.#keys[this.#keys.indexOf(key)] = key;
+			else this.#keys.push(key);
+		}
 		super.set(key, value);
 		return this;
 	}
@@ -1401,19 +1403,21 @@ var AccordionImpl = /* @__PURE__ */ import_react.forwardRef(/* @__PURE__ */ __na
 				nextIndex = endIndex;
 				break;
 			case "ArrowRight":
-				if (orientation === "horizontal") if (isDirectionLTR) moveNext();
-				else movePrev();
+				if (orientation === "horizontal") {
+					if (isDirectionLTR) moveNext();
+					else movePrev();
+				}
 				break;
 			case "ArrowDown":
 				if (orientation === "vertical") moveNext();
 				break;
 			case "ArrowLeft":
-				if (orientation === "horizontal") if (isDirectionLTR) movePrev();
-				else moveNext();
+				if (orientation === "horizontal") {
+					if (isDirectionLTR) movePrev();
+					else moveNext();
+				}
 				break;
-			case "ArrowUp":
-				if (orientation === "vertical") movePrev();
-				break;
+			case "ArrowUp": if (orientation === "vertical") movePrev();
 		}
 		triggerCollection[nextIndex % triggerCount].ref.current?.focus();
 	});

@@ -60,9 +60,7 @@ Linear.prototype = {
 				this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default:
-				this._context.lineTo(x, y);
-				break;
+			default: this._context.lineTo(x, y);
 		}
 	}
 };
@@ -87,8 +85,10 @@ function line_default(x$1, y$1) {
 		var i, n = (data = array_default(data)).length, d, defined0 = false, buffer;
 		if (context == null) output = curve(buffer = path());
 		for (i = 0; i <= n; ++i) {
-			if (!(i < n && defined(d = data[i], i, data)) === defined0) if (defined0 = !defined0) output.lineStart();
-			else output.lineEnd();
+			if (!(i < n && defined(d = data[i], i, data)) === defined0) {
+				if (defined0 = !defined0) output.lineStart();
+				else output.lineEnd();
+			}
 			if (defined0) output.point(+x$1(d, i, data), +y$1(d, i, data));
 		}
 		if (buffer) return output = null, buffer + "" || null;
@@ -121,16 +121,18 @@ function area_default(x0, y0, y1) {
 		var i, j, k, n = (data = array_default(data)).length, d, defined0 = false, buffer, x0z = new Array(n), y0z = new Array(n);
 		if (context == null) output = curve(buffer = path());
 		for (i = 0; i <= n; ++i) {
-			if (!(i < n && defined(d = data[i], i, data)) === defined0) if (defined0 = !defined0) {
-				j = i;
-				output.areaStart();
-				output.lineStart();
-			} else {
-				output.lineEnd();
-				output.lineStart();
-				for (k = i - 1; k >= j; --k) output.point(x0z[k], y0z[k]);
-				output.lineEnd();
-				output.areaEnd();
+			if (!(i < n && defined(d = data[i], i, data)) === defined0) {
+				if (defined0 = !defined0) {
+					j = i;
+					output.areaStart();
+					output.lineStart();
+				} else {
+					output.lineEnd();
+					output.lineStart();
+					for (k = i - 1; k >= j; --k) output.point(x0z[k], y0z[k]);
+					output.lineEnd();
+					output.areaEnd();
+				}
 			}
 			if (defined0) {
 				x0z[i] = +x0(d, i, data), y0z[i] = +y0(d, i, data);
@@ -209,10 +211,8 @@ var Bump = class {
 				else this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default:
-				if (this._x) this._context.bezierCurveTo(this._x0 = (this._x0 + x) / 2, this._y0, this._x0, y, x, y);
-				else this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y) / 2, x, this._y0, x, y);
-				break;
+			default: if (this._x) this._context.bezierCurveTo(this._x0 = (this._x0 + x) / 2, this._y0, this._x0, y, x, y);
+			else this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y) / 2, x, this._y0, x, y);
 		}
 		this._x0 = x, this._y0 = y;
 	}
@@ -369,9 +369,7 @@ Basis.prototype = {
 	lineEnd: function() {
 		switch (this._point) {
 			case 3: point$1(this, this._x1, this._y1);
-			case 2:
-				this._context.lineTo(this._x1, this._y1);
-				break;
+			case 2: this._context.lineTo(this._x1, this._y1);
 		}
 		if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
 		this._line = 1 - this._line;
@@ -389,9 +387,7 @@ Basis.prototype = {
 			case 2:
 				this._point = 3;
 				this._context.lineTo((5 * this._x0 + this._x1) / 6, (5 * this._y0 + this._y1) / 6);
-			default:
-				point$1(this, x, y);
-				break;
+			default: point$1(this, x, y);
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -427,7 +423,6 @@ BasisClosed.prototype = {
 				this.point(this._x2, this._y2);
 				this.point(this._x3, this._y3);
 				this.point(this._x4, this._y4);
-				break;
 		}
 	},
 	point: function(x, y) {
@@ -446,9 +441,7 @@ BasisClosed.prototype = {
 				this._x4 = x, this._y4 = y;
 				this._context.moveTo((this._x0 + 4 * this._x1 + x) / 6, (this._y0 + 4 * this._y1 + y) / 6);
 				break;
-			default:
-				point$1(this, x, y);
-				break;
+			default: point$1(this, x, y);
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -492,9 +485,7 @@ BasisOpen.prototype = {
 				this._line ? this._context.lineTo(x0, y0) : this._context.moveTo(x0, y0);
 				break;
 			case 3: this._point = 4;
-			default:
-				point$1(this, x, y);
-				break;
+			default: point$1(this, x, y);
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -562,9 +553,7 @@ MonotoneX.prototype = {
 			case 2:
 				this._context.lineTo(this._x1, this._y1);
 				break;
-			case 3:
-				point(this, this._t0, slope2(this, this._t0));
-				break;
+			case 3: point(this, this._t0, slope2(this, this._t0));
 		}
 		if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
 		this._line = 1 - this._line;
@@ -585,9 +574,7 @@ MonotoneX.prototype = {
 				this._point = 3;
 				point(this, slope2(this, t1 = slope3(this, x, y)), t1);
 				break;
-			default:
-				point(this, this._t0, t1 = slope3(this, x, y));
-				break;
+			default: point(this, this._t0, t1 = slope3(this, x, y));
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -703,16 +690,14 @@ Step.prototype = {
 				this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default:
-				if (this._t <= 0) {
-					this._context.lineTo(this._x, y);
-					this._context.lineTo(x, y);
-				} else {
-					var x1 = this._x * (1 - this._t) + x * this._t;
-					this._context.lineTo(x1, this._y);
-					this._context.lineTo(x1, y);
-				}
-				break;
+			default: if (this._t <= 0) {
+				this._context.lineTo(this._x, y);
+				this._context.lineTo(x, y);
+			} else {
+				var x1 = this._x * (1 - this._t) + x * this._t;
+				this._context.lineTo(x1, this._y);
+				this._context.lineTo(x1, y);
+			}
 		}
 		this._x = x, this._y = y;
 	}

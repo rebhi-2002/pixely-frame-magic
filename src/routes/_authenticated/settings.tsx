@@ -23,6 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -63,7 +64,7 @@ function SettingsPage() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   function openDialog() {

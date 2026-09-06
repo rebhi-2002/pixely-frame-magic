@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { listModules, setModuleEnabled } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY, useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 export function SystemModulesPage() {
   const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ export function SystemModulesPage() {
       toast.success(bi("تم حفظ حالة الوحدة", "Module status saved"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const editable = can("admin_settings", "edit");

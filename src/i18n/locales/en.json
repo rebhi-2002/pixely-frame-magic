@@ -208,11 +208,6 @@
         "Digital certificates on subject completion"
       ]
     },
-    "teacher": {
-      "name": "Teacher",
-      "price": "9",
-      "cta": "Start as a teacher"
-    },
     "note": "Prices in Israeli shekels (ILS). Cancel anytime.",
     "currency": "ILS",
     "forever": "forever",
@@ -401,54 +396,82 @@
     "forbiddenText": "This page requires a permission your account doesn't have."
   },
   "privacy": {
-    "h1": "Privacy policy",
-    "intro": "Last updated: platform launch. Written in plain language because it actually concerns you.",
+    "h1": "Privacy Policy",
+    "intro": "Initial draft pending final legal review — written in plain language because it's genuinely about you.",
     "sections": [
       {
-        "t": "Data we collect",
-        "d": "Your name, email, the system, grade and subjects you pick, and your activity on the platform (lessons completed and Quiz results)."
+        "t": "Data We Collect",
+        "d": "Account data (name, email, phone, role), academic data (attendance, exam results, course history), financial data (wallet transaction history only — we don't store bank card details, transfers are manual with a receipt), and basic technical data for security purposes."
       },
       {
-        "t": "How we use it",
-        "d": "To tailor your content, compute your achievement rate, and suggest the right reviews. We never sell your data to third parties."
+        "t": "How We Use Your Data",
+        "d": "To run your account and wallet, to communicate about your requests and notifications, to improve the service, and to comply with the law when officially required."
       },
       {
-        "t": "Student privacy toward parents",
-        "d": "A parent sees only a weekly summary of consistency and achievement — not your community chats or daily activity details."
+        "t": "Data Sharing",
+        "d": "We do not sell user data to any third party. A student's academic and financial data is shown to the teacher of their course (limited to what's necessary), to a linked parent account, and to admins for administrative purposes. [TBD: name any external service providers — hosting, email, etc.]"
       },
       {
-        "t": "Uploaded content",
-        "d": "Teachers are responsible for the rights to the content they upload. Reported content is reviewed by moderation and may be removed."
+        "t": "Data Security",
+        "d": "Passwords are stored hashed, and login sessions are protected with secure cookies. [TBD: update with any further security measure once actually added to the platform]"
       },
       {
-        "t": "Your rights",
-        "d": "You can request deletion of your account and data at any time from settings or by contacting support."
+        "t": "Minors' Data",
+        "d": "[TBD — critical point: if students under 18 use the platform directly, this needs a dedicated parental-consent clause and extra protection per local law]"
+      },
+      {
+        "t": "Your Rights",
+        "d": "You may request a copy of your data, request corrections, or request account deletion (subject to retaining financial records for the legally required period)."
+      },
+      {
+        "t": "Cookies",
+        "d": "Essential cookies are used for sign-in and saving your preferences (language, theme), with your consent via the site's cookie banner."
+      },
+      {
+        "t": "Contact Us",
+        "d": "[TBD: a dedicated email or contact point for privacy inquiries]"
       }
     ]
   },
   "terms": {
-    "h1": "Terms of use",
-    "intro": "By using Academia, you agree to the following.",
+    "h1": "Terms of Service",
+    "intro": "By using Academia (and its related apps), you agree to the following terms. Initial draft pending final legal review — subject to updates.",
     "sections": [
       {
-        "t": "Account",
-        "d": "One account per person, with accurate details. Sharing your account may lead to suspension."
+        "t": "Acceptance of Terms",
+        "d": "Using the platform means you fully accept these terms. If you are under 18, a parent or guardian must accept on your behalf. [TBD: exact age per local law]"
       },
       {
-        "t": "Community conduct",
-        "d": "Questions and answers are for learning. Abuse or inappropriate content is reported and reviewed by moderation."
+        "t": "Service Description",
+        "d": "Academia is an education marketplace connecting students with teachers and courses, offering an internal wallet, academic tracking (attendance, exams, results), and optional parent monitoring. The platform currently does not offer live chat, live video streaming, a native mobile app, or instant online payment — bank transfers are processed manually."
       },
       {
-        "t": "Content rights",
-        "d": "Do not upload content you don't own the rights to. Violating content is removed; repeats may suspend the account."
+        "t": "Accounts & Roles",
+        "d": "You're responsible for keeping your login credentials confidential. Available roles: student, teacher, parent, supervisor, system admin. The platform may suspend or terminate any account that violates these terms or is used fraudulently."
       },
       {
-        "t": "Subscriptions",
-        "d": "The monthly subscription renews automatically and can be cancelled anytime, staying active until the paid period ends."
+        "t": "Wallet & Financial Transactions",
+        "d": "Top-ups happen via manual bank transfer plus a receipt upload, reviewed by an admin before the balance is credited. Enrollment fee deductions are final once a teacher approves the request, unless a different refund policy is set [TBD]. A platform commission applies to each enrollment. Teacher withdrawal requests are reviewed before the actual transfer. [TBD: min/max top-up and withdrawal amounts, processing time]"
       },
       {
-        "t": "Service limits",
-        "d": "The exam simulator is an AI-based practice tool, not an official substitute for ministry resources."
+        "t": "User Conduct",
+        "d": "Impersonation, uploading content that violates the law or intellectual property rights, unauthorized access attempts to other accounts or data, and any fraudulent use of the platform are prohibited."
+      },
+      {
+        "t": "Intellectual Property",
+        "d": "Educational content uploaded by a teacher remains their property; the teacher grants the platform a license to display it exclusively to students enrolled in their course."
+      },
+      {
+        "t": "Disclaimer",
+        "d": "The platform is an intermediary between students and teachers and isn't directly responsible for the quality of teacher-provided educational content. [TBD: financial liability limits need precise legal wording]"
+      },
+      {
+        "t": "Changes to These Terms",
+        "d": "The platform may amend these terms, notifying users of any material change a reasonable time before it takes effect."
+      },
+      {
+        "t": "Governing Law",
+        "d": "[TBD — to be determined with legal counsel based on the country of incorporation/operation]"
       }
     ]
   },

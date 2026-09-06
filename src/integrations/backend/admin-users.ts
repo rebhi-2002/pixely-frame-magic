@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient, throwBilingual } from "./client";
 import type { UserRow } from "@/lib/rbac-types";
 
 export interface BackendUserType {
@@ -115,7 +115,10 @@ export async function saveBackendUser(form: BackendUserForm): Promise<void> {
   );
 
   if (!form.id && (!form.password || !form.confirmPassword)) {
-    throw new Error("كلمة المرور وتأكيدها مطلوبان عند إضافة مستخدم");
+    throwBilingual(
+      "كلمة المرور وتأكيدها مطلوبان عند إضافة مستخدم",
+      "Password and confirmation are required when adding a user",
+    );
   }
 
   const result = await apiClient.post<{ success: boolean; message?: string | null }>(
@@ -134,14 +137,20 @@ export async function saveBackendUser(form: BackendUserForm): Promise<void> {
     },
   );
 
-  if (!result.success) throw new Error(result.message || "تعذر حفظ المستخدم");
+  if (!result.success) {
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حفظ المستخدم", "Failed to save user");
+  }
 }
 
 export async function updateBackendUserStatus(id: string, isActive: boolean): Promise<void> {
   const result = await loadFormData(id);
   const user = result.user;
   if (!user?.id || !user.name || !user.email || !user.phoneNumber) {
-    throw new Error("تعذر تحميل بيانات المستخدم قبل تحديث حالته");
+    throwBilingual(
+      "تعذر تحميل بيانات المستخدم قبل تحديث حالته",
+      "Couldn't load the user's data before updating their status",
+    );
   }
 
   const genderId = requiredId(user.genderId ?? user.gender?.id ?? null, "الجنس");
@@ -162,12 +171,18 @@ export async function updateBackendUserStatus(id: string, isActive: boolean): Pr
     },
   );
 
-  if (!saved.success) throw new Error(saved.message || "تعذر تحديث حالة المستخدم");
+  if (!saved.success) {
+    if (saved.message) throw new Error(saved.message);
+    throwBilingual("تعذر تحديث حالة المستخدم", "Failed to update user status");
+  }
 }
 
 export async function deleteBackendUser(id: string): Promise<void> {
   const result = await apiClient.delete<{ success: boolean; message?: string | null }>(
     `/api/User/Delete?id=${encodeURIComponent(id)}`,
   );
-  if (!result.success) throw new Error(result.message || "تعذر حذف المستخدم");
+  if (!result.success) {
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حذف المستخدم", "Failed to delete user");
+  }
 }

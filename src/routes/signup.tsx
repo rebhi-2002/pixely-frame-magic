@@ -10,6 +10,7 @@ import { currentUserHome } from "@/lib/session-home";
 import { FeatureStatus } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "إنشاء حساب | أكاديميا";
 const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
@@ -57,7 +58,7 @@ function SignupPage() {
       // دخول الأدمن الحالي (/api/Auth/Login). راجع src/integrations/backend/auth.ts.
       throw new Error("إنشاء حساب جديد غير متاح حالياً — قيد الربط مع الباك اند الجديد.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "…");
+      toast.error(getErrorMessage(err, "…"));
     } finally {
       setLoading(false);
     }

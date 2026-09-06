@@ -42,6 +42,7 @@ import { listQuizItems, listTeacherCourses } from "@/lib/teacher-teaching.functi
 import type { MissedPriority, MissedQuestionRow } from "@/lib/teacher-followup-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "التحليلات | أكاديميا";
 const description = "أين يتعثّر طلابك بالضبط: أسئلة يخطئ فيها الأكثر، وإتقان كل اختبار.";
@@ -114,7 +115,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -125,7 +126,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: MissedQuestionRow | null) {

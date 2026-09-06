@@ -15,6 +15,7 @@ import {
 } from "@/lib/account-pages.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 export const Route = createFileRoute("/_authenticated/notifications")({
   head: () => ({
@@ -63,7 +64,7 @@ function Body() {
     mutationFn: (id: string) => markOne({ data: { id } }),
     onSuccess: invalidate,
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const markAllMutation = useMutation({
@@ -73,14 +74,14 @@ function Body() {
       toast.success(bi("تم تعليم الكل كمقروء", "All marked as read"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => remove({ data: { id } }),
     onSuccess: invalidate,
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   return (

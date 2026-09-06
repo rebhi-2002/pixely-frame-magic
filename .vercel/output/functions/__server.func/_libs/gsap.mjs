@@ -1608,10 +1608,12 @@ var Timeline = /*#__PURE__*/ function(_Animation) {
 		if (ignoreBeforeTime === void 0) ignoreBeforeTime = -_bigNum$1;
 		var a = [], child = this._first;
 		while (child) {
-			if (child._start >= ignoreBeforeTime) if (child instanceof Tween) tweens && a.push(child);
-			else {
-				timelines && a.push(child);
-				nested && a.push.apply(a, child.getChildren(true, tweens, timelines));
+			if (child._start >= ignoreBeforeTime) {
+				if (child instanceof Tween) tweens && a.push(child);
+				else {
+					timelines && a.push(child);
+					nested && a.push.apply(a, child.getChildren(true, tweens, timelines));
+				}
 			}
 			child = child._next;
 		}
@@ -3519,13 +3521,15 @@ var _parseTransform = function _parseTransform(target, uncache) {
 			t1 && target.setAttribute("transform", t1);
 		}
 	}
-	if (Math.abs(skewX) > 90 && Math.abs(skewX) < 270) if (invertedScaleX) {
-		scaleX *= -1;
-		skewX += rotation <= 0 ? 180 : -180;
-		rotation += rotation <= 0 ? 180 : -180;
-	} else {
-		scaleY *= -1;
-		skewX += skewX <= 0 ? 180 : -180;
+	if (Math.abs(skewX) > 90 && Math.abs(skewX) < 270) {
+		if (invertedScaleX) {
+			scaleX *= -1;
+			skewX += rotation <= 0 ? 180 : -180;
+			rotation += rotation <= 0 ? 180 : -180;
+		} else {
+			scaleY *= -1;
+			skewX += skewX <= 0 ? 180 : -180;
+		}
 	}
 	uncache = uncache || cache.uncache;
 	cache.x = x - ((cache.xPercent = x && (!uncache && cache.xPercent || (Math.round(target.offsetWidth / 2) === Math.round(-x) ? -50 : 0))) ? target.offsetWidth * cache.xPercent / 100 : 0) + px;
@@ -4731,8 +4735,10 @@ var _revertAll = function _revertAll(kill, media) {
 	var trigger;
 	for (_i = 0; _i < _triggers.length; _i++) {
 		trigger = _triggers[_i];
-		if (trigger && (!media || trigger._ctx === media)) if (kill) trigger.kill(1);
-		else trigger.revert(true, true);
+		if (trigger && (!media || trigger._ctx === media)) {
+			if (kill) trigger.kill(1);
+			else trigger.revert(true, true);
+		}
 	}
 	_isReverted = true;
 	media && _revertRecorded(media);
@@ -5281,8 +5287,10 @@ var ScrollTrigger = /*#__PURE__*/ function() {
 					_refreshing = self;
 					self.update(r);
 				}
-				if (pin && (!pinReparent || !self.isActive)) if (r) _swapPinOut(pin, spacer, pinOriginalState);
-				else _swapPinIn(pin, spacer, _getComputedStyle(pin), spacerState);
+				if (pin && (!pinReparent || !self.isActive)) {
+					if (r) _swapPinOut(pin, spacer, pinOriginalState);
+					else _swapPinIn(pin, spacer, _getComputedStyle(pin), spacerState);
+				}
 				r || self.update(r);
 				_refreshing = prevRefreshing;
 				self.isReverted = r;
@@ -5332,11 +5340,13 @@ var ScrollTrigger = /*#__PURE__*/ function() {
 			parsedStart = _parseClamp(parsedStart, "start", self);
 			start = _parsePosition(parsedStart, trigger, size, direction, scrollFunc(), markerStart, markerStartTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._startClamp && "_startClamp") || (pin ? -.001 : 0);
 			_isFunction(parsedEnd) && (parsedEnd = parsedEnd(self));
-			if (_isString(parsedEnd) && !parsedEnd.indexOf("+=")) if (~parsedEnd.indexOf(" ")) parsedEnd = (_isString(parsedStart) ? parsedStart.split(" ")[0] : "") + parsedEnd;
-			else {
-				offset = _offsetToPx(parsedEnd.substr(2), size);
-				parsedEnd = _isString(parsedStart) ? parsedStart : (containerAnimation ? gsap.utils.mapRange(0, containerAnimation.duration(), containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, start) : start) + offset;
-				parsedEndTrigger = trigger;
+			if (_isString(parsedEnd) && !parsedEnd.indexOf("+=")) {
+				if (~parsedEnd.indexOf(" ")) parsedEnd = (_isString(parsedStart) ? parsedStart.split(" ")[0] : "") + parsedEnd;
+				else {
+					offset = _offsetToPx(parsedEnd.substr(2), size);
+					parsedEnd = _isString(parsedStart) ? parsedStart : (containerAnimation ? gsap.utils.mapRange(0, containerAnimation.duration(), containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, start) : start) + offset;
+					parsedEndTrigger = trigger;
+				}
 			}
 			parsedEnd = _parseClamp(parsedEnd, "end", self);
 			end = Math.max(start, _parsePosition(parsedEnd || (parsedEndTrigger ? "100% 0" : max), parsedEndTrigger, size, direction, scrollFunc() + offset, markerEnd, markerEndTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._endClamp && "_endClamp")) || -.001;
@@ -5546,10 +5556,12 @@ var ScrollTrigger = /*#__PURE__*/ function() {
 					if (!useFixedPosition) pinSetter(_round(pinStart + pinChange * clipped));
 					else if (stateChanged) {
 						isAtMax = !reset && clipped > prevProgress && end + 1 > scroll && scroll + 1 >= _maxScroll(scroller, direction);
-						if (pinReparent) if (!reset && (isActive || isAtMax)) {
-							var bounds = _getBounds(pin, true), _offset = scroll - start;
-							_reparent(pin, _body, bounds.top + (direction === _vertical ? _offset : 0) + _px, bounds.left + (direction === _vertical ? 0 : _offset) + _px);
-						} else _reparent(pin, spacer);
+						if (pinReparent) {
+							if (!reset && (isActive || isAtMax)) {
+								var bounds = _getBounds(pin, true), _offset = scroll - start;
+								_reparent(pin, _body, bounds.top + (direction === _vertical ? _offset : 0) + _px, bounds.left + (direction === _vertical ? 0 : _offset) + _px);
+							} else _reparent(pin, spacer);
+						}
 						_setState(isActive || isAtMax ? pinActiveState : pinState);
 						pinMoves && clipped < 1 && isActive || pinSetter(pinStart + (clipped === 1 && !isAtMax ? pinChange : 0));
 					}
@@ -5561,10 +5573,12 @@ var ScrollTrigger = /*#__PURE__*/ function() {
 				onUpdate && !isToggle && !reset && onUpdate(self);
 				if (stateChanged && !_refreshing) {
 					if (isToggle) {
-						if (isTakingAction) if (action === "complete") animation.pause().totalProgress(1);
-						else if (action === "reset") animation.restart(true).pause();
-						else if (action === "restart") animation.restart(true);
-						else animation[action]();
+						if (isTakingAction) {
+							if (action === "complete") animation.pause().totalProgress(1);
+							else if (action === "reset") animation.restart(true).pause();
+							else if (action === "restart") animation.restart(true);
+							else animation[action]();
+						}
 						onUpdate && onUpdate(self);
 					}
 					if (toggled || !_limitCallbacks) {

@@ -146,12 +146,12 @@ P.squareRoot = P.sqrt = function() {
 	e = getBase10Exponent(x);
 	external = false;
 	s = Math.sqrt(+x);
-	if (s == 0 || s == Infinity) {
+	if (s == 0 || s == 1 / 0) {
 		n = digitsToString(x.d);
 		if ((n.length + e) % 2 == 0) n += "0";
 		s = Math.sqrt(n);
 		e = mathfloor((e + 1) / 2) - (e < 0 || e % 2);
-		if (s == Infinity) n = "5e" + e;
+		if (s == 1 / 0) n = "5e" + e;
 		else {
 			n = s.toExponential();
 			n = n.slice(0, n.indexOf("e") + 1) + e;
@@ -880,16 +880,20 @@ function config(obj) {
 		0,
 		8,
 		"toExpNeg",
-		-Infinity,
+		-1 / 0,
 		0,
 		"toExpPos",
 		0,
-		Infinity
+		1 / 0
 	];
-	for (i = 0; i < ps.length; i += 3) if ((v = obj[p = ps[i]]) !== void 0) if (mathfloor(v) === v && v >= ps[i + 1] && v <= ps[i + 2]) this[p] = v;
-	else throw Error(invalidArgument + p + ": " + v);
-	if ((v = obj[p = "LN10"]) !== void 0) if (v == Math.LN10) this[p] = new this(v);
-	else throw Error(invalidArgument + p + ": " + v);
+	for (i = 0; i < ps.length; i += 3) if ((v = obj[p = ps[i]]) !== void 0) {
+		if (mathfloor(v) === v && v >= ps[i + 1] && v <= ps[i + 2]) this[p] = v;
+		else throw Error(invalidArgument + p + ": " + v);
+	}
+	if ((v = obj[p = "LN10"]) !== void 0) {
+		if (v == Math.LN10) this[p] = new this(v);
+		else throw Error(invalidArgument + p + ": " + v);
+	}
 	return this;
 }
 var Decimal = clone(defaults);

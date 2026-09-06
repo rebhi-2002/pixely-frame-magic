@@ -115,9 +115,10 @@ function string_default(a, b) {
 			if (s[i]) s[i] += bs;
 			else s[++i] = bs;
 		}
-		if ((am = am[0]) === (bm = bm[0])) if (s[i]) s[i] += bm;
-		else s[++i] = bm;
-		else {
+		if ((am = am[0]) === (bm = bm[0])) {
+			if (s[i]) s[i] += bm;
+			else s[++i] = bm;
+		} else {
 			s[++i] = null;
 			q.push({
 				i,

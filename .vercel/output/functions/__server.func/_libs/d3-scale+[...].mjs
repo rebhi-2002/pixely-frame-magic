@@ -53,9 +53,7 @@ function initRange(domain, range) {
 		case 1:
 			this.range(domain);
 			break;
-		default:
-			this.range(range).domain(domain);
-			break;
+		default: this.range(range).domain(domain);
 	}
 	return this;
 }
@@ -70,7 +68,6 @@ function initInterpolator(domain, interpolator) {
 			this.domain(domain);
 			if (typeof interpolator === "function") this.interpolator(interpolator);
 			else this.range(interpolator);
-			break;
 	}
 	return this;
 }
@@ -288,9 +285,7 @@ function tickFormat(start, stop, count, specifier) {
 			if (specifier.precision == null && !isNaN(precision = precisionRound_default(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
 			break;
 		case "f":
-		case "%":
-			if (specifier.precision == null && !isNaN(precision = precisionFixed_default(step))) specifier.precision = precision - (specifier.type === "%") * 2;
-			break;
+		case "%": if (specifier.precision == null && !isNaN(precision = precisionFixed_default(step))) specifier.precision = precision - (specifier.type === "%") * 2;
 	}
 	return format(specifier);
 }
@@ -719,8 +714,10 @@ function timeInterval(floori, offseti, count, field) {
 		return timeInterval((date) => {
 			if (date >= date) while (floori(date), !test(date)) date.setTime(date - 1);
 		}, (date, step) => {
-			if (date >= date) if (step < 0) while (++step <= 0) while (offseti(date, -1), !test(date));
-			else while (--step >= 0) while (offseti(date, 1), !test(date));
+			if (date >= date) {
+				if (step < 0) while (++step <= 0) while (offseti(date, -1), !test(date));
+				else while (--step >= 0) while (offseti(date, 1), !test(date));
+			}
 		});
 	};
 	if (count) {

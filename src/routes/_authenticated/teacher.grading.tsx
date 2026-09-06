@@ -35,6 +35,7 @@ import {
 import type { GradingItemRow } from "@/lib/teacher-followup-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "التصحيح | أكاديميا";
 const description = "قائمة التصحيح: الأسئلة المقالية والملفات المرفوعة، مع ملاحظات لكل طالب.";
@@ -107,7 +108,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const gradeMutation = useMutation({
@@ -118,7 +119,7 @@ function Body() {
       toast.success(bi("تم التصحيح", "Marked as graded"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -129,7 +130,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: GradingItemRow | null) {

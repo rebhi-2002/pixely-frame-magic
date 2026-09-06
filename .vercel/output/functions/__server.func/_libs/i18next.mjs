@@ -74,10 +74,13 @@ var getPathWithDefaults = (data, defaultData, key) => {
 	return getPath(defaultData, key);
 };
 var deepExtend = (target, source, overwrite) => {
-	for (const prop in source) if (prop !== "__proto__" && prop !== "constructor") if (Object.prototype.hasOwnProperty.call(target, prop)) if (isString(target[prop]) || target[prop] instanceof String || isString(source[prop]) || source[prop] instanceof String) {
-		if (overwrite) target[prop] = source[prop];
-	} else deepExtend(target[prop], source[prop], overwrite);
-	else target[prop] = source[prop];
+	for (const prop in source) if (prop !== "__proto__" && prop !== "constructor") {
+		if (Object.prototype.hasOwnProperty.call(target, prop)) {
+			if (isString(target[prop]) || target[prop] instanceof String || isString(source[prop]) || source[prop] instanceof String) {
+				if (overwrite) target[prop] = source[prop];
+			} else deepExtend(target[prop], source[prop], overwrite);
+		} else target[prop] = source[prop];
+	}
 	return target;
 };
 var regexEscape = (str) => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -278,9 +281,11 @@ var ResourceStore = class extends EventEmitter {
 		if (lng.includes(".")) path = lng.split(".");
 		else {
 			path = [lng, ns];
-			if (key) if (Array.isArray(key)) path.push(...key);
-			else if (isString(key) && keySeparator) path.push(...key.split(keySeparator));
-			else path.push(key);
+			if (key) {
+				if (Array.isArray(key)) path.push(...key);
+				else if (isString(key) && keySeparator) path.push(...key.split(keySeparator));
+				else path.push(key);
+			}
 		}
 		const result = getPath(this.data, path);
 		if (!result && !ns && !key && lng.includes(".")) {
@@ -582,14 +587,16 @@ var Translator = class Translator extends EventEmitter {
 					else if (this.backendConnector?.saveMissing) this.backendConnector.saveMissing(l, namespace, k, defaultForMissing, updateMissing, opt);
 					this.emit("missingKey", l, namespace, k, res);
 				};
-				if (this.options.saveMissing) if (this.options.saveMissingPlurals && needsPluralHandling) lngs.forEach((language) => {
-					const suffixes = this.pluralResolver.getSuffixes(language, opt);
-					if (needsZeroSuffixLookup && opt[`defaultValue${this.options.pluralSeparator}zero`] && !suffixes.includes(`${this.options.pluralSeparator}zero`)) suffixes.push(`${this.options.pluralSeparator}zero`);
-					suffixes.forEach((suffix) => {
-						send([language], key + suffix, opt[`defaultValue${suffix}`] || defaultValue);
+				if (this.options.saveMissing) {
+					if (this.options.saveMissingPlurals && needsPluralHandling) lngs.forEach((language) => {
+						const suffixes = this.pluralResolver.getSuffixes(language, opt);
+						if (needsZeroSuffixLookup && opt[`defaultValue${this.options.pluralSeparator}zero`] && !suffixes.includes(`${this.options.pluralSeparator}zero`)) suffixes.push(`${this.options.pluralSeparator}zero`);
+						suffixes.forEach((suffix) => {
+							send([language], key + suffix, opt[`defaultValue${suffix}`] || defaultValue);
+						});
 					});
-				});
-				else send(lngs, key, defaultValue);
+					else send(lngs, key, defaultValue);
+				}
 			}
 			res = this.extendTranslation(res, keys, opt, resolved, lastKey);
 			if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = `${namespace}${nsSeparator}${key}`;
@@ -775,6 +782,10 @@ var LanguageUtil = class {
 		this.options = options;
 		this.supportedLngs = this.options.supportedLngs || false;
 		this.logger = baseLogger.create("languageUtils");
+		this.resolveHierarchyCache = {};
+	}
+	clearCache() {
+		this.resolveHierarchyCache = {};
 	}
 	getScriptPartFromCode(code) {
 		code = getCleanedCode(code);
@@ -847,6 +858,27 @@ var LanguageUtil = class {
 		return found || [];
 	}
 	toResolveHierarchy(code, fallbackCode) {
+		const fallbackLng = this.options.fallbackLng;
+		const fallbackLngKey = Array.isArray(fallbackLng) ? fallbackLng.join("|") : fallbackLng;
+		if (fallbackLngKey !== this._cachedFallbackLng) {
+			this.resolveHierarchyCache = {};
+			this._cachedFallbackLng = fallbackLngKey;
+		}
+		const hasCacheableFallback = fallbackCode === void 0 || fallbackCode === false || isString(fallbackCode);
+		const usesUncacheableOptionsFallback = fallbackCode === void 0 && typeof this.options.fallbackLng === "function";
+		const cacheable = isString(code) && hasCacheableFallback && !usesUncacheableOptionsFallback;
+		let cacheKey = null;
+		if (cacheable) {
+			let fallbackCacheKey;
+			if (fallbackCode === void 0) fallbackCacheKey = "undefined";
+			else if (fallbackCode === false) fallbackCacheKey = "boolean:false";
+			else fallbackCacheKey = `string:${fallbackCode}`;
+			cacheKey = `${code.length}:${code}|${fallbackCacheKey}`;
+		}
+		if (cacheKey !== null) {
+			const cached = this.resolveHierarchyCache[cacheKey];
+			if (cached !== void 0) return cached.slice();
+		}
 		const fallbackCodes = this.getFallbackCodes((fallbackCode === false ? [] : fallbackCode) || this.options.fallbackLng || [], code);
 		const codes = [];
 		const addCode = (c) => {
@@ -862,6 +894,10 @@ var LanguageUtil = class {
 		fallbackCodes.forEach((fc) => {
 			if (!codes.includes(fc)) addCode(this.formatLanguageCode(fc));
 		});
+		if (cacheKey !== null) {
+			this.resolveHierarchyCache[cacheKey] = codes;
+			return codes.slice();
+		}
 		return codes;
 	}
 };
@@ -1018,18 +1054,19 @@ var Interpolator = class {
 			while (match = todo.regex.exec(str)) {
 				const matchedVar = match[1].trim();
 				value = handleFormat(matchedVar);
-				if (value === void 0) if (typeof missingInterpolationHandler === "function") {
-					const temp = missingInterpolationHandler(str, match, options);
-					value = isString(temp) ? temp : "";
-				} else if (options && Object.prototype.hasOwnProperty.call(options, matchedVar)) value = "";
-				else if (skipOnVariables) {
-					value = match[0];
-					continue;
-				} else {
-					this.logger.warn(`missed to pass in variable ${matchedVar} for interpolating ${str}`);
-					value = "";
-				}
-				else if (!isString(value) && !this.useRawValueToEscape) value = makeString(value);
+				if (value === void 0) {
+					if (typeof missingInterpolationHandler === "function") {
+						const temp = missingInterpolationHandler(str, match, options);
+						value = isString(temp) ? temp : "";
+					} else if (options && Object.prototype.hasOwnProperty.call(options, matchedVar)) value = "";
+					else if (skipOnVariables) {
+						value = match[0];
+						continue;
+					} else {
+						this.logger.warn(`missed to pass in variable ${matchedVar} for interpolating ${str}`);
+						value = "";
+					}
+				} else if (!isString(value) && !this.useRawValueToEscape) value = makeString(value);
 				const safeValue = todo.safeValue(value);
 				str = str.replace(match[0], regexSafe(safeValue));
 				if (skipOnVariables) {
@@ -1716,9 +1753,10 @@ var instance = class I18n extends EventEmitter {
 			});
 		};
 		if (!lng && this.services.languageDetector && !this.services.languageDetector.async) setLng(this.services.languageDetector.detect());
-		else if (!lng && this.services.languageDetector && this.services.languageDetector.async) if (this.services.languageDetector.detect.length === 0) this.services.languageDetector.detect().then(setLng);
-		else this.services.languageDetector.detect(setLng);
-		else setLng(lng);
+		else if (!lng && this.services.languageDetector && this.services.languageDetector.async) {
+			if (this.services.languageDetector.detect.length === 0) this.services.languageDetector.detect().then(setLng);
+			else this.services.languageDetector.detect(setLng);
+		} else setLng(lng);
 		return deferred;
 	}
 	getFixedT(lng, ns, keyPrefix, fixedOpts) {

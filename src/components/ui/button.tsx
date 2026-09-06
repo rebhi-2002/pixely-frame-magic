@@ -56,8 +56,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        {loading && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-        {children}
+        {asChild ? (
+          // Slot (Radix) يقبل عنصر React واحد بالضبط كـ children. لو ضفنا
+          // أي عنصر شقيق (حتى لو شرطي وناتجه false)، بيرمي:
+          // "Slot failed to slot onto its children" ويوقف الصفحة كلها.
+          // فلما asChild=true منمرر children كما هي بدون أي إخوة.
+          children
+        ) : (
+          <>
+            {loading && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
+            {children}
+          </>
+        )}
       </Comp>
     );
   },

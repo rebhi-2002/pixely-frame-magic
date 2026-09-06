@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient, throwBilingual } from "./client";
 
 export interface PageRow {
   id: number;
@@ -115,16 +115,22 @@ export async function loadBackendPageOptions(): Promise<PageFormOptions> {
 
 export async function saveBackendPage(form: PageForm): Promise<void> {
   if (!form.name.trim() || form.name.trim().length < 3) {
-    throw new Error("الاسم بالعربي مطلوب (3 أحرف على الأقل)");
+    throwBilingual(
+      "الاسم بالعربي مطلوب (3 أحرف على الأقل)",
+      "Arabic name is required (at least 3 characters)",
+    );
   }
   if (!form.name_en.trim() || form.name_en.trim().length < 3) {
-    throw new Error("الاسم بالإنجليزي مطلوب (3 أحرف على الأقل)");
+    throwBilingual(
+      "الاسم بالإنجليزي مطلوب (3 أحرف على الأقل)",
+      "English name is required (at least 3 characters)",
+    );
   }
   if (form.category_id == null) {
-    throw new Error("يجب اختيار الفئة");
+    throwBilingual("يجب اختيار الفئة", "You must select a category");
   }
   if (form.id != null && form.parent_id === form.id) {
-    throw new Error("لا يمكن أن تكون الصفحة أبًا لنفسها");
+    throwBilingual("لا يمكن أن تكون الصفحة أبًا لنفسها", "A page can't be its own parent");
   }
 
   const result = await apiClient.post<{ success: boolean; message?: string | null }>(
@@ -144,7 +150,10 @@ export async function saveBackendPage(form: PageForm): Promise<void> {
     },
   );
 
-  if (!result.success) throw new Error(result.message || "تعذر حفظ الصفحة");
+  if (!result.success) {
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حفظ الصفحة", "Failed to save page");
+  }
 }
 
 export async function deleteBackendPage(id: number): Promise<void> {
@@ -154,6 +163,7 @@ export async function deleteBackendPage(id: number): Promise<void> {
   if (!result.success) {
     // الباك اند برجّع رسالة "هذه الصفحة لها صفحات فرعية" لو في أبناء —
     // منعرضها كما هي، مو رسالة عامة.
-    throw new Error(result.message || "تعذر حذف الصفحة");
+    if (result.message) throw new Error(result.message);
+    throwBilingual("تعذر حذف الصفحة", "Failed to delete page");
   }
 }

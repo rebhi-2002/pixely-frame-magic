@@ -815,11 +815,7 @@ RemoveScroll.classNames = {
 	fullWidth: fullWidthClassName,
 	zeroRight: zeroRightClassName
 };
-//#endregion
-//#region node_modules/get-nonce/dist/es2015/index.js
-var currentNonce;
 var getNonce = function() {
-	if (currentNonce) return currentNonce;
 	if (typeof __webpack_nonce__ !== "undefined") return __webpack_nonce__;
 };
 //#endregion
@@ -1434,7 +1430,8 @@ var Slot = createSlot("DialogOverlay.RemoveScroll");
 var DialogOverlayImpl = /* @__PURE__ */ import_react.forwardRef(/* @__PURE__ */ __name$1(function DialogOverlayImpl2(props, forwardedRef) {
 	const { __scopeDialog, ...overlayProps } = props;
 	const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
-	const composedRefs = useComposedRefs(forwardedRef, useDismissableLayerSurface());
+	const registerDismissableSurface = useDismissableLayerSurface();
+	const composedRefs = useComposedRefs(forwardedRef, registerDismissableSurface);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReactRemoveScroll, {
 		as: Slot,
 		allowPinchZoom: true,
@@ -1637,7 +1634,8 @@ var [AlertDialogContentProvider, useAlertDialogContentContext] = createAlertDial
 var AlertDialogContent = import_react.forwardRef(/* @__PURE__ */ __name(function AlertDialogContent2(props, forwardedRef) {
 	const { __scopeAlertDialog, children, ...contentProps } = props;
 	const dialogScope = useDialogScope(__scopeAlertDialog);
-	const composedRefs = useComposedRefs(forwardedRef, import_react.useRef(null));
+	const contentRef = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, contentRef);
 	const cancelRef = import_react.useRef(null);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertDialogContentProvider, {
 		scope: __scopeAlertDialog,

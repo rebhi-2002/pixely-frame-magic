@@ -30,36 +30,67 @@ export class ApiError extends Error {
 
 /** رسائل عامة واضحة حسب نوع/كود الخطأ — تُستخدم فقط لو الباك اند نفسه ما
  * رجّع رسالة واضحة بحقل message (رسائل الباك اند العربية دايمًا لها الأولوية). */
+/** يقرأ لغة الواجهة الحالية من <html lang="..."> (تنعكس فورًا مع تبديل
+ * اللغة عبر preferences-provider). ما فيه "useTranslation" هون لأنه ملف
+ * عادي مش React component — بيشتغل برات وقت رندر. */
+export function currentLang(): "ar" | "en" {
+  if (typeof document === "undefined") return "ar";
+  return document.documentElement.lang === "en" ? "en" : "ar";
+}
+
 function friendlyMessageFor(kind: ApiErrorKind, status: number): string {
+  const ar = currentLang() === "ar";
   if (kind === "network") {
-    return "تعذّر الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مجددًا — إذا استمرت المشكلة، الخادم قد يكون متوقفًا مؤقتًا.";
+    return ar
+      ? "تعذّر الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مجددًا — إذا استمرت المشكلة، الخادم قد يكون متوقفًا مؤقتًا."
+      : "Couldn't reach the server. Check your internet connection and try again — the server may be temporarily down.";
   }
   if (kind === "timeout") {
-    return "استغرق الطلب وقتًا أطول من المتوقع. حاول مرة أخرى.";
+    return ar
+      ? "استغرق الطلب وقتًا أطول من المتوقع. حاول مرة أخرى."
+      : "The request took too long. Please try again.";
   }
   if (kind === "parse") {
-    return "وصل ردّ غير متوقع من الخادم. حاول مجددًا، وإذا تكررت المشكلة بلّغ الدعم الفني.";
+    return ar
+      ? "وصل ردّ غير متوقع من الخادم. حاول مجددًا، وإذا تكررت المشكلة بلّغ الدعم الفني."
+      : "Received an unexpected response from the server. Try again, and contact support if it keeps happening.";
   }
   switch (status) {
     case 400:
-      return "البيانات المُرسلة غير صحيحة. راجع الحقول وحاول مجددًا.";
+      return ar
+        ? "البيانات المُرسلة غير صحيحة. راجع الحقول وحاول مجددًا."
+        : "The submitted data isn't valid. Please check the fields and try again.";
     case 401:
-      return "انتهت جلستك أو لم يتم تسجيل الدخول. سجّل الدخول مجددًا للمتابعة.";
+      return ar
+        ? "انتهت جلستك أو لم يتم تسجيل الدخول. سجّل الدخول مجددًا للمتابعة."
+        : "Your session has ended or you're not signed in. Please sign in again to continue.";
     case 403:
-      return "ليس لديك صلاحية للقيام بهذا الإجراء.";
+      return ar
+        ? "ليس لديك صلاحية للقيام بهذا الإجراء."
+        : "You don't have permission to do this.";
     case 404:
-      return "لم يتم العثور على البيانات المطلوبة.";
+      return ar
+        ? "لم يتم العثور على البيانات المطلوبة."
+        : "The requested data couldn't be found.";
     case 409:
-      return "تعارض في البيانات — قد يكون هذا العنصر معدّلاً من مكان آخر. حدّث الصفحة وحاول مجددًا.";
+      return ar
+        ? "تعارض في البيانات — قد يكون هذا العنصر معدّلاً من مكان آخر. حدّث الصفحة وحاول مجددًا."
+        : "Data conflict — this item may have been changed elsewhere. Refresh the page and try again.";
     case 422:
-      return "تعذّر معالجة البيانات المُرسلة. راجع الحقول وحاول مجددًا.";
+      return ar
+        ? "تعذّر معالجة البيانات المُرسلة. راجع الحقول وحاول مجددًا."
+        : "The submitted data couldn't be processed. Please check the fields and try again.";
     case 429:
-      return "طلبات كثيرة خلال وقت قصير. انتظر قليلًا وحاول مجددًا.";
+      return ar
+        ? "طلبات كثيرة خلال وقت قصير. انتظر قليلًا وحاول مجددًا."
+        : "Too many requests in a short time. Please wait a moment and try again.";
     default:
       if (status >= 500) {
-        return "حدث خطأ من جهة الخادم. حاول لاحقًا، وإذا استمرت المشكلة بلّغ الدعم الفني.";
+        return ar
+          ? "حدث خطأ من جهة الخادم. حاول لاحقًا، وإذا استمرت المشكلة بلّغ الدعم الفني."
+          : "A server error occurred. Please try again later, and contact support if it persists.";
       }
-      return "حدث خطأ غير متوقع. حاول مجددًا.";
+      return ar ? "حدث خطأ غير متوقع. حاول مجددًا." : "An unexpected error occurred. Please try again.";
   }
 }
 
@@ -136,8 +167,67 @@ export const apiClient = {
  * بدل `err instanceof Error ? err.message : "..."` مباشرة، حتى ما توصل
  * نصوص تقنية زي "Failed to fetch" للواجهة.
  */
+/**
+ * جميع رسائل الخطأ العربية الثابتة يلي بترميها server functions لوحات
+ * الديمو (rbac.functions.ts وأخواتها). هاي الدوال تشتغل على السيرفر
+ * (TanStack Start) مش بالمتصفح، فما تقدر تقرأ document.documentElement.lang
+ * زي باقي الحلول — فبدل ما نمرر locale كـ parameter لكل نداء (تغيير كبير
+ * يلمس عشرات نقاط الاستدعاء)، منترجم هون على مستوى العرض بس، بدون أي لمس
+ * لتعريف الدوال نفسها أو أي مكان بينادها.
+ */
+const DEMO_ERROR_TRANSLATIONS: Record<string, string> = {
+  "الإشعار غير موجود": "Notification not found",
+  "الاختبار غير موجود": "Quiz not found",
+  "الامتحان غير موجود": "Exam not found",
+  "البلاغ غير موجود": "Report not found",
+  "التقرير غير موجود": "Report not found",
+  "الحدث غير موجود": "Event not found",
+  "الحركة غير موجودة": "Transaction not found",
+  "الخطأ غير موجود": "Mistake entry not found",
+  "الدخول التجريبي متاح في بيئة التطوير فقط": "Demo login is only available in development",
+  "الدعوة غير موجودة": "Invitation not found",
+  "السؤال غير موجود": "Question not found",
+  "الشارة غير موجودة": "Badge not found",
+  "الشهادة غير موجودة": "Certificate not found",
+  "الطالب غير موجود": "Student not found",
+  "الطلب غير موجود": "Request not found",
+  "العملية غير موجودة": "Operation not found",
+  "العنصر غير موجود": "Item not found",
+  "الكورس غير موجود": "Course not found",
+  "المادة غير موجودة": "Subject not found",
+  "المجموعة غير موجودة": "Group not found",
+  "المستخدم غير موجود": "User not found",
+  "المعلم غير موجود": "Teacher not found",
+  "المهمة غير موجودة": "Task not found",
+  "النتيجة غير موجودة": "Result not found",
+  "الوحدة غير موجودة": "Module not found",
+  "اليوم غير موجود": "Day not found",
+  "تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.":
+    "Teacher registration isn't available yet — being connected to the new backend.",
+  "تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي": "Signed in, but couldn't verify your profile",
+  "لا يوجد بريد إلكتروني لهذا المستخدم": "This user has no email address",
+  "ليس لديك صلاحية لتنفيذ هذا الإجراء": "You don't have permission to do this",
+  "نوع المستخدم غير موجود": "User type not found",
+  "هذا الإجراء متاح لمدير النظام فقط": "This action is only available to the system admin",
+  "إرسال رابط إعادة تعيين كلمة المرور غير متاح بعد — قيد ربطه بالباك اند الجديد":
+    "Sending a password reset link isn't available yet — being connected to the new backend",
+  "إنشاء حساب جديد غير متاح حالياً — قيد الربط مع الباك اند الجديد.":
+    "Creating a new account isn't available yet — being connected to the new backend.",
+};
+
 export function getErrorMessage(err: unknown, fallback: string): string {
   if (err instanceof ApiError) return err.userMessage;
-  if (err instanceof Error) return err.message;
+  if (err instanceof Error) {
+    if (currentLang() === "en" && DEMO_ERROR_TRANSLATIONS[err.message]) {
+      return DEMO_ERROR_TRANSLATIONS[err.message];
+    }
+    return err.message;
+  }
   return fallback;
+}
+
+/** يرمي رسالة تحقق مطابقة للغة الواجهة الحالية — للاستخدام بملفات التكامل
+ * العادية (admin-users.ts وغيرها) يلي مش مكوّنات React وما فيها useTranslation. */
+export function throwBilingual(ar: string, en: string): never {
+  throw new Error(currentLang() === "ar" ? ar : en);
 }

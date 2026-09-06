@@ -32,6 +32,7 @@ import { getStudyStats, listLibrarySubjects } from "@/lib/student-learning.funct
 import type { BadgeRow } from "@/lib/student-evaluation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "الإنجاز | أكاديميا";
 const description = "تقدّمك يُقاس بالإتقان لا بالساعات: شارات، سلاسل أيام، ونسب إتقان لكل مادة.";
@@ -99,7 +100,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -110,7 +111,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: BadgeRow | null) {

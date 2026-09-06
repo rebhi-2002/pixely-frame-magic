@@ -1,7 +1,7 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "./@floating-ui/react-dom+[...].mjs";
 import { v as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
-import { a as environmentManager, i as notifyManager, n as MutationObserver, o as noop, r as QueryObserver, s as shouldThrowError } from "./tanstack__query-core.mjs";
+import { a as noop, i as notifyManager, n as MutationObserver, o as shouldThrowError, r as QueryObserver } from "./tanstack__query-core.mjs";
 //#region node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
@@ -51,7 +51,7 @@ var useQueryErrorResetBoundary = () => import_react.useContext(QueryErrorResetBo
 //#region node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js
 var ensurePreventErrorBoundaryRetry = (options, errorResetBoundary, query) => {
 	const throwOnError = query?.state.error && typeof options.throwOnError === "function" ? shouldThrowError(options.throwOnError, [query.state.error, query]) : options.throwOnError;
-	if (options.suspense || options.experimental_prefetchInRender || throwOnError) {
+	if (options.suspense || throwOnError) {
 		if (!errorResetBoundary.isReset()) options.retryOnMount = false;
 	}
 };
@@ -74,7 +74,6 @@ var ensureSuspenseTimers = (defaultedOptions) => {
 		if (typeof defaultedOptions.gcTime === "number") defaultedOptions.gcTime = Math.max(defaultedOptions.gcTime, MIN_SUSPENSE_TIME_MS);
 	}
 };
-var willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring;
 var shouldSuspend = (defaultedOptions, result) => defaultedOptions?.suspense && result.isPending;
 var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).catch(() => {
 	errorResetBoundary.clearReset();
@@ -86,14 +85,12 @@ function useBaseQuery(options, Observer, queryClient) {
 	const errorResetBoundary = useQueryErrorResetBoundary();
 	const client = useQueryClient(queryClient);
 	const defaultedOptions = client.defaultQueryOptions(options);
-	client.getDefaultOptions().queries?._experimental_beforeQuery?.(defaultedOptions);
 	const query = client.getQueryCache().get(defaultedOptions.queryHash);
 	const subscribed = options.subscribed !== false;
 	defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : subscribed ? "optimistic" : void 0;
 	ensureSuspenseTimers(defaultedOptions);
 	ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary, query);
 	useClearResetErrorBoundary(errorResetBoundary);
-	const isNewCacheEntry = !client.getQueryCache().get(defaultedOptions.queryHash);
 	const [observer] = import_react.useState(() => new Observer(client, defaultedOptions));
 	const result = observer.getOptimisticResult(defaultedOptions);
 	const shouldSubscribe = !isRestoring && subscribed;
@@ -113,10 +110,6 @@ function useBaseQuery(options, Observer, queryClient) {
 		query,
 		suspense: defaultedOptions.suspense
 	})) throw result.error;
-	client.getDefaultOptions().queries?._experimental_afterQuery?.(defaultedOptions, result);
-	if (defaultedOptions.experimental_prefetchInRender && !environmentManager.isServer() && willFetch(result, isRestoring)) (isNewCacheEntry ? fetchOptimistic(defaultedOptions, observer, errorResetBoundary) : query?.promise)?.catch(noop).finally(() => {
-		observer.updateResult();
-	});
 	return !defaultedOptions.notifyOnChangeProps ? observer.trackResult(result) : result;
 }
 //#endregion
@@ -133,8 +126,8 @@ function useMutation(options, queryClient) {
 		observer.setOptions(options);
 	}, [observer, options]);
 	const result = import_react.useSyncExternalStore(import_react.useCallback((onStoreChange) => observer.subscribe(notifyManager.batchCalls(onStoreChange)), [observer]), () => observer.getCurrentResult(), () => observer.getCurrentResult());
-	const mutate = import_react.useCallback((variables, mutateOptions) => {
-		observer.mutate(variables, mutateOptions).catch(noop);
+	const mutate = import_react.useCallback((...args) => {
+		observer.mutate(args[0], args[1]).catch(noop);
 	}, [observer]);
 	if (result.error && shouldThrowError(observer.options.throwOnError, [result.error])) throw result.error;
 	return {

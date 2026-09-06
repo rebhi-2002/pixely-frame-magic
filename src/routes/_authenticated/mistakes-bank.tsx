@@ -37,6 +37,7 @@ import { deleteMistake, listMistakes, saveMistake } from "@/lib/student-evaluati
 import type { MistakeRow, MistakeStatus } from "@/lib/student-evaluation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "بنك الأخطاء | أكاديميا";
 const description = "كل سؤال أخطأت فيه يُحفظ هنا تلقائياً، ويُعاد عليك حتى تُتقنه.";
@@ -128,7 +129,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -139,7 +140,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: MistakeRow | null) {

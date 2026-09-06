@@ -30,6 +30,7 @@ import { deleteRole, listRoles, saveRole } from "@/lib/rbac.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { ROLE_NAME_EN, type RoleRow } from "@/lib/rbac-types";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 export function UserTypesPage() {
   const queryClient = useQueryClient();
@@ -58,7 +59,7 @@ export function UserTypesPage() {
       toast.success(bi("تم الحفظ بنجاح", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -69,7 +70,7 @@ export function UserTypesPage() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(role: RoleRow | null) {

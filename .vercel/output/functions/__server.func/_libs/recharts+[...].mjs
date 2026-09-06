@@ -1371,7 +1371,13 @@ var DefaultLegendContent = /*#__PURE__*/ function(_PureComponent) {
 	return _createClass$20(DefaultLegendContent, [
 		{
 			key: "renderIcon",
-			value: function renderIcon(data) {
+			value: 
+			/**
+			* Render the path of icon
+			* @param {Object} data Data of each legend item
+			* @return {String} Path element
+			*/
+			function renderIcon(data) {
 				var inactiveColor = this.props.inactiveColor;
 				var halfSize = SIZE / 2;
 				var sixthSize = SIZE / 6;
@@ -1727,14 +1733,18 @@ var Legend = /*#__PURE__*/ function(_PureComponent) {
 			value: function getDefaultPosition(style) {
 				var _this$props = this.props, layout = _this$props.layout, align = _this$props.align, verticalAlign = _this$props.verticalAlign, margin = _this$props.margin, chartWidth = _this$props.chartWidth, chartHeight = _this$props.chartHeight;
 				var hPos, vPos;
-				if (!style || (style.left === void 0 || style.left === null) && (style.right === void 0 || style.right === null)) if (align === "center" && layout === "vertical") {
-					var box = this.getBBoxSnapshot();
-					hPos = { left: ((chartWidth || 0) - box.width) / 2 };
-				} else hPos = align === "right" ? { right: margin && margin.right || 0 } : { left: margin && margin.left || 0 };
-				if (!style || (style.top === void 0 || style.top === null) && (style.bottom === void 0 || style.bottom === null)) if (verticalAlign === "middle") {
-					var _box = this.getBBoxSnapshot();
-					vPos = { top: ((chartHeight || 0) - _box.height) / 2 };
-				} else vPos = verticalAlign === "bottom" ? { bottom: margin && margin.bottom || 0 } : { top: margin && margin.top || 0 };
+				if (!style || (style.left === void 0 || style.left === null) && (style.right === void 0 || style.right === null)) {
+					if (align === "center" && layout === "vertical") {
+						var box = this.getBBoxSnapshot();
+						hPos = { left: ((chartWidth || 0) - box.width) / 2 };
+					} else hPos = align === "right" ? { right: margin && margin.right || 0 } : { left: margin && margin.left || 0 };
+				}
+				if (!style || (style.top === void 0 || style.top === null) && (style.bottom === void 0 || style.bottom === null)) {
+					if (verticalAlign === "middle") {
+						var _box = this.getBBoxSnapshot();
+						vPos = { top: ((chartHeight || 0) - _box.height) / 2 };
+					} else vPos = verticalAlign === "bottom" ? { bottom: margin && margin.bottom || 0 } : { top: margin && margin.top || 0 };
+				}
 				return _objectSpread$33(_objectSpread$33({}, hPos), vPos);
 			}
 		},
@@ -2923,9 +2933,9 @@ var CONVERSION_RATES = {
 	cm: 96 / 2.54,
 	mm: 96 / 25.4,
 	pt: 96 / 72,
-	pc: 96 / 6,
+	pc: 16,
 	"in": 96,
-	Q: 96 / (2.54 * 40),
+	Q: 96 / 101.6,
 	px: 1
 };
 var FIXED_CSS_LENGTH_UNITS = Object.keys(CONVERSION_RATES);
@@ -3152,8 +3162,10 @@ var calculateWordWidths = function calculateWordWidths(_ref) {
 	var children = _ref.children, breakAll = _ref.breakAll, style = _ref.style;
 	try {
 		var words = [];
-		if (!(0, import_isNil.default)(children)) if (breakAll) words = children.toString().split("");
-		else words = children.toString().split(BREAKING_SPACES);
+		if (!(0, import_isNil.default)(children)) {
+			if (breakAll) words = children.toString().split("");
+			else words = children.toString().split(BREAKING_SPACES);
+		}
 		return {
 			wordsWithComputedWidth: words.map(function(word) {
 				return {
@@ -3281,9 +3293,7 @@ var Text = function Text(_ref5) {
 		case "middle":
 			startDy = reduceCSSCalc("calc(".concat((wordsByLines.length - 1) / 2, " * -").concat(lineHeight, " + (").concat(capHeight, " / 2))"));
 			break;
-		default:
-			startDy = reduceCSSCalc("calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"));
-			break;
+		default: startDy = reduceCSSCalc("calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"));
 	}
 	var transforms = [];
 	if (scaleToFit) {
@@ -4273,9 +4283,7 @@ var getMainColorOfGraphicItem = function getMainColorOfGraphicItem(item) {
 		case "Radar":
 			result = stroke && stroke !== "none" ? stroke : fill;
 			break;
-		default:
-			result = fill;
-			break;
+		default: result = fill;
 	}
 	return result;
 };
@@ -6755,7 +6763,13 @@ var PolarRadiusAxis = /*#__PURE__*/ function(_PureComponent) {
 	return _createClass$14(PolarRadiusAxis, [
 		{
 			key: "getTickValueCoord",
-			value: function getTickValueCoord(_ref) {
+			value: 
+			/**
+			* Calculate the coordinate of tick
+			* @param  {Number} coordinate The radius of tick
+			* @return {Object} (x, y)
+			*/
+			function getTickValueCoord(_ref) {
 				var coordinate = _ref.coordinate;
 				var _this$props = this.props, angle = _this$props.angle, cx = _this$props.cx, cy = _this$props.cy;
 				return polarToCartesian(cx, cy, coordinate, angle);
@@ -6773,9 +6787,7 @@ var PolarRadiusAxis = /*#__PURE__*/ function(_PureComponent) {
 					case "right":
 						textAnchor = "start";
 						break;
-					default:
-						textAnchor = "middle";
-						break;
+					default: textAnchor = "middle";
 				}
 				return textAnchor;
 			}
@@ -7019,7 +7031,15 @@ var PolarAngleAxis = /*#__PURE__*/ function(_PureComponent) {
 	return _createClass$13(PolarAngleAxis, [
 		{
 			key: "getTickLineCoord",
-			value: function getTickLineCoord(data) {
+			value: 
+			/**
+			* Calculate the coordinate of line endpoint
+			* @param  {Object} data The Data if ticks
+			* @return {Object} (x0, y0): The start point of text,
+			*                  (x1, y1): The end point close to text,
+			*                  (x2, y2): The end point close to axis
+			*/
+			function getTickLineCoord(data) {
 				var _this$props = this.props, cx = _this$props.cx, cy = _this$props.cy, radius = _this$props.radius, orientation = _this$props.orientation;
 				var tickLineSize = _this$props.tickSize || 8;
 				var p1 = polarToCartesian(cx, cy, radius, data.coordinate);
@@ -7830,8 +7850,6 @@ var Pie = /*#__PURE__*/ function(_PureComponent) {
 						case "Escape":
 							_this4.sectorRefs[_this4.state.sectorToFocus].blur();
 							_this4.setState({ sectorToFocus: 0 });
-							break;
-						default:
 					}
 				};
 			}
@@ -9671,9 +9689,9 @@ var useClipPathId = function useClipPathId() {
 */
 var useXAxisOrThrow = function useXAxisOrThrow(xAxisId) {
 	var xAxisMap = (0, import_react.useContext)(XAxisContext);
-	!(xAxisMap != null) && invariant(false);
+	xAxisMap ?? invariant(false);
 	var xAxis = xAxisMap[xAxisId];
-	!(xAxis != null) && invariant(false);
+	xAxis ?? invariant(false);
 	return xAxis;
 };
 /**
@@ -9710,9 +9728,9 @@ var useYAxisWithFiniteDomainOrRandom = function useYAxisWithFiniteDomainOrRandom
 */
 var useYAxisOrThrow = function useYAxisOrThrow(yAxisId) {
 	var yAxisMap = (0, import_react.useContext)(YAxisContext);
-	!(yAxisMap != null) && invariant(false);
+	yAxisMap ?? invariant(false);
 	var yAxis = yAxisMap[yAxisId];
-	!(yAxis != null) && invariant(false);
+	yAxis ?? invariant(false);
 	return yAxis;
 };
 var useViewBox = function useViewBox() {
@@ -10852,7 +10870,6 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 						y1 = y2 + sign * finalTickSize;
 						ty = y1 + sign * tickMargin;
 						tx = tickCoord;
-						break;
 				}
 				return {
 					line: {
@@ -10880,9 +10897,7 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 					case "right":
 						textAnchor = mirror ? "end" : "start";
 						break;
-					default:
-						textAnchor = "middle";
-						break;
+					default: textAnchor = "middle";
 				}
 				return textAnchor;
 			}
@@ -10900,9 +10915,7 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 					case "top":
 						verticalAnchor = mirror ? "start" : "end";
 						break;
-					default:
-						verticalAnchor = mirror ? "end" : "start";
-						break;
+					default: verticalAnchor = mirror ? "end" : "start";
 				}
 				return verticalAnchor;
 			}
@@ -10934,7 +10947,15 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 		},
 		{
 			key: "renderTicks",
-			value: function renderTicks(ticks, fontSize, letterSpacing) {
+			value: 
+			/**
+			* render the ticks
+			* @param {Array} ticks The ticks to actually render (overrides what was passed in props)
+			* @param {string} fontSize Fontsize to consider for tick spacing
+			* @param {string} letterSpacing Letterspacing to consider for tick spacing
+			* @return {ReactComponent} renderedTicks
+			*/
+			function renderTicks(ticks, fontSize, letterSpacing) {
 				var _this2 = this;
 				var _this$props6 = this.props, tickLine = _this$props6.tickLine, stroke = _this$props6.stroke, tick = _this$props6.tick, tickFormatter = _this$props6.tickFormatter, unit = _this$props6.unit;
 				var finalTicks = getTicks(_objectSpread$4(_objectSpread$4({}, this.props), {}, { ticks }), fontSize, letterSpacing);
@@ -12346,8 +12367,6 @@ var AccessibilityManager = /*#__PURE__*/ function() {
 						if (this.layout !== "horizontal") return;
 						this.activeIndex = Math.max(this.activeIndex - 1, 0);
 						this.spoofMouse();
-						break;
-					default: break;
 				}
 			}
 		},
@@ -12439,15 +12458,17 @@ function getCursorPoints(layout, activeCoordinate, offset) {
 		y2 = y1;
 		x1 = offset.left;
 		x2 = offset.left + offset.width;
-	} else if (activeCoordinate.cx != null && activeCoordinate.cy != null) if (layout === "centric") {
-		var cx = activeCoordinate.cx, cy = activeCoordinate.cy, innerRadius = activeCoordinate.innerRadius, outerRadius = activeCoordinate.outerRadius, angle = activeCoordinate.angle;
-		var innerPoint = polarToCartesian(cx, cy, innerRadius, angle);
-		var outerPoint = polarToCartesian(cx, cy, outerRadius, angle);
-		x1 = innerPoint.x;
-		y1 = innerPoint.y;
-		x2 = outerPoint.x;
-		y2 = outerPoint.y;
-	} else return getRadialCursorPoints(activeCoordinate);
+	} else if (activeCoordinate.cx != null && activeCoordinate.cy != null) {
+		if (layout === "centric") {
+			var cx = activeCoordinate.cx, cy = activeCoordinate.cy, innerRadius = activeCoordinate.innerRadius, outerRadius = activeCoordinate.outerRadius, angle = activeCoordinate.angle;
+			var innerPoint = polarToCartesian(cx, cy, innerRadius, angle);
+			var outerPoint = polarToCartesian(cx, cy, outerRadius, angle);
+			x1 = innerPoint.x;
+			y1 = innerPoint.y;
+			x2 = outerPoint.x;
+			y2 = outerPoint.y;
+		} else return getRadialCursorPoints(activeCoordinate);
+	}
 	return [{
 		x: x1,
 		y: y1
@@ -12949,13 +12970,14 @@ var getAxisMapByAxes = function getAxisMapByAxes(props, _ref2) {
 					} else if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
 						return finalDomain.indexOf(entry) >= 0 ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
 					}, []);
-				} else if (type === "category") if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
-					return finalDomain.indexOf(entry) >= 0 || entry === "" || (0, import_isNil.default)(entry) ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
-				}, []);
-				else domain = domain.filter(function(entry) {
-					return entry !== "" && !(0, import_isNil.default)(entry);
-				});
-				else if (type === "number") {
+				} else if (type === "category") {
+					if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
+						return finalDomain.indexOf(entry) >= 0 || entry === "" || (0, import_isNil.default)(entry) ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
+					}, []);
+					else domain = domain.filter(function(entry) {
+						return entry !== "" && !(0, import_isNil.default)(entry);
+					});
+				} else if (type === "number") {
 					var errorBarsDomain = parseErrorBarsOfAxis(displayedData, graphicalItems.filter(function(item) {
 						var _defaultProps2, _defaultProps3;
 						var itemAxisId = axisIdKey in item.props ? item.props[axisIdKey] : (_defaultProps2 = item.type.defaultProps) === null || _defaultProps2 === void 0 ? void 0 : _defaultProps2[axisIdKey];
@@ -13605,8 +13627,8 @@ var generateCategoricalChart = function generateCategoricalChart(_ref6) {
 					legendContent
 				});
 				if (!props) return null;
-				var item = props.item;
-				return /*#__PURE__*/ (0, import_react.cloneElement)(item, _objectSpread(_objectSpread({}, _objectWithoutProperties(props, _excluded)), {}, {
+				var item = props.item, otherProps = _objectWithoutProperties(props, _excluded);
+				return /*#__PURE__*/ (0, import_react.cloneElement)(item, _objectSpread(_objectSpread({}, otherProps), {}, {
 					chartWidth: width,
 					chartHeight: height,
 					margin,
@@ -13717,46 +13739,49 @@ var generateCategoricalChart = function generateCategoricalChart(_ref6) {
 				function findWithPayload(entry) {
 					return typeof tooltipAxis.dataKey === "function" ? tooltipAxis.dataKey(entry.payload) : null;
 				}
-				if (hasActive) if (activeTooltipIndex >= 0) {
-					var activePoint, basePoint;
-					if (tooltipAxis.dataKey && !tooltipAxis.allowDuplicatedCategory) {
-						var specifiedKey = typeof tooltipAxis.dataKey === "function" ? findWithPayload : "payload.".concat(tooltipAxis.dataKey.toString());
-						activePoint = findEntryInArray(points, specifiedKey, activeLabel);
-						basePoint = isRange && baseLine && findEntryInArray(baseLine, specifiedKey, activeLabel);
+				if (hasActive) {
+					if (activeTooltipIndex >= 0) {
+						var activePoint, basePoint;
+						if (tooltipAxis.dataKey && !tooltipAxis.allowDuplicatedCategory) {
+							var specifiedKey = typeof tooltipAxis.dataKey === "function" ? findWithPayload : "payload.".concat(tooltipAxis.dataKey.toString());
+							activePoint = findEntryInArray(points, specifiedKey, activeLabel);
+							basePoint = isRange && baseLine && findEntryInArray(baseLine, specifiedKey, activeLabel);
+						} else {
+							activePoint = points === null || points === void 0 ? void 0 : points[activeTooltipIndex];
+							basePoint = isRange && baseLine && baseLine[activeTooltipIndex];
+						}
+						if (activeShape || activeBar) {
+							var activeIndex = element.props.activeIndex !== void 0 ? element.props.activeIndex : activeTooltipIndex;
+							return [
+								/*#__PURE__*/ (0, import_react.cloneElement)(element, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex })),
+								null,
+								null
+							];
+						}
+						if (!(0, import_isNil.default)(activePoint)) return [graphicalItem].concat(_toConsumableArray(_this.renderActivePoints({
+							item,
+							activePoint,
+							basePoint,
+							childIndex: activeTooltipIndex,
+							isRange
+						})));
 					} else {
-						activePoint = points === null || points === void 0 ? void 0 : points[activeTooltipIndex];
-						basePoint = isRange && baseLine && baseLine[activeTooltipIndex];
-					}
-					if (activeShape || activeBar) {
-						var activeIndex = element.props.activeIndex !== void 0 ? element.props.activeIndex : activeTooltipIndex;
+						var _this$getItemByXY;
+						/**
+						* We hit this block if consumer uses a Tooltip without XAxis and/or YAxis.
+						* In which case, this.state.activeTooltipIndex never gets set
+						* because the mouse events that trigger that value getting set never get trigged without the axis components.
+						*
+						* An example usage case is a FunnelChart
+						*/
+						var _ref11$graphicalItem = ((_this$getItemByXY = _this.getItemByXY(_this.state.activeCoordinate)) !== null && _this$getItemByXY !== void 0 ? _this$getItemByXY : { graphicalItem }).graphicalItem, _ref11$graphicalItem$ = _ref11$graphicalItem.item, xyItem = _ref11$graphicalItem$ === void 0 ? element : _ref11$graphicalItem$, childIndex = _ref11$graphicalItem.childIndex;
+						var elementProps = _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex: childIndex });
 						return [
-							/*#__PURE__*/ (0, import_react.cloneElement)(element, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex })),
+							/*#__PURE__*/ (0, import_react.cloneElement)(xyItem, elementProps),
 							null,
 							null
 						];
 					}
-					if (!(0, import_isNil.default)(activePoint)) return [graphicalItem].concat(_toConsumableArray(_this.renderActivePoints({
-						item,
-						activePoint,
-						basePoint,
-						childIndex: activeTooltipIndex,
-						isRange
-					})));
-				} else {
-					var _this$getItemByXY;
-					/**
-					* We hit this block if consumer uses a Tooltip without XAxis and/or YAxis.
-					* In which case, this.state.activeTooltipIndex never gets set
-					* because the mouse events that trigger that value getting set never get trigged without the axis components.
-					*
-					* An example usage case is a FunnelChart
-					*/
-					var _ref11$graphicalItem = ((_this$getItemByXY = _this.getItemByXY(_this.state.activeCoordinate)) !== null && _this$getItemByXY !== void 0 ? _this$getItemByXY : { graphicalItem }).graphicalItem, _ref11$graphicalItem$ = _ref11$graphicalItem.item, xyItem = _ref11$graphicalItem$ === void 0 ? element : _ref11$graphicalItem$, childIndex = _ref11$graphicalItem.childIndex;
-					return [
-						/*#__PURE__*/ (0, import_react.cloneElement)(xyItem, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex: childIndex })),
-						null,
-						null
-					];
 				}
 				if (isRange) return [
 					graphicalItem,
@@ -13967,17 +13992,19 @@ var generateCategoricalChart = function generateCategoricalChart(_ref6) {
 					var tooltipEventType = this.getTooltipEventType();
 					var tooltipItem = findChildByType(children, Tooltip);
 					var tooltipEvents = {};
-					if (tooltipItem && tooltipEventType === "axis") if (tooltipItem.props.trigger === "click") tooltipEvents = { onClick: this.handleClick };
-					else tooltipEvents = {
-						onMouseEnter: this.handleMouseEnter,
-						onDoubleClick: this.handleDoubleClick,
-						onMouseMove: this.handleMouseMove,
-						onMouseLeave: this.handleMouseLeave,
-						onTouchMove: this.handleTouchMove,
-						onTouchStart: this.handleTouchStart,
-						onTouchEnd: this.handleTouchEnd,
-						onContextMenu: this.handleContextMenu
-					};
+					if (tooltipItem && tooltipEventType === "axis") {
+						if (tooltipItem.props.trigger === "click") tooltipEvents = { onClick: this.handleClick };
+						else tooltipEvents = {
+							onMouseEnter: this.handleMouseEnter,
+							onDoubleClick: this.handleDoubleClick,
+							onMouseMove: this.handleMouseMove,
+							onMouseLeave: this.handleMouseLeave,
+							onTouchMove: this.handleTouchMove,
+							onTouchStart: this.handleTouchStart,
+							onTouchEnd: this.handleTouchEnd,
+							onContextMenu: this.handleContextMenu
+						};
+					}
 					return _objectSpread(_objectSpread({}, adaptEventHandlers(this.props, this.handleOuterEvent)), tooltipEvents);
 				}
 			},

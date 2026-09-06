@@ -1,6 +1,6 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "./@floating-ui/react-dom+[...].mjs";
-import { R as require_shim } from "./@tanstack/react-router+[...].mjs";
+import { H as require_shim } from "./@tanstack/react-router+[...].mjs";
 //#region node_modules/react-i18next/dist/es/utils.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var warn = (i18n, code, msg, rest) => {
@@ -250,15 +250,18 @@ var useTranslation = (ns, props = {}) => {
 		const original = finalI18n;
 		const lang = original?.language;
 		let i18nWrapper = original;
-		if (original) if (wrapperRef.current && wrapperRef.current.__original === original) if (wrapperLangRef.current !== lang) {
-			i18nWrapper = createI18nWrapper(original);
-			wrapperRef.current = i18nWrapper;
-			wrapperLangRef.current = lang;
-		} else i18nWrapper = wrapperRef.current;
-		else {
-			i18nWrapper = createI18nWrapper(original);
-			wrapperRef.current = i18nWrapper;
-			wrapperLangRef.current = lang;
+		if (original) {
+			if (wrapperRef.current && wrapperRef.current.__original === original) {
+				if (wrapperLangRef.current !== lang) {
+					i18nWrapper = createI18nWrapper(original);
+					wrapperRef.current = i18nWrapper;
+					wrapperLangRef.current = lang;
+				} else i18nWrapper = wrapperRef.current;
+			} else {
+				i18nWrapper = createI18nWrapper(original);
+				wrapperRef.current = i18nWrapper;
+				wrapperLangRef.current = lang;
+			}
 		}
 		const effectiveT = !ready && !useSuspense ? (...args) => {
 			warnOnce(i18n, "USE_T_BEFORE_READY", "useTranslation: t was called before ready. When using useSuspense: false, make sure to check the ready flag before using t.");

@@ -39,6 +39,7 @@ import {
 import type { CommunityReportRow, ReportPriority, ReportStatus } from "@/lib/admin-moderation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const PRIORITIES: ReportPriority[] = ["عالية", "متوسطة", "منخفضة"];
 const STATUSES: ReportStatus[] = ["مفتوح", "مغلق", "مؤجل"];
@@ -111,7 +112,7 @@ export function CommunityReportsPage() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const resolveMutation = useMutation({
@@ -130,7 +131,7 @@ export function CommunityReportsPage() {
       toast.success(bi("تم إغلاق البلاغ", "Report closed"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -141,7 +142,7 @@ export function CommunityReportsPage() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: CommunityReportRow | null) {

@@ -35,6 +35,7 @@ import { deletePayment, listPayments, savePayment } from "@/lib/admin-curriculum
 import type { PaymentRow, PaymentStatus } from "@/lib/admin-curriculum-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const STATUSES: PaymentStatus[] = ["ناجحة", "قيد المعالجة", "مستردة", "فاشلة"];
 
@@ -103,7 +104,7 @@ export function PaymentsPage() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const refundMutation = useMutation({
@@ -116,7 +117,7 @@ export function PaymentsPage() {
       toast.success(bi("تم استرداد العملية", "Payment refunded"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -127,7 +128,7 @@ export function PaymentsPage() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: PaymentRow | null) {

@@ -7,6 +7,7 @@ import { BadgeCheck, UploadCloud } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "تسجيل معلّم | أكاديميا";
 const description = "سجّل كمعلّم في أكاديميا وارفع وثيقة التوثيق لمراجعة فريق الإشراف.";
@@ -55,7 +56,7 @@ function TeacherRegisterPage() {
       // تسجيل المعلّمين غير متاح بعد على الباك اند الجديد — قيد الربط.
       throw new Error("تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "…");
+      toast.error(getErrorMessage(err, "…"));
     } finally {
       setLoading(false);
     }

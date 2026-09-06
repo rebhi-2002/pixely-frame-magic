@@ -84,7 +84,6 @@ function formatTrim_default(s) {
 		default:
 			if (!+s[i]) break out;
 			if (i0 > 0) i0 = 0;
-			break;
 	}
 	return i0 > 0 ? s.slice(0, i0) + s.slice(i1 + 1) : s;
 }
@@ -195,9 +194,7 @@ function locale_default(locale) {
 				case "^":
 					value = padding.slice(0, length = padding.length >> 1) + valuePrefix + value + valueSuffix + padding.slice(length);
 					break;
-				default:
-					value = padding + valuePrefix + value + valueSuffix;
-					break;
+				default: value = padding + valuePrefix + value + valueSuffix;
 			}
 			return numerals(value);
 		}

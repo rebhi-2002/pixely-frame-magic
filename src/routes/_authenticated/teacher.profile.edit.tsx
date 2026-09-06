@@ -21,6 +21,7 @@ import { getTeacherProfile, saveTeacherProfile } from "@/lib/account-pages.funct
 import { listTeacherCourses } from "@/lib/teacher-teaching.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "ملفي العام | أكاديميا";
 const description = "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.";
@@ -74,7 +75,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   function openDialog() {

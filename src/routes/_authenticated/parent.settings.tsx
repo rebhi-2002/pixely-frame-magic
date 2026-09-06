@@ -37,6 +37,7 @@ import {
 import type { LinkedChildRow } from "@/lib/account-pages-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "إعدادات ولي الأمر | أكاديميا";
 const description = "الأبناء المرتبطون بحسابك، فك الربط، وتفضيلات الإشعارات والتقارير.";
@@ -101,7 +102,7 @@ function Body() {
       toast.success(bi("تم الربط", "Linked successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الربط", "Failed to link")),
+      toast.error(getErrorMessage(e, bi("تعذّر الربط", "Failed to link"))),
   });
 
   const unlinkMutation = useMutation({
@@ -112,7 +113,7 @@ function Body() {
       toast.success(bi("تم فك الربط", "Unlinked successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر فك الربط", "Failed to unlink")),
+      toast.error(getErrorMessage(e, bi("تعذّر فك الربط", "Failed to unlink"))),
   });
 
   const prefsMutation = useMutation({
@@ -122,7 +123,7 @@ function Body() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   return (

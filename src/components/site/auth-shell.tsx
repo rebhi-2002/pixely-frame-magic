@@ -70,7 +70,7 @@ export function AuthShell({
 
           <div
             className={`shadow-elevation-2 mx-auto w-full rounded-2xl border border-border bg-card p-6 sm:p-8 ${
-              wide ? "max-w-2xl lg:max-w-none" : "max-w-md lg:max-w-md"
+              wide ? "max-w-md sm:max-w-2xl lg:max-w-none" : "max-w-md lg:max-w-md"
             }`}
           >
             <div className="mb-6 flex items-start gap-3">

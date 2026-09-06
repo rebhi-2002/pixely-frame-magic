@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { answerClassQuestion, listClassQuestions } from "@/lib/teacher-followup.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "مجتمع الصف | أكاديميا";
 const description = "أسئلة طلابك في مكان واحد؛ إجابتك تُميّز كـ«إجابة معلم» تلقائياً.";
@@ -60,7 +61,7 @@ function Body() {
       toast.success(bi("تم تمييز إجابتك", "Your answer was marked"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   return (

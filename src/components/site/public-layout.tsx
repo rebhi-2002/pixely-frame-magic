@@ -104,11 +104,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   <Menu aria-hidden="true" className="size-5" />
                 </button>
               </SheetTrigger>
-              {/* "end" = نفس جهة نهاية النص: يسار بالعربي (RTL)، يمين
-                  بالإنجليزي (LTR) — نفس جهة زر الهامبرغر بالهيدر. الانعكاس
-                  بين اللغتين يصير تلقائيًا عبر CSS (dir="rtl"/"ltr" على
-                  <html>) داخل sheet.tsx، فما في داعي نحسبه هون بالجافاسكربت. */}
-              <SheetContent side="end" className="w-[min(88vw,360px)]">
+              {/* "start" = نفس جهة بداية النص: يمين بالعربي (RTL)، يسار
+                  بالإنجليزي (LTR) — حسب طلب المستخدم صراحة. الانعكاس بين
+                  اللغتين تلقائي عبر CSS (dir="rtl"/"ltr" على <html>) داخل
+                  sheet.tsx، فما في داعي نحسبه هون بالجافاسكربت. */}
+              <SheetContent side="start" className="w-[min(88vw,360px)]">
                 <SheetHeader className="text-start">
                   <SheetTitle>{t("common.menu")}</SheetTitle>
                   <SheetDescription>{t("nav.tagline")}</SheetDescription>

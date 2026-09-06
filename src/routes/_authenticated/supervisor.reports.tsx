@@ -15,6 +15,7 @@ import {
 } from "@/lib/supervisor-oversight.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "تقارير الإشراف | أكاديميا";
 const description = "تقارير دورية جاهزة للتصدير: جودة التدريس، الإتقان، والالتزام.";
@@ -74,7 +75,7 @@ function Body() {
       toast.success(bi("تم تسجيل التنزيل", "Download recorded"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التنزيل", "Failed to download")),
+      toast.error(getErrorMessage(e, bi("تعذّر التنزيل", "Failed to download"))),
   });
 
   const deleteMutation = useMutation({
@@ -84,7 +85,7 @@ function Body() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   return (

@@ -519,6 +519,17 @@ export const PAGES: StaticPageRow[] = [
     path: "/admin/constants",
     sort_order: 2,
   },
+  {
+    id: "p-backend-permissions",
+    module_id: "m-admin",
+    parent_id: "p-content-mgmt",
+    key: "admin_backend_permissions",
+    name: "صلاحيات الباك اند",
+    name_en: "Backend permissions",
+    icon: "ShieldCheck",
+    path: "/admin/backend-permissions",
+    sort_order: 3,
+  },
 
   // ---- الشؤون الأكاديمية (مدير عام) ----
   {

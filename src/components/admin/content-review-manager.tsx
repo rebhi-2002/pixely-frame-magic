@@ -39,6 +39,7 @@ import {
 import type { ContentStatus, ContentSubmissionRow, ContentType } from "@/lib/admin-moderation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 const TYPES: ContentType[] = ["درس", "اختبار", "كورس"];
 const STATUSES: ContentStatus[] = ["جديد", "مراجعة ثانية", "جاهز للاعتماد", "معتمد", "مرفوض"];
@@ -115,7 +116,7 @@ export function ContentReviewPage() {
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const statusMutation = useMutation({
@@ -126,7 +127,7 @@ export function ContentReviewPage() {
       toast.success(bi("تم تحديث الحالة", "Status updated"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر التحديث", "Failed to update")),
+      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -137,7 +138,7 @@ export function ContentReviewPage() {
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحذف", "Failed to delete")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: ContentSubmissionRow | null) {

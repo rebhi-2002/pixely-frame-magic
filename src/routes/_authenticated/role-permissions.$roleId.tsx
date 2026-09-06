@@ -18,6 +18,7 @@ import {
 } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
+import { getErrorMessage } from "@/integrations/backend/client";
 
 export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
   head: () => ({
@@ -74,7 +75,7 @@ function RolePermissionsPage() {
       toast.success(bi("تم حفظ الصلاحيات", "Permissions saved"));
     },
     onError: (e) =>
-      toast.error(e instanceof Error ? e.message : bi("تعذّر الحفظ", "Failed to save")),
+      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const keys = data?.permissionKeys ?? [];
