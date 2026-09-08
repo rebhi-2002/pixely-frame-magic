@@ -1,6 +1,7 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Compass, HeartHandshake, Languages, Target } from "lucide-react";
+import { Compass, HeartHandshake, Languages, Target, Code2, ServerCog } from "lucide-react";
+import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
@@ -13,6 +14,14 @@ export const Route = createFileRoute("/about")({
 });
 
 const valueIcons = [Compass, HeartHandshake, Languages, Target];
+/* صورة + أيقونة احتياطية لكل عضو فريق، بالترتيب: فرونت، باك اند 1، باك اند 2.
+   حط صورة حقيقية بنفس الاسم داخل public/team/ وبتظهر تلقائياً — عبر
+   PhotoAvatar المشترك (نفس المكوّن المستخدم لصور المعلمين بصفحة الكورسات). */
+const teamMembers = [
+  { photo: "/team/frontend.jpg", icon: Code2 },
+  { photo: "/team/backend-1.jpg", icon: ServerCog },
+  { photo: "/team/backend-2.jpg", icon: ServerCog },
+];
 
 function AboutPage() {
   const { t } = useTranslation();
@@ -25,7 +34,8 @@ function AboutPage() {
       <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-4xl px-5 py-20">
           <h1 className="text-4xl font-bold leading-[1.25] text-foreground md:text-5xl">
-            {t("about.h1")}
+            {t("about.h1a")}
+            <span className="text-highlight">{t("about.h1b")}</span>
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t("about.sub")}</p>
         </div>
@@ -40,7 +50,8 @@ function AboutPage() {
             const Icon = valueIcons[i % valueIcons.length];
             return (
               <Reveal key={v.t} delay={i * 0.06}>
-                <article className="hover-lift shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-6">
+                <article className="shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-6">
+                  {/* بدون hover-lift: قيمة نصية ثابتة، مش عنصر تفاعلي. */}
                   <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
                     <Icon className="size-5" />
                   </span>
@@ -58,14 +69,24 @@ function AboutPage() {
           <h2 className="text-2xl font-bold text-foreground">{t("about.teamTitle")}</h2>
           <p className="mt-2 text-muted-foreground">{t("about.teamSub")}</p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {team.map((m, i) => (
-              <Reveal key={m.t} delay={i * 0.06}>
-                <div className="shadow-elevation-1 h-full rounded-2xl border border-border bg-background p-6">
-                  <h3 className="font-bold text-foreground">{m.t}</h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>
-                </div>
-              </Reveal>
-            ))}
+            {team.map((m, i) => {
+              const member = teamMembers[i % teamMembers.length];
+              return (
+                <Reveal key={m.t} delay={i * 0.06}>
+                  <div className="shadow-elevation-1 flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
+                    <PhotoAvatar
+                      src={member.photo}
+                      icon={member.icon}
+                      className="size-14"
+                    />
+                    <div>
+                      <h3 className="font-bold text-foreground">{m.t}</h3>
+                      <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>

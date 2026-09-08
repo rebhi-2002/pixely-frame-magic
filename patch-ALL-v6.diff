@@ -1,0 +1,1368 @@
+--- a/src/components/site/illustrations.tsx
++++ b/src/components/site/illustrations.tsx
+@@ -90,6 +90,207 @@
+   );
+ }
+ 
++/**
++ * رسمة "المكتبة الذكية" — تصنيف شجري (فصل ← مادة ← وحدة ← درس) بشكل بصري،
++ * بدل أيقونة كتاب عامة. تُستخدم بالبطاقة الرئيسية (Flagship) بقسم مزايا الرئيسية.
++ */
++export function LibraryTreeIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 220 150" fill="none" className={className} aria-hidden>
++      <rect x="18" y="18" width="70" height="24" rx="8" className="fill-primary/15" />
++      <text x="53" y="34" textAnchor="middle" className="fill-primary text-[10px] font-bold">
++        الفصل
++      </text>
++      <path d="M53 42 L53 56" className="stroke-border" strokeWidth="2" />
++      <path d="M53 56 H150" className="stroke-border" strokeWidth="2" />
++      <path d="M78 56 V66 M126 56 V66 M150 56 V66" className="stroke-border" strokeWidth="2" />
++
++      <rect x="46" y="66" width="64" height="22" rx="7" className="fill-card stroke-border" strokeWidth="1.5" />
++      <text x="78" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
++        رياضيات
++      </text>
++      <rect x="120" y="66" width="64" height="22" rx="7" className="fill-card stroke-border" strokeWidth="1.5" />
++      <text x="152" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
++        علوم
++      </text>
++
++      <path d="M78 88 V98" className="stroke-border" strokeWidth="1.5" />
++      <rect x="52" y="98" width="52" height="18" rx="6" className="fill-primary/10" />
++      <text x="78" y="110" textAnchor="middle" className="fill-primary text-[8px] font-medium">
++        وحدة 3
++      </text>
++
++      <path d="M152 88 V98" className="stroke-border" strokeWidth="1.5" />
++      <rect x="126" y="98" width="52" height="18" rx="6" className="fill-success/10" />
++      <text x="152" y="110" textAnchor="middle" className="fill-success text-[8px] font-medium">
++        وحدة 1
++      </text>
++
++      <circle cx="192" cy="30" r="12" className="fill-info/15" />
++      <circle cx="24" cy="120" r="8" className="fill-success/15" />
++    </svg>
++  );
++}
++
++/**
++ * رسمة "محاكي الامتحان" — ورقة امتحان بمؤقّت وعلامة صح، بدل أيقونة روبوت عامة.
++ * تُستخدم بالبطاقة العريضة الخاصة بمحاكي الامتحان الوزاري بقسم مزايا الرئيسية.
++ */
++export function ExamSimIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 220 120" fill="none" className={className} aria-hidden>
++      <rect x="24" y="14" width="98" height="94" rx="10" className="fill-card stroke-border" strokeWidth="2" />
++      <rect x="38" y="30" width="70" height="6" rx="3" className="fill-foreground/15" />
++      <rect x="38" y="44" width="52" height="6" rx="3" className="fill-foreground/10" />
++      <circle cx="42" cy="62" r="5" className="fill-success/20 stroke-success" strokeWidth="1.5" />
++      <path d="M39.5 62 L41.5 64 L45 59.5" className="stroke-success" strokeWidth="1.5" strokeLinecap="round" fill="none" />
++      <rect x="52" y="59" width="48" height="6" rx="3" className="fill-foreground/10" />
++      <circle cx="42" cy="80" r="5" className="fill-destructive/15 stroke-destructive/60" strokeWidth="1.5" />
++      <rect x="52" y="77" width="40" height="6" rx="3" className="fill-foreground/10" />
++
++      <circle cx="164" cy="46" r="34" className="fill-primary/8 stroke-primary/40" strokeWidth="2" />
++      <path d="M164 46 L164 26 M164 46 L180 54" className="stroke-primary" strokeWidth="3" strokeLinecap="round" />
++      <circle cx="164" cy="46" r="3" className="fill-primary" />
++
++      <rect x="140" y="88" width="48" height="20" rx="10" className="fill-success/15" />
++      <text x="164" y="101" textAnchor="middle" className="fill-success text-[9px] font-bold">
++        92%
++      </text>
++    </svg>
++  );
++}
++
++/** رسمة "من الرفع للنشر" — تدفق مرئي (رفع → مراجعة → منشور) لصفحة "للمعلمين". */
++export function ContentFlowIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 320 140" fill="none" className={className} aria-hidden>
++      <rect x="10" y="44" width="84" height="60" rx="12" className="fill-card stroke-border" strokeWidth="2" />
++      <path d="M52 66 V86 M42 76 L52 66 L62 76" className="stroke-primary" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
++      <text x="52" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">رفع المحتوى</text>
++
++      <path d="M100 74 H128" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
++      <path d="M120 68 L128 74 L120 80" className="stroke-border" strokeWidth="2" fill="none" />
++
++      <rect x="132" y="34" width="84" height="70" rx="12" className="fill-info/8 stroke-info/40" strokeWidth="2" />
++      <circle cx="174" cy="60" r="14" className="fill-info/15" />
++      <path d="M168 60 h12 M168 66 h8" className="stroke-info" strokeWidth="2" strokeLinecap="round" />
++      <text x="174" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">مراجعة أساسية</text>
++
++      <path d="M222 74 H250" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
++      <path d="M242 68 L250 74 L242 80" className="stroke-border" strokeWidth="2" fill="none" />
++
++      <rect x="254" y="44" width="60" height="60" rx="12" className="fill-success/10 stroke-success/40" strokeWidth="2" />
++      <path d="M270 74 L280 84 L298 64" className="stroke-success" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
++      <text x="284" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">منشور</text>
++    </svg>
++  );
++}
++
++/** رسمة "اختيار الخطة" — مسارين (مجاني/بريميوم) يلتقيان بنفس الوجهة. لصفحة الأسعار. */
++export function PlanChoiceIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 260 100" fill="none" className={className} aria-hidden>
++      <path
++        d="M20 80 Q90 80 130 50"
++        className="stroke-border"
++        strokeWidth="2.5"
++        strokeDasharray="5 5"
++        fill="none"
++      />
++      <path
++        d="M20 20 Q90 20 130 50"
++        className="stroke-primary/70"
++        strokeWidth="2.5"
++        fill="none"
++      />
++      <circle cx="20" cy="80" r="7" className="fill-card stroke-border" strokeWidth="2" />
++      <circle cx="20" cy="20" r="7" className="fill-primary/15 stroke-primary" strokeWidth="2" />
++      <circle cx="130" cy="50" r="10" className="fill-primary" />
++      <path d="M126 50 L129 53 L135 46" className="stroke-primary-foreground" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
++      <path d="M148 50 H230" className="stroke-border" strokeWidth="2" />
++      <path d="M222 44 L230 50 L222 56" className="stroke-border" strokeWidth="2" fill="none" />
++    </svg>
++  );
++}
++
++/**
++ * رسمة "بنك الأخطاء" — بطاقة سؤال مصغّرة عليها علامة خطأ وتاغ "محفوظ للمراجعة"،
++ * بدل أيقونة X عامة. بيانات توضيحية (demo) فقط، مافي رقم حقيقي.
++ */
++export function MistakeBankIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 220 90" fill="none" className={className} aria-hidden>
++      <rect x="14" y="14" width="130" height="62" rx="12" className="fill-card stroke-border" strokeWidth="2" />
++      <rect x="28" y="28" width="70" height="6" rx="3" className="fill-foreground/15" />
++      <rect x="28" y="42" width="90" height="6" rx="3" className="fill-foreground/10" />
++      <circle cx="122" cy="31" r="9" className="fill-destructive/15 stroke-destructive/60" strokeWidth="1.5" />
++      <path d="M118.5 27.5 L125.5 34.5 M125.5 27.5 L118.5 34.5" className="stroke-destructive" strokeWidth="1.6" strokeLinecap="round" />
++      <rect x="28" y="56" width="46" height="14" rx="7" className="fill-primary/10" />
++      <text x="51" y="66" textAnchor="middle" className="fill-primary text-[8px] font-bold">
++        للمراجعة
++      </text>
++
++      <rect x="160" y="10" width="50" height="70" rx="10" className="fill-primary/6 stroke-primary/25" strokeWidth="1.5" strokeDasharray="3 3" />
++      <path d="M175 30 v14 M168 37 h14" className="stroke-primary/50" strokeWidth="2" strokeLinecap="round" />
++      <text x="185" y="66" textAnchor="middle" className="fill-muted-foreground text-[7px]">
++        يتجمّع هنا
++      </text>
++    </svg>
++  );
++}
++
++/**
++ * رسمة "مراجعة 15 دقيقة" — قرص مؤقّت مقسوم لثلاث حصص قصيرة، بدل أيقونة ساعة عامة.
++ * بيانات توضيحية (demo) فقط.
++ */
++export function ReviewSessionIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 220 90" fill="none" className={className} aria-hidden>
++      <circle cx="45" cy="45" r="32" className="fill-card stroke-border" strokeWidth="2" />
++      <path d="M45 45 L45 20 A25 25 0 0 1 66 57 Z" className="fill-primary/20" />
++      <path d="M45 45 L45 20" className="stroke-primary" strokeWidth="2.5" strokeLinecap="round" />
++      <path d="M45 45 L66 57" className="stroke-primary" strokeWidth="2.5" strokeLinecap="round" />
++      <circle cx="45" cy="45" r="3" className="fill-primary" />
++      <text x="45" y="80" textAnchor="middle" className="fill-muted-foreground text-[8px] font-medium">
++        15 دقيقة
++      </text>
++
++      <g>
++        <rect x="98" y="18" width="108" height="14" rx="7" className="fill-success/12" />
++        <rect x="98" y="18" width="70" height="14" rx="7" className="fill-success/40" />
++        <rect x="98" y="38" width="108" height="14" rx="7" className="fill-primary/10" />
++        <rect x="98" y="38" width="40" height="14" rx="7" className="fill-primary/40" />
++        <rect x="98" y="58" width="108" height="14" rx="7" className="fill-border/60" />
++      </g>
++    </svg>
++  );
++}
++
++/**
++ * رسمة "تقرير ولي الأمر" — بطاقة تقرير أسبوعي مختصر + رمز خصوصية (قفل)،
++ * تجسّد الفكرتين الأساسيتين لصفحة أولياء الأمور: ملخص واضح + خصوصية الطالب.
++ */
++export function ParentReportIllustration({ className }: IllustrationProps) {
++  return (
++    <svg viewBox="0 0 260 120" fill="none" className={className} aria-hidden>
++      <rect x="16" y="14" width="150" height="92" rx="14" className="fill-card stroke-border" strokeWidth="2" />
++      <rect x="32" y="30" width="60" height="7" rx="3.5" className="fill-foreground/15" />
++      <rect x="32" y="46" width="118" height="10" rx="5" className="fill-success/12" />
++      <rect x="32" y="46" width="82" height="10" rx="5" className="fill-success/45" />
++      <rect x="32" y="64" width="118" height="10" rx="5" className="fill-primary/10" />
++      <rect x="32" y="64" width="54" height="10" rx="5" className="fill-primary/45" />
++      <rect x="32" y="84" width="46" height="14" rx="7" className="fill-info/12" />
++      <text x="55" y="94" textAnchor="middle" className="fill-info text-[8px] font-bold">
++        أسبوعي
++      </text>
++
++      <circle cx="210" cy="60" r="36" className="fill-success/8 stroke-success/30" strokeWidth="2" />
++      <path d="M210 42 a12 12 0 0 0-12 12 v6 h24 v-6 a12 12 0 0 0-12-12 Z" className="fill-none stroke-success" strokeWidth="2.5" strokeLinejoin="round" />
++      <rect x="196" y="58" width="28" height="20" rx="4" className="fill-success/20 stroke-success" strokeWidth="2" />
++    </svg>
++  );
++}
++
+ /** رسمة "غير مصرح" — قفل. لصفحة Forbidden. */
+ export function ForbiddenIllustration({ className }: IllustrationProps) {
+   return (
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -16,6 +16,12 @@
+ import { SessionCta } from "@/components/site/session-cta";
+ import { TestimonialsSection } from "@/components/site/testimonials-section";
+ import { HeroMockup } from "@/components/site/hero-mockup";
++import {
++  LibraryTreeIllustration,
++  ExamSimIllustration,
++  MistakeBankIllustration,
++  ReviewSessionIllustration,
++} from "@/components/site/illustrations";
+ import { Reveal } from "@/components/ui/reveal";
+ import { AnimatedCounter } from "@/components/ui/animated-counter";
+ import { useSession } from "@/hooks/use-session";
+@@ -33,12 +39,36 @@
+ });
+ 
+ const features = [
+-  { icon: BookOpenCheck, key: "library", span: "lg:col-span-2 lg:row-span-2", flagship: true },
+-  { icon: Bot, key: "simulator", span: "lg:col-span-2", flagship: false },
+-  { icon: MessagesSquare, key: "community", span: "", flagship: false },
+-  { icon: LineChart, key: "tracker", span: "", flagship: false },
+-  { icon: XCircle, key: "mistakes", span: "lg:col-span-2", flagship: false },
+-  { icon: Timer, key: "review", span: "lg:col-span-2", flagship: false },
++  {
++    icon: BookOpenCheck,
++    key: "library",
++    span: "lg:col-span-2 lg:row-span-2",
++    flagship: true,
++    Illustration: LibraryTreeIllustration,
++  },
++  {
++    icon: Bot,
++    key: "simulator",
++    span: "lg:col-span-2",
++    flagship: false,
++    Illustration: ExamSimIllustration,
++  },
++  { icon: MessagesSquare, key: "community", span: "", flagship: false, Illustration: null },
++  { icon: LineChart, key: "tracker", span: "", flagship: false, Illustration: null },
++  {
++    icon: XCircle,
++    key: "mistakes",
++    span: "lg:col-span-2",
++    flagship: false,
++    Illustration: MistakeBankIllustration,
++  },
++  {
++    icon: Timer,
++    key: "review",
++    span: "lg:col-span-2",
++    flagship: false,
++    Illustration: ReviewSessionIllustration,
++  },
+ ] as const;
+ 
+ /* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */
+@@ -131,7 +161,9 @@
+               <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
+                 {stats.map((s, i) => (
+                   <Reveal key={s.key} delay={i * 0.08} className="h-full">
+-                    <div className="hover-lift shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
++                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
++                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
++                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
+                       <p className="font-display text-3xl font-bold text-primary">
+                         <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
+                       </p>
+@@ -163,25 +195,34 @@
+             <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
+               <article
+                 className={cn(
+-                  "hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
++                  // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
++                  // نفس منطق تصحيح الإحصائيات فوق.
++                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
+                   f.flagship
+                     ? "surface-mesh border-primary/30 bg-primary/5"
+                     : "border-border bg-card",
+                 )}
+               >
+-                <span
+-                  className={cn(
+-                    "flex size-11 items-center justify-center rounded-xl",
+-                    f.flagship
+-                      ? "bg-primary text-primary-foreground"
+-                      : "bg-primary/12 text-primary",
+-                  )}
+-                >
+-                  <f.icon className="size-5" />
+-                </span>
++                {f.Illustration ? (
++                  <f.Illustration
++                    className={cn("w-full", f.flagship ? "h-32" : "h-20")}
++                  />
++                ) : (
++                  <span
++                    className={cn(
++                      "flex size-11 items-center justify-center rounded-xl",
++                      f.flagship
++                        ? "bg-primary text-primary-foreground"
++                        : "bg-primary/12 text-primary",
++                    )}
++                  >
++                    <f.icon className="size-5" />
++                  </span>
++                )}
+                 <h3
+                   className={cn(
+-                    "mt-4 font-bold text-foreground",
++                    "font-bold text-foreground",
++                    f.Illustration ? "mt-3" : "mt-4",
+                     f.flagship ? "text-lg" : "text-base",
+                   )}
+                 >
+@@ -201,7 +242,9 @@
+           {roles.map((r) => (
+             <div
+               key={r.key}
+-              className="hover-lift rounded-2xl border border-border bg-background p-6"
++              className="rounded-2xl border border-border bg-background p-6"
++              // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
++              // مش رابط ولا زر — نفس المبدأ بكل الملف.
+             >
+               <r.icon className="size-6 text-success" />
+               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+--- a/src/routes/how-it-works.tsx
++++ b/src/routes/how-it-works.tsx
+@@ -4,6 +4,7 @@
+ import { PublicLayout } from "@/components/site/public-layout";
+ import { SessionCta } from "@/components/site/session-cta";
+ import { Reveal } from "@/components/ui/reveal";
++import { cn } from "@/lib/utils";
+ 
+ const title = "كيف تعمل أكاديميا؟ | خطوات البداية";
+ const description =
+@@ -31,11 +32,25 @@
+       </section>
+ 
+       <section className="mx-auto max-w-4xl px-5 py-16">
+-        <ol className="space-y-4">
++        <ol className="relative space-y-4">
++          {/* خط المسار الموصل بين الخطوات — يحوّل القائمة من نص عادي إلى تدفّق
++              بصري واحد، بدل أربع بطاقات منفصلة بلا رابط. */}
++          <div
++            aria-hidden
++            className="absolute top-6 bottom-6 w-0.5 bg-border ltr:left-6 rtl:right-6"
++          />
+           {steps.map((s, i) => (
+-            <Reveal key={s} as="li" delay={i * 0.08}>
+-              <div className="hover-lift shadow-elevation-1 flex gap-5 rounded-2xl border border-border bg-card p-6">
+-                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/12 font-display text-xl font-bold text-primary">
++            <Reveal key={s} as="li" delay={i * 0.08} className="relative">
++              <div className="shadow-elevation-1 flex gap-5 rounded-2xl border border-border bg-card p-6">
++                {/* بدون hover-lift: خطوة معلوماتية بمسار ثابت، مش عنصر قابل للنقر. */}
++                <span
++                  className={cn(
++                    "relative z-10 flex size-12 shrink-0 items-center justify-center rounded-xl font-display text-xl font-bold",
++                    i === 0
++                      ? "bg-primary text-primary-foreground"
++                      : "bg-primary/12 text-primary",
++                  )}
++                >
+                   {i + 1}
+                 </span>
+                 <div>
+--- a/src/routes/about.tsx
++++ b/src/routes/about.tsx
+@@ -1,6 +1,7 @@
+ import { createSeoHead, localeFromSearch } from "@/lib/seo";
+ import { createFileRoute, Link } from "@tanstack/react-router";
+-import { Compass, HeartHandshake, Languages, Target } from "lucide-react";
++import { Compass, HeartHandshake, Languages, Target, Code2, ServerCog } from "lucide-react";
++import { PhotoAvatar } from "@/components/site/photo-avatar";
+ import { useTranslation } from "react-i18next";
+ import { PublicLayout } from "@/components/site/public-layout";
+ import { SessionCta } from "@/components/site/session-cta";
+@@ -13,6 +14,14 @@
+ });
+ 
+ const valueIcons = [Compass, HeartHandshake, Languages, Target];
++/* صورة + أيقونة احتياطية لكل عضو فريق، بالترتيب: فرونت، باك اند 1، باك اند 2.
++   حط صورة حقيقية بنفس الاسم داخل public/team/ وبتظهر تلقائياً — عبر
++   PhotoAvatar المشترك (نفس المكوّن المستخدم لصور المعلمين بصفحة الكورسات). */
++const teamMembers = [
++  { photo: "/team/frontend.jpg", icon: Code2 },
++  { photo: "/team/backend-1.jpg", icon: ServerCog },
++  { photo: "/team/backend-2.jpg", icon: ServerCog },
++];
+ 
+ function AboutPage() {
+   const { t } = useTranslation();
+@@ -25,7 +34,8 @@
+       <section className="surface-mesh border-b border-border">
+         <div className="mx-auto max-w-4xl px-5 py-20">
+           <h1 className="text-4xl font-bold leading-[1.25] text-foreground md:text-5xl">
+-            {t("about.h1")}
++            {t("about.h1a")}
++            <span className="text-highlight">{t("about.h1b")}</span>
+           </h1>
+           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t("about.sub")}</p>
+         </div>
+@@ -40,7 +50,8 @@
+             const Icon = valueIcons[i % valueIcons.length];
+             return (
+               <Reveal key={v.t} delay={i * 0.06}>
+-                <article className="hover-lift shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-6">
++                <article className="shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-6">
++                  {/* بدون hover-lift: قيمة نصية ثابتة، مش عنصر تفاعلي. */}
+                   <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                     <Icon className="size-5" />
+                   </span>
+@@ -58,14 +69,24 @@
+           <h2 className="text-2xl font-bold text-foreground">{t("about.teamTitle")}</h2>
+           <p className="mt-2 text-muted-foreground">{t("about.teamSub")}</p>
+           <div className="mt-8 grid gap-4 md:grid-cols-3">
+-            {team.map((m, i) => (
+-              <Reveal key={m.t} delay={i * 0.06}>
+-                <div className="shadow-elevation-1 h-full rounded-2xl border border-border bg-background p-6">
+-                  <h3 className="font-bold text-foreground">{m.t}</h3>
+-                  <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>
+-                </div>
+-              </Reveal>
+-            ))}
++            {team.map((m, i) => {
++              const member = teamMembers[i % teamMembers.length];
++              return (
++                <Reveal key={m.t} delay={i * 0.06}>
++                  <div className="shadow-elevation-1 flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
++                    <PhotoAvatar
++                      src={member.photo}
++                      icon={member.icon}
++                      className="size-14"
++                    />
++                    <div>
++                      <h3 className="font-bold text-foreground">{m.t}</h3>
++                      <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>
++                    </div>
++                  </div>
++                </Reveal>
++              );
++            })}
+           </div>
+         </div>
+       </section>
+--- a/src/i18n/locales/ar.pages.json
++++ b/src/i18n/locales/ar.pages.json
+@@ -140,6 +140,8 @@
+       "description": "قصة أكاديميا: فريق عربي يبني منصة تنظيم وإنجاز لطلاب الثانوية بدل فوضى مجموعات الواتساب."
+     },
+     "h1": "بنينا أكاديميا لأننا عشنا الفوضى",
++  "h1a": "بنينا أكاديميا لأننا عشنا ",
++  "h1b": "الفوضى",
+     "sub": "ملفات ضايعة بمجموعات، أسئلة بلا إجابة، وامتحان وزاري بيقرب. قرّرنا نعمل المكان المرتّب اللي كنا نتمناه.",
+     "missionTitle": "مهمتنا",
+     "mission": "نساعد كل طالب عربي يحوّل مواده من كومة ملفات إلى خطة واضحة يقدر ينجزها خطوة خطوة.",
+@@ -162,19 +164,19 @@
+       }
+     ],
+     "teamTitle": "الفريق",
+-    "teamSub": "فريق صغير من مطوّرين ومعلّمين ومصمّمين، يشتغل قريب من الطلاب والمدارس.",
++    "teamSub": "فريق مؤسس من 3 أشخاص، يبني المنصة بالكامل من الصفر — الواجهة والبنية التقنية معًا.",
+     "team": [
+       {
+-        "t": "المنتج والتصميم",
+-        "d": "أبحاث مع طلاب حقيقيين قبل أي شاشة نطلقها."
++        "t": "مؤسس — الواجهة الأمامية والمنتج",
++        "d": "يبني تجربة الطالب والواجهات، من التصميم لآخر تفصيل بالتفاعل."
+       },
+       {
+-        "t": "الهندسة",
+-        "d": "منصة سريعة تشتغل على شبكات ضعيفة وأجهزة متوسطة."
++        "t": "مؤسس — الباك اند",
++        "d": "يبني البنية التقنية وقاعدة البيانات."
+       },
+       {
+-        "t": "المحتوى الأكاديمي",
+-        "d": "معلّمون يراجعون التصنيف وبنك الأسئلة قبل النشر."
++        "t": "مؤسس — الباك اند",
++        "d": "يبني الأمان والبنية التحتية للمنصة."
+       }
+     ],
+     "ctaTitle": "بدك تكون جزء من القصة؟",
+@@ -193,6 +195,7 @@
+     "all": "الكل",
+     "empty": "لا نتائج مطابقة لبحثك.",
+     "lessons": "درس",
++    "hours": "ساعة",
+     "free": "مجاني",
+     "enroll": "التحقّق والاشتراك",
+     "byTeacher": "المعلّم",
+--- a/src/i18n/locales/en.pages.json
++++ b/src/i18n/locales/en.pages.json
+@@ -140,6 +140,8 @@
+       "description": "The Academia story: an Arabic-first team building an organization and achievement platform for high-school students."
+     },
+     "h1": "We built Academia because we lived the chaos",
++  "h1a": "We built Academia because we lived the ",
++  "h1b": "chaos",
+     "sub": "Files lost in group chats, questions with no answers, and a national exam getting closer. So we built the tidy place we wished we had.",
+     "missionTitle": "Our mission",
+     "mission": "Help every Arabic-speaking student turn a pile of files into a clear plan they can actually finish, step by step.",
+@@ -162,19 +164,19 @@
+       }
+     ],
+     "teamTitle": "The team",
+-    "teamSub": "A small team of engineers, teachers and designers working close to students and schools.",
++    "teamSub": "A 3-person founding team building the platform from scratch — frontend and backend together.",
+     "team": [
+       {
+-        "t": "Product & design",
+-        "d": "Research with real students before any screen ships."
++        "t": "Founder — Frontend & product",
++        "d": "Builds the student experience and the interface, down to the last interaction detail."
+       },
+       {
+-        "t": "Engineering",
+-        "d": "A fast platform that works on weak networks and mid-range devices."
++        "t": "Founder — Backend",
++        "d": "Builds the technical infrastructure and database."
+       },
+       {
+-        "t": "Academic content",
+-        "d": "Teachers review the taxonomy and question bank before publishing."
++        "t": "Founder — Backend",
++        "d": "Builds platform security and infrastructure."
+       }
+     ],
+     "ctaTitle": "Want to be part of the story?",
+@@ -193,6 +195,7 @@
+     "all": "All",
+     "empty": "No results match your search.",
+     "lessons": "lessons",
++    "hours": "hours",
+     "free": "Free",
+     "enroll": "View & enroll",
+     "byTeacher": "Teacher",
+--- a/src/routes/for-teachers.tsx
++++ b/src/routes/for-teachers.tsx
+@@ -7,6 +7,8 @@
+ import { FAQSection } from "@/components/site/faq-section";
+ import { TestimonialsSection } from "@/components/site/testimonials-section";
+ import { Reveal } from "@/components/ui/reveal";
++import { ContentFlowIllustration } from "@/components/site/illustrations";
++import { cn } from "@/lib/utils";
+ 
+ const title = "للمعلمين | انشر محتواك واربح مع أكاديميا";
+ const description =
+@@ -32,7 +34,9 @@
+       <section className="surface-mesh border-b border-border">
+         <div className="mx-auto max-w-5xl px-5 py-20">
+           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
+-            {t("forTeachers.h1")}
++            {t("forTeachers.h1a")}
++            <span className="text-highlight">{t("forTeachers.h1b")}</span>
++            {t("forTeachers.h1c")}
+           </h1>
+           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forTeachers.sub")}</p>
+           <SessionCta
+@@ -40,25 +44,35 @@
+             label={t("forTeachers.cta")}
+             className="btn-shine glow-primary hover-press mt-8 inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+           />
++          <ContentFlowIllustration className="mt-12 h-28 w-full max-w-xl" />
+         </div>
+       </section>
+ 
+-      <section className="mx-auto grid max-w-5xl gap-4 px-5 py-16 md:grid-cols-2">
+-        {benefits.map((b, i) => (
+-          <Reveal key={b.key} delay={i * 0.06}>
+-            <article className="hover-lift shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-6">
+-              <span className="flex size-11 items-center justify-center rounded-xl bg-success/12 text-success">
+-                <b.icon className="size-5" />
+-              </span>
+-              <h2 className="mt-4 text-base font-bold text-foreground">
+-                {t(`forTeachers.benefits.${b.key}.t`)}
+-              </h2>
+-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+-                {t(`forTeachers.benefits.${b.key}.d`)}
+-              </p>
+-            </article>
+-          </Reveal>
+-        ))}
++      <section className="mx-auto max-w-4xl px-5 py-16">
++        <div className="space-y-3">
++          {benefits.map((b, i) => (
++            <Reveal key={b.key} delay={i * 0.06}>
++              <div
++                className={cn(
++                  "shadow-elevation-1 flex flex-col items-start gap-5 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center",
++                  i % 2 === 1 && "sm:flex-row-reverse",
++                )}
++              >
++                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-success/12 text-success">
++                  <b.icon className="size-6" />
++                </span>
++                <div className={cn(i % 2 === 1 && "sm:text-end")}>
++                  <h2 className="text-lg font-bold text-foreground">
++                    {t(`forTeachers.benefits.${b.key}.t`)}
++                  </h2>
++                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
++                    {t(`forTeachers.benefits.${b.key}.d`)}
++                  </p>
++                </div>
++              </div>
++            </Reveal>
++          ))}
++        </div>
+       </section>
+ 
+       <TestimonialsSection className="border-y border-border bg-card/40" />
+--- a/src/i18n/locales/ar.json
++++ b/src/i18n/locales/ar.json
+@@ -43,6 +43,7 @@
+     "howItWorks": "كيف تعمل",
+     "pricing": "الأسعار",
+     "forTeachers": "للمعلمين",
++    "forParents": "لأولياء الأمور",
+     "platform": "المنصة",
+     "legal": "قانوني",
+     "privacy": "سياسة الخصوصية",
+@@ -328,12 +329,63 @@
+       ]
+     }
+   },
++  "forParents": {
++    "meta": {
++      "title": "أكاديميا لأولياء الأمور | ملخص واضح بدون تدخل زايد",
++      "description": "تابع انتظام وإنجاز ابنك أو بنتك بتقرير أسبوعي مختصر، مع الحفاظ على خصوصية مساحتهم الشخصية."
++    },
++    "h1": "اطمئن على تقدّم ابنك، من غير ما تراقب كل خطوة.",
++    "h1a": "اطمئن على تقدّم ابنك، ",
++    "h1b": "من غير ما تراقب كل خطوة",
++    "h1c": ".",
++    "sub": "أكاديميا بتديك ملخص أسبوعي واضح عن انتظام وإنجاز ابنك أو بنتك، وبتحافظ بنفس الوقت على مساحتهم الشخصية بالتعلّم.",
++    "cta": "أنشئ حساب ولي أمر",
++    "benefits": {
++      "report": {
++        "t": "تقرير أسبوعي واضح",
++        "d": "ملخص أسبوعي عن الانتظام والإنجاز العام، يوصلك بدون ما تحتاج تتابع كل يوم بنفسك."
++      },
++      "privacy": {
++        "t": "خصوصية ابنك محفوظة",
++        "d": "بتشوف ملخص عام بس — مش كل سؤال أخطأ فيه أو كل نقرة. مساحة الطالب الشخصية محفوظة بالتصميم."
++      },
++      "multiKids": {
++        "t": "أكتر من ابن بحساب وحد",
++        "d": "اربط كل أولادك بحساب واحد، وتابع كل واحد فيهم لحاله من مكان واحد."
++      },
++      "alerts": {
++        "t": "تنبيه بس لما يهم فعلاً",
++        "d": "إذا صار تراجع ملحوظ أو اقترب موعد اختبار مهم، بتوصلك رسالة — مش إشعارات مستمرة تضيّع وقتك."
++      }
++    },
++    "faq": [
++      {
++        "q": "هل بقدر أشوف كل نشاط ابني بالتفصيل؟",
++        "a": "لأ، بالتصميم — بتشوف ملخص عام (انتظام، إنجاز)، مش كل تفصيلة صغيرة. هيك منحافظ على مساحة الطالب الشخصية ونشجّعه يعتمد على حاله."
++      },
++      {
++        "q": "كيف بربط حساب ابني بحسابي؟",
++        "a": "من حسابك كولي أمر، بتضيف بريد ابنك أو كود دعوة، وبعد موافقته يصير حسابه مرتبط بحسابك."
++      },
++      {
++        "q": "هل في تكلفة إضافية لحساب ولي الأمر؟",
++        "a": "حساب ولي الأمر نفسه مجاني. أي تكلفة مرتبطة باشتراك الطالب نفسه — راجع صفحة الأسعار للتفاصيل."
++      },
++      {
++        "q": "شو بصير لو لاحظت مشكلة بمحتوى إشي؟",
++        "a": "تقدر تتواصل معنا من صفحة \"تواصل معنا\" وفريقنا بيتابعها مباشرة."
++      }
++    ]
++  },
+   "forTeachers": {
+     "meta": {
+       "title": "أكاديميا للمعلمين | أدوات تنظيم وتقييم",
+       "description": "ارفع محتواك مرة واحدة، جهّز Quizzes تُصحَّح تلقائياً، وتابع أداء طلابك بتقارير واضحة."
+     },
+     "h1": "علّم أكتر، صحّح أقل، ووصل لطلاب أكتر.",
++    "h1a": "علّم أكتر، ",
++    "h1b": "صحّح أقل",
++    "h1c": "، ووصل لطلاب أكتر.",
+     "sub": "أكاديميا بتعطيك مكان منظّم لمحتواك، تصحيح آلي للـQuizzes، وتحليلات تخليك تعرف بالضبط وين تركّز جهدك.",
+     "cta": "سجّل كمعلّم",
+     "benefits": {
+@@ -346,8 +398,8 @@
+         "d": "شوف مين فهم ومين متعثّر، وأي وحدة بالضبط بتشكّل نقطة ضعف عند شعبتك."
+       },
+       "income": {
+-        "t": "دخل من عملك",
+-        "d": "عمولة على اشتراكات الطلاب المرتبطين فيك، مع لوحة واضحة للمدفوعات."
++        "t": "دخل قادم من محتواك",
++        "d": "جزء من نموذج دخل للمعلمين قيد الإعداد الآن، مبني على تفاعل الطلاب مع محتواك — التفاصيل والنسب تُعلن قبل الإطلاق الرسمي."
+       },
+       "verified": {
+         "t": "حساب موثّق",
+@@ -360,8 +412,12 @@
+         "a": "سجّل من زر \"ابدأ كمعلّم\"، عبّي بياناتك ومؤهلاتك، وفريقنا بيراجع الطلب ويفعّل حسابك خلال أيام قليلة."
+       },
+       {
+-        "q": "كيف بوصلني الدخل من اشتراكات المنصة؟",
+-        "a": "بتحصل على نسبة من اشتراكات الطلاب اللي بياخدوا كورساتك، وبتقدر تتابع أرباحك أول بأول من لوحة تحكم المعلّم."
++        "q": "كيف بوصلني الدخل من المنصة؟",
++        "a": "نموذج الدخل قيد الإعداد الآن (النسب وطريقة الدفع لسا ما اتحددت رسمياً). حالما يجهز، رح يوصلك إشعار وتفاصيل واضحة قبل ما يُفعّل على حسابك."
++      },
++      {
++        "q": "هل محتواي يظهر مباشرة للطلاب؟",
++        "a": "أي محتوى ترفعه بيمر بمراجعة أساسية من فريقنا قبل ما يظهر للطلاب، للحفاظ على جودة المكتبة وموثوقيتها."
+       },
+       {
+         "q": "شو أنواع المحتوى اللي بقدر أرفعها؟",
+--- a/src/i18n/locales/en.json
++++ b/src/i18n/locales/en.json
+@@ -43,6 +43,7 @@
+     "howItWorks": "How it works",
+     "pricing": "Pricing",
+     "forTeachers": "For teachers",
++    "forParents": "For parents",
+     "platform": "Platform",
+     "legal": "Legal",
+     "privacy": "Privacy policy",
+@@ -328,12 +329,63 @@
+       ]
+     }
+   },
++  "forParents": {
++    "meta": {
++      "title": "Academia for parents | A clear summary, no micromanaging",
++      "description": "Track your child's engagement and progress with a short weekly report, while their personal learning space stays private."
++    },
++    "h1": "Follow your child's progress, without watching every step.",
++    "h1a": "Follow your child's progress, ",
++    "h1b": "without watching every step",
++    "h1c": ".",
++    "sub": "Academia gives you a clear weekly summary of your child's engagement and progress, while keeping their personal learning space private.",
++    "cta": "Create a parent account",
++    "benefits": {
++      "report": {
++        "t": "A clear weekly report",
++        "d": "A weekly summary of engagement and overall progress, delivered without you having to check in every day."
++      },
++      "privacy": {
++        "t": "Your child's privacy is protected",
++        "d": "You see a general summary only — not every question they got wrong or every click. The student's personal space stays private by design."
++      },
++      "multiKids": {
++        "t": "More than one child, one account",
++        "d": "Link all your children to a single account and follow each of them individually from one place."
++      },
++      "alerts": {
++        "t": "Alerts only when it matters",
++        "d": "If there's a noticeable drop or an important exam is coming up, you'll get a message — not constant notifications."
++      }
++    },
++    "faq": [
++      {
++        "q": "Can I see every detail of my child's activity?",
++        "a": "No, by design — you see a general summary (engagement, progress), not every small detail. This keeps the student's personal space intact and encourages independence."
++      },
++      {
++        "q": "How do I link my child's account to mine?",
++        "a": "From your parent account, add your child's email or an invite code. Once they approve, their account is linked to yours."
++      },
++      {
++        "q": "Is there an extra cost for a parent account?",
++        "a": "The parent account itself is free. Any cost is tied to the student's own subscription — see the pricing page for details."
++      },
++      {
++        "q": "What if I notice an issue with some content?",
++        "a": "You can reach us from the Contact page and our team will follow up directly."
++      }
++    ]
++  },
+   "forTeachers": {
+     "meta": {
+       "title": "Academia for teachers | Organizing and assessment tools",
+       "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
+     },
+     "h1": "Teach more, grade less, reach more students.",
++    "h1a": "Teach more, ",
++    "h1b": "grade less",
++    "h1c": ", reach more students.",
+     "sub": "Academia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
+     "cta": "Sign up as a teacher",
+     "benefits": {
+@@ -346,8 +398,8 @@
+         "d": "See who understood and who is struggling, and exactly which unit is the weak point."
+       },
+       "income": {
+-        "t": "Income from your work",
+-        "d": "A commission on the subscriptions of students linked to you, with a clear payouts dashboard."
++        "t": "Income coming from your content",
++        "d": "Part of a teacher income model currently being finalized, based on student engagement with your content — full details and rates will be announced before official launch."
+       },
+       "verified": {
+         "t": "Verified account",
+@@ -360,8 +412,12 @@
+         "a": "Sign up via \"Start as a teacher\", fill in your details and qualifications, and our team reviews your application within a few days."
+       },
+       {
+-        "q": "How does the revenue share work?",
+-        "a": "You earn a share of the subscription revenue from students who take your courses, and you can track your earnings anytime from the teacher dashboard."
++        "q": "How will teacher income work?",
++        "a": "The income model is being finalized (rates and payout method are not yet official). Once ready, you'll get a clear notice with the details before it's enabled on your account."
++      },
++      {
++        "q": "Does my content go live immediately?",
++        "a": "Any content you upload goes through a basic review by our team before it appears to students, to keep the library's quality reliable."
+       },
+       {
+         "q": "What kind of content can I upload?",
+--- a/src/routes/pricing.tsx
++++ b/src/routes/pricing.tsx
+@@ -7,6 +7,7 @@
+ import { FAQSection } from "@/components/site/faq-section";
+ import { PricingCompareTable } from "@/components/site/pricing-compare-table";
+ import { Reveal } from "@/components/ui/reveal";
++import { PlanChoiceIllustration } from "@/components/site/illustrations";
+ 
+ const title = "الأسعار | أكاديميا مجاناً أو بريميوم";
+ const description =
+@@ -31,6 +32,7 @@
+         <div className="mx-auto max-w-4xl px-5 py-16 text-center">
+           <h1 className="text-4xl font-bold text-foreground">{t("pricing.h1")}</h1>
+           <p className="mt-4 text-lg text-muted-foreground">{t("pricing.sub")}</p>
++          <PlanChoiceIllustration className="mx-auto mt-8 h-16 w-full max-w-xs" />
+         </div>
+       </section>
+ 
+--- a/src/routes/courses.tsx
++++ b/src/routes/courses.tsx
+@@ -3,18 +3,63 @@
+ import { createFileRoute, Link } from "@tanstack/react-router";
+ import { useQuery } from "@tanstack/react-query";
+ import { useServerFn } from "@tanstack/react-start";
+-import { BookOpen, Loader2, Search, Star } from "lucide-react";
++import { BookOpen, Clock, Loader2, Search, Star, Users, Wallet } from "lucide-react";
+ import { useTranslation } from "react-i18next";
+ import { PublicLayout } from "@/components/site/public-layout";
++import { PhotoAvatar } from "@/components/site/photo-avatar";
+ import { useSession } from "@/hooks/use-session";
+ import { useBi } from "@/lib/bi";
+ import { listPublicCourses } from "@/lib/public-catalog.functions";
++import { courseCoverPath, teacherPhotoPath } from "@/lib/public-catalog-data";
+ 
+ export const Route = createFileRoute("/courses")({
+   head: (ctx) => createSeoHead("/courses", localeFromSearch(ctx.match.search)),
+   component: CoursesPage,
+ });
+ 
++// شريط لوني علوي حسب المادة — يكسر تكرار البطاقات البيضاء المتطابقة،
++// ويعطي تصنيف بصري سريع بدون الحاجة لصورة غلاف حقيقية غير متوفرة بعد.
++const SUBJECT_ACCENTS = [
++  "bg-primary",
++  "bg-success",
++  "bg-info",
++  "bg-destructive/70",
++  "bg-secondary-foreground/60",
++] as const;
++
++function subjectAccent(subject: string) {
++  let hash = 0;
++  for (let i = 0; i < subject.length; i++) hash = (hash * 31 + subject.charCodeAt(i)) >>> 0;
++  return SUBJECT_ACCENTS[hash % SUBJECT_ACCENTS.length];
++}
++
++/**
++ * غلاف الكورس: يحاول عرض صورة حقيقية، ولو غير موجودة بعد يظهر تدرّج لوني
++ * حسب المادة + أول حرف من عنوانها — بديل صادق (مش placeholder عام بلا معنى)
++ * لحد ما تتوفر صور غلاف حقيقية بنفس المسار (courseCoverPath).
++ */
++function CourseCover({ src, subject, accent }: { src: string; subject: string; accent: string }) {
++  const [failed, setFailed] = useState(false);
++  if (failed) {
++    return (
++      <div className={`flex h-28 w-full items-center justify-center ${accent}/15`}>
++        <span className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}>
++          {subject.charAt(0)}
++        </span>
++      </div>
++    );
++  }
++  return (
++    <img
++      src={src}
++      alt=""
++      aria-hidden
++      onError={() => setFailed(true)}
++      className="h-28 w-full object-cover"
++    />
++  );
++}
++
+ function CoursesPage() {
+   const { t } = useTranslation();
+   const bi = useBi();
+@@ -98,41 +143,88 @@
+                 {filtered.map((c) => (
+                   <article
+                     key={c.id}
+-                    className="hover-lift flex flex-col rounded-2xl border border-border bg-card p-6"
++                    className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
+                   >
+-                    <div className="flex items-center justify-between">
+-                      <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+-                        {bi(...c.subject)}
+-                      </span>
+-                      <span className="text-xs text-muted-foreground">{bi(...c.level)}</span>
+-                    </div>
+-                    <h2 className="mt-4 text-base font-bold text-foreground">{bi(...c.title)}</h2>
+-                    <p className="mt-1.5 text-sm text-muted-foreground">
+-                      {t("courses.byTeacher")}:{" "}
++                    <CourseCover
++                      src={courseCoverPath(c.id)}
++                      subject={bi(...c.subject)}
++                      accent={subjectAccent(bi(...c.subject))}
++                    />
++                    <div className="flex flex-1 flex-col p-6">
++                      <div className="flex items-center justify-between">
++                        <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
++                          {bi(...c.subject)}
++                        </span>
++                        <span className="text-xs text-muted-foreground">{bi(...c.level)}</span>
++                      </div>
++                      <h2 className="mt-4 text-base font-bold text-foreground">{bi(...c.title)}</h2>
++                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
++                        {bi(...c.description)}
++                      </p>
++
++                      {c.tags && c.tags.length > 0 && (
++                        <div className="mt-3 flex flex-wrap gap-1.5">
++                          {c.tags.map((tag) => (
++                            <span
++                              key={bi(...tag)}
++                              className="rounded-md bg-secondary px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
++                            >
++                              {bi(...tag)}
++                            </span>
++                          ))}
++                        </div>
++                      )}
++
++                      <div className="mt-3 flex items-center gap-2.5">
++                        <PhotoAvatar
++                          src={teacherPhotoPath(c.teacherId)}
++                          className="size-7"
++                          iconClassName="size-3.5"
++                        />
++                        <Link
++                          to="/teacher/$id"
++                          params={{ id: c.teacherId }}
++                          className="text-sm font-semibold text-primary hover:underline"
++                        >
++                          {bi(...c.teacher)}
++                        </Link>
++                        {typeof c.rating === "number" && (
++                          <span className="ms-auto inline-flex items-center gap-1 text-xs font-bold text-foreground">
++                            <Star className="size-3.5 fill-primary text-primary" />
++                            {c.rating.toFixed(1)}
++                          </span>
++                        )}
++                      </div>
++
++                      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
++                        <span className="inline-flex items-center gap-1.5">
++                          <BookOpen className="size-4" />
++                          {c.lessons} {t("courses.lessons")}
++                        </span>
++                        {typeof c.durationHours === "number" && (
++                          <span className="inline-flex items-center gap-1.5">
++                            <Clock className="size-4" />
++                            {c.durationHours} {t("courses.hours")}
++                          </span>
++                        )}
++                        {typeof c.studentsCount === "number" && (
++                          <span className="inline-flex items-center gap-1.5">
++                            <Users className="size-4" />
++                            {c.studentsCount}
++                          </span>
++                        )}
++                        <span className="inline-flex items-center gap-1.5">
++                          <Wallet className="size-4 text-primary" />
++                          {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
++                        </span>
++                      </div>
+                       <Link
+-                        to="/teacher/$id"
+-                        params={{ id: c.teacherId }}
+-                        className="font-semibold text-primary hover:underline"
++                        to={isSignedIn ? "/my-courses" : "/signup"}
++                        className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+                       >
+-                        {bi(...c.teacher)}
++                        {t(isSignedIn ? "courses.open" : "courses.enroll")}
+                       </Link>
+-                    </p>
+-                    <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+-                      <span className="inline-flex items-center gap-1.5">
+-                        <BookOpen className="size-4" />
+-                        {c.lessons} {t("courses.lessons")}
+-                      </span>
+-                      <span className="inline-flex items-center gap-1.5">
+-                        <Star className="size-4 text-primary" />
+-                        {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+-                      </span>
+                     </div>
+-                    <Link
+-                      to={isSignedIn ? "/my-courses" : "/signup"}
+-                      className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+-                    >
+-                      {t(isSignedIn ? "courses.open" : "courses.enroll")}
+-                    </Link>
+                   </article>
+                 ))}
+               </div>
+--- a/src/lib/public-catalog-data.ts
++++ b/src/lib/public-catalog-data.ts
+@@ -5,18 +5,49 @@
+ export interface PublicCourseRow {
+   id: string;
+   title: [string, string];
++  /** وصف قصير سطر واحد لمحتوى الكورس — يظهر بالبطاقة، يوضّح شو بالضبط جوّاه. */
++  description: [string, string];
+   teacher: [string, string];
+   teacherId: string;
+   subject: [string, string];
+   level: [string, string];
+   lessons: number;
+   price: number;
++  /* الحقول تحت اختيارية وفاضية/undefined حالياً بقصد — ما في بيانات حقيقية
++     لهلق، وواجهة البطاقة (courses.tsx) ما بتعرضها إلا لو صارت موجودة فعلاً.
++     الهدف: لما تتوفر بيانات حقيقية تحطها هون بس، بدون ولا سطر كود إضافي. */
++  /** تقييم من 5 — يُعرض بس لو موجود (مافي رقم افتراضي/مختلق). */
++  rating?: number;
++  /** عدد الطلاب المشتركين فعلياً — يُعرض بس لو موجود. */
++  studentsCount?: number;
++  /** مدة الكورس التقريبية بالساعات. */
++  durationHours?: number;
++  /** وسوم قصيرة تظهر كـ chips على البطاقة، مثلاً ["مراجعة نهائية", "أسئلة وزارية"]. */
++  tags?: [string, string][];
++  /** تاريخ آخر تحديث للمحتوى (ISO)، يُعرض كـ"آخر تحديث" لو موجود. */
++  updatedAt?: string;
++}
++
++/** مسار صورة المعلم — حسب teacherId، ثابت الاسم عشان تحط الصورة الحقيقية
++ *  لاحقاً بنفس الاسم بدون أي تعديل كود (نفس مبدأ صور الفريق). */
++export function teacherPhotoPath(teacherId: string): string {
++  return `/team/teachers/${teacherId}.jpg`;
++}
++
++/** مسار غلاف الكورس — حسب id الكورس، بنفس مبدأ صورة المعلم (fallback تلقائي
++ *  لتدرّج لوني + أيقونة المادة لو الملف غير موجود بعد). */
++export function courseCoverPath(courseId: string): string {
++  return `/courses/covers/${courseId}.jpg`;
+ }
+ 
+ export const PUBLIC_COURSES: PublicCourseRow[] = [
+   {
+     id: "math-tawjihi",
+     title: ["الرياضيات — تفاضل وتكامل", "Mathematics — Calculus"],
++    description: [
++      "شرح تفصيلي لوحدتي التفاضل والتكامل بأسلوب مبسّط مع حل أسئلة وزارية سابقة.",
++      "Detailed coverage of differentiation and integration with past exam questions.",
++    ],
+     teacher: ["أ. سامي خليل", "Sami Khalil"],
+     teacherId: "sami-khalil",
+     subject: ["رياضيات", "Math"],
+@@ -27,6 +58,10 @@
+   {
+     id: "physics-mechanics",
+     title: ["الفيزياء — الميكانيكا الكاملة", "Physics — Full mechanics"],
++    description: [
++      "الحركة والقوى والطاقة خطوة بخطوة، مع أمثلة محلولة على كل قانون.",
++      "Motion, forces and energy step by step, with worked examples for every law.",
++    ],
+     teacher: ["أ. رنا حدّاد", "Rana Haddad"],
+     teacherId: "rana-haddad",
+     subject: ["فيزياء", "Physics"],
+@@ -37,6 +72,10 @@
+   {
+     id: "arabic-grammar",
+     title: ["اللغة العربية — النحو والبلاغة", "Arabic — Grammar & rhetoric"],
++    description: [
++      "قواعد النحو الأساسية وفنون البلاغة بأمثلة من نصوص المنهج مباشرة.",
++      "Core grammar rules and rhetoric with examples straight from the curriculum.",
++    ],
+     teacher: ["أ. مها زيدان", "Maha Zeidan"],
+     teacherId: "maha-zeidan",
+     subject: ["عربي", "Arabic"],
+@@ -47,6 +86,10 @@
+   {
+     id: "english-exam",
+     title: ["الإنجليزية — تحضير الامتحان", "English — Exam preparation"],
++    description: [
++      "مراجعة شاملة للقواعد والقراءة والكتابة بصيغة امتحان التوجيهي بالضبط.",
++      "Full grammar, reading and writing review in the exact Tawjihi exam format.",
++    ],
+     teacher: ["أ. لؤي درويش", "Luay Darwish"],
+     teacherId: "luay-darwish",
+     subject: ["إنجليزي", "English"],
+@@ -57,6 +100,10 @@
+   {
+     id: "chem-organic",
+     title: ["الكيمياء العضوية من الصفر", "Organic chemistry from zero"],
++    description: [
++      "بناء المفاهيم من الصفر: التركيب، التفاعلات، وتسمية المركبات العضوية.",
++      "Concepts built from zero: structure, reactions, and naming organic compounds.",
++    ],
+     teacher: ["أ. نور عابد", "Noor Abed"],
+     teacherId: "noor-abed",
+     subject: ["كيمياء", "Chemistry"],
+@@ -67,6 +114,10 @@
+   {
+     id: "islamic-studies",
+     title: ["التربية الإسلامية — مراجعة شاملة", "Islamic studies — Full review"],
++    description: [
++      "مراجعة مكثّفة لكل وحدات المنهج مع بنك أسئلة على كل درس.",
++      "An intensive review of every curriculum unit with a question bank per lesson.",
++    ],
+     teacher: ["أ. عمر الشريف", "Omar Sharif"],
+     teacherId: "omar-sharif",
+     subject: ["إسلامية", "Islamic"],
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -257,7 +257,9 @@
+     0 6px 16px -6px color-mix(in oklab, var(--color-foreground) 18%, transparent);
+ }
+ 
+-/* ——— نص بتدرّج لوني — للكلمة/الجملة المميّزة داخل العناوين ——— */
++/* ——— نص بتدرّج لوني — للكلمة/الجملة المميّزة داخل العناوين ———
++   الاتجاه لازم يتبع اتجاه القراءة الفعلي (dir)، مش قيمة ثابتة —
++   وإلا التدرّج بالإنجليزي بيبلش من الطرف الغلط (نفس منطق ps-/pe- بالمشروع). */
+ @utility text-gradient {
+   background: linear-gradient(
+     to left,
+@@ -269,6 +271,34 @@
+   color: transparent;
+ }
+ 
++:root:dir(ltr) .text-gradient {
++  background: linear-gradient(
++    to right,
++    var(--color-primary),
++    color-mix(in oklab, var(--color-primary) 55%, var(--color-success))
++  );
++  background-clip: text;
++  -webkit-background-clip: text;
++}
++
++/* ——— تمييز "قلم تحديد" تحت الكلمة — بديل عن التدرّج لصفحات مالها Hero ضخم،
++   خط سفلي متموّج بلون شفاف، إحساس "محدَّد باليد" بدل تلوين الحرف نفسه.
++   يشتغل بنفس منطق text-gradient (اتجاه-agnostic لأنه underline بس). ——— */
++@utility text-highlight {
++  position: relative;
++  z-index: 0;
++  &::after {
++    content: "";
++    position: absolute;
++    inset-inline: -0.15em;
++    bottom: 0.02em;
++    height: 0.32em;
++    z-index: -1;
++    background: color-mix(in oklab, var(--color-primary) 28%, transparent);
++    border-radius: 999px 999px 40% 40% / 999px 999px 100% 100%;
++  }
++}
++
+ /* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ——— */
+ @utility surface-mesh {
+   position: relative;
+--- a/src/components/site/public-layout.tsx
++++ b/src/components/site/public-layout.tsx
+@@ -26,6 +26,7 @@
+   { to: "/how-it-works", key: "nav.howItWorks" },
+   { to: "/pricing", key: "nav.pricing" },
+   { to: "/for-teachers", key: "nav.forTeachers" },
++  { to: "/for-parents", key: "nav.forParents" },
+ ] as const;
+ 
+ const footerPlatform = [
+@@ -33,6 +34,7 @@
+   { to: "/how-it-works", key: "nav.howItWorks" },
+   { to: "/pricing", key: "nav.pricing" },
+   { to: "/for-teachers", key: "nav.forTeachers" },
++  { to: "/for-parents", key: "nav.forParents" },
+   { to: "/blog", key: "nav.blog" },
+   { to: "/about", key: "nav.about" },
+ ] as const;
+--- a/scripts/generate-sitemap.mjs
++++ b/scripts/generate-sitemap.mjs
+@@ -9,6 +9,7 @@
+   "/about",
+   "/courses",
+   "/for-teachers",
++  "/for-parents",
+   "/how-it-works",
+   "/pricing",
+   "/contact",
+--- a/src/lib/seo.ts
++++ b/src/lib/seo.ts
+@@ -22,6 +22,7 @@
+   "/about": "about",
+   "/courses": "courses",
+   "/for-teachers": "forTeachers",
++  "/for-parents": "forParents",
+   "/how-it-works": "howItWorks",
+   "/pricing": "pricing",
+   "/contact": "contact",
+--- a/src/lib/bi.ts
++++ b/src/lib/bi.ts
+@@ -54,7 +54,7 @@
+ export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
+   student: ["/", "/courses", "/how-it-works", "/pricing", "/blog"],
+   teacher: ["/", "/for-teachers", "/how-it-works", "/blog"],
+-  parent: ["/", "/how-it-works", "/pricing", "/blog"],
++  parent: ["/", "/for-parents", "/how-it-works", "/pricing", "/blog"],
+   supervisor: ["/", "/how-it-works", "/blog"],
+   admin: ["/", "/blog"],
+ };
+--- a/src/components/site/photo-avatar.tsx
++++ b/src/components/site/photo-avatar.tsx
+@@ -0,0 +1,50 @@
++import { useState } from "react";
++import { User } from "lucide-react";
++import { cn } from "@/lib/utils";
++
++interface PhotoAvatarProps {
++  /** مسار الصورة المتوقّع، مثلاً /team/teachers/sami-khalil.jpg */
++  src: string;
++  alt?: string;
++  /** أيقونة بديلة تظهر تلقائياً لو الصورة غير موجودة بعد (fallback). */
++  icon?: typeof User;
++  className?: string;
++  iconClassName?: string;
++}
++
++/**
++ * أفاتار بصورة حقيقية مع Fallback تلقائي لأيقونة لو الملف غير موجود —
++ * هيك تقدر تحط اسم مسار صورة بأي مكان بالمشروع (فريق، معلم، طالب) من الآن،
++ * ولما تتوفر الصورة الحقيقية تحطها بنفس الاسم بدون أي تعديل كود.
++ */
++export function PhotoAvatar({
++  src,
++  alt = "",
++  icon: Icon = User,
++  className,
++  iconClassName,
++}: PhotoAvatarProps) {
++  const [failed, setFailed] = useState(false);
++
++  if (failed) {
++    return (
++      <span
++        className={cn(
++          "flex shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary",
++          className,
++        )}
++      >
++        <Icon className={cn("size-1/2", iconClassName)} />
++      </span>
++    );
++  }
++
++  return (
++    <img
++      src={src}
++      alt={alt}
++      onError={() => setFailed(true)}
++      className={cn("shrink-0 rounded-full border border-border object-cover", className)}
++    />
++  );
++}
+--- a/src/routes/for-parents.tsx
++++ b/src/routes/for-parents.tsx
+@@ -0,0 +1,82 @@
++import { createSeoHead, localeFromSearch } from "@/lib/seo";
++import { createFileRoute } from "@tanstack/react-router";
++import { BarChart3, Lock, Users2, BellRing } from "lucide-react";
++import { useTranslation } from "react-i18next";
++import { PublicLayout } from "@/components/site/public-layout";
++import { SessionCta } from "@/components/site/session-cta";
++import { FAQSection } from "@/components/site/faq-section";
++import { TestimonialsSection } from "@/components/site/testimonials-section";
++import { Reveal } from "@/components/ui/reveal";
++import { ParentReportIllustration } from "@/components/site/illustrations";
++import { cn } from "@/lib/utils";
++
++const title = "لأولياء الأمور | ملخص واضح بدون تدخل زايد";
++const description =
++  "تابع انتظام وإنجاز ابنك أو بنتك بتقرير أسبوعي مختصر، مع الحفاظ على خصوصية مساحتهم الشخصية.";
++
++export const Route = createFileRoute("/for-parents")({
++  head: (ctx) => createSeoHead("/for-parents", localeFromSearch(ctx.match.search)),
++  component: ForParents,
++});
++
++const benefits = [
++  { icon: BarChart3, key: "report" },
++  { icon: Lock, key: "privacy" },
++  { icon: Users2, key: "multiKids" },
++  { icon: BellRing, key: "alerts" },
++] as const;
++
++function ForParents() {
++  const { t } = useTranslation();
++
++  return (
++    <PublicLayout>
++      <section className="surface-mesh border-b border-border">
++        <div className="mx-auto max-w-5xl px-5 py-20">
++          <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
++            {t("forParents.h1a")}
++            <span className="text-highlight">{t("forParents.h1b")}</span>
++            {t("forParents.h1c")}
++          </h1>
++          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forParents.sub")}</p>
++          <SessionCta
++            to="/signup"
++            label={t("forParents.cta")}
++            className="btn-shine glow-primary hover-press mt-8 inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
++          />
++          <ParentReportIllustration className="mt-12 h-28 w-full max-w-xl" />
++        </div>
++      </section>
++
++      <section className="mx-auto max-w-4xl px-5 py-16">
++        <div className="space-y-3">
++          {benefits.map((b, i) => (
++            <Reveal key={b.key} delay={i * 0.06}>
++              <div
++                className={cn(
++                  "shadow-elevation-1 flex flex-col items-start gap-5 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center",
++                  i % 2 === 1 && "sm:flex-row-reverse",
++                )}
++              >
++                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-info/12 text-info">
++                  <b.icon className="size-6" />
++                </span>
++                <div className={cn(i % 2 === 1 && "sm:text-end")}>
++                  <h2 className="text-lg font-bold text-foreground">
++                    {t(`forParents.benefits.${b.key}.t`)}
++                  </h2>
++                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
++                    {t(`forParents.benefits.${b.key}.d`)}
++                  </p>
++                </div>
++              </div>
++            </Reveal>
++          ))}
++        </div>
++      </section>
++
++      <TestimonialsSection className="border-y border-border bg-card/40" />
++      <FAQSection i18nKey="forParents.faq" />
++    </PublicLayout>
++  );
++}

@@ -22,6 +22,7 @@ const PAGE_META_KEYS: Record<string, string> = {
   "/about": "about",
   "/courses": "courses",
   "/for-teachers": "forTeachers",
+  "/for-parents": "forParents",
   "/how-it-works": "howItWorks",
   "/pricing": "pricing",
   "/contact": "contact",

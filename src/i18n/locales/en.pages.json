@@ -140,6 +140,8 @@
       "description": "The Academia story: an Arabic-first team building an organization and achievement platform for high-school students."
     },
     "h1": "We built Academia because we lived the chaos",
+  "h1a": "We built Academia because we lived the ",
+  "h1b": "chaos",
     "sub": "Files lost in group chats, questions with no answers, and a national exam getting closer. So we built the tidy place we wished we had.",
     "missionTitle": "Our mission",
     "mission": "Help every Arabic-speaking student turn a pile of files into a clear plan they can actually finish, step by step.",
@@ -162,19 +164,19 @@
       }
     ],
     "teamTitle": "The team",
-    "teamSub": "A small team of engineers, teachers and designers working close to students and schools.",
+    "teamSub": "A 3-person founding team building the platform from scratch — frontend and backend together.",
     "team": [
       {
-        "t": "Product & design",
-        "d": "Research with real students before any screen ships."
+        "t": "Founder — Frontend & product",
+        "d": "Builds the student experience and the interface, down to the last interaction detail."
       },
       {
-        "t": "Engineering",
-        "d": "A fast platform that works on weak networks and mid-range devices."
+        "t": "Founder — Backend",
+        "d": "Builds the technical infrastructure and database."
       },
       {
-        "t": "Academic content",
-        "d": "Teachers review the taxonomy and question bank before publishing."
+        "t": "Founder — Backend",
+        "d": "Builds platform security and infrastructure."
       }
     ],
     "ctaTitle": "Want to be part of the story?",
@@ -193,6 +195,7 @@
     "all": "All",
     "empty": "No results match your search.",
     "lessons": "lessons",
+    "hours": "hours",
     "free": "Free",
     "enroll": "View & enroll",
     "byTeacher": "Teacher",

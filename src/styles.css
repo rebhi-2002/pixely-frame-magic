@@ -257,7 +257,9 @@
     0 6px 16px -6px color-mix(in oklab, var(--color-foreground) 18%, transparent);
 }
 
-/* ——— نص بتدرّج لوني — للكلمة/الجملة المميّزة داخل العناوين ——— */
+/* ——— نص بتدرّج لوني — للكلمة/الجملة المميّزة داخل العناوين ———
+   الاتجاه لازم يتبع اتجاه القراءة الفعلي (dir)، مش قيمة ثابتة —
+   وإلا التدرّج بالإنجليزي بيبلش من الطرف الغلط (نفس منطق ps-/pe- بالمشروع). */
 @utility text-gradient {
   background: linear-gradient(
     to left,
@@ -267,6 +269,34 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+:root:dir(ltr) .text-gradient {
+  background: linear-gradient(
+    to right,
+    var(--color-primary),
+    color-mix(in oklab, var(--color-primary) 55%, var(--color-success))
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* ——— تمييز "قلم تحديد" تحت الكلمة — بديل عن التدرّج لصفحات مالها Hero ضخم،
+   خط سفلي متموّج بلون شفاف، إحساس "محدَّد باليد" بدل تلوين الحرف نفسه.
+   يشتغل بنفس منطق text-gradient (اتجاه-agnostic لأنه underline بس). ——— */
+@utility text-highlight {
+  position: relative;
+  z-index: 0;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: -0.15em;
+    bottom: 0.02em;
+    height: 0.32em;
+    z-index: -1;
+    background: color-mix(in oklab, var(--color-primary) 28%, transparent);
+    border-radius: 999px 999px 40% 40% / 999px 999px 100% 100%;
+  }
 }
 
 /* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ——— */

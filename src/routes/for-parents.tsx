@@ -1,32 +1,32 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { BadgeCheck, Coins, LineChart, Upload } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { BarChart3, Lock, Users2, BellRing } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { FAQSection } from "@/components/site/faq-section";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
 import { Reveal } from "@/components/ui/reveal";
-import { ContentFlowIllustration } from "@/components/site/illustrations";
+import { ParentReportIllustration } from "@/components/site/illustrations";
 import { cn } from "@/lib/utils";
 
-const title = "للمعلمين | انشر محتواك واربح مع أكاديميا";
+const title = "لأولياء الأمور | ملخص واضح بدون تدخل زايد";
 const description =
-  "ارفع محتواك التعليمي، جهّز بنوك أسئلة، تابع أداء طلابك بتحليلات دقيقة، واحصل على دخل من اشتراكات المنصة.";
+  "تابع انتظام وإنجاز ابنك أو بنتك بتقرير أسبوعي مختصر، مع الحفاظ على خصوصية مساحتهم الشخصية.";
 
-export const Route = createFileRoute("/for-teachers")({
-  head: (ctx) => createSeoHead("/for-teachers", localeFromSearch(ctx.match.search)),
-  component: ForTeachers,
+export const Route = createFileRoute("/for-parents")({
+  head: (ctx) => createSeoHead("/for-parents", localeFromSearch(ctx.match.search)),
+  component: ForParents,
 });
 
 const benefits = [
-  { icon: Upload, key: "upload" },
-  { icon: LineChart, key: "analytics" },
-  { icon: Coins, key: "income" },
-  { icon: BadgeCheck, key: "verified" },
+  { icon: BarChart3, key: "report" },
+  { icon: Lock, key: "privacy" },
+  { icon: Users2, key: "multiKids" },
+  { icon: BellRing, key: "alerts" },
 ] as const;
 
-function ForTeachers() {
+function ForParents() {
   const { t } = useTranslation();
 
   return (
@@ -34,17 +34,17 @@ function ForTeachers() {
       <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-5xl px-5 py-20">
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-            {t("forTeachers.h1a")}
-            <span className="text-highlight">{t("forTeachers.h1b")}</span>
-            {t("forTeachers.h1c")}
+            {t("forParents.h1a")}
+            <span className="text-highlight">{t("forParents.h1b")}</span>
+            {t("forParents.h1c")}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forTeachers.sub")}</p>
+          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forParents.sub")}</p>
           <SessionCta
             to="/signup"
-            label={t("forTeachers.cta")}
+            label={t("forParents.cta")}
             className="btn-shine glow-primary hover-press mt-8 inline-flex rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
           />
-          <ContentFlowIllustration className="mt-12 h-28 w-full max-w-xl" />
+          <ParentReportIllustration className="mt-12 h-28 w-full max-w-xl" />
         </div>
       </section>
 
@@ -58,15 +58,15 @@ function ForTeachers() {
                   i % 2 === 1 && "sm:flex-row-reverse",
                 )}
               >
-                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-success/12 text-success">
+                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-info/12 text-info">
                   <b.icon className="size-6" />
                 </span>
                 <div className={cn(i % 2 === 1 && "sm:text-end")}>
                   <h2 className="text-lg font-bold text-foreground">
-                    {t(`forTeachers.benefits.${b.key}.t`)}
+                    {t(`forParents.benefits.${b.key}.t`)}
                   </h2>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {t(`forTeachers.benefits.${b.key}.d`)}
+                    {t(`forParents.benefits.${b.key}.d`)}
                   </p>
                 </div>
               </div>
@@ -76,7 +76,7 @@ function ForTeachers() {
       </section>
 
       <TestimonialsSection className="border-y border-border bg-card/40" />
-      <FAQSection i18nKey="forTeachers.faq" />
+      <FAQSection i18nKey="forParents.faq" />
     </PublicLayout>
   );
 }

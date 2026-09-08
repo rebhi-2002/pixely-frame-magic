@@ -54,7 +54,7 @@ export function roleHome(name?: string | null, isAdmin = false): string {
 export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
   student: ["/", "/courses", "/how-it-works", "/pricing", "/blog"],
   teacher: ["/", "/for-teachers", "/how-it-works", "/blog"],
-  parent: ["/", "/how-it-works", "/pricing", "/blog"],
+  parent: ["/", "/for-parents", "/how-it-works", "/pricing", "/blog"],
   supervisor: ["/", "/how-it-works", "/blog"],
   admin: ["/", "/blog"],
 };

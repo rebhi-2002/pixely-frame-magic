@@ -25,6 +25,7 @@ const navItems = [
   { to: "/how-it-works", key: "nav.howItWorks" },
   { to: "/pricing", key: "nav.pricing" },
   { to: "/for-teachers", key: "nav.forTeachers" },
+  { to: "/for-parents", key: "nav.forParents" },
 ] as const;
 
 const footerPlatform = [
@@ -32,6 +33,7 @@ const footerPlatform = [
   { to: "/how-it-works", key: "nav.howItWorks" },
   { to: "/pricing", key: "nav.pricing" },
   { to: "/for-teachers", key: "nav.forTeachers" },
+  { to: "/for-parents", key: "nav.forParents" },
   { to: "/blog", key: "nav.blog" },
   { to: "/about", key: "nav.about" },
 ] as const;

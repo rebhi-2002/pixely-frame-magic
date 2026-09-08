@@ -43,6 +43,7 @@
     "howItWorks": "How it works",
     "pricing": "Pricing",
     "forTeachers": "For teachers",
+    "forParents": "For parents",
     "platform": "Platform",
     "legal": "Legal",
     "privacy": "Privacy policy",
@@ -323,12 +324,63 @@
       ]
     }
   },
+  "forParents": {
+    "meta": {
+      "title": "Academia for parents | A clear summary, no micromanaging",
+      "description": "Track your child's engagement and progress with a short weekly report, while their personal learning space stays private."
+    },
+    "h1": "Follow your child's progress, without watching every step.",
+    "h1a": "Follow your child's progress, ",
+    "h1b": "without watching every step",
+    "h1c": ".",
+    "sub": "Academia gives you a clear weekly summary of your child's engagement and progress, while keeping their personal learning space private.",
+    "cta": "Create a parent account",
+    "benefits": {
+      "report": {
+        "t": "A clear weekly report",
+        "d": "A weekly summary of engagement and overall progress, delivered without you having to check in every day."
+      },
+      "privacy": {
+        "t": "Your child's privacy is protected",
+        "d": "You see a general summary only — not every question they got wrong or every click. The student's personal space stays private by design."
+      },
+      "multiKids": {
+        "t": "More than one child, one account",
+        "d": "Link all your children to a single account and follow each of them individually from one place."
+      },
+      "alerts": {
+        "t": "Alerts only when it matters",
+        "d": "If there's a noticeable drop or an important exam is coming up, you'll get a message — not constant notifications."
+      }
+    },
+    "faq": [
+      {
+        "q": "Can I see every detail of my child's activity?",
+        "a": "No, by design — you see a general summary (engagement, progress), not every small detail. This keeps the student's personal space intact and encourages independence."
+      },
+      {
+        "q": "How do I link my child's account to mine?",
+        "a": "From your parent account, add your child's email or an invite code. Once they approve, their account is linked to yours."
+      },
+      {
+        "q": "Is there an extra cost for a parent account?",
+        "a": "The parent account itself is free. Any cost is tied to the student's own subscription — see the pricing page for details."
+      },
+      {
+        "q": "What if I notice an issue with some content?",
+        "a": "You can reach us from the Contact page and our team will follow up directly."
+      }
+    ]
+  },
   "forTeachers": {
     "meta": {
       "title": "Academia for teachers | Organizing and assessment tools",
       "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
     },
     "h1": "Teach more, grade less, reach more students.",
+    "h1a": "Teach more, ",
+    "h1b": "grade less",
+    "h1c": ", reach more students.",
     "sub": "Academia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
     "cta": "Sign up as a teacher",
     "benefits": {
@@ -341,8 +393,8 @@
         "d": "See who understood and who is struggling, and exactly which unit is the weak point."
       },
       "income": {
-        "t": "Income from your work",
-        "d": "A commission on the subscriptions of students linked to you, with a clear payouts dashboard."
+        "t": "Income coming from your content",
+        "d": "Part of a teacher income model currently being finalized, based on student engagement with your content — full details and rates will be announced before official launch."
       },
       "verified": {
         "t": "Verified account",
@@ -355,8 +407,12 @@
         "a": "Sign up via \"Start as a teacher\", fill in your details and qualifications, and our team reviews your application within a few days."
       },
       {
-        "q": "How does the revenue share work?",
-        "a": "You earn a share of the subscription revenue from students who take your courses, and you can track your earnings anytime from the teacher dashboard."
+        "q": "How will teacher income work?",
+        "a": "The income model is being finalized (rates and payout method are not yet official). Once ready, you'll get a clear notice with the details before it's enabled on your account."
+      },
+      {
+        "q": "Does my content go live immediately?",
+        "a": "Any content you upload goes through a basic review by our team before it appears to students, to keep the library's quality reliable."
       },
       {
         "q": "What kind of content can I upload?",

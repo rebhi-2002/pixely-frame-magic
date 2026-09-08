@@ -7,6 +7,7 @@ import { SessionCta } from "@/components/site/session-cta";
 import { FAQSection } from "@/components/site/faq-section";
 import { PricingCompareTable } from "@/components/site/pricing-compare-table";
 import { Reveal } from "@/components/ui/reveal";
+import { PlanChoiceIllustration } from "@/components/site/illustrations";
 
 const title = "الأسعار | أكاديميا مجاناً أو بريميوم";
 const description =
@@ -31,6 +32,7 @@ function Pricing() {
         <div className="mx-auto max-w-4xl px-5 py-16 text-center">
           <h1 className="text-4xl font-bold text-foreground">{t("pricing.h1")}</h1>
           <p className="mt-4 text-lg text-muted-foreground">{t("pricing.sub")}</p>
+          <PlanChoiceIllustration className="mx-auto mt-8 h-16 w-full max-w-xs" />
         </div>
       </section>
 

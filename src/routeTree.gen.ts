@@ -16,6 +16,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as ForParentsRouteImport } from './routes/for-parents'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
@@ -113,6 +114,11 @@ const ContactRoute = ContactRouteImport.update({
 const CoursesRoute = CoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForParentsRoute = ForParentsRouteImport.update({
+  id: '/for-parents',
+  path: '/for-parents',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForTeachersRoute = ForTeachersRouteImport.update({
@@ -478,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
+  '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -550,6 +557,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
+  '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -624,6 +632,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
+  '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
@@ -698,6 +707,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/courses'
+    | '/for-parents'
     | '/for-teachers'
     | '/forgot-password'
     | '/help'
@@ -770,6 +780,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/courses'
+    | '/for-parents'
     | '/for-teachers'
     | '/forgot-password'
     | '/help'
@@ -843,6 +854,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/courses'
+    | '/for-parents'
     | '/for-teachers'
     | '/forgot-password'
     | '/help'
@@ -917,6 +929,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRoute
+  ForParentsRoute: typeof ForParentsRoute
   ForTeachersRoute: typeof ForTeachersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
@@ -984,6 +997,13 @@ declare module '@tanstack/react-router' {
       path: '/courses'
       fullPath: '/courses'
       preLoaderRoute: typeof CoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-parents': {
+      id: '/for-parents'
+      path: '/for-parents'
+      fullPath: '/for-parents'
+      preLoaderRoute: typeof ForParentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/for-teachers': {
@@ -1572,6 +1592,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRoute,
+  ForParentsRoute: ForParentsRoute,
   ForTeachersRoute: ForTeachersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,

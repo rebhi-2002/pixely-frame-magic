@@ -16,6 +16,12 @@ import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
 import { HeroMockup } from "@/components/site/hero-mockup";
+import {
+  LibraryTreeIllustration,
+  ExamSimIllustration,
+  MistakeBankIllustration,
+  ReviewSessionIllustration,
+} from "@/components/site/illustrations";
 import { Reveal } from "@/components/ui/reveal";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
@@ -33,12 +39,36 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { icon: BookOpenCheck, key: "library", span: "lg:col-span-2 lg:row-span-2", flagship: true },
-  { icon: Bot, key: "simulator", span: "lg:col-span-2", flagship: false },
-  { icon: MessagesSquare, key: "community", span: "", flagship: false },
-  { icon: LineChart, key: "tracker", span: "", flagship: false },
-  { icon: XCircle, key: "mistakes", span: "lg:col-span-2", flagship: false },
-  { icon: Timer, key: "review", span: "lg:col-span-2", flagship: false },
+  {
+    icon: BookOpenCheck,
+    key: "library",
+    span: "lg:col-span-2 lg:row-span-2",
+    flagship: true,
+    Illustration: LibraryTreeIllustration,
+  },
+  {
+    icon: Bot,
+    key: "simulator",
+    span: "lg:col-span-2",
+    flagship: false,
+    Illustration: ExamSimIllustration,
+  },
+  { icon: MessagesSquare, key: "community", span: "", flagship: false, Illustration: null },
+  { icon: LineChart, key: "tracker", span: "", flagship: false, Illustration: null },
+  {
+    icon: XCircle,
+    key: "mistakes",
+    span: "lg:col-span-2",
+    flagship: false,
+    Illustration: MistakeBankIllustration,
+  },
+  {
+    icon: Timer,
+    key: "review",
+    span: "lg:col-span-2",
+    flagship: false,
+    Illustration: ReviewSessionIllustration,
+  },
 ] as const;
 
 /* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */
@@ -131,7 +161,9 @@ function Landing() {
               <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} delay={i * 0.08} className="h-full">
-                    <div className="hover-lift shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
+                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
+                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
+                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">
                         <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
                       </p>
@@ -163,25 +195,34 @@ function Landing() {
             <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
               <article
                 className={cn(
-                  "hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
+                  // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
+                  // نفس منطق تصحيح الإحصائيات فوق.
+                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
                   f.flagship
                     ? "surface-mesh border-primary/30 bg-primary/5"
                     : "border-border bg-card",
                 )}
               >
-                <span
-                  className={cn(
-                    "flex size-11 items-center justify-center rounded-xl",
-                    f.flagship
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-primary/12 text-primary",
-                  )}
-                >
-                  <f.icon className="size-5" />
-                </span>
+                {f.Illustration ? (
+                  <f.Illustration
+                    className={cn("w-full", f.flagship ? "h-32" : "h-20")}
+                  />
+                ) : (
+                  <span
+                    className={cn(
+                      "flex size-11 items-center justify-center rounded-xl",
+                      f.flagship
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-primary/12 text-primary",
+                    )}
+                  >
+                    <f.icon className="size-5" />
+                  </span>
+                )}
                 <h3
                   className={cn(
-                    "mt-4 font-bold text-foreground",
+                    "font-bold text-foreground",
+                    f.Illustration ? "mt-3" : "mt-4",
                     f.flagship ? "text-lg" : "text-base",
                   )}
                 >
@@ -201,7 +242,9 @@ function Landing() {
           {roles.map((r) => (
             <div
               key={r.key}
-              className="hover-lift rounded-2xl border border-border bg-background p-6"
+              className="rounded-2xl border border-border bg-background p-6"
+              // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
+              // مش رابط ولا زر — نفس المبدأ بكل الملف.
             >
               <r.icon className="size-6 text-success" />
               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { Reveal } from "@/components/ui/reveal";
+import { cn } from "@/lib/utils";
 
 const title = "كيف تعمل أكاديميا؟ | خطوات البداية";
 const description =
@@ -31,11 +32,25 @@ function HowItWorks() {
       </section>
 
       <section className="mx-auto max-w-4xl px-5 py-16">
-        <ol className="space-y-4">
+        <ol className="relative space-y-4">
+          {/* خط المسار الموصل بين الخطوات — يحوّل القائمة من نص عادي إلى تدفّق
+              بصري واحد، بدل أربع بطاقات منفصلة بلا رابط. */}
+          <div
+            aria-hidden
+            className="absolute top-6 bottom-6 w-0.5 bg-border ltr:left-6 rtl:right-6"
+          />
           {steps.map((s, i) => (
-            <Reveal key={s} as="li" delay={i * 0.08}>
-              <div className="hover-lift shadow-elevation-1 flex gap-5 rounded-2xl border border-border bg-card p-6">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/12 font-display text-xl font-bold text-primary">
+            <Reveal key={s} as="li" delay={i * 0.08} className="relative">
+              <div className="shadow-elevation-1 flex gap-5 rounded-2xl border border-border bg-card p-6">
+                {/* بدون hover-lift: خطوة معلوماتية بمسار ثابت، مش عنصر قابل للنقر. */}
+                <span
+                  className={cn(
+                    "relative z-10 flex size-12 shrink-0 items-center justify-center rounded-xl font-display text-xl font-bold",
+                    i === 0
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-primary/12 text-primary",
+                  )}
+                >
                   {i + 1}
                 </span>
                 <div>
