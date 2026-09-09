@@ -164,8 +164,11 @@ export const PAGES: StaticPageRow[] = [
     module_id: "m-student",
     parent_id: null,
     key: "student_exam",
-    name: "محاكي الامتحان",
-    name_en: "Exam simulator",
+    /* اسم مؤقّت وصادق بقصد — الصفحة حاليًا دفتر تتبّع يدوي بدون مؤقّت ولا
+       محاكاة فعلية. لما نبني محاكي حقيقي (مؤقّت + واجهة أسئلة)، رجّع الاسم
+       لـ"محاكي الامتحان" / "Exam simulator" كترقية، مش قبلها. */
+    name: "امتحاناتي التجريبية",
+    name_en: "My practice exams",
     icon: "FileQuestion",
     path: "/exam-simulator",
     sort_order: 5,
@@ -219,8 +222,11 @@ export const PAGES: StaticPageRow[] = [
     module_id: "m-student",
     parent_id: null,
     key: "student_community",
-    name: "المجتمع",
-    name_en: "Community",
+    /* اسم مؤقّت وصادق — لسا مجرد دفتر أسئلة شخصي، مافي تفاعل حقيقي بين
+       المستخدمين ولا تمييز تلقائي لإجابة معلم. رجّع "المجتمع" لما يوصل
+       فعلياً (سؤال/جواب حقيقي بين مستخدمين). */
+    name: "أسئلتي",
+    name_en: "My questions",
     icon: "MessagesSquare",
     path: "/community",
     sort_order: 10,
@@ -331,8 +337,9 @@ export const PAGES: StaticPageRow[] = [
     module_id: "m-teacher",
     parent_id: null,
     key: "teacher_community",
-    name: "المجتمع",
-    name_en: "Community",
+    /* نفس ملاحظة الطالب — دفتر أسئلة، مش مجتمع تفاعلي حقيقي بعد. */
+    name: "أسئلة طلابي",
+    name_en: "My students' questions",
     icon: "MessagesSquare",
     path: "/teacher/community",
     sort_order: 8,

@@ -44,7 +44,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "المحتوى | أكاديميا";
-const description = "دروسك وملفاتك: ارفع، رتّب على شجرة المنهاج، وأرسل للمراجعة قبل النشر.";
+const description = "دروسك وملفاتك: أضفها، رتّبها على شجرة المنهاج، وتابع حالة مراجعتها.";
 
 export const Route = createFileRoute("/_authenticated/teacher/content")({
   head: () => ({

@@ -99,18 +99,64 @@ export const LIBRARY_SUBJECTS: LibrarySubjectRow[] = [
   },
 ];
 
+export interface FlashcardItem {
+  front: string;
+  back: string;
+}
+
 export interface FlashcardDeckRow {
   id: string;
   deckName: string;
   totalCards: number;
   dueCards: number;
   masteredCards: number;
+  /**
+   * بطاقات فعلية للمراجعة التفاعلية (وش/ظهر) — اختيارية بقصد. المجموعات
+   * يلي تنضاف من نموذج "إضافة مجموعة" ما إلها بطاقات فعلية بعد (النموذج
+   * حاليًا عدّادات بس)، فبتفتح وضع المراجعة برسالة واضحة بدل ما تنكسر.
+   * لما يجهز الباك اند، هاي بتيجي من قاعدة بيانات حقيقية بدل هالمصفوفة.
+   */
+  cards?: FlashcardItem[];
 }
 
 export const FLASHCARD_DECKS: FlashcardDeckRow[] = [
-  { id: "deck-1", deckName: "رياضيات — مشتقات", totalCards: 48, dueCards: 12, masteredCards: 30 },
-  { id: "deck-2", deckName: "فيزياء — الحركة", totalCards: 36, dueCards: 14, masteredCards: 18 },
-  { id: "deck-3", deckName: "عربي — بلاغة", totalCards: 60, dueCards: 8, masteredCards: 45 },
+  {
+    id: "deck-1",
+    deckName: "رياضيات — مشتقات",
+    totalCards: 48,
+    dueCards: 12,
+    masteredCards: 30,
+    cards: [
+      { front: "مشتقة x²", back: "2x" },
+      { front: "مشتقة sin(x)", back: "cos(x)" },
+      { front: "مشتقة ثابت (مثل 7)", back: "0" },
+      { front: "قاعدة الضرب: مشتقة (u·v)", back: "u'v + uv'" },
+    ],
+  },
+  {
+    id: "deck-2",
+    deckName: "فيزياء — الحركة",
+    totalCards: 36,
+    dueCards: 14,
+    masteredCards: 18,
+    cards: [
+      { front: "قانون نيوتن الثاني", back: "F = m × a" },
+      { front: "السرعة = ؟", back: "المسافة ÷ الزمن" },
+      { front: "التسارع = ؟", back: "التغيّر بالسرعة ÷ الزمن" },
+    ],
+  },
+  {
+    id: "deck-3",
+    deckName: "عربي — بلاغة",
+    totalCards: 60,
+    dueCards: 8,
+    masteredCards: 45,
+    cards: [
+      { front: "التشبيه", back: "مقارنة شيء بشيء بأداة تشبيه لصفة مشتركة" },
+      { front: "الاستعارة", back: "تشبيه حذف منه أحد طرفيه" },
+      { front: "الطباق", back: "الجمع بين لفظتين متضادتين بالمعنى" },
+    ],
+  },
 ];
 
 export interface DailyStudyRow {

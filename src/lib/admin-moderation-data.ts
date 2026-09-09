@@ -13,40 +13,8 @@ export interface TeacherVerificationRow {
   notes: string | null;
 }
 
-export const TEACHER_VERIFICATIONS: TeacherVerificationRow[] = [
-  {
-    id: "tv-1",
-    teacherName: "سارة الحسن",
-    specialty: "رياضيات",
-    requestedOn: "2026-08-05",
-    status: "قيد المراجعة",
-    notes: null,
-  },
-  {
-    id: "tv-2",
-    teacherName: "محمد العلي",
-    specialty: "فيزياء",
-    requestedOn: "2026-08-04",
-    status: "مكتمل",
-    notes: null,
-  },
-  {
-    id: "tv-3",
-    teacherName: "ريم خالد",
-    specialty: "لغة عربية",
-    requestedOn: "2026-08-04",
-    status: "ينقص مستند",
-    notes: "ينقص إثبات المؤهل الجامعي",
-  },
-  {
-    id: "tv-4",
-    teacherName: "أحمد يوسف",
-    specialty: "كيمياء",
-    requestedOn: "2026-08-02",
-    status: "قيد المراجعة",
-    notes: null,
-  },
-];
+// فاضية بقصد — طلبات توثيق معلمين حقيقيين، ما في طلبات حقيقية بعد.
+export const TEACHER_VERIFICATIONS: TeacherVerificationRow[] = [];
 
 export type ContentType = "درس" | "اختبار" | "كورس";
 export type ContentStatus = "جديد" | "مراجعة ثانية" | "جاهز للاعتماد" | "معتمد" | "مرفوض";
@@ -59,29 +27,8 @@ export interface ContentSubmissionRow {
   status: ContentStatus;
 }
 
-export const CONTENT_SUBMISSIONS: ContentSubmissionRow[] = [
-  {
-    id: "cs-1",
-    title: "التفاضل — الوحدة الثانية",
-    teacherName: "أحمد يوسف",
-    type: "درس",
-    status: "جديد",
-  },
-  {
-    id: "cs-2",
-    title: "اختبار الكهرباء",
-    teacherName: "لينا سمير",
-    type: "اختبار",
-    status: "مراجعة ثانية",
-  },
-  {
-    id: "cs-3",
-    title: "الكيمياء العضوية",
-    teacherName: "ياسر علي",
-    type: "كورس",
-    status: "جاهز للاعتماد",
-  },
-];
+// فاضية بقصد — محتوى مرسل من معلمين حقيقيين للمراجعة، ما في محتوى حقيقي بعد.
+export const CONTENT_SUBMISSIONS: ContentSubmissionRow[] = [];
 
 export type ReportPriority = "عالية" | "متوسطة" | "منخفضة";
 export type ReportStatus = "مفتوح" | "مغلق" | "مؤجل";
@@ -95,32 +42,8 @@ export interface CommunityReportRow {
   status: ReportStatus;
 }
 
-export const COMMUNITY_REPORTS: CommunityReportRow[] = [
-  {
-    id: "cr-1",
-    code: "#R-1042",
-    community: "رياضيات الثانوية",
-    reason: "محتوى غير مناسب",
-    priority: "عالية",
-    status: "مفتوح",
-  },
-  {
-    id: "cr-2",
-    code: "#R-1041",
-    community: "مجتمع الفيزياء",
-    reason: "إزعاج متكرر",
-    priority: "متوسطة",
-    status: "مفتوح",
-  },
-  {
-    id: "cr-3",
-    code: "#R-1038",
-    community: "اللغة العربية",
-    reason: "معلومة مضللة",
-    priority: "متوسطة",
-    status: "مؤجل",
-  },
-];
+// فاضية بقصد — بلاغات حقيقية من مستخدمين حقيقيين، ما في بلاغات حقيقية بعد.
+export const COMMUNITY_REPORTS: CommunityReportRow[] = [];
 
 export function nextModId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;

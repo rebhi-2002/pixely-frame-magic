@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserPlus } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, Progress, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
+import { Button } from "@/components/ui/button";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 import { getChildReport } from "@/lib/supervisor-oversight.functions";
@@ -43,12 +44,42 @@ function Body() {
     queryFn: () => fetchReport(),
   });
 
-  if (isLoading || !report) {
+  if (isLoading) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
         <div className="flex justify-center py-16">
           <Loader2 className="size-6 animate-spin text-primary" />
         </div>
+      </AppPage>
+    );
+  }
+
+  if (!report) {
+    return (
+      <AppPage
+        title={bi("تقرير الابن", "Child report")}
+        icon="FileBarChart"
+        subtitle={bi(
+          "ما في ابن مرتبط بحسابك بعد — اربط أول ابن حتى يظهر تقريره هون.",
+          "No child is linked to your account yet — link your first child to see their report here.",
+        )}
+      >
+        <EmptyState
+          icon="UserPlus"
+          title={bi("لسا ما في تقرير لعرضه", "No report to show yet")}
+          description={bi(
+            "اربط حساب ابنك أو بنتك من الإعدادات، وبيظهر التقرير الأسبوعي هون تلقائيًا.",
+            "Link your child's account from Settings, and their weekly report will appear here automatically.",
+          )}
+          action={
+            <Button asChild size="sm">
+              <Link to="/parent/settings">
+                <UserPlus className="size-4" />
+                {bi("اربط ابن الآن", "Link a child now")}
+              </Link>
+            </Button>
+          }
+        />
       </AppPage>
     );
   }

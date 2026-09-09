@@ -34,8 +34,7 @@ function AboutPage() {
       <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-4xl px-5 py-20">
           <h1 className="text-4xl font-bold leading-[1.25] text-foreground md:text-5xl">
-            {t("about.h1a")}
-            <span className="text-highlight">{t("about.h1b")}</span>
+            {t("about.h1")}
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t("about.sub")}</p>
         </div>
@@ -72,7 +71,7 @@ function AboutPage() {
             {team.map((m, i) => {
               const member = teamMembers[i % teamMembers.length];
               return (
-                <Reveal key={m.t} delay={i * 0.06}>
+                <Reveal key={member.photo} delay={i * 0.06}>
                   <div className="shadow-elevation-1 flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
                     <PhotoAvatar
                       src={member.photo}

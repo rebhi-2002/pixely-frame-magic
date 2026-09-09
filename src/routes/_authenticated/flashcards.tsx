@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Pencil, Plus, RotateCw, Trash2 } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "البطاقات | أكاديميا";
-const description =
-  "مراجعة متباعدة (Spaced repetition): البطاقة ترجع لك في الوقت الذي تنساها فيه بالضبط.";
+const description = "دفتر متابعة مجموعات بطاقاتك: كم بطاقة عندك، كم مستحقة، وكم أتقنتها.";
 
 export const Route = createFileRoute("/_authenticated/flashcards")({
   head: () => ({
@@ -77,6 +76,9 @@ function Body() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<FlashcardDeckRow | null>(null);
+  const [studyDeck, setStudyDeck] = useState<FlashcardDeckRow | null>(null);
+  const [studyIndex, setStudyIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["flashcard-decks"],
@@ -139,13 +141,53 @@ function Body() {
     setOpen(true);
   }
 
+  function startStudy(row: FlashcardDeckRow) {
+    setStudyDeck(row);
+    setStudyIndex(0);
+    setFlipped(false);
+  }
+
+  const currentCard = studyDeck?.cards?.[studyIndex];
+
+  function goToCard(delta: number) {
+    if (!studyDeck?.cards) return;
+    const next = studyIndex + delta;
+    if (next < 0 || next >= studyDeck.cards.length) return;
+    setStudyIndex(next);
+    setFlipped(false);
+  }
+
+  function markMastered() {
+    if (!studyDeck) return;
+    const nextDue = Math.max(0, studyDeck.dueCards - 1);
+    const nextMastered = studyDeck.masteredCards + 1;
+    persist({
+      data: {
+        id: studyDeck.id,
+        deckName: studyDeck.deckName,
+        totalCards: studyDeck.totalCards,
+        dueCards: nextDue,
+        masteredCards: nextMastered,
+      },
+    }).then(() => {
+      invalidate();
+      setStudyDeck((d) => (d ? { ...d, dueCards: nextDue, masteredCards: nextMastered } : d));
+    });
+    if (studyDeck.cards && studyIndex < studyDeck.cards.length - 1) {
+      goToCard(1);
+    } else {
+      toast.success(bi("خلّصت مراجعة هالمجموعة 🎉", "You finished reviewing this deck 🎉"));
+      setStudyDeck(null);
+    }
+  }
+
   return (
     <AppPage
       title={bi("البطاقات", "Flashcards")}
       icon="Layers"
       subtitle={bi(
         description,
-        "Spaced repetition: each card returns exactly when you're about to forget it.",
+        "A tracker for your card decks: how many cards, how many due, how many mastered.",
       )}
     >
       <StatGrid
@@ -193,10 +235,11 @@ function Body() {
                 `${r.totalCards} بطاقة · ${r.dueCards} مستحقة`,
                 `${r.totalCards} cards · ${r.dueCards} due`,
               ),
-              value: bi("ابدأ", "Start"),
-              tone: "primary" as const,
               actions: (
                 <div className="flex items-center gap-1">
+                  <Button size="sm" variant="secondary" onClick={() => startStudy(r)}>
+                    {bi("ابدأ", "Start")}
+                  </Button>
                   {can("student_flashcards", "edit") && (
                     <Button size="icon" variant="ghost" onClick={() => openDialog(r)}>
                       <Pencil className="size-4" />
@@ -302,6 +345,82 @@ function Body() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* وضع المراجعة التفاعلي — قلب بطاقة حقيقي بالمتصفح، مع تحديث فعلي
+          لعدد "المُتقنة/المستحقة" عبر نفس دالة الحفظ الموجودة. البطاقات
+          نفسها بيانات مثال مؤقتة (راجع تعليق student-learning-data.ts). */}
+      <Dialog open={!!studyDeck} onOpenChange={(v) => !v && setStudyDeck(null)}>
+        <DialogContent className="text-start sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{studyDeck?.deckName}</DialogTitle>
+          </DialogHeader>
+
+          {currentCard ? (
+            <div className="space-y-4">
+              <p className="text-center text-xs text-muted-foreground">
+                {bi(
+                  `بطاقة ${studyIndex + 1} من ${studyDeck?.cards?.length}`,
+                  `Card ${studyIndex + 1} of ${studyDeck?.cards?.length}`,
+                )}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setFlipped((f) => !f)}
+                className="flex min-h-40 w-full items-center justify-center rounded-2xl border border-border bg-card p-6 text-center shadow-elevation-2 transition-all duration-200"
+              >
+                <span
+                  key={flipped ? "back" : "front"}
+                  className="animate-in fade-in zoom-in-95 font-display text-lg font-bold text-foreground duration-200"
+                >
+                  {flipped ? currentCard.back : currentCard.front}
+                </span>
+              </button>
+
+              <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+                <RotateCw className="size-3.5" />
+                {bi("دوس على البطاقة تشوف الجواب", "Tap the card to see the answer")}
+              </p>
+
+              <div className="flex items-center justify-between gap-2">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => goToCard(-1)}
+                  disabled={studyIndex === 0}
+                >
+                  <ChevronRight className="size-4" />
+                </Button>
+                <Button onClick={markMastered} className="flex-1">
+                  {bi("أتقنتها ✓", "Got it ✓")}
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => goToCard(1)}
+                  disabled={!studyDeck?.cards || studyIndex >= studyDeck.cards.length - 1}
+                >
+                  <ChevronLeft className="size-4" />
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <EmptyState
+              icon="Layers"
+              text={bi(
+                "هذي المجموعة عدّاد بس، ما إلها بطاقات فعلية بعد. جرّب «رياضيات — مشتقات» كمثال.",
+                "This deck is a counter only — no real cards yet. Try “Math — derivatives” as an example.",
+              )}
+            />
+          )}
+
+          <DialogFooter className="sm:justify-start">
+            <Button variant="outline" onClick={() => setStudyDeck(null)}>
+              {bi("إغلاق", "Close")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppPage>
   );
 }

@@ -12,8 +12,8 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
-const title = "مجتمع الصف | أكاديميا";
-const description = "أسئلة طلابك في مكان واحد؛ إجابتك تُميّز كـ«إجابة معلم» تلقائياً.";
+const title = "أسئلة طلابي | أكاديميا";
+const description = "أسئلة طلابك في مكان واحد، وسجّل جوابك عليها.";
 
 export const Route = createFileRoute("/_authenticated/teacher/community")({
   head: () => ({
@@ -66,11 +66,11 @@ function Body() {
 
   return (
     <AppPage
-      title={bi("مجتمع الصف", "Class community")}
+      title={bi("أسئلة طلابي", "My students' questions")}
       icon="MessagesSquare"
       subtitle={bi(
         description,
-        "Your students' questions in one place; your answer is marked as verified automatically.",
+        "Your students' questions in one place, so you can log your answer.",
       )}
     >
       {isLoading ? (

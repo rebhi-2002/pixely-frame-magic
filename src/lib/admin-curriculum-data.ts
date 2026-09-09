@@ -11,11 +11,10 @@ export interface PaymentRow {
   status: PaymentStatus;
 }
 
-export const PAYMENTS: PaymentRow[] = [
-  { id: "pay-1", code: "#PAY-9281", userName: "عمر سليم", amount: 49, status: "ناجحة" },
-  { id: "pay-2", code: "#PAY-9280", userName: "سارة كامل", amount: 89, status: "قيد المعالجة" },
-  { id: "pay-3", code: "#PAY-9274", userName: "ليان أحمد", amount: 29, status: "مستردة" },
-];
+// فاضية بقصد — مافي نظام دفع فعلي متّصل بعد (راجع ملاحظة الباك اند بالتقرير)،
+// فما بنعرض عمليات دفع وهمية بأسماء مستخدمين حقيقيين. بتتعبى تلقائياً لما
+// يشتغل نظام الدفع الحقيقي.
+export const PAYMENTS: PaymentRow[] = [];
 
 export interface CurriculumSubjectRow {
   id: string;
@@ -25,10 +24,13 @@ export interface CurriculumSubjectRow {
   coursesCount: number;
 }
 
+// أصفار بقصد — العدد الحقيقي للكورسات المبنية فعليًا تحت كل مادة بالمنهاج،
+// ومش مربوطة فعليًا ببنك الكورسات العام (public-catalog-data.ts) بعد —
+// نظامين منفصلين حاليًا، فما بنعرض رقم مختلق غير متوافق مع الكتالوج الفعلي.
 export const CURRICULUM_SUBJECTS: CurriculumSubjectRow[] = [
-  { id: "cur-1", grade: "الثاني عشر", group: "العلمي", subject: "الفيزياء", coursesCount: 8 },
-  { id: "cur-2", grade: "الثاني عشر", group: "العلمي", subject: "الرياضيات", coursesCount: 11 },
-  { id: "cur-3", grade: "الحادي عشر", group: "الأدبي", subject: "اللغة العربية", coursesCount: 6 },
+  { id: "cur-1", grade: "الثاني عشر", group: "العلمي", subject: "الفيزياء", coursesCount: 0 },
+  { id: "cur-2", grade: "الثاني عشر", group: "العلمي", subject: "الرياضيات", coursesCount: 0 },
+  { id: "cur-3", grade: "الحادي عشر", group: "الأدبي", subject: "اللغة العربية", coursesCount: 0 },
 ];
 
 export type CurriculumEntityType = "وحدة" | "مادة" | "مجموعة" | "صف" | "كورس";
@@ -42,29 +44,9 @@ export interface CurriculumRequestRow {
   status: CurriculumRequestStatus;
 }
 
-export const CURRICULUM_REQUESTS: CurriculumRequestRow[] = [
-  {
-    id: "creq-1",
-    title: "إضافة وحدة الموجات",
-    requesterName: "د. خالد عمر",
-    entityType: "وحدة",
-    status: "جديد",
-  },
-  {
-    id: "creq-2",
-    title: "تحديث ترتيب الكيمياء",
-    requesterName: "سلمى حسن",
-    entityType: "مادة",
-    status: "قيد الدراسة",
-  },
-  {
-    id: "creq-3",
-    title: "إضافة مجموعة أدبي",
-    requesterName: "المشرف الأكاديمي",
-    entityType: "مجموعة",
-    status: "جاهز للاعتماد",
-  },
-];
+// فاضية بقصد — طلبات تعديل منهج من معلمين/مشرفين حقيقيين، ما في طلبات
+// حقيقية بعد.
+export const CURRICULUM_REQUESTS: CurriculumRequestRow[] = [];
 
 export function nextCurriculumId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;

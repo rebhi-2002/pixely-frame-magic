@@ -45,7 +45,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "الجدول | أكاديميا";
-const description = "جدول دراسي يذكّرك: حصص، واجبات، امتحانات، وجلسات مراجعة.";
+const description = "جدول دراسي بمكان واحد: حصص، واجبات، امتحانات، وجلسات مراجعة.";
 
 export const Route = createFileRoute("/_authenticated/schedule")({
   head: () => ({
@@ -185,7 +185,7 @@ function Body() {
           },
           {
             icon: "BellRing",
-            label: bi("تذكيرات مفعّلة", "Reminders on"),
+            label: bi("معلَّمة كمهمة", "Marked important"),
             value: String(stats.reminders),
           },
           { icon: "ListChecks", label: bi("مهام متأخرة", "Overdue"), value: String(stats.overdue) },
@@ -327,7 +327,9 @@ function Body() {
                 checked={form.reminderOn}
                 onCheckedChange={(v) => setForm((f) => ({ ...f, reminderOn: v }))}
               />
-              <Label htmlFor="sch-reminder">{bi("تذكير مفعّل", "Reminder on")}</Label>
+              <Label htmlFor="sch-reminder">
+                {bi("علّمها كمهمة (بدون إشعار فعلي حاليًا)", "Mark as important (no live alert yet)")}
+              </Label>
             </div>
             <div className="flex items-center gap-2">
               <Switch

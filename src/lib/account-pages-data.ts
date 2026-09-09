@@ -28,8 +28,9 @@ export const TEACHER_PROFILE: TeacherProfile = {
   displayName: "أ. سامي خالد",
   bio: "معلم رياضيات — 12 سنة خبرة",
   subjectsLabel: "رياضيات · فيزياء",
-  profileViews: 1860,
-  rating: 4.8,
+  // أصفار بقصد — مشاهدات وتقييم حقيقيين من زوار/طلاب حقيقيين، ما توفروا بعد.
+  profileViews: 0,
+  rating: 0,
 };
 
 export interface LinkedChildRow {
@@ -39,10 +40,9 @@ export interface LinkedChildRow {
   linkedDateLabel: string;
 }
 
-export const LINKED_CHILDREN: LinkedChildRow[] = [
-  { id: "lc-1", childName: "أحمد", gradeLabel: "الصف الحادي عشر", linkedDateLabel: "2026/03/02" },
-  { id: "lc-2", childName: "سارة", gradeLabel: "الصف التاسع", linkedDateLabel: "2026/04/18" },
-];
+// فاضية بقصد — ولي الأمر ما ربط أولاد حقيقيين بعد. أول ابن يُربط فعليًا
+// بيظهر هون تلقائياً.
+export const LINKED_CHILDREN: LinkedChildRow[] = [];
 
 export interface ParentNotificationPrefs {
   weeklyReport: boolean;
@@ -67,48 +67,9 @@ export interface NotificationRow {
   tone: "primary" | "success" | "muted";
 }
 
-export const NOTIFICATIONS: NotificationRow[] = [
-  {
-    id: "nt-1",
-    title: "تم نشر نتيجة اختبار الفيزياء",
-    meta: "منذ 12 دقيقة",
-    category: "اليوم",
-    isNew: true,
-    tone: "primary",
-  },
-  {
-    id: "nt-2",
-    title: "موعد مراجعة الرياضيات غداً",
-    meta: "منذ ساعة",
-    category: "اليوم",
-    isNew: true,
-    tone: "success",
-  },
-  {
-    id: "nt-3",
-    title: "تم تحديث إعدادات الأمان",
-    meta: "منذ 3 ساعات",
-    category: "اليوم",
-    isNew: false,
-    tone: "muted",
-  },
-  {
-    id: "nt-4",
-    title: "أضيف درس جديد إلى مكتبتك",
-    meta: "أمس",
-    category: "سابقاً",
-    isNew: false,
-    tone: "muted",
-  },
-  {
-    id: "nt-5",
-    title: "اكتملت سلسلة إنجاز 12 يوماً",
-    meta: "منذ يومين",
-    category: "سابقاً",
-    isNew: false,
-    tone: "success",
-  },
-];
+// فاضية بقصد — إشعارات عن أحداث حقيقية (نتيجة اختبار، درس جديد...) ما
+// صارت بعد، فما بنعرض إشعارات لأحداث مختلقة بتواريخ وهمية.
+export const NOTIFICATIONS: NotificationRow[] = [];
 
 export function nextAccountId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;

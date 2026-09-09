@@ -34,9 +34,7 @@ function ForTeachers() {
       <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-5xl px-5 py-20">
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-            {t("forTeachers.h1a")}
-            <span className="text-highlight">{t("forTeachers.h1b")}</span>
-            {t("forTeachers.h1c")}
+            {t("forTeachers.h1")}
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forTeachers.sub")}</p>
           <SessionCta

@@ -44,8 +44,8 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
-const title = "مجتمع المواد | أكاديميا";
-const description = "اسأل في مجتمع المادة، وجاوب زملاءك — إجابات المعلم تُميّز تلقائياً.";
+const title = "أسئلتي | أكاديميا";
+const description = "سجّل أسئلتك بكل مادة، وتابع حالتها لحد ما توصلك إجابة.";
 
 export const Route = createFileRoute("/_authenticated/community")({
   head: () => ({
@@ -151,11 +151,11 @@ function Body() {
 
   return (
     <AppPage
-      title={bi("مجتمع المواد", "Subject community")}
+      title={bi("أسئلتي", "My questions")}
       icon="MessagesSquare"
       subtitle={bi(
         description,
-        "Ask in your subject community and answer classmates — teacher answers are highlighted.",
+        "Log your questions per subject, and track their status until answered.",
       )}
     >
       {isLoading ? (

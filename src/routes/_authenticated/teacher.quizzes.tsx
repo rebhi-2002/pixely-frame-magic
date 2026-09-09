@@ -40,7 +40,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "الاختبارات | أكاديميا";
-const description = "بنك أسئلتك واختباراتك: اختيار متعدد، صح/خطأ، ومقالي — مع تصحيح آلي حيث ينفع.";
+const description = "بنك أسئلتك واختباراتك: اختيار متعدد، صح/خطأ، ومقالي.";
 
 export const Route = createFileRoute("/_authenticated/teacher/quizzes")({
   head: () => ({
@@ -156,7 +156,7 @@ function Body() {
       icon="ListChecks"
       subtitle={bi(
         description,
-        "Your question bank and quizzes: MCQ, true/false and essay — auto-graded where possible.",
+        "Your question bank and quizzes: MCQ, true/false and essay.",
       )}
     >
       <StatGrid

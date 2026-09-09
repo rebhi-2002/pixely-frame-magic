@@ -34,9 +34,7 @@ function ForParents() {
       <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-5xl px-5 py-20">
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-            {t("forParents.h1a")}
-            <span className="text-highlight">{t("forParents.h1b")}</span>
-            {t("forParents.h1c")}
+            {t("forParents.h1")}
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forParents.sub")}</p>
           <SessionCta

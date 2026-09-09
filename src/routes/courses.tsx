@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { BookOpen, Clock, Loader2, Search, Star, Users, Wallet } from "lucide-react";
+import { BookOpen, Clock, Search, Star, Users, Wallet } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
@@ -129,8 +129,32 @@ function CoursesPage() {
 
       <section className="mx-auto max-w-6xl px-5 py-14">
         {isLoading ? (
-          <div className="flex justify-center py-10">
-            <Loader2 className="size-6 animate-spin text-primary" />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+            {/* هيكل تحميل (Skeleton) بنفس أبعاد البطاقة الحقيقية تمامًا —
+                يمنع "قفزة" بالتخطيط لما توصل البيانات، ويحس المستخدم
+                بسرعة أعلى من دوّارة وحيدة بنص الشاشة. */}
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="animate-pulse overflow-hidden rounded-2xl border border-border bg-card"
+              >
+                <div className="h-28 w-full bg-secondary" />
+                <div className="space-y-3 p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="h-5 w-16 rounded bg-secondary" />
+                    <div className="h-4 w-12 rounded bg-secondary" />
+                  </div>
+                  <div className="h-5 w-4/5 rounded bg-secondary" />
+                  <div className="h-4 w-full rounded bg-secondary" />
+                  <div className="h-4 w-2/3 rounded bg-secondary" />
+                  <div className="flex items-center gap-2 pt-1">
+                    <div className="size-7 rounded-full bg-secondary" />
+                    <div className="h-4 w-24 rounded bg-secondary" />
+                  </div>
+                  <div className="h-10 w-full rounded-xl bg-secondary" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div key={`${subject}-${filtered.length}`} className="panel-swap">

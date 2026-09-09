@@ -37,8 +37,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "المكتبة | أكاديميا";
-const description =
-  "مكتبة مرتّبة: فصل ← مادة ← وحدة ← درس. لا مزيد من الملفات الضائعة في الواتساب.";
+const description = "مكتبة مرتّبة: فصل ← مادة ← وحدة ← درس، لتتابع تقدّمك بكل مادة بمكان واحد.";
 
 export const Route = createFileRoute("/_authenticated/library")({
   head: () => ({
@@ -158,7 +157,7 @@ function Body() {
       icon="Library"
       subtitle={bi(
         description,
-        "A tidy library: term → subject → unit → lesson. No more files lost in WhatsApp.",
+        "A tidy library: term → subject → unit → lesson, so you can track every subject in one place.",
       )}
     >
       <StatGrid

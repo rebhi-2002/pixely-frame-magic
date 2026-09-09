@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Download, Loader2, Trash2 } from "lucide-react";
+import { Bell, Loader2, Trash2 } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "تقارير الإشراف | أكاديميا";
-const description = "تقارير دورية جاهزة للتصدير: جودة التدريس، الإتقان، والالتزام.";
+const description = "تقارير دورية عن جودة التدريس، الإتقان، والالتزام.";
 
 export const Route = createFileRoute("/_authenticated/supervisor/reports")({
   head: () => ({
@@ -72,7 +72,7 @@ function Body() {
     mutationFn: (id: string) => download({ data: { id } }),
     onSuccess: () => {
       invalidate();
-      toast.success(bi("تم تسجيل التنزيل", "Download recorded"));
+      toast.success(bi("سجّلنا طلبك — التصدير الفعلي للملف قادم مع الباك اند.", "Request logged — real file export is coming with the backend."));
     },
     onError: (e) =>
       toast.error(getErrorMessage(e, bi("تعذّر التنزيل", "Failed to download"))),
@@ -94,7 +94,7 @@ function Body() {
       icon="FileBarChart"
       subtitle={bi(
         description,
-        "Periodic exportable reports: teaching quality, mastery and consistency.",
+        "Periodic reports on teaching quality, mastery and consistency.",
       )}
     >
       {isLoading ? (
@@ -116,8 +116,8 @@ function Body() {
                 value: settings.reportFrequencyLabel,
               },
               {
-                icon: "Download",
-                label: bi("تنزيلات", "Downloads"),
+                icon: "Bell",
+                label: bi("طلبات نسخة", "Copy requests"),
                 value: String(totalDownloads),
               },
               {
@@ -137,8 +137,8 @@ function Body() {
                 rows={reports.map((r) => ({
                   title: r.title,
                   meta: bi(
-                    `${r.formatLabel} · ${r.downloadsCount} تنزيل`,
-                    `${r.formatLabel} · ${r.downloadsCount} downloads`,
+                    `${r.formatLabel} · ${r.downloadsCount} طلب`,
+                    `${r.formatLabel} · ${r.downloadsCount} requests`,
                   ),
                   tone: "primary" as const,
                   actions: (
@@ -149,8 +149,8 @@ function Body() {
                           variant="outline"
                           onClick={() => downloadMutation.mutate(r.id)}
                         >
-                          <Download className="size-4" />
-                          {bi("تنزيل", "Download")}
+                          <Bell className="size-4" />
+                          {bi("اطلب نسخة", "Request a copy")}
                         </Button>
                       )}
                       {can("supervisor_reports", "delete") && (

@@ -33,6 +33,8 @@ import { getErrorMessage } from "@/integrations/backend/client";
 const EMPTY_FORM = {
   titleAr: "",
   titleEn: "",
+  descriptionAr: "",
+  descriptionEn: "",
   teacherAr: "",
   teacherEn: "",
   teacherId: "",
@@ -42,6 +44,13 @@ const EMPTY_FORM = {
   levelEn: "",
   lessons: "0",
   price: "0",
+  // اختيارية بقصد — فاضية = محبوسة من العرض بالبطاقة تلقائياً حتى تتوفر
+  // بيانات حقيقية (راجع تعليق الشرح داخل courses.tsx وpublic-catalog-data.ts).
+  rating: "",
+  studentsCount: "",
+  durationHours: "",
+  tagsAr: "",
+  tagsEn: "",
 };
 
 export function CourseCatalogPage() {
@@ -82,6 +91,9 @@ export function CourseCatalogPage() {
           id: editingId ?? undefined,
           lessons: Number(form.lessons) || 0,
           price: Number(form.price) || 0,
+          rating: form.rating.trim() ? Number(form.rating) : undefined,
+          studentsCount: form.studentsCount.trim() ? Number(form.studentsCount) : undefined,
+          durationHours: form.durationHours.trim() ? Number(form.durationHours) : undefined,
         },
       }),
     onSuccess: () => {
@@ -111,6 +123,8 @@ export function CourseCatalogPage() {
         ? {
             titleAr: row.title[0],
             titleEn: row.title[1],
+            descriptionAr: row.description[0],
+            descriptionEn: row.description[1],
             teacherAr: row.teacher[0],
             teacherEn: row.teacher[1],
             teacherId: row.teacherId,
@@ -120,6 +134,11 @@ export function CourseCatalogPage() {
             levelEn: row.level[1],
             lessons: String(row.lessons),
             price: String(row.price),
+            rating: row.rating != null ? String(row.rating) : "",
+            studentsCount: row.studentsCount != null ? String(row.studentsCount) : "",
+            durationHours: row.durationHours != null ? String(row.durationHours) : "",
+            tagsAr: row.tags?.map((t) => t[0]).join(", ") ?? "",
+            tagsEn: row.tags?.map((t) => t[1]).join(", ") ?? "",
           }
         : EMPTY_FORM,
     );
@@ -232,6 +251,24 @@ export function CourseCatalogPage() {
                 onChange={(e) => setForm((f) => ({ ...f, titleEn: e.target.value }))}
               />
             </div>
+            <div className="space-y-1.5 sm:col-span-2">
+              <Label htmlFor="crs-desc-ar">{bi("وصف قصير (عربي)", "Short description (Arabic)")}</Label>
+              <Input
+                id="crs-desc-ar"
+                value={form.descriptionAr}
+                onChange={(e) => setForm((f) => ({ ...f, descriptionAr: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5 sm:col-span-2">
+              <Label htmlFor="crs-desc-en">
+                {bi("وصف قصير (إنجليزي)", "Short description (English)")}
+              </Label>
+              <Input
+                id="crs-desc-en"
+                value={form.descriptionEn}
+                onChange={(e) => setForm((f) => ({ ...f, descriptionEn: e.target.value }))}
+              />
+            </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-teacher-ar">{bi("المعلم (عربي)", "Teacher (Arabic)")}</Label>
               <Input
@@ -308,11 +345,79 @@ export function CourseCatalogPage() {
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
               />
             </div>
+
+            <div className="sm:col-span-2">
+              <p className="text-xs font-semibold text-muted-foreground">
+                {bi(
+                  "الحقول تحت اختيارية — خليها فاضية لحد ما يصير عندك رقم حقيقي، وما بتظهر بالبطاقة أبداً وهي فاضية.",
+                  "Fields below are optional — leave empty until you have a real number; they never show on the card while empty.",
+                )}
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-rating">{bi("تقييم (من 5)", "Rating (out of 5)")}</Label>
+              <Input
+                id="crs-rating"
+                type="number"
+                min={0}
+                max={5}
+                step={0.1}
+                placeholder={bi("فاضي = ما يظهر", "Empty = hidden")}
+                value={form.rating}
+                onChange={(e) => setForm((f) => ({ ...f, rating: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-students">{bi("عدد الطلاب المشتركين", "Enrolled students")}</Label>
+              <Input
+                id="crs-students"
+                type="number"
+                min={0}
+                placeholder={bi("فاضي = ما يظهر", "Empty = hidden")}
+                value={form.studentsCount}
+                onChange={(e) => setForm((f) => ({ ...f, studentsCount: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-duration">{bi("مدة الكورس (ساعة)", "Duration (hours)")}</Label>
+              <Input
+                id="crs-duration"
+                type="number"
+                min={0}
+                placeholder={bi("فاضي = ما يظهر", "Empty = hidden")}
+                value={form.durationHours}
+                onChange={(e) => setForm((f) => ({ ...f, durationHours: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-tags-ar">{bi("وسوم (عربي)", "Tags (Arabic)")}</Label>
+              <Input
+                id="crs-tags-ar"
+                placeholder={bi("مراجعة نهائية، أسئلة وزارية", "comma, separated")}
+                value={form.tagsAr}
+                onChange={(e) => setForm((f) => ({ ...f, tagsAr: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-tags-en">{bi("وسوم (إنجليزي)", "Tags (English)")}</Label>
+              <Input
+                id="crs-tags-en"
+                placeholder={bi("بنفس ترتيب وعدد الوسوم العربي", "Same order & count as Arabic")}
+                value={form.tagsEn}
+                onChange={(e) => setForm((f) => ({ ...f, tagsEn: e.target.value }))}
+              />
+            </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
             <Button
               onClick={() => saveMutation.mutate()}
-              disabled={saveMutation.isPending || !form.titleAr.trim() || !form.titleEn.trim()}
+              disabled={
+                saveMutation.isPending ||
+                !form.titleAr.trim() ||
+                !form.titleEn.trim() ||
+                !form.descriptionAr.trim() ||
+                !form.descriptionEn.trim()
+              }
             >
               {bi("حفظ", "Save")}
             </Button>

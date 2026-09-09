@@ -170,7 +170,11 @@ export const getChildReport = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await requirePageAction(context.userId, "parent_report", "view_list");
 
-    const childName = LINKED_CHILDREN[0]?.childName ?? "—";
+    // لا يوجد تقرير حقيقي بدون ابن مرتبط فعليًا — إرجاع بيانات الطالب
+    // الحالي هون كان خطأ منطقي (يوهم بوجود ابن). null = بلا ابن مرتبط.
+    if (LINKED_CHILDREN.length === 0) return null;
+
+    const childName = LINKED_CHILDREN[0].childName;
     const studyDaysCount = WEEKLY_STUDY_LOG.filter((d) => d.minutes > 0).length;
     const totalMinutes = WEEKLY_STUDY_LOG.reduce((s, d) => s + d.minutes, 0);
     const avgMastery = LIBRARY_SUBJECTS.length

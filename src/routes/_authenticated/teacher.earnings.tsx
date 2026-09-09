@@ -99,8 +99,7 @@ function Body() {
 
   const isLoading = rowsQuery.isLoading || settingsQuery.isLoading;
   const list = rowsQuery.data ?? [];
-  const settings = settingsQuery.data ?? { platformFeePercent: 15 };
-
+  const settings = settingsQuery.data ?? { platformFeePercent: null };
   const stats = useMemo(() => {
     const available = list.filter((r) => r.status === "مؤكد").reduce((s, r) => s + r.amount, 0);
     const pending = list
@@ -182,7 +181,10 @@ function Body() {
               {
                 icon: "BadgePercent",
                 label: bi("عمولة المنصة", "Platform fee"),
-                value: `${settings.platformFeePercent}%`,
+                value:
+                  settings.platformFeePercent != null
+                    ? `${settings.platformFeePercent}%`
+                    : bi("قيد التحديد", "TBD"),
               },
               {
                 icon: "Banknote",

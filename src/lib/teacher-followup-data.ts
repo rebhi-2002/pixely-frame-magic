@@ -12,32 +12,8 @@ export interface GradingItemRow {
   overdue: boolean;
 }
 
-export const GRADING_ITEMS: GradingItemRow[] = [
-  {
-    id: "gr-1",
-    studentName: "أحمد ع.",
-    itemTitle: "امتحان وحدة 4 — مقالي",
-    submittedLabel: "اليوم 10:12",
-    status: "بانتظار",
-    overdue: false,
-  },
-  {
-    id: "gr-2",
-    studentName: "سما ح.",
-    itemTitle: "ورقة عمل مرفوعة",
-    submittedLabel: "أمس",
-    status: "بانتظار",
-    overdue: true,
-  },
-  {
-    id: "gr-3",
-    studentName: "يزن م.",
-    itemTitle: "امتحان وحدة 3",
-    submittedLabel: "2026/07/28",
-    status: "مُصحّح",
-    overdue: false,
-  },
-];
+// فاضية بقصد — أعمال طلاب حقيقيين تنتظر تصحيح، ما في طلاب حقيقيين بعد.
+export const GRADING_ITEMS: GradingItemRow[] = [];
 
 export type MissedPriority = "أولوية" | "مراجعة";
 
@@ -48,16 +24,9 @@ export interface MissedQuestionRow {
   priority: MissedPriority;
 }
 
-export const MISSED_QUESTIONS: MissedQuestionRow[] = [
-  { id: "mq-1", questionTitle: "تكامل بالتجزيء — سؤال 7", wrongPercent: 68, priority: "أولوية" },
-  { id: "mq-2", questionTitle: "قاعدة السلسلة — سؤال 3", wrongPercent: 54, priority: "مراجعة" },
-  {
-    id: "mq-3",
-    questionTitle: "النهايات اللانهائية — سؤال 11",
-    wrongPercent: 41,
-    priority: "مراجعة",
-  },
-];
+// فاضية بقصد — هاي إحصاءات تحليلية عن أداء طلاب حقيقيين، وما في طلاب
+// حقيقيين بعد. بتتعبى تلقائياً لما توصل بيانات امتحانات فعلية.
+export const MISSED_QUESTIONS: MissedQuestionRow[] = [];
 
 export type TransactionStatus = "مؤكد" | "قيد التنفيذ";
 
@@ -69,29 +38,17 @@ export interface EarningTransactionRow {
   status: TransactionStatus;
 }
 
-export const EARNING_TRANSACTIONS: EarningTransactionRow[] = [
-  {
-    id: "et-1",
-    dateLabel: "2026/07/30",
-    description: "اشتراك كورس تفاضل",
-    amount: 45,
-    status: "مؤكد",
-  },
-  {
-    id: "et-2",
-    dateLabel: "2026/07/28",
-    description: "طلب سحب",
-    amount: -500,
-    status: "قيد التنفيذ",
-  },
-  { id: "et-3", dateLabel: "2026/07/25", description: "اشتراك مراجعة", amount: 15, status: "مؤكد" },
-];
+// فاضية بقصد — نموذج الدخل ونسبة العمولة لسا قيد الإعداد (نفس قرار صفحة
+// "للمعلمين" العامة)، فما بنعرض ولا معاملة وهمية توحي إنه فيه أرباح حقيقية
+// قبل ما يصير في نظام دفع فعلي. أول معاملة حقيقية بتضاف هون لما يجهز الباك اند.
+export const EARNING_TRANSACTIONS: EarningTransactionRow[] = [];
 
 export interface EarningsSettings {
-  platformFeePercent: number;
+  /** null = لسا ما تقرر رسميًا. لا تحطّ رقم افتراضي هون. */
+  platformFeePercent: number | null;
 }
 
-export const EARNINGS_SETTINGS: EarningsSettings = { platformFeePercent: 15 };
+export const EARNINGS_SETTINGS: EarningsSettings = { platformFeePercent: null };
 
 export function nextFollowUpId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;

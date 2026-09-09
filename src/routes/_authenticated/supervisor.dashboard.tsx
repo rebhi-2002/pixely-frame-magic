@@ -163,7 +163,7 @@ function Body() {
               {
                 icon: "Percent",
                 label: bi("متوسط الإتقان", "Avg. mastery"),
-                value: `${avgMastery}%`,
+                value: students.length ? `${avgMastery}%` : "—",
               },
             ]}
           />

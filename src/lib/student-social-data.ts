@@ -66,22 +66,24 @@ export const COMMUNITY_QUESTIONS: CommunityQuestionRow[] = [
     id: "cq-1",
     questionTitle: "كيف نحلّ تكامل بالتجزيء؟",
     subjectName: "رياضيات",
-    answersCount: 6,
-    status: "إجابة معلم",
+    // صفر بقصد — مافي إجابات حقيقية من معلم أو زميل بعد، هاد دفتر أسئلة
+    // شخصي حاليًا (راجع وصف الصفحة community.tsx).
+    answersCount: 0,
+    status: "مفتوح",
   },
   {
     id: "cq-2",
     questionTitle: "فرق الجهد في التوالي والتوازي",
     subjectName: "فيزياء",
-    answersCount: 3,
+    answersCount: 0,
     status: "مفتوح",
   },
   {
     id: "cq-3",
     questionTitle: "مراجعة قواعد الهمزة",
     subjectName: "عربي",
-    answersCount: 9,
-    status: "مُغلق",
+    answersCount: 0,
+    status: "مفتوح",
   },
 ];
 
@@ -90,9 +92,10 @@ export interface CommunityStats {
   reputation: number;
 }
 
+// أصفار بقصد — مافي مجتمع حقيقي متعدد المستخدمين بعد (راجع وصف الصفحة).
 export const COMMUNITY_STATS: CommunityStats = {
-  memberCount: 312,
-  reputation: 150,
+  memberCount: 0,
+  reputation: 0,
 };
 
 export type BookmarkType = "درس" | "سؤال" | "نقاش";
@@ -119,11 +122,9 @@ export interface ReferralRow {
   status: ReferralStatus;
 }
 
-export const REFERRALS: ReferralRow[] = [
-  { id: "ref-1", friendName: "لؤي ع.", dateLabel: "2026/07/12", status: "مكافأة" },
-  { id: "ref-2", friendName: "سما ح.", dateLabel: "2026/07/03", status: "مكافأة" },
-  { id: "ref-3", friendName: "يزن م.", dateLabel: "—", status: "معلّق" },
-];
+// فاضية بقصد — ما في أصدقاء حقيقيين انضموا عبر الإحالة بعد، فما بنعرض
+// مكافآت وهمية. أول إحالة حقيقية بتظهر هون تلقائياً.
+export const REFERRALS: ReferralRow[] = [];
 
 export interface ReferralLink {
   code: string;

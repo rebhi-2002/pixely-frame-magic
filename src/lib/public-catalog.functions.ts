@@ -17,6 +17,8 @@ export const saveCourse = createServerFn({ method: "POST" })
         id: z.string().optional(),
         titleAr: z.string().trim().min(2, "العنوان بالعربي مطلوب"),
         titleEn: z.string().trim().min(2, "العنوان بالإنجليزي مطلوب"),
+        descriptionAr: z.string().trim().min(10, "الوصف بالعربي مطلوب (10 أحرف ع الأقل)"),
+        descriptionEn: z.string().trim().min(10, "الوصف بالإنجليزي مطلوب (10 أحرف ع الأقل)"),
         teacherAr: z.string().trim().min(2, "اسم المعلم بالعربي مطلوب"),
         teacherEn: z.string().trim().min(2, "اسم المعلم بالإنجليزي مطلوب"),
         teacherId: z.string().trim().min(2, "معرّف المعلم مطلوب"),
@@ -26,6 +28,14 @@ export const saveCourse = createServerFn({ method: "POST" })
         levelEn: z.string().trim().min(1, "المستوى بالإنجليزي مطلوب"),
         lessons: z.number().int().min(0),
         price: z.number().min(0),
+        // اختياريين بقصد — فاضين لحد ما تتوفر بيانات حقيقية (راجع تعليق
+        // PublicCourseRow بـ public-catalog-data.ts لشرح المبدأ).
+        rating: z.number().min(0).max(5).optional(),
+        studentsCount: z.number().int().min(0).optional(),
+        durationHours: z.number().min(0).optional(),
+        /** وسوم مفصولة بفاصلة، بنفس الترتيب باللغتين (تاغ 1 عربي = تاغ 1 إنجليزي). */
+        tagsAr: z.string().optional(),
+        tagsEn: z.string().optional(),
       })
       .parse(input),
   )
@@ -35,14 +45,34 @@ export const saveCourse = createServerFn({ method: "POST" })
       "admin_course_catalog",
       data.id ? "edit" : "execute_add",
     );
+    const tagsArList = (data.tagsAr ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const tagsEnList = (data.tagsEn ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const tags: [string, string][] | undefined =
+      tagsArList.length > 0
+        ? tagsArList.map((ar, i) => [ar, tagsEnList[i] ?? ar] as [string, string])
+        : undefined;
+
     const shaped = {
       title: [data.titleAr, data.titleEn] as [string, string],
+      description: [data.descriptionAr, data.descriptionEn] as [string, string],
       teacher: [data.teacherAr, data.teacherEn] as [string, string],
       teacherId: data.teacherId,
       subject: [data.subjectAr, data.subjectEn] as [string, string],
       level: [data.levelAr, data.levelEn] as [string, string],
       lessons: data.lessons,
       price: data.price,
+      rating: data.rating,
+      studentsCount: data.studentsCount,
+      durationHours: data.durationHours,
+      tags,
+      // يُحدَّث تلقائياً بكل حفظ — بدون حقل يدوي بالنموذج.
+      updatedAt: new Date().toISOString(),
     };
     if (data.id) {
       const row = PUBLIC_COURSES.find((r) => r.id === data.id);

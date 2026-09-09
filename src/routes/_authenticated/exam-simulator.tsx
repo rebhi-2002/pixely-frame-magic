@@ -47,9 +47,8 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
-const title = "محاكي الامتحان | أكاديميا";
-const description =
-  "امتحان تدريبي بمؤقّت وشكل ورقة حقيقية، وتحليل يكشف نقاط ضعفك قبل الامتحان الحقيقي.";
+const title = "امتحاناتي التجريبية | أكاديميا";
+const description = "خطّط لامتحاناتك التجريبية، وسجّل نتيجتك وتحسّنك بعد كل محاولة.";
 
 export const Route = createFileRoute("/_authenticated/exam-simulator")({
   head: () => ({
@@ -221,11 +220,11 @@ function Body() {
 
   return (
     <AppPage
-      title={bi("محاكي الامتحان", "Exam simulator")}
+      title={bi("امتحاناتي التجريبية", "My practice exams")}
       icon="Timer"
       subtitle={bi(
         description,
-        "A timed mock exam that looks like the real paper, with analysis that exposes weak spots.",
+        "Plan your practice exams, and log your score and progress after every attempt.",
       )}
     >
       <StatGrid

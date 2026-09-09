@@ -40,7 +40,7 @@ import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 
 const title = "بنك الأخطاء | أكاديميا";
-const description = "كل سؤال أخطأت فيه يُحفظ هنا تلقائياً، ويُعاد عليك حتى تُتقنه.";
+const description = "سجّل الأسئلة يلي بتخطئ فيها بنفسك، وتابع تكرارها لحد ما تتقنها.";
 
 export const Route = createFileRoute("/_authenticated/mistakes-bank")({
   head: () => ({
@@ -164,7 +164,7 @@ function Body() {
       icon="XCircle"
       subtitle={bi(
         description,
-        "Every question you got wrong is saved here and repeated until you master it.",
+        "Log the questions you get wrong yourself, and track them until you master them.",
       )}
     >
       <StatGrid

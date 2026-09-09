@@ -285,7 +285,7 @@ function Body() {
                 { to: "/library", label: bi("المكتبة", "Library"), icon: "Library" },
                 {
                   to: "/exam-simulator",
-                  label: bi("محاكي امتحان", "Exam simulator"),
+                  label: bi("امتحاناتي التجريبية", "My practice exams"),
                   icon: "Timer",
                 },
                 {

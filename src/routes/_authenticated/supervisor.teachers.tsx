@@ -184,17 +184,17 @@ function Body() {
           {
             icon: "Clock",
             label: bi("متوسط زمن الرد", "Avg. response"),
-            value: bi(`${stats.avgResponse} س`, `${stats.avgResponse}h`),
+            value: list.length ? bi(`${stats.avgResponse} س`, `${stats.avgResponse}h`) : "—",
           },
           {
             icon: "PenSquare",
             label: bi("متوسط زمن التصحيح", "Avg. grading"),
-            value: bi(`${stats.avgGrading} يوم`, `${stats.avgGrading}d`),
+            value: list.length ? bi(`${stats.avgGrading} يوم`, `${stats.avgGrading}d`) : "—",
           },
           {
             icon: "Star",
             label: bi("متوسط التقييم", "Avg. rating"),
-            value: String(stats.avgRating),
+            value: list.length ? String(stats.avgRating) : "—",
           },
         ]}
       />

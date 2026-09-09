@@ -49,7 +49,9 @@ export function StatGrid({ items }: { items: { icon: string; label: string; valu
         const parsed = parseStatValue(s.value);
         return (
           <Reveal key={s.label} delay={i * 0.05}>
-            <div className="hover-lift shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-4">
+            <div className="shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-4">
+              {/* بدون hover-lift: بطاقة إحصائية ثابتة بكل صفحات المنصة —
+                  نفس مبدأ تصحيح الصفحات العامة، بمكان واحد يغطي كل شي. */}
               <span className="inline-flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <DynamicIcon name={s.icon} className="size-4" />
               </span>
