@@ -49,6 +49,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/for-teachers" />
   </url>
   <url>
+    <loc>https://pixely-frame-magic.vercel.app/for-parents</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/for-parents" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/for-parents?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/for-parents" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/for-parents?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/for-parents" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/for-parents?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/for-parents" />
+  </url>
+  <url>
     <loc>https://pixely-frame-magic.vercel.app/how-it-works</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/how-it-works" />
     <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/how-it-works?lang=en" />

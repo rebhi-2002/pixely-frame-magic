@@ -8,65 +8,61 @@ var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 if (typeof window !== "undefined") gsapWithCSS.registerPlugin(ScrollTrigger);
 /**
- * useScrollReveal — يكشف العنصر بأنيميشن fade+slide عند دخوله الشاشة عبر GSAP ScrollTrigger.
- * يحترم prefers-reduced-motion تلقائياً (العنصر يبقى ظاهراً بدون حركة).
- * يعتمد على data-reveal / data-revealed في styles.css كحالة أولية بدون وميض (FOUC).
- */
+* useScrollReveal — يكشف العنصر بأنيميشن fade+slide عند دخوله الشاشة عبر GSAP ScrollTrigger.
+* يحترم prefers-reduced-motion تلقائياً (العنصر يبقى ظاهراً بدون حركة).
+* يعتمد على data-reveal / data-revealed في styles.css كحالة أولية بدون وميض (FOUC).
+*/
 function useScrollReveal(options = {}) {
-  const ref = (0, import_react.useRef)(null);
-  const { delay = 0, y = 24, duration = 0.7, disabled = false } = options;
-  (0, import_react.useEffect)(() => {
-    const el = ref.current;
-    if (!el || disabled) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.setAttribute("data-revealed", "true");
-      return;
-    }
-    el.setAttribute("data-reveal", "");
-    const ctx = gsapWithCSS.context(() => {
-      gsapWithCSS.fromTo(
-        el,
-        {
-          opacity: 0,
-          y,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration,
-          delay,
-          ease: "power3.out",
-          onStart: () => el.setAttribute("data-revealed", "true"),
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
-        },
-      );
-    }, el);
-    return () => ctx.revert();
-  }, []);
-  return ref;
+	const ref = (0, import_react.useRef)(null);
+	const { delay = 0, y = 24, duration = .7, disabled = false } = options;
+	(0, import_react.useEffect)(() => {
+		const el = ref.current;
+		if (!el || disabled) return;
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			el.setAttribute("data-revealed", "true");
+			return;
+		}
+		el.setAttribute("data-reveal", "");
+		const ctx = gsapWithCSS.context(() => {
+			gsapWithCSS.fromTo(el, {
+				opacity: 0,
+				y
+			}, {
+				opacity: 1,
+				y: 0,
+				duration,
+				delay,
+				ease: "power3.out",
+				onStart: () => el.setAttribute("data-revealed", "true"),
+				scrollTrigger: {
+					trigger: el,
+					start: "top 85%",
+					once: true
+				}
+			});
+		}, el);
+		return () => ctx.revert();
+	}, []);
+	return ref;
 }
 /**
- * <Reveal> — غلاف لأي محتوى ليظهر بأنيميشن fade+slide عند وصول المستخدم إليه بالسكرول.
- * مثال للتتابع:
- *   {items.map((item, i) => (
- *     <Reveal key={item.id} delay={i * 0.08}><Card>...</Card></Reveal>
- *   ))}
- */
+* <Reveal> — غلاف لأي محتوى ليظهر بأنيميشن fade+slide عند وصول المستخدم إليه بالسكرول.
+* مثال للتتابع:
+*   {items.map((item, i) => (
+*     <Reveal key={item.id} delay={i * 0.08}><Card>...</Card></Reveal>
+*   ))}
+*/
 function Reveal({ children, as: Tag = "div", className, delay, y, duration }) {
-  const ref = useScrollReveal({
-    delay,
-    y,
-    duration,
-  });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tag, {
-    ref,
-    className: cn(className),
-    children,
-  });
+	const ref = useScrollReveal({
+		delay,
+		y,
+		duration
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tag, {
+		ref,
+		className: cn(className),
+		children
+	});
 }
 //#endregion
 export { Reveal as t };

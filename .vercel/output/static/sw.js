@@ -34,15 +34,12 @@ self.addEventListener("fetch", (event) => {
   }
 
   // لباقي الطلبات (GET لنفس الأصل: الصفحات والأصول الثابتة) مرّرها للشبكة
-  // مباشرة، مع catch يمنع "Uncaught (in promise) TypeError: Failed to fetch"
-  // من الظهور بالكونسول ومن كسر التنقل بالموقع عند أي انقطاع شبكة مؤقت.
-  event.respondWith(
-    fetch(req).catch(
-      () =>
-        new Response("", {
-          status: 504,
-          statusText: "Network error (service worker passthrough failed)",
-        }),
-    ),
-  );
+  // مباشرة بدون أي تعديل. جرّبنا سابقًا نرجع Response بديلة (504) عند فشل
+  // fetch لتفادي ضجيج الكونسول، بس تبيّن إنه على شبكة غير مستقرة فعليًا هالشي
+  // بيسوء الوضع: بيبدّل فشل طبيعي المتصفح عارف يتعامل معه (retry تلقائي
+  // للـnavigation، رسالة واضحة لاستيراد ديناميكي فاشل) برد فاضي مصطنع بيربك
+  // التطبيق. فهلق منسيب فشل fetch الحقيقي يوصل زي ما هو، بالضبط متل عدم
+  // وجود Service Worker إطلاقًا بالنسبة لحالات الفشل — بس السجل نفسه لسا
+  // مسجَّل (شرط قابلية التثبيت PWA لسا محقَّق).
+  event.respondWith(fetch(req));
 });
