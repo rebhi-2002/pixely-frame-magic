@@ -1,1 +1,171 @@
-import{C as e,M as t,R as n,ht as r,k as i,vt as a}from"./rbac-static-data-Cz2qa6wH.js";import{t as o}from"./useNavigate-D8IP3eLF.js";import{t as s}from"./badge-check-19fgxV1C.js";import{t as c}from"./cloud-upload-D2u7z46u.js";import{B as l}from"./index-CUZEShOB.js";import{n as u,r as d}from"./types-BaQ7EMJK.js";import{n as f,t as p}from"./auth-shell-DzmMbYa2.js";var m=a(r()),h=n(),g=u({fullName:d().trim().min(2),email:d().trim().email(),password:d().min(6),phone:d().trim().min(6).max(30),subject:d().trim().min(2).max(60),experience:d().trim().max(3),bio:d().trim().max(600)});function _(){let{t:n}=i();o();let[r,a]=(0,m.useState)(!1),[u,d]=(0,m.useState)(``),[_,v]=(0,m.useState)(``),[y,b]=(0,m.useState)(``),[x,S]=(0,m.useState)(``),[C,w]=(0,m.useState)(``),[T,E]=(0,m.useState)(``),[D,O]=(0,m.useState)(``),[k,A]=(0,m.useState)(``);async function j(t){t.preventDefault();let n=g.safeParse({fullName:u,email:_,password:y,phone:x,subject:C,experience:T,bio:D});if(!n.success){l.error(n.error.issues[0].message);return}a(!0);try{throw Error(`تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.`)}catch(t){l.error(e(t,`…`))}finally{a(!1)}}return(0,h.jsxs)(f,{icon:(0,h.jsx)(s,{className:`size-5`}),title:n(`authPages.teacherRegister.h1`),subtitle:n(`authPages.teacherRegister.sub`),wide:!0,children:[(0,h.jsxs)(`form`,{onSubmit:j,className:`grid gap-4 sm:grid-cols-2`,children:[(0,h.jsx)(p,{id:`name`,label:n(`authPages.teacherRegister.fullName`),value:u,onChange:d,autoComplete:`name`}),(0,h.jsx)(p,{id:`phone`,label:n(`authPages.teacherRegister.phone`),value:x,onChange:S,autoComplete:`tel`}),(0,h.jsx)(p,{id:`email`,label:n(`authPages.teacherRegister.email`),type:`email`,value:_,onChange:v,autoComplete:`email`}),(0,h.jsx)(p,{id:`password`,label:n(`authPages.teacherRegister.password`),type:`password`,value:y,onChange:b,autoComplete:`new-password`}),(0,h.jsx)(p,{id:`subject`,label:n(`authPages.teacherRegister.subject`),value:C,onChange:w}),(0,h.jsx)(p,{id:`experience`,label:n(`authPages.teacherRegister.experience`),value:T,onChange:E}),(0,h.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,h.jsx)(`label`,{htmlFor:`bio`,className:`block text-sm font-semibold text-foreground`,children:n(`authPages.teacherRegister.bio`)}),(0,h.jsx)(`textarea`,{id:`bio`,rows:3,value:D,onChange:e=>O(e.target.value),placeholder:n(`authPages.teacherRegister.bioPlaceholder`),className:`w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary`})]}),(0,h.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,h.jsx)(`span`,{className:`block text-sm font-semibold text-foreground`,children:n(`authPages.teacherRegister.document`)}),(0,h.jsxs)(`label`,{htmlFor:`doc`,className:`flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-background px-3.5 py-4 text-sm text-muted-foreground transition-colors hover:border-primary`,children:[(0,h.jsx)(c,{className:`size-5 shrink-0 text-primary`}),(0,h.jsx)(`span`,{className:`min-w-0 truncate`,children:k||n(`authPages.teacherRegister.documentHint`)})]}),(0,h.jsx)(`input`,{id:`doc`,type:`file`,accept:`image/*,application/pdf`,className:`sr-only`,onChange:e=>A(e.target.files?.[0]?.name??``)})]}),(0,h.jsx)(`button`,{type:`submit`,disabled:r,className:`sm:col-span-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60`,children:n(r?`common.loading`:`authPages.teacherRegister.submit`)})]}),(0,h.jsx)(`p`,{className:`mt-6 text-center text-xs text-muted-foreground`,children:(0,h.jsx)(t,{to:`/signup`,className:`font-bold text-primary hover:underline`,children:n(`authPages.teacherRegister.back`)})})]})}export{_ as component};
+import { C as e, M as t, R as n, ht as r, k as i, vt as a } from "./rbac-static-data-Cz2qa6wH.js";
+import { t as o } from "./useNavigate-D8IP3eLF.js";
+import { t as s } from "./badge-check-19fgxV1C.js";
+import { t as c } from "./cloud-upload-D2u7z46u.js";
+import { B as l } from "./index-CUZEShOB.js";
+import { n as u, r as d } from "./types-BaQ7EMJK.js";
+import { n as f, t as p } from "./auth-shell-DzmMbYa2.js";
+var m = a(r()),
+  h = n(),
+  g = u({
+    fullName: d().trim().min(2),
+    email: d().trim().email(),
+    password: d().min(6),
+    phone: d().trim().min(6).max(30),
+    subject: d().trim().min(2).max(60),
+    experience: d().trim().max(3),
+    bio: d().trim().max(600),
+  });
+function _() {
+  let { t: n } = i();
+  o();
+  let [r, a] = (0, m.useState)(!1),
+    [u, d] = (0, m.useState)(``),
+    [_, v] = (0, m.useState)(``),
+    [y, b] = (0, m.useState)(``),
+    [x, S] = (0, m.useState)(``),
+    [C, w] = (0, m.useState)(``),
+    [T, E] = (0, m.useState)(``),
+    [D, O] = (0, m.useState)(``),
+    [k, A] = (0, m.useState)(``);
+  async function j(t) {
+    t.preventDefault();
+    let n = g.safeParse({
+      fullName: u,
+      email: _,
+      password: y,
+      phone: x,
+      subject: C,
+      experience: T,
+      bio: D,
+    });
+    if (!n.success) {
+      l.error(n.error.issues[0].message);
+      return;
+    }
+    a(!0);
+    try {
+      throw Error(`تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.`);
+    } catch (t) {
+      l.error(e(t, `…`));
+    } finally {
+      a(!1);
+    }
+  }
+  return (0, h.jsxs)(f, {
+    icon: (0, h.jsx)(s, { className: `size-5` }),
+    title: n(`authPages.teacherRegister.h1`),
+    subtitle: n(`authPages.teacherRegister.sub`),
+    wide: !0,
+    children: [
+      (0, h.jsxs)(`form`, {
+        onSubmit: j,
+        className: `grid gap-4 sm:grid-cols-2`,
+        children: [
+          (0, h.jsx)(p, {
+            id: `name`,
+            label: n(`authPages.teacherRegister.fullName`),
+            value: u,
+            onChange: d,
+            autoComplete: `name`,
+          }),
+          (0, h.jsx)(p, {
+            id: `phone`,
+            label: n(`authPages.teacherRegister.phone`),
+            value: x,
+            onChange: S,
+            autoComplete: `tel`,
+          }),
+          (0, h.jsx)(p, {
+            id: `email`,
+            label: n(`authPages.teacherRegister.email`),
+            type: `email`,
+            value: _,
+            onChange: v,
+            autoComplete: `email`,
+          }),
+          (0, h.jsx)(p, {
+            id: `password`,
+            label: n(`authPages.teacherRegister.password`),
+            type: `password`,
+            value: y,
+            onChange: b,
+            autoComplete: `new-password`,
+          }),
+          (0, h.jsx)(p, {
+            id: `subject`,
+            label: n(`authPages.teacherRegister.subject`),
+            value: C,
+            onChange: w,
+          }),
+          (0, h.jsx)(p, {
+            id: `experience`,
+            label: n(`authPages.teacherRegister.experience`),
+            value: T,
+            onChange: E,
+          }),
+          (0, h.jsxs)(`div`, {
+            className: `space-y-1.5 sm:col-span-2`,
+            children: [
+              (0, h.jsx)(`label`, {
+                htmlFor: `bio`,
+                className: `block text-sm font-semibold text-foreground`,
+                children: n(`authPages.teacherRegister.bio`),
+              }),
+              (0, h.jsx)(`textarea`, {
+                id: `bio`,
+                rows: 3,
+                value: D,
+                onChange: (e) => O(e.target.value),
+                placeholder: n(`authPages.teacherRegister.bioPlaceholder`),
+                className: `w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary`,
+              }),
+            ],
+          }),
+          (0, h.jsxs)(`div`, {
+            className: `space-y-1.5 sm:col-span-2`,
+            children: [
+              (0, h.jsx)(`span`, {
+                className: `block text-sm font-semibold text-foreground`,
+                children: n(`authPages.teacherRegister.document`),
+              }),
+              (0, h.jsxs)(`label`, {
+                htmlFor: `doc`,
+                className: `flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-background px-3.5 py-4 text-sm text-muted-foreground transition-colors hover:border-primary`,
+                children: [
+                  (0, h.jsx)(c, { className: `size-5 shrink-0 text-primary` }),
+                  (0, h.jsx)(`span`, {
+                    className: `min-w-0 truncate`,
+                    children: k || n(`authPages.teacherRegister.documentHint`),
+                  }),
+                ],
+              }),
+              (0, h.jsx)(`input`, {
+                id: `doc`,
+                type: `file`,
+                accept: `image/*,application/pdf`,
+                className: `sr-only`,
+                onChange: (e) => A(e.target.files?.[0]?.name ?? ``),
+              }),
+            ],
+          }),
+          (0, h.jsx)(`button`, {
+            type: `submit`,
+            disabled: r,
+            className: `sm:col-span-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60`,
+            children: n(r ? `common.loading` : `authPages.teacherRegister.submit`),
+          }),
+        ],
+      }),
+      (0, h.jsx)(`p`, {
+        className: `mt-6 text-center text-xs text-muted-foreground`,
+        children: (0, h.jsx)(t, {
+          to: `/signup`,
+          className: `font-bold text-primary hover:underline`,
+          children: n(`authPages.teacherRegister.back`),
+        }),
+      }),
+    ],
+  });
+}
+export { _ as component };

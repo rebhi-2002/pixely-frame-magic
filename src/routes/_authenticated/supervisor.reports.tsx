@@ -72,10 +72,14 @@ function Body() {
     mutationFn: (id: string) => download({ data: { id } }),
     onSuccess: () => {
       invalidate();
-      toast.success(bi("سجّلنا طلبك — التصدير الفعلي للملف قادم مع الباك اند.", "Request logged — real file export is coming with the backend."));
+      toast.success(
+        bi(
+          "سجّلنا طلبك — التصدير الفعلي للملف قادم مع الباك اند.",
+          "Request logged — real file export is coming with the backend.",
+        ),
+      );
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التنزيل", "Failed to download"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التنزيل", "Failed to download"))),
   });
 
   const deleteMutation = useMutation({
@@ -84,18 +88,14 @@ function Body() {
       invalidate();
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   return (
     <AppPage
       title={bi("تقارير الإشراف", "Supervision reports")}
       icon="FileBarChart"
-      subtitle={bi(
-        description,
-        "Periodic reports on teaching quality, mastery and consistency.",
-      )}
+      subtitle={bi(description, "Periodic reports on teaching quality, mastery and consistency.")}
     >
       {isLoading ? (
         <div className="flex justify-center py-10">

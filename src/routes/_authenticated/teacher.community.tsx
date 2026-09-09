@@ -60,8 +60,7 @@ function Body() {
       queryClient.invalidateQueries({ queryKey: ["class-questions"] });
       toast.success(bi("تم تمييز إجابتك", "Your answer was marked"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   return (

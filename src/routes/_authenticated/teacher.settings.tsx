@@ -76,8 +76,7 @@ function Body() {
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   function openDialog() {

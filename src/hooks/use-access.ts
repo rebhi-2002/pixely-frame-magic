@@ -2,7 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAccess } from "@/lib/rbac.functions";
 import { buildFullAdminAccess, emptyAccess } from "@/lib/rbac-client";
-import { getStoredProfile, getStoredUserId, isDemoSession, isRealAdmin } from "@/integrations/backend/auth";
+import {
+  getStoredProfile,
+  getStoredUserId,
+  isDemoSession,
+  isRealAdmin,
+} from "@/integrations/backend/auth";
 import type { MyAccess } from "@/lib/rbac-types";
 
 export const ACCESS_QUERY_KEY = ["my-access"] as const;

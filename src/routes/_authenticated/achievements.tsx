@@ -99,8 +99,7 @@ function Body() {
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -110,8 +109,7 @@ function Body() {
       setPendingDelete(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: BadgeRow | null) {

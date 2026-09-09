@@ -133,8 +133,7 @@ function Body() {
       setMinuteEdit(null);
       toast.success(bi("تم التحديث", "Updated"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const statsMutation = useMutation({
@@ -150,8 +149,7 @@ function Body() {
       setStatsOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const taskSaveMutation = useMutation({
@@ -161,8 +159,7 @@ function Body() {
       setTaskOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const taskDeleteMutation = useMutation({
@@ -172,8 +169,7 @@ function Body() {
       setPendingDeleteTask(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   const isLoading =

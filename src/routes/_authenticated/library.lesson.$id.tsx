@@ -56,10 +56,10 @@ const SAMPLE_QUESTIONS = [
     correct: 1,
   },
   {
-    q: [
-      "أي مما يلي يمثّل قانون نيوتن الثاني؟",
-      "Which of these is Newton's second law?",
-    ] as [string, string],
+    q: ["أي مما يلي يمثّل قانون نيوتن الثاني؟", "Which of these is Newton's second law?"] as [
+      string,
+      string,
+    ],
     options: [
       ["F = m × a", "F = m × a"],
       ["E = m × c²", "E = m × c²"],
@@ -159,10 +159,7 @@ function Body() {
                             isChosen &&
                             !isCorrect &&
                             "border-destructive bg-destructive/10 text-destructive",
-                          revealed &&
-                            !isChosen &&
-                            !isCorrect &&
-                            "border-border bg-card opacity-50",
+                          revealed && !isChosen && !isCorrect && "border-border bg-card opacity-50",
                         )}
                       >
                         {bi(...opt)}

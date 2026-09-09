@@ -105,11 +105,27 @@ export function LibraryTreeIllustration({ className }: IllustrationProps) {
       <path d="M53 56 H150" className="stroke-border" strokeWidth="2" />
       <path d="M78 56 V66 M126 56 V66 M150 56 V66" className="stroke-border" strokeWidth="2" />
 
-      <rect x="46" y="66" width="64" height="22" rx="7" className="fill-card stroke-border" strokeWidth="1.5" />
+      <rect
+        x="46"
+        y="66"
+        width="64"
+        height="22"
+        rx="7"
+        className="fill-card stroke-border"
+        strokeWidth="1.5"
+      />
       <text x="78" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
         رياضيات
       </text>
-      <rect x="120" y="66" width="64" height="22" rx="7" className="fill-card stroke-border" strokeWidth="1.5" />
+      <rect
+        x="120"
+        y="66"
+        width="64"
+        height="22"
+        rx="7"
+        className="fill-card stroke-border"
+        strokeWidth="1.5"
+      />
       <text x="152" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
         علوم
       </text>
@@ -139,17 +155,48 @@ export function LibraryTreeIllustration({ className }: IllustrationProps) {
 export function ExamSimIllustration({ className }: IllustrationProps) {
   return (
     <svg viewBox="0 0 220 120" fill="none" className={className} aria-hidden>
-      <rect x="24" y="14" width="98" height="94" rx="10" className="fill-card stroke-border" strokeWidth="2" />
+      <rect
+        x="24"
+        y="14"
+        width="98"
+        height="94"
+        rx="10"
+        className="fill-card stroke-border"
+        strokeWidth="2"
+      />
       <rect x="38" y="30" width="70" height="6" rx="3" className="fill-foreground/15" />
       <rect x="38" y="44" width="52" height="6" rx="3" className="fill-foreground/10" />
       <circle cx="42" cy="62" r="5" className="fill-success/20 stroke-success" strokeWidth="1.5" />
-      <path d="M39.5 62 L41.5 64 L45 59.5" className="stroke-success" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path
+        d="M39.5 62 L41.5 64 L45 59.5"
+        className="stroke-success"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+      />
       <rect x="52" y="59" width="48" height="6" rx="3" className="fill-foreground/10" />
-      <circle cx="42" cy="80" r="5" className="fill-destructive/15 stroke-destructive/60" strokeWidth="1.5" />
+      <circle
+        cx="42"
+        cy="80"
+        r="5"
+        className="fill-destructive/15 stroke-destructive/60"
+        strokeWidth="1.5"
+      />
       <rect x="52" y="77" width="40" height="6" rx="3" className="fill-foreground/10" />
 
-      <circle cx="164" cy="46" r="34" className="fill-primary/8 stroke-primary/40" strokeWidth="2" />
-      <path d="M164 46 L164 26 M164 46 L180 54" className="stroke-primary" strokeWidth="3" strokeLinecap="round" />
+      <circle
+        cx="164"
+        cy="46"
+        r="34"
+        className="fill-primary/8 stroke-primary/40"
+        strokeWidth="2"
+      />
+      <path
+        d="M164 46 L164 26 M164 46 L180 54"
+        className="stroke-primary"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
       <circle cx="164" cy="46" r="3" className="fill-primary" />
 
       <rect x="140" y="88" width="48" height="20" rx="10" className="fill-success/15" />
@@ -164,24 +211,88 @@ export function ExamSimIllustration({ className }: IllustrationProps) {
 export function ContentFlowIllustration({ className }: IllustrationProps) {
   return (
     <svg viewBox="0 0 320 140" fill="none" className={className} aria-hidden>
-      <rect x="10" y="44" width="84" height="60" rx="12" className="fill-card stroke-border" strokeWidth="2" />
-      <path d="M52 66 V86 M42 76 L52 66 L62 76" className="stroke-primary" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <text x="52" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">رفع المحتوى</text>
+      <rect
+        x="10"
+        y="44"
+        width="84"
+        height="60"
+        rx="12"
+        className="fill-card stroke-border"
+        strokeWidth="2"
+      />
+      <path
+        d="M52 66 V86 M42 76 L52 66 L62 76"
+        className="stroke-primary"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <text
+        x="52"
+        y="118"
+        textAnchor="middle"
+        className="fill-muted-foreground text-[9px] font-medium"
+      >
+        رفع المحتوى
+      </text>
 
       <path d="M100 74 H128" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
       <path d="M120 68 L128 74 L120 80" className="stroke-border" strokeWidth="2" fill="none" />
 
-      <rect x="132" y="34" width="84" height="70" rx="12" className="fill-info/8 stroke-info/40" strokeWidth="2" />
+      <rect
+        x="132"
+        y="34"
+        width="84"
+        height="70"
+        rx="12"
+        className="fill-info/8 stroke-info/40"
+        strokeWidth="2"
+      />
       <circle cx="174" cy="60" r="14" className="fill-info/15" />
-      <path d="M168 60 h12 M168 66 h8" className="stroke-info" strokeWidth="2" strokeLinecap="round" />
-      <text x="174" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">مراجعة أساسية</text>
+      <path
+        d="M168 60 h12 M168 66 h8"
+        className="stroke-info"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <text
+        x="174"
+        y="118"
+        textAnchor="middle"
+        className="fill-muted-foreground text-[9px] font-medium"
+      >
+        مراجعة أساسية
+      </text>
 
       <path d="M222 74 H250" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
       <path d="M242 68 L250 74 L242 80" className="stroke-border" strokeWidth="2" fill="none" />
 
-      <rect x="254" y="44" width="60" height="60" rx="12" className="fill-success/10 stroke-success/40" strokeWidth="2" />
-      <path d="M270 74 L280 84 L298 64" className="stroke-success" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <text x="284" y="118" textAnchor="middle" className="fill-muted-foreground text-[9px] font-medium">منشور</text>
+      <rect
+        x="254"
+        y="44"
+        width="60"
+        height="60"
+        rx="12"
+        className="fill-success/10 stroke-success/40"
+        strokeWidth="2"
+      />
+      <path
+        d="M270 74 L280 84 L298 64"
+        className="stroke-success"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <text
+        x="284"
+        y="118"
+        textAnchor="middle"
+        className="fill-muted-foreground text-[9px] font-medium"
+      >
+        منشور
+      </text>
     </svg>
   );
 }
@@ -197,16 +308,18 @@ export function PlanChoiceIllustration({ className }: IllustrationProps) {
         strokeDasharray="5 5"
         fill="none"
       />
-      <path
-        d="M20 20 Q90 20 130 50"
-        className="stroke-primary/70"
-        strokeWidth="2.5"
-        fill="none"
-      />
+      <path d="M20 20 Q90 20 130 50" className="stroke-primary/70" strokeWidth="2.5" fill="none" />
       <circle cx="20" cy="80" r="7" className="fill-card stroke-border" strokeWidth="2" />
       <circle cx="20" cy="20" r="7" className="fill-primary/15 stroke-primary" strokeWidth="2" />
       <circle cx="130" cy="50" r="10" className="fill-primary" />
-      <path d="M126 50 L129 53 L135 46" className="stroke-primary-foreground" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path
+        d="M126 50 L129 53 L135 46"
+        className="stroke-primary-foreground"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
       <path d="M148 50 H230" className="stroke-border" strokeWidth="2" />
       <path d="M222 44 L230 50 L222 56" className="stroke-border" strokeWidth="2" fill="none" />
     </svg>
@@ -220,18 +333,51 @@ export function PlanChoiceIllustration({ className }: IllustrationProps) {
 export function MistakeBankIllustration({ className }: IllustrationProps) {
   return (
     <svg viewBox="0 0 220 90" fill="none" className={className} aria-hidden>
-      <rect x="14" y="14" width="130" height="62" rx="12" className="fill-card stroke-border" strokeWidth="2" />
+      <rect
+        x="14"
+        y="14"
+        width="130"
+        height="62"
+        rx="12"
+        className="fill-card stroke-border"
+        strokeWidth="2"
+      />
       <rect x="28" y="28" width="70" height="6" rx="3" className="fill-foreground/15" />
       <rect x="28" y="42" width="90" height="6" rx="3" className="fill-foreground/10" />
-      <circle cx="122" cy="31" r="9" className="fill-destructive/15 stroke-destructive/60" strokeWidth="1.5" />
-      <path d="M118.5 27.5 L125.5 34.5 M125.5 27.5 L118.5 34.5" className="stroke-destructive" strokeWidth="1.6" strokeLinecap="round" />
+      <circle
+        cx="122"
+        cy="31"
+        r="9"
+        className="fill-destructive/15 stroke-destructive/60"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M118.5 27.5 L125.5 34.5 M125.5 27.5 L118.5 34.5"
+        className="stroke-destructive"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
       <rect x="28" y="56" width="46" height="14" rx="7" className="fill-primary/10" />
       <text x="51" y="66" textAnchor="middle" className="fill-primary text-[8px] font-bold">
         للمراجعة
       </text>
 
-      <rect x="160" y="10" width="50" height="70" rx="10" className="fill-primary/6 stroke-primary/25" strokeWidth="1.5" strokeDasharray="3 3" />
-      <path d="M175 30 v14 M168 37 h14" className="stroke-primary/50" strokeWidth="2" strokeLinecap="round" />
+      <rect
+        x="160"
+        y="10"
+        width="50"
+        height="70"
+        rx="10"
+        className="fill-primary/6 stroke-primary/25"
+        strokeWidth="1.5"
+        strokeDasharray="3 3"
+      />
+      <path
+        d="M175 30 v14 M168 37 h14"
+        className="stroke-primary/50"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       <text x="185" y="66" textAnchor="middle" className="fill-muted-foreground text-[7px]">
         يتجمّع هنا
       </text>
@@ -251,7 +397,12 @@ export function ReviewSessionIllustration({ className }: IllustrationProps) {
       <path d="M45 45 L45 20" className="stroke-primary" strokeWidth="2.5" strokeLinecap="round" />
       <path d="M45 45 L66 57" className="stroke-primary" strokeWidth="2.5" strokeLinecap="round" />
       <circle cx="45" cy="45" r="3" className="fill-primary" />
-      <text x="45" y="80" textAnchor="middle" className="fill-muted-foreground text-[8px] font-medium">
+      <text
+        x="45"
+        y="80"
+        textAnchor="middle"
+        className="fill-muted-foreground text-[8px] font-medium"
+      >
         15 دقيقة
       </text>
 
@@ -273,7 +424,15 @@ export function ReviewSessionIllustration({ className }: IllustrationProps) {
 export function ParentReportIllustration({ className }: IllustrationProps) {
   return (
     <svg viewBox="0 0 260 120" fill="none" className={className} aria-hidden>
-      <rect x="16" y="14" width="150" height="92" rx="14" className="fill-card stroke-border" strokeWidth="2" />
+      <rect
+        x="16"
+        y="14"
+        width="150"
+        height="92"
+        rx="14"
+        className="fill-card stroke-border"
+        strokeWidth="2"
+      />
       <rect x="32" y="30" width="60" height="7" rx="3.5" className="fill-foreground/15" />
       <rect x="32" y="46" width="118" height="10" rx="5" className="fill-success/12" />
       <rect x="32" y="46" width="82" height="10" rx="5" className="fill-success/45" />
@@ -284,9 +443,28 @@ export function ParentReportIllustration({ className }: IllustrationProps) {
         أسبوعي
       </text>
 
-      <circle cx="210" cy="60" r="36" className="fill-success/8 stroke-success/30" strokeWidth="2" />
-      <path d="M210 42 a12 12 0 0 0-12 12 v6 h24 v-6 a12 12 0 0 0-12-12 Z" className="fill-none stroke-success" strokeWidth="2.5" strokeLinejoin="round" />
-      <rect x="196" y="58" width="28" height="20" rx="4" className="fill-success/20 stroke-success" strokeWidth="2" />
+      <circle
+        cx="210"
+        cy="60"
+        r="36"
+        className="fill-success/8 stroke-success/30"
+        strokeWidth="2"
+      />
+      <path
+        d="M210 42 a12 12 0 0 0-12 12 v6 h24 v-6 a12 12 0 0 0-12-12 Z"
+        className="fill-none stroke-success"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      />
+      <rect
+        x="196"
+        y="58"
+        width="28"
+        height="20"
+        rx="4"
+        className="fill-success/20 stroke-success"
+        strokeWidth="2"
+      />
     </svg>
   );
 }

@@ -1,1 +1,149 @@
-import{C as e,R as t,ht as n,j as r,u as i,vt as a}from"./rbac-static-data-Cz2qa6wH.js";import{i as o,n as s}from"./auth-middleware-CmTSOr_x.js";import{t as c}from"./useMutation-CfRTvAO7.js";import{i as l}from"./dynamic-icon-fBQNzGz-.js";import{t as u}from"./check-CJTwoqRt.js";import{a as d}from"./dist-LHEW5aEh.js";import{t as f}from"./loader-circle-DYrBHP0C.js";import{t as p}from"./button-m-Eg43IZ.js";import{B as m}from"./index-CUZEShOB.js";import{n as h}from"./use-access-DbwD014U.js";import{n as g}from"./guard-B5vrll8Q.js";import{a as _,c as v,i as y,n as b,t as x}from"./kit-D226f5oO.js";import{c as S,l as C,n as w,s as T}from"./account-pages.functions-CEBVucMc.js";var E=a(n()),D=t();function O(){return(0,D.jsx)(g,{pageKey:`notifications`,children:(0,D.jsx)(k,{})})}function k(){let t=i(),n=r(),{can:a}=h(),g=o(T),O=o(C),k=o(S),A=o(w),{data:j,isLoading:M}=s({queryKey:[`notifications`],queryFn:()=>g()}),N=()=>n.invalidateQueries({queryKey:[`notifications`]}),P=j??[],F=(0,E.useMemo)(()=>P.filter(e=>e.category===`اليوم`),[P]),I=(0,E.useMemo)(()=>P.filter(e=>e.category===`سابقاً`),[P]),L=P.filter(e=>e.isNew).length,R=c({mutationFn:e=>O({data:{id:e}}),onSuccess:N,onError:n=>m.error(e(n,t(`تعذّر التحديث`,`Failed to update`)))}),z=c({mutationFn:()=>k(),onSuccess:()=>{N(),m.success(t(`تم تعليم الكل كمقروء`,`All marked as read`))},onError:n=>m.error(e(n,t(`تعذّر التحديث`,`Failed to update`)))}),B=c({mutationFn:e=>A({data:{id:e}}),onSuccess:N,onError:n=>m.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});return(0,D.jsx)(x,{title:t(`الإشعارات`,`Notifications`),icon:`Bell`,subtitle:t(`تنبيهات الدراسة والحساب والمراجعات في مكان واحد.`,`Study, account, and review alerts in one place.`),children:M?(0,D.jsx)(`div`,{className:`flex justify-center py-10`,children:(0,D.jsx)(f,{className:`size-6 animate-spin text-primary`})}):(0,D.jsxs)(D.Fragment,{children:[(0,D.jsx)(_,{title:t(`اليوم`,`Today`),icon:`Bell`,action:(0,D.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,D.jsx)(b,{tone:`primary`,children:L}),a(`notifications`,`edit`)&&L>0&&(0,D.jsxs)(p,{size:`sm`,variant:`outline`,onClick:()=>z.mutate(),children:[(0,D.jsx)(u,{className:`size-4`}),t(`تعليم الكل كمقروء`,`Mark all read`)]})]}),children:F.length?(0,D.jsx)(v,{rows:F.map(e=>({title:e.title,meta:e.meta,value:e.isNew?t(`جديد`,`New`):void 0,tone:e.tone,actions:(0,D.jsxs)(`div`,{className:`flex items-center gap-1`,children:[a(`notifications`,`edit`)&&e.isNew&&(0,D.jsx)(p,{size:`icon`,variant:`ghost`,onClick:()=>R.mutate(e.id),children:(0,D.jsx)(u,{className:`size-4`})}),a(`notifications`,`delete`)&&(0,D.jsx)(p,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>B.mutate(e.id),children:(0,D.jsx)(d,{className:`size-4`})})]})}))}):(0,D.jsx)(y,{icon:`Bell`,text:t(`لا إشعارات اليوم.`,`No notifications today.`)})}),(0,D.jsx)(_,{title:t(`سابقاً`,`Earlier`),icon:`History`,children:I.length?(0,D.jsx)(v,{rows:I.map(e=>({title:e.title,meta:e.meta,value:e.tone===`success`?t(`إنجاز`,`Achievement`):void 0,tone:e.tone,actions:a(`notifications`,`delete`)?(0,D.jsx)(p,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>B.mutate(e.id),children:(0,D.jsx)(l,{className:`size-4`})}):void 0}))}):(0,D.jsx)(y,{icon:`History`,text:t(`لا إشعارات سابقة.`,`No earlier notifications.`)})})]})})}export{O as component};
+import { C as e, R as t, ht as n, j as r, u as i, vt as a } from "./rbac-static-data-Cz2qa6wH.js";
+import { i as o, n as s } from "./auth-middleware-CmTSOr_x.js";
+import { t as c } from "./useMutation-CfRTvAO7.js";
+import { i as l } from "./dynamic-icon-fBQNzGz-.js";
+import { t as u } from "./check-CJTwoqRt.js";
+import { a as d } from "./dist-LHEW5aEh.js";
+import { t as f } from "./loader-circle-DYrBHP0C.js";
+import { t as p } from "./button-m-Eg43IZ.js";
+import { B as m } from "./index-CUZEShOB.js";
+import { n as h } from "./use-access-DbwD014U.js";
+import { n as g } from "./guard-B5vrll8Q.js";
+import { a as _, c as v, i as y, n as b, t as x } from "./kit-D226f5oO.js";
+import { c as S, l as C, n as w, s as T } from "./account-pages.functions-CEBVucMc.js";
+var E = a(n()),
+  D = t();
+function O() {
+  return (0, D.jsx)(g, { pageKey: `notifications`, children: (0, D.jsx)(k, {}) });
+}
+function k() {
+  let t = i(),
+    n = r(),
+    { can: a } = h(),
+    g = o(T),
+    O = o(C),
+    k = o(S),
+    A = o(w),
+    { data: j, isLoading: M } = s({ queryKey: [`notifications`], queryFn: () => g() }),
+    N = () => n.invalidateQueries({ queryKey: [`notifications`] }),
+    P = j ?? [],
+    F = (0, E.useMemo)(() => P.filter((e) => e.category === `اليوم`), [P]),
+    I = (0, E.useMemo)(() => P.filter((e) => e.category === `سابقاً`), [P]),
+    L = P.filter((e) => e.isNew).length,
+    R = c({
+      mutationFn: (e) => O({ data: { id: e } }),
+      onSuccess: N,
+      onError: (n) => m.error(e(n, t(`تعذّر التحديث`, `Failed to update`))),
+    }),
+    z = c({
+      mutationFn: () => k(),
+      onSuccess: () => {
+        (N(), m.success(t(`تم تعليم الكل كمقروء`, `All marked as read`)));
+      },
+      onError: (n) => m.error(e(n, t(`تعذّر التحديث`, `Failed to update`))),
+    }),
+    B = c({
+      mutationFn: (e) => A({ data: { id: e } }),
+      onSuccess: N,
+      onError: (n) => m.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  return (0, D.jsx)(x, {
+    title: t(`الإشعارات`, `Notifications`),
+    icon: `Bell`,
+    subtitle: t(
+      `تنبيهات الدراسة والحساب والمراجعات في مكان واحد.`,
+      `Study, account, and review alerts in one place.`,
+    ),
+    children: M
+      ? (0, D.jsx)(`div`, {
+          className: `flex justify-center py-10`,
+          children: (0, D.jsx)(f, { className: `size-6 animate-spin text-primary` }),
+        })
+      : (0, D.jsxs)(D.Fragment, {
+          children: [
+            (0, D.jsx)(_, {
+              title: t(`اليوم`, `Today`),
+              icon: `Bell`,
+              action: (0, D.jsxs)(`div`, {
+                className: `flex items-center gap-2`,
+                children: [
+                  (0, D.jsx)(b, { tone: `primary`, children: L }),
+                  a(`notifications`, `edit`) &&
+                    L > 0 &&
+                    (0, D.jsxs)(p, {
+                      size: `sm`,
+                      variant: `outline`,
+                      onClick: () => z.mutate(),
+                      children: [
+                        (0, D.jsx)(u, { className: `size-4` }),
+                        t(`تعليم الكل كمقروء`, `Mark all read`),
+                      ],
+                    }),
+                ],
+              }),
+              children: F.length
+                ? (0, D.jsx)(v, {
+                    rows: F.map((e) => ({
+                      title: e.title,
+                      meta: e.meta,
+                      value: e.isNew ? t(`جديد`, `New`) : void 0,
+                      tone: e.tone,
+                      actions: (0, D.jsxs)(`div`, {
+                        className: `flex items-center gap-1`,
+                        children: [
+                          a(`notifications`, `edit`) &&
+                            e.isNew &&
+                            (0, D.jsx)(p, {
+                              size: `icon`,
+                              variant: `ghost`,
+                              onClick: () => R.mutate(e.id),
+                              children: (0, D.jsx)(u, { className: `size-4` }),
+                            }),
+                          a(`notifications`, `delete`) &&
+                            (0, D.jsx)(p, {
+                              size: `icon`,
+                              variant: `ghost`,
+                              className: `text-destructive`,
+                              onClick: () => B.mutate(e.id),
+                              children: (0, D.jsx)(d, { className: `size-4` }),
+                            }),
+                        ],
+                      }),
+                    })),
+                  })
+                : (0, D.jsx)(y, {
+                    icon: `Bell`,
+                    text: t(`لا إشعارات اليوم.`, `No notifications today.`),
+                  }),
+            }),
+            (0, D.jsx)(_, {
+              title: t(`سابقاً`, `Earlier`),
+              icon: `History`,
+              children: I.length
+                ? (0, D.jsx)(v, {
+                    rows: I.map((e) => ({
+                      title: e.title,
+                      meta: e.meta,
+                      value: e.tone === `success` ? t(`إنجاز`, `Achievement`) : void 0,
+                      tone: e.tone,
+                      actions: a(`notifications`, `delete`)
+                        ? (0, D.jsx)(p, {
+                            size: `icon`,
+                            variant: `ghost`,
+                            className: `text-destructive`,
+                            onClick: () => B.mutate(e.id),
+                            children: (0, D.jsx)(l, { className: `size-4` }),
+                          })
+                        : void 0,
+                    })),
+                  })
+                : (0, D.jsx)(y, {
+                    icon: `History`,
+                    text: t(`لا إشعارات سابقة.`, `No earlier notifications.`),
+                  }),
+            }),
+          ],
+        }),
+  });
+}
+export { O as component };

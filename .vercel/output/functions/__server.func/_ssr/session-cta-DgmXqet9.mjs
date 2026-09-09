@@ -5,23 +5,24 @@ import { t as useSession } from "./use-session-D9w0Q2fu.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/session-cta-DgmXqet9.js
 var import_jsx_runtime = require_jsx_runtime();
 /**
-* زر دعوة لإجراء يتبدّل حسب حالة الجلسة:
-* زائر → التسجيل/الدخول، مسجّل دخول → مساحته حسب الدور.
-*/
+ * زر دعوة لإجراء يتبدّل حسب حالة الجلسة:
+ * زائر → التسجيل/الدخول، مسجّل دخول → مساحته حسب الدور.
+ */
 function SessionCta({ to, label, className, search, signedInLabel }) {
-	const { t } = useTranslation();
-	const { session, isSignedIn } = useSession();
-	if (isSignedIn && session) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-		to: session.home,
-		className,
-		children: signedInLabel ?? t("common.goToDashboard", { defaultValue: t("common.dashboard") })
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-		to,
-		search,
-		className,
-		children: label
-	});
+  const { t } = useTranslation();
+  const { session, isSignedIn } = useSession();
+  if (isSignedIn && session)
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+      to: session.home,
+      className,
+      children: signedInLabel ?? t("common.goToDashboard", { defaultValue: t("common.dashboard") }),
+    });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+    to,
+    search,
+    className,
+    children: label,
+  });
 }
 //#endregion
 export { SessionCta as t };

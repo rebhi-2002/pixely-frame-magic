@@ -1,1 +1,39 @@
-import{R as e}from"./rbac-static-data-Cz2qa6wH.js";import{t,y as n}from"./dynamic-icon-fBQNzGz-.js";import{t as r}from"./button-m-Eg43IZ.js";var i=e();function a({title:e,icon:a,actions:o,onBack:s}){return(0,i.jsxs)(`header`,{className:`shadow-elevation-1 static z-20 flex items-center justify-between gap-4 border-b border-border bg-card/95 px-5 py-4 backdrop-blur md:sticky md:top-0`,children:[(0,i.jsxs)(`div`,{className:`flex items-center gap-3`,children:[s&&(0,i.jsx)(r,{type:`button`,variant:`outline`,size:`icon`,onClick:s,"aria-label":`رجوع`,className:`text-muted-foreground`,children:(0,i.jsx)(n,{className:`size-4 rotate-180`})}),(0,i.jsx)(`span`,{className:`flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary`,children:(0,i.jsx)(t,{name:a,className:`size-5`})}),(0,i.jsx)(`h1`,{className:`text-lg font-bold text-foreground`,children:e})]}),o]})}function o({children:e}){return(0,i.jsx)(`div`,{className:`flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-5 py-3`,children:e})}export{o as n,a as t};
+import { R as e } from "./rbac-static-data-Cz2qa6wH.js";
+import { t, y as n } from "./dynamic-icon-fBQNzGz-.js";
+import { t as r } from "./button-m-Eg43IZ.js";
+var i = e();
+function a({ title: e, icon: a, actions: o, onBack: s }) {
+  return (0, i.jsxs)(`header`, {
+    className: `shadow-elevation-1 static z-20 flex items-center justify-between gap-4 border-b border-border bg-card/95 px-5 py-4 backdrop-blur md:sticky md:top-0`,
+    children: [
+      (0, i.jsxs)(`div`, {
+        className: `flex items-center gap-3`,
+        children: [
+          s &&
+            (0, i.jsx)(r, {
+              type: `button`,
+              variant: `outline`,
+              size: `icon`,
+              onClick: s,
+              "aria-label": `رجوع`,
+              className: `text-muted-foreground`,
+              children: (0, i.jsx)(n, { className: `size-4 rotate-180` }),
+            }),
+          (0, i.jsx)(`span`, {
+            className: `flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary`,
+            children: (0, i.jsx)(t, { name: a, className: `size-5` }),
+          }),
+          (0, i.jsx)(`h1`, { className: `text-lg font-bold text-foreground`, children: e }),
+        ],
+      }),
+      o,
+    ],
+  });
+}
+function o({ children: e }) {
+  return (0, i.jsx)(`div`, {
+    className: `flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-5 py-3`,
+    children: e,
+  });
+}
+export { o as n, a as t };

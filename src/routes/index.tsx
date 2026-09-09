@@ -204,9 +204,7 @@ function Landing() {
                 )}
               >
                 {f.Illustration ? (
-                  <f.Illustration
-                    className={cn("w-full", f.flagship ? "h-32" : "h-20")}
-                  />
+                  <f.Illustration className={cn("w-full", f.flagship ? "h-32" : "h-20")} />
                 ) : (
                   <span
                     className={cn(

@@ -67,7 +67,14 @@ export function buildFullAdminAccess(
     };
     collect(tree);
 
-    modules.push({ id: m.id, key: m.key, name: m.name, nameEn: m.nameEn, icon: m.icon, pages: tree });
+    modules.push({
+      id: m.id,
+      key: m.key,
+      name: m.name,
+      nameEn: m.nameEn,
+      icon: m.icon,
+      pages: tree,
+    });
   }
 
   return {

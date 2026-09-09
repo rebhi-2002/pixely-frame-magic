@@ -1,1 +1,296 @@
-import{C as e,R as t,ht as n,j as r,u as i,vt as a}from"./rbac-static-data-Cz2qa6wH.js";import{i as o,n as s}from"./auth-middleware-CmTSOr_x.js";import{t as c}from"./useMutation-CfRTvAO7.js";import{i as ee,l as te,u as l}from"./dynamic-icon-fBQNzGz-.js";import{t as u}from"./loader-circle-DYrBHP0C.js";import{t as d}from"./button-m-Eg43IZ.js";import{B as f,c as ne}from"./index-CUZEShOB.js";import{n as p}from"./use-access-DbwD014U.js";import{n as m}from"./guard-B5vrll8Q.js";import{a as h,i as re,l as ie,n as ae,r as oe,t as se}from"./kit-D226f5oO.js";import{t as g}from"./input-DhAlVvjJ.js";import{a as ce,i as le,n as ue,o as _,r as v,t as y}from"./dialog-C80UddLn.js";import{a as b,c as x,i as S,n as C,o as w,r as T,s as E,t as D}from"./alert-dialog-C95lx8dr.js";import{a as O,i as k,n as A,r as j,t as M}from"./select-CjwHz5Zu.js";import{c as N,i as P,t as F}from"./teacher-teaching.functions-CavrlbeM.js";var I=a(n()),L=t();function R(){return(0,L.jsx)(m,{pageKey:`teacher_content`,children:(0,L.jsx)(V,{})})}var z={title:``,subjectName:``,status:`مسوّدة`,viewsCount:`0`},B={منشور:`success`,"قيد المراجعة":`muted`,مسوّدة:`primary`};function V(){let t=i(),n=r(),{can:a}=p(),m=o(P),R=o(N),V=o(F),[H,U]=(0,I.useState)(!1),[W,de]=(0,I.useState)(null),[G,K]=(0,I.useState)(z),[q,J]=(0,I.useState)(null),{data:fe,isLoading:pe}=s({queryKey:[`teacher-content`],queryFn:()=>m()}),Y=()=>n.invalidateQueries({queryKey:[`teacher-content`]}),X=fe??[],Z=(0,I.useMemo)(()=>({published:X.filter(e=>e.status===`منشور`).length,inReview:X.filter(e=>e.status===`قيد المراجعة`).length,drafts:X.filter(e=>e.status===`مسوّدة`).length,views:X.reduce((e,t)=>e+t.viewsCount,0)}),[X]),Q=c({mutationFn:()=>R({data:{...G,id:W??void 0,viewsCount:Number(G.viewsCount)||0}}),onSuccess:()=>{Y(),U(!1),f.success(t(`تم الحفظ`,`Saved successfully`))},onError:n=>f.error(e(n,t(`تعذّر الحفظ`,`Failed to save`)))}),me=c({mutationFn:e=>V({data:{id:e}}),onSuccess:()=>{Y(),J(null),f.success(t(`تم الحذف`,`Deleted successfully`))},onError:n=>f.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});function $(e){de(e?.id??null),K(e?{title:e.title,subjectName:e.subjectName,status:e.status,viewsCount:String(e.viewsCount)}:z),U(!0)}return(0,L.jsxs)(se,{title:t(`المحتوى`,`Content`),icon:`FileStack`,subtitle:t(ne,`Your lessons and files: upload, place on the curriculum tree, submit for review.`),children:[(0,L.jsx)(ie,{items:[{icon:`FileStack`,label:t(`دروس منشورة`,`Published`),value:String(Z.published)},{icon:`Clock`,label:t(`قيد المراجعة`,`In review`),value:String(Z.inReview)},{icon:`FileEdit`,label:t(`مسوّدات`,`Drafts`),value:String(Z.drafts)},{icon:`Eye`,label:t(`مشاهدات الشهر`,`Views this month`),value:String(Z.views)}]}),(0,L.jsx)(h,{title:t(`أحدث المحتوى`,`Recent content`),icon:`FileStack`,action:a(`teacher_content`,`show_add_form`)?(0,L.jsxs)(d,{size:`sm`,onClick:()=>$(null),children:[(0,L.jsx)(te,{className:`size-4`}),t(`إضافة محتوى`,`Add content`)]}):void 0,children:pe?(0,L.jsx)(`div`,{className:`flex justify-center py-8`,children:(0,L.jsx)(u,{className:`size-5 animate-spin text-primary`})}):X.length?(0,L.jsx)(oe,{head:[t(`العنوان`,`Title`),t(`المادة`,`Subject`),t(`الحالة`,`Status`),t(`مشاهدات`,`Views`),t(``,``)],rows:X.map(e=>[e.title,e.subjectName,(0,L.jsx)(ae,{tone:B[e.status],children:t(e.status,e.status===`منشور`?`Published`:e.status===`قيد المراجعة`?`In review`:`Draft`)},e.id),e.viewsCount>0?String(e.viewsCount):`—`,(0,L.jsxs)(`div`,{className:`flex items-center justify-end gap-1`,children:[a(`teacher_content`,`edit`)&&(0,L.jsx)(d,{size:`icon`,variant:`ghost`,onClick:()=>$(e),children:(0,L.jsx)(l,{className:`size-4`})}),a(`teacher_content`,`delete`)&&(0,L.jsx)(d,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>J(e),children:(0,L.jsx)(ee,{className:`size-4`})})]},`${e.id}-actions`)])}):(0,L.jsx)(re,{icon:`FileStack`,text:t(`لا محتوى بعد.`,`No content yet.`)})}),(0,L.jsx)(y,{open:H,onOpenChange:U,children:(0,L.jsxs)(ue,{className:`text-start`,children:[(0,L.jsx)(le,{children:(0,L.jsx)(ce,{children:W?t(`تعديل محتوى`,`Edit content`):t(`إضافة محتوى`,`Add content`)})}),(0,L.jsxs)(`div`,{className:`grid gap-4 sm:grid-cols-2`,children:[(0,L.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,L.jsx)(_,{htmlFor:`ci-title`,children:t(`العنوان`,`Title`)}),(0,L.jsx)(g,{id:`ci-title`,value:G.title,onChange:e=>K(t=>({...t,title:e.target.value}))})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,L.jsx)(_,{htmlFor:`ci-subject`,children:t(`المادة`,`Subject`)}),(0,L.jsx)(g,{id:`ci-subject`,value:G.subjectName,onChange:e=>K(t=>({...t,subjectName:e.target.value}))})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,L.jsx)(_,{children:t(`الحالة`,`Status`)}),(0,L.jsxs)(M,{value:G.status,onValueChange:e=>K(t=>({...t,status:e})),children:[(0,L.jsx)(k,{children:(0,L.jsx)(O,{})}),(0,L.jsxs)(A,{children:[(0,L.jsx)(j,{value:`مسوّدة`,children:t(`مسوّدة`,`Draft`)}),(0,L.jsx)(j,{value:`قيد المراجعة`,children:t(`قيد المراجعة`,`In review`)}),(0,L.jsx)(j,{value:`منشور`,children:t(`منشور`,`Published`)})]})]})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,L.jsx)(_,{htmlFor:`ci-views`,children:t(`عدد المشاهدات`,`Views count`)}),(0,L.jsx)(g,{id:`ci-views`,type:`number`,min:0,value:G.viewsCount,onChange:e=>K(t=>({...t,viewsCount:e.target.value}))})]})]}),(0,L.jsxs)(v,{className:`gap-2 sm:justify-start`,children:[(0,L.jsx)(d,{onClick:()=>Q.mutate(),disabled:Q.isPending||!G.title.trim(),children:t(`حفظ`,`Save`)}),(0,L.jsx)(d,{variant:`outline`,onClick:()=>U(!1),children:t(`إلغاء`,`Cancel`)})]})]})}),(0,L.jsx)(D,{open:!!q,onOpenChange:e=>!e&&J(null),children:(0,L.jsxs)(S,{className:`text-start`,children:[(0,L.jsxs)(E,{children:[(0,L.jsx)(x,{children:t(`حذف «${q?.title}»؟`,`Delete "${q?.title}"?`)}),(0,L.jsx)(b,{children:t(`لا يمكن التراجع عن هذا الإجراء.`,`This action cannot be undone.`)})]}),(0,L.jsxs)(w,{className:`gap-2 sm:justify-start`,children:[(0,L.jsx)(C,{onClick:()=>q&&me.mutate(q.id),children:t(`حذف`,`Delete`)}),(0,L.jsx)(T,{children:t(`إلغاء`,`Cancel`)})]})]})})]})}export{R as component};
+import { C as e, R as t, ht as n, j as r, u as i, vt as a } from "./rbac-static-data-Cz2qa6wH.js";
+import { i as o, n as s } from "./auth-middleware-CmTSOr_x.js";
+import { t as c } from "./useMutation-CfRTvAO7.js";
+import { i as ee, l as te, u as l } from "./dynamic-icon-fBQNzGz-.js";
+import { t as u } from "./loader-circle-DYrBHP0C.js";
+import { t as d } from "./button-m-Eg43IZ.js";
+import { B as f, c as ne } from "./index-CUZEShOB.js";
+import { n as p } from "./use-access-DbwD014U.js";
+import { n as m } from "./guard-B5vrll8Q.js";
+import { a as h, i as re, l as ie, n as ae, r as oe, t as se } from "./kit-D226f5oO.js";
+import { t as g } from "./input-DhAlVvjJ.js";
+import { a as ce, i as le, n as ue, o as _, r as v, t as y } from "./dialog-C80UddLn.js";
+import {
+  a as b,
+  c as x,
+  i as S,
+  n as C,
+  o as w,
+  r as T,
+  s as E,
+  t as D,
+} from "./alert-dialog-C95lx8dr.js";
+import { a as O, i as k, n as A, r as j, t as M } from "./select-CjwHz5Zu.js";
+import { c as N, i as P, t as F } from "./teacher-teaching.functions-CavrlbeM.js";
+var I = a(n()),
+  L = t();
+function R() {
+  return (0, L.jsx)(m, { pageKey: `teacher_content`, children: (0, L.jsx)(V, {}) });
+}
+var z = { title: ``, subjectName: ``, status: `مسوّدة`, viewsCount: `0` },
+  B = { منشور: `success`, "قيد المراجعة": `muted`, مسوّدة: `primary` };
+function V() {
+  let t = i(),
+    n = r(),
+    { can: a } = p(),
+    m = o(P),
+    R = o(N),
+    V = o(F),
+    [H, U] = (0, I.useState)(!1),
+    [W, de] = (0, I.useState)(null),
+    [G, K] = (0, I.useState)(z),
+    [q, J] = (0, I.useState)(null),
+    { data: fe, isLoading: pe } = s({ queryKey: [`teacher-content`], queryFn: () => m() }),
+    Y = () => n.invalidateQueries({ queryKey: [`teacher-content`] }),
+    X = fe ?? [],
+    Z = (0, I.useMemo)(
+      () => ({
+        published: X.filter((e) => e.status === `منشور`).length,
+        inReview: X.filter((e) => e.status === `قيد المراجعة`).length,
+        drafts: X.filter((e) => e.status === `مسوّدة`).length,
+        views: X.reduce((e, t) => e + t.viewsCount, 0),
+      }),
+      [X],
+    ),
+    Q = c({
+      mutationFn: () =>
+        R({ data: { ...G, id: W ?? void 0, viewsCount: Number(G.viewsCount) || 0 } }),
+      onSuccess: () => {
+        (Y(), U(!1), f.success(t(`تم الحفظ`, `Saved successfully`)));
+      },
+      onError: (n) => f.error(e(n, t(`تعذّر الحفظ`, `Failed to save`))),
+    }),
+    me = c({
+      mutationFn: (e) => V({ data: { id: e } }),
+      onSuccess: () => {
+        (Y(), J(null), f.success(t(`تم الحذف`, `Deleted successfully`)));
+      },
+      onError: (n) => f.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  function $(e) {
+    (de(e?.id ?? null),
+      K(
+        e
+          ? {
+              title: e.title,
+              subjectName: e.subjectName,
+              status: e.status,
+              viewsCount: String(e.viewsCount),
+            }
+          : z,
+      ),
+      U(!0));
+  }
+  return (0, L.jsxs)(se, {
+    title: t(`المحتوى`, `Content`),
+    icon: `FileStack`,
+    subtitle: t(
+      ne,
+      `Your lessons and files: upload, place on the curriculum tree, submit for review.`,
+    ),
+    children: [
+      (0, L.jsx)(ie, {
+        items: [
+          { icon: `FileStack`, label: t(`دروس منشورة`, `Published`), value: String(Z.published) },
+          { icon: `Clock`, label: t(`قيد المراجعة`, `In review`), value: String(Z.inReview) },
+          { icon: `FileEdit`, label: t(`مسوّدات`, `Drafts`), value: String(Z.drafts) },
+          { icon: `Eye`, label: t(`مشاهدات الشهر`, `Views this month`), value: String(Z.views) },
+        ],
+      }),
+      (0, L.jsx)(h, {
+        title: t(`أحدث المحتوى`, `Recent content`),
+        icon: `FileStack`,
+        action: a(`teacher_content`, `show_add_form`)
+          ? (0, L.jsxs)(d, {
+              size: `sm`,
+              onClick: () => $(null),
+              children: [(0, L.jsx)(te, { className: `size-4` }), t(`إضافة محتوى`, `Add content`)],
+            })
+          : void 0,
+        children: pe
+          ? (0, L.jsx)(`div`, {
+              className: `flex justify-center py-8`,
+              children: (0, L.jsx)(u, { className: `size-5 animate-spin text-primary` }),
+            })
+          : X.length
+            ? (0, L.jsx)(oe, {
+                head: [
+                  t(`العنوان`, `Title`),
+                  t(`المادة`, `Subject`),
+                  t(`الحالة`, `Status`),
+                  t(`مشاهدات`, `Views`),
+                  t(``, ``),
+                ],
+                rows: X.map((e) => [
+                  e.title,
+                  e.subjectName,
+                  (0, L.jsx)(
+                    ae,
+                    {
+                      tone: B[e.status],
+                      children: t(
+                        e.status,
+                        e.status === `منشور`
+                          ? `Published`
+                          : e.status === `قيد المراجعة`
+                            ? `In review`
+                            : `Draft`,
+                      ),
+                    },
+                    e.id,
+                  ),
+                  e.viewsCount > 0 ? String(e.viewsCount) : `—`,
+                  (0, L.jsxs)(
+                    `div`,
+                    {
+                      className: `flex items-center justify-end gap-1`,
+                      children: [
+                        a(`teacher_content`, `edit`) &&
+                          (0, L.jsx)(d, {
+                            size: `icon`,
+                            variant: `ghost`,
+                            onClick: () => $(e),
+                            children: (0, L.jsx)(l, { className: `size-4` }),
+                          }),
+                        a(`teacher_content`, `delete`) &&
+                          (0, L.jsx)(d, {
+                            size: `icon`,
+                            variant: `ghost`,
+                            className: `text-destructive`,
+                            onClick: () => J(e),
+                            children: (0, L.jsx)(ee, { className: `size-4` }),
+                          }),
+                      ],
+                    },
+                    `${e.id}-actions`,
+                  ),
+                ]),
+              })
+            : (0, L.jsx)(re, { icon: `FileStack`, text: t(`لا محتوى بعد.`, `No content yet.`) }),
+      }),
+      (0, L.jsx)(y, {
+        open: H,
+        onOpenChange: U,
+        children: (0, L.jsxs)(ue, {
+          className: `text-start`,
+          children: [
+            (0, L.jsx)(le, {
+              children: (0, L.jsx)(ce, {
+                children: W ? t(`تعديل محتوى`, `Edit content`) : t(`إضافة محتوى`, `Add content`),
+              }),
+            }),
+            (0, L.jsxs)(`div`, {
+              className: `grid gap-4 sm:grid-cols-2`,
+              children: [
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, L.jsx)(_, { htmlFor: `ci-title`, children: t(`العنوان`, `Title`) }),
+                    (0, L.jsx)(g, {
+                      id: `ci-title`,
+                      value: G.title,
+                      onChange: (e) => K((t) => ({ ...t, title: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, L.jsx)(_, { htmlFor: `ci-subject`, children: t(`المادة`, `Subject`) }),
+                    (0, L.jsx)(g, {
+                      id: `ci-subject`,
+                      value: G.subjectName,
+                      onChange: (e) => K((t) => ({ ...t, subjectName: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, L.jsx)(_, { children: t(`الحالة`, `Status`) }),
+                    (0, L.jsxs)(M, {
+                      value: G.status,
+                      onValueChange: (e) => K((t) => ({ ...t, status: e })),
+                      children: [
+                        (0, L.jsx)(k, { children: (0, L.jsx)(O, {}) }),
+                        (0, L.jsxs)(A, {
+                          children: [
+                            (0, L.jsx)(j, { value: `مسوّدة`, children: t(`مسوّدة`, `Draft`) }),
+                            (0, L.jsx)(j, {
+                              value: `قيد المراجعة`,
+                              children: t(`قيد المراجعة`, `In review`),
+                            }),
+                            (0, L.jsx)(j, { value: `منشور`, children: t(`منشور`, `Published`) }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, L.jsx)(_, {
+                      htmlFor: `ci-views`,
+                      children: t(`عدد المشاهدات`, `Views count`),
+                    }),
+                    (0, L.jsx)(g, {
+                      id: `ci-views`,
+                      type: `number`,
+                      min: 0,
+                      value: G.viewsCount,
+                      onChange: (e) => K((t) => ({ ...t, viewsCount: e.target.value })),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, L.jsxs)(v, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, L.jsx)(d, {
+                  onClick: () => Q.mutate(),
+                  disabled: Q.isPending || !G.title.trim(),
+                  children: t(`حفظ`, `Save`),
+                }),
+                (0, L.jsx)(d, {
+                  variant: `outline`,
+                  onClick: () => U(!1),
+                  children: t(`إلغاء`, `Cancel`),
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+      (0, L.jsx)(D, {
+        open: !!q,
+        onOpenChange: (e) => !e && J(null),
+        children: (0, L.jsxs)(S, {
+          className: `text-start`,
+          children: [
+            (0, L.jsxs)(E, {
+              children: [
+                (0, L.jsx)(x, { children: t(`حذف «${q?.title}»؟`, `Delete "${q?.title}"?`) }),
+                (0, L.jsx)(b, {
+                  children: t(`لا يمكن التراجع عن هذا الإجراء.`, `This action cannot be undone.`),
+                }),
+              ],
+            }),
+            (0, L.jsxs)(w, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, L.jsx)(C, {
+                  onClick: () => q && me.mutate(q.id),
+                  children: t(`حذف`, `Delete`),
+                }),
+                (0, L.jsx)(T, { children: t(`إلغاء`, `Cancel`) }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+export { R as component };

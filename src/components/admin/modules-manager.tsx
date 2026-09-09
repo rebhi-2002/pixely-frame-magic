@@ -29,8 +29,7 @@ export function SystemModulesPage() {
       queryClient.invalidateQueries({ queryKey: ACCESS_QUERY_KEY });
       toast.success(bi("تم حفظ حالة الوحدة", "Module status saved"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const editable = can("admin_settings", "edit");

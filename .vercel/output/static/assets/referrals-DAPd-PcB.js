@@ -1,1 +1,275 @@
-import{C as e,R as t,ht as n,j as ee,u as te,vt as r}from"./rbac-static-data-Cz2qa6wH.js";import{i,n as a}from"./auth-middleware-CmTSOr_x.js";import{t as o}from"./useMutation-CfRTvAO7.js";import{i as s,l as ne,u as re}from"./dynamic-icon-fBQNzGz-.js";import{t as ie}from"./loader-circle-DYrBHP0C.js";import{t as c}from"./button-m-Eg43IZ.js";import{B as l,C as ae}from"./index-CUZEShOB.js";import{n as oe}from"./use-access-DbwD014U.js";import{n as u}from"./guard-B5vrll8Q.js";import{a as d,c as f,i as p,l as m,t as h}from"./kit-D226f5oO.js";import{t as g}from"./input-DhAlVvjJ.js";import{a as _,i as v,n as y,o as b,r as se,t as ce}from"./dialog-C80UddLn.js";import{a as le,c as ue,i as de,n as x,o as S,r as C,s as w,t as T}from"./alert-dialog-C95lx8dr.js";import{a as E,i as D,n as O,r as k,t as A}from"./select-CjwHz5Zu.js";import{l as j,o as M,p as N,r as P}from"./student-social.functions-CblOF1su.js";var F=r(n()),I=t();function L(){return(0,I.jsx)(u,{pageKey:`student_referrals`,children:(0,I.jsx)(z,{})})}var R={friendName:``,dateLabel:``,status:`معلّق`};function z(){let t=te(),n=ee(),{can:r}=oe(),u=i(j),L=i(N),z=i(P),B=i(M),V=a({queryKey:[`referrals`],queryFn:()=>u()}),H=a({queryKey:[`referral-link`],queryFn:()=>B()}),[fe,U]=(0,F.useState)(!1),[W,pe]=(0,F.useState)(null),[G,K]=(0,F.useState)(R),[q,J]=(0,F.useState)(null),Y=V.data??[],me=V.isLoading||H.isLoading,X=(0,F.useMemo)(()=>{let e=Y.filter(e=>e.status===`مكافأة`).length;return{sent:Y.length,joined:e,months:e}},[Y]),Z=()=>n.invalidateQueries({queryKey:[`referrals`]}),Q=o({mutationFn:()=>L({data:{...G,id:W??void 0}}),onSuccess:()=>{Z(),U(!1),l.success(t(`تم الحفظ`,`Saved successfully`))},onError:n=>l.error(e(n,t(`تعذّر الحفظ`,`Failed to save`)))}),he=o({mutationFn:e=>z({data:{id:e}}),onSuccess:()=>{Z(),J(null),l.success(t(`تم الحذف`,`Deleted successfully`))},onError:n=>l.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});function $(e){pe(e?.id??null),K(e?{friendName:e.friendName,dateLabel:e.dateLabel,status:e.status}:R),U(!0)}return(0,I.jsxs)(h,{title:t(`الإحالات`,`Referrals`),icon:`Gift`,subtitle:t(ae,`Invite friends with your own link, and track who joined and what you earned.`),children:[me?(0,I.jsx)(`div`,{className:`flex justify-center py-10`,children:(0,I.jsx)(ie,{className:`size-6 animate-spin text-primary`})}):(0,I.jsxs)(I.Fragment,{children:[(0,I.jsx)(m,{items:[{icon:`Link`,label:t(`رابطك`,`Your link`),value:`acadimia/r/${H.data?.code??`—`}`},{icon:`UserPlus`,label:t(`دعوات مُرسلة`,`Invites sent`),value:String(X.sent)},{icon:`CheckCircle2`,label:t(`سجّلوا فعلياً`,`Joined`),value:String(X.joined)},{icon:`Gift`,label:t(`مكافآتك`,`Rewards`),value:t(`${X.months} شهور`,`${X.months} months`)}]}),(0,I.jsx)(d,{title:t(`من دعوتهم`,`People you invited`),icon:`Users`,action:r(`student_referrals`,`show_add_form`)?(0,I.jsxs)(c,{size:`sm`,onClick:()=>$(null),children:[(0,I.jsx)(ne,{className:`size-4`}),t(`إضافة دعوة`,`Add invite`)]}):void 0,children:Y.length?(0,I.jsx)(f,{rows:Y.map(e=>({title:e.friendName,meta:e.status===`مكافأة`?t(`سجّل ${e.dateLabel}`,`Joined ${e.dateLabel}`):t(`الدعوة مفتوحة`,`Invite pending`),value:t(e.status,e.status===`مكافأة`?`Rewarded`:`Pending`),tone:e.status===`مكافأة`?`success`:`muted`,actions:(0,I.jsxs)(`div`,{className:`flex items-center gap-1`,children:[r(`student_referrals`,`edit`)&&(0,I.jsx)(c,{size:`icon`,variant:`ghost`,onClick:()=>$(e),children:(0,I.jsx)(re,{className:`size-4`})}),r(`student_referrals`,`delete`)&&(0,I.jsx)(c,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>J(e),children:(0,I.jsx)(s,{className:`size-4`})})]})}))}):(0,I.jsx)(p,{icon:`Users`,text:t(`لسا ما دعوت حد — شارك رابطك!`,`You haven't invited anyone yet — share your link!`)})})]}),(0,I.jsx)(ce,{open:fe,onOpenChange:U,children:(0,I.jsxs)(y,{className:`text-start`,children:[(0,I.jsx)(v,{children:(0,I.jsx)(_,{children:W?t(`تعديل دعوة`,`Edit invite`):t(`إضافة دعوة`,`Add invite`)})}),(0,I.jsxs)(`div`,{className:`grid gap-4 sm:grid-cols-2`,children:[(0,I.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,I.jsx)(b,{htmlFor:`ref-name`,children:t(`اسم الصديق`,`Friend's name`)}),(0,I.jsx)(g,{id:`ref-name`,value:G.friendName,onChange:e=>K(t=>({...t,friendName:e.target.value}))})]}),(0,I.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,I.jsx)(b,{htmlFor:`ref-date`,children:t(`تاريخ التسجيل`,`Join date`)}),(0,I.jsx)(g,{id:`ref-date`,value:G.dateLabel,onChange:e=>K(t=>({...t,dateLabel:e.target.value}))})]}),(0,I.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,I.jsx)(b,{children:t(`الحالة`,`Status`)}),(0,I.jsxs)(A,{value:G.status,onValueChange:e=>K(t=>({...t,status:e})),children:[(0,I.jsx)(D,{children:(0,I.jsx)(E,{})}),(0,I.jsxs)(O,{children:[(0,I.jsx)(k,{value:`معلّق`,children:t(`معلّق`,`Pending`)}),(0,I.jsx)(k,{value:`مكافأة`,children:t(`مكافأة`,`Rewarded`)})]})]})]})]}),(0,I.jsxs)(se,{className:`gap-2 sm:justify-start`,children:[(0,I.jsx)(c,{onClick:()=>Q.mutate(),disabled:Q.isPending||!G.friendName.trim(),children:t(`حفظ`,`Save`)}),(0,I.jsx)(c,{variant:`outline`,onClick:()=>U(!1),children:t(`إلغاء`,`Cancel`)})]})]})}),(0,I.jsx)(T,{open:!!q,onOpenChange:e=>!e&&J(null),children:(0,I.jsxs)(de,{className:`text-start`,children:[(0,I.jsxs)(w,{children:[(0,I.jsx)(ue,{children:t(`حذف «${q?.friendName}»؟`,`Delete "${q?.friendName}"?`)}),(0,I.jsx)(le,{children:t(`لا يمكن التراجع عن هذا الإجراء.`,`This action cannot be undone.`)})]}),(0,I.jsxs)(S,{className:`gap-2 sm:justify-start`,children:[(0,I.jsx)(x,{onClick:()=>q&&he.mutate(q.id),children:t(`حذف`,`Delete`)}),(0,I.jsx)(C,{children:t(`إلغاء`,`Cancel`)})]})]})})]})}export{L as component};
+import { C as e, R as t, ht as n, j as ee, u as te, vt as r } from "./rbac-static-data-Cz2qa6wH.js";
+import { i, n as a } from "./auth-middleware-CmTSOr_x.js";
+import { t as o } from "./useMutation-CfRTvAO7.js";
+import { i as s, l as ne, u as re } from "./dynamic-icon-fBQNzGz-.js";
+import { t as ie } from "./loader-circle-DYrBHP0C.js";
+import { t as c } from "./button-m-Eg43IZ.js";
+import { B as l, C as ae } from "./index-CUZEShOB.js";
+import { n as oe } from "./use-access-DbwD014U.js";
+import { n as u } from "./guard-B5vrll8Q.js";
+import { a as d, c as f, i as p, l as m, t as h } from "./kit-D226f5oO.js";
+import { t as g } from "./input-DhAlVvjJ.js";
+import { a as _, i as v, n as y, o as b, r as se, t as ce } from "./dialog-C80UddLn.js";
+import {
+  a as le,
+  c as ue,
+  i as de,
+  n as x,
+  o as S,
+  r as C,
+  s as w,
+  t as T,
+} from "./alert-dialog-C95lx8dr.js";
+import { a as E, i as D, n as O, r as k, t as A } from "./select-CjwHz5Zu.js";
+import { l as j, o as M, p as N, r as P } from "./student-social.functions-CblOF1su.js";
+var F = r(n()),
+  I = t();
+function L() {
+  return (0, I.jsx)(u, { pageKey: `student_referrals`, children: (0, I.jsx)(z, {}) });
+}
+var R = { friendName: ``, dateLabel: ``, status: `معلّق` };
+function z() {
+  let t = te(),
+    n = ee(),
+    { can: r } = oe(),
+    u = i(j),
+    L = i(N),
+    z = i(P),
+    B = i(M),
+    V = a({ queryKey: [`referrals`], queryFn: () => u() }),
+    H = a({ queryKey: [`referral-link`], queryFn: () => B() }),
+    [fe, U] = (0, F.useState)(!1),
+    [W, pe] = (0, F.useState)(null),
+    [G, K] = (0, F.useState)(R),
+    [q, J] = (0, F.useState)(null),
+    Y = V.data ?? [],
+    me = V.isLoading || H.isLoading,
+    X = (0, F.useMemo)(() => {
+      let e = Y.filter((e) => e.status === `مكافأة`).length;
+      return { sent: Y.length, joined: e, months: e };
+    }, [Y]),
+    Z = () => n.invalidateQueries({ queryKey: [`referrals`] }),
+    Q = o({
+      mutationFn: () => L({ data: { ...G, id: W ?? void 0 } }),
+      onSuccess: () => {
+        (Z(), U(!1), l.success(t(`تم الحفظ`, `Saved successfully`)));
+      },
+      onError: (n) => l.error(e(n, t(`تعذّر الحفظ`, `Failed to save`))),
+    }),
+    he = o({
+      mutationFn: (e) => z({ data: { id: e } }),
+      onSuccess: () => {
+        (Z(), J(null), l.success(t(`تم الحذف`, `Deleted successfully`)));
+      },
+      onError: (n) => l.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  function $(e) {
+    (pe(e?.id ?? null),
+      K(e ? { friendName: e.friendName, dateLabel: e.dateLabel, status: e.status } : R),
+      U(!0));
+  }
+  return (0, I.jsxs)(h, {
+    title: t(`الإحالات`, `Referrals`),
+    icon: `Gift`,
+    subtitle: t(ae, `Invite friends with your own link, and track who joined and what you earned.`),
+    children: [
+      me
+        ? (0, I.jsx)(`div`, {
+            className: `flex justify-center py-10`,
+            children: (0, I.jsx)(ie, { className: `size-6 animate-spin text-primary` }),
+          })
+        : (0, I.jsxs)(I.Fragment, {
+            children: [
+              (0, I.jsx)(m, {
+                items: [
+                  {
+                    icon: `Link`,
+                    label: t(`رابطك`, `Your link`),
+                    value: `acadimia/r/${H.data?.code ?? `—`}`,
+                  },
+                  {
+                    icon: `UserPlus`,
+                    label: t(`دعوات مُرسلة`, `Invites sent`),
+                    value: String(X.sent),
+                  },
+                  {
+                    icon: `CheckCircle2`,
+                    label: t(`سجّلوا فعلياً`, `Joined`),
+                    value: String(X.joined),
+                  },
+                  {
+                    icon: `Gift`,
+                    label: t(`مكافآتك`, `Rewards`),
+                    value: t(`${X.months} شهور`, `${X.months} months`),
+                  },
+                ],
+              }),
+              (0, I.jsx)(d, {
+                title: t(`من دعوتهم`, `People you invited`),
+                icon: `Users`,
+                action: r(`student_referrals`, `show_add_form`)
+                  ? (0, I.jsxs)(c, {
+                      size: `sm`,
+                      onClick: () => $(null),
+                      children: [
+                        (0, I.jsx)(ne, { className: `size-4` }),
+                        t(`إضافة دعوة`, `Add invite`),
+                      ],
+                    })
+                  : void 0,
+                children: Y.length
+                  ? (0, I.jsx)(f, {
+                      rows: Y.map((e) => ({
+                        title: e.friendName,
+                        meta:
+                          e.status === `مكافأة`
+                            ? t(`سجّل ${e.dateLabel}`, `Joined ${e.dateLabel}`)
+                            : t(`الدعوة مفتوحة`, `Invite pending`),
+                        value: t(e.status, e.status === `مكافأة` ? `Rewarded` : `Pending`),
+                        tone: e.status === `مكافأة` ? `success` : `muted`,
+                        actions: (0, I.jsxs)(`div`, {
+                          className: `flex items-center gap-1`,
+                          children: [
+                            r(`student_referrals`, `edit`) &&
+                              (0, I.jsx)(c, {
+                                size: `icon`,
+                                variant: `ghost`,
+                                onClick: () => $(e),
+                                children: (0, I.jsx)(re, { className: `size-4` }),
+                              }),
+                            r(`student_referrals`, `delete`) &&
+                              (0, I.jsx)(c, {
+                                size: `icon`,
+                                variant: `ghost`,
+                                className: `text-destructive`,
+                                onClick: () => J(e),
+                                children: (0, I.jsx)(s, { className: `size-4` }),
+                              }),
+                          ],
+                        }),
+                      })),
+                    })
+                  : (0, I.jsx)(p, {
+                      icon: `Users`,
+                      text: t(
+                        `لسا ما دعوت حد — شارك رابطك!`,
+                        `You haven't invited anyone yet — share your link!`,
+                      ),
+                    }),
+              }),
+            ],
+          }),
+      (0, I.jsx)(ce, {
+        open: fe,
+        onOpenChange: U,
+        children: (0, I.jsxs)(y, {
+          className: `text-start`,
+          children: [
+            (0, I.jsx)(v, {
+              children: (0, I.jsx)(_, {
+                children: W ? t(`تعديل دعوة`, `Edit invite`) : t(`إضافة دعوة`, `Add invite`),
+              }),
+            }),
+            (0, I.jsxs)(`div`, {
+              className: `grid gap-4 sm:grid-cols-2`,
+              children: [
+                (0, I.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, I.jsx)(b, {
+                      htmlFor: `ref-name`,
+                      children: t(`اسم الصديق`, `Friend's name`),
+                    }),
+                    (0, I.jsx)(g, {
+                      id: `ref-name`,
+                      value: G.friendName,
+                      onChange: (e) => K((t) => ({ ...t, friendName: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, I.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, I.jsx)(b, {
+                      htmlFor: `ref-date`,
+                      children: t(`تاريخ التسجيل`, `Join date`),
+                    }),
+                    (0, I.jsx)(g, {
+                      id: `ref-date`,
+                      value: G.dateLabel,
+                      onChange: (e) => K((t) => ({ ...t, dateLabel: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, I.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, I.jsx)(b, { children: t(`الحالة`, `Status`) }),
+                    (0, I.jsxs)(A, {
+                      value: G.status,
+                      onValueChange: (e) => K((t) => ({ ...t, status: e })),
+                      children: [
+                        (0, I.jsx)(D, { children: (0, I.jsx)(E, {}) }),
+                        (0, I.jsxs)(O, {
+                          children: [
+                            (0, I.jsx)(k, { value: `معلّق`, children: t(`معلّق`, `Pending`) }),
+                            (0, I.jsx)(k, { value: `مكافأة`, children: t(`مكافأة`, `Rewarded`) }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, I.jsxs)(se, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, I.jsx)(c, {
+                  onClick: () => Q.mutate(),
+                  disabled: Q.isPending || !G.friendName.trim(),
+                  children: t(`حفظ`, `Save`),
+                }),
+                (0, I.jsx)(c, {
+                  variant: `outline`,
+                  onClick: () => U(!1),
+                  children: t(`إلغاء`, `Cancel`),
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+      (0, I.jsx)(T, {
+        open: !!q,
+        onOpenChange: (e) => !e && J(null),
+        children: (0, I.jsxs)(de, {
+          className: `text-start`,
+          children: [
+            (0, I.jsxs)(w, {
+              children: [
+                (0, I.jsx)(ue, {
+                  children: t(`حذف «${q?.friendName}»؟`, `Delete "${q?.friendName}"?`),
+                }),
+                (0, I.jsx)(le, {
+                  children: t(`لا يمكن التراجع عن هذا الإجراء.`, `This action cannot be undone.`),
+                }),
+              ],
+            }),
+            (0, I.jsxs)(S, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, I.jsx)(x, {
+                  onClick: () => q && he.mutate(q.id),
+                  children: t(`حذف`, `Delete`),
+                }),
+                (0, I.jsx)(C, { children: t(`إلغاء`, `Cancel`) }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+export { L as component };

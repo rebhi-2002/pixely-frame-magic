@@ -1,4 +1,5 @@
 # Academia — Jury Prep Guide
+
 ### Deep-dive explainer + anticipated Q&A bank
 
 This guide has two jobs: (1) let you explain any slide in more depth than the deck itself
@@ -30,9 +31,11 @@ straight to the category a question falls into.
 ## 2. Deep-dive by topic
 
 ### 2.1 The problem, in more detail
+
 Your own requirements work identifies the root cause plainly: teaching materials, join
 requests, and payment currently move through **social-media groups and disconnected manual
 methods**. Three concrete failure modes fall out of that:
+
 - **No durable record** — a lesson file shared in a WhatsApp group is not organized by
   subject/lesson the way a course platform would structure it (this is literally what FR‑12,
   "Upload and Organize Course Materials," was written to fix).
@@ -48,18 +51,19 @@ independent third-party evidence the problem is real and investable, even though
 user research is internal, not a published study.
 
 ### 2.2 Market sizing — why there's no dollar figure
-You'll notice the deck frames TAM/SAM/SOM *conceptually* rather than with a specific dollar
+
+You'll notice the deck frames TAM/SAM/SOM _conceptually_ rather than with a specific dollar
 number. That is deliberate, not a gap: no sourced market study for your specific target market
 exists in your materials, and presenting an invented figure to a jury is a bigger risk than
 presenting none. What the deck offers instead is real, independently reported evidence that
 capital already flows into this category:
 
-| Company | HQ | Founded | Funding (reported) | What it tells the jury |
-|---|---|---|---|---|
-| Noon Academy | Saudi Arabia | 2013 | ~$41M Series B (2026) | Live/social tutoring at scale still attracts large, recent rounds |
-| Abwaab | Jordan | 2019 | $27.5M total | Curriculum-aligned content raised a $20M Series A to expand into Egypt/Pakistan |
-| Al‑Mentor | UAE | 2016 | $14.5M total | Adjacent (professional/skills) content is fundable too |
-| Orcas | Egypt | 2013 | $3.5M total | Even a narrower tutor-discovery app cleared a seed/Series A bar |
+| Company      | HQ           | Founded | Funding (reported)    | What it tells the jury                                                          |
+| ------------ | ------------ | ------- | --------------------- | ------------------------------------------------------------------------------- |
+| Noon Academy | Saudi Arabia | 2013    | ~$41M Series B (2026) | Live/social tutoring at scale still attracts large, recent rounds               |
+| Abwaab       | Jordan       | 2019    | $27.5M total          | Curriculum-aligned content raised a $20M Series A to expand into Egypt/Pakistan |
+| Al‑Mentor    | UAE          | 2016    | $14.5M total          | Adjacent (professional/skills) content is fundable too                          |
+| Orcas        | Egypt        | 2013    | $3.5M total           | Even a narrower tutor-discovery app cleared a seed/Series A bar                 |
 
 **If pressed for a number anyway**: say plainly that you haven't sized the market with a
 sourced study yet, and that you'd rather commit to doing that properly (e.g., using regional
@@ -67,13 +71,14 @@ household-education-spend data or a specific country's private-tutoring survey) 
 guess in a jury setting.
 
 ### 2.3 Who else is already here (competition, in depth)
+
 Four real, funded players operate adjacent to Academia, and none of them combine all five of
 Academia's core pieces (marketplace discovery + wallet + commission ledger + parent dashboard +
 attendance/exam tracking) in one system:
 
 - **Noon Academy** — closest in spirit (live, social tutoring), but it's a content/session
   platform without a wallet-and-commission marketplace layer or parent finance visibility.
-- **Orcas** — closest in *distribution model* (mobile app connecting parents/students to nearby
+- **Orcas** — closest in _distribution model_ (mobile app connecting parents/students to nearby
   tutors), but it's positioned as a discovery/booking layer, not a full course/LMS + payments
   system.
 - **Al‑Mentor** — a professional-development video library aimed at adult/enterprise learners,
@@ -90,6 +95,7 @@ attendance/exam tracking) in one system:
 below (section 3.4) for the prepared answer.
 
 ### 2.4 The product, module by module
+
 - **Marketplace & discovery** — a public catalog of courses/categories/teacher groups.
 - **Courses, groups & lessons** — teachers upload materials into lesson categories, with
   visibility set to public or enrolled‑only, and a documented 50MB per‑file upload ceiling with
@@ -104,6 +110,7 @@ below (section 3.4) for the prepared answer.
 - **Admin & audit** — permissions, notifications, and audit logs.
 
 ### 2.5 The wallet & commission engine, precisely
+
 This is the most technically interesting — and most heavily scrutinized — part of the system,
 so know it cold:
 
@@ -135,6 +142,7 @@ The 80/20 split shown visually in the deck is **illustrative only** — say this
 asked. The real rate is a configurable platform setting, not a hard-coded number.
 
 ### 2.6 Architecture, in more depth
+
 - **Frontend**: React 19.2 + TypeScript, built on Vite, using TanStack Router/Start for
   routing/data-loading, Tailwind CSS 4 for styling, Radix UI for accessible primitives, and
   i18next for multi-language support (the codebase is already structured for more than one
@@ -151,12 +159,13 @@ asked. The real rate is a configurable platform setting, not a hard-coded number
 - **Process maturity**: the team has already run an internal architecture review of the
   services layer (auditing which services correctly inherit shared base-class behavior like
   `CreatedBy`/`UpdatedBy` field population, soft-delete conventions, and audit-trail hooks)
-  *before* building out the three newest domains (Wallet, Enrollment/Courses, Academic
+  _before_ building out the three newest domains (Wallet, Enrollment/Courses, Academic
   Tracking). That's a real, completed internal document — a good thing to mention if a
   technical juror asks about code quality practices, because it shows the team catches
   inconsistency before it compounds, not after.
 
 ### 2.7 Where the build actually stands today
+
 Be exact and unembarrassed about this — it's a strength, not a weakness, in front of a
 technical jury:
 
@@ -168,6 +177,7 @@ technical jury:
   verified manual bank transfer only), the AI study-assistant layer, native mobile apps.
 
 ### 2.8 The 12-week build plan
+
 Weeks 1–2 foundations (requirements, user stories, auth/RBAC) → weeks 3–6 content & enrollment
 (system design, courses, join requests) → weeks 6–9 wallet & academics (top-ups, commission
 split, attendance, exams) → weeks 9–12 polish & launch (notifications, QA, go-live). This is
@@ -177,6 +187,7 @@ executing against, and the "Live today" / "Finishing next" slide is the real-tim
 where you are inside it.
 
 ### 2.9 The team
+
 Prepared by **Ahmed Alkhaldi**, **Rebhi Ibrahim**, and **Ziad Alnumailat**, supervised by
 **Hamza Abu Jarad**, built through the **TAQAT · CodeMap** program. Rebhi's ownership of the
 public frontend repository and Ziad's ownership of the hosted backend/Swagger environment are
@@ -190,6 +201,7 @@ documented.
 ## 3. Anticipated Q&A bank
 
 ### 3.1 Market & problem
+
 **Q: How big is this market, really — do you have a number?**
 A: We haven't sized our specific target market with a sourced study, and we'd rather say that
 plainly than give the jury a guess dressed up as research. What we can show is that comparable
@@ -214,6 +226,7 @@ funded regional companies were independently built to solve, which is external c
 we didn't have to invent.
 
 ### 3.2 Business model & unit economics
+
 **Q: What's your commission rate?**
 A: It's admin-configurable, not fixed — the system validates any rate between 0% and 100%,
 logs every change with who made it and when, and archives the previous rate for audit purposes.
@@ -257,6 +270,7 @@ payment gateway is on our near-term roadmap — it removes the manual-verificati
 the residual fraud surface that comes with a human-in-the-loop process.
 
 ### 3.3 Product & technology
+
 **Q: Why React + ASP.NET Core instead of [some other stack]?**
 A: React with TypeScript gives us a component-based frontend with strong typing across a large,
 role-differentiated UI (student/teacher/parent/admin all see very different views of the same
@@ -305,6 +319,7 @@ We'd rather show you the data foundation is real than claim the AI feature is fu
 than it is.
 
 ### 3.4 Competition & defensibility
+
 **Q: Google Classroom or Udemy could add a wallet and a marketplace tomorrow — why won't they?**
 A: They could, technically — but it would mean rebuilding their core product identity. Classroom
 is built around closed, single-teacher classrooms tied to a school's Google Workspace account;
@@ -330,6 +345,7 @@ disintermediation answer above (3.2). We'd rather say that plainly than claim a 
 haven't earned yet.
 
 ### 3.5 Go-to-market
+
 **Q: How do you solve the chicken-and-egg problem — no teachers without students, no students
 without teachers?**
 A: We seed supply first, deliberately: onboard a small number of independent teachers and small
@@ -355,6 +371,7 @@ teacher can still use their existing channels alongside Academia; we're not aski
 down what already works for them.
 
 ### 3.6 Team & execution
+
 **Q: Why should we trust this team to execute?**
 A: The strongest evidence isn't a claim — it's the artifacts. We produced a full SRS with
 testable functional requirements down to the transaction level (not vague statements like "the
@@ -373,6 +390,7 @@ deliberate, so the product isn't worthless before the marketplace effect kicks i
 vision depends on winning that density.
 
 ### 3.7 The ask
+
 **Q: How much are you raising, and what's the valuation?**
 A: We haven't put a specific number in this deck because we don't want to anchor a figure we
 haven't properly modeled against real cost data — engineering time, infrastructure, and a
@@ -414,7 +432,7 @@ ones:
 
 ---
 
-## 5. Delivering it — the jury weighs *how* you present, not just what's on the slide
+## 5. Delivering it — the jury weighs _how_ you present, not just what's on the slide
 
 You mentioned the jury pays close attention to how the idea is presented, not only the content —
 that's a fair thing to prepare for deliberately, because it's a separate skill from writing the
@@ -429,14 +447,14 @@ chips, don't read all ten), and the SaaS philosophy bridge (one sentence, then m
 **Rehearse the transitions out loud, not just the content.** Because each slide now has a
 distinct entrance (zoom on the cover/why-we-win/ask, fade on the two "pause and be honest"
 slides, convex on architecture, slide everywhere else), practice saying the first sentence of
-each new slide *as it visually settles* — the motion should support your point, not distract
+each new slide _as it visually settles_ — the motion should support your point, not distract
 from it. On the two `fade` slides in particular (the SaaS-philosophy bridge and the "Where we
 are today" slide) — pause a full beat before speaking. Fade is your "let this land" cue.
 
 **Assign a speaker to each thematic block**, if presenting as a team — the deck's six agenda
 items map cleanly onto that: e.g., one person owns problem/market/competition, a second owns
 product/architecture/status, a third owns business model/GTM/roadmap/ask. Handoffs should
-happen *on a slide boundary*, not mid-slide, and each handoff line can be as simple as "I'll let
+happen _on a slide boundary_, not mid-slide, and each handoff line can be as simple as "I'll let
 [name] walk you through how the wallet actually works."
 
 **Practice the honesty beats deliberately — they're a strength only if delivered with
@@ -446,9 +464,10 @@ apologize for what isn't built yet. A steady, matter-of-fact tone reads as matur
 or defensive tone undercuts the same words.
 
 **On Q&A specifically:**
+
 - Repeat or briefly rephrase a hard question before answering — it buys you a second to think
   and confirms you understood it correctly.
-- If you don't know something, say so in one sentence and offer what you *can* commit to next
+- If you don't know something, say so in one sentence and offer what you _can_ commit to next
   (see the "what NOT to say" list below for the exact places this applies — market size,
   funding ask, commission rate, launch country).
 - Let whichever team member built the thing being asked about answer it — a backend question
@@ -458,6 +477,7 @@ or defensive tone undercuts the same words.
   it") — end on the actual last fact.
 
 **Physical/logistics checklist:**
+
 - You now have two versions of this deck: the HTML file (richer motion, GSAP-driven staggered
   reveals, needs a browser and — the first time — internet access to load fonts/scripts from a
   CDN) and the PowerPoint file (works fully offline once opened, easier to hand to a jury
@@ -498,24 +518,24 @@ or defensive tone undercuts the same words.
 You asked directly whether the Google Classroom comparison row was checked and improved, or
 just copy-pasted. Here's exactly what happened, so you can verify it yourself line by line: your
 source file (`مقارنة المنصة مع كلاس روم.pdf`) is entirely in Arabic, and the deck's table is in
-English — so every cell is necessarily a *translation*, not a paste. What I mean by "verified"
+English — so every cell is necessarily a _translation_, not a paste. What I mean by "verified"
 is that I re-extracted the raw Arabic text a second time from the original file and checked my
 English wording against it sentence-by-sentence before finalizing the slide, rather than
 translating once from memory and moving on. Below is that exact side-by-side so you can confirm
 it yourself:
 
-| Dimension | Arabic source (verbatim) | English in the deck |
-|---|---|---|
-| Platform type — Classroom | أداة لتنظيم صفوف مغلقة | Tool for organizing closed classes |
-| Platform type — Academia | سوق تعليمي ومنصة LMS متكاملة | Education marketplace + integrated LMS |
-| Discovery — Classroom | غير متاح؛ يحتاج المستخدم إلى رابط أو رمز دخول | Not available — needs a link or access code |
-| Discovery — Academia | متاح عبر دليل الدورات والمدرسين | Directory of courses & teachers |
-| Payments — Classroom | خارجي تماماً ولا يدعمه النظام | Entirely external — not supported by the system |
-| Payments — Academia | محفظة داخلية موحدة وآمنة | Unified, secure in‑platform wallet |
-| Parent role — Classroom | تقارير بريدية محدودة | Limited email reports |
-| Parent role — Academia | لوحة متابعة للنشاط والمدفوعات | Dedicated activity & payments dashboard |
-| Attendance/exams — Classroom | محدود جداً | Very limited |
-| Attendance/exams — Academia | تتبع أكاديمي تفصيلي | Detailed academic tracking |
+| Dimension                    | Arabic source (verbatim)                      | English in the deck                             |
+| ---------------------------- | --------------------------------------------- | ----------------------------------------------- |
+| Platform type — Classroom    | أداة لتنظيم صفوف مغلقة                        | Tool for organizing closed classes              |
+| Platform type — Academia     | سوق تعليمي ومنصة LMS متكاملة                  | Education marketplace + integrated LMS          |
+| Discovery — Classroom        | غير متاح؛ يحتاج المستخدم إلى رابط أو رمز دخول | Not available — needs a link or access code     |
+| Discovery — Academia         | متاح عبر دليل الدورات والمدرسين               | Directory of courses & teachers                 |
+| Payments — Classroom         | خارجي تماماً ولا يدعمه النظام                 | Entirely external — not supported by the system |
+| Payments — Academia          | محفظة داخلية موحدة وآمنة                      | Unified, secure in‑platform wallet              |
+| Parent role — Classroom      | تقارير بريدية محدودة                          | Limited email reports                           |
+| Parent role — Academia       | لوحة متابعة للنشاط والمدفوعات                 | Dedicated activity & payments dashboard         |
+| Attendance/exams — Classroom | محدود جداً                                    | Very limited                                    |
+| Attendance/exams — Academia  | تتبع أكاديمي تفصيلي                           | Detailed academic tracking                      |
 
 The **Udemy** column is not in this source file at all — there's no Arabic table row to
 translate for it. It's built instead from a separate narrative paragraph in your business-model

@@ -154,8 +154,7 @@ export async function login(email: string, password: string): Promise<void> {
  * نفس شرط الظهور بالضبط يلي بيتحكم بظهور أزرار الدخول التجريبي بـlogin.tsx
  * (demoEnabled) — لازم يضلوا متطابقين وإلا الزر بيظهر بس الضغط عليه بيفشل. */
 export function loginAsDemo(userId: string): void {
-  const demoAllowed =
-    import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+  const demoAllowed = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
   if (!demoAllowed) {
     throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
   }

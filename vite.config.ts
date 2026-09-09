@@ -18,7 +18,6 @@ export default defineConfig({
     nitro({ preset: nitroPreset }),
   ],
   server: {
-    host: true
-  }
+    host: true,
+  },
 });
-

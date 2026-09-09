@@ -1,1 +1,321 @@
-import{C as e,R as t,ht as n,j as r,u as i,vt as a}from"./rbac-static-data-Cz2qa6wH.js";import{i as o,n as s}from"./auth-middleware-CmTSOr_x.js";import{t as c}from"./useMutation-CfRTvAO7.js";import{i as l,l as ee,u as te}from"./dynamic-icon-fBQNzGz-.js";import{t as u}from"./loader-circle-DYrBHP0C.js";import{t as d}from"./button-m-Eg43IZ.js";import{B as f,r as p}from"./index-CUZEShOB.js";import{n as m}from"./use-access-DbwD014U.js";import{n as h}from"./guard-B5vrll8Q.js";import{a as g,i as _,l as v,n as ne,r as re,t as ie}from"./kit-D226f5oO.js";import{t as y}from"./input-DhAlVvjJ.js";import{a as ae,i as oe,n as se,o as b,r as ce,t as x}from"./dialog-C80UddLn.js";import{a as S,c as C,i as w,n as T,o as E,r as D,s as O,t as k}from"./alert-dialog-C95lx8dr.js";import{a as A,i as j,n as M,r as N,t as P}from"./select-CjwHz5Zu.js";import{l as F,n as I,o as le}from"./teacher-teaching.functions-CavrlbeM.js";var L=a(n()),R=t();function z(){return(0,R.jsx)(h,{pageKey:`teacher_quizzes`,children:(0,R.jsx)(V,{})})}var B={title:``,questionsCount:`10`,attemptsCount:`0`,avgScore:`0`,status:`مسوّدة`};function V(){let t=i(),n=r(),{can:a}=m(),h=o(le),z=o(F),V=o(I),[H,U]=(0,L.useState)(!1),[W,ue]=(0,L.useState)(null),[G,K]=(0,L.useState)(B),[q,J]=(0,L.useState)(null),{data:de,isLoading:fe}=s({queryKey:[`teacher-quizzes`],queryFn:()=>h()}),Y=()=>n.invalidateQueries({queryKey:[`teacher-quizzes`]}),X=de??[],Z=(0,L.useMemo)(()=>{let e=X.reduce((e,t)=>e+t.questionsCount,0),t=X.reduce((e,t)=>e+t.attemptsCount,0),n=X.filter(e=>e.attemptsCount>0),r=n.length?Math.round(n.reduce((e,t)=>e+t.avgScore,0)/n.length):0;return{quizzes:X.length,totalQuestions:e,totalAttempts:t,avg:r}},[X]),Q=c({mutationFn:()=>z({data:{...G,id:W??void 0,questionsCount:Number(G.questionsCount)||1,attemptsCount:Number(G.attemptsCount)||0,avgScore:Number(G.avgScore)||0}}),onSuccess:()=>{Y(),U(!1),f.success(t(`تم الحفظ`,`Saved successfully`))},onError:n=>f.error(e(n,t(`تعذّر الحفظ`,`Failed to save`)))}),pe=c({mutationFn:e=>V({data:{id:e}}),onSuccess:()=>{Y(),J(null),f.success(t(`تم الحذف`,`Deleted successfully`))},onError:n=>f.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});function $(e){ue(e?.id??null),K(e?{title:e.title,questionsCount:String(e.questionsCount),attemptsCount:String(e.attemptsCount),avgScore:String(e.avgScore),status:e.status}:B),U(!0)}return(0,R.jsxs)(ie,{title:t(`الاختبارات`,`Quizzes`),icon:`ListChecks`,subtitle:t(p,`Your question bank and quizzes: MCQ, true/false and essay — auto-graded where possible.`),children:[(0,R.jsx)(v,{items:[{icon:`ListChecks`,label:t(`اختبارات`,`Quizzes`),value:String(Z.quizzes)},{icon:`HelpCircle`,label:t(`أسئلة في البنك`,`Questions in bank`),value:String(Z.totalQuestions)},{icon:`Users`,label:t(`محاولات هذا الأسبوع`,`Attempts this week`),value:String(Z.totalAttempts)},{icon:`Percent`,label:t(`متوسط النتائج`,`Average score`),value:`${Z.avg}%`}]}),(0,R.jsx)(g,{title:t(`اختباراتك`,`Your quizzes`),icon:`ListChecks`,action:a(`teacher_quizzes`,`show_add_form`)?(0,R.jsxs)(d,{size:`sm`,onClick:()=>$(null),children:[(0,R.jsx)(ee,{className:`size-4`}),t(`إنشاء اختبار`,`Create quiz`)]}):void 0,children:fe?(0,R.jsx)(`div`,{className:`flex justify-center py-8`,children:(0,R.jsx)(u,{className:`size-5 animate-spin text-primary`})}):X.length?(0,R.jsx)(re,{head:[t(`الاختبار`,`Quiz`),t(`الأسئلة`,`Questions`),t(`المحاولات`,`Attempts`),t(`الحالة`,`Status`),t(``,``)],rows:X.map(e=>[e.title,String(e.questionsCount),String(e.attemptsCount),(0,R.jsx)(ne,{tone:e.status===`نشط`?`success`:`muted`,children:t(e.status,e.status===`نشط`?`Live`:`Draft`)},e.id),(0,R.jsxs)(`div`,{className:`flex items-center justify-end gap-1`,children:[a(`teacher_quizzes`,`edit`)&&(0,R.jsx)(d,{size:`icon`,variant:`ghost`,onClick:()=>$(e),children:(0,R.jsx)(te,{className:`size-4`})}),a(`teacher_quizzes`,`delete`)&&(0,R.jsx)(d,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>J(e),children:(0,R.jsx)(l,{className:`size-4`})})]},`${e.id}-actions`)])}):(0,R.jsx)(_,{icon:`ListChecks`,text:t(`لا اختبارات بعد.`,`No quizzes yet.`)})}),(0,R.jsx)(x,{open:H,onOpenChange:U,children:(0,R.jsxs)(se,{className:`text-start`,children:[(0,R.jsx)(oe,{children:(0,R.jsx)(ae,{children:W?t(`تعديل اختبار`,`Edit quiz`):t(`إنشاء اختبار`,`Create quiz`)})}),(0,R.jsxs)(`div`,{className:`grid gap-4 sm:grid-cols-2`,children:[(0,R.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,R.jsx)(b,{htmlFor:`qz-title`,children:t(`اسم الاختبار`,`Quiz title`)}),(0,R.jsx)(y,{id:`qz-title`,value:G.title,onChange:e=>K(t=>({...t,title:e.target.value}))})]}),(0,R.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,R.jsx)(b,{htmlFor:`qz-q`,children:t(`عدد الأسئلة`,`Questions`)}),(0,R.jsx)(y,{id:`qz-q`,type:`number`,min:1,value:G.questionsCount,onChange:e=>K(t=>({...t,questionsCount:e.target.value}))})]}),(0,R.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,R.jsx)(b,{children:t(`الحالة`,`Status`)}),(0,R.jsxs)(P,{value:G.status,onValueChange:e=>K(t=>({...t,status:e})),children:[(0,R.jsx)(j,{children:(0,R.jsx)(A,{})}),(0,R.jsxs)(M,{children:[(0,R.jsx)(N,{value:`مسوّدة`,children:t(`مسوّدة`,`Draft`)}),(0,R.jsx)(N,{value:`نشط`,children:t(`نشط`,`Live`)})]})]})]}),(0,R.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,R.jsx)(b,{htmlFor:`qz-attempts`,children:t(`عدد المحاولات`,`Attempts`)}),(0,R.jsx)(y,{id:`qz-attempts`,type:`number`,min:0,value:G.attemptsCount,onChange:e=>K(t=>({...t,attemptsCount:e.target.value}))})]}),(0,R.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,R.jsx)(b,{htmlFor:`qz-avg`,children:t(`متوسط النتائج (%)`,`Average score (%)`)}),(0,R.jsx)(y,{id:`qz-avg`,type:`number`,min:0,max:100,value:G.avgScore,onChange:e=>K(t=>({...t,avgScore:e.target.value}))})]})]}),(0,R.jsxs)(ce,{className:`gap-2 sm:justify-start`,children:[(0,R.jsx)(d,{onClick:()=>Q.mutate(),disabled:Q.isPending||!G.title.trim(),children:t(`حفظ`,`Save`)}),(0,R.jsx)(d,{variant:`outline`,onClick:()=>U(!1),children:t(`إلغاء`,`Cancel`)})]})]})}),(0,R.jsx)(k,{open:!!q,onOpenChange:e=>!e&&J(null),children:(0,R.jsxs)(w,{className:`text-start`,children:[(0,R.jsxs)(O,{children:[(0,R.jsx)(C,{children:t(`حذف «${q?.title}»؟`,`Delete "${q?.title}"?`)}),(0,R.jsx)(S,{children:t(`لا يمكن التراجع عن هذا الإجراء.`,`This action cannot be undone.`)})]}),(0,R.jsxs)(E,{className:`gap-2 sm:justify-start`,children:[(0,R.jsx)(T,{onClick:()=>q&&pe.mutate(q.id),children:t(`حذف`,`Delete`)}),(0,R.jsx)(D,{children:t(`إلغاء`,`Cancel`)})]})]})})]})}export{z as component};
+import { C as e, R as t, ht as n, j as r, u as i, vt as a } from "./rbac-static-data-Cz2qa6wH.js";
+import { i as o, n as s } from "./auth-middleware-CmTSOr_x.js";
+import { t as c } from "./useMutation-CfRTvAO7.js";
+import { i as l, l as ee, u as te } from "./dynamic-icon-fBQNzGz-.js";
+import { t as u } from "./loader-circle-DYrBHP0C.js";
+import { t as d } from "./button-m-Eg43IZ.js";
+import { B as f, r as p } from "./index-CUZEShOB.js";
+import { n as m } from "./use-access-DbwD014U.js";
+import { n as h } from "./guard-B5vrll8Q.js";
+import { a as g, i as _, l as v, n as ne, r as re, t as ie } from "./kit-D226f5oO.js";
+import { t as y } from "./input-DhAlVvjJ.js";
+import { a as ae, i as oe, n as se, o as b, r as ce, t as x } from "./dialog-C80UddLn.js";
+import {
+  a as S,
+  c as C,
+  i as w,
+  n as T,
+  o as E,
+  r as D,
+  s as O,
+  t as k,
+} from "./alert-dialog-C95lx8dr.js";
+import { a as A, i as j, n as M, r as N, t as P } from "./select-CjwHz5Zu.js";
+import { l as F, n as I, o as le } from "./teacher-teaching.functions-CavrlbeM.js";
+var L = a(n()),
+  R = t();
+function z() {
+  return (0, R.jsx)(h, { pageKey: `teacher_quizzes`, children: (0, R.jsx)(V, {}) });
+}
+var B = { title: ``, questionsCount: `10`, attemptsCount: `0`, avgScore: `0`, status: `مسوّدة` };
+function V() {
+  let t = i(),
+    n = r(),
+    { can: a } = m(),
+    h = o(le),
+    z = o(F),
+    V = o(I),
+    [H, U] = (0, L.useState)(!1),
+    [W, ue] = (0, L.useState)(null),
+    [G, K] = (0, L.useState)(B),
+    [q, J] = (0, L.useState)(null),
+    { data: de, isLoading: fe } = s({ queryKey: [`teacher-quizzes`], queryFn: () => h() }),
+    Y = () => n.invalidateQueries({ queryKey: [`teacher-quizzes`] }),
+    X = de ?? [],
+    Z = (0, L.useMemo)(() => {
+      let e = X.reduce((e, t) => e + t.questionsCount, 0),
+        t = X.reduce((e, t) => e + t.attemptsCount, 0),
+        n = X.filter((e) => e.attemptsCount > 0),
+        r = n.length ? Math.round(n.reduce((e, t) => e + t.avgScore, 0) / n.length) : 0;
+      return { quizzes: X.length, totalQuestions: e, totalAttempts: t, avg: r };
+    }, [X]),
+    Q = c({
+      mutationFn: () =>
+        z({
+          data: {
+            ...G,
+            id: W ?? void 0,
+            questionsCount: Number(G.questionsCount) || 1,
+            attemptsCount: Number(G.attemptsCount) || 0,
+            avgScore: Number(G.avgScore) || 0,
+          },
+        }),
+      onSuccess: () => {
+        (Y(), U(!1), f.success(t(`تم الحفظ`, `Saved successfully`)));
+      },
+      onError: (n) => f.error(e(n, t(`تعذّر الحفظ`, `Failed to save`))),
+    }),
+    pe = c({
+      mutationFn: (e) => V({ data: { id: e } }),
+      onSuccess: () => {
+        (Y(), J(null), f.success(t(`تم الحذف`, `Deleted successfully`)));
+      },
+      onError: (n) => f.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  function $(e) {
+    (ue(e?.id ?? null),
+      K(
+        e
+          ? {
+              title: e.title,
+              questionsCount: String(e.questionsCount),
+              attemptsCount: String(e.attemptsCount),
+              avgScore: String(e.avgScore),
+              status: e.status,
+            }
+          : B,
+      ),
+      U(!0));
+  }
+  return (0, R.jsxs)(ie, {
+    title: t(`الاختبارات`, `Quizzes`),
+    icon: `ListChecks`,
+    subtitle: t(
+      p,
+      `Your question bank and quizzes: MCQ, true/false and essay — auto-graded where possible.`,
+    ),
+    children: [
+      (0, R.jsx)(v, {
+        items: [
+          { icon: `ListChecks`, label: t(`اختبارات`, `Quizzes`), value: String(Z.quizzes) },
+          {
+            icon: `HelpCircle`,
+            label: t(`أسئلة في البنك`, `Questions in bank`),
+            value: String(Z.totalQuestions),
+          },
+          {
+            icon: `Users`,
+            label: t(`محاولات هذا الأسبوع`, `Attempts this week`),
+            value: String(Z.totalAttempts),
+          },
+          { icon: `Percent`, label: t(`متوسط النتائج`, `Average score`), value: `${Z.avg}%` },
+        ],
+      }),
+      (0, R.jsx)(g, {
+        title: t(`اختباراتك`, `Your quizzes`),
+        icon: `ListChecks`,
+        action: a(`teacher_quizzes`, `show_add_form`)
+          ? (0, R.jsxs)(d, {
+              size: `sm`,
+              onClick: () => $(null),
+              children: [(0, R.jsx)(ee, { className: `size-4` }), t(`إنشاء اختبار`, `Create quiz`)],
+            })
+          : void 0,
+        children: fe
+          ? (0, R.jsx)(`div`, {
+              className: `flex justify-center py-8`,
+              children: (0, R.jsx)(u, { className: `size-5 animate-spin text-primary` }),
+            })
+          : X.length
+            ? (0, R.jsx)(re, {
+                head: [
+                  t(`الاختبار`, `Quiz`),
+                  t(`الأسئلة`, `Questions`),
+                  t(`المحاولات`, `Attempts`),
+                  t(`الحالة`, `Status`),
+                  t(``, ``),
+                ],
+                rows: X.map((e) => [
+                  e.title,
+                  String(e.questionsCount),
+                  String(e.attemptsCount),
+                  (0, R.jsx)(
+                    ne,
+                    {
+                      tone: e.status === `نشط` ? `success` : `muted`,
+                      children: t(e.status, e.status === `نشط` ? `Live` : `Draft`),
+                    },
+                    e.id,
+                  ),
+                  (0, R.jsxs)(
+                    `div`,
+                    {
+                      className: `flex items-center justify-end gap-1`,
+                      children: [
+                        a(`teacher_quizzes`, `edit`) &&
+                          (0, R.jsx)(d, {
+                            size: `icon`,
+                            variant: `ghost`,
+                            onClick: () => $(e),
+                            children: (0, R.jsx)(te, { className: `size-4` }),
+                          }),
+                        a(`teacher_quizzes`, `delete`) &&
+                          (0, R.jsx)(d, {
+                            size: `icon`,
+                            variant: `ghost`,
+                            className: `text-destructive`,
+                            onClick: () => J(e),
+                            children: (0, R.jsx)(l, { className: `size-4` }),
+                          }),
+                      ],
+                    },
+                    `${e.id}-actions`,
+                  ),
+                ]),
+              })
+            : (0, R.jsx)(_, { icon: `ListChecks`, text: t(`لا اختبارات بعد.`, `No quizzes yet.`) }),
+      }),
+      (0, R.jsx)(x, {
+        open: H,
+        onOpenChange: U,
+        children: (0, R.jsxs)(se, {
+          className: `text-start`,
+          children: [
+            (0, R.jsx)(oe, {
+              children: (0, R.jsx)(ae, {
+                children: W ? t(`تعديل اختبار`, `Edit quiz`) : t(`إنشاء اختبار`, `Create quiz`),
+              }),
+            }),
+            (0, R.jsxs)(`div`, {
+              className: `grid gap-4 sm:grid-cols-2`,
+              children: [
+                (0, R.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, R.jsx)(b, {
+                      htmlFor: `qz-title`,
+                      children: t(`اسم الاختبار`, `Quiz title`),
+                    }),
+                    (0, R.jsx)(y, {
+                      id: `qz-title`,
+                      value: G.title,
+                      onChange: (e) => K((t) => ({ ...t, title: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, R.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, R.jsx)(b, { htmlFor: `qz-q`, children: t(`عدد الأسئلة`, `Questions`) }),
+                    (0, R.jsx)(y, {
+                      id: `qz-q`,
+                      type: `number`,
+                      min: 1,
+                      value: G.questionsCount,
+                      onChange: (e) => K((t) => ({ ...t, questionsCount: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, R.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, R.jsx)(b, { children: t(`الحالة`, `Status`) }),
+                    (0, R.jsxs)(P, {
+                      value: G.status,
+                      onValueChange: (e) => K((t) => ({ ...t, status: e })),
+                      children: [
+                        (0, R.jsx)(j, { children: (0, R.jsx)(A, {}) }),
+                        (0, R.jsxs)(M, {
+                          children: [
+                            (0, R.jsx)(N, { value: `مسوّدة`, children: t(`مسوّدة`, `Draft`) }),
+                            (0, R.jsx)(N, { value: `نشط`, children: t(`نشط`, `Live`) }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                (0, R.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, R.jsx)(b, {
+                      htmlFor: `qz-attempts`,
+                      children: t(`عدد المحاولات`, `Attempts`),
+                    }),
+                    (0, R.jsx)(y, {
+                      id: `qz-attempts`,
+                      type: `number`,
+                      min: 0,
+                      value: G.attemptsCount,
+                      onChange: (e) => K((t) => ({ ...t, attemptsCount: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, R.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, R.jsx)(b, {
+                      htmlFor: `qz-avg`,
+                      children: t(`متوسط النتائج (%)`, `Average score (%)`),
+                    }),
+                    (0, R.jsx)(y, {
+                      id: `qz-avg`,
+                      type: `number`,
+                      min: 0,
+                      max: 100,
+                      value: G.avgScore,
+                      onChange: (e) => K((t) => ({ ...t, avgScore: e.target.value })),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, R.jsxs)(ce, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, R.jsx)(d, {
+                  onClick: () => Q.mutate(),
+                  disabled: Q.isPending || !G.title.trim(),
+                  children: t(`حفظ`, `Save`),
+                }),
+                (0, R.jsx)(d, {
+                  variant: `outline`,
+                  onClick: () => U(!1),
+                  children: t(`إلغاء`, `Cancel`),
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+      (0, R.jsx)(k, {
+        open: !!q,
+        onOpenChange: (e) => !e && J(null),
+        children: (0, R.jsxs)(w, {
+          className: `text-start`,
+          children: [
+            (0, R.jsxs)(O, {
+              children: [
+                (0, R.jsx)(C, { children: t(`حذف «${q?.title}»؟`, `Delete "${q?.title}"?`) }),
+                (0, R.jsx)(S, {
+                  children: t(`لا يمكن التراجع عن هذا الإجراء.`, `This action cannot be undone.`),
+                }),
+              ],
+            }),
+            (0, R.jsxs)(E, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, R.jsx)(T, {
+                  onClick: () => q && pe.mutate(q.id),
+                  children: t(`حذف`, `Delete`),
+                }),
+                (0, R.jsx)(D, { children: t(`إلغاء`, `Cancel`) }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+export { z as component };

@@ -1,1 +1,70 @@
-import{M as e,R as t,ht as n,k as r,vt as i}from"./rbac-static-data-Cz2qa6wH.js";import{t as a}from"./useNavigate-D8IP3eLF.js";import{t as o}from"./mail-check-Cp3b1Luz.js";import{B as s,F as c,P as l}from"./index-CUZEShOB.js";import{r as u}from"./types-BaQ7EMJK.js";import{n as d,t as f}from"./auth-shell-DzmMbYa2.js";var p=i(n()),m=t();function h(){let{t}=r(),n=a(),{email:i}=l.useSearch(),[h,g]=(0,p.useState)(i??``),[_,v]=(0,p.useState)(!1),[y,b]=(0,p.useState)(!1);(0,p.useEffect)(()=>{},[i]);async function x(){let e=u().trim().email().safeParse(h);if(!e.success){s.error(e.error.issues[0].message);return}b(!0),b(!1),s.error(`إعادة إرسال رابط التفعيل غير متاح حالياً — قيد الربط مع الباك اند الجديد.`)}return(0,m.jsxs)(d,{icon:(0,m.jsx)(o,{className:`size-5`}),title:t(`authPages.verify.h1`),subtitle:t(_?`authPages.verify.verified`:`authPages.verify.sub`),children:[_?(0,m.jsx)(`button`,{type:`button`,onClick:async()=>n({href:await c()??`/dashboard`,replace:!0}),className:`inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90`,children:t(`authPages.verify.goDashboard`)}):(0,m.jsxs)(`div`,{className:`space-y-4`,children:[(0,m.jsx)(f,{id:`email`,label:t(`authPages.verify.emailPlaceholder`),type:`email`,value:h,onChange:g,autoComplete:`email`}),(0,m.jsx)(`button`,{type:`button`,onClick:x,disabled:y,className:`w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60`,children:t(y?`common.loading`:`authPages.verify.resend`)})]}),(0,m.jsx)(`p`,{className:`mt-6 text-center text-xs text-muted-foreground`,children:(0,m.jsx)(e,{to:`/login`,className:`font-bold text-primary hover:underline`,children:t(`authPages.verify.back`)})})]})}export{h as component};
+import { M as e, R as t, ht as n, k as r, vt as i } from "./rbac-static-data-Cz2qa6wH.js";
+import { t as a } from "./useNavigate-D8IP3eLF.js";
+import { t as o } from "./mail-check-Cp3b1Luz.js";
+import { B as s, F as c, P as l } from "./index-CUZEShOB.js";
+import { r as u } from "./types-BaQ7EMJK.js";
+import { n as d, t as f } from "./auth-shell-DzmMbYa2.js";
+var p = i(n()),
+  m = t();
+function h() {
+  let { t } = r(),
+    n = a(),
+    { email: i } = l.useSearch(),
+    [h, g] = (0, p.useState)(i ?? ``),
+    [_, v] = (0, p.useState)(!1),
+    [y, b] = (0, p.useState)(!1);
+  (0, p.useEffect)(() => {}, [i]);
+  async function x() {
+    let e = u().trim().email().safeParse(h);
+    if (!e.success) {
+      s.error(e.error.issues[0].message);
+      return;
+    }
+    (b(!0),
+      b(!1),
+      s.error(`إعادة إرسال رابط التفعيل غير متاح حالياً — قيد الربط مع الباك اند الجديد.`));
+  }
+  return (0, m.jsxs)(d, {
+    icon: (0, m.jsx)(o, { className: `size-5` }),
+    title: t(`authPages.verify.h1`),
+    subtitle: t(_ ? `authPages.verify.verified` : `authPages.verify.sub`),
+    children: [
+      _
+        ? (0, m.jsx)(`button`, {
+            type: `button`,
+            onClick: async () => n({ href: (await c()) ?? `/dashboard`, replace: !0 }),
+            className: `inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90`,
+            children: t(`authPages.verify.goDashboard`),
+          })
+        : (0, m.jsxs)(`div`, {
+            className: `space-y-4`,
+            children: [
+              (0, m.jsx)(f, {
+                id: `email`,
+                label: t(`authPages.verify.emailPlaceholder`),
+                type: `email`,
+                value: h,
+                onChange: g,
+                autoComplete: `email`,
+              }),
+              (0, m.jsx)(`button`, {
+                type: `button`,
+                onClick: x,
+                disabled: y,
+                className: `w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60`,
+                children: t(y ? `common.loading` : `authPages.verify.resend`),
+              }),
+            ],
+          }),
+      (0, m.jsx)(`p`, {
+        className: `mt-6 text-center text-xs text-muted-foreground`,
+        children: (0, m.jsx)(e, {
+          to: `/login`,
+          className: `font-bold text-primary hover:underline`,
+          children: t(`authPages.verify.back`),
+        }),
+      }),
+    ],
+  });
+}
+export { h as component };

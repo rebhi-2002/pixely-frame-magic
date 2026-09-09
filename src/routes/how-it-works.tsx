@@ -46,9 +46,7 @@ function HowItWorks() {
                 <span
                   className={cn(
                     "relative z-10 flex size-12 shrink-0 items-center justify-center rounded-xl font-display text-xl font-bold",
-                    i === 0
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-primary/12 text-primary",
+                    i === 0 ? "bg-primary text-primary-foreground" : "bg-primary/12 text-primary",
                   )}
                 >
                   {i + 1}

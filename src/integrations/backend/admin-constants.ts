@@ -73,7 +73,11 @@ export async function loadBackendConstantParents(): Promise<ConstantParentOption
 
 export async function saveBackendConstant(form: ConstantForm): Promise<void> {
   if (!form.name.trim()) throwBilingual("الاسم مطلوب", "Name is required");
-  if (form.name.trim().length < 3) throwBilingual("الاسم قصير جدًا (3 أحرف على الأقل)", "Name is too short (at least 3 characters)");
+  if (form.name.trim().length < 3)
+    throwBilingual(
+      "الاسم قصير جدًا (3 أحرف على الأقل)",
+      "Name is too short (at least 3 characters)",
+    );
 
   // الباك اند بيرفض الطلب لو الثابت اختار نفسه أبًا له — فحص وقائي بالفرونت
   // قبل الإرسال، بالإضافة لأي تحقق سيرفري لاحقًا.

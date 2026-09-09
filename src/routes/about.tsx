@@ -73,11 +73,7 @@ function AboutPage() {
               return (
                 <Reveal key={member.photo} delay={i * 0.06}>
                   <div className="shadow-elevation-1 flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
-                    <PhotoAvatar
-                      src={member.photo}
-                      icon={member.icon}
-                      className="size-14"
-                    />
+                    <PhotoAvatar src={member.photo} icon={member.icon} className="size-14" />
                     <div>
                       <h3 className="font-bold text-foreground">{m.t}</h3>
                       <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>

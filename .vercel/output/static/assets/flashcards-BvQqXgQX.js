@@ -1,1 +1,279 @@
-import{C as e,R as t,ht as n,j as r,u as i,vt as a}from"./rbac-static-data-Cz2qa6wH.js";import{i as o,n as s}from"./auth-middleware-CmTSOr_x.js";import{t as c}from"./useMutation-CfRTvAO7.js";import{i as l,l as u,u as ee}from"./dynamic-icon-fBQNzGz-.js";import{t as d}from"./loader-circle-DYrBHP0C.js";import{t as f}from"./button-m-Eg43IZ.js";import{B as p,O as m}from"./index-CUZEShOB.js";import{n as h}from"./use-access-DbwD014U.js";import{n as g}from"./guard-B5vrll8Q.js";import{a as _,c as v,i as y,l as b,t as x}from"./kit-D226f5oO.js";import{t as S}from"./input-DhAlVvjJ.js";import{a as te,i as ne,n as re,o as C,r as ie,t as w}from"./dialog-C80UddLn.js";import{a as T,c as E,i as D,n as O,o as k,r as A,s as j,t as M}from"./alert-dialog-C95lx8dr.js";import{f as N,n as P,s as F}from"./student-learning.functions-DKypWX69.js";var I=a(n()),L=t();function R(){return(0,L.jsx)(g,{pageKey:`student_flashcards`,children:(0,L.jsx)(B,{})})}var z={deckName:``,totalCards:`0`,dueCards:`0`,masteredCards:`0`};function B(){let t=i(),n=r(),{can:a}=h(),g=o(F),R=o(N),B=o(P),[V,H]=(0,I.useState)(!1),[U,W]=(0,I.useState)(null),[G,K]=(0,I.useState)(z),[q,J]=(0,I.useState)(null),{data:Y,isLoading:ae}=s({queryKey:[`flashcard-decks`],queryFn:()=>g()}),X=()=>n.invalidateQueries({queryKey:[`flashcard-decks`]}),Z=(0,I.useMemo)(()=>{let e=Y??[],t=e.reduce((e,t)=>e+t.dueCards,0),n=e.reduce((e,t)=>e+t.masteredCards,0),r=e.reduce((e,t)=>e+t.totalCards,0);return{due:t,mastered:n,accuracy:r>0?Math.round(n/r*100):0}},[Y]),Q=c({mutationFn:()=>R({data:{...G,id:U??void 0,totalCards:Number(G.totalCards)||0,dueCards:Number(G.dueCards)||0,masteredCards:Number(G.masteredCards)||0}}),onSuccess:()=>{X(),H(!1),p.success(t(`تم الحفظ`,`Saved successfully`))},onError:n=>p.error(e(n,t(`تعذّر الحفظ`,`Failed to save`)))}),oe=c({mutationFn:e=>B({data:{id:e}}),onSuccess:()=>{X(),J(null),p.success(t(`تم الحذف`,`Deleted successfully`))},onError:n=>p.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});function $(e){W(e?.id??null),K(e?{deckName:e.deckName,totalCards:String(e.totalCards),dueCards:String(e.dueCards),masteredCards:String(e.masteredCards)}:z),H(!0)}return(0,L.jsxs)(x,{title:t(`البطاقات`,`Flashcards`),icon:`Layers`,subtitle:t(m,`Spaced repetition: each card returns exactly when you're about to forget it.`),children:[(0,L.jsx)(b,{items:[{icon:`Layers`,label:t(`بطاقات اليوم`,`Due today`),value:String(Z.due)},{icon:`CheckCircle2`,label:t(`بطاقات مُتقنة`,`Mastered`),value:String(Z.mastered)},{icon:`Percent`,label:t(`دقّة التذكّر`,`Recall accuracy`),value:`${Z.accuracy}%`},{icon:`Library`,label:t(`عدد المجموعات`,`Decks`),value:String(Y?.length??0)}]}),(0,L.jsx)(_,{title:t(`مجموعاتك`,`Your decks`),icon:`Layers`,action:a(`student_flashcards`,`show_add_form`)?(0,L.jsxs)(f,{size:`sm`,onClick:()=>$(null),children:[(0,L.jsx)(u,{className:`size-4`}),t(`إضافة مجموعة`,`Add deck`)]}):void 0,children:ae?(0,L.jsx)(`div`,{className:`flex justify-center py-8`,children:(0,L.jsx)(d,{className:`size-5 animate-spin text-primary`})}):Y?.length?(0,L.jsx)(v,{rows:Y.map(e=>({title:e.deckName,meta:t(`${e.totalCards} بطاقة · ${e.dueCards} مستحقة`,`${e.totalCards} cards · ${e.dueCards} due`),value:t(`ابدأ`,`Start`),tone:`primary`,actions:(0,L.jsxs)(`div`,{className:`flex items-center gap-1`,children:[a(`student_flashcards`,`edit`)&&(0,L.jsx)(f,{size:`icon`,variant:`ghost`,onClick:()=>$(e),children:(0,L.jsx)(ee,{className:`size-4`})}),a(`student_flashcards`,`delete`)&&(0,L.jsx)(f,{size:`icon`,variant:`ghost`,className:`text-destructive`,onClick:()=>J(e),children:(0,L.jsx)(l,{className:`size-4`})})]})}))}):(0,L.jsx)(y,{icon:`Layers`,text:t(`لا مجموعات بعد.`,`No decks yet.`)})}),(0,L.jsx)(w,{open:V,onOpenChange:H,children:(0,L.jsxs)(re,{className:`text-start`,children:[(0,L.jsx)(ne,{children:(0,L.jsx)(te,{children:U?t(`تعديل مجموعة`,`Edit deck`):t(`إضافة مجموعة`,`Add deck`)})}),(0,L.jsxs)(`div`,{className:`grid gap-4 sm:grid-cols-2`,children:[(0,L.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,L.jsx)(C,{htmlFor:`deck-name`,children:t(`اسم المجموعة`,`Deck name`)}),(0,L.jsx)(S,{id:`deck-name`,value:G.deckName,onChange:e=>K(t=>({...t,deckName:e.target.value}))})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,L.jsx)(C,{htmlFor:`deck-total`,children:t(`إجمالي البطاقات`,`Total cards`)}),(0,L.jsx)(S,{id:`deck-total`,type:`number`,min:0,value:G.totalCards,onChange:e=>K(t=>({...t,totalCards:e.target.value}))})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,L.jsx)(C,{htmlFor:`deck-due`,children:t(`مستحقة اليوم`,`Due today`)}),(0,L.jsx)(S,{id:`deck-due`,type:`number`,min:0,value:G.dueCards,onChange:e=>K(t=>({...t,dueCards:e.target.value}))})]}),(0,L.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,L.jsx)(C,{htmlFor:`deck-mastered`,children:t(`بطاقات مُتقنة`,`Mastered cards`)}),(0,L.jsx)(S,{id:`deck-mastered`,type:`number`,min:0,value:G.masteredCards,onChange:e=>K(t=>({...t,masteredCards:e.target.value}))})]})]}),(0,L.jsxs)(ie,{className:`gap-2 sm:justify-start`,children:[(0,L.jsx)(f,{onClick:()=>Q.mutate(),disabled:Q.isPending||!G.deckName.trim(),children:t(`حفظ`,`Save`)}),(0,L.jsx)(f,{variant:`outline`,onClick:()=>H(!1),children:t(`إلغاء`,`Cancel`)})]})]})}),(0,L.jsx)(M,{open:!!q,onOpenChange:e=>!e&&J(null),children:(0,L.jsxs)(D,{className:`text-start`,children:[(0,L.jsxs)(j,{children:[(0,L.jsx)(E,{children:t(`حذف «${q?.deckName}»؟`,`Delete "${q?.deckName}"?`)}),(0,L.jsx)(T,{children:t(`لا يمكن التراجع عن هذا الإجراء.`,`This action cannot be undone.`)})]}),(0,L.jsxs)(k,{className:`gap-2 sm:justify-start`,children:[(0,L.jsx)(O,{onClick:()=>q&&oe.mutate(q.id),children:t(`حذف`,`Delete`)}),(0,L.jsx)(A,{children:t(`إلغاء`,`Cancel`)})]})]})})]})}export{R as component};
+import { C as e, R as t, ht as n, j as r, u as i, vt as a } from "./rbac-static-data-Cz2qa6wH.js";
+import { i as o, n as s } from "./auth-middleware-CmTSOr_x.js";
+import { t as c } from "./useMutation-CfRTvAO7.js";
+import { i as l, l as u, u as ee } from "./dynamic-icon-fBQNzGz-.js";
+import { t as d } from "./loader-circle-DYrBHP0C.js";
+import { t as f } from "./button-m-Eg43IZ.js";
+import { B as p, O as m } from "./index-CUZEShOB.js";
+import { n as h } from "./use-access-DbwD014U.js";
+import { n as g } from "./guard-B5vrll8Q.js";
+import { a as _, c as v, i as y, l as b, t as x } from "./kit-D226f5oO.js";
+import { t as S } from "./input-DhAlVvjJ.js";
+import { a as te, i as ne, n as re, o as C, r as ie, t as w } from "./dialog-C80UddLn.js";
+import {
+  a as T,
+  c as E,
+  i as D,
+  n as O,
+  o as k,
+  r as A,
+  s as j,
+  t as M,
+} from "./alert-dialog-C95lx8dr.js";
+import { f as N, n as P, s as F } from "./student-learning.functions-DKypWX69.js";
+var I = a(n()),
+  L = t();
+function R() {
+  return (0, L.jsx)(g, { pageKey: `student_flashcards`, children: (0, L.jsx)(B, {}) });
+}
+var z = { deckName: ``, totalCards: `0`, dueCards: `0`, masteredCards: `0` };
+function B() {
+  let t = i(),
+    n = r(),
+    { can: a } = h(),
+    g = o(F),
+    R = o(N),
+    B = o(P),
+    [V, H] = (0, I.useState)(!1),
+    [U, W] = (0, I.useState)(null),
+    [G, K] = (0, I.useState)(z),
+    [q, J] = (0, I.useState)(null),
+    { data: Y, isLoading: ae } = s({ queryKey: [`flashcard-decks`], queryFn: () => g() }),
+    X = () => n.invalidateQueries({ queryKey: [`flashcard-decks`] }),
+    Z = (0, I.useMemo)(() => {
+      let e = Y ?? [],
+        t = e.reduce((e, t) => e + t.dueCards, 0),
+        n = e.reduce((e, t) => e + t.masteredCards, 0),
+        r = e.reduce((e, t) => e + t.totalCards, 0);
+      return { due: t, mastered: n, accuracy: r > 0 ? Math.round((n / r) * 100) : 0 };
+    }, [Y]),
+    Q = c({
+      mutationFn: () =>
+        R({
+          data: {
+            ...G,
+            id: U ?? void 0,
+            totalCards: Number(G.totalCards) || 0,
+            dueCards: Number(G.dueCards) || 0,
+            masteredCards: Number(G.masteredCards) || 0,
+          },
+        }),
+      onSuccess: () => {
+        (X(), H(!1), p.success(t(`تم الحفظ`, `Saved successfully`)));
+      },
+      onError: (n) => p.error(e(n, t(`تعذّر الحفظ`, `Failed to save`))),
+    }),
+    oe = c({
+      mutationFn: (e) => B({ data: { id: e } }),
+      onSuccess: () => {
+        (X(), J(null), p.success(t(`تم الحذف`, `Deleted successfully`)));
+      },
+      onError: (n) => p.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  function $(e) {
+    (W(e?.id ?? null),
+      K(
+        e
+          ? {
+              deckName: e.deckName,
+              totalCards: String(e.totalCards),
+              dueCards: String(e.dueCards),
+              masteredCards: String(e.masteredCards),
+            }
+          : z,
+      ),
+      H(!0));
+  }
+  return (0, L.jsxs)(x, {
+    title: t(`البطاقات`, `Flashcards`),
+    icon: `Layers`,
+    subtitle: t(m, `Spaced repetition: each card returns exactly when you're about to forget it.`),
+    children: [
+      (0, L.jsx)(b, {
+        items: [
+          { icon: `Layers`, label: t(`بطاقات اليوم`, `Due today`), value: String(Z.due) },
+          {
+            icon: `CheckCircle2`,
+            label: t(`بطاقات مُتقنة`, `Mastered`),
+            value: String(Z.mastered),
+          },
+          { icon: `Percent`, label: t(`دقّة التذكّر`, `Recall accuracy`), value: `${Z.accuracy}%` },
+          { icon: `Library`, label: t(`عدد المجموعات`, `Decks`), value: String(Y?.length ?? 0) },
+        ],
+      }),
+      (0, L.jsx)(_, {
+        title: t(`مجموعاتك`, `Your decks`),
+        icon: `Layers`,
+        action: a(`student_flashcards`, `show_add_form`)
+          ? (0, L.jsxs)(f, {
+              size: `sm`,
+              onClick: () => $(null),
+              children: [(0, L.jsx)(u, { className: `size-4` }), t(`إضافة مجموعة`, `Add deck`)],
+            })
+          : void 0,
+        children: ae
+          ? (0, L.jsx)(`div`, {
+              className: `flex justify-center py-8`,
+              children: (0, L.jsx)(d, { className: `size-5 animate-spin text-primary` }),
+            })
+          : Y?.length
+            ? (0, L.jsx)(v, {
+                rows: Y.map((e) => ({
+                  title: e.deckName,
+                  meta: t(
+                    `${e.totalCards} بطاقة · ${e.dueCards} مستحقة`,
+                    `${e.totalCards} cards · ${e.dueCards} due`,
+                  ),
+                  value: t(`ابدأ`, `Start`),
+                  tone: `primary`,
+                  actions: (0, L.jsxs)(`div`, {
+                    className: `flex items-center gap-1`,
+                    children: [
+                      a(`student_flashcards`, `edit`) &&
+                        (0, L.jsx)(f, {
+                          size: `icon`,
+                          variant: `ghost`,
+                          onClick: () => $(e),
+                          children: (0, L.jsx)(ee, { className: `size-4` }),
+                        }),
+                      a(`student_flashcards`, `delete`) &&
+                        (0, L.jsx)(f, {
+                          size: `icon`,
+                          variant: `ghost`,
+                          className: `text-destructive`,
+                          onClick: () => J(e),
+                          children: (0, L.jsx)(l, { className: `size-4` }),
+                        }),
+                    ],
+                  }),
+                })),
+              })
+            : (0, L.jsx)(y, { icon: `Layers`, text: t(`لا مجموعات بعد.`, `No decks yet.`) }),
+      }),
+      (0, L.jsx)(w, {
+        open: V,
+        onOpenChange: H,
+        children: (0, L.jsxs)(re, {
+          className: `text-start`,
+          children: [
+            (0, L.jsx)(ne, {
+              children: (0, L.jsx)(te, {
+                children: U ? t(`تعديل مجموعة`, `Edit deck`) : t(`إضافة مجموعة`, `Add deck`),
+              }),
+            }),
+            (0, L.jsxs)(`div`, {
+              className: `grid gap-4 sm:grid-cols-2`,
+              children: [
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, L.jsx)(C, {
+                      htmlFor: `deck-name`,
+                      children: t(`اسم المجموعة`, `Deck name`),
+                    }),
+                    (0, L.jsx)(S, {
+                      id: `deck-name`,
+                      value: G.deckName,
+                      onChange: (e) => K((t) => ({ ...t, deckName: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, L.jsx)(C, {
+                      htmlFor: `deck-total`,
+                      children: t(`إجمالي البطاقات`, `Total cards`),
+                    }),
+                    (0, L.jsx)(S, {
+                      id: `deck-total`,
+                      type: `number`,
+                      min: 0,
+                      value: G.totalCards,
+                      onChange: (e) => K((t) => ({ ...t, totalCards: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, L.jsx)(C, {
+                      htmlFor: `deck-due`,
+                      children: t(`مستحقة اليوم`, `Due today`),
+                    }),
+                    (0, L.jsx)(S, {
+                      id: `deck-due`,
+                      type: `number`,
+                      min: 0,
+                      value: G.dueCards,
+                      onChange: (e) => K((t) => ({ ...t, dueCards: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, L.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, L.jsx)(C, {
+                      htmlFor: `deck-mastered`,
+                      children: t(`بطاقات مُتقنة`, `Mastered cards`),
+                    }),
+                    (0, L.jsx)(S, {
+                      id: `deck-mastered`,
+                      type: `number`,
+                      min: 0,
+                      value: G.masteredCards,
+                      onChange: (e) => K((t) => ({ ...t, masteredCards: e.target.value })),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, L.jsxs)(ie, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, L.jsx)(f, {
+                  onClick: () => Q.mutate(),
+                  disabled: Q.isPending || !G.deckName.trim(),
+                  children: t(`حفظ`, `Save`),
+                }),
+                (0, L.jsx)(f, {
+                  variant: `outline`,
+                  onClick: () => H(!1),
+                  children: t(`إلغاء`, `Cancel`),
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+      (0, L.jsx)(M, {
+        open: !!q,
+        onOpenChange: (e) => !e && J(null),
+        children: (0, L.jsxs)(D, {
+          className: `text-start`,
+          children: [
+            (0, L.jsxs)(j, {
+              children: [
+                (0, L.jsx)(E, { children: t(`حذف «${q?.deckName}»؟`, `Delete "${q?.deckName}"?`) }),
+                (0, L.jsx)(T, {
+                  children: t(`لا يمكن التراجع عن هذا الإجراء.`, `This action cannot be undone.`),
+                }),
+              ],
+            }),
+            (0, L.jsxs)(k, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, L.jsx)(O, {
+                  onClick: () => q && oe.mutate(q.id),
+                  children: t(`حذف`, `Delete`),
+                }),
+                (0, L.jsx)(A, { children: t(`إلغاء`, `Cancel`) }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+export { R as component };

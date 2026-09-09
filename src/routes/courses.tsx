@@ -43,7 +43,9 @@ function CourseCover({ src, subject, accent }: { src: string; subject: string; a
   if (failed) {
     return (
       <div className={`flex h-28 w-full items-center justify-center ${accent}/15`}>
-        <span className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}>
+        <span
+          className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}
+        >
           {subject.charAt(0)}
         </span>
       </div>

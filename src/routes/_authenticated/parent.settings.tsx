@@ -101,8 +101,7 @@ function Body() {
       setChildForm({ childName: "", gradeLabel: "" });
       toast.success(bi("تم الربط", "Linked successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الربط", "Failed to link"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الربط", "Failed to link"))),
   });
 
   const unlinkMutation = useMutation({
@@ -112,8 +111,7 @@ function Body() {
       setPendingUnlink(null);
       toast.success(bi("تم فك الربط", "Unlinked successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر فك الربط", "Failed to unlink"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر فك الربط", "Failed to unlink"))),
   });
 
   const prefsMutation = useMutation({
@@ -122,8 +120,7 @@ function Body() {
       queryClient.invalidateQueries({ queryKey: ["parent-notification-prefs"] });
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   return (

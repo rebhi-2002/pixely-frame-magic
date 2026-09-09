@@ -103,8 +103,7 @@ export function PaymentsPage() {
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const refundMutation = useMutation({
@@ -116,8 +115,7 @@ export function PaymentsPage() {
       invalidate();
       toast.success(bi("تم استرداد العملية", "Payment refunded"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
@@ -127,8 +125,7 @@ export function PaymentsPage() {
       setPendingDelete(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: PaymentRow | null) {

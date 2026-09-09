@@ -101,8 +101,7 @@ export function CourseCatalogPage() {
       setOpen(false);
       toast.success(bi("تم الحفظ", "Saved successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
   });
 
   const deleteMutation = useMutation({
@@ -112,8 +111,7 @@ export function CourseCatalogPage() {
       setPendingDelete(null);
       toast.success(bi("تم الحذف", "Deleted successfully"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   function openDialog(row: PublicCourseRow | null) {
@@ -252,7 +250,9 @@ export function CourseCatalogPage() {
               />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <Label htmlFor="crs-desc-ar">{bi("وصف قصير (عربي)", "Short description (Arabic)")}</Label>
+              <Label htmlFor="crs-desc-ar">
+                {bi("وصف قصير (عربي)", "Short description (Arabic)")}
+              </Label>
               <Input
                 id="crs-desc-ar"
                 value={form.descriptionAr}
@@ -368,7 +368,9 @@ export function CourseCatalogPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="crs-students">{bi("عدد الطلاب المشتركين", "Enrolled students")}</Label>
+              <Label htmlFor="crs-students">
+                {bi("عدد الطلاب المشتركين", "Enrolled students")}
+              </Label>
               <Input
                 id="crs-students"
                 type="number"

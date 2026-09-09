@@ -1,1 +1,440 @@
-import{C as e,R as t,ht as n,j as r,u as ee,vt as i}from"./rbac-static-data-Cz2qa6wH.js";import{i as a,n as te}from"./auth-middleware-CmTSOr_x.js";import{t as o}from"./useMutation-CfRTvAO7.js";import{i as s,l as ne,u as re}from"./dynamic-icon-fBQNzGz-.js";import{t as ie}from"./check-CJTwoqRt.js";import{t as ae}from"./loader-circle-DYrBHP0C.js";import{t as c}from"./button-m-Eg43IZ.js";import{t as oe}from"./search-CKHPlqGH.js";import{B as l}from"./index-CUZEShOB.js";import{n as u}from"./use-access-DbwD014U.js";import{n as d}from"./guard-B5vrll8Q.js";import{n as se,t as f}from"./page-header-D2zc6ZVs.js";import{t as p}from"./input-DhAlVvjJ.js";import{a as ce,i as le,n as ue,o as m,r as h,t as g}from"./dialog-C80UddLn.js";import{a as _,c as v,i as y,n as b,o as x,r as S,s as de,t as fe}from"./alert-dialog-C95lx8dr.js";import{a as C,i as w,n as T,r as E,t as D}from"./select-CjwHz5Zu.js";import{i as pe,s as me,t as he}from"./admin-moderation.functions-CoUERKIG.js";var O=i(n()),k=t(),A=[`عالية`,`متوسطة`,`منخفضة`],j=[`مفتوح`,`مغلق`,`مؤجل`],M={عالية:[`عالية`,`High`],متوسطة:[`متوسطة`,`Medium`],منخفضة:[`منخفضة`,`Low`]},N={عالية:`danger`,متوسطة:`primary`,منخفضة:`muted`},P={مفتوح:[`مفتوح`,`Open`],مغلق:[`مغلق`,`Closed`],مؤجل:[`مؤجل`,`Deferred`]},F={community:``,reason:``,priority:`متوسطة`,status:`مفتوح`};function I(){let t=ee(),n=r(),{can:i}=u(),d=a(pe),I=a(me),z=a(he),[B,ge]=(0,O.useState)(``),[V,_e]=(0,O.useState)(`all`),[H,ve]=(0,O.useState)(`all`),[ye,U]=(0,O.useState)(!1),[W,be]=(0,O.useState)(null),[G,K]=(0,O.useState)(F),[q,J]=(0,O.useState)(null),{data:Y,isLoading:xe}=te({queryKey:[`community-reports`],queryFn:()=>d()}),X=(0,O.useMemo)(()=>(Y??[]).filter(e=>{if(V!==`all`&&e.status!==V||H!==`all`&&e.priority!==H)return!1;if(B.trim()){let t=B.trim().toLowerCase();if(!`${e.community} ${e.reason} ${e.code}`.toLowerCase().includes(t))return!1}return!0}),[Y,V,H,B]),Z=()=>n.invalidateQueries({queryKey:[`community-reports`]}),Q=o({mutationFn:()=>I({data:{...G,id:W??void 0}}),onSuccess:()=>{Z(),U(!1),l.success(t(`تم الحفظ`,`Saved successfully`))},onError:n=>l.error(e(n,t(`تعذّر الحفظ`,`Failed to save`)))}),Se=o({mutationFn:e=>I({data:{id:e.id,community:e.community,reason:e.reason,priority:e.priority,status:`مغلق`}}),onSuccess:()=>{Z(),l.success(t(`تم إغلاق البلاغ`,`Report closed`))},onError:n=>l.error(e(n,t(`تعذّر التحديث`,`Failed to update`)))}),Ce=o({mutationFn:e=>z({data:{id:e}}),onSuccess:()=>{Z(),J(null),l.success(t(`تم الحذف`,`Deleted successfully`))},onError:n=>l.error(e(n,t(`تعذّر الحذف`,`Failed to delete`)))});function $(e){be(e?.id??null),K(e?{community:e.community,reason:e.reason,priority:e.priority,status:e.status}:F),U(!0)}return(0,k.jsxs)(`div`,{children:[(0,k.jsx)(f,{title:t(`بلاغات المجتمع`,`Community reports`),icon:`Flag`}),(0,k.jsxs)(`div`,{className:`p-5`,children:[(0,k.jsxs)(se,{children:[(0,k.jsxs)(`div`,{className:`relative min-w-56 flex-1`,children:[(0,k.jsx)(oe,{className:`pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground`}),(0,k.jsx)(p,{placeholder:t(`بحث بالمجتمع أو السبب أو الرقم`,`Search by community, reason, or ID`),value:B,onChange:e=>ge(e.target.value),className:`ps-9`})]}),(0,k.jsx)(L,{value:H,onChange:ve,placeholder:t(`الأولوية`,`Priority`),options:[{value:`all`,label:t(`كل الأولويات`,`All priorities`)},...A.map(e=>({value:e,label:t(...M[e])}))]}),(0,k.jsx)(L,{value:V,onChange:_e,placeholder:t(`الحالة`,`Status`),options:[{value:`all`,label:t(`كل الحالات`,`All statuses`)},...j.map(e=>({value:e,label:t(...P[e])}))]}),i(`admin_community_reports`,`show_add_form`)&&(0,k.jsxs)(c,{className:`ms-auto`,onClick:()=>$(null),children:[(0,k.jsx)(ne,{className:`size-4`}),t(`إضافة بلاغ`,`Add report`)]})]}),(0,k.jsx)(`div`,{className:`mt-4 overflow-x-auto rounded-2xl bg-card`,children:xe?(0,k.jsx)(`div`,{className:`flex justify-center p-10`,children:(0,k.jsx)(ae,{className:`size-5 animate-spin text-primary`})}):(0,k.jsxs)(`table`,{className:`w-full min-w-3xl text-start text-sm`,children:[(0,k.jsx)(`thead`,{children:(0,k.jsxs)(`tr`,{className:`border-b border-border text-xs text-muted-foreground`,children:[(0,k.jsx)(`th`,{className:`w-24 px-4 py-3 font-semibold`,children:t(`الرقم`,`ID`)}),(0,k.jsx)(`th`,{className:`px-4 py-3 font-semibold`,children:t(`المجتمع`,`Community`)}),(0,k.jsx)(`th`,{className:`px-4 py-3 font-semibold`,children:t(`السبب`,`Reason`)}),(0,k.jsx)(`th`,{className:`px-4 py-3 font-semibold`,children:t(`الأولوية`,`Priority`)}),(0,k.jsx)(`th`,{className:`px-4 py-3 font-semibold`,children:t(`الحالة`,`Status`)}),(0,k.jsx)(`th`,{className:`w-36 px-4 py-3 font-semibold`,children:t(`إجراءات`,`Actions`)})]})}),(0,k.jsxs)(`tbody`,{children:[X.map(e=>(0,k.jsxs)(`tr`,{className:`border-b border-border/60 last:border-0`,children:[(0,k.jsx)(`td`,{className:`px-4 py-3 font-mono text-xs text-muted-foreground`,children:e.code}),(0,k.jsx)(`td`,{className:`px-4 py-3 font-semibold text-foreground`,children:e.community}),(0,k.jsx)(`td`,{className:`px-4 py-3 text-muted-foreground`,children:e.reason}),(0,k.jsx)(`td`,{className:`px-4 py-3`,children:(0,k.jsx)(R,{tone:N[e.priority],children:t(...M[e.priority])})}),(0,k.jsx)(`td`,{className:`px-4 py-3`,children:(0,k.jsx)(R,{tone:e.status===`مغلق`?`success`:e.status===`مفتوح`?`danger`:`muted`,children:t(...P[e.status])})}),(0,k.jsx)(`td`,{className:`px-4 py-3`,children:(0,k.jsxs)(`div`,{className:`flex items-center gap-1`,children:[i(`admin_community_reports`,`edit`)&&e.status!==`مغلق`&&(0,k.jsx)(c,{size:`icon`,variant:`ghost`,title:t(`إغلاق البلاغ`,`Close report`),className:`text-success`,onClick:()=>Se.mutate(e),children:(0,k.jsx)(ie,{className:`size-4`})}),i(`admin_community_reports`,`edit`)&&(0,k.jsx)(c,{size:`icon`,variant:`ghost`,title:t(`تعديل`,`Edit`),onClick:()=>$(e),children:(0,k.jsx)(re,{className:`size-4`})}),i(`admin_community_reports`,`delete`)&&(0,k.jsx)(c,{size:`icon`,variant:`ghost`,title:t(`حذف`,`Delete`),className:`text-destructive`,onClick:()=>J(e),children:(0,k.jsx)(s,{className:`size-4`})})]})})]},e.id)),!X.length&&(0,k.jsx)(`tr`,{children:(0,k.jsx)(`td`,{colSpan:6,className:`p-8 text-center text-muted-foreground`,children:t(`لا توجد نتائج مطابقة.`,`No matching results.`)})})]})]})})]}),(0,k.jsx)(g,{open:ye,onOpenChange:U,children:(0,k.jsxs)(ue,{className:`text-start`,children:[(0,k.jsx)(le,{children:(0,k.jsx)(ce,{children:W?t(`تعديل بلاغ`,`Edit report`):t(`إضافة بلاغ`,`Add report`)})}),(0,k.jsxs)(`div`,{className:`grid gap-4 sm:grid-cols-2`,children:[(0,k.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,k.jsx)(m,{htmlFor:`cr-community`,children:t(`المجتمع`,`Community`)}),(0,k.jsx)(p,{id:`cr-community`,value:G.community,onChange:e=>K(t=>({...t,community:e.target.value}))})]}),(0,k.jsxs)(`div`,{className:`space-y-1.5 sm:col-span-2`,children:[(0,k.jsx)(m,{htmlFor:`cr-reason`,children:t(`السبب`,`Reason`)}),(0,k.jsx)(p,{id:`cr-reason`,value:G.reason,onChange:e=>K(t=>({...t,reason:e.target.value}))})]}),(0,k.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,k.jsx)(m,{children:t(`الأولوية`,`Priority`)}),(0,k.jsxs)(D,{value:G.priority,onValueChange:e=>K(t=>({...t,priority:e})),children:[(0,k.jsx)(w,{children:(0,k.jsx)(C,{})}),(0,k.jsx)(T,{children:A.map(e=>(0,k.jsx)(E,{value:e,children:t(...M[e])},e))})]})]}),(0,k.jsxs)(`div`,{className:`space-y-1.5`,children:[(0,k.jsx)(m,{children:t(`الحالة`,`Status`)}),(0,k.jsxs)(D,{value:G.status,onValueChange:e=>K(t=>({...t,status:e})),children:[(0,k.jsx)(w,{children:(0,k.jsx)(C,{})}),(0,k.jsx)(T,{children:j.map(e=>(0,k.jsx)(E,{value:e,children:t(...P[e])},e))})]})]})]}),(0,k.jsxs)(h,{className:`gap-2 sm:justify-start`,children:[(0,k.jsx)(c,{onClick:()=>Q.mutate(),disabled:Q.isPending,children:t(`حفظ`,`Save`)}),(0,k.jsx)(c,{variant:`outline`,onClick:()=>U(!1),children:t(`إلغاء`,`Cancel`)})]})]})}),(0,k.jsx)(fe,{open:!!q,onOpenChange:e=>!e&&J(null),children:(0,k.jsxs)(y,{className:`text-start`,children:[(0,k.jsxs)(de,{children:[(0,k.jsx)(v,{children:t(`حذف البلاغ «${q?.code}»؟`,`Delete "${q?.code}"?`)}),(0,k.jsx)(_,{children:t(`لا يمكن التراجع عن هذا الإجراء.`,`This action cannot be undone.`)})]}),(0,k.jsxs)(x,{className:`gap-2 sm:justify-start`,children:[(0,k.jsx)(b,{onClick:()=>q&&Ce.mutate(q.id),children:t(`حذف`,`Delete`)}),(0,k.jsx)(S,{children:t(`إلغاء`,`Cancel`)})]})]})})]})}function L({value:e,onChange:t,placeholder:n,options:r}){return(0,k.jsxs)(D,{value:e,onValueChange:t,children:[(0,k.jsx)(w,{className:`w-44`,children:(0,k.jsx)(C,{placeholder:n})}),(0,k.jsx)(T,{children:r.map(e=>(0,k.jsx)(E,{value:e.value,children:e.label},e.value))})]})}function R({children:e,tone:t}){return(0,k.jsx)(`span`,{className:`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold `+(t===`primary`?`bg-primary/15 text-primary`:t===`success`?`bg-success/15 text-success`:t===`danger`?`bg-destructive/15 text-destructive`:`bg-muted text-muted-foreground`),children:e})}var z=()=>(0,k.jsx)(d,{pageKey:`admin_community_reports`,children:(0,k.jsx)(I,{})});export{z as component};
+import { C as e, R as t, ht as n, j as r, u as ee, vt as i } from "./rbac-static-data-Cz2qa6wH.js";
+import { i as a, n as te } from "./auth-middleware-CmTSOr_x.js";
+import { t as o } from "./useMutation-CfRTvAO7.js";
+import { i as s, l as ne, u as re } from "./dynamic-icon-fBQNzGz-.js";
+import { t as ie } from "./check-CJTwoqRt.js";
+import { t as ae } from "./loader-circle-DYrBHP0C.js";
+import { t as c } from "./button-m-Eg43IZ.js";
+import { t as oe } from "./search-CKHPlqGH.js";
+import { B as l } from "./index-CUZEShOB.js";
+import { n as u } from "./use-access-DbwD014U.js";
+import { n as d } from "./guard-B5vrll8Q.js";
+import { n as se, t as f } from "./page-header-D2zc6ZVs.js";
+import { t as p } from "./input-DhAlVvjJ.js";
+import { a as ce, i as le, n as ue, o as m, r as h, t as g } from "./dialog-C80UddLn.js";
+import {
+  a as _,
+  c as v,
+  i as y,
+  n as b,
+  o as x,
+  r as S,
+  s as de,
+  t as fe,
+} from "./alert-dialog-C95lx8dr.js";
+import { a as C, i as w, n as T, r as E, t as D } from "./select-CjwHz5Zu.js";
+import { i as pe, s as me, t as he } from "./admin-moderation.functions-CoUERKIG.js";
+var O = i(n()),
+  k = t(),
+  A = [`عالية`, `متوسطة`, `منخفضة`],
+  j = [`مفتوح`, `مغلق`, `مؤجل`],
+  M = { عالية: [`عالية`, `High`], متوسطة: [`متوسطة`, `Medium`], منخفضة: [`منخفضة`, `Low`] },
+  N = { عالية: `danger`, متوسطة: `primary`, منخفضة: `muted` },
+  P = { مفتوح: [`مفتوح`, `Open`], مغلق: [`مغلق`, `Closed`], مؤجل: [`مؤجل`, `Deferred`] },
+  F = { community: ``, reason: ``, priority: `متوسطة`, status: `مفتوح` };
+function I() {
+  let t = ee(),
+    n = r(),
+    { can: i } = u(),
+    d = a(pe),
+    I = a(me),
+    z = a(he),
+    [B, ge] = (0, O.useState)(``),
+    [V, _e] = (0, O.useState)(`all`),
+    [H, ve] = (0, O.useState)(`all`),
+    [ye, U] = (0, O.useState)(!1),
+    [W, be] = (0, O.useState)(null),
+    [G, K] = (0, O.useState)(F),
+    [q, J] = (0, O.useState)(null),
+    { data: Y, isLoading: xe } = te({ queryKey: [`community-reports`], queryFn: () => d() }),
+    X = (0, O.useMemo)(
+      () =>
+        (Y ?? []).filter((e) => {
+          if ((V !== `all` && e.status !== V) || (H !== `all` && e.priority !== H)) return !1;
+          if (B.trim()) {
+            let t = B.trim().toLowerCase();
+            if (!`${e.community} ${e.reason} ${e.code}`.toLowerCase().includes(t)) return !1;
+          }
+          return !0;
+        }),
+      [Y, V, H, B],
+    ),
+    Z = () => n.invalidateQueries({ queryKey: [`community-reports`] }),
+    Q = o({
+      mutationFn: () => I({ data: { ...G, id: W ?? void 0 } }),
+      onSuccess: () => {
+        (Z(), U(!1), l.success(t(`تم الحفظ`, `Saved successfully`)));
+      },
+      onError: (n) => l.error(e(n, t(`تعذّر الحفظ`, `Failed to save`))),
+    }),
+    Se = o({
+      mutationFn: (e) =>
+        I({
+          data: {
+            id: e.id,
+            community: e.community,
+            reason: e.reason,
+            priority: e.priority,
+            status: `مغلق`,
+          },
+        }),
+      onSuccess: () => {
+        (Z(), l.success(t(`تم إغلاق البلاغ`, `Report closed`)));
+      },
+      onError: (n) => l.error(e(n, t(`تعذّر التحديث`, `Failed to update`))),
+    }),
+    Ce = o({
+      mutationFn: (e) => z({ data: { id: e } }),
+      onSuccess: () => {
+        (Z(), J(null), l.success(t(`تم الحذف`, `Deleted successfully`)));
+      },
+      onError: (n) => l.error(e(n, t(`تعذّر الحذف`, `Failed to delete`))),
+    });
+  function $(e) {
+    (be(e?.id ?? null),
+      K(
+        e
+          ? { community: e.community, reason: e.reason, priority: e.priority, status: e.status }
+          : F,
+      ),
+      U(!0));
+  }
+  return (0, k.jsxs)(`div`, {
+    children: [
+      (0, k.jsx)(f, { title: t(`بلاغات المجتمع`, `Community reports`), icon: `Flag` }),
+      (0, k.jsxs)(`div`, {
+        className: `p-5`,
+        children: [
+          (0, k.jsxs)(se, {
+            children: [
+              (0, k.jsxs)(`div`, {
+                className: `relative min-w-56 flex-1`,
+                children: [
+                  (0, k.jsx)(oe, {
+                    className: `pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground`,
+                  }),
+                  (0, k.jsx)(p, {
+                    placeholder: t(
+                      `بحث بالمجتمع أو السبب أو الرقم`,
+                      `Search by community, reason, or ID`,
+                    ),
+                    value: B,
+                    onChange: (e) => ge(e.target.value),
+                    className: `ps-9`,
+                  }),
+                ],
+              }),
+              (0, k.jsx)(L, {
+                value: H,
+                onChange: ve,
+                placeholder: t(`الأولوية`, `Priority`),
+                options: [
+                  { value: `all`, label: t(`كل الأولويات`, `All priorities`) },
+                  ...A.map((e) => ({ value: e, label: t(...M[e]) })),
+                ],
+              }),
+              (0, k.jsx)(L, {
+                value: V,
+                onChange: _e,
+                placeholder: t(`الحالة`, `Status`),
+                options: [
+                  { value: `all`, label: t(`كل الحالات`, `All statuses`) },
+                  ...j.map((e) => ({ value: e, label: t(...P[e]) })),
+                ],
+              }),
+              i(`admin_community_reports`, `show_add_form`) &&
+                (0, k.jsxs)(c, {
+                  className: `ms-auto`,
+                  onClick: () => $(null),
+                  children: [
+                    (0, k.jsx)(ne, { className: `size-4` }),
+                    t(`إضافة بلاغ`, `Add report`),
+                  ],
+                }),
+            ],
+          }),
+          (0, k.jsx)(`div`, {
+            className: `mt-4 overflow-x-auto rounded-2xl bg-card`,
+            children: xe
+              ? (0, k.jsx)(`div`, {
+                  className: `flex justify-center p-10`,
+                  children: (0, k.jsx)(ae, { className: `size-5 animate-spin text-primary` }),
+                })
+              : (0, k.jsxs)(`table`, {
+                  className: `w-full min-w-3xl text-start text-sm`,
+                  children: [
+                    (0, k.jsx)(`thead`, {
+                      children: (0, k.jsxs)(`tr`, {
+                        className: `border-b border-border text-xs text-muted-foreground`,
+                        children: [
+                          (0, k.jsx)(`th`, {
+                            className: `w-24 px-4 py-3 font-semibold`,
+                            children: t(`الرقم`, `ID`),
+                          }),
+                          (0, k.jsx)(`th`, {
+                            className: `px-4 py-3 font-semibold`,
+                            children: t(`المجتمع`, `Community`),
+                          }),
+                          (0, k.jsx)(`th`, {
+                            className: `px-4 py-3 font-semibold`,
+                            children: t(`السبب`, `Reason`),
+                          }),
+                          (0, k.jsx)(`th`, {
+                            className: `px-4 py-3 font-semibold`,
+                            children: t(`الأولوية`, `Priority`),
+                          }),
+                          (0, k.jsx)(`th`, {
+                            className: `px-4 py-3 font-semibold`,
+                            children: t(`الحالة`, `Status`),
+                          }),
+                          (0, k.jsx)(`th`, {
+                            className: `w-36 px-4 py-3 font-semibold`,
+                            children: t(`إجراءات`, `Actions`),
+                          }),
+                        ],
+                      }),
+                    }),
+                    (0, k.jsxs)(`tbody`, {
+                      children: [
+                        X.map((e) =>
+                          (0, k.jsxs)(
+                            `tr`,
+                            {
+                              className: `border-b border-border/60 last:border-0`,
+                              children: [
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3 font-mono text-xs text-muted-foreground`,
+                                  children: e.code,
+                                }),
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3 font-semibold text-foreground`,
+                                  children: e.community,
+                                }),
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3 text-muted-foreground`,
+                                  children: e.reason,
+                                }),
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3`,
+                                  children: (0, k.jsx)(R, {
+                                    tone: N[e.priority],
+                                    children: t(...M[e.priority]),
+                                  }),
+                                }),
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3`,
+                                  children: (0, k.jsx)(R, {
+                                    tone:
+                                      e.status === `مغلق`
+                                        ? `success`
+                                        : e.status === `مفتوح`
+                                          ? `danger`
+                                          : `muted`,
+                                    children: t(...P[e.status]),
+                                  }),
+                                }),
+                                (0, k.jsx)(`td`, {
+                                  className: `px-4 py-3`,
+                                  children: (0, k.jsxs)(`div`, {
+                                    className: `flex items-center gap-1`,
+                                    children: [
+                                      i(`admin_community_reports`, `edit`) &&
+                                        e.status !== `مغلق` &&
+                                        (0, k.jsx)(c, {
+                                          size: `icon`,
+                                          variant: `ghost`,
+                                          title: t(`إغلاق البلاغ`, `Close report`),
+                                          className: `text-success`,
+                                          onClick: () => Se.mutate(e),
+                                          children: (0, k.jsx)(ie, { className: `size-4` }),
+                                        }),
+                                      i(`admin_community_reports`, `edit`) &&
+                                        (0, k.jsx)(c, {
+                                          size: `icon`,
+                                          variant: `ghost`,
+                                          title: t(`تعديل`, `Edit`),
+                                          onClick: () => $(e),
+                                          children: (0, k.jsx)(re, { className: `size-4` }),
+                                        }),
+                                      i(`admin_community_reports`, `delete`) &&
+                                        (0, k.jsx)(c, {
+                                          size: `icon`,
+                                          variant: `ghost`,
+                                          title: t(`حذف`, `Delete`),
+                                          className: `text-destructive`,
+                                          onClick: () => J(e),
+                                          children: (0, k.jsx)(s, { className: `size-4` }),
+                                        }),
+                                    ],
+                                  }),
+                                }),
+                              ],
+                            },
+                            e.id,
+                          ),
+                        ),
+                        !X.length &&
+                          (0, k.jsx)(`tr`, {
+                            children: (0, k.jsx)(`td`, {
+                              colSpan: 6,
+                              className: `p-8 text-center text-muted-foreground`,
+                              children: t(`لا توجد نتائج مطابقة.`, `No matching results.`),
+                            }),
+                          }),
+                      ],
+                    }),
+                  ],
+                }),
+          }),
+        ],
+      }),
+      (0, k.jsx)(g, {
+        open: ye,
+        onOpenChange: U,
+        children: (0, k.jsxs)(ue, {
+          className: `text-start`,
+          children: [
+            (0, k.jsx)(le, {
+              children: (0, k.jsx)(ce, {
+                children: W ? t(`تعديل بلاغ`, `Edit report`) : t(`إضافة بلاغ`, `Add report`),
+              }),
+            }),
+            (0, k.jsxs)(`div`, {
+              className: `grid gap-4 sm:grid-cols-2`,
+              children: [
+                (0, k.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, k.jsx)(m, { htmlFor: `cr-community`, children: t(`المجتمع`, `Community`) }),
+                    (0, k.jsx)(p, {
+                      id: `cr-community`,
+                      value: G.community,
+                      onChange: (e) => K((t) => ({ ...t, community: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, k.jsxs)(`div`, {
+                  className: `space-y-1.5 sm:col-span-2`,
+                  children: [
+                    (0, k.jsx)(m, { htmlFor: `cr-reason`, children: t(`السبب`, `Reason`) }),
+                    (0, k.jsx)(p, {
+                      id: `cr-reason`,
+                      value: G.reason,
+                      onChange: (e) => K((t) => ({ ...t, reason: e.target.value })),
+                    }),
+                  ],
+                }),
+                (0, k.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, k.jsx)(m, { children: t(`الأولوية`, `Priority`) }),
+                    (0, k.jsxs)(D, {
+                      value: G.priority,
+                      onValueChange: (e) => K((t) => ({ ...t, priority: e })),
+                      children: [
+                        (0, k.jsx)(w, { children: (0, k.jsx)(C, {}) }),
+                        (0, k.jsx)(T, {
+                          children: A.map((e) =>
+                            (0, k.jsx)(E, { value: e, children: t(...M[e]) }, e),
+                          ),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                (0, k.jsxs)(`div`, {
+                  className: `space-y-1.5`,
+                  children: [
+                    (0, k.jsx)(m, { children: t(`الحالة`, `Status`) }),
+                    (0, k.jsxs)(D, {
+                      value: G.status,
+                      onValueChange: (e) => K((t) => ({ ...t, status: e })),
+                      children: [
+                        (0, k.jsx)(w, { children: (0, k.jsx)(C, {}) }),
+                        (0, k.jsx)(T, {
+                          children: j.map((e) =>
+                            (0, k.jsx)(E, { value: e, children: t(...P[e]) }, e),
+                          ),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, k.jsxs)(h, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, k.jsx)(c, {
+                  onClick: () => Q.mutate(),
+                  disabled: Q.isPending,
+                  children: t(`حفظ`, `Save`),
+                }),
+                (0, k.jsx)(c, {
+                  variant: `outline`,
+                  onClick: () => U(!1),
+                  children: t(`إلغاء`, `Cancel`),
+                }),
+              ],
+            }),
+          ],
+        }),
+      }),
+      (0, k.jsx)(fe, {
+        open: !!q,
+        onOpenChange: (e) => !e && J(null),
+        children: (0, k.jsxs)(y, {
+          className: `text-start`,
+          children: [
+            (0, k.jsxs)(de, {
+              children: [
+                (0, k.jsx)(v, { children: t(`حذف البلاغ «${q?.code}»؟`, `Delete "${q?.code}"?`) }),
+                (0, k.jsx)(_, {
+                  children: t(`لا يمكن التراجع عن هذا الإجراء.`, `This action cannot be undone.`),
+                }),
+              ],
+            }),
+            (0, k.jsxs)(x, {
+              className: `gap-2 sm:justify-start`,
+              children: [
+                (0, k.jsx)(b, {
+                  onClick: () => q && Ce.mutate(q.id),
+                  children: t(`حذف`, `Delete`),
+                }),
+                (0, k.jsx)(S, { children: t(`إلغاء`, `Cancel`) }),
+              ],
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+function L({ value: e, onChange: t, placeholder: n, options: r }) {
+  return (0, k.jsxs)(D, {
+    value: e,
+    onValueChange: t,
+    children: [
+      (0, k.jsx)(w, { className: `w-44`, children: (0, k.jsx)(C, { placeholder: n }) }),
+      (0, k.jsx)(T, {
+        children: r.map((e) => (0, k.jsx)(E, { value: e.value, children: e.label }, e.value)),
+      }),
+    ],
+  });
+}
+function R({ children: e, tone: t }) {
+  return (0, k.jsx)(`span`, {
+    className:
+      `inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ` +
+      (t === `primary`
+        ? `bg-primary/15 text-primary`
+        : t === `success`
+          ? `bg-success/15 text-success`
+          : t === `danger`
+            ? `bg-destructive/15 text-destructive`
+            : `bg-muted text-muted-foreground`),
+    children: e,
+  });
+}
+var z = () => (0, k.jsx)(d, { pageKey: `admin_community_reports`, children: (0, k.jsx)(I, {}) });
+export { z as component };

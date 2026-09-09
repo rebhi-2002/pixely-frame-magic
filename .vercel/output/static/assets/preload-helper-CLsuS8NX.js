@@ -1,1 +1,246 @@
-import{K as e,M as t,R as n,U as r,dt as i,ht as a,q as o,tt as s,vt as c,z as l}from"./rbac-static-data-Cz2qa6wH.js";import{t as u}from"./root-DLTE-HSj.js";import{r as d}from"./redirect-DtIAAt0y.js";import{t as f}from"./useMatch-BmxhYGiQ.js";import{t as p}from"./useNavigate-D8IP3eLF.js";var m=class{get to(){return this._to}get id(){return this._id}get path(){return this._path}get fullPath(){return this._fullPath}constructor(t){if(this.init=t=>{this.originalIndex=t.originalIndex;let n=this.options,i=!n?.path&&!n?.id;this.parentRoute=this.options.getParentRoute?.(),i?this._path=u:this.parentRoute||s();let a=i?u:n?.path;a&&a!==`/`&&(a=e(a));let c=n?.id||a,l=i?u:r([this.parentRoute.id===`__root__`?``:this.parentRoute.id,c]);a===`__root__`&&(a=`/`),l!==`__root__`&&(l=r([`/`,l]));let d=l===`__root__`?`/`:r([this.parentRoute.fullPath,a]);this._path=a,this._id=l,this._fullPath=d,this._to=o(d)},this.addChildren=e=>this._addFileChildren(e),this._addFileChildren=e=>(Array.isArray(e)&&(this.children=e),typeof e==`object`&&e&&(this.children=Object.values(e)),this),this._addFileTypes=()=>this,this.updateLoader=e=>(Object.assign(this.options,e),this),this.update=e=>(Object.assign(this.options,e),this),this.lazy=e=>(this.lazyFn=e,this),this.redirect=e=>d({from:this.fullPath,...e}),this.options=t||{},this.isRoot=!t?.getParentRoute,t?.id&&t?.path)throw Error(`Route cannot have both an 'id' and a 'path' option.`)}},h=class extends m{constructor(e){super(e)}};function g(e){return f({from:e.from,strict:e.strict,structuralSharing:e.structuralSharing,select:t=>e.select?e.select(t.loaderData):t.loaderData})}function _(e){let{select:t,...n}=e;return f({...n,select:e=>t?t(e.loaderDeps):e.loaderDeps})}function v(e){return f({from:e.from,shouldThrow:e.shouldThrow,structuralSharing:e.structuralSharing,strict:e.strict,select:t=>{let n=e.strict===!1?t.params:t._strictParams;return e.select?e.select(n):n}})}function y(e){return f({from:e.from,strict:e.strict,shouldThrow:e.shouldThrow,structuralSharing:e.structuralSharing,select:t=>e.select?e.select(t.search):t.search})}function b(e){return f({...e,select:t=>e.select?e.select(t.context):t.context})}var x=c(a(),1),S=n(),C=class extends m{constructor(e){super(e),this.useMatch=e=>f({select:e?.select,from:this.id,structuralSharing:e?.structuralSharing}),this.useRouteContext=e=>b({...e,from:this.id}),this.useSearch=e=>y({select:e?.select,structuralSharing:e?.structuralSharing,from:this.id}),this.useParams=e=>v({select:e?.select,structuralSharing:e?.structuralSharing,from:this.id}),this.useLoaderDeps=e=>_({...e,from:this.id}),this.useLoaderData=e=>g({...e,from:this.id}),this.useNavigate=()=>p({from:this.fullPath}),this.Link=x.forwardRef((e,n)=>(0,S.jsx)(t,{ref:n,from:this.fullPath,...e}))}};function w(e){return new C(e)}function T(){return e=>D(e)}var E=class extends h{constructor(e){super(e),this.useMatch=e=>f({select:e?.select,from:this.id,structuralSharing:e?.structuralSharing}),this.useRouteContext=e=>b({...e,from:this.id}),this.useSearch=e=>y({select:e?.select,structuralSharing:e?.structuralSharing,from:this.id}),this.useParams=e=>v({select:e?.select,structuralSharing:e?.structuralSharing,from:this.id}),this.useLoaderDeps=e=>_({...e,from:this.id}),this.useLoaderData=e=>g({...e,from:this.id}),this.useNavigate=()=>p({from:this.fullPath}),this.Link=x.forwardRef((e,n)=>(0,S.jsx)(t,{ref:n,from:this.fullPath,...e}))}};function D(e){return new E(e)}function O(e){return e=>{let t=w(e);return t.isRoot=!1,t}}function k(e,t){let n,r,a,o=()=>(n||=(a=void 0,e().then(e=>{n=void 0,s.preload=void 0,r=e[t??`default`]}).catch(e=>{n=void 0,a=e})),n),s=function(e){if(a){if(i(a)&&typeof sessionStorage<`u`){let e=`tanstack_router_reload:${a.message}`;if(!sessionStorage.getItem(e))throw sessionStorage.setItem(e,`1`),window.location.reload(),new Promise(()=>{})}throw a}if(!r){if(l)l(o());else throw o()}return x.createElement(r,e)};return s.preload=o,s}var A=`modulepreload`,j=function(e){return`/`+e},M={},N=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}function s(e){return import.meta.resolve?import.meta.resolve(e):new URL(e,import.meta.url).href}r=o(t.map(t=>{if(t=j(t,n),t=s(t),t in M)return;M[t]=!0;let r=t.endsWith(`.css`);for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}let i=document.createElement(`link`);if(i.rel=r?`stylesheet`:A,r||(i.as=`script`),i.crossOrigin=``,i.href=t,a&&i.setAttribute(`nonce`,a),document.head.appendChild(i),r)return new Promise((e,n)=>{i.addEventListener(`load`,e),i.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})};export{T as i,k as n,O as r,N as t};
+import {
+  K as e,
+  M as t,
+  R as n,
+  U as r,
+  dt as i,
+  ht as a,
+  q as o,
+  tt as s,
+  vt as c,
+  z as l,
+} from "./rbac-static-data-Cz2qa6wH.js";
+import { t as u } from "./root-DLTE-HSj.js";
+import { r as d } from "./redirect-DtIAAt0y.js";
+import { t as f } from "./useMatch-BmxhYGiQ.js";
+import { t as p } from "./useNavigate-D8IP3eLF.js";
+var m = class {
+    get to() {
+      return this._to;
+    }
+    get id() {
+      return this._id;
+    }
+    get path() {
+      return this._path;
+    }
+    get fullPath() {
+      return this._fullPath;
+    }
+    constructor(t) {
+      if (
+        ((this.init = (t) => {
+          this.originalIndex = t.originalIndex;
+          let n = this.options,
+            i = !n?.path && !n?.id;
+          ((this.parentRoute = this.options.getParentRoute?.()),
+            i ? (this._path = u) : this.parentRoute || s());
+          let a = i ? u : n?.path;
+          a && a !== `/` && (a = e(a));
+          let c = n?.id || a,
+            l = i ? u : r([this.parentRoute.id === `__root__` ? `` : this.parentRoute.id, c]);
+          (a === `__root__` && (a = `/`), l !== `__root__` && (l = r([`/`, l])));
+          let d = l === `__root__` ? `/` : r([this.parentRoute.fullPath, a]);
+          ((this._path = a), (this._id = l), (this._fullPath = d), (this._to = o(d)));
+        }),
+        (this.addChildren = (e) => this._addFileChildren(e)),
+        (this._addFileChildren = (e) => (
+          Array.isArray(e) && (this.children = e),
+          typeof e == `object` && e && (this.children = Object.values(e)),
+          this
+        )),
+        (this._addFileTypes = () => this),
+        (this.updateLoader = (e) => (Object.assign(this.options, e), this)),
+        (this.update = (e) => (Object.assign(this.options, e), this)),
+        (this.lazy = (e) => ((this.lazyFn = e), this)),
+        (this.redirect = (e) => d({ from: this.fullPath, ...e })),
+        (this.options = t || {}),
+        (this.isRoot = !t?.getParentRoute),
+        t?.id && t?.path)
+      )
+        throw Error(`Route cannot have both an 'id' and a 'path' option.`);
+    }
+  },
+  h = class extends m {
+    constructor(e) {
+      super(e);
+    }
+  };
+function g(e) {
+  return f({
+    from: e.from,
+    strict: e.strict,
+    structuralSharing: e.structuralSharing,
+    select: (t) => (e.select ? e.select(t.loaderData) : t.loaderData),
+  });
+}
+function _(e) {
+  let { select: t, ...n } = e;
+  return f({ ...n, select: (e) => (t ? t(e.loaderDeps) : e.loaderDeps) });
+}
+function v(e) {
+  return f({
+    from: e.from,
+    shouldThrow: e.shouldThrow,
+    structuralSharing: e.structuralSharing,
+    strict: e.strict,
+    select: (t) => {
+      let n = e.strict === !1 ? t.params : t._strictParams;
+      return e.select ? e.select(n) : n;
+    },
+  });
+}
+function y(e) {
+  return f({
+    from: e.from,
+    strict: e.strict,
+    shouldThrow: e.shouldThrow,
+    structuralSharing: e.structuralSharing,
+    select: (t) => (e.select ? e.select(t.search) : t.search),
+  });
+}
+function b(e) {
+  return f({ ...e, select: (t) => (e.select ? e.select(t.context) : t.context) });
+}
+var x = c(a(), 1),
+  S = n(),
+  C = class extends m {
+    constructor(e) {
+      (super(e),
+        (this.useMatch = (e) =>
+          f({ select: e?.select, from: this.id, structuralSharing: e?.structuralSharing })),
+        (this.useRouteContext = (e) => b({ ...e, from: this.id })),
+        (this.useSearch = (e) =>
+          y({ select: e?.select, structuralSharing: e?.structuralSharing, from: this.id })),
+        (this.useParams = (e) =>
+          v({ select: e?.select, structuralSharing: e?.structuralSharing, from: this.id })),
+        (this.useLoaderDeps = (e) => _({ ...e, from: this.id })),
+        (this.useLoaderData = (e) => g({ ...e, from: this.id })),
+        (this.useNavigate = () => p({ from: this.fullPath })),
+        (this.Link = x.forwardRef((e, n) => (0, S.jsx)(t, { ref: n, from: this.fullPath, ...e }))));
+    }
+  };
+function w(e) {
+  return new C(e);
+}
+function T() {
+  return (e) => D(e);
+}
+var E = class extends h {
+  constructor(e) {
+    (super(e),
+      (this.useMatch = (e) =>
+        f({ select: e?.select, from: this.id, structuralSharing: e?.structuralSharing })),
+      (this.useRouteContext = (e) => b({ ...e, from: this.id })),
+      (this.useSearch = (e) =>
+        y({ select: e?.select, structuralSharing: e?.structuralSharing, from: this.id })),
+      (this.useParams = (e) =>
+        v({ select: e?.select, structuralSharing: e?.structuralSharing, from: this.id })),
+      (this.useLoaderDeps = (e) => _({ ...e, from: this.id })),
+      (this.useLoaderData = (e) => g({ ...e, from: this.id })),
+      (this.useNavigate = () => p({ from: this.fullPath })),
+      (this.Link = x.forwardRef((e, n) => (0, S.jsx)(t, { ref: n, from: this.fullPath, ...e }))));
+  }
+};
+function D(e) {
+  return new E(e);
+}
+function O(e) {
+  return (e) => {
+    let t = w(e);
+    return ((t.isRoot = !1), t);
+  };
+}
+function k(e, t) {
+  let n,
+    r,
+    a,
+    o = () => (
+      (n ||=
+        ((a = void 0),
+        e()
+          .then((e) => {
+            ((n = void 0), (s.preload = void 0), (r = e[t ?? `default`]));
+          })
+          .catch((e) => {
+            ((n = void 0), (a = e));
+          }))),
+      n
+    ),
+    s = function (e) {
+      if (a) {
+        if (i(a) && typeof sessionStorage < `u`) {
+          let e = `tanstack_router_reload:${a.message}`;
+          if (!sessionStorage.getItem(e))
+            throw (sessionStorage.setItem(e, `1`), window.location.reload(), new Promise(() => {}));
+        }
+        throw a;
+      }
+      if (!r) {
+        if (l) l(o());
+        else throw o();
+      }
+      return x.createElement(r, e);
+    };
+  return ((s.preload = o), s);
+}
+var A = `modulepreload`,
+  j = function (e) {
+    return `/` + e;
+  },
+  M = {},
+  N = function (e, t, n) {
+    let r = Promise.resolve();
+    if (t && t.length > 0) {
+      let e = document.getElementsByTagName(`link`),
+        i = document.querySelector(`meta[property=csp-nonce]`),
+        a = i?.nonce || i?.getAttribute(`nonce`);
+      function o(e) {
+        return Promise.all(
+          e.map((e) =>
+            Promise.resolve(e).then(
+              (e) => ({ status: `fulfilled`, value: e }),
+              (e) => ({ status: `rejected`, reason: e }),
+            ),
+          ),
+        );
+      }
+      function s(e) {
+        return import.meta.resolve ? import.meta.resolve(e) : new URL(e, import.meta.url).href;
+      }
+      r = o(
+        t.map((t) => {
+          if (((t = j(t, n)), (t = s(t)), t in M)) return;
+          M[t] = !0;
+          let r = t.endsWith(`.css`);
+          for (let n = e.length - 1; n >= 0; n--) {
+            let i = e[n];
+            if (i.href === t && (!r || i.rel === `stylesheet`)) return;
+          }
+          let i = document.createElement(`link`);
+          if (
+            ((i.rel = r ? `stylesheet` : A),
+            r || (i.as = `script`),
+            (i.crossOrigin = ``),
+            (i.href = t),
+            a && i.setAttribute(`nonce`, a),
+            document.head.appendChild(i),
+            r)
+          )
+            return new Promise((e, n) => {
+              (i.addEventListener(`load`, e),
+                i.addEventListener(`error`, () => n(Error(`Unable to preload CSS for ${t}`))));
+            });
+        }),
+      );
+    }
+    function i(e) {
+      let t = new Event(`vite:preloadError`, { cancelable: !0 });
+      if (((t.payload = e), window.dispatchEvent(t), !t.defaultPrevented)) throw e;
+    }
+    return r.then((t) => {
+      for (let e of t || []) e.status === `rejected` && i(e.reason);
+      return e().catch(i);
+    });
+  };
+export { T as i, k as n, O as r, N as t };

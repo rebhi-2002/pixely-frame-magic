@@ -63,8 +63,7 @@ function Body() {
   const markOneMutation = useMutation({
     mutationFn: (id: string) => markOne({ data: { id } }),
     onSuccess: invalidate,
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const markAllMutation = useMutation({
@@ -73,15 +72,13 @@ function Body() {
       invalidate();
       toast.success(bi("تم تعليم الكل كمقروء", "All marked as read"));
     },
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => remove({ data: { id } }),
     onSuccess: invalidate,
-    onError: (e) =>
-      toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
+    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
   });
 
   return (

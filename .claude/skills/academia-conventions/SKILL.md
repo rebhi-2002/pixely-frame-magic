@@ -25,8 +25,8 @@ exists when it doesn't. Concretely:
 
 - **Keep**: a user's own self-reported/editable data (their own streak,
   points, courses they enrolled in). It's transparent and editable.
-- **Zero out / empty**: any array or number that implies *other real
-  people's* activity — student names, enrollment counts, ratings, financial
+- **Zero out / empty**: any array or number that implies _other real
+  people's_ activity — student names, enrollment counts, ratings, financial
   transactions, "X% of your students got this wrong". If it isn't real yet,
   it must render as an honest empty state (most pages already have an
   `EmptyState`/`EmptyIllustration` for this — use it, don't invent a fake
@@ -36,8 +36,8 @@ exists when it doesn't. Concretely:
   explicitly. **In-app pages** (post-login) must describe current reality:
   if a button says "Download" but only logs a counter, rename the button.
   If a toggle says "Reminder" but sends no notification, say so in the label.
-- Quick self-check before adding any new copy or data: *"If the content
-  were different, would I make the exact same call regardless?"* If yes,
+- Quick self-check before adding any new copy or data: _"If the content
+  were different, would I make the exact same call regardless?"_ If yes,
   it's an unexamined template — stop and look at what's actually there.
 
 ## 3. Feature naming caution

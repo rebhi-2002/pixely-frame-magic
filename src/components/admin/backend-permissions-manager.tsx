@@ -107,7 +107,9 @@ export function BackendPermissionsPage() {
         </div>
 
         {isLoading ? (
-          <LoadingState label={bi("عم نحمّل الصفحات والصلاحيات…", "Loading pages and permissions…")} />
+          <LoadingState
+            label={bi("عم نحمّل الصفحات والصلاحيات…", "Loading pages and permissions…")}
+          />
         ) : isError ? (
           <ErrorState
             title={bi("تعذّر تحميل البيانات", "Couldn't load data")}
@@ -127,19 +129,14 @@ export function BackendPermissionsPage() {
           <div className="space-y-4">
             {Array.from(grouped.entries()).map(([moduleName, list]) => (
               <div key={moduleName} className="rounded-2xl border border-border bg-card p-4">
-                <p className="mb-3 font-display text-sm font-bold text-foreground">
-                  {moduleName}
-                </p>
+                <p className="mb-3 font-display text-sm font-bold text-foreground">{moduleName}</p>
                 <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {(list ?? []).map((p) => (
                     <label
                       key={p.id}
                       className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-muted/50"
                     >
-                      <Checkbox
-                        checked={checked.has(p.id)}
-                        onCheckedChange={() => toggle(p.id)}
-                      />
+                      <Checkbox checked={checked.has(p.id)} onCheckedChange={() => toggle(p.id)} />
                       <span className="text-foreground">{p.name}</span>
                     </label>
                   ))}

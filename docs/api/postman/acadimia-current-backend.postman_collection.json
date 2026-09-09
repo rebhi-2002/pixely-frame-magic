@@ -64,14 +64,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Auth/Login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Auth",
-                "Login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Auth", "Login"]
             },
             "description": "بدون مصادقة مسبقة. يحفظ Postman cookie الجلسة تلقائيًا من Set-Cookie.\n\nAuthentication uses ASP.NET Identity cookie. Do not add a Bearer token.",
             "body": {
@@ -112,14 +106,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Auth/Logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Auth",
-                "Logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Auth", "Logout"]
             },
             "description": "يستخدم cookie الجلسة المحفوظة في Postman."
           },
@@ -147,14 +135,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Constant/GetAll",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Constant",
-                "GetAll"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Constant", "GetAll"]
             },
             "description": "يعيد recordsFiltered وtotalCount وdata.",
             "body": {
@@ -181,14 +163,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Constant/CreateEditModal?id={{constantId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Constant",
-                "CreateEditModal"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Constant", "CreateEditModal"],
               "query": [
                 {
                   "key": "id",
@@ -217,14 +193,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Constant/CreateEdit",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Constant",
-                "CreateEdit"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Constant", "CreateEdit"]
             },
             "description": "name بطول 3 إلى 250 حرفًا.",
             "body": {
@@ -251,14 +221,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Constant/Delete?id={{constantId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Constant",
-                "Delete"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Constant", "Delete"],
               "query": [
                 {
                   "key": "id",
@@ -292,14 +256,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Page/GetAll",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Page",
-                "GetAll"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Page", "GetAll"]
             },
             "description": "يعيد recordsFiltered وrecordsTotal وdata.",
             "body": {
@@ -326,14 +284,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Page/CreateEditModal?id={{pageId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Page",
-                "CreateEditModal"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Page", "CreateEditModal"],
               "query": [
                 {
                   "key": "id",
@@ -362,14 +314,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Page/CreateEdit",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Page",
-                "CreateEdit"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Page", "CreateEdit"]
             },
             "description": "name وnameEn وcategoryId مطلوبة.",
             "body": {
@@ -396,14 +342,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/Page/Delete?id={{pageId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "Page",
-                "Delete"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Page", "Delete"],
               "query": [
                 {
                   "key": "id",
@@ -432,14 +372,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/MyProfileModal",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "MyProfileModal"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "MyProfileModal"]
             },
             "description": "يعيد MyProfileDto وGenders."
           },
@@ -462,14 +396,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/MyProfile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "MyProfile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "MyProfile"]
             },
             "description": "يتطلب كل الحقول المطلوبة؛ id يجب أن يطابق المستخدم الحالي.",
             "body": {
@@ -496,14 +424,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/ChangePasswordModal",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "ChangePasswordModal"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "ChangePasswordModal"]
             },
             "description": "يعيد نموذج ChangePasswordDto فارغًا."
           },
@@ -526,14 +448,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/ChangePassword",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "ChangePassword"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "ChangePassword"]
             },
             "description": "كلمة المرور الجديدة يجب أن توافق قواعد Identity في الباك إند.",
             "body": {
@@ -565,14 +481,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/GetAll",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "GetAll"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "GetAll"]
             },
             "description": "يعيد recordsFiltered وtotalCount وdata. الفلاتر اختيارية.",
             "body": {
@@ -599,14 +509,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/CreateEditModal?id={{userId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "CreateEditModal"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "CreateEditModal"],
               "query": [
                 {
                   "key": "id",
@@ -635,14 +539,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/CreateEdit",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "CreateEdit"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "CreateEdit"]
             },
             "description": "Password وConfirmPassword مطلوبان عند الإنشاء، ويُتجاهلان عند التعديل حسب controller.",
             "body": {
@@ -669,14 +567,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/User/Delete?id={{userId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "User",
-                "Delete"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "User", "Delete"],
               "query": [
                 {
                   "key": "id",
@@ -705,14 +597,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/UserPermission/GetUserTypePermissions?userTypeId={{userTypeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "UserPermission",
-                "GetUserTypePermissions"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "UserPermission", "GetUserTypePermissions"],
               "query": [
                 {
                   "key": "userTypeId",
@@ -741,14 +627,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/UserPermission/SavePermissions?userTypeId={{userTypeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "UserPermission",
-                "SavePermissions"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "UserPermission", "SavePermissions"],
               "query": [
                 {
                   "key": "userTypeId",

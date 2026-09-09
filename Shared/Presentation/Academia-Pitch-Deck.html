@@ -1,1099 +1,2940 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Academia — Investor Pitch Deck</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academia — Investor Pitch Deck</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+      id="theme"
+    />
 
-<style>
-:root{
-  --navy-950:#0a0f1c; --navy-900:#0e1626; --navy-800:#141f34; --navy-700:#1b2a45; --navy-600:#26395c;
-  --line:rgba(230,232,240,.14); --line-soft:rgba(230,232,240,.08);
-  --paper:#f5f2ea; --paper-dim:#e9e4d6; --ink:#151a24; --ink-soft:#4a5163;
-  --mist:#aeb7cc; --mist-dim:#7c869c;
-  --gold:#cf9f3f; --gold-soft:#e9cd8f; --teal:#3fa295; --teal-soft:#8fd4c8; --coral:#c9694f;
-  --r-sm:6px; --r-md:10px; --r-lg:16px;
-}
-*{box-sizing:border-box;}
-html{ scroll-behavior:smooth; }
-body{
-  background:
-    radial-gradient(1100px 700px at 12% -8%, #16223b 0%, transparent 60%),
-    radial-gradient(900px 600px at 108% 8%, #17293a 0%, transparent 55%),
-    var(--navy-950);
-}
-.reveal{ font-family:'Inter',sans-serif; color:var(--mist); font-size:24.5px; }
-.reveal .slides{ text-align:left; }
-.reveal .slides section{ padding:54px 82px; height:100%; top:0 !important; }
-.reveal h1,.reveal h2,.reveal h3,.reveal h4{
-  font-family:'Fraunces',serif; font-weight:600; text-transform:none; letter-spacing:-0.01em;
-  color:#f4f1ea; margin:0 0 .3em 0; line-height:1.08;
-}
-.reveal a{ color:var(--gold-soft); }
-.reveal p{ line-height:1.5; color:var(--mist); }
-.reveal ::selection{ background:var(--gold); color:#1a1206; }
+    <style>
+      :root {
+        --navy-950: #0a0f1c;
+        --navy-900: #0e1626;
+        --navy-800: #141f34;
+        --navy-700: #1b2a45;
+        --navy-600: #26395c;
+        --line: rgba(230, 232, 240, 0.14);
+        --line-soft: rgba(230, 232, 240, 0.08);
+        --paper: #f5f2ea;
+        --paper-dim: #e9e4d6;
+        --ink: #151a24;
+        --ink-soft: #4a5163;
+        --mist: #aeb7cc;
+        --mist-dim: #7c869c;
+        --gold: #cf9f3f;
+        --gold-soft: #e9cd8f;
+        --teal: #3fa295;
+        --teal-soft: #8fd4c8;
+        --coral: #c9694f;
+        --r-sm: 6px;
+        --r-md: 10px;
+        --r-lg: 16px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background:
+          radial-gradient(1100px 700px at 12% -8%, #16223b 0%, transparent 60%),
+          radial-gradient(900px 600px at 108% 8%, #17293a 0%, transparent 55%), var(--navy-950);
+      }
+      .reveal {
+        font-family: "Inter", sans-serif;
+        color: var(--mist);
+        font-size: 24.5px;
+      }
+      .reveal .slides {
+        text-align: left;
+      }
+      .reveal .slides section {
+        padding: 54px 82px;
+        height: 100%;
+        top: 0 !important;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3,
+      .reveal h4 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: -0.01em;
+        color: #f4f1ea;
+        margin: 0 0 0.3em 0;
+        line-height: 1.08;
+      }
+      .reveal a {
+        color: var(--gold-soft);
+      }
+      .reveal p {
+        line-height: 1.5;
+        color: var(--mist);
+      }
+      .reveal ::selection {
+        background: var(--gold);
+        color: #1a1206;
+      }
 
-.slide-wrap{ width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; }
-.eyebrow{
-  font-family:'JetBrains Mono',monospace; font-size:13.5px; letter-spacing:.14em; color:var(--teal-soft);
-  text-transform:uppercase; display:flex; align-items:center; gap:12px; margin-bottom:16px;
-}
-.eyebrow::before{ content:""; width:26px; height:2px; background:var(--gold); display:inline-block; }
-.eyebrow.alt{ color:var(--gold-soft); } .eyebrow.alt::before{ background:var(--teal); }
+      .slide-wrap {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13.5px;
+        letter-spacing: 0.14em;
+        color: var(--teal-soft);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: var(--gold);
+        display: inline-block;
+      }
+      .eyebrow.alt {
+        color: var(--gold-soft);
+      }
+      .eyebrow.alt::before {
+        background: var(--teal);
+      }
 
-.h-xl{ font-size:60px; } .h-lg{ font-size:44px; } .h-md{ font-size:34px; }
-.lede{ font-size:21.5px; color:var(--mist); max-width:820px; line-height:1.55; margin-top:6px; }
-.lede.tight{ max-width:640px; }
-.rule{ width:56px; height:3px; background:linear-gradient(90deg,var(--gold),var(--teal)); margin:16px 0 24px; border-radius:2px; }
+      .h-xl {
+        font-size: 60px;
+      }
+      .h-lg {
+        font-size: 44px;
+      }
+      .h-md {
+        font-size: 34px;
+      }
+      .lede {
+        font-size: 21.5px;
+        color: var(--mist);
+        max-width: 820px;
+        line-height: 1.55;
+        margin-top: 6px;
+      }
+      .lede.tight {
+        max-width: 640px;
+      }
+      .rule {
+        width: 56px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), var(--teal));
+        margin: 16px 0 24px;
+        border-radius: 2px;
+      }
 
-.tag{
-  display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px;
-  letter-spacing:.06em; padding:6px 12px; border:1px solid var(--line); border-radius:999px; color:var(--mist);
-  background:rgba(255,255,255,.03);
-}
-.tag.gold{ color:var(--gold-soft); border-color:rgba(207,159,63,.4); background:rgba(207,159,63,.08); }
-.tag.teal{ color:var(--teal-soft); border-color:rgba(63,162,149,.4); background:rgba(63,162,149,.08); }
-.tag.coral{ color:#e3a48f; border-color:rgba(201,105,79,.4); background:rgba(201,105,79,.08); }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.06em;
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--mist);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .tag.gold {
+        color: var(--gold-soft);
+        border-color: rgba(207, 159, 63, 0.4);
+        background: rgba(207, 159, 63, 0.08);
+      }
+      .tag.teal {
+        color: var(--teal-soft);
+        border-color: rgba(63, 162, 149, 0.4);
+        background: rgba(63, 162, 149, 0.08);
+      }
+      .tag.coral {
+        color: #e3a48f;
+        border-color: rgba(201, 105, 79, 0.4);
+        background: rgba(201, 105, 79, 0.08);
+      }
 
-.grid{ display:grid; gap:16px; }
-.grid-2{ grid-template-columns:1fr 1fr; } .grid-3{ grid-template-columns:repeat(3,1fr); } .grid-4{ grid-template-columns:repeat(4,1fr); } .grid-5{ grid-template-columns:repeat(5,1fr); }
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .grid-5 {
+        grid-template-columns: repeat(5, 1fr);
+      }
 
-.panel{
-  background:linear-gradient(180deg,var(--navy-800),var(--navy-900));
-  border:1px solid var(--line); border-radius:var(--r-lg); padding:20px 22px;
-  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-}
-.panel:hover{ transform:translateY(-5px); border-color:rgba(207,159,63,.45); box-shadow:0 18px 34px -18px rgba(0,0,0,.6); }
-.panel h4{ font-size:18.5px; margin-bottom:6px; color:#f4f1ea; }
-.panel p{ font-size:14.5px; color:var(--mist-dim); margin:0; line-height:1.5; }
-.panel .num{ font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12.5px; margin-bottom:9px; display:block; }
+      .panel {
+        background: linear-gradient(180deg, var(--navy-800), var(--navy-900));
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 20px 22px;
+        transition:
+          transform 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+      .panel:hover {
+        transform: translateY(-5px);
+        border-color: rgba(207, 159, 63, 0.45);
+        box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.6);
+      }
+      .panel h4 {
+        font-size: 18.5px;
+        margin-bottom: 6px;
+        color: #f4f1ea;
+      }
+      .panel p {
+        font-size: 14.5px;
+        color: var(--mist-dim);
+        margin: 0;
+        line-height: 1.5;
+      }
+      .panel .num {
+        font-family: "JetBrains Mono", monospace;
+        color: var(--gold);
+        font-size: 12.5px;
+        margin-bottom: 9px;
+        display: block;
+      }
 
-/* icon badge */
-.ico{
-  width:38px;height:38px;border-radius:10px;margin-bottom:11px; display:flex;align-items:center;justify-content:center;
-  background:rgba(63,162,149,.14); border:1px solid rgba(63,162,149,.35); color:var(--teal-soft); flex:none;
-}
-.ico.gold{ background:rgba(207,159,63,.14); border-color:rgba(207,159,63,.4); color:var(--gold-soft); }
-.ico svg{ width:19px;height:19px; display:block; }
-.i{ width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
-.i.big{ width:26px;height:26px; }
+      /* icon badge */
+      .ico {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        margin-bottom: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(63, 162, 149, 0.14);
+        border: 1px solid rgba(63, 162, 149, 0.35);
+        color: var(--teal-soft);
+        flex: none;
+      }
+      .ico.gold {
+        background: rgba(207, 159, 63, 0.14);
+        border-color: rgba(207, 159, 63, 0.4);
+        color: var(--gold-soft);
+      }
+      .ico svg {
+        width: 19px;
+        height: 19px;
+        display: block;
+      }
+      .i {
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .i.big {
+        width: 26px;
+        height: 26px;
+      }
 
-.panel-paper{
-  background:var(--paper); color:var(--ink); border-radius:var(--r-lg); padding:24px 28px;
-  border:1px solid rgba(0,0,0,.06); box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
-}
-.panel-paper h4{ color:var(--ink); font-family:'Fraunces',serif; }
-.panel-paper p{ color:var(--ink-soft); }
+      .panel-paper {
+        background: var(--paper);
+        color: var(--ink);
+        border-radius: var(--r-lg);
+        padding: 24px 28px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+      }
+      .panel-paper h4 {
+        color: var(--ink);
+        font-family: "Fraunces", serif;
+      }
+      .panel-paper p {
+        color: var(--ink-soft);
+      }
 
-table.cmp{ width:100%; border-collapse:collapse; font-size:15px; }
-table.cmp th, table.cmp td{ padding:11px 13px; text-align:left; border-bottom:1px solid rgba(0,0,0,.08); vertical-align:top; }
-table.cmp thead th{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); border-bottom:2px solid var(--ink); }
-table.cmp td.feat{ font-weight:700; color:var(--ink); width:20%; }
-table.cmp td.win{ color:#1c6b5e; font-weight:600; background:rgba(63,162,149,.09); border-radius:6px; }
-table.cmp tbody tr{ transition:background .2s ease; }
-table.cmp tbody tr:hover{ background:rgba(207,159,63,.08); }
-.src-note{ font-size:12px; color:var(--mist-dim); margin-top:9px; font-family:'JetBrains Mono',monospace; }
+      table.cmp {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+      }
+      table.cmp th,
+      table.cmp td {
+        padding: 11px 13px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        vertical-align: top;
+      }
+      table.cmp thead th {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        border-bottom: 2px solid var(--ink);
+      }
+      table.cmp td.feat {
+        font-weight: 700;
+        color: var(--ink);
+        width: 20%;
+      }
+      table.cmp td.win {
+        color: #1c6b5e;
+        font-weight: 600;
+        background: rgba(63, 162, 149, 0.09);
+        border-radius: 6px;
+      }
+      table.cmp tbody tr {
+        transition: background 0.2s ease;
+      }
+      table.cmp tbody tr:hover {
+        background: rgba(207, 159, 63, 0.08);
+      }
+      .src-note {
+        font-size: 12px;
+        color: var(--mist-dim);
+        margin-top: 9px;
+        font-family: "JetBrains Mono", monospace;
+      }
 
-.flow{ display:flex; align-items:stretch; gap:0; margin-top:8px; }
-.flow-step{ flex:1; position:relative; background:var(--navy-800); border:1px solid var(--line); border-radius:var(--r-md); padding:16px 15px; margin-right:22px; }
-.flow-step:last-child{ margin-right:0; }
-.flow-step::after{ content:"→"; position:absolute; right:-21px; top:44%; transform:translateY(-50%); color:var(--gold); font-size:17px; }
-.flow-step:last-child::after{ content:""; }
-.flow-step .ico{ width:32px;height:32px;margin-bottom:8px; }
-.flow-step .ico svg{ width:16px;height:16px; }
-.flow-step .n{ font-family:'JetBrains Mono',monospace; color:var(--teal-soft); font-size:11.5px; margin-bottom:5px; display:block; }
-.flow-step h4{ font-size:15px; margin-bottom:4px; }
-.flow-step p{ font-size:12.8px; color:var(--mist-dim); }
+      .flow {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+        margin-top: 8px;
+      }
+      .flow-step {
+        flex: 1;
+        position: relative;
+        background: var(--navy-800);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        padding: 16px 15px;
+        margin-right: 22px;
+      }
+      .flow-step:last-child {
+        margin-right: 0;
+      }
+      .flow-step::after {
+        content: "→";
+        position: absolute;
+        right: -21px;
+        top: 44%;
+        transform: translateY(-50%);
+        color: var(--gold);
+        font-size: 17px;
+      }
+      .flow-step:last-child::after {
+        content: "";
+      }
+      .flow-step .ico {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 8px;
+      }
+      .flow-step .ico svg {
+        width: 16px;
+        height: 16px;
+      }
+      .flow-step .n {
+        font-family: "JetBrains Mono", monospace;
+        color: var(--teal-soft);
+        font-size: 11.5px;
+        margin-bottom: 5px;
+        display: block;
+      }
+      .flow-step h4 {
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .flow-step p {
+        font-size: 12.8px;
+        color: var(--mist-dim);
+      }
 
-.timeline{ position:relative; padding-left:30px; margin-top:4px; }
-.timeline::before{ content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px; background:linear-gradient(180deg,var(--gold),var(--teal)); }
-.t-item{ position:relative; padding-bottom:15px; transition:transform .2s ease; }
-.t-item:hover{ transform:translateX(4px); }
-.t-item .dot{ position:absolute; left:-30px; top:2px; width:20px;height:20px;border-radius:50%; background:var(--navy-950); border:2px solid var(--gold); display:flex;align-items:center;justify-content:center; color:var(--gold-soft); }
-.t-item .dot svg{ width:11px;height:11px; }
-.t-item .wk{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--gold-soft); }
-.t-item h4{ font-size:16.5px; margin:2px 0 3px; }
-.t-item p{ font-size:13.5px; color:var(--mist-dim); margin:0; }
+      .timeline {
+        position: relative;
+        padding-left: 30px;
+        margin-top: 4px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 6px;
+        bottom: 6px;
+        width: 2px;
+        background: linear-gradient(180deg, var(--gold), var(--teal));
+      }
+      .t-item {
+        position: relative;
+        padding-bottom: 15px;
+        transition: transform 0.2s ease;
+      }
+      .t-item:hover {
+        transform: translateX(4px);
+      }
+      .t-item .dot {
+        position: absolute;
+        left: -30px;
+        top: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--navy-950);
+        border: 2px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gold-soft);
+      }
+      .t-item .dot svg {
+        width: 11px;
+        height: 11px;
+      }
+      .t-item .wk {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--gold-soft);
+      }
+      .t-item h4 {
+        font-size: 16.5px;
+        margin: 2px 0 3px;
+      }
+      .t-item p {
+        font-size: 13.5px;
+        color: var(--mist-dim);
+        margin: 0;
+      }
 
-.stat{ border-left:2px solid var(--line); padding-left:15px; transition:border-color .2s ease; display:flex; gap:10px; align-items:flex-start; }
-.stat:hover{ border-color:var(--gold); }
-.stat .ico{ margin-bottom:0; }
-.stat b{ display:block; font-family:'Fraunces',serif; font-size:19px; color:#f4f1ea; font-weight:600; }
-.stat span{ font-size:12.8px; color:var(--mist-dim); }
-.stat.big b{ font-size:27px; }
+      .stat {
+        border-left: 2px solid var(--line);
+        padding-left: 15px;
+        transition: border-color 0.2s ease;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .stat:hover {
+        border-color: var(--gold);
+      }
+      .stat .ico {
+        margin-bottom: 0;
+      }
+      .stat b {
+        display: block;
+        font-family: "Fraunces", serif;
+        font-size: 19px;
+        color: #f4f1ea;
+        font-weight: 600;
+      }
+      .stat span {
+        font-size: 12.8px;
+        color: var(--mist-dim);
+      }
+      .stat.big b {
+        font-size: 27px;
+      }
 
-.market-wrap{ display:flex; align-items:center; justify-content:center; gap:56px; }
-.circles{ position:relative; width:320px; height:320px; flex:none; }
-.circle{ position:absolute; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:18px; gap:4px; }
-.circle .lbl{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.08em; }
-.c-tam{ width:320px; height:320px; left:0; top:0; background:rgba(63,162,149,.10); border:1px solid rgba(63,162,149,.5); }
-.c-sam{ width:222px; height:222px; left:49px; top:49px; background:rgba(207,159,63,.12); border:1px solid rgba(207,159,63,.55); }
-.c-som{ width:126px; height:126px; left:97px; top:97px; background:rgba(201,105,79,.16); border:1px solid rgba(201,105,79,.6); align-items:center; padding-top:0; justify-content:center; }
-.c-tam .lbl{ color:var(--teal-soft); } .c-sam .lbl{ color:var(--gold-soft); } .c-som .lbl{ color:#e3a48f; }
-.market-legend{ max-width:380px; }
-.market-legend .row{ margin-bottom:14px; padding-left:15px; border-left:3px solid var(--line); }
-.market-legend .row.tam{ border-color:var(--teal); } .market-legend .row.sam{ border-color:var(--gold); } .market-legend .row.som{ border-color:var(--coral); }
-.market-legend h4{ font-size:15.5px; margin-bottom:3px; }
-.market-legend p{ font-size:13px; margin:0; color:var(--mist-dim); }
+      .market-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 56px;
+      }
+      .circles {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        flex: none;
+      }
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 18px;
+        gap: 4px;
+      }
+      .circle .lbl {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+      .c-tam {
+        width: 320px;
+        height: 320px;
+        left: 0;
+        top: 0;
+        background: rgba(63, 162, 149, 0.1);
+        border: 1px solid rgba(63, 162, 149, 0.5);
+      }
+      .c-sam {
+        width: 222px;
+        height: 222px;
+        left: 49px;
+        top: 49px;
+        background: rgba(207, 159, 63, 0.12);
+        border: 1px solid rgba(207, 159, 63, 0.55);
+      }
+      .c-som {
+        width: 126px;
+        height: 126px;
+        left: 97px;
+        top: 97px;
+        background: rgba(201, 105, 79, 0.16);
+        border: 1px solid rgba(201, 105, 79, 0.6);
+        align-items: center;
+        padding-top: 0;
+        justify-content: center;
+      }
+      .c-tam .lbl {
+        color: var(--teal-soft);
+      }
+      .c-sam .lbl {
+        color: var(--gold-soft);
+      }
+      .c-som .lbl {
+        color: #e3a48f;
+      }
+      .market-legend {
+        max-width: 380px;
+      }
+      .market-legend .row {
+        margin-bottom: 14px;
+        padding-left: 15px;
+        border-left: 3px solid var(--line);
+      }
+      .market-legend .row.tam {
+        border-color: var(--teal);
+      }
+      .market-legend .row.sam {
+        border-color: var(--gold);
+      }
+      .market-legend .row.som {
+        border-color: var(--coral);
+      }
+      .market-legend h4 {
+        font-size: 15.5px;
+        margin-bottom: 3px;
+      }
+      .market-legend p {
+        font-size: 13px;
+        margin: 0;
+        color: var(--mist-dim);
+      }
 
-.arch{ display:flex; flex-direction:column; gap:11px; }
-.arch-row{ display:flex; gap:11px; }
-.arch-box{ flex:1; border:1px solid var(--line); border-radius:var(--r-md); padding:13px 15px; background:var(--navy-800); text-align:left; font-size:13.5px; display:flex; gap:11px; align-items:center; }
-.arch-box b{ display:block; color:#f4f1ea; font-size:15px; margin-bottom:2px; font-family:'Fraunces',serif; font-weight:600;}
-.arch-box span{ color:var(--mist-dim); font-size:12px; }
-.arch-box.accent{ border-color:rgba(207,159,63,.5); background:rgba(207,159,63,.08); }
-.arch-box.accent2{ border-color:rgba(63,162,149,.5); background:rgba(63,162,149,.08); }
-.arch-arrow{ align-self:center; color:var(--mist-dim); font-size:17px; text-align:center; margin-left:19px; }
+      .arch {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+      }
+      .arch-row {
+        display: flex;
+        gap: 11px;
+      }
+      .arch-box {
+        flex: 1;
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        padding: 13px 15px;
+        background: var(--navy-800);
+        text-align: left;
+        font-size: 13.5px;
+        display: flex;
+        gap: 11px;
+        align-items: center;
+      }
+      .arch-box b {
+        display: block;
+        color: #f4f1ea;
+        font-size: 15px;
+        margin-bottom: 2px;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+      }
+      .arch-box span {
+        color: var(--mist-dim);
+        font-size: 12px;
+      }
+      .arch-box.accent {
+        border-color: rgba(207, 159, 63, 0.5);
+        background: rgba(207, 159, 63, 0.08);
+      }
+      .arch-box.accent2 {
+        border-color: rgba(63, 162, 149, 0.5);
+        background: rgba(63, 162, 149, 0.08);
+      }
+      .arch-arrow {
+        align-self: center;
+        color: var(--mist-dim);
+        font-size: 17px;
+        text-align: center;
+        margin-left: 19px;
+      }
 
-.statement{ font-family:'Fraunces',serif; font-weight:500; font-size:38px; line-height:1.28; color:#f4f1ea; max-width:960px; }
-.statement em{ font-style:italic; color:var(--gold-soft); }
+      .statement {
+        font-family: "Fraunces", serif;
+        font-weight: 500;
+        font-size: 38px;
+        line-height: 1.28;
+        color: #f4f1ea;
+        max-width: 960px;
+      }
+      .statement em {
+        font-style: italic;
+        color: var(--gold-soft);
+      }
 
-.slide-foot{ position:absolute; left:82px; bottom:24px; display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mist-dim); letter-spacing:.05em; }
-.slide-foot .dot2{ width:5px;height:5px;border-radius:50%;background:var(--gold); }
-.brandmark{ position:absolute; right:82px; bottom:24px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mist-dim); }
+      .slide-foot {
+        position: absolute;
+        left: 82px;
+        bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--mist-dim);
+        letter-spacing: 0.05em;
+      }
+      .slide-foot .dot2 {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .brandmark {
+        position: absolute;
+        right: 82px;
+        bottom: 24px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--mist-dim);
+      }
 
-.section-divider{ position:relative; overflow:hidden; }
-.section-divider .bignum{ position:absolute; right:-40px; bottom:-90px; font-family:'Fraunces',serif; font-weight:300; font-size:300px; color:rgba(255,255,255,.035); line-height:1; pointer-events:none; }
+      .section-divider {
+        position: relative;
+        overflow: hidden;
+      }
+      .section-divider .bignum {
+        position: absolute;
+        right: -40px;
+        bottom: -90px;
+        font-family: "Fraunces", serif;
+        font-weight: 300;
+        font-size: 300px;
+        color: rgba(255, 255, 255, 0.035);
+        line-height: 1;
+        pointer-events: none;
+      }
 
-.check-list{ list-style:none; padding:0; margin:14px 0 0; }
-.check-list li{ position:relative; padding-left:27px; margin-bottom:11px; font-size:15.5px; color:var(--mist); line-height:1.5; }
-.check-list li::before{ content:"✓"; position:absolute; left:0; top:1px; color:var(--teal-soft); font-weight:700; width:18px; height:18px; border:1px solid rgba(63,162,149,.5); border-radius:5px; font-size:11.5px; display:flex; align-items:center; justify-content:center; }
-.check-list.gold li::before{ color:var(--gold-soft); border-color:rgba(207,159,63,.5); }
-.pill-row{ display:flex; gap:9px; flex-wrap:wrap; margin-top:13px; }
-.two-col{ display:grid; grid-template-columns:1.05fr .95fr; gap:46px; align-items:center; }
+      .check-list {
+        list-style: none;
+        padding: 0;
+        margin: 14px 0 0;
+      }
+      .check-list li {
+        position: relative;
+        padding-left: 27px;
+        margin-bottom: 11px;
+        font-size: 15.5px;
+        color: var(--mist);
+        line-height: 1.5;
+      }
+      .check-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 1px;
+        color: var(--teal-soft);
+        font-weight: 700;
+        width: 18px;
+        height: 18px;
+        border: 1px solid rgba(63, 162, 149, 0.5);
+        border-radius: 5px;
+        font-size: 11.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .check-list.gold li::before {
+        color: var(--gold-soft);
+        border-color: rgba(207, 159, 63, 0.5);
+      }
+      .pill-row {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        margin-top: 13px;
+      }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 46px;
+        align-items: center;
+      }
 
-.comp-card{ background:var(--navy-800); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px 18px; transition:transform .22s ease, border-color .22s ease; display:flex; flex-direction:column; }
-.comp-card:hover{ transform:translateY(-4px); border-color:rgba(63,162,149,.5); }
-.comp-mono{ width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center; font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:#0a0f1c;margin-bottom:10px; background:linear-gradient(135deg,var(--gold-soft),var(--gold)); }
-.comp-card h4{ font-size:16px;margin-bottom:1px; }
-.comp-card .hq{ font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--mist-dim);margin-bottom:8px;display:block; }
-.comp-card .cat{ display:inline-block; font-size:10.5px; color:var(--teal-soft); border:1px solid rgba(63,162,149,.4); border-radius:999px; padding:2px 8px; margin-bottom:9px; font-family:'JetBrains Mono',monospace; }
-.comp-card p{ font-size:12.8px;color:var(--mist-dim);margin:0 0 9px; }
-.comp-card .gap{ font-size:11.8px; color:var(--gold-soft); border-top:1px dashed var(--line); padding-top:8px; margin-top:auto; }
+      .comp-card {
+        background: var(--navy-800);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 18px 18px;
+        transition:
+          transform 0.22s ease,
+          border-color 0.22s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .comp-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(63, 162, 149, 0.5);
+      }
+      .comp-mono {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 16px;
+        color: #0a0f1c;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+      }
+      .comp-card h4 {
+        font-size: 16px;
+        margin-bottom: 1px;
+      }
+      .comp-card .hq {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        color: var(--mist-dim);
+        margin-bottom: 8px;
+        display: block;
+      }
+      .comp-card .cat {
+        display: inline-block;
+        font-size: 10.5px;
+        color: var(--teal-soft);
+        border: 1px solid rgba(63, 162, 149, 0.4);
+        border-radius: 999px;
+        padding: 2px 8px;
+        margin-bottom: 9px;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .comp-card p {
+        font-size: 12.8px;
+        color: var(--mist-dim);
+        margin: 0 0 9px;
+      }
+      .comp-card .gap {
+        font-size: 11.8px;
+        color: var(--gold-soft);
+        border-top: 1px dashed var(--line);
+        padding-top: 8px;
+        margin-top: auto;
+      }
 
-.meter{ position:relative; height:44px; border-radius:999px; background:var(--navy-800); border:1px solid var(--line); overflow:hidden; margin:16px 0 9px; }
-.meter .fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,var(--teal),var(--teal-soft)); border-radius:999px; transition:width 1.2s cubic-bezier(.2,.8,.2,1); }
-.meter .fill.commission{ background:linear-gradient(90deg,var(--gold),var(--gold-soft)); }
-.meter span.lab{ position:absolute; top:50%; transform:translateY(-50%); font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#0a0f1c; font-weight:700; left:16px; z-index:2; }
-.meter-labels{ display:flex; justify-content:space-between; font-size:12px; color:var(--mist-dim); font-family:'JetBrains Mono',monospace; }
+      .meter {
+        position: relative;
+        height: 44px;
+        border-radius: 999px;
+        background: var(--navy-800);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        margin: 16px 0 9px;
+      }
+      .meter .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0%;
+        background: linear-gradient(90deg, var(--teal), var(--teal-soft));
+        border-radius: 999px;
+        transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .meter .fill.commission {
+        background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+      }
+      .meter span.lab {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12.5px;
+        color: #0a0f1c;
+        font-weight: 700;
+        left: 16px;
+        z-index: 2;
+      }
+      .meter-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--mist-dim);
+        font-family: "JetBrains Mono", monospace;
+      }
 
-.team-card{ display:flex; gap:14px; align-items:center; background:var(--navy-800); border:1px solid var(--line); border-radius:var(--r-lg); padding:16px 18px; transition:transform .2s ease,border-color .2s ease; }
-.team-card:hover{ transform:translateY(-4px); border-color:rgba(207,159,63,.4); }
-.avatar{ width:50px;height:50px;border-radius:50%; flex:none; display:flex;align-items:center;justify-content:center; font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#0a0f1c; background:linear-gradient(135deg,var(--teal-soft),var(--teal)); }
-.team-card h4{ font-size:15.5px; margin-bottom:2px; }
-.team-card span{ font-size:12px; color:var(--mist-dim); font-family:'JetBrains Mono',monospace; }
+      .team-card {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        background: var(--navy-800);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 16px 18px;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .team-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(207, 159, 63, 0.4);
+      }
+      .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 17px;
+        color: #0a0f1c;
+        background: linear-gradient(135deg, var(--teal-soft), var(--teal));
+      }
+      .team-card h4 {
+        font-size: 15.5px;
+        margin-bottom: 2px;
+      }
+      .team-card span {
+        font-size: 12px;
+        color: var(--mist-dim);
+        font-family: "JetBrains Mono", monospace;
+      }
 
-/* feature wall */
-.feat-wall{ display:grid; grid-template-columns:repeat(5,1fr); gap:13px; margin-top:6px; }
-.feat-chip{ background:var(--navy-800); border:1px solid var(--line); border-radius:var(--r-md); padding:14px 12px; text-align:center; transition:transform .2s ease,border-color .2s ease; }
-.feat-chip:hover{ transform:translateY(-4px); border-color:rgba(63,162,149,.4); }
-.feat-chip .ico{ margin:0 auto 8px; }
-.feat-chip h5{ font-size:13px; color:#f4f1ea; font-weight:600; margin:0 0 3px; }
-.feat-chip p{ font-size:11px; color:var(--mist-dim); margin:0; line-height:1.35; }
+      /* feature wall */
+      .feat-wall {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 13px;
+        margin-top: 6px;
+      }
+      .feat-chip {
+        background: var(--navy-800);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        padding: 14px 12px;
+        text-align: center;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .feat-chip:hover {
+        transform: translateY(-4px);
+        border-color: rgba(63, 162, 149, 0.4);
+      }
+      .feat-chip .ico {
+        margin: 0 auto 8px;
+      }
+      .feat-chip h5 {
+        font-size: 13px;
+        color: #f4f1ea;
+        font-weight: 600;
+        margin: 0 0 3px;
+      }
+      .feat-chip p {
+        font-size: 11px;
+        color: var(--mist-dim);
+        margin: 0;
+        line-height: 1.35;
+      }
 
-/* browser mockup */
-.mockup{ border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--navy-800); box-shadow:0 40px 80px -30px rgba(0,0,0,.7); }
-.mockup .bar{ display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--navy-900); border-bottom:1px solid var(--line); }
-.mockup .dot3{ width:9px;height:9px;border-radius:50%; }
-.mockup .bar .addr{ margin-left:10px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--mist-dim); background:var(--navy-800); padding:4px 12px; border-radius:6px; flex:1; }
-.mockup .body{ display:flex; min-height:290px; }
-.mockup .side{ width:150px; background:var(--navy-900); border-right:1px solid var(--line); padding:16px 12px; display:flex; flex-direction:column; gap:10px; }
-.mockup .side .sitem{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--mist-dim); padding:7px 8px; border-radius:6px; }
-.mockup .side .sitem.active{ background:rgba(207,159,63,.14); color:var(--gold-soft); }
-.mockup .side .sitem .ico{ width:22px;height:22px;margin:0; }
-.mockup .side .sitem .ico svg{ width:12px;height:12px; }
-.mockup .main{ flex:1; padding:16px 18px; }
-.mockup .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
-.mockup .kpi{ background:var(--navy-950); border:1px solid var(--line); border-radius:9px; padding:10px 12px; }
-.mockup .kpi b{ display:block; font-family:'Fraunces',serif; color:#f4f1ea; font-size:17px; }
-.mockup .kpi span{ font-size:10px; color:var(--mist-dim); }
-.mockup .course-row{ display:flex; gap:10px; }
-.mockup .crs{ flex:1; background:var(--navy-950); border:1px solid var(--line); border-radius:9px; padding:10px; }
-.mockup .crs .thumb{ height:44px; border-radius:6px; margin-bottom:8px; background:linear-gradient(135deg,var(--teal),var(--navy-700)); }
-.mockup .crs b{ font-size:11.5px; color:#f4f1ea; display:block; }
-.mockup .crs span{ font-size:10px; color:var(--mist-dim); }
-.mockup-caption{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mist-dim); margin-top:12px; text-align:center; }
+      /* browser mockup */
+      .mockup {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: var(--navy-800);
+        box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+      }
+      .mockup .bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: var(--navy-900);
+        border-bottom: 1px solid var(--line);
+      }
+      .mockup .dot3 {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .mockup .bar .addr {
+        margin-left: 10px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        color: var(--mist-dim);
+        background: var(--navy-800);
+        padding: 4px 12px;
+        border-radius: 6px;
+        flex: 1;
+      }
+      .mockup .body {
+        display: flex;
+        min-height: 290px;
+      }
+      .mockup .side {
+        width: 150px;
+        background: var(--navy-900);
+        border-right: 1px solid var(--line);
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .mockup .side .sitem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        color: var(--mist-dim);
+        padding: 7px 8px;
+        border-radius: 6px;
+      }
+      .mockup .side .sitem.active {
+        background: rgba(207, 159, 63, 0.14);
+        color: var(--gold-soft);
+      }
+      .mockup .side .sitem .ico {
+        width: 22px;
+        height: 22px;
+        margin: 0;
+      }
+      .mockup .side .sitem .ico svg {
+        width: 12px;
+        height: 12px;
+      }
+      .mockup .main {
+        flex: 1;
+        padding: 16px 18px;
+      }
+      .mockup .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .mockup .kpi {
+        background: var(--navy-950);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 10px 12px;
+      }
+      .mockup .kpi b {
+        display: block;
+        font-family: "Fraunces", serif;
+        color: #f4f1ea;
+        font-size: 17px;
+      }
+      .mockup .kpi span {
+        font-size: 10px;
+        color: var(--mist-dim);
+      }
+      .mockup .course-row {
+        display: flex;
+        gap: 10px;
+      }
+      .mockup .crs {
+        flex: 1;
+        background: var(--navy-950);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 10px;
+      }
+      .mockup .crs .thumb {
+        height: 44px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, var(--teal), var(--navy-700));
+      }
+      .mockup .crs b {
+        font-size: 11.5px;
+        color: #f4f1ea;
+        display: block;
+      }
+      .mockup .crs span {
+        font-size: 10px;
+        color: var(--mist-dim);
+      }
+      .mockup-caption {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--mist-dim);
+        margin-top: 12px;
+        text-align: center;
+      }
 
-.reveal .progress{ color:var(--gold); height:4px; }
-.reveal .controls{ color:var(--gold-soft); }
-.reveal .slide-number{ font-family:'JetBrains Mono',monospace; background:transparent; color:var(--mist-dim); font-size:13px; }
+      .reveal .progress {
+        color: var(--gold);
+        height: 4px;
+      }
+      .reveal .controls {
+        color: var(--gold-soft);
+      }
+      .reveal .slide-number {
+        font-family: "JetBrains Mono", monospace;
+        background: transparent;
+        color: var(--mist-dim);
+        font-size: 13px;
+      }
 
-/* ---------- progressive reveal, driven entirely by GSAP in <script> ----------
+      /* ---------- progressive reveal, driven entirely by GSAP in <script> ----------
    No overlay, nothing covers the screen — reveal.js's own per-slide
    data-transition (zoom / fade / convex / slide) plays completely untouched.
    GSAP sets each element's "from" state itself at animation time, so no
    opacity:0 default is needed here (that would break printing / no-JS). */
 
-.reveal .fragment.grow-in{ opacity:0; transform:translateY(14px); }
-.reveal .fragment.grow-in.visible{ opacity:1; transform:translateY(0); transition:all .5s ease; }
+      .reveal .fragment.grow-in {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      .reveal .fragment.grow-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.5s ease;
+      }
 
-@media (prefers-reduced-motion: reduce){
-  .panel,.t-item,.stat,.comp-card,.team-card,.feat-chip{ transition:none; }
-  .meter .fill{ transition:none; }
-}
+      @media (prefers-reduced-motion: reduce) {
+        .panel,
+        .t-item,
+        .stat,
+        .comp-card,
+        .team-card,
+        .feat-chip {
+          transition: none;
+        }
+        .meter .fill {
+          transition: none;
+        }
+      }
 
-@media (max-width:900px){
-  .reveal .slides section{ padding:34px 34px; }
-  .grid-4,.grid-5{ grid-template-columns:repeat(2,1fr); }
-  .grid-3{ grid-template-columns:1fr 1fr; }
-  .feat-wall{ grid-template-columns:repeat(2,1fr); }
-  .market-wrap{ flex-direction:column; gap:24px; }
-  .two-col{ grid-template-columns:1fr; }
-  .mockup .side{ display:none; }
-}
-</style>
-</head>
-<body>
-
-<!-- reusable icon library -->
-<svg style="display:none" aria-hidden="true">
-<defs>
-<!-- Icon paths verified against the real Lucide icon set (ISC licensed) so shapes render cleanly, not hand-guessed -->
-<symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></symbol>
-<symbol id="icon-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
-<symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></symbol>
-<symbol id="icon-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
-<symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 11h8"/><path d="M7 16h12"/><path d="M7 6h3"/></symbol>
-<symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
-<symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></symbol>
-<symbol id="icon-bank" viewBox="0 0 24 24"><path d="M10 18v-7"/><path d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/></symbol>
-<symbol id="icon-split" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M18.5 5.5 5.5 18.5"/></symbol>
-<symbol id="icon-server" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="7" rx="1.6"/><rect x="2" y="14" width="20" height="7" rx="1.6"/><path d="M6 6.5h.01M6 17.5h.01"/></symbol>
-<symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
-<symbol id="icon-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="1.8"/><path d="M8 21h8M12 17v4"/></symbol>
-<symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
-<symbol id="icon-bell" viewBox="0 0 24 24"><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/><path d="M10.268 21a2 2 0 0 0 3.464 0"/></symbol>
-<symbol id="icon-certificate" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
-<symbol id="icon-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-<symbol id="icon-check-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
-<symbol id="icon-handshake" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></symbol>
-<symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
-<symbol id="icon-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
-<symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
-<symbol id="icon-mobile" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.4"/><path d="M11 18h2"/></symbol>
-<symbol id="icon-export" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></symbol>
-<symbol id="icon-layers" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="m2 14 10 5 10-5M2 11l10 5 10-5"/></symbol>
-<symbol id="icon-dashboard" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.4"/><rect x="14" y="3" width="7" height="5" rx="1.4"/><rect x="14" y="12" width="7" height="9" rx="1.4"/><rect x="3" y="16" width="7" height="5" rx="1.4"/></symbol>
-</defs>
-</svg>
-
-<div class="reveal">
-<div class="slides">
-
-<!-- 1. COVER -->
-<section data-transition="zoom" data-background-color="#0a0f1c">
-  <div class="two-col slide-wrap">
-    <div>
-      <span class="tag gold">EDUCATION MARKETPLACE &amp; LMS</span>
-      <h1 class="h-xl" style="margin-top:18px;">Academ<em style="font-style:italic;color:var(--gold-soft);">ia</em></h1>
-      <p class="lede">A learning marketplace that connects students and teachers around real
-        courses, real payments, and real progress — replacing scattered WhatsApp groups and
-        disconnected spreadsheets with one trusted platform.</p>
-      <div class="rule"></div>
-      <div class="pill-row">
-        <span class="tag">Marketplace + LMS</span>
-        <span class="tag teal">In‑platform Wallet</span>
-        <span class="tag">Academic Tracking</span>
-        <span class="tag gold">Commission Engine</span>
-      </div>
-    </div>
-    <svg viewBox="0 0 380 380" style="width:100%;max-width:380px;justify-self:center;">
-      <g stroke="var(--line)" stroke-width="1.4">
-        <line x1="190" y1="190" x2="70" y2="90"/><line x1="190" y1="190" x2="320" y2="80"/>
-        <line x1="190" y1="190" x2="60" y2="290"/><line x1="190" y1="190" x2="310" y2="300"/>
-        <line x1="190" y1="190" x2="190" y2="40"/><line x1="70" y1="90" x2="190" y2="40"/>
-        <line x1="320" y1="80" x2="190" y2="40"/><line x1="60" y1="290" x2="310" y2="300"/>
-      </g>
-      <circle cx="190" cy="190" r="34" fill="rgba(207,159,63,.16)" stroke="var(--gold)" stroke-width="1.6"/>
-      <use href="#icon-layers" x="176" y="176" width="28" height="28" color="var(--gold-soft)"/>
-      <circle cx="70" cy="90" r="24" fill="rgba(63,162,149,.16)" stroke="var(--teal)" stroke-width="1.4"/>
-      <use href="#icon-users" x="59" y="79" width="22" height="22" color="var(--teal-soft)"/>
-      <circle cx="320" cy="80" r="24" fill="rgba(63,162,149,.16)" stroke="var(--teal)" stroke-width="1.4"/>
-      <use href="#icon-book" x="309" y="69" width="22" height="22" color="var(--teal-soft)"/>
-      <circle cx="60" cy="290" r="24" fill="rgba(63,162,149,.16)" stroke="var(--teal)" stroke-width="1.4"/>
-      <use href="#icon-wallet" x="49" y="279" width="22" height="22" color="var(--teal-soft)"/>
-      <circle cx="310" cy="300" r="24" fill="rgba(63,162,149,.16)" stroke="var(--teal)" stroke-width="1.4"/>
-      <use href="#icon-chart" x="299" y="289" width="22" height="22" color="var(--teal-soft)"/>
-      <circle cx="190" cy="40" r="16" fill="rgba(230,232,240,.08)" stroke="var(--line)" stroke-width="1.2"/>
+      @media (max-width: 900px) {
+        .reveal .slides section {
+          padding: 34px 34px;
+        }
+        .grid-4,
+        .grid-5 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .grid-3 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .feat-wall {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .market-wrap {
+          flex-direction: column;
+          gap: 24px;
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .mockup .side {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- reusable icon library -->
+    <svg style="display: none" aria-hidden="true">
+      <defs>
+        <!-- Icon paths verified against the real Lucide icon set (ISC licensed) so shapes render cleanly, not hand-guessed -->
+        <symbol id="icon-search" viewBox="0 0 24 24">
+          <path d="m21 21-4.34-4.34" />
+          <circle cx="11" cy="11" r="8" />
+        </symbol>
+        <symbol id="icon-book" viewBox="0 0 24 24">
+          <path d="M12 7v14" />
+          <path
+            d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+          />
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <circle cx="9" cy="7" r="4" />
+        </symbol>
+        <symbol id="icon-wallet" viewBox="0 0 24 24">
+          <path
+            d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"
+          />
+          <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+        </symbol>
+        <symbol id="icon-chart" viewBox="0 0 24 24">
+          <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+          <path d="M7 11h8" />
+          <path d="M7 16h12" />
+          <path d="M7 6h3" />
+        </symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24">
+          <path
+            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+          />
+        </symbol>
+        <symbol id="icon-upload" viewBox="0 0 24 24">
+          <path d="M12 3v12" />
+          <path d="m17 8-5-5-5 5" />
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        </symbol>
+        <symbol id="icon-bank" viewBox="0 0 24 24">
+          <path d="M10 18v-7" />
+          <path
+            d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z"
+          />
+          <path d="M14 18v-7" />
+          <path d="M18 18v-7" />
+          <path d="M3 22h18" />
+          <path d="M6 18v-7" />
+        </symbol>
+        <symbol id="icon-split" viewBox="0 0 24 24">
+          <circle cx="6" cy="6" r="3" />
+          <circle cx="18" cy="18" r="3" />
+          <path d="M18.5 5.5 5.5 18.5" />
+        </symbol>
+        <symbol id="icon-server" viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="7" rx="1.6" />
+          <rect x="2" y="14" width="20" height="7" rx="1.6" />
+          <path d="M6 6.5h.01M6 17.5h.01" />
+        </symbol>
+        <symbol id="icon-database" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="5" rx="8" ry="3" />
+          <path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5" />
+          <path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" />
+        </symbol>
+        <symbol id="icon-monitor" viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="1.8" />
+          <path d="M8 21h8M12 17v4" />
+        </symbol>
+        <symbol id="icon-globe" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </symbol>
+        <symbol id="icon-bell" viewBox="0 0 24 24">
+          <path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+          />
+          <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+        </symbol>
+        <symbol id="icon-certificate" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="7" />
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+        </symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </symbol>
+        <symbol id="icon-check-shield" viewBox="0 0 24 24">
+          <path
+            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+          />
+          <path d="m9 12 2 2 4-4" />
+        </symbol>
+        <symbol id="icon-handshake" viewBox="0 0 24 24">
+          <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+          <path
+            d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"
+          />
+          <path d="m21 3 1 11h-2" />
+          <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+          <path d="M3 4h8" />
+        </symbol>
+        <symbol id="icon-target" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="12" r="6" />
+          <circle cx="12" cy="12" r="2" />
+        </symbol>
+        <symbol id="icon-rocket" viewBox="0 0 24 24">
+          <path
+            d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+          />
+          <path
+            d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+          />
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+        </symbol>
+        <symbol id="icon-mobile" viewBox="0 0 24 24">
+          <rect x="6" y="2" width="12" height="20" rx="2.4" />
+          <path d="M11 18h2" />
+        </symbol>
+        <symbol id="icon-export" viewBox="0 0 24 24">
+          <path d="M12 15V3" />
+          <path d="m7 10 5 5 5-5" />
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        </symbol>
+        <symbol id="icon-layers" viewBox="0 0 24 24">
+          <path d="M12 3 2 8l10 5 10-5-10-5z" />
+          <path d="m2 14 10 5 10-5M2 11l10 5 10-5" />
+        </symbol>
+        <symbol id="icon-dashboard" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="9" rx="1.4" />
+          <rect x="14" y="3" width="7" height="5" rx="1.4" />
+          <rect x="14" y="12" width="7" height="9" rx="1.4" />
+          <rect x="3" y="16" width="7" height="5" rx="1.4" />
+        </symbol>
+      </defs>
     </svg>
-  </div>
-  <div class="slide-foot"><span class="dot2"></span> Academia — Investor &amp; Jury Briefing</div>
-  <div class="brandmark">01 / 25</div>
-  <aside class="notes">
-    Open warm, not salesy. One line: Academia turns fragmented private tutoring and course
-    delivery into a single trusted marketplace — discovery, payment, and progress in one place.
-  </aside>
-</section>
 
-<!-- 2. AGENDA -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Where we're going</div>
-    <h2 class="h-lg">Agenda</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:4px;">
-      <ol style="list-style:none;padding:0;margin:0;">
-        <li class="panel" style="margin-bottom:11px;"><span class="num">01</span><h4>The problem &amp; the market</h4><p>Why tutoring is still stuck in group chats, and who else is chasing this gap.</p></li>
-        <li class="panel" style="margin-bottom:11px;"><span class="num">02</span><h4>The solution &amp; how it works</h4><p>Marketplace, wallet, commission engine, and academic tracking end to end.</p></li>
-        <li class="panel"><span class="num">03</span><h4>Product &amp; engineering</h4><p>Architecture, security, and an honest look at where we are today.</p></li>
-      </ol>
-      <ol style="list-style:none;padding:0;margin:0;">
-        <li class="panel" style="margin-bottom:11px;"><span class="num">04</span><h4>Competition &amp; differentiation</h4><p>Academia against Google Classroom, Udemy, and regional peers.</p></li>
-        <li class="panel" style="margin-bottom:11px;"><span class="num">05</span><h4>Winning both sides</h4><p>Why students switch, and why teachers accept a commission.</p></li>
-        <li class="panel"><span class="num">06</span><h4>Roadmap, team &amp; the ask</h4><p>What we build next, who's building it, and what we need.</p></li>
-      </ol>
-    </div>
-  </div>
-  <div class="brandmark">02 / 25</div>
-  <aside class="notes">Quick roadmap of the deck — keep under 30 seconds.</aside>
-</section>
-
-<!-- 3. PROBLEM -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">The problem</div>
-    <h2 class="h-lg">Great teaching is still run through group chats.</h2>
-    <div class="rule"></div>
-    <div class="grid grid-3" style="margin-top:2px;">
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-upload"/></svg></div>
-        <h4>Materials get lost</h4>
-        <p>Lessons and files scatter across social‑media groups and manual folders — nothing centralized, nothing searchable.</p>
-      </div>
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-search"/></svg></div>
-        <h4>No real discovery</h4>
-        <p>A new student reaches a teacher only through a personal link or word of mouth — there's no place to browse and compare.</p>
-      </div>
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-bank"/></svg></div>
-        <h4>Payment is manual and risky</h4>
-        <p>Fees are chased informally, progress isn't tracked, and parents have no visibility into attendance, results, or spend.</p>
-      </div>
-    </div>
-    <p class="lede tight" style="margin-top:20px;font-size:15px;">
-      This is the exact gap our own field research surfaced: instructors and students rely on
-      social‑media groups and disconnected manual methods for materials, join requests, and
-      payment — files get lost, time is wasted, and teachers can't fairly evaluate progress.
-    </p>
-  </div>
-  <div class="brandmark">03 / 25</div>
-  <aside class="notes">Grounded in the founders' own SRS problem statement and milestones doc.</aside>
-</section>
-
-<!-- 4. SaaS PHILOSOPHY BRIDGE -->
-<section data-transition="fade" data-background-color="#0a0f1c" class="section-divider">
-  <span class="bignum">SaaS</span>
-  <div class="slide-wrap">
-    <div class="eyebrow alt">Our operating principle</div>
-    <p class="statement">A SaaS product isn't the app.<br>It's the <em>whole ecosystem</em> around it —
-      who it's for, what it's worth to them, and whether they'll actually pay.</p>
-    <p class="lede tight" style="margin-top:22px;">
-      Before we wrote a line of code, we asked who we're solving this for, how big that market
-      really is, and whether people would pay for the answer — the same questions this jury is
-      asking us right now.
-    </p>
-  </div>
-  <div class="brandmark">04 / 25</div>
-  <aside class="notes">Bridge slide. Signal business-first thinking before market sizing.</aside>
-</section>
-
-<!-- 5. MARKET -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Market opportunity</div>
-    <h2 class="h-lg">Sizing the opportunity honestly</h2>
-    <div class="rule"></div>
-    <div class="market-wrap" style="margin-top:4px;">
-      <div class="circles">
-        <div class="circle c-tam"><svg class="i" style="color:var(--teal-soft)"><use href="#icon-globe"/></svg><span class="lbl">TAM</span></div>
-        <div class="circle c-sam"><svg class="i" style="color:var(--gold-soft)"><use href="#icon-users"/></svg><span class="lbl">SAM</span></div>
-        <div class="circle c-som"><svg class="i" style="color:#e3a48f"><use href="#icon-target"/></svg><span class="lbl">SOM</span></div>
-      </div>
-      <div class="market-legend">
-        <div class="row tam"><h4>Total Addressable Market</h4><p>Everything spent on private tutoring and course‑based learning across our target region.</p></div>
-        <div class="row sam"><h4>Serviceable Available Market</h4><p>Teachers and students already paying for lessons, reachable online, willing to transact digitally.</p></div>
-        <div class="row som"><h4>Serviceable Obtainable Market</h4><p>Independent teachers and small tutoring centers onboarded through direct partnerships.</p></div>
-      </div>
-    </div>
-    <div style="margin-top:20px;display:flex;gap:30px;">
-      <div class="stat"><div class="ico"><svg class="i"><use href="#icon-rocket"/></svg></div><div><b class="cu" data-target="41" data-suffix="M">$0M</b><span>Noon Academy — Series B, 2026</span></div></div>
-      <div class="stat"><div class="ico"><svg class="i"><use href="#icon-rocket"/></svg></div><div><b class="cu" data-target="27.5" data-suffix="M">$0M</b><span>Abwaab — total raised</span></div></div>
-      <div class="stat"><div class="ico"><svg class="i"><use href="#icon-rocket"/></svg></div><div><b class="cu" data-target="14.5" data-suffix="M">$0M</b><span>Al‑Mentor — total raised</span></div></div>
-    </div>
-    <p class="src-note">Independent, publicly reported funding for comparable regional ed‑tech peers — proof of investor appetite, not Academia's own valuation.</p>
-  </div>
-  <div class="brandmark">05 / 25</div>
-  <aside class="notes">No invented Academia-specific TAM figure — real peer funding as proof of category appetite instead.</aside>
-</section>
-
-<!-- 6. REGIONAL COMPETITORS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Who else is chasing this gap</div>
-    <h2 class="h-lg">Real regional players — and where they stop short</h2>
-    <div class="rule"></div>
-    <div class="grid grid-4" style="margin-top:0;">
-      <div class="comp-card">
-        <div class="comp-mono">N</div><h4>Noon Academy</h4><span class="hq">Saudi Arabia · 2013</span>
-        <span class="cat">Live tutoring</span>
-        <p>Social, gamified live tutoring; Series B ≈$41M (2026). Strong KSA/Egypt reach.</p>
-        <div class="gap">Gap: no marketplace wallet, no parent finance dashboard.</div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-mono">O</div><h4>Orcas</h4><span class="hq">Egypt · 2013</span>
-        <span class="cat">Tutor discovery</span>
-        <p>Mobile app connecting parents/students with nearby tutors, online &amp; offline.</p>
-        <div class="gap">Gap: discovery‑only, not a full course/LMS + commission engine.</div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-mono">A</div><h4>Al‑Mentor</h4><span class="hq">UAE · 2016</span>
-        <span class="cat">Video courses</span>
-        <p>Professional video courses by experts; 80+ enterprise partnerships across MENA.</p>
-        <div class="gap">Gap: skills/career content, not K‑12 attendance or live class management.</div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-mono">T</div><h4>Nafham / Tyro</h4><span class="hq">Egypt · merged 2021</span>
-        <span class="cat">Content + tutoring</span>
-        <p>Free crowdsourced video lessons (6M+ annual users) merged with a live‑tutoring booking platform.</p>
-        <div class="gap">Gap: no unified wallet, commission ledger, or parent controls.</div>
-      </div>
-    </div>
-    <p class="src-note">Publicly reported facts; positioning gaps are our own competitive analysis, not claims made by these companies.</p>
-  </div>
-  <div class="brandmark">06 / 25</div>
-  <aside class="notes">Four funded regional players — none combine discovery + wallet + ledger + parent dashboard + academic tracking in one role-aware system.</aside>
-</section>
-
-<!-- 7. VISION -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="two-col slide-wrap">
-    <div>
-      <div class="eyebrow">The idea</div>
-      <h2 class="h-lg">One platform where teaching, learning, and paying finally live together.</h2>
-      <p class="lede" style="margin-top:14px;">
-        Academia is an education marketplace and learning platform connecting students, teachers,
-        and courses — combining discovery, enrollment, an internal wallet for fees and payouts,
-        and academic tracking such as attendance and exams in a single role‑aware system.
-      </p>
-    </div>
-    <div class="panel" style="padding:26px;">
-      <h4 style="font-size:17px;margin-bottom:13px;">Who it serves</h4>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-users"/></svg></div><div><b style="color:#f4f1ea;">Students</b><br><span style="color:var(--mist-dim);font-size:13px;">discover, request enrollment, pay from one wallet, track progress.</span></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-book"/></svg></div><div><b style="color:#f4f1ea;">Teachers</b><br><span style="color:var(--mist-dim);font-size:13px;">create courses and lessons, manage enrollment, get paid automatically.</span></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-shield"/></svg></div><div><b style="color:#f4f1ea;">Parents</b><br><span style="color:var(--mist-dim);font-size:13px;">optionally follow attendance, results, and spend.</span></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-check-shield"/></svg></div><div><b style="color:#f4f1ea;">Admins</b><br><span style="color:var(--mist-dim);font-size:13px;">govern approvals, permissions, finance, and audit trails.</span></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="brandmark">07 / 25</div>
-  <aside class="notes">Four-role value proposition. Emphasize "role-aware."</aside>
-</section>
-
-<!-- 8. SOLUTION -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">The solution</div>
-    <h2 class="h-lg">Six modules, one connected system</h2>
-    <div class="rule"></div>
-    <div class="grid grid-3" style="margin-top:0;">
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-search"/></svg></div><h4>Marketplace &amp; discovery</h4><p>A public catalog of courses, categories, and teacher groups students can browse and compare.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-book"/></svg></div><h4>Courses, groups &amp; lessons</h4><p>Teachers upload and structure materials into lesson categories; files up to 50MB, with public or enrolled‑only visibility.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-users"/></svg></div><h4>Join requests &amp; enrollment</h4><p>Students request a seat; a duplicate or already‑pending request is blocked automatically.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-wallet"/></svg></div><h4>In‑platform wallet</h4><p>One wallet handles top‑ups, fee deductions, commission splits, and teacher withdrawals — securely.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-chart"/></svg></div><h4>Academic tracking</h4><p>Attendance, exam scores, and pass/absent status recorded per student, exportable as PDF or Excel.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-shield"/></svg></div><h4>Admin &amp; audit control</h4><p>Role‑based permissions, notifications, and audit logs govern every sensitive action.</p></div>
-    </div>
-  </div>
-  <div class="brandmark">08 / 25</div>
-  <aside class="notes">50MB upload limit and PDF/Excel export are real documented acceptance criteria, not invented specs.</aside>
-</section>
-
-<!-- 9. PLATFORM CAPABILITIES WALL -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Under the hood</div>
-    <h2 class="h-lg">Small details, all designed on purpose</h2>
-    <div class="rule"></div>
-    <div class="feat-wall">
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-globe"/></svg></div><h5>Multi‑language ready</h5><p>Built on i18next from day one</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-bell"/></svg></div><h5>Notifications</h5><p>Join requests, payments &amp; grades</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-certificate"/></svg></div><h5>Certificates</h5><p>Delivered on course completion</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-export"/></svg></div><h5>PDF / Excel export</h5><p>Academic reports in under 3s</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-lock"/></svg></div><h5>Private by default</h5><p>Receipts &amp; bank data locked down</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-check-shield"/></svg></div><h5>Full audit trail</h5><p>Every sensitive action logged</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-shield"/></svg></div><h5>Role‑based access</h5><p>Student / Teacher / Parent / Admin</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-mobile"/></svg></div><h5>Responsive UI</h5><p>Built mobile‑first with Tailwind</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-wallet"/></svg></div><h5>Transaction history</h5><p>Filterable, per‑user wallet log</p></div>
-      <div class="feat-chip"><div class="ico"><svg class="i"><use href="#icon-users"/></svg></div><h5>Duplicate‑request guard</h5><p>No double join requests possible</p></div>
-    </div>
-  </div>
-  <div class="brandmark">09 / 25</div>
-  <aside class="notes">
-    Every chip here is a documented requirement from the SRS/user stories, not marketing filler —
-    good slide to point to if a juror asks "what have you actually specified in detail."
-  </aside>
-</section>
-
-<!-- 10. PRODUCT CONCEPT MOCKUP -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">A first look</div>
-    <h2 class="h-lg">What the student dashboard is designed to feel like</h2>
-    <div class="rule"></div>
-    <div class="mockup">
-      <div class="bar">
-        <div class="dot3" style="background:#e5645b;"></div><div class="dot3" style="background:#e8b13f;"></div><div class="dot3" style="background:#4cae6b;"></div>
-        <div class="addr">academia.app / dashboard</div>
-      </div>
-      <div class="body">
-        <div class="side">
-          <div class="sitem active"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-dashboard"/></svg></div>Overview</div>
-          <div class="sitem"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-book"/></svg></div>My courses</div>
-          <div class="sitem"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-wallet"/></svg></div>Wallet</div>
-          <div class="sitem"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-chart"/></svg></div>Progress</div>
-          <div class="sitem"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-bell"/></svg></div>Notifications</div>
-        </div>
-        <div class="main">
-          <div class="cards">
-            <div class="kpi"><b>3</b><span>ACTIVE COURSES</span></div>
-            <div class="kpi"><b>92%</b><span>ATTENDANCE</span></div>
-            <div class="kpi"><b>$—</b><span>WALLET BALANCE</span></div>
+    <div class="reveal">
+      <div class="slides">
+        <!-- 1. COVER -->
+        <section data-transition="zoom" data-background-color="#0a0f1c">
+          <div class="two-col slide-wrap">
+            <div>
+              <span class="tag gold">EDUCATION MARKETPLACE &amp; LMS</span>
+              <h1 class="h-xl" style="margin-top: 18px">
+                Academ<em style="font-style: italic; color: var(--gold-soft)">ia</em>
+              </h1>
+              <p class="lede">
+                A learning marketplace that connects students and teachers around real courses, real
+                payments, and real progress — replacing scattered WhatsApp groups and disconnected
+                spreadsheets with one trusted platform.
+              </p>
+              <div class="rule"></div>
+              <div class="pill-row">
+                <span class="tag">Marketplace + LMS</span>
+                <span class="tag teal">In‑platform Wallet</span>
+                <span class="tag">Academic Tracking</span>
+                <span class="tag gold">Commission Engine</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 380 380" style="width: 100%; max-width: 380px; justify-self: center">
+              <g stroke="var(--line)" stroke-width="1.4">
+                <line x1="190" y1="190" x2="70" y2="90" />
+                <line x1="190" y1="190" x2="320" y2="80" />
+                <line x1="190" y1="190" x2="60" y2="290" />
+                <line x1="190" y1="190" x2="310" y2="300" />
+                <line x1="190" y1="190" x2="190" y2="40" />
+                <line x1="70" y1="90" x2="190" y2="40" />
+                <line x1="320" y1="80" x2="190" y2="40" />
+                <line x1="60" y1="290" x2="310" y2="300" />
+              </g>
+              <circle
+                cx="190"
+                cy="190"
+                r="34"
+                fill="rgba(207,159,63,.16)"
+                stroke="var(--gold)"
+                stroke-width="1.6"
+              />
+              <use
+                href="#icon-layers"
+                x="176"
+                y="176"
+                width="28"
+                height="28"
+                color="var(--gold-soft)"
+              />
+              <circle
+                cx="70"
+                cy="90"
+                r="24"
+                fill="rgba(63,162,149,.16)"
+                stroke="var(--teal)"
+                stroke-width="1.4"
+              />
+              <use
+                href="#icon-users"
+                x="59"
+                y="79"
+                width="22"
+                height="22"
+                color="var(--teal-soft)"
+              />
+              <circle
+                cx="320"
+                cy="80"
+                r="24"
+                fill="rgba(63,162,149,.16)"
+                stroke="var(--teal)"
+                stroke-width="1.4"
+              />
+              <use
+                href="#icon-book"
+                x="309"
+                y="69"
+                width="22"
+                height="22"
+                color="var(--teal-soft)"
+              />
+              <circle
+                cx="60"
+                cy="290"
+                r="24"
+                fill="rgba(63,162,149,.16)"
+                stroke="var(--teal)"
+                stroke-width="1.4"
+              />
+              <use
+                href="#icon-wallet"
+                x="49"
+                y="279"
+                width="22"
+                height="22"
+                color="var(--teal-soft)"
+              />
+              <circle
+                cx="310"
+                cy="300"
+                r="24"
+                fill="rgba(63,162,149,.16)"
+                stroke="var(--teal)"
+                stroke-width="1.4"
+              />
+              <use
+                href="#icon-chart"
+                x="299"
+                y="289"
+                width="22"
+                height="22"
+                color="var(--teal-soft)"
+              />
+              <circle
+                cx="190"
+                cy="40"
+                r="16"
+                fill="rgba(230,232,240,.08)"
+                stroke="var(--line)"
+                stroke-width="1.2"
+              />
+            </svg>
           </div>
-          <div class="course-row">
-            <div class="crs"><div class="thumb"></div><b>Algebra II</b><span>Ustadh Samir · Mon/Wed</span></div>
-            <div class="crs"><div class="thumb" style="background:linear-gradient(135deg,var(--gold),var(--navy-700));"></div><b>English Writing</b><span>Ms. Lina · Sun/Tue</span></div>
-            <div class="crs"><div class="thumb" style="background:linear-gradient(135deg,var(--coral),var(--navy-700));"></div><b>Physics Lab</b><span>Dr. Fadi · Thu</span></div>
+          <div class="slide-foot">
+            <span class="dot2"></span> Academia — Investor &amp; Jury Briefing
           </div>
-        </div>
+          <div class="brandmark">01 / 25</div>
+          <aside class="notes">
+            Open warm, not salesy. One line: Academia turns fragmented private tutoring and course
+            delivery into a single trusted marketplace — discovery, payment, and progress in one
+            place.
+          </aside>
+        </section>
+
+        <!-- 2. AGENDA -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Where we're going</div>
+            <h2 class="h-lg">Agenda</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 4px">
+              <ol style="list-style: none; padding: 0; margin: 0">
+                <li class="panel" style="margin-bottom: 11px">
+                  <span class="num">01</span>
+                  <h4>The problem &amp; the market</h4>
+                  <p>
+                    Why tutoring is still stuck in group chats, and who else is chasing this gap.
+                  </p>
+                </li>
+                <li class="panel" style="margin-bottom: 11px">
+                  <span class="num">02</span>
+                  <h4>The solution &amp; how it works</h4>
+                  <p>Marketplace, wallet, commission engine, and academic tracking end to end.</p>
+                </li>
+                <li class="panel">
+                  <span class="num">03</span>
+                  <h4>Product &amp; engineering</h4>
+                  <p>Architecture, security, and an honest look at where we are today.</p>
+                </li>
+              </ol>
+              <ol style="list-style: none; padding: 0; margin: 0">
+                <li class="panel" style="margin-bottom: 11px">
+                  <span class="num">04</span>
+                  <h4>Competition &amp; differentiation</h4>
+                  <p>Academia against Google Classroom, Udemy, and regional peers.</p>
+                </li>
+                <li class="panel" style="margin-bottom: 11px">
+                  <span class="num">05</span>
+                  <h4>Winning both sides</h4>
+                  <p>Why students switch, and why teachers accept a commission.</p>
+                </li>
+                <li class="panel">
+                  <span class="num">06</span>
+                  <h4>Roadmap, team &amp; the ask</h4>
+                  <p>What we build next, who's building it, and what we need.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="brandmark">02 / 25</div>
+          <aside class="notes">Quick roadmap of the deck — keep under 30 seconds.</aside>
+        </section>
+
+        <!-- 3. PROBLEM -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">The problem</div>
+            <h2 class="h-lg">Great teaching is still run through group chats.</h2>
+            <div class="rule"></div>
+            <div class="grid grid-3" style="margin-top: 2px">
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-upload" /></svg>
+                </div>
+                <h4>Materials get lost</h4>
+                <p>
+                  Lessons and files scatter across social‑media groups and manual folders — nothing
+                  centralized, nothing searchable.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-search" /></svg>
+                </div>
+                <h4>No real discovery</h4>
+                <p>
+                  A new student reaches a teacher only through a personal link or word of mouth —
+                  there's no place to browse and compare.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-bank" /></svg>
+                </div>
+                <h4>Payment is manual and risky</h4>
+                <p>
+                  Fees are chased informally, progress isn't tracked, and parents have no visibility
+                  into attendance, results, or spend.
+                </p>
+              </div>
+            </div>
+            <p class="lede tight" style="margin-top: 20px; font-size: 15px">
+              This is the exact gap our own field research surfaced: instructors and students rely
+              on social‑media groups and disconnected manual methods for materials, join requests,
+              and payment — files get lost, time is wasted, and teachers can't fairly evaluate
+              progress.
+            </p>
+          </div>
+          <div class="brandmark">03 / 25</div>
+          <aside class="notes">
+            Grounded in the founders' own SRS problem statement and milestones doc.
+          </aside>
+        </section>
+
+        <!-- 4. SaaS PHILOSOPHY BRIDGE -->
+        <section data-transition="fade" data-background-color="#0a0f1c" class="section-divider">
+          <span class="bignum">SaaS</span>
+          <div class="slide-wrap">
+            <div class="eyebrow alt">Our operating principle</div>
+            <p class="statement">
+              A SaaS product isn't the app.<br />It's the <em>whole ecosystem</em> around it — who
+              it's for, what it's worth to them, and whether they'll actually pay.
+            </p>
+            <p class="lede tight" style="margin-top: 22px">
+              Before we wrote a line of code, we asked who we're solving this for, how big that
+              market really is, and whether people would pay for the answer — the same questions
+              this jury is asking us right now.
+            </p>
+          </div>
+          <div class="brandmark">04 / 25</div>
+          <aside class="notes">
+            Bridge slide. Signal business-first thinking before market sizing.
+          </aside>
+        </section>
+
+        <!-- 5. MARKET -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Market opportunity</div>
+            <h2 class="h-lg">Sizing the opportunity honestly</h2>
+            <div class="rule"></div>
+            <div class="market-wrap" style="margin-top: 4px">
+              <div class="circles">
+                <div class="circle c-tam">
+                  <svg class="i" style="color: var(--teal-soft)"><use href="#icon-globe" /></svg
+                  ><span class="lbl">TAM</span>
+                </div>
+                <div class="circle c-sam">
+                  <svg class="i" style="color: var(--gold-soft)"><use href="#icon-users" /></svg
+                  ><span class="lbl">SAM</span>
+                </div>
+                <div class="circle c-som">
+                  <svg class="i" style="color: #e3a48f"><use href="#icon-target" /></svg
+                  ><span class="lbl">SOM</span>
+                </div>
+              </div>
+              <div class="market-legend">
+                <div class="row tam">
+                  <h4>Total Addressable Market</h4>
+                  <p>
+                    Everything spent on private tutoring and course‑based learning across our target
+                    region.
+                  </p>
+                </div>
+                <div class="row sam">
+                  <h4>Serviceable Available Market</h4>
+                  <p>
+                    Teachers and students already paying for lessons, reachable online, willing to
+                    transact digitally.
+                  </p>
+                </div>
+                <div class="row som">
+                  <h4>Serviceable Obtainable Market</h4>
+                  <p>
+                    Independent teachers and small tutoring centers onboarded through direct
+                    partnerships.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 30px">
+              <div class="stat">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-rocket" /></svg>
+                </div>
+                <div>
+                  <b class="cu" data-target="41" data-suffix="M">$0M</b
+                  ><span>Noon Academy — Series B, 2026</span>
+                </div>
+              </div>
+              <div class="stat">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-rocket" /></svg>
+                </div>
+                <div>
+                  <b class="cu" data-target="27.5" data-suffix="M">$0M</b
+                  ><span>Abwaab — total raised</span>
+                </div>
+              </div>
+              <div class="stat">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-rocket" /></svg>
+                </div>
+                <div>
+                  <b class="cu" data-target="14.5" data-suffix="M">$0M</b
+                  ><span>Al‑Mentor — total raised</span>
+                </div>
+              </div>
+            </div>
+            <p class="src-note">
+              Independent, publicly reported funding for comparable regional ed‑tech peers — proof
+              of investor appetite, not Academia's own valuation.
+            </p>
+          </div>
+          <div class="brandmark">05 / 25</div>
+          <aside class="notes">
+            No invented Academia-specific TAM figure — real peer funding as proof of category
+            appetite instead.
+          </aside>
+        </section>
+
+        <!-- 6. REGIONAL COMPETITORS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Who else is chasing this gap</div>
+            <h2 class="h-lg">Real regional players — and where they stop short</h2>
+            <div class="rule"></div>
+            <div class="grid grid-4" style="margin-top: 0">
+              <div class="comp-card">
+                <div class="comp-mono">N</div>
+                <h4>Noon Academy</h4>
+                <span class="hq">Saudi Arabia · 2013</span>
+                <span class="cat">Live tutoring</span>
+                <p>
+                  Social, gamified live tutoring; Series B ≈$41M (2026). Strong KSA/Egypt reach.
+                </p>
+                <div class="gap">Gap: no marketplace wallet, no parent finance dashboard.</div>
+              </div>
+              <div class="comp-card">
+                <div class="comp-mono">O</div>
+                <h4>Orcas</h4>
+                <span class="hq">Egypt · 2013</span>
+                <span class="cat">Tutor discovery</span>
+                <p>
+                  Mobile app connecting parents/students with nearby tutors, online &amp; offline.
+                </p>
+                <div class="gap">
+                  Gap: discovery‑only, not a full course/LMS + commission engine.
+                </div>
+              </div>
+              <div class="comp-card">
+                <div class="comp-mono">A</div>
+                <h4>Al‑Mentor</h4>
+                <span class="hq">UAE · 2016</span>
+                <span class="cat">Video courses</span>
+                <p>
+                  Professional video courses by experts; 80+ enterprise partnerships across MENA.
+                </p>
+                <div class="gap">
+                  Gap: skills/career content, not K‑12 attendance or live class management.
+                </div>
+              </div>
+              <div class="comp-card">
+                <div class="comp-mono">T</div>
+                <h4>Nafham / Tyro</h4>
+                <span class="hq">Egypt · merged 2021</span>
+                <span class="cat">Content + tutoring</span>
+                <p>
+                  Free crowdsourced video lessons (6M+ annual users) merged with a live‑tutoring
+                  booking platform.
+                </p>
+                <div class="gap">
+                  Gap: no unified wallet, commission ledger, or parent controls.
+                </div>
+              </div>
+            </div>
+            <p class="src-note">
+              Publicly reported facts; positioning gaps are our own competitive analysis, not claims
+              made by these companies.
+            </p>
+          </div>
+          <div class="brandmark">06 / 25</div>
+          <aside class="notes">
+            Four funded regional players — none combine discovery + wallet + ledger + parent
+            dashboard + academic tracking in one role-aware system.
+          </aside>
+        </section>
+
+        <!-- 7. VISION -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="two-col slide-wrap">
+            <div>
+              <div class="eyebrow">The idea</div>
+              <h2 class="h-lg">
+                One platform where teaching, learning, and paying finally live together.
+              </h2>
+              <p class="lede" style="margin-top: 14px">
+                Academia is an education marketplace and learning platform connecting students,
+                teachers, and courses — combining discovery, enrollment, an internal wallet for fees
+                and payouts, and academic tracking such as attendance and exams in a single
+                role‑aware system.
+              </p>
+            </div>
+            <div class="panel" style="padding: 26px">
+              <h4 style="font-size: 17px; margin-bottom: 13px">Who it serves</h4>
+              <div style="display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; gap: 10px; align-items: flex-start">
+                  <div class="ico" style="margin-bottom: 0">
+                    <svg class="i"><use href="#icon-users" /></svg>
+                  </div>
+                  <div>
+                    <b style="color: #f4f1ea">Students</b><br /><span
+                      style="color: var(--mist-dim); font-size: 13px"
+                      >discover, request enrollment, pay from one wallet, track progress.</span
+                    >
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: flex-start">
+                  <div class="ico" style="margin-bottom: 0">
+                    <svg class="i"><use href="#icon-book" /></svg>
+                  </div>
+                  <div>
+                    <b style="color: #f4f1ea">Teachers</b><br /><span
+                      style="color: var(--mist-dim); font-size: 13px"
+                      >create courses and lessons, manage enrollment, get paid automatically.</span
+                    >
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: flex-start">
+                  <div class="ico" style="margin-bottom: 0">
+                    <svg class="i"><use href="#icon-shield" /></svg>
+                  </div>
+                  <div>
+                    <b style="color: #f4f1ea">Parents</b><br /><span
+                      style="color: var(--mist-dim); font-size: 13px"
+                      >optionally follow attendance, results, and spend.</span
+                    >
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: flex-start">
+                  <div class="ico" style="margin-bottom: 0">
+                    <svg class="i"><use href="#icon-check-shield" /></svg>
+                  </div>
+                  <div>
+                    <b style="color: #f4f1ea">Admins</b><br /><span
+                      style="color: var(--mist-dim); font-size: 13px"
+                      >govern approvals, permissions, finance, and audit trails.</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">07 / 25</div>
+          <aside class="notes">Four-role value proposition. Emphasize "role-aware."</aside>
+        </section>
+
+        <!-- 8. SOLUTION -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">The solution</div>
+            <h2 class="h-lg">Six modules, one connected system</h2>
+            <div class="rule"></div>
+            <div class="grid grid-3" style="margin-top: 0">
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-search" /></svg>
+                </div>
+                <h4>Marketplace &amp; discovery</h4>
+                <p>
+                  A public catalog of courses, categories, and teacher groups students can browse
+                  and compare.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-book" /></svg>
+                </div>
+                <h4>Courses, groups &amp; lessons</h4>
+                <p>
+                  Teachers upload and structure materials into lesson categories; files up to 50MB,
+                  with public or enrolled‑only visibility.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-users" /></svg>
+                </div>
+                <h4>Join requests &amp; enrollment</h4>
+                <p>
+                  Students request a seat; a duplicate or already‑pending request is blocked
+                  automatically.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-wallet" /></svg>
+                </div>
+                <h4>In‑platform wallet</h4>
+                <p>
+                  One wallet handles top‑ups, fee deductions, commission splits, and teacher
+                  withdrawals — securely.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-chart" /></svg>
+                </div>
+                <h4>Academic tracking</h4>
+                <p>
+                  Attendance, exam scores, and pass/absent status recorded per student, exportable
+                  as PDF or Excel.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-shield" /></svg>
+                </div>
+                <h4>Admin &amp; audit control</h4>
+                <p>
+                  Role‑based permissions, notifications, and audit logs govern every sensitive
+                  action.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">08 / 25</div>
+          <aside class="notes">
+            50MB upload limit and PDF/Excel export are real documented acceptance criteria, not
+            invented specs.
+          </aside>
+        </section>
+
+        <!-- 9. PLATFORM CAPABILITIES WALL -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Under the hood</div>
+            <h2 class="h-lg">Small details, all designed on purpose</h2>
+            <div class="rule"></div>
+            <div class="feat-wall">
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-globe" /></svg>
+                </div>
+                <h5>Multi‑language ready</h5>
+                <p>Built on i18next from day one</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-bell" /></svg>
+                </div>
+                <h5>Notifications</h5>
+                <p>Join requests, payments &amp; grades</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-certificate" /></svg>
+                </div>
+                <h5>Certificates</h5>
+                <p>Delivered on course completion</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-export" /></svg>
+                </div>
+                <h5>PDF / Excel export</h5>
+                <p>Academic reports in under 3s</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-lock" /></svg>
+                </div>
+                <h5>Private by default</h5>
+                <p>Receipts &amp; bank data locked down</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-check-shield" /></svg>
+                </div>
+                <h5>Full audit trail</h5>
+                <p>Every sensitive action logged</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-shield" /></svg>
+                </div>
+                <h5>Role‑based access</h5>
+                <p>Student / Teacher / Parent / Admin</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-mobile" /></svg>
+                </div>
+                <h5>Responsive UI</h5>
+                <p>Built mobile‑first with Tailwind</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-wallet" /></svg>
+                </div>
+                <h5>Transaction history</h5>
+                <p>Filterable, per‑user wallet log</p>
+              </div>
+              <div class="feat-chip">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-users" /></svg>
+                </div>
+                <h5>Duplicate‑request guard</h5>
+                <p>No double join requests possible</p>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">09 / 25</div>
+          <aside class="notes">
+            Every chip here is a documented requirement from the SRS/user stories, not marketing
+            filler — good slide to point to if a juror asks "what have you actually specified in
+            detail."
+          </aside>
+        </section>
+
+        <!-- 10. PRODUCT CONCEPT MOCKUP -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">A first look</div>
+            <h2 class="h-lg">What the student dashboard is designed to feel like</h2>
+            <div class="rule"></div>
+            <div class="mockup">
+              <div class="bar">
+                <div class="dot3" style="background: #e5645b"></div>
+                <div class="dot3" style="background: #e8b13f"></div>
+                <div class="dot3" style="background: #4cae6b"></div>
+                <div class="addr">academia.app / dashboard</div>
+              </div>
+              <div class="body">
+                <div class="side">
+                  <div class="sitem active">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-dashboard" /></svg>
+                    </div>
+                    Overview
+                  </div>
+                  <div class="sitem">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-book" /></svg>
+                    </div>
+                    My courses
+                  </div>
+                  <div class="sitem">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-wallet" /></svg>
+                    </div>
+                    Wallet
+                  </div>
+                  <div class="sitem">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-chart" /></svg>
+                    </div>
+                    Progress
+                  </div>
+                  <div class="sitem">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-bell" /></svg>
+                    </div>
+                    Notifications
+                  </div>
+                </div>
+                <div class="main">
+                  <div class="cards">
+                    <div class="kpi"><b>3</b><span>ACTIVE COURSES</span></div>
+                    <div class="kpi"><b>92%</b><span>ATTENDANCE</span></div>
+                    <div class="kpi"><b>$—</b><span>WALLET BALANCE</span></div>
+                  </div>
+                  <div class="course-row">
+                    <div class="crs">
+                      <div class="thumb"></div>
+                      <b>Algebra II</b><span>Ustadh Samir · Mon/Wed</span>
+                    </div>
+                    <div class="crs">
+                      <div
+                        class="thumb"
+                        style="background: linear-gradient(135deg, var(--gold), var(--navy-700))"
+                      ></div>
+                      <b>English Writing</b><span>Ms. Lina · Sun/Tue</span>
+                    </div>
+                    <div class="crs">
+                      <div
+                        class="thumb"
+                        style="background: linear-gradient(135deg, var(--coral), var(--navy-700))"
+                      ></div>
+                      <b>Physics Lab</b><span>Dr. Fadi · Thu</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="mockup-caption">
+              Concept illustration of the planned UI — not a live product screenshot.
+            </p>
+          </div>
+          <div class="brandmark">10 / 25</div>
+          <aside class="notes">
+            Explicitly labeled as a concept mockup, not a screenshot — course/enrollment screens are
+            still on the "finishing next" list per the status slide. This exists to help the jury
+            visualize the product, not to claim it's built.
+          </aside>
+        </section>
+
+        <!-- 11. HOW IT WORKS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">How it works</div>
+            <h2 class="h-lg">From join request to teacher payout</h2>
+            <div class="rule"></div>
+            <div class="flow" style="margin-top: 8px">
+              <div class="flow-step fragment grow-in">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-users" /></svg>
+                </div>
+                <span class="n">STEP 1</span>
+                <h4>Request</h4>
+                <p>Student submits a join request for a course.</p>
+              </div>
+              <div class="flow-step fragment grow-in">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-check-shield" /></svg>
+                </div>
+                <span class="n">STEP 2</span>
+                <h4>Approve</h4>
+                <p>Teacher reviews and approves — low balance blocks approval automatically.</p>
+              </div>
+              <div class="flow-step fragment grow-in">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-wallet" /></svg>
+                </div>
+                <span class="n">STEP 3</span>
+                <h4>Deduct</h4>
+                <p>The fee is deducted from the student's wallet, atomically.</p>
+              </div>
+              <div class="flow-step fragment grow-in">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-split" /></svg>
+                </div>
+                <span class="n">STEP 4</span>
+                <h4>Split</h4>
+                <p>Commission is calculated from the active rate and logged to the ledger.</p>
+              </div>
+              <div class="flow-step fragment grow-in">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-bank" /></svg>
+                </div>
+                <span class="n">STEP 5</span>
+                <h4>Pay out</h4>
+                <p>
+                  The teacher's wallet is credited net of commission; withdrawal follows on request.
+                </p>
+              </div>
+            </div>
+            <p class="lede tight fragment grow-in" style="margin-top: 20px; font-size: 14.5px">
+              Steps 3 and 4 are one atomic transaction — the fee deduction and the teacher's net
+              credit succeed or fail together, so wallet balances and the revenue ledger never drift
+              apart.
+            </p>
+          </div>
+          <div class="brandmark">11 / 25</div>
+          <aside class="notes">
+            Maps to FR-W03a/FR-W03b in the SRS — a single atomic operation.
+          </aside>
+        </section>
+
+        <!-- 12. COMMISSION MECHANICS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">The commission engine, in detail</div>
+            <h2 class="h-lg">Every enrollment fee splits automatically</h2>
+            <div class="rule"></div>
+            <p class="lede tight" style="font-size: 15.5px">
+              Example split on a course fee, at the platform's active commission rate:
+            </p>
+            <div class="meter">
+              <div class="fill" style="width: 0%" data-target="80">
+                <span class="lab">Teacher receives</span>
+              </div>
+            </div>
+            <div class="meter">
+              <div class="fill commission" style="width: 0%" data-target="20">
+                <span class="lab">Platform commission</span>
+              </div>
+            </div>
+            <div class="meter-labels"><span>0%</span><span>100% of enrollment fee</span></div>
+            <div class="grid grid-2" style="margin-top: 22px">
+              <ul class="check-list" style="font-size: 14.5px">
+                <li>Rate is admin‑configurable between 0–100%, never hard‑coded</li>
+                <li>Every rate change is logged with admin ID and timestamp</li>
+              </ul>
+              <ul class="check-list gold" style="font-size: 14.5px">
+                <li>The previous rate is archived, not overwritten — full audit history</li>
+                <li>Commission and teacher credit post as a single atomic transaction</li>
+              </ul>
+            </div>
+          </div>
+          <div class="brandmark">12 / 25</div>
+          <aside class="notes">
+            The 80/20 split is illustrative only — say this out loud so the jury doesn't mistake it
+            for a committed number.
+          </aside>
+        </section>
+
+        <!-- 13. ARCHITECTURE -->
+        <section data-transition="convex" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Product &amp; architecture</div>
+            <h2 class="h-lg">Built like a platform, not a prototype</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="align-items: center">
+              <div class="arch">
+                <div class="arch-row">
+                  <div class="arch-box accent">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-monitor" /></svg>
+                    </div>
+                    <div>
+                      <b>React 19 + TypeScript</b
+                      ><span>SPA · TanStack Router/Start · Tailwind</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="arch-arrow">↓ REST / JSON</div>
+                <div class="arch-row">
+                  <div class="arch-box">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-server" /></svg>
+                    </div>
+                    <div>
+                      <b>ASP.NET Core API</b><span>Controllers · DTOs · JWT auth · RBAC</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-row">
+                  <div class="arch-box">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-layers" /></svg>
+                    </div>
+                    <div><b>Service layer</b><span>Wallet · Enrollment · Academic rules</span></div>
+                  </div>
+                </div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-row">
+                  <div class="arch-box accent2">
+                    <div class="ico" style="margin: 0">
+                      <svg class="i"><use href="#icon-database" /></svg>
+                    </div>
+                    <div>
+                      <b>EF Core + SQL database</b
+                      ><span>Migrations · Transactions · Audit logs</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <ul class="check-list">
+                  <li>Clean separation: Data · Core · Infrastructure · API · Web</li>
+                  <li>
+                    Every sensitive field returned through role‑aware DTOs, never raw entities
+                  </li>
+                  <li>Centralized dependency injection for testable, swappable services</li>
+                  <li>Structured exception handling and Serilog‑based logging across the API</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">13 / 25</div>
+          <aside class="notes">
+            Real stack from the codebase — React 19.2 + TypeScript + Vite + TanStack; ASP.NET Core +
+            EF Core + Identity/JWT.
+          </aside>
+        </section>
+
+        <!-- 14. ENGINEERING / SECURITY -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Engineering rigor</div>
+            <h2 class="h-lg">The parts users never see, but always feel</h2>
+            <div class="rule"></div>
+            <div class="grid grid-4" style="margin-top: 2px">
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-shield" /></svg>
+                </div>
+                <h4>Role‑based access</h4>
+                <p>
+                  Every page, action, and field is governed by explicit permissions, enforced at the
+                  API and service layer.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-split" /></svg>
+                </div>
+                <h4>Financial atomicity</h4>
+                <p>
+                  Wallet deductions, commission splits, and ledger writes commit together or not at
+                  all.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-check-shield" /></svg>
+                </div>
+                <h4>Full audit trail</h4>
+                <p>
+                  Permission changes, payments, and deletions all produce persistent, reviewable
+                  audit records.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-lock" /></svg>
+                </div>
+                <h4>Historical integrity</h4>
+                <p>
+                  Soft deletion preserves history while safely freeing up unique fields for reuse.
+                </p>
+              </div>
+            </div>
+            <p class="lede tight" style="margin-top: 18px; font-size: 14.5px">
+              Receipts and bank details are protected behind authorization checks by default — never
+              publicly accessible. The team also runs internal service‑layer audits before scaling
+              to new modules.
+            </p>
+          </div>
+          <div class="brandmark">14 / 25</div>
+          <aside class="notes">
+            References the team's real Infrastructure/Services architecture review.
+          </aside>
+        </section>
+
+        <!-- 15. STATUS TODAY -->
+        <section data-transition="fade" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">Where we are today</div>
+            <h2 class="h-lg">Built with discipline — and honest about the gap</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 0">
+              <div class="panel">
+                <h4 style="color: var(--teal-soft)">Live today</h4>
+                <ul class="check-list" style="margin-top: 7px">
+                  <li>Authentication &amp; role‑based access control</li>
+                  <li>User, page, module, and permission management</li>
+                  <li>Core platform constants and configuration</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4 style="color: var(--gold-soft)">Finishing next</h4>
+                <ul class="check-list gold" style="margin-top: 7px">
+                  <li>Course, lesson, and exam API contracts</li>
+                  <li>Enrollment and certificate delivery</li>
+                  <li>In‑app notifications end to end</li>
+                </ul>
+              </div>
+            </div>
+            <p class="lede tight" style="margin-top: 16px; font-size: 14.5px">
+              We'd rather show a jury a real, honestly‑labeled build status than a polished demo
+              that overstates where the product is. That discipline is deliberate.
+            </p>
+          </div>
+          <div class="brandmark">15 / 25</div>
+          <aside class="notes">From the frontend's own integration notes.</aside>
+        </section>
+
+        <!-- 16. BUSINESS MODEL -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Business model</div>
+            <h2 class="h-lg">We earn only when a teacher earns</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 0">
+              <div>
+                <p class="lede tight" style="font-size: 15px">
+                  Academia's revenue engine is a transparent, admin‑configurable commission on every
+                  paid enrollment that moves through the platform wallet — recorded to a dedicated
+                  revenue ledger every step of the way.
+                </p>
+                <div style="margin-top: 16px; display: flex; gap: 18px">
+                  <div class="stat">
+                    <div class="ico" style="margin-bottom: 0">
+                      <svg class="i"><use href="#icon-bank" /></svg>
+                    </div>
+                    <div>
+                      <b style="font-size: 16.5px">Top‑up</b><br /><span
+                        >Verified bank transfer into the wallet</span
+                      >
+                    </div>
+                  </div>
+                  <div class="stat">
+                    <div class="ico" style="margin-bottom: 0">
+                      <svg class="i"><use href="#icon-users" /></svg>
+                    </div>
+                    <div>
+                      <b style="font-size: 16.5px">Enrollment</b><br /><span
+                        >Fee deducted, commission calculated</span
+                      >
+                    </div>
+                  </div>
+                  <div class="stat">
+                    <div class="ico" style="margin-bottom: 0">
+                      <svg class="i"><use href="#icon-handshake" /></svg>
+                    </div>
+                    <div>
+                      <b style="font-size: 16.5px">Payout</b><br /><span
+                        >Teacher withdraws net earnings</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-paper">
+                <h4 style="margin-bottom: 10px">Why a commission, not a subscription</h4>
+                <ul
+                  style="
+                    margin: 0;
+                    padding-left: 20px;
+                    color: var(--ink-soft);
+                    font-size: 14px;
+                    line-height: 1.6;
+                  "
+                >
+                  <li>Teachers pay nothing to list a course — zero upfront risk to join.</li>
+                  <li>Academia only earns when a real, paid enrollment happens.</li>
+                  <li>Every commission is logged in a ledger both sides can audit.</li>
+                  <li>Aligns platform growth directly with teacher and student success.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pill-row">
+              <span class="tag gold">Core: enrollment commission</span>
+              <span class="tag">Future: premium placement</span>
+              <span class="tag">Future: analytics for teachers</span>
+            </div>
+          </div>
+          <div class="brandmark">16 / 25</div>
+          <aside class="notes">
+            "Future" pills are clearly exploratory, not committed revenue lines.
+          </aside>
+        </section>
+
+        <!-- 17. UNIT ECONOMICS FRAMEWORK -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">Unit economics — the framework, not a forecast</div>
+            <h2 class="h-lg">How one enrollment turns into revenue</h2>
+            <div class="rule"></div>
+            <div class="grid grid-4" style="margin-top: 2px">
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-users" /></svg>
+                </div>
+                <h4>Enrollments</h4>
+                <p>Number of paid join requests approved through the wallet in a period.</p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-wallet" /></svg>
+                </div>
+                <h4>× Average fee</h4>
+                <p>The course or session price the student pays, set by each teacher.</p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-split" /></svg>
+                </div>
+                <h4>× Commission %</h4>
+                <p>The admin‑configurable platform rate applied at the moment of deduction.</p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-chart" /></svg>
+                </div>
+                <h4>= Platform revenue</h4>
+                <p>Logged automatically to the revenue ledger — no separate invoicing step.</p>
+              </div>
+            </div>
+            <div class="panel-paper" style="margin-top: 20px">
+              <h4 style="margin-bottom: 8px">Why we're showing a formula, not a forecast</h4>
+              <p style="font-size: 14px; line-height: 1.6">
+                We don't have real enrollment volume yet — the platform hasn't launched, so any
+                revenue number today would be invented, not measured. What's real is the mechanism
+                above: near‑zero marginal cost per transaction, revenue that scales directly with
+                enrollments rather than headcount, and a cost base (engineering, hosting,
+                verification staff) that grows far more slowly than transaction volume once the
+                payment gateway replaces manual bank‑transfer checks.
+              </p>
+            </div>
+          </div>
+          <div class="brandmark">17 / 25</div>
+          <aside class="notes">
+            Deliberately a formula, not a number — filling in placeholder revenue figures would be
+            exactly the kind of invented data the rest of this deck goes out of its way to avoid. If
+            a juror pushes for a number, walk through this formula live with a hypothetical example
+            rather than presenting one as fact.
+          </aside>
+        </section>
+
+        <!-- 18. COMPETITIVE FEATURE TABLE -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Feature comparison</div>
+            <h2 class="h-lg">A different category, not a feature race</h2>
+            <div class="rule"></div>
+            <div class="panel-paper" style="padding: 15px 20px">
+              <table class="cmp">
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Google Classroom</th>
+                    <th>Udemy</th>
+                    <th>Academia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="feat">Platform type</td>
+                    <td>Tool for organizing closed classes</td>
+                    <td>Global asynchronous course marketplace</td>
+                    <td class="win">Education marketplace + integrated LMS</td>
+                  </tr>
+                  <tr>
+                    <td class="feat">Discovery</td>
+                    <td>Not available — needs a link or access code</td>
+                    <td>Public catalog, global scale</td>
+                    <td class="win">Directory of courses &amp; teachers</td>
+                  </tr>
+                  <tr>
+                    <td class="feat">Payments</td>
+                    <td>Entirely external — not supported by the system</td>
+                    <td>External processor, one‑time purchase</td>
+                    <td class="win">Unified, secure in‑platform wallet</td>
+                  </tr>
+                  <tr>
+                    <td class="feat">Parent role</td>
+                    <td>Limited email reports</td>
+                    <td>None</td>
+                    <td class="win">Dedicated activity &amp; payments dashboard</td>
+                  </tr>
+                  <tr>
+                    <td class="feat">Attendance &amp; exams</td>
+                    <td>Very limited</td>
+                    <td>Not built for live, attended instruction</td>
+                    <td class="win">Detailed academic tracking</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="src-note">
+                Google Classroom row translated directly from Academia's own comparison sheet; Udemy
+                row per the same team's competitive notes.
+              </p>
+            </div>
+          </div>
+          <div class="brandmark">18 / 25</div>
+          <aside class="notes">
+            Classroom wins on simplicity, Udemy on breadth. Academia's edge is
+            live+paid+marketplace+family visibility together.
+          </aside>
+        </section>
+
+        <!-- 19. WHY WE WIN -->
+        <section data-transition="zoom" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">Why we win</div>
+            <h2 class="h-lg">Four things a "course tool" doesn't have</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 0">
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-search" /></svg>
+                </div>
+                <h4>A real marketplace</h4>
+                <p>
+                  Students find teachers by browsing, not by receiving a private link — the platform
+                  generates demand, not just delivery.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-wallet" /></svg>
+                </div>
+                <h4>Money that just works</h4>
+                <p>
+                  One wallet handles every teacher's fees — no manual transfers to chase, no
+                  spreadsheets to reconcile.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-shield" /></svg>
+                </div>
+                <h4>Parents, included</h4>
+                <p>
+                  Attendance, results, and spend are visible to the people who are often the ones
+                  actually paying.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-chart" /></svg>
+                </div>
+                <h4>Room to get smarter</h4>
+                <p>
+                  Lesson content, attendance, and exam history already live in one place — the
+                  foundation an AI study assistant needs, planned for a later release.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">19 / 25</div>
+          <aside class="notes">AI mention is a future release, not a current feature.</aside>
+        </section>
+
+        <!-- 20. RISKS & MITIGATIONS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Said out loud, not waiting to be asked</div>
+            <h2 class="h-lg">Four real risks, and how we're handling each</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 2px">
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-split" /></svg>
+                </div>
+                <h4>Disintermediation</h4>
+                <p>
+                  A teacher and student could exchange contact info and transact outside the
+                  platform to avoid the commission.
+                  <b style="color: var(--teal-soft)">Mitigation:</b> the wallet, attendance record,
+                  materials hosting, and parent dashboard are workflow value a side deal doesn't
+                  replicate — staying on‑platform stays more convenient than leaving it.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-bank" /></svg>
+                </div>
+                <h4>Manual‑transfer fraud</h4>
+                <p>
+                  Today's top‑up relies on a human checking a bank receipt.
+                  <b style="color: var(--teal-soft)">Mitigation:</b> every verification is logged
+                  with an admin ID and timestamp, balances never move without approval, and an
+                  automated payment gateway is next on the roadmap specifically to close this gap.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-users" /></svg>
+                </div>
+                <h4>Chicken‑and‑egg supply/demand</h4>
+                <p>
+                  No students without teachers, no teachers without students.
+                  <b style="color: var(--teal-soft)">Mitigation:</b> we seed supply first —
+                  independent teachers and small centers get the tools free during onboarding, and
+                  their existing students migrate in as first demand.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-shield" /></svg>
+                </div>
+                <h4>A funded competitor moves faster</h4>
+                <p>
+                  Noon Academy or Orcas could extend toward our model.
+                  <b style="color: var(--teal-soft)">Mitigation:</b> neither is optimized around
+                  wallet + commission ledger + parent dashboard + academic tracking together —
+                  pivoting a funded product's core is organizationally slower than a focused build.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">20 / 25</div>
+          <aside class="notes">
+            Say these plainly and move on — presented with confidence, naming your own risks before
+            a juror does reads as maturity, not weakness. Don't over-apologize for any of these.
+          </aside>
+        </section>
+
+        <!-- 21. WINNING STUDENTS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="two-col slide-wrap">
+            <div>
+              <div class="eyebrow">Winning students</div>
+              <h2 class="h-lg">Why a student signs up — and stays</h2>
+              <p class="lede" style="margin-top: 12px; font-size: 17px">
+                Students don't need another app to check. They need one place where finding a
+                teacher, paying safely, and seeing their own progress finally fit together.
+              </p>
+            </div>
+            <ul class="check-list" style="font-size: 15px">
+              <li>
+                <b style="color: #f4f1ea">Browse before you commit</b> — compare teachers, subjects,
+                and prices in one catalog instead of asking around.
+              </li>
+              <li>
+                <b style="color: #f4f1ea">Pay once, use everywhere</b> — a single wallet covers
+                every course, no separate transfer per teacher.
+              </li>
+              <li>
+                <b style="color: #f4f1ea">See your own progress</b> — attendance and exam results
+                live in your account, not a teacher's notebook.
+              </li>
+              <li>
+                <b style="color: #f4f1ea">Trust, not guesswork</b> — enrollment is confirmed,
+                blocked from duplicating, and receipted.
+              </li>
+            </ul>
+          </div>
+          <div class="brandmark">21 / 25</div>
+          <aside class="notes">Retention argument as much as acquisition.</aside>
+        </section>
+
+        <!-- 22. WINNING TEACHERS -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow alt">Winning teachers</div>
+            <h2 class="h-lg">"Why should I give up a cut of my fee?"</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 0">
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-split" /></svg>
+                </div>
+                <h4>What the teacher gives up</h4>
+                <p style="margin-top: 5px">
+                  A transparent, admin‑governed commission — calculated and logged automatically on
+                  every enrollment fee that clears through the wallet. Never a fixed lock‑in, always
+                  visible in the ledger.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico">
+                  <svg class="i"><use href="#icon-handshake" /></svg>
+                </div>
+                <h4>What the teacher gets back</h4>
+                <div style="margin-top: 5px">
+                  <p style="margin-bottom: 5px">
+                    <b style="color: #f4f1ea">New students</b> — discovered through the marketplace,
+                    not just their existing circle.
+                  </p>
+                  <p style="margin-bottom: 5px">
+                    <b style="color: #f4f1ea">Zero collection hassle</b> — no chasing transfers or
+                    reconciling who actually paid.
+                  </p>
+                  <p style="margin-bottom: 0">
+                    <b style="color: #f4f1ea">A real dashboard</b> — join requests, rosters, and
+                    payouts, all in one place.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="lede tight" style="margin-top: 16px; font-size: 14.5px">
+              The pitch is simple: the commission is the price of demand generation and automated,
+              verified collection — work every independent teacher currently does themselves, for
+              free, badly.
+            </p>
+          </div>
+          <div class="brandmark">22 / 25</div>
+          <aside class="notes">Direct answer to "why would a teacher accept a commission."</aside>
+        </section>
+
+        <!-- 23. ROADMAP -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">Roadmap</div>
+            <h2 class="h-lg">A 12‑week build, then what's next</h2>
+            <div class="rule"></div>
+            <div class="grid grid-2" style="margin-top: 0">
+              <div>
+                <h4 style="font-size: 14.5px; color: var(--teal-soft); margin-bottom: 7px">
+                  MVP build sprint
+                </h4>
+                <div class="timeline">
+                  <div class="t-item">
+                    <div class="dot">
+                      <svg class="i" style="width: 11px; height: 11px">
+                        <use href="#icon-lock" />
+                      </svg>
+                    </div>
+                    <span class="wk">WEEK 1–2</span>
+                    <h4>Foundations</h4>
+                    <p>SRS, user stories, auth &amp; RBAC.</p>
+                  </div>
+                  <div class="t-item">
+                    <div class="dot">
+                      <svg class="i" style="width: 11px; height: 11px">
+                        <use href="#icon-book" />
+                      </svg>
+                    </div>
+                    <span class="wk">WEEK 3–6</span>
+                    <h4>Content &amp; enrollment</h4>
+                    <p>System design, courses, join requests.</p>
+                  </div>
+                  <div class="t-item">
+                    <div class="dot">
+                      <svg class="i" style="width: 11px; height: 11px">
+                        <use href="#icon-wallet" />
+                      </svg>
+                    </div>
+                    <span class="wk">WEEK 6–9</span>
+                    <h4>Wallet &amp; academics</h4>
+                    <p>Top‑ups, commission split, attendance, exams.</p>
+                  </div>
+                  <div class="t-item">
+                    <div class="dot">
+                      <svg class="i" style="width: 11px; height: 11px">
+                        <use href="#icon-rocket" />
+                      </svg>
+                    </div>
+                    <span class="wk">WEEK 9–12</span>
+                    <h4>Polish &amp; launch</h4>
+                    <p>Notifications, QA, and go‑live.</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 style="font-size: 14.5px; color: var(--gold-soft); margin-bottom: 7px">
+                  What's next
+                </h4>
+                <ul class="check-list gold">
+                  <li>Automated online payment gateway, alongside verified bank transfer</li>
+                  <li>AI study assistant for lesson materials (summaries, flashcards, Q&amp;A)</li>
+                  <li>Auto‑generated practice quizzes from uploaded course content</li>
+                  <li>Predictive performance alerts for parents and teachers</li>
+                  <li>Native mobile apps</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="brandmark">23 / 25</div>
+          <aside class="notes">
+            Left column is the real 12-week milestones plan; right column is explicitly
+            future/out-of-scope.
+          </aside>
+        </section>
+
+        <!-- 24. TEAM -->
+        <section data-transition="slide" data-background-color="#0a0f1c">
+          <div class="slide-wrap">
+            <div class="eyebrow">The team</div>
+            <h2 class="h-lg">Three engineers, one supervisor, one shared build</h2>
+            <div class="rule"></div>
+            <div class="grid grid-3" style="margin-top: 2px">
+              <div class="team-card">
+                <div class="avatar">RI</div>
+                <div>
+                  <h4>Rebhi Ibrahim</h4>
+                  <span>Frontend engineering</span>
+                </div>
+              </div>
+              <div class="team-card">
+                <div class="avatar">ZA</div>
+                <div>
+                  <h4>Ziad Alnumailat</h4>
+                  <span>Backend &amp; platform engineering</span>
+                </div>
+              </div>
+              <div class="team-card">
+                <div class="avatar">AA</div>
+                <div>
+                  <h4>Ahmed Alkhaldi</h4>
+                  <span>Founding engineer</span>
+                </div>
+              </div>
+            </div>
+            <div class="pill-row" style="margin-top: 20px">
+              <span class="tag">Supervised by Hamza Abu Jarad</span>
+              <span class="tag gold">Built through TAQAT · CodeMap</span>
+            </div>
+          </div>
+          <div class="brandmark">24 / 25</div>
+          <aside class="notes">
+            Real names from the SRS cover page; role attributions follow repo/hosting ownership.
+          </aside>
+        </section>
+
+        <!-- 25. THE ASK / CLOSING -->
+        <section data-transition="zoom" data-background-color="#0a0f1c" class="section-divider">
+          <span class="bignum">Ask</span>
+          <div class="slide-wrap">
+            <div class="eyebrow alt">The ask</div>
+            <h2 class="h-lg">What funding unlocks</h2>
+            <div class="rule"></div>
+            <div class="grid grid-3" style="margin-top: 2px">
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-layers" /></svg>
+                </div>
+                <h4>Finish the core</h4>
+                <p>
+                  Complete course, enrollment, and certificate APIs already designed and scheduled.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-bank" /></svg>
+                </div>
+                <h4>Automate payments</h4>
+                <p>
+                  Move top‑ups and withdrawals from manual verification to an integrated payment
+                  gateway.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="ico gold">
+                  <svg class="i"><use href="#icon-chart" /></svg>
+                </div>
+                <h4>Build the AI layer</h4>
+                <p>
+                  Turn existing lesson and performance data into study assistance and early‑warning
+                  alerts.
+                </p>
+              </div>
+            </div>
+            <p class="statement" style="font-size: 26px; margin-top: 22px">
+              We're not asking you to fund an idea. We're asking you to fund the
+              <em>next stage</em> of a system that's already designed, partly built, and honest
+              about the road ahead.
+            </p>
+            <div class="pill-row" style="margin-top: 20px">
+              <span class="tag gold">team@academia.app</span>
+              <span class="tag">academia.app</span>
+              <span class="tag">@academia — TAQAT · CodeMap</span>
+            </div>
+          </div>
+          <div class="slide-foot"><span class="dot2"></span> Thank you — Academia</div>
+          <div class="brandmark">25 / 25</div>
+          <aside class="notes">
+            Close on credibility, not hype. No invented funding amount is quoted. Swap the
+            placeholder email/site/handle for the real ones before presenting.
+          </aside>
+        </section>
       </div>
     </div>
-    <p class="mockup-caption">Concept illustration of the planned UI — not a live product screenshot.</p>
-  </div>
-  <div class="brandmark">10 / 25</div>
-  <aside class="notes">
-    Explicitly labeled as a concept mockup, not a screenshot — course/enrollment screens are still
-    on the "finishing next" list per the status slide. This exists to help the jury visualize the
-    product, not to claim it's built.
-  </aside>
-</section>
 
-<!-- 11. HOW IT WORKS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">How it works</div>
-    <h2 class="h-lg">From join request to teacher payout</h2>
-    <div class="rule"></div>
-    <div class="flow" style="margin-top:8px;">
-      <div class="flow-step fragment grow-in"><div class="ico"><svg class="i"><use href="#icon-users"/></svg></div><span class="n">STEP 1</span><h4>Request</h4><p>Student submits a join request for a course.</p></div>
-      <div class="flow-step fragment grow-in"><div class="ico"><svg class="i"><use href="#icon-check-shield"/></svg></div><span class="n">STEP 2</span><h4>Approve</h4><p>Teacher reviews and approves — low balance blocks approval automatically.</p></div>
-      <div class="flow-step fragment grow-in"><div class="ico"><svg class="i"><use href="#icon-wallet"/></svg></div><span class="n">STEP 3</span><h4>Deduct</h4><p>The fee is deducted from the student's wallet, atomically.</p></div>
-      <div class="flow-step fragment grow-in"><div class="ico gold"><svg class="i"><use href="#icon-split"/></svg></div><span class="n">STEP 4</span><h4>Split</h4><p>Commission is calculated from the active rate and logged to the ledger.</p></div>
-      <div class="flow-step fragment grow-in"><div class="ico gold"><svg class="i"><use href="#icon-bank"/></svg></div><span class="n">STEP 5</span><h4>Pay out</h4><p>The teacher's wallet is credited net of commission; withdrawal follows on request.</p></div>
-    </div>
-    <p class="lede tight fragment grow-in" style="margin-top:20px;font-size:14.5px;">
-      Steps 3 and 4 are one atomic transaction — the fee deduction and the teacher's net credit
-      succeed or fail together, so wallet balances and the revenue ledger never drift apart.
-    </p>
-  </div>
-  <div class="brandmark">11 / 25</div>
-  <aside class="notes">Maps to FR-W03a/FR-W03b in the SRS — a single atomic operation.</aside>
-</section>
-
-<!-- 12. COMMISSION MECHANICS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">The commission engine, in detail</div>
-    <h2 class="h-lg">Every enrollment fee splits automatically</h2>
-    <div class="rule"></div>
-    <p class="lede tight" style="font-size:15.5px;">Example split on a course fee, at the platform's active commission rate:</p>
-    <div class="meter"><div class="fill" style="width:0%" data-target="80"><span class="lab">Teacher receives</span></div></div>
-    <div class="meter"><div class="fill commission" style="width:0%" data-target="20"><span class="lab">Platform commission</span></div></div>
-    <div class="meter-labels"><span>0%</span><span>100% of enrollment fee</span></div>
-    <div class="grid grid-2" style="margin-top:22px;">
-      <ul class="check-list" style="font-size:14.5px;">
-        <li>Rate is admin‑configurable between 0–100%, never hard‑coded</li>
-        <li>Every rate change is logged with admin ID and timestamp</li>
-      </ul>
-      <ul class="check-list gold" style="font-size:14.5px;">
-        <li>The previous rate is archived, not overwritten — full audit history</li>
-        <li>Commission and teacher credit post as a single atomic transaction</li>
-      </ul>
-    </div>
-  </div>
-  <div class="brandmark">12 / 25</div>
-  <aside class="notes">The 80/20 split is illustrative only — say this out loud so the jury doesn't mistake it for a committed number.</aside>
-</section>
-
-<!-- 13. ARCHITECTURE -->
-<section data-transition="convex" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Product &amp; architecture</div>
-    <h2 class="h-lg">Built like a platform, not a prototype</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="align-items:center;">
-      <div class="arch">
-        <div class="arch-row"><div class="arch-box accent"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-monitor"/></svg></div><div><b>React 19 + TypeScript</b><span>SPA · TanStack Router/Start · Tailwind</span></div></div></div>
-        <div class="arch-arrow">↓ REST / JSON</div>
-        <div class="arch-row"><div class="arch-box"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-server"/></svg></div><div><b>ASP.NET Core API</b><span>Controllers · DTOs · JWT auth · RBAC</span></div></div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-row"><div class="arch-box"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-layers"/></svg></div><div><b>Service layer</b><span>Wallet · Enrollment · Academic rules</span></div></div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-row"><div class="arch-box accent2"><div class="ico" style="margin:0;"><svg class="i"><use href="#icon-database"/></svg></div><div><b>EF Core + SQL database</b><span>Migrations · Transactions · Audit logs</span></div></div></div>
-      </div>
-      <div>
-        <ul class="check-list">
-          <li>Clean separation: Data · Core · Infrastructure · API · Web</li>
-          <li>Every sensitive field returned through role‑aware DTOs, never raw entities</li>
-          <li>Centralized dependency injection for testable, swappable services</li>
-          <li>Structured exception handling and Serilog‑based logging across the API</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="brandmark">13 / 25</div>
-  <aside class="notes">Real stack from the codebase — React 19.2 + TypeScript + Vite + TanStack; ASP.NET Core + EF Core + Identity/JWT.</aside>
-</section>
-
-<!-- 14. ENGINEERING / SECURITY -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Engineering rigor</div>
-    <h2 class="h-lg">The parts users never see, but always feel</h2>
-    <div class="rule"></div>
-    <div class="grid grid-4" style="margin-top:2px;">
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-shield"/></svg></div><h4>Role‑based access</h4><p>Every page, action, and field is governed by explicit permissions, enforced at the API and service layer.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-split"/></svg></div><h4>Financial atomicity</h4><p>Wallet deductions, commission splits, and ledger writes commit together or not at all.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-check-shield"/></svg></div><h4>Full audit trail</h4><p>Permission changes, payments, and deletions all produce persistent, reviewable audit records.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-lock"/></svg></div><h4>Historical integrity</h4><p>Soft deletion preserves history while safely freeing up unique fields for reuse.</p></div>
-    </div>
-    <p class="lede tight" style="margin-top:18px;font-size:14.5px;">
-      Receipts and bank details are protected behind authorization checks by default — never
-      publicly accessible. The team also runs internal service‑layer audits before scaling to
-      new modules.
-    </p>
-  </div>
-  <div class="brandmark">14 / 25</div>
-  <aside class="notes">References the team's real Infrastructure/Services architecture review.</aside>
-</section>
-
-<!-- 15. STATUS TODAY -->
-<section data-transition="fade" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">Where we are today</div>
-    <h2 class="h-lg">Built with discipline — and honest about the gap</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:0;">
-      <div class="panel">
-        <h4 style="color:var(--teal-soft);">Live today</h4>
-        <ul class="check-list" style="margin-top:7px;">
-          <li>Authentication &amp; role‑based access control</li>
-          <li>User, page, module, and permission management</li>
-          <li>Core platform constants and configuration</li>
-        </ul>
-      </div>
-      <div class="panel">
-        <h4 style="color:var(--gold-soft);">Finishing next</h4>
-        <ul class="check-list gold" style="margin-top:7px;">
-          <li>Course, lesson, and exam API contracts</li>
-          <li>Enrollment and certificate delivery</li>
-          <li>In‑app notifications end to end</li>
-        </ul>
-      </div>
-    </div>
-    <p class="lede tight" style="margin-top:16px;font-size:14.5px;">
-      We'd rather show a jury a real, honestly‑labeled build status than a polished demo that
-      overstates where the product is. That discipline is deliberate.
-    </p>
-  </div>
-  <div class="brandmark">15 / 25</div>
-  <aside class="notes">From the frontend's own integration notes.</aside>
-</section>
-
-<!-- 16. BUSINESS MODEL -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Business model</div>
-    <h2 class="h-lg">We earn only when a teacher earns</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:0;">
-      <div>
-        <p class="lede tight" style="font-size:15px;">
-          Academia's revenue engine is a transparent, admin‑configurable commission on every paid
-          enrollment that moves through the platform wallet — recorded to a dedicated revenue
-          ledger every step of the way.
-        </p>
-        <div style="margin-top:16px;display:flex;gap:18px;">
-          <div class="stat"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-bank"/></svg></div><div><b style="font-size:16.5px;">Top‑up</b><br><span>Verified bank transfer into the wallet</span></div></div>
-          <div class="stat"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-users"/></svg></div><div><b style="font-size:16.5px;">Enrollment</b><br><span>Fee deducted, commission calculated</span></div></div>
-          <div class="stat"><div class="ico" style="margin-bottom:0;"><svg class="i"><use href="#icon-handshake"/></svg></div><div><b style="font-size:16.5px;">Payout</b><br><span>Teacher withdraws net earnings</span></div></div>
-        </div>
-      </div>
-      <div class="panel-paper">
-        <h4 style="margin-bottom:10px;">Why a commission, not a subscription</h4>
-        <ul style="margin:0;padding-left:20px;color:var(--ink-soft);font-size:14px;line-height:1.6;">
-          <li>Teachers pay nothing to list a course — zero upfront risk to join.</li>
-          <li>Academia only earns when a real, paid enrollment happens.</li>
-          <li>Every commission is logged in a ledger both sides can audit.</li>
-          <li>Aligns platform growth directly with teacher and student success.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="pill-row">
-      <span class="tag gold">Core: enrollment commission</span>
-      <span class="tag">Future: premium placement</span>
-      <span class="tag">Future: analytics for teachers</span>
-    </div>
-  </div>
-  <div class="brandmark">16 / 25</div>
-  <aside class="notes">"Future" pills are clearly exploratory, not committed revenue lines.</aside>
-</section>
-
-<!-- 17. UNIT ECONOMICS FRAMEWORK -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">Unit economics — the framework, not a forecast</div>
-    <h2 class="h-lg">How one enrollment turns into revenue</h2>
-    <div class="rule"></div>
-    <div class="grid grid-4" style="margin-top:2px;">
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-users"/></svg></div><h4>Enrollments</h4><p>Number of paid join requests approved through the wallet in a period.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-wallet"/></svg></div><h4>× Average fee</h4><p>The course or session price the student pays, set by each teacher.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-split"/></svg></div><h4>× Commission %</h4><p>The admin‑configurable platform rate applied at the moment of deduction.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-chart"/></svg></div><h4>= Platform revenue</h4><p>Logged automatically to the revenue ledger — no separate invoicing step.</p></div>
-    </div>
-    <div class="panel-paper" style="margin-top:20px;">
-      <h4 style="margin-bottom:8px;">Why we're showing a formula, not a forecast</h4>
-      <p style="font-size:14px;line-height:1.6;">
-        We don't have real enrollment volume yet — the platform hasn't launched, so any revenue
-        number today would be invented, not measured. What's real is the mechanism above: near‑zero
-        marginal cost per transaction, revenue that scales directly with enrollments rather than
-        headcount, and a cost base (engineering, hosting, verification staff) that grows far more
-        slowly than transaction volume once the payment gateway replaces manual bank‑transfer checks.
-      </p>
-    </div>
-  </div>
-  <div class="brandmark">17 / 25</div>
-  <aside class="notes">
-    Deliberately a formula, not a number — filling in placeholder revenue figures would be exactly
-    the kind of invented data the rest of this deck goes out of its way to avoid. If a juror pushes
-    for a number, walk through this formula live with a hypothetical example rather than presenting
-    one as fact.
-  </aside>
-</section>
-
-<!-- 18. COMPETITIVE FEATURE TABLE -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Feature comparison</div>
-    <h2 class="h-lg">A different category, not a feature race</h2>
-    <div class="rule"></div>
-    <div class="panel-paper" style="padding:15px 20px;">
-      <table class="cmp">
-        <thead><tr><th>Dimension</th><th>Google Classroom</th><th>Udemy</th><th>Academia</th></tr></thead>
-        <tbody>
-          <tr><td class="feat">Platform type</td><td>Tool for organizing closed classes</td><td>Global asynchronous course marketplace</td><td class="win">Education marketplace + integrated LMS</td></tr>
-          <tr><td class="feat">Discovery</td><td>Not available — needs a link or access code</td><td>Public catalog, global scale</td><td class="win">Directory of courses &amp; teachers</td></tr>
-          <tr><td class="feat">Payments</td><td>Entirely external — not supported by the system</td><td>External processor, one‑time purchase</td><td class="win">Unified, secure in‑platform wallet</td></tr>
-          <tr><td class="feat">Parent role</td><td>Limited email reports</td><td>None</td><td class="win">Dedicated activity &amp; payments dashboard</td></tr>
-          <tr><td class="feat">Attendance &amp; exams</td><td>Very limited</td><td>Not built for live, attended instruction</td><td class="win">Detailed academic tracking</td></tr>
-        </tbody>
-      </table>
-      <p class="src-note">Google Classroom row translated directly from Academia's own comparison sheet; Udemy row per the same team's competitive notes.</p>
-    </div>
-  </div>
-  <div class="brandmark">18 / 25</div>
-  <aside class="notes">Classroom wins on simplicity, Udemy on breadth. Academia's edge is live+paid+marketplace+family visibility together.</aside>
-</section>
-
-<!-- 19. WHY WE WIN -->
-<section data-transition="zoom" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">Why we win</div>
-    <h2 class="h-lg">Four things a "course tool" doesn't have</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:0;">
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-search"/></svg></div><h4>A real marketplace</h4><p>Students find teachers by browsing, not by receiving a private link — the platform generates demand, not just delivery.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-wallet"/></svg></div><h4>Money that just works</h4><p>One wallet handles every teacher's fees — no manual transfers to chase, no spreadsheets to reconcile.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-shield"/></svg></div><h4>Parents, included</h4><p>Attendance, results, and spend are visible to the people who are often the ones actually paying.</p></div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-chart"/></svg></div><h4>Room to get smarter</h4><p>Lesson content, attendance, and exam history already live in one place — the foundation an AI study assistant needs, planned for a later release.</p></div>
-    </div>
-  </div>
-  <div class="brandmark">19 / 25</div>
-  <aside class="notes">AI mention is a future release, not a current feature.</aside>
-</section>
-
-<!-- 20. RISKS & MITIGATIONS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Said out loud, not waiting to be asked</div>
-    <h2 class="h-lg">Four real risks, and how we're handling each</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:2px;">
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-split"/></svg></div>
-        <h4>Disintermediation</h4>
-        <p>A teacher and student could exchange contact info and transact outside the platform to avoid the commission. <b style="color:var(--teal-soft);">Mitigation:</b> the wallet, attendance record, materials hosting, and parent dashboard are workflow value a side deal doesn't replicate — staying on‑platform stays more convenient than leaving it.</p>
-      </div>
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-bank"/></svg></div>
-        <h4>Manual‑transfer fraud</h4>
-        <p>Today's top‑up relies on a human checking a bank receipt. <b style="color:var(--teal-soft);">Mitigation:</b> every verification is logged with an admin ID and timestamp, balances never move without approval, and an automated payment gateway is next on the roadmap specifically to close this gap.</p>
-      </div>
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-users"/></svg></div>
-        <h4>Chicken‑and‑egg supply/demand</h4>
-        <p>No students without teachers, no teachers without students. <b style="color:var(--teal-soft);">Mitigation:</b> we seed supply first — independent teachers and small centers get the tools free during onboarding, and their existing students migrate in as first demand.</p>
-      </div>
-      <div class="panel">
-        <div class="ico"><svg class="i"><use href="#icon-shield"/></svg></div>
-        <h4>A funded competitor moves faster</h4>
-        <p>Noon Academy or Orcas could extend toward our model. <b style="color:var(--teal-soft);">Mitigation:</b> neither is optimized around wallet + commission ledger + parent dashboard + academic tracking together — pivoting a funded product's core is organizationally slower than a focused build.</p>
-      </div>
-    </div>
-  </div>
-  <div class="brandmark">20 / 25</div>
-  <aside class="notes">
-    Say these plainly and move on — presented with confidence, naming your own risks before a
-    juror does reads as maturity, not weakness. Don't over-apologize for any of these.
-  </aside>
-</section>
-
-<!-- 21. WINNING STUDENTS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="two-col slide-wrap">
-    <div>
-      <div class="eyebrow">Winning students</div>
-      <h2 class="h-lg">Why a student signs up — and stays</h2>
-      <p class="lede" style="margin-top:12px;font-size:17px;">
-        Students don't need another app to check. They need one place where finding a teacher,
-        paying safely, and seeing their own progress finally fit together.
-      </p>
-    </div>
-    <ul class="check-list" style="font-size:15px;">
-      <li><b style="color:#f4f1ea;">Browse before you commit</b> — compare teachers, subjects, and prices in one catalog instead of asking around.</li>
-      <li><b style="color:#f4f1ea;">Pay once, use everywhere</b> — a single wallet covers every course, no separate transfer per teacher.</li>
-      <li><b style="color:#f4f1ea;">See your own progress</b> — attendance and exam results live in your account, not a teacher's notebook.</li>
-      <li><b style="color:#f4f1ea;">Trust, not guesswork</b> — enrollment is confirmed, blocked from duplicating, and receipted.</li>
-    </ul>
-  </div>
-  <div class="brandmark">21 / 25</div>
-  <aside class="notes">Retention argument as much as acquisition.</aside>
-</section>
-
-<!-- 22. WINNING TEACHERS -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow alt">Winning teachers</div>
-    <h2 class="h-lg">"Why should I give up a cut of my fee?"</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:0;">
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-split"/></svg></div>
-        <h4>What the teacher gives up</h4>
-        <p style="margin-top:5px;">A transparent, admin‑governed commission — calculated and logged automatically on every enrollment fee that clears through the wallet. Never a fixed lock‑in, always visible in the ledger.</p>
-      </div>
-      <div class="panel"><div class="ico"><svg class="i"><use href="#icon-handshake"/></svg></div>
-        <h4>What the teacher gets back</h4>
-        <div style="margin-top:5px;">
-          <p style="margin-bottom:5px;"><b style="color:#f4f1ea;">New students</b> — discovered through the marketplace, not just their existing circle.</p>
-          <p style="margin-bottom:5px;"><b style="color:#f4f1ea;">Zero collection hassle</b> — no chasing transfers or reconciling who actually paid.</p>
-          <p style="margin-bottom:0;"><b style="color:#f4f1ea;">A real dashboard</b> — join requests, rosters, and payouts, all in one place.</p>
-        </div>
-      </div>
-    </div>
-    <p class="lede tight" style="margin-top:16px;font-size:14.5px;">
-      The pitch is simple: the commission is the price of demand generation and automated,
-      verified collection — work every independent teacher currently does themselves, for free,
-      badly.
-    </p>
-  </div>
-  <div class="brandmark">22 / 25</div>
-  <aside class="notes">Direct answer to "why would a teacher accept a commission."</aside>
-</section>
-
-<!-- 23. ROADMAP -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">Roadmap</div>
-    <h2 class="h-lg">A 12‑week build, then what's next</h2>
-    <div class="rule"></div>
-    <div class="grid grid-2" style="margin-top:0;">
-      <div>
-        <h4 style="font-size:14.5px;color:var(--teal-soft);margin-bottom:7px;">MVP build sprint</h4>
-        <div class="timeline">
-          <div class="t-item"><div class="dot"><svg class="i" style="width:11px;height:11px;"><use href="#icon-lock"/></svg></div><span class="wk">WEEK 1–2</span><h4>Foundations</h4><p>SRS, user stories, auth &amp; RBAC.</p></div>
-          <div class="t-item"><div class="dot"><svg class="i" style="width:11px;height:11px;"><use href="#icon-book"/></svg></div><span class="wk">WEEK 3–6</span><h4>Content &amp; enrollment</h4><p>System design, courses, join requests.</p></div>
-          <div class="t-item"><div class="dot"><svg class="i" style="width:11px;height:11px;"><use href="#icon-wallet"/></svg></div><span class="wk">WEEK 6–9</span><h4>Wallet &amp; academics</h4><p>Top‑ups, commission split, attendance, exams.</p></div>
-          <div class="t-item"><div class="dot"><svg class="i" style="width:11px;height:11px;"><use href="#icon-rocket"/></svg></div><span class="wk">WEEK 9–12</span><h4>Polish &amp; launch</h4><p>Notifications, QA, and go‑live.</p></div>
-        </div>
-      </div>
-      <div>
-        <h4 style="font-size:14.5px;color:var(--gold-soft);margin-bottom:7px;">What's next</h4>
-        <ul class="check-list gold">
-          <li>Automated online payment gateway, alongside verified bank transfer</li>
-          <li>AI study assistant for lesson materials (summaries, flashcards, Q&amp;A)</li>
-          <li>Auto‑generated practice quizzes from uploaded course content</li>
-          <li>Predictive performance alerts for parents and teachers</li>
-          <li>Native mobile apps</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="brandmark">23 / 25</div>
-  <aside class="notes">Left column is the real 12-week milestones plan; right column is explicitly future/out-of-scope.</aside>
-</section>
-
-<!-- 24. TEAM -->
-<section data-transition="slide" data-background-color="#0a0f1c">
-  <div class="slide-wrap">
-    <div class="eyebrow">The team</div>
-    <h2 class="h-lg">Three engineers, one supervisor, one shared build</h2>
-    <div class="rule"></div>
-    <div class="grid grid-3" style="margin-top:2px;">
-      <div class="team-card"><div class="avatar">RI</div><div><h4>Rebhi Ibrahim</h4><span>Frontend engineering</span></div></div>
-      <div class="team-card"><div class="avatar">ZA</div><div><h4>Ziad Alnumailat</h4><span>Backend &amp; platform engineering</span></div></div>
-      <div class="team-card"><div class="avatar">AA</div><div><h4>Ahmed Alkhaldi</h4><span>Founding engineer</span></div></div>
-    </div>
-    <div class="pill-row" style="margin-top:20px;">
-      <span class="tag">Supervised by Hamza Abu Jarad</span>
-      <span class="tag gold">Built through TAQAT · CodeMap</span>
-    </div>
-  </div>
-  <div class="brandmark">24 / 25</div>
-  <aside class="notes">Real names from the SRS cover page; role attributions follow repo/hosting ownership.</aside>
-</section>
-
-<!-- 25. THE ASK / CLOSING -->
-<section data-transition="zoom" data-background-color="#0a0f1c" class="section-divider">
-  <span class="bignum">Ask</span>
-  <div class="slide-wrap">
-    <div class="eyebrow alt">The ask</div>
-    <h2 class="h-lg">What funding unlocks</h2>
-    <div class="rule"></div>
-    <div class="grid grid-3" style="margin-top:2px;">
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-layers"/></svg></div><h4>Finish the core</h4><p>Complete course, enrollment, and certificate APIs already designed and scheduled.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-bank"/></svg></div><h4>Automate payments</h4><p>Move top‑ups and withdrawals from manual verification to an integrated payment gateway.</p></div>
-      <div class="panel"><div class="ico gold"><svg class="i"><use href="#icon-chart"/></svg></div><h4>Build the AI layer</h4><p>Turn existing lesson and performance data into study assistance and early‑warning alerts.</p></div>
-    </div>
-    <p class="statement" style="font-size:26px;margin-top:22px;">
-      We're not asking you to fund an idea. We're asking you to fund the <em>next stage</em> of a
-      system that's already designed, partly built, and honest about the road ahead.
-    </p>
-    <div class="pill-row" style="margin-top:20px;">
-      <span class="tag gold">team@academia.app</span>
-      <span class="tag">academia.app</span>
-      <span class="tag">@academia — TAQAT · CodeMap</span>
-    </div>
-  </div>
-  <div class="slide-foot"><span class="dot2"></span> Thank you — Academia</div>
-  <div class="brandmark">25 / 25</div>
-  <aside class="notes">Close on credibility, not hype. No invented funding amount is quoted. Swap the placeholder email/site/handle for the real ones before presenting.</aside>
-</section>
-
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script>
-  const deck = new Reveal({
-    hash: true,
-    progress: true,
-    slideNumber: false,
-    controls: true,
-    center: false,
-    transition: 'slide',
-    transitionSpeed: 'default',
-    backgroundTransition: 'slide',
-    width: 1280,
-    height: 720,
-    margin: 0.04,
-    minScale: 0.2,
-    maxScale: 1.6,
-    plugins: [ RevealNotes ]
-  });
-
-  // ---------------------------------------------------------------
-  // Every slide's content is choreographed with GSAP once it becomes
-  // the active slide. Nothing here touches the slide-to-slide motion
-  // itself (that's reveal.js's own data-transition on each <section>:
-  // zoom / fade / convex / slide) — this only staggers the CONTENT
-  // of the slide in afterwards, so a slide never dumps everything on
-  // screen at once. Reduced-motion users get the plain instant state.
-  // ---------------------------------------------------------------
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function animateSlide(slide){
-    if (!slide || reduceMotion) return;
-    gsap.killTweensOf(slide.querySelectorAll('*'));
-
-    const eyebrow = slide.querySelectorAll('.eyebrow');
-    const heading = slide.querySelectorAll('h1, h2');
-    const rule    = slide.querySelectorAll('.rule');
-    const lede    = slide.querySelectorAll('.lede, .statement');
-    const cards   = slide.querySelectorAll(
-      '.panel:not(.fragment), .comp-card, .team-card, .feat-chip, .t-item, .stat, .flow-step:not(.fragment)'
-    );
-    const rows    = slide.querySelectorAll('table.cmp tbody tr');
-    const items   = slide.querySelectorAll('.check-list > li');
-    const tags    = slide.querySelectorAll('.pill-row .tag');
-    const mockup  = slide.querySelectorAll('.mockup');
-    const circles = slide.querySelectorAll('.circles .circle');
-
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    if (eyebrow.length) tl.fromTo(eyebrow, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4 }, 0);
-    if (heading.length) tl.fromTo(heading, { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
-      { opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: 0.65, ease: 'power4.out' }, 0.08);
-    if (rule.length)    tl.fromTo(rule, { width: 0 }, { width: 56, duration: 0.45 }, 0.35);
-    if (lede.length)    tl.fromTo(lede, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, 0.3);
-    if (circles.length) tl.fromTo(circles, { opacity: 0, scale: 0.75 },
-      { opacity: 1, scale: 1, duration: 0.55, stagger: 0.12, ease: 'back.out(1.6)' }, 0.25);
-    if (cards.length)   tl.fromTo(cards, { opacity: 0, y: 22 },
-      { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 }, 0.35);
-    if (rows.length)    tl.fromTo(rows, { opacity: 0, x: -14 },
-      { opacity: 1, x: 0, duration: 0.4, stagger: 0.07 }, 0.35);
-    if (items.length)   tl.fromTo(items, { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.4, stagger: 0.09 }, 0.4);
-    if (tags.length)    tl.fromTo(tags, { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.35, stagger: 0.05 }, 0.55);
-    if (mockup.length)  tl.fromTo(mockup, { opacity: 0, y: 26, scale: 0.97 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 }, 0.3);
-
-    return tl;
-  }
-
-  deck.on('slidechanged', (event) => animateSlide(event.currentSlide));
-  deck.on('ready', (event) => animateSlide(event.currentSlide));
-
-  deck.initialize().then(() => {
-    // commission meters + funding count-ups still run on their own trigger,
-    // independent of the GSAP entrance choreography above
-    deck.on('slidechanged', (event) => {
-      event.currentSlide.querySelectorAll('.meter .fill').forEach(el => {
-        const t = el.getAttribute('data-target');
-        gsap.fromTo(el, { width: '0%' }, { width: t + '%', duration: 1.1, delay: 0.5, ease: 'power2.out' });
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+      const deck = new Reveal({
+        hash: true,
+        progress: true,
+        slideNumber: false,
+        controls: true,
+        center: false,
+        transition: "slide",
+        transitionSpeed: "default",
+        backgroundTransition: "slide",
+        width: 1280,
+        height: 720,
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 1.6,
+        plugins: [RevealNotes],
       });
-      event.currentSlide.querySelectorAll('.cu:not(.done)').forEach(el => {
-        el.classList.add('done');
-        const target = parseFloat(el.getAttribute('data-target'));
-        const suffix = el.getAttribute('data-suffix') || '';
-        const obj = { v: 0 };
-        gsap.to(obj, {
-          v: target, duration: 1, delay: 0.5, ease: 'power2.out',
-          onUpdate: () => { el.textContent = '$' + (target % 1 === 0 ? Math.round(obj.v) : obj.v.toFixed(1)) + suffix; }
+
+      // ---------------------------------------------------------------
+      // Every slide's content is choreographed with GSAP once it becomes
+      // the active slide. Nothing here touches the slide-to-slide motion
+      // itself (that's reveal.js's own data-transition on each <section>:
+      // zoom / fade / convex / slide) — this only staggers the CONTENT
+      // of the slide in afterwards, so a slide never dumps everything on
+      // screen at once. Reduced-motion users get the plain instant state.
+      // ---------------------------------------------------------------
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function animateSlide(slide) {
+        if (!slide || reduceMotion) return;
+        gsap.killTweensOf(slide.querySelectorAll("*"));
+
+        const eyebrow = slide.querySelectorAll(".eyebrow");
+        const heading = slide.querySelectorAll("h1, h2");
+        const rule = slide.querySelectorAll(".rule");
+        const lede = slide.querySelectorAll(".lede, .statement");
+        const cards = slide.querySelectorAll(
+          ".panel:not(.fragment), .comp-card, .team-card, .feat-chip, .t-item, .stat, .flow-step:not(.fragment)",
+        );
+        const rows = slide.querySelectorAll("table.cmp tbody tr");
+        const items = slide.querySelectorAll(".check-list > li");
+        const tags = slide.querySelectorAll(".pill-row .tag");
+        const mockup = slide.querySelectorAll(".mockup");
+        const circles = slide.querySelectorAll(".circles .circle");
+
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        if (eyebrow.length)
+          tl.fromTo(eyebrow, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4 }, 0);
+        if (heading.length)
+          tl.fromTo(
+            heading,
+            { opacity: 0, clipPath: "inset(0 100% 0 0)" },
+            { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 0.65, ease: "power4.out" },
+            0.08,
+          );
+        if (rule.length) tl.fromTo(rule, { width: 0 }, { width: 56, duration: 0.45 }, 0.35);
+        if (lede.length)
+          tl.fromTo(lede, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, 0.3);
+        if (circles.length)
+          tl.fromTo(
+            circles,
+            { opacity: 0, scale: 0.75 },
+            { opacity: 1, scale: 1, duration: 0.55, stagger: 0.12, ease: "back.out(1.6)" },
+            0.25,
+          );
+        if (cards.length)
+          tl.fromTo(
+            cards,
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 },
+            0.35,
+          );
+        if (rows.length)
+          tl.fromTo(
+            rows,
+            { opacity: 0, x: -14 },
+            { opacity: 1, x: 0, duration: 0.4, stagger: 0.07 },
+            0.35,
+          );
+        if (items.length)
+          tl.fromTo(
+            items,
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.4, stagger: 0.09 },
+            0.4,
+          );
+        if (tags.length)
+          tl.fromTo(
+            tags,
+            { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.35, stagger: 0.05 },
+            0.55,
+          );
+        if (mockup.length)
+          tl.fromTo(
+            mockup,
+            { opacity: 0, y: 26, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+            0.3,
+          );
+
+        return tl;
+      }
+
+      deck.on("slidechanged", (event) => animateSlide(event.currentSlide));
+      deck.on("ready", (event) => animateSlide(event.currentSlide));
+
+      deck.initialize().then(() => {
+        // commission meters + funding count-ups still run on their own trigger,
+        // independent of the GSAP entrance choreography above
+        deck.on("slidechanged", (event) => {
+          event.currentSlide.querySelectorAll(".meter .fill").forEach((el) => {
+            const t = el.getAttribute("data-target");
+            gsap.fromTo(
+              el,
+              { width: "0%" },
+              { width: t + "%", duration: 1.1, delay: 0.5, ease: "power2.out" },
+            );
+          });
+          event.currentSlide.querySelectorAll(".cu:not(.done)").forEach((el) => {
+            el.classList.add("done");
+            const target = parseFloat(el.getAttribute("data-target"));
+            const suffix = el.getAttribute("data-suffix") || "";
+            const obj = { v: 0 };
+            gsap.to(obj, {
+              v: target,
+              duration: 1,
+              delay: 0.5,
+              ease: "power2.out",
+              onUpdate: () => {
+                el.textContent =
+                  "$" + (target % 1 === 0 ? Math.round(obj.v) : obj.v.toFixed(1)) + suffix;
+              },
+            });
+          });
         });
       });
-    });
-  });
-</script>
-</body>
+    </script>
+  </body>
 </html>

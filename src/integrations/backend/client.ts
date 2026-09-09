@@ -65,13 +65,9 @@ function friendlyMessageFor(kind: ApiErrorKind, status: number): string {
         ? "انتهت جلستك أو لم يتم تسجيل الدخول. سجّل الدخول مجددًا للمتابعة."
         : "Your session has ended or you're not signed in. Please sign in again to continue.";
     case 403:
-      return ar
-        ? "ليس لديك صلاحية للقيام بهذا الإجراء."
-        : "You don't have permission to do this.";
+      return ar ? "ليس لديك صلاحية للقيام بهذا الإجراء." : "You don't have permission to do this.";
     case 404:
-      return ar
-        ? "لم يتم العثور على البيانات المطلوبة."
-        : "The requested data couldn't be found.";
+      return ar ? "لم يتم العثور على البيانات المطلوبة." : "The requested data couldn't be found.";
     case 409:
       return ar
         ? "تعارض في البيانات — قد يكون هذا العنصر معدّلاً من مكان آخر. حدّث الصفحة وحاول مجددًا."
@@ -90,7 +86,9 @@ function friendlyMessageFor(kind: ApiErrorKind, status: number): string {
           ? "حدث خطأ من جهة الخادم. حاول لاحقًا، وإذا استمرت المشكلة بلّغ الدعم الفني."
           : "A server error occurred. Please try again later, and contact support if it persists.";
       }
-      return ar ? "حدث خطأ غير متوقع. حاول مجددًا." : "An unexpected error occurred. Please try again.";
+      return ar
+        ? "حدث خطأ غير متوقع. حاول مجددًا."
+        : "An unexpected error occurred. Please try again.";
   }
 }
 
@@ -117,7 +115,8 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
     // أي فشل بمستوى الشبكة (لا اتصال، CORS، الخادم متوقف، DNS...) بيوصل هون
     // كـ TypeError خام من fetch نفسه (نص إنجليزي تقني زي "Failed to fetch")
     // — منترجمه لرسالة مفهومة قبل ما توصل لأي مكوّن بالواجهة.
-    const kind: ApiErrorKind = err instanceof DOMException && err.name === "AbortError" ? "timeout" : "network";
+    const kind: ApiErrorKind =
+      err instanceof DOMException && err.name === "AbortError" ? "timeout" : "network";
     const raw = err instanceof Error ? err.message : String(err);
     throw new ApiError(raw, 0, kind, friendlyMessageFor(kind, 0));
   } finally {
@@ -131,7 +130,12 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
       data = JSON.parse(text);
     } catch {
       if (!res.ok) {
-        throw new ApiError(text || res.statusText, res.status, "parse", friendlyMessageFor("parse", res.status));
+        throw new ApiError(
+          text || res.statusText,
+          res.status,
+          "parse",
+          friendlyMessageFor("parse", res.status),
+        );
       }
       // استجابة ناجحة (200) لكن مو JSON — نادرًا ما يصير، منمررها كما هي.
       data = text;
@@ -204,7 +208,8 @@ const DEMO_ERROR_TRANSLATIONS: Record<string, string> = {
   "اليوم غير موجود": "Day not found",
   "تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.":
     "Teacher registration isn't available yet — being connected to the new backend.",
-  "تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي": "Signed in, but couldn't verify your profile",
+  "تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي":
+    "Signed in, but couldn't verify your profile",
   "لا يوجد بريد إلكتروني لهذا المستخدم": "This user has no email address",
   "ليس لديك صلاحية لتنفيذ هذا الإجراء": "You don't have permission to do this",
   "نوع المستخدم غير موجود": "User type not found",
