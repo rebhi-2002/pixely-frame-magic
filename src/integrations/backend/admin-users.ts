@@ -26,6 +26,7 @@ interface BackendUserDto {
 
 interface UserTableResponse {
   data?: BackendUserDto[] | null;
+  totalCount?: number;
 }
 
 interface UserFormResponse {
@@ -74,22 +75,43 @@ function mapUser(user: BackendUserDto): UserRow {
 }
 
 async function loadFormData(id?: string): Promise<UserFormResponse> {
-  const query = id ? `?id=${encodeURIComponent(id)}` : "?id=";
+  // ملاحظة مهمة: id فاضي تمامًا (id=) بيرجّع 400 من الباك اند الفعلي
+  // (تأكدنا من الـNetwork tab)، بعكس id غير فاضي زي "0" يلي شغال. نفس
+  // الحل المستخدم أصلاً بـadmin-constants.ts/admin-pages.ts.
+  const query = `?id=${id ? encodeURIComponent(id) : "0"}`;
   return apiClient.get<UserFormResponse>(`/api/User/CreateEditModal${query}`);
 }
 
-export async function listBackendUsers(): Promise<UserRow[]> {
+export interface ListUsersParams {
+  searchValue?: string;
+  userTypeId?: number | null;
+  genderId?: number | null;
+  isActiveSearch?: boolean | null;
+  pageSize?: number;
+  skip?: number;
+}
+
+export interface ListUsersResult {
+  rows: UserRow[];
+  totalCount: number;
+}
+
+export async function listBackendUsers(params: ListUsersParams = {}): Promise<ListUsersResult> {
+  const pageSize = params.pageSize ?? 20;
   const result = await apiClient.post<UserTableResponse>("/api/User/GetAll", {
-    searchValue: "",
+    searchValue: params.searchValue ?? "",
     sortColumn: "",
     sortColumnDirection: "",
-    pageSize: 1000,
-    skip: 0,
-    userTypeId: null,
-    genderId: null,
-    isActiveSearch: null,
+    pageSize,
+    skip: params.skip ?? 0,
+    userTypeId: params.userTypeId ?? null,
+    genderId: params.genderId ?? null,
+    isActiveSearch: params.isActiveSearch ?? null,
   });
-  return (result.data ?? []).map(mapUser).filter((user) => user.id.length > 0);
+  return {
+    rows: (result.data ?? []).map(mapUser).filter((user) => user.id.length > 0),
+    totalCount: result.totalCount ?? 0,
+  };
 }
 
 export async function loadBackendUserOptions(): Promise<BackendUserOptions> {

@@ -6,7 +6,7 @@ import { isAuthenticated, logout } from "@/integrations/backend/auth";
 
 /** ساعتان — تسجيل خروج تلقائي عند الخمول (قرار أمان متفق عليه مع المستخدم). */
 export const IDLE_LIMIT_MS = 2 * 60 * 60 * 1000;
-export const LAST_ACTIVITY_KEY = "acadimia.lastActivity";
+export const LAST_ACTIVITY_KEY = "academia.lastActivity";
 
 const ACTIVITY_EVENTS = ["pointerdown", "keydown", "scroll", "touchstart", "visibilitychange"];
 

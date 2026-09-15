@@ -33,6 +33,7 @@ interface BackendConstantDto {
 
 interface ConstantTableResponse {
   data?: BackendConstantDto[] | null;
+  totalCount?: number;
 }
 
 interface ConstantFormResponse {
@@ -55,15 +56,31 @@ async function loadFormData(id?: number): Promise<ConstantFormResponse> {
   return apiClient.get<ConstantFormResponse>(`/api/Constant/CreateEditModal?id=${id ?? 0}`);
 }
 
-export async function listBackendConstants(): Promise<ConstantRow[]> {
+export interface ListConstantsParams {
+  searchValue?: string;
+  pageSize?: number;
+  skip?: number;
+}
+
+export interface ListConstantsResult {
+  rows: ConstantRow[];
+  totalCount: number;
+}
+
+export async function listBackendConstants(
+  params: ListConstantsParams = {},
+): Promise<ListConstantsResult> {
   const result = await apiClient.post<ConstantTableResponse>("/api/Constant/GetAll", {
-    searchValue: "",
+    searchValue: params.searchValue ?? "",
     sortColumn: "",
     sortColumnDirection: "",
-    pageSize: 1000,
-    skip: 0,
+    pageSize: params.pageSize ?? 20,
+    skip: params.skip ?? 0,
   });
-  return (result.data ?? []).map(mapConstant).filter((c) => c.id > 0);
+  return {
+    rows: (result.data ?? []).map(mapConstant).filter((c) => c.id > 0),
+    totalCount: result.totalCount ?? 0,
+  };
 }
 
 export async function loadBackendConstantParents(): Promise<ConstantParentOption[]> {

@@ -61,6 +61,7 @@ interface BackendPageDto {
 
 interface PageTableResponse {
   data?: BackendPageDto[] | null;
+  totalCount?: number;
 }
 
 interface PageFormResponse {

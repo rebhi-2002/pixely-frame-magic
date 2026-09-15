@@ -162,6 +162,11 @@ export const apiClient = {
   get: <T>(path: string) => request<T>(path, { method: "GET" }),
   post: <T>(path: string, json?: unknown) => request<T>(path, { method: "POST", json }),
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  /** لـ endpoints [FromForm] (زي رفع الملفات) — بدون Content-Type يدوي حتى
+   * يحدد المتصفح boundary الـ multipart تلقائيًا. */
+  postForm: <T>(path: string, formData: FormData) =>
+    request<T>(path, { method: "POST", body: formData }),
+  baseUrl: API_BASE_URL,
 };
 
 /**

@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { logout } from "@/integrations/backend/auth";
+import { trackEvent } from "@/lib/analytics";
 import { BrandLogo } from "@/components/site/brand-logo";
 
 /**
@@ -21,6 +22,7 @@ export function useSignOut(to = "/") {
       await queryClient.cancelQueries();
       queryClient.clear();
       await logout();
+      trackEvent("logout");
       navigate({ to, replace: true });
     } finally {
       // نُبقي الطبقة ظاهرة لحظة قصيرة حتى يكتمل التنقّل بسلاسة

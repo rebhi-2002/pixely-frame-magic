@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAccess } from "@/lib/rbac.functions";
-import { buildFullAdminAccess, emptyAccess } from "@/lib/rbac-client";
+import { buildFullAdminAccess, buildRoleAccess, emptyAccess } from "@/lib/rbac-client";
+import { roleKeyFromName } from "@/lib/bi";
 import {
   getStoredProfile,
   getStoredUserId,
@@ -37,8 +38,22 @@ export function useAccess() {
         });
       }
 
-      // نوع مستخدم حقيقي تاني (أو تعذّر تحديده) — لسا ما فيه عقد أدوار
-      // حقيقي غير الأدمن، فما منخترع صلاحيات. راجع الـ TODO بـ rbac-client.ts.
+      const profile = getStoredProfile();
+      // roleId معروف فعليًا (جاي من fetchUserType بـauth.ts) — منطي وصول
+      // لمساحة هالدور فقط، بغض النظر شو نوعه (طالب/معلم/ولي أمر...).
+      if (profile?.roleId != null && typeof profile.roleId === "number") {
+        const roleKey = roleKeyFromName(profile.roleName, false);
+        return buildRoleAccess(
+          userId,
+          { name: profile.name, email: profile.email, avatar: profile.avatar ?? null },
+          profile.roleId,
+          profile.roleName ?? "",
+          roleKey,
+        );
+      }
+
+      // تعذّر تحديد الدور فعليًا (roleId=null) — ما منخترع صلاحيات، برجع
+      // access فاضي. راجع تحذير login.tsx/signup.tsx للمستخدم بهالحالة.
       return emptyAccess(userId);
     },
     staleTime: 30_000,

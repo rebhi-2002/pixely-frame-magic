@@ -1,13 +1,27 @@
 import { apiClient } from "./client";
 
-// الباك اند حاليًا فيه بس نوعين مستخدم ثابتين ومفروضين بالكود نفسه (لا يوجد
-// أي Controller لإدارة UserTypes — لا إضافة ولا حذف)، فبنعرضهم كقائمة ثابتة
-// هون بدل ما نخترع نداء لإندبوينت غير موجود. لو انضاف Controller لهم لاحقًا،
-// بنبدلها بنداء حقيقي.
-export const BACKEND_USER_TYPES = [
-  { id: 1, name: "مدير النظام", name_en: "System Admin" },
-  { id: 2, name: "مستخدم", name_en: "User" },
-] as const;
+export interface BackendUserType {
+  id: number;
+  name: string;
+}
+
+interface UserTypesFormResponse {
+  userTypes?: BackendUserType[] | null;
+}
+
+/**
+ * أنواع المستخدمين الحقيقية متل ما هي مزروعة (seeded) بالباك اند — 5 أنواع:
+ * مدير النظام، مستخدم، الطالب، المعلم، ولي الامر (راجع UserSeed.cs). لا يوجد
+ * Controller مستقل لإدارتها (لا إضافة ولا حذف من الواجهة)، فبنجيبها ديناميكيًا
+ * من نفس endpoint يلي شاشة تعديل المستخدم بتستخدمه (/api/User/CreateEditModal)
+ * بدل ما نخترع endpoint غير موجود أو نثبّت قائمة ناقصة بالكود.
+ */
+export async function listBackendUserTypes(): Promise<BackendUserType[]> {
+  // id فاضي تمامًا بيرجّع 400 فعليًا (راجع admin-users.ts:loadFormData
+  // لنفس الملاحظة) — "0" آمن وبيرجّع نفس قوائم userTypes/genders الكاملة.
+  const result = await apiClient.get<UserTypesFormResponse>(`/api/User/CreateEditModal?id=0`);
+  return result.userTypes ?? [];
+}
 
 interface RawPermissionEntry {
   pageId?: number;

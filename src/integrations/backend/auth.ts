@@ -1,4 +1,4 @@
-// تكامل المصادقة الحالي مع ASP.NET Identity في باك إند Acadimia.
+// تكامل المصادقة الحالي مع ASP.NET Identity في باك إند academia.
 // المتاح حاليًا: Login وLogout وMyProfileModal.
 // إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
 // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
@@ -38,6 +38,11 @@ interface StoredSession {
   userId: string;
   isDemo: boolean;
   profile: StoredProfile | null;
+  /** true فقط إذا صار تسجيل الحساب بهالجلسة بالذات (لحظة التسجيل، مو
+   * تسجيل دخول لاحق) — إشارة حقيقية الوحيدة المتوفرة لدينا لـ"مستخدم
+   * جديد" (الباك اند ما بيرجع تاريخ إنشاء الحساب بـMyProfileModal).
+   * تُستهلك بـsrc/lib/onboarding.ts لعرض قائمة الخطوات الأولى مرة وحدة. */
+  justRegistered?: boolean;
 }
 
 type ProfileEnvelope = {
@@ -52,6 +57,73 @@ function readStoredSession(): StoredSession | null {
     return raw ? (JSON.parse(raw) as StoredSession) : null;
   } catch {
     return null;
+  }
+}
+
+/** يحدّث بيانات الجلسة المخزّنة محليًا بعد نجاح تعديل حقيقي (تعديل ملف
+ * شخصي، تحديد نوع مستخدم بعد fetchUserType...) — بدون ما نصدّر
+ * writeStoredSession/readStoredSession أنفسهم لتبقى إدارة الجلسة مركزية
+ * بهالملف. */
+function patchStoredProfile(patch: Partial<StoredProfile>): void {
+  const session = readStoredSession();
+  if (!session?.profile) return;
+  writeStoredSession({ ...session, profile: { ...session.profile, ...patch } });
+}
+
+export interface UpdateProfileInput {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  genderId: number;
+}
+
+/** تعديل الملف الشخصي الحقيقي — POST /api/User/MyProfile. متاح فقط
+ * لجلسة حقيقية (مو ديمو)؛ بعد النجاح نحدّث الجلسة المخزّنة محليًا حتى
+ * تنعكس فورًا بكل مكان بيقرأ StoredProfile (القائمة الجانبية، الإعدادات...). */
+export async function updateMyProfile(input: UpdateProfileInput): Promise<void> {
+  const result = await apiClient.post<{ success: boolean; message?: string | null }>(
+    "/api/User/MyProfile",
+    {
+      id: input.id,
+      name: input.name,
+      email: input.email,
+      phoneNumber: input.phoneNumber,
+      genderId: input.genderId,
+    },
+  );
+  if (!result?.success) {
+    throw new Error(result?.message || "تعذّر حفظ التعديلات");
+  }
+  patchStoredProfile({
+    name: input.name,
+    email: input.email,
+    phoneNumber: input.phoneNumber,
+    genderId: input.genderId,
+  });
+}
+
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+/** تغيير كلمة المرور الحقيقي — POST /api/User/ChangePassword. الباك اند
+ * نفسه بيتحقق من تطابق newPassword/confirmPassword (Compare attribute)
+ * وصحة currentPassword — رسالة الخطأ (مثلاً "كلمة المرور الحالية غير
+ * صحيحة") جاية من الباك اند مباشرة. */
+export async function changeMyPassword(input: ChangePasswordInput): Promise<void> {
+  const result = await apiClient.post<{ success: boolean; message?: string | null }>(
+    "/api/User/ChangePassword",
+    {
+      currentPassword: input.currentPassword,
+      newPassword: input.newPassword,
+      confirmPassword: input.confirmPassword,
+    },
+  );
+  if (!result?.success) {
+    throw new Error(result?.message || "تعذّر تغيير كلمة المرور");
   }
 }
 
@@ -93,12 +165,15 @@ function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
 
 /**
  * MyProfileModal ما بيرجع نوع المستخدم (UserTypeId/UserType.Name) — لسا ما
- * انضافت لـ MyProfileDto بالباك اند. بالانتظار، نجيبها من
- * /api/User/CreateEditModal?id=... (نفس الـ endpoint يلي شاشة تعديل
- * المستخدم بتستخدمه، ومتاح لأي جلسة). إذا فشل النداء (باك اند قديم/تعطّل
- * مؤقت) منرجع null وبيضل تسجيل الدخول نفسه ناجح — بس الراوتينغ بيوجّه
- * لصفحة طالب افتراضية بدل الأدمن، فمهم ما نكسر الدخول كله بسبب هالنداء
- * الإضافي.
+ * انضافت لـ MyProfileDto بالباك اند، وما في أي مصدر بديل (لا claim ولا حقل
+ * بنتيجة تسجيل الدخول) — هاد النداء هو المصدر الوحيد لمعرفة الدور. بالانتظار،
+ * نجيبها من /api/User/CreateEditModal?id=... (نفس الـ endpoint يلي شاشة
+ * تعديل المستخدم بتستخدمه). إذا فشل النداء منرجع null وبيضل تسجيل الدخول
+ * نفسه ناجح — بس الراوتينغ بيوجّه لصفحة طالب افتراضية بدل الدور الحقيقي.
+ * لهيك بنسجّل الخطأ بالكونسول بدل ما نبلعه بصمت — لو صرت تشوف مستخدم حقيقي
+ * (وخصوصًا الأدمن) بينوجّه لمساحة غلط بعد الدخول، افتح Console وشوف رسالة
+ * "fetchUserType failed" هون: غالبًا الاستجابة من CreateEditModal رجعت خطأ
+ * أو شكل مختلف عن المتوقع.
  */
 async function fetchUserType(
   userId: string,
@@ -109,11 +184,17 @@ async function fetchUserType(
       User?: { userTypeId?: number | null; userType?: { name?: string | null } | null } | null;
     }>(`/api/User/CreateEditModal?id=${encodeURIComponent(userId)}`);
     const u = modal?.user ?? modal?.User;
-    return {
-      roleId: typeof u?.userTypeId === "number" ? u.userTypeId : null,
-      roleName: typeof u?.userType?.name === "string" ? u.userType.name : null,
-    };
-  } catch {
+    const roleId = typeof u?.userTypeId === "number" ? u.userTypeId : null;
+    const roleName = typeof u?.userType?.name === "string" ? u.userType.name : null;
+    if (roleId == null) {
+      console.warn(
+        "[auth] fetchUserType: userTypeId غير موجود بالاستجابة — تحقق من شكل الـJSON الفعلي:",
+        modal,
+      );
+    }
+    return { roleId, roleName };
+  } catch (err) {
+    console.error("[auth] fetchUserType failed — سيتم التعامل مع المستخدم كطالب افتراضيًا:", err);
     return { roleId: null, roleName: null };
   }
 }
@@ -147,6 +228,55 @@ export async function login(email: string, password: string): Promise<void> {
     userId: profile.id,
     isDemo: false,
     profile,
+  });
+}
+
+export interface RegisterInput {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+  genderId: number;
+  /** نوع المستخدم (3=الطالب، 5=ولي الامر، 4=المعلم...) — راجع
+   * listBackendUserTypes() بـ admin-permissions.ts لجلبها ديناميكيًا. */
+  userTypeId: number;
+}
+
+/** الباك اند بينشئ الحساب، ينشئ Wallet تلقائيًا، ويسجّل الدخول فورًا لو نجح
+ * (SignInManager.SignInAsync)، فمنجيب البروفايل فورًا بعدها متل login(). */
+export async function register(input: RegisterInput): Promise<void> {
+  const result = await apiClient.post<OperationResult>("/api/Auth/Register", {
+    name: input.name,
+    email: input.email,
+    phoneNumber: input.phoneNumber,
+    password: input.password,
+    confirmPassword: input.confirmPassword,
+    genderId: input.genderId,
+    userTypeId: input.userTypeId,
+  });
+
+  if (!result?.success) {
+    throw new Error(result?.message || "تعذّر إنشاء الحساب");
+  }
+
+  const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+  const profile = normalizeProfile(payload);
+  if (!profile) {
+    throw new Error("تم إنشاء الحساب، لكن تعذّر التحقق من الملف الشخصي");
+  }
+
+  const userType = await fetchUserType(profile.id);
+  profile.roleId = userType.roleId;
+  profile.roleName = userType.roleName;
+
+  writeStoredSession({
+    email: profile.email,
+    loggedInAt: Date.now(),
+    userId: profile.id,
+    isDemo: false,
+    profile,
+    justRegistered: true,
   });
 }
 
@@ -227,6 +357,14 @@ export function getStoredUserId(): string | null {
 
 export function getStoredProfile(): StoredProfile | null {
   return readStoredSession()?.profile ?? null;
+}
+
+/** true فقط لأول جلسة بعد نجاح التسجيل — إشارة ابتدائية لعرض قائمة
+ * "خطواتك الأولى" تلقائيًا أول مرة. لا تُستهلك/تُطفى هون عمدًا (القرار
+ * الدائم لعرض/إخفاء القائمة عبر عمر الحساب بيتحكم فيه onboarding.ts
+ * بعلم منفصل مربوط بـuserId، مش بهالعلم المؤقت). */
+export function wasJustRegistered(): boolean {
+  return readStoredSession()?.justRegistered === true;
 }
 
 /** UserTypeId=1 ("مدير النظام") — الوحيد المتاح فعليًا على الباك اند حاليًا. */

@@ -7,26 +7,33 @@
 // شغالة، اتحقق منها بـ verifyServerSession عبر نداء مباشر من المتصفح
 // لـ /api/User/MyProfileModal)، منبني نفس شكل MyAccess هون محليًا.
 //
-// حاليًا الباك اند فيه بس UserTypeId=1 ("مدير النظام") كمستخدم حقيقي، فمنطي
-// صلاحيات كاملة لأي جلسة حقيقية متأكدين إنها أدمن (isRealAdmin())، وأي شي
-// تاني (أو تعذّر تحديد النوع) برجع access فاضي — بالضبط متل سلوك
-// rbac.server.ts لمستخدم حقيقي غير معروف، ما نخترع صلاحيات لأي حد.
+// كل دور حقيقي متأكدين منه (profile.roleId موجود فعليًا — راجع fetchUserType
+// بـauth.ts) بياخد وصول كامل لمساحته هو بس (الصفحات يلي بادئتها تطابق دوره،
+// نفس آلية pageMatchesRole المستخدمة أصلاً بـGuard) — مبني على نفس شجرة
+// الصفحات الثابتة (MODULES/PAGES) يلي بيستخدمها وضع الديمو، لأنه معظم هالصفحات
+// لسا مبنية على بيانات ديمو مش تكامل حقيقي (راجع التقرير الشامل). لو تعذّر
+// تحديد الدور (roleId=null) بنرجع access فاضي بدل ما نخمّن — أأمن.
 //
-// TODO: لما الباك اند يضيف باقي أنواع المستخدمين (طالب/معلم/ولي أمر/مشرف)
-// ويرجّع UserTypeId ضمن MyProfileModal مباشرة (بدل ما نستنتجه من
-// CreateEditModal بـ auth.ts)، نوسّع هالملف ليبني شجرة كل نوع حسب دوره
-// الحقيقي بدل "أدمن كامل أو ولا شي".
+// TODO: لما الباك اند يوفر Pages/Permissions حقيقية تطابق مفاتيح الصفحات
+// (pageKey) المستخدمة فعليًا بالراوتات، نستبدل هالمنطق بنداء حقيقي لـ
+// listBackendPages()/listGrantedPageIds() (admin-pages.ts/admin-permissions.ts)
+// بدل شجرة الديمو الثابتة.
 
 import type { AccessModule, AccessPage, MyAccess } from "./rbac-types";
 import { MODULES, PAGES, PERMISSION_KEYS } from "./rbac-static-data";
+import { pageMatchesRole, type RoleKey } from "./bi";
 
 export function emptyAccess(userId: string): MyAccess {
   return { userId, isAdmin: false, profile: null, modules: [], permissions: {} };
 }
 
-export function buildFullAdminAccess(
+function buildAccessTree(
   userId: string,
   profile: { name: string; email: string; avatar: string | null },
+  roleId: string,
+  roleName: string,
+  isAdmin: boolean,
+  pageAllowed: (pageKey: string) => boolean,
 ): MyAccess {
   const allPermKeys = PERMISSION_KEYS.map((p) => p.key);
   const enabledModules = MODULES.filter((m) => m.enabled).sort(
@@ -51,8 +58,8 @@ export function buildFullAdminAccess(
           nameEn: p.name_en,
           icon: p.icon,
           path: p.path,
-          permissions: allPermKeys,
-          canView: true,
+          permissions: pageAllowed(p.key) ? allPermKeys : [],
+          canView: pageAllowed(p.key),
           children: build(p.id),
         }));
 
@@ -79,16 +86,40 @@ export function buildFullAdminAccess(
 
   return {
     userId,
-    isAdmin: true,
+    isAdmin,
     profile: {
       id: userId,
       full_name: profile.name,
       email: profile.email,
       avatar_url: profile.avatar,
-      role_id: "backend-admin",
-      role_name: "مدير النظام",
+      role_id: roleId,
+      role_name: roleName,
     },
     modules,
     permissions,
   };
+}
+
+export function buildFullAdminAccess(
+  userId: string,
+  profile: { name: string; email: string; avatar: string | null },
+): MyAccess {
+  return buildAccessTree(userId, profile, "backend-admin", "مدير النظام", true, () => true);
+}
+
+/**
+ * وصول لأي دور حقيقي غير الأدمن (طالب/معلم/ولي أمر) — يُمنح فقط لو تأكدنا
+ * فعليًا من الدور (roleId جاي من الباك اند، مش افتراض). بيحصر الوصول
+ * بالصفحات يلي بادئتها تطابق الدور (pageMatchesRole)، بنفس آلية Guard.
+ */
+export function buildRoleAccess(
+  userId: string,
+  profile: { name: string; email: string; avatar: string | null },
+  roleId: number,
+  roleName: string,
+  roleKey: RoleKey,
+): MyAccess {
+  return buildAccessTree(userId, profile, String(roleId), roleName, false, (pageKey) =>
+    pageMatchesRole(pageKey, roleKey),
+  );
 }
