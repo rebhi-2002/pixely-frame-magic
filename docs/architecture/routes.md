@@ -6,7 +6,7 @@
 
 ## Authenticated routes
 
-كل ما تحت `src/routes/_authenticated` يمر عبر layout مشترك. توجد مسارات عامة للطالب مثل dashboard وlibrary وmy-courses وexam-simulator وflashcards وmistakes-bank وachievements وcertificates وsettings، ومسارات أدوار للإدارة والمعلم والمشرف وولي الأمر.
+كل ما تحت `src/routes/_authenticated` يمر عبر layout مشترك. توجد مسارات عامة للطالب مثل dashboard وlibrary وmy-courses وexam-simulator وflashcards وmistakes-bank وachievements وcertificates و**wallet** (محفظة حقيقية، جديدة) وsettings (تعديل ملف شخصي + تغيير كلمة مرور حقيقيين الآن)، ومسارات أدوار للإدارة والمعلم والمشرف وولي الأمر.
 
 ## حراسة المسارات
 

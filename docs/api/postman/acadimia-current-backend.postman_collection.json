@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Acadimia API - Current Backend",
-    "_postman_id": "acadimia-current-backend",
+    "name": "academia API - Current Backend",
+    "_postman_id": "academia-current-backend",
     "description": "Generated from deployed Swagger and backend controllers. Authentication is ASP.NET Identity cookie-based; Postman cookie jar must be enabled.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },

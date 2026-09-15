@@ -2,7 +2,12 @@
 
 واجهة منصة Academia التعليمية المبنية على React وTypeScript وVite وTanStack Router/Start.
 
-> 📅 **آخر تحديث لهذا الملف:** 6 سبتمبر 2026
+> 📅 **آخر تحديث لهذا الملف:** 14 سبتمبر 2026 — بعد ربط Wallet/Parent
+> بالكامل، RBAC لكل الأدوار، onboarding، pagination حقيقي، Sentry/PostHog،
+> واختبارات. **مصدر الحقيقة لحالة كل endpoint:**
+> [`docs/api/frontend-integration-status.md`](docs/api/frontend-integration-status.md)
+> (جدول محدَّث لحظيًا، 32 endpoint بالضبط) — الجدول بهذا الملف يبقى
+> للـUI/UX بس، ما يكرر تفاصيل الباك اند.
 
 ---
 
@@ -69,7 +74,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 - 🟢 **جاهزة** — منطق كامل وبيانات صادقة (فاضية بصدق أو self-reported)، جاهزة تفاهيميًا لدمج API حقيقي بدون إعادة بناء الواجهة.
 - 🟡 **جزئية** — الواجهة والمنطق موجودين، بس بيانات وهمية كانت فيها (اتصلّحت لصفر/فاضي)، أو التسمية أبسط من الاسم الطموح مؤقتًا.
 - 🔴 **معاينة تصميم فقط** — بيانات ثابتة بالكود، بدون منطق فعلي (موسومة بشارة "معاينة تصميم" بالواجهة).
-- 🔗 **باك اند مطلوب** — Yes = محتاج endpoint حقيقي ليشتغل بالكامل. حاليًا الباك اند (Acadimia) فيه فقط: Auth, User, UserPermission, Constant, Page, Home — **لا يوجد أي endpoint لكورسات/محتوى/امتحانات/مدفوعات/إشعارات بعد.**
+- 🔗 **باك اند مطلوب** — Yes = محتاج endpoint حقيقي ليشتغل بالكامل. حاليًا الباك اند (Academia) فيه فقط: Auth, User, UserPermission, Constant, Page, Home — **لا يوجد أي endpoint لكورسات/محتوى/امتحانات/مدفوعات/إشعارات بعد.**
 
 ### 🌐 الصفحات العامة (Public)
 
@@ -85,7 +90,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | المدونة            | `/blog` + `/blog/$slug` | 🟢     | لا            | محتوى حقيقي مكتوب، فهرس + صفحة مقال كاملة                                                 |
 | تواصل معنا         | `/contact`              | 🟡     | ✅            | ⚠️ النموذج ما بيوصل لحد فعليًا بعد (mock)، لازم ربط بريد حقيقي قبل تسويق فعلي             |
 | المساعدة           | `/help`                 | 🟢     | جزئي          | FAQ بحث فعلي، بعض الإجابات = مواصفة مستقبلية للباك اند                                    |
-| دخول/تسجيل         | `/login` `/signup`      | 🟢     | ✅            | حسابات Demo محجوبة بـ`import.meta.env.DEV` فقط                                            |
+| دخول/تسجيل         | `/login` `/signup`      | 🟢     | ✅            | **تسجيل حقيقي شغال لكل الأدوار** (Auth/Register متصل). ديمو محجوب بـ`DEV` أو `VITE_ENABLE_DEMO_LOGIN=true` |
 | الخصوصية/الشروط    | `/privacy` `/terms`     | 🟢     | لا            | —                                                                                         |
 
 ### 👨‍🎓 مساحة الطالب
@@ -105,6 +110,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | شهاداتي                                       | `/my-certificates`    | 🟢     | ✅            | —                                                                                     |
 | التحقق من شهادة                               | `/certificate/$id`    | 🟢     | ✅            | ✅ مثال ممتاز: يتحقق من الشكل (Pattern) فقط، موسوم بصراحة بالكود إنه ينتظر سجل حقيقي  |
 | الجدول الدراسي                                | `/schedule`           | 🟢     | ✅            | مفتاح "تذكير" بلا إشعار فعلي، صار موسوم بوضوح                                         |
+| **محفظتي** (صفحة جديدة)                       | `/wallet`             | 🟢     | ✅            | **مربوطة بـWallet API حقيقي بالكامل** (رصيد + سجل حركات مرقّم + طلب شحن برفع صورة) — أُضيفت هالجلسة، ما كانت موجودة قبل |
 
 ### 👩‍🏫 مساحة المعلم
 
@@ -117,7 +123,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | التصحيح                           | `/teacher/grading`      | 🟢     | ✅            | كانت فيها طلاب وهميون بانتظار تصحيح — تصفير كامل                                                                  |
 | **أسئلة طلابي** (كان: مجتمع الصف) | `/teacher/community`    | 🟡     | ✅            | نفس فيتشر أسئلتي الطالب، بلا تفاعل حقيقي بعد                                                                      |
 | التحليلات                         | `/teacher/analytics`    | 🟢     | ✅            | إحصاءات "أكثر الأسئلة خطأً" كانت وهمية — تصفير كامل                                                               |
-| **الأرباح**                       | `/teacher/earnings`     | 🟢     | ✅            | ⚠️ كانت فيها عمولة 15% ثابتة + معاملات وهمية بمبالغ حقيقية الشكل — **صُفِّرت بالكامل**، عمولة تُعرض "قيد التحديد" |
+| **الأرباح**                       | `/teacher/earnings`     | 🟢     | ✅            | **مربوطة بـWallet API حقيقي** (رصيد + سجل حركات حقيقي + طلب سحب فعلي) — الشاشة الوهمية القديمة استُبدلت بالكامل |
 | ملفي الشخصي                       | `/teacher/profile/edit` | 🟢     | ✅            | مشاهدات/تقييم صُفِّرت                                                                                             |
 | الإعدادات                         | `/teacher/settings`     | 🟢     | ✅            | —                                                                                                                 |
 
@@ -147,7 +153,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | المعلمون (توثيق) | `/admin/teachers`            | 🟢     | ✅            | كانت 4 طلبات توثيق وهمية — تصفير                                                             |
 | الأدوار          | `/admin/roles`               | 🟢     | ✅            | —                                                                                            |
 | الصلاحيات        | `/admin/permissions`         | 🟢     | ✅            | —                                                                                            |
-| المدفوعات        | `/admin/payments`            | 🟢     | ✅            | ⚠️ كانت 3 عمليات دفع وهمية بمبالغ/أسماء حقيقية الشكل — **تصفير كامل** (لا نظام دفع فعلي بعد) |
+| المدفوعات        | `/admin/payments`            | 🟢     | ✅            | **مربوطة بـWallet API حقيقي** — شاشة مراجعة طلبات شحن/سحب حقيقية (بديل شاشة CRUD وهمية قديمة) |
 | المنهاج          | `/admin/curriculum`          | 🟢     | ✅            | عدد الكورسات لكل مادة صُفِّر (كان غير مرتبط بكتالوج الكورسات الفعلي أصلاً)                   |
 | طلبات المنهاج    | `/admin/curriculum-requests` | 🟢     | ✅            | تصفير كامل                                                                                   |
 | مراجعة المحتوى   | `/admin/content-review`      | 🟢     | ✅            | تصفير كامل                                                                                   |
@@ -159,7 +165,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | ---------------- | ---------------- | ------ | ------------- | -------------------------------------------------------------------------------- |
 | الإشعارات        | `/notifications` | 🟢     | ✅            | كانت 5 إشعارات وهمية لأحداث ما صارت — تصفير كامل، تعرض حالة فاضية صادقة الآن     |
 | الإحالات         | `/referrals`     | 🟢     | ✅            | كانت أصدقاء وهميين "استلموا مكافأة" — تصفير كامل، بلا رقم/نسبة مكافأة محددة (صح) |
-| الإعدادات (طالب) | `/settings`      | 🟢     | ✅            | —                                                                                |
+| الإعدادات (طالب) | `/settings`      | 🟢     | ✅            | **تعديل الملف الشخصي + تغيير كلمة المرور مربوطين حقيقيًا هالجلسة** (ما كان فيهم إطلاقًا قبل) |
 
 ### 🛠️ صفحات أدمن إضافية (كانت ناقصة من الجرد الأول)
 
@@ -174,9 +180,21 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 
 ## Current integration boundary
 
-المصادقة وبعض عمليات المستخدمين والصفحات والثوابت والصلاحيات متاحة حاليًا (7 controllers: Auth, User, UserPermission, Constant, Page, Home). الكورسات والدروس والاختبارات والتسجيلات والشهادات والإشعارات والمدفوعات تنتظر عقود API مكتملة. لا تعتبر UI guards أو localStorage حماية للخادم.
+**محدَّث 14 سبتمبر 2026 — راجع [`docs/api/frontend-integration-status.md`](docs/api/frontend-integration-status.md) للجدول الكامل (32 endpoint، حالة كل وحدة).**
 
-**كل البيانات الحالية بالصفحات أعلاه (عدا Auth/Users/Permissions) هي `in-memory` بالفرونت نفسه** (مصفوفات JS بملفات `src/lib/*-data.ts`) — تُحاكي شكل استجابة API حقيقي حتى يسهل استبدالها لاحقًا بدون إعادة بناء الواجهة.
+الباك اند (Academia) فيه فعليًا **8 controllers**: Auth, User (بما فيها
+تعديل الملف الشخصي وتغيير كلمة المرور — رُبطا هالجلسة)، UserPermission,
+Constant, Page, **Wallet** (محفظة/شحن/سحب — 10 endpoints، مربوطة
+بالكامل)، **Parent** (مربوطة بالكود، **معطّلة عمليًا** بسبب فجوة باك
+اند: لا endpoint لربط الأبناء، و"الطالب" كيان منفصل عن `User` بدون أي
+كود ينشئه)، وHome (redirect فقط). الكورسات والدروس والتسجيلات
+والحضور/الامتحانات الحقيقية والإشعارات لسا تنتظر عقود API — موثّقة
+كخطة مستقبلية بـ`docs/product/` (راجع تقرير SRS/System Design المرفق
+من الفريق).
+
+لا تعتبر UI guards أو localStorage حماية للخادم. البيانات المتبقية
+بصفحات المحتوى/المنهج/الحضور (عدا Auth/Users/Permissions/Wallet) لسا
+`in-memory` بالفرونت (`src/lib/*-data.ts`) بانتظار الباك اند.
 
 ---
 
@@ -187,6 +205,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | الملف                                                                                              | الموضوع                                                                                          |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | [`docs/product/overview.md`](docs/product/overview.md)                                             | نظرة المنتج والمستخدمين                                                                          |
+| [`docs/product/srs.md`](docs/product/srs.md) | SRS رسمي كامل من الفريق (نطاق مستهدف — راجع ملاحظة الحالة بأول الملف) |
 | [`docs/architecture/frontend.md`](docs/architecture/frontend.md)                                   | طبقات الكود ومخطط التدفق                                                                         |
 | [`docs/architecture/routes.md`](docs/architecture/routes.md)                                       | خريطة المسارات وقاعدة إضافة route جديد                                                           |
 | [`docs/architecture/state-management.md`](docs/architecture/state-management.md)                   | Local vs Server state                                                                            |
@@ -195,13 +214,23 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | [`docs/design/design-system.md`](docs/design/design-system.md)                                     | قواعد نظام التصميم                                                                               |
 | [`docs/design/component-catalog.md`](docs/design/component-catalog.md)                             | فهرس المكوّنات                                                                                   |
 | [`docs/design/ux-guidelines.md`](docs/design/ux-guidelines.md)                                     | مبادئ UX                                                                                         |
+| [`docs/design/landing-page-ux-research.md`](docs/design/landing-page-ux-research.md) | بحث UX خارجي على الصفحة الرئيسية (68/100) — يحتاج خطة تنفيذ |
 | [`docs/standards/code-style.md`](docs/standards/code-style.md)                                     | أسلوب الكود                                                                                      |
 | [`docs/qa/*`](docs/qa)                                                                             | Checklist، إمكانية الوصول، الأداء، استراتيجية الاختبار                                           |
 | [`docs/security/frontend-route-protection.md`](docs/security/frontend-route-protection.md)         | حدود حماية الفرونت الأمنية                                                                       |
 | [`docs/operations/deployment-and-release.md`](docs/operations/deployment-and-release.md)           | النشر                                                                                            |
 | [`docs/decisions/`](docs/decisions)                                                                | ADRs (قرارات معمارية موثّقة)                                                                     |
+| [`docs/architecture-target.md`](docs/architecture-target.md) | معمارية مستهدفة (Clean Architecture) — ⚠️ مش الواقع الحالي، راجع الملاحظة أعلى الملف |
+| [`docs/architecture/system-design-and-gap-analysis.md`](docs/architecture/system-design-and-gap-analysis.md) | تصميم نظام الباك اند + تحليل فجوات + ERD رسمي من الفريق (مرجع، راجع ملاحظة الحالة) |
+| [`docs/data-fetching-rules.md`](docs/data-fetching-rules.md) | معيار TanStack Query مستهدف — ⚠️ فجوات حقيقية موثّقة مع الواقع |
+| [`docs/testing-guidelines.md`](docs/testing-guidelines.md) | استراتيجية اختبار مستهدفة — ⚠️ صفر اختبارات حاليًا |
+| [`docs/standards/design-tokens-policy.md`](docs/standards/design-tokens-policy.md) | انضباط design tokens — ✅ يطابق واقعنا فعليًا |
+| [`docs/srs-template.md`](docs/srs-template.md) | قالب مواصفات متطلبات (SRS) لأي فيتشر جديد |
+| `.claude/skills/{plan,implement,review,finalize}-task/` | سكيلز سير عمل AI منظّم (تخطيط→تنفيذ→مراجعة→إنهاء) |
 | [`docs/engineering-playbook.md`](docs/engineering-playbook.md)                                     | دليل هندسي مطبَّق على Academia + أجندة الدراسة المفتوحة (استراتيجية، Design System، a11y، QA...) |
 | [`docs/api/README.md`](docs/api/README.md) + [`docs/api/postman`](docs/api/postman)                | توثيق API وPostman collection                                                                    |
+| [`docs/api/frontend-integration-status.md`](docs/api/frontend-integration-status.md) | ✅ **مصدر الحقيقة** لحالة كل الـ32 endpoint (مربوط/غير مربوط ولماذا) — يُحدَّث فورًا مع أي تغيير |
+| [`docs/design/ui-ux-improvement-plan.md`](docs/design/ui-ux-improvement-plan.md) | خطة تحسين UI/UX استراتيجية (مراحل) — مع ملاحظة تنفيذ محدّثة بأول الملف |
 
 ---
 
@@ -244,6 +273,16 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 | ---------------------------- | ----------- |
 | ESLint 9 + typescript-eslint | Linting     |
 | Prettier                     | تنسيق الكود |
+| Vitest + React Testing Library | اختبارات وحدة/تكامل (`npm test`) — أُضيفت هالجلسة، لسا تغطية محدودة (تيست واحد حقيقي يقفل باگ role-mapping) |
+| Playwright                   | اختبارات E2E (`npm run test:e2e`) — دخان واحد لصفحة الدخول لحد الآن |
+| `npm audit` / `audit:fix` / `audit:prod` | فحص ثغرات الاعتماديات — مربوط بـCI (`--audit-level=high`) |
+
+### المراقبة (Monitoring)
+
+| الأداة   | الدور                                                                 |
+| -------- | ---------------------------------------------------------------------- |
+| Sentry (`@sentry/tanstackstart-react`) | تتبّع أخطاء (جهة عميل + سيرفر) — يحتاج `npm install` وتجربة فعلية قبل الإنتاج، راجع `docs/api/frontend-integration-status.md` |
+| PostHog (`posthog-js`) | تتبّع استخدام (دخول/تسجيل...) — مربوط بموافقة الكوكيز الموجودة أصلاً بالمشروع، يحتاج `VITE_POSTHOG_KEY` حقيقي (Project API Key، مو مفتاح إداري سرّي) |
 
 > ⚠️ **ملاحظة صريحة:** Framer Motion / motion غير مثبّتة، وقرار مدروس بعدم إضافتها الآن — GSAP الحالي يغطي الاحتياج، وإضافة مكتبة حركة ثانية تكرار وتضخيم للحزمة (bundle bloat) بلا داعٍ فعلي. تُراجَع فقط لو ظهر احتياج حقيقي (Layout/Exit animations معقّدة).
 
@@ -271,7 +310,7 @@ Academia منصة تعليمية عربية أولاً (RTL حقيقي، ثنا�
 ## المعمارية والبنية (Architecture & Structure)
 
 ```
-Routes (src/routes) ──> Components (app/site/ui) ──> Hooks ──> Integrations ──> Backend (Acadimia API)
+Routes (src/routes) ──> Components (app/site/ui) ──> Hooks ──> Integrations ──> Backend (Academia API)
                                                           └──> lib/*.functions.ts (server functions مؤقتة، in-memory)
 ```
 
@@ -283,7 +322,7 @@ Routes (src/routes) ──> Components (app/site/ui) ──> Hooks ──> Integ
 | Site components  | `src/components/site`                  | الـshell العام، الهيدر/الفوتر، illustrations، مكوّنات التسويق                                           |
 | Admin components | `src/components/admin`                 | مدراء شاشات الأدمن (users-manager, roles-manager...)                                                    |
 | Hooks            | `src/hooks`                            | `use-session`, `use-access` (RBAC check عبر `can()`), `use-scroll-reveal`                               |
-| Integrations     | `src/integrations/backend`             | Auth client الحقيقي المتصل بـ Acadimia API                                                              |
+| Integrations     | `src/integrations/backend`             | Auth client الحقيقي المتصل بـ Academia API                                                              |
 | lib (مؤقت)       | `src/lib/*.functions.ts` + `*-data.ts` | Server functions تحاكي API حقيقي فوق مصفوفات in-memory، بانتظار الباك اند                               |
 | i18n             | `src/i18n/locales/*.json`              | `ar.json`/`en.json` (صفحات مشتركة+معقّدة) و`ar.pages.json`/`en.pages.json` (صفحات عامة بسيطة)           |
 

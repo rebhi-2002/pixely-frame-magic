@@ -4,7 +4,7 @@
 
 مسار `/_authenticated` يحتوي `beforeLoad` يعيد المستخدم إلى `/login` عندما لا يجد الفرونت جلسة محلية. هذا مفيد لتجربة الاستخدام ومنع عرض الشاشات الداخلية للمستخدم العادي، لكنه ليس حدًا أمنيًا؛ لأن القرار يعتمد على browser state ويمكن تغييره من DevTools.
 
-كما أن `useSession` و`currentUserHome` يعتمدان جزئيًا على بيانات محلية وstatic RBAC fallback. لذلك لا يجوز اعتبار role أو user ID الموجودين في localStorage دليل صلاحية.
+كما أن `useAccess` (`src/hooks/use-access.ts`) بيبني صلاحيات كاملة محليًا بالمتصفح لأي جلسة حقيقية (`buildFullAdminAccess`/`buildRoleAccess` بـ`rbac-client.ts`) اعتمادًا على `roleId`/`roleName` المخزّنين بـ`localStorage` — **وهاد اتساع لسطح الثقة المحلية لكل الأدوار، مش الأدمن بس** (كان الوضع السابق يقتصر على الأدمن). لذلك لا يجوز اعتبار role أو user ID الموجودين في localStorage دليل صلاحية — تحديدًا الآن أهم من أي وقت.
 
 ## الحد الأمني الصحيح
 

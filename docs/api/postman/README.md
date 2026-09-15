@@ -4,8 +4,8 @@
 
 ## الملفات
 
-- `acadimia-current-backend.postman_collection.json`: جميع endpoints الموجودة حاليًا في Swagger، مرتبة حسب Auth وUser وPage وConstant وUserPermission.
-- `acadimia-current-backend.postman_environment.json`: متغيرات `baseUrl`, `email`, `password`, وIDs المستخدمة في الأمثلة.
+- `academia-current-backend.postman_collection.json`: جميع endpoints الموجودة حاليًا في Swagger، مرتبة حسب Auth وUser وPage وConstant وUserPermission.
+- `academia-current-backend.postman_environment.json`: متغيرات `baseUrl`, `email`, `password`, وIDs المستخدمة في الأمثلة.
 
 ## الاستيراد والاختبار
 
