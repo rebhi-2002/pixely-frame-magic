@@ -17,4 +17,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: npm run build
+      # يفشل بس على ثغرات high/critical — moderate/low ما بتوقف الـCI (تجنبًا
+      # لضجيج متكرر من ثغرات transitive بعيدة عن السيطرة المباشرة).
+      - run: npm audit --audit-level=high

@@ -34,3 +34,8 @@ dist-ssr
 # متغيرات بيئة محلية (عناوين/أسرار) — لا تُرفع لجيت هب
 .env
 .env.local
+
+# نتائج الاختبارات
+coverage/
+playwright-report/
+test-results/

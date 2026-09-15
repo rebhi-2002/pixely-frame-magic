@@ -11,7 +11,7 @@ mistakes recurring across many files; this skill exists so they don't recur agai
 
 ## 1. Backend reality check (always verify, don't assume)
 
-The real backend (Acadimia) currently exposes **only**: Auth, User,
+The real backend (Academia) currently exposes **only**: Auth, User,
 UserPermission, Constant, Page, Home. There is no Course, Content, Exam,
 Payment, or Notification endpoint. Everything else in this frontend is a
 `src/lib/*.functions.ts` server function operating on an in-memory array in
