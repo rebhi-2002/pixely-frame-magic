@@ -15,8 +15,8 @@ export function PageHeader({
   onBack?: () => void;
 }) {
   return (
-    <header className="shadow-elevation-1 static z-20 flex items-center justify-between gap-4 border-b border-border bg-card/95 px-5 py-4 backdrop-blur md:sticky md:top-0">
-      <div className="flex items-center gap-3">
+    <header className="shadow-elevation-1 sticky top-0 z-20 flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-border bg-background/90 px-4 py-3 backdrop-blur sm:px-6 lg:px-8">
+      <div className="flex min-w-0 items-center gap-3">
         {onBack && (
           <Button
             type="button"
@@ -24,17 +24,17 @@ export function PageHeader({
             size="icon"
             onClick={onBack}
             aria-label="رجوع"
-            className="text-muted-foreground"
+            className="shrink-0 text-muted-foreground"
           >
             <ChevronLeft className="size-4 rotate-180" />
           </Button>
         )}
-        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/10">
           <DynamicIcon name={icon} className="size-5" />
         </span>
-        <h1 className="text-lg font-bold text-foreground">{title}</h1>
+        <h1 className="truncate text-base font-bold text-foreground sm:text-lg">{title}</h1>
       </div>
-      {actions}
+      {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
     </header>
   );
 }

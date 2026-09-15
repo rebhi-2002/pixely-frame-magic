@@ -168,7 +168,11 @@ export function PaymentsPage() {
           )}
         </Toolbar>
 
-        <div className="mt-4 overflow-x-auto rounded-2xl bg-card">
+        <div
+          className="mt-4 overflow-x-auto rounded-2xl bg-card"
+          role="region"
+          aria-label={bi("المدفوعات", "Payments")}
+        >
           {isLoading ? (
             <div className="flex justify-center p-10">
               <Loader2 className="size-5 animate-spin text-primary" />

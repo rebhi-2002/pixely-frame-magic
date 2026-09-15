@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Check, Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
+import { Badge as StatusBadge } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -201,7 +202,11 @@ export function CommunityReportsPage() {
           )}
         </Toolbar>
 
-        <div className="mt-4 overflow-x-auto rounded-2xl bg-card">
+        <div
+          className="mt-4 overflow-x-auto rounded-2xl bg-card"
+          role="region"
+          aria-label={bi("بلاغات المجتمع", "Community reports")}
+        >
           {isLoading ? (
             <div className="flex justify-center p-10">
               <Loader2 className="size-5 animate-spin text-primary" />
@@ -413,30 +418,5 @@ function FilterSelect({
         ))}
       </SelectContent>
     </Select>
-  );
-}
-
-function StatusBadge({
-  children,
-  tone,
-}: {
-  children: React.ReactNode;
-  tone: "success" | "primary" | "danger" | "muted";
-}) {
-  return (
-    <span
-      className={
-        "inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold " +
-        (tone === "primary"
-          ? "bg-primary/15 text-primary"
-          : tone === "success"
-            ? "bg-success/15 text-success"
-            : tone === "danger"
-              ? "bg-destructive/15 text-destructive"
-              : "bg-muted text-muted-foreground")
-      }
-    >
-      {children}
-    </span>
   );
 }

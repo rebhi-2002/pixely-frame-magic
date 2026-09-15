@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  BACKEND_USER_TYPES,
+  listBackendUserTypes,
   listGrantedPageIds,
   saveGrantedPageIds,
 } from "@/integrations/backend/admin-permissions";
@@ -19,8 +19,22 @@ import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback
 export function BackendPermissionsPage() {
   const bi = useBi();
   const queryClient = useQueryClient();
-  const [userTypeId, setUserTypeId] = useState<number>(BACKEND_USER_TYPES[0].id);
+  const [userTypeId, setUserTypeId] = useState<number | null>(null);
   const [checked, setChecked] = useState<Set<number>>(new Set());
+
+  const {
+    data: userTypes,
+    isLoading: userTypesLoading,
+    isError: userTypesError,
+  } = useQuery({ queryKey: ["backend-user-types"], queryFn: listBackendUserTypes });
+
+  // أول ما توصل أنواع المستخدمين، نختار أول نوع افتراضيًا (مرة وحدة فقط —
+  // ما منعيد ضبطه لو المستخدم بدّل الاختيار يدويًا لاحقًا).
+  useEffect(() => {
+    if (userTypeId == null && userTypes && userTypes.length > 0) {
+      setUserTypeId(userTypes[0].id);
+    }
+  }, [userTypes, userTypeId]);
 
   const {
     data: pages,
@@ -34,7 +48,8 @@ export function BackendPermissionsPage() {
     isError: grantedError,
   } = useQuery({
     queryKey: ["backend-permissions", userTypeId],
-    queryFn: () => listGrantedPageIds(userTypeId),
+    queryFn: () => listGrantedPageIds(userTypeId as number),
+    enabled: userTypeId != null,
   });
 
   // كل ما نبدّل نوع المستخدم، نعيد ضبط الاختيارات على القيم المحفوظة فعليًا
@@ -54,7 +69,7 @@ export function BackendPermissionsPage() {
   }, [pages, bi]);
 
   const saveMutation = useMutation({
-    mutationFn: () => saveGrantedPageIds(userTypeId, Array.from(checked)),
+    mutationFn: () => saveGrantedPageIds(userTypeId as number, Array.from(checked)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["backend-permissions", userTypeId] });
       toast.success(bi("تم حفظ الصلاحيات", "Permissions saved"));
@@ -71,8 +86,8 @@ export function BackendPermissionsPage() {
     });
   }
 
-  const isLoading = pagesLoading || grantedLoading;
-  const isError = pagesError || grantedError;
+  const isLoading = pagesLoading || grantedLoading || userTypesLoading;
+  const isError = pagesError || grantedError || userTypesError;
 
   return (
     <div className="pb-24">
@@ -84,13 +99,13 @@ export function BackendPermissionsPage() {
       <div className="px-4 py-5 md:px-6">
         <p className="mb-4 text-sm text-muted-foreground">
           {bi(
-            "الباك اند حاليًا فيه نوعين مستخدم ثابتين فقط (بدون إمكانية إضافة نوع جديد). حدد أي صفحات يقدر هذا النوع يوصلها.",
-            "The backend currently has only two fixed user types (no way to add more). Choose which pages this type can access.",
+            "أنواع المستخدمين ثابتة بالباك اند (بدون إمكانية إضافة نوع جديد من الواجهة). حدد أي صفحات يقدر هذا النوع يوصلها.",
+            "User types are fixed on the backend (no way to add a new type from the UI). Choose which pages this type can access.",
           )}
         </p>
 
         <div className="mb-5 flex flex-wrap gap-2">
-          {BACKEND_USER_TYPES.map((t) => (
+          {(userTypes ?? []).map((t) => (
             <button
               key={t.id}
               type="button"
@@ -101,7 +116,7 @@ export function BackendPermissionsPage() {
                   : "border-border bg-card text-muted-foreground hover:border-primary/50"
               }`}
             >
-              {bi(t.name, t.name_en)}
+              {t.name}
             </button>
           ))}
         </div>

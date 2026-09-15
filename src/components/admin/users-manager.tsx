@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
+import { Pagination } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,6 +42,7 @@ import {
 } from "@/integrations/backend/admin-users";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { useAccess } from "@/hooks/use-access";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { UserRow } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
@@ -63,23 +65,18 @@ export function UsersPage() {
   const { can } = useAccess();
 
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search);
   const [status, setStatus] = useState("all");
   const [gender, setGender] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 20;
 
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<UserRow | null>(null);
 
-  const {
-    data: users,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: listBackendUsers,
-  });
   const { data: options } = useQuery({
     queryKey: ["backend-user-options"],
     queryFn: loadBackendUserOptions,
@@ -94,19 +91,56 @@ export function UsersPage() {
   }));
   const genders = options?.genders ?? [];
 
-  const filtered = useMemo(() => {
-    return (users ?? []).filter((u) => {
-      if (status !== "all" && u.is_active !== (status === "active")) return false;
-      if (gender !== "all" && u.gender !== gender) return false;
-      if (roleFilter !== "all" && u.role_id !== roleFilter) return false;
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
-        const hay = `${u.full_name} ${u.email ?? ""} ${u.phone ?? ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
+  // فلترة/بحث حقيقي من الباك اند (لا نجيب كل المستخدمين ونفلتر بالمتصفح —
+  // الباك اند أصلاً بيدعم هالمعاملات كلها، وكان مهدور بـpageSize:1000 ثابت
+  // قبل هالتعديل. راجع full-project-report.md قسم "جداول أدمن" للتفاصيل).
+  const {
+    data: usersResult,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["users", { search: debouncedSearch, status, gender, roleFilter, page }],
+    queryFn: () =>
+      listBackendUsers({
+        searchValue: debouncedSearch.trim(),
+        userTypeId: roleFilter === "all" ? null : Number(roleFilter),
+        genderId: gender === "all" ? null : Number(gender),
+        isActiveSearch: status === "all" ? null : status === "active",
+        pageSize: PAGE_SIZE,
+        skip: page * PAGE_SIZE,
+      }),
+    placeholderData: (prev) => prev,
+  });
+  const users = usersResult?.rows ?? [];
+  const totalCount = usersResult?.totalCount ?? 0;
+
+  function resetToFirstPage<T>(setter: (v: T) => void) {
+    return (value: T) => {
+      setter(value);
+      setPage(0);
+    };
+  }
+
+  // تحقق حقيقي قبل الإرسال — كان معدوم بالكامل (يعتمد فقط على رفض
+  // الباك اند + رسالة خطأ عامة). راجع full-project-report.md للسياق
+  // (نفس النمط المستخدم أصلاً بـsignup.tsx/teacher.register.tsx).
+  function validateUserForm(): string | null {
+    if (!form.full_name.trim()) return bi("الاسم الكامل مطلوب", "Full name is required");
+    if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) {
+      return bi("البريد الإلكتروني غير صالح", "Enter a valid email address");
+    }
+    if (!form.phone.trim()) return bi("رقم الجوال مطلوب", "Phone number is required");
+    if (form.gender_id == null) return bi("الجنس مطلوب", "Gender is required");
+    if (!editingId) {
+      if (form.password.length < 6) {
+        return bi("كلمة المرور 6 أحرف على الأقل", "Password must be at least 6 characters");
       }
-      return true;
-    });
-  }, [users, status, gender, roleFilter, search]);
+      if (form.password !== form.confirmPassword) {
+        return bi("كلمتا المرور غير متطابقتين", "Passwords don't match");
+      }
+    }
+    return null;
+  }
 
   const saveMutation = useMutation({
     mutationFn: () => saveBackendUser({ ...form, id: editingId ?? undefined }),
@@ -169,14 +203,14 @@ export function UsersPage() {
             <Input
               placeholder={bi("بحث بالاسم أو البريد أو الجوال", "Search by name, email, or phone")}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => resetToFirstPage(setSearch)(e.target.value)}
               className="ps-9"
             />
           </div>
 
           <FilterSelect
             value={status}
-            onChange={setStatus}
+            onChange={resetToFirstPage(setStatus)}
             placeholder={bi("الحالة", "Status")}
             options={[
               { value: "all", label: bi("كل الحالات", "All statuses") },
@@ -186,17 +220,16 @@ export function UsersPage() {
           />
           <FilterSelect
             value={gender}
-            onChange={setGender}
+            onChange={resetToFirstPage(setGender)}
             placeholder={bi("الجنس", "Gender")}
             options={[
               { value: "all", label: bi("الكل", "All") },
-              { value: "male", label: bi("ذكر", "Male") },
-              { value: "female", label: bi("أنثى", "Female") },
+              ...genders.map((g) => ({ value: String(g.id), label: g.name })),
             ]}
           />
           <FilterSelect
             value={roleFilter}
-            onChange={setRoleFilter}
+            onChange={resetToFirstPage(setRoleFilter)}
             placeholder={bi("نوع المستخدم", "User type")}
             options={[
               { value: "all", label: bi("كل الأنواع", "All types") },
@@ -216,10 +249,7 @@ export function UsersPage() {
           aria-live="polite"
         >
           <span>
-            {bi(
-              `${filtered.length} نتيجة`,
-              `${filtered.length} result${filtered.length === 1 ? "" : "s"}`,
-            )}
+            {bi(`${totalCount} نتيجة`, `${totalCount} result${totalCount === 1 ? "" : "s"}`)}
           </span>
           {hasFilters && (
             <Button
@@ -231,6 +261,7 @@ export function UsersPage() {
                 setStatus("all");
                 setGender("all");
                 setRoleFilter("all");
+                setPage(0);
               }}
             >
               {bi("مسح الفلاتر", "Clear filters")}
@@ -270,7 +301,7 @@ export function UsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((u, i) => (
+                {users.map((u, i) => (
                   <tr key={u.id} className="border-b border-border/60 last:border-0">
                     <td className="px-4 py-3 text-muted-foreground">{i + 1}</td>
                     <td className="px-4 py-3 font-semibold text-foreground">{u.full_name}</td>
@@ -319,7 +350,7 @@ export function UsersPage() {
                     </td>
                   </tr>
                 ))}
-                {!filtered.length && (
+                {!users.length && (
                   <tr>
                     <td colSpan={8} className="p-8 text-center text-muted-foreground">
                       {hasFilters
@@ -335,6 +366,19 @@ export function UsersPage() {
             </table>
           )}
         </div>
+
+        <Pagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          totalCount={totalCount}
+          onPageChange={setPage}
+          summary={bi(
+            `${Math.min(page * PAGE_SIZE + 1, totalCount)}–${Math.min((page + 1) * PAGE_SIZE, totalCount)} من ${totalCount}`,
+            `${Math.min(page * PAGE_SIZE + 1, totalCount)}–${Math.min((page + 1) * PAGE_SIZE, totalCount)} of ${totalCount}`,
+          )}
+          previousLabel={bi("السابق", "Previous")}
+          nextLabel={bi("التالي", "Next")}
+        />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -379,7 +423,7 @@ export function UsersPage() {
                   setForm((f) => ({
                     ...f,
                     gender_id: gender?.id ?? null,
-                    gender: gender?.name.includes("أنث") ? "female" : "male",
+                    gender: gender?.name.includes("أنثى") ? "female" : "male",
                   }));
                 }}
               >
@@ -451,7 +495,17 @@ export function UsersPage() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
-            <Button onClick={() => saveMutation.mutate()} loading={saveMutation.isPending}>
+            <Button
+              onClick={() => {
+                const error = validateUserForm();
+                if (error) {
+                  toast.error(error);
+                  return;
+                }
+                saveMutation.mutate();
+              }}
+              loading={saveMutation.isPending}
+            >
               {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>

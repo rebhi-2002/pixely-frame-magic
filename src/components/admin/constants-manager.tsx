@@ -1,9 +1,11 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
+import { Pagination } from "@/components/app/kit";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,34 +59,40 @@ export function ConstantsPage() {
   const { can } = useAccess();
 
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search);
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 20;
+
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<ConstantRow | null>(null);
 
+  // فلترة/بحث حقيقي من الباك اند بدل جلب 1000 صف وفلترة بالمتصفح — راجع
+  // full-project-report.md قسم "جداول أدمن" للتفاصيل والدافع.
   const {
-    data: constants,
+    data: constantsResult,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["constants"],
-    queryFn: listBackendConstants,
+    queryKey: ["constants", { search: debouncedSearch, page }],
+    queryFn: () =>
+      listBackendConstants({
+        searchValue: debouncedSearch.trim(),
+        pageSize: PAGE_SIZE,
+        skip: page * PAGE_SIZE,
+      }),
+    placeholderData: (prev) => prev,
   });
+  const constants = constantsResult?.rows ?? [];
+  const totalCount = constantsResult?.totalCount ?? 0;
+
   const { data: parents } = useQuery({
     queryKey: ["backend-constant-parents"],
     queryFn: loadBackendConstantParents,
     staleTime: 5 * 60_000,
     retry: false,
   });
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return constants ?? [];
-    return (constants ?? []).filter((c) => {
-      const hay = `${c.name} ${c.comment ?? ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-  }, [constants, search]);
 
   const saveMutation = useMutation({
     mutationFn: () => saveBackendConstant({ ...form, id: editingId ?? undefined }),
@@ -140,7 +148,10 @@ export function ConstantsPage() {
             <Input
               placeholder={bi("بحث بالاسم أو الملاحظة", "Search by name or comment")}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
               className="ps-9"
             />
           </div>
@@ -158,8 +169,8 @@ export function ConstantsPage() {
         >
           <span>
             {bi(
-              `${filtered.length} نتيجة`,
-              `${filtered.length} result${filtered.length === 1 ? "" : "s"}`,
+              `${totalCount} نتيجة`,
+              `${totalCount} result${totalCount === 1 ? "" : "s"}`,
             )}
           </span>
         </div>
@@ -193,7 +204,7 @@ export function ConstantsPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((c, i) => (
+                {constants.map((c, i) => (
                   <tr key={c.id} className="border-b border-border/60 last:border-0">
                     <td className="px-4 py-3 text-muted-foreground">{i + 1}</td>
                     <td className="px-4 py-3 font-semibold text-foreground">{c.name}</td>
@@ -226,7 +237,7 @@ export function ConstantsPage() {
                     </td>
                   </tr>
                 ))}
-                {!filtered.length && (
+                {!constants.length && (
                   <tr>
                     <td colSpan={5} className="p-8 text-center text-muted-foreground">
                       {search.trim()
@@ -239,6 +250,19 @@ export function ConstantsPage() {
             </table>
           )}
         </div>
+
+        <Pagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          totalCount={totalCount}
+          onPageChange={setPage}
+          summary={bi(
+            `${Math.min(page * PAGE_SIZE + 1, totalCount)}–${Math.min((page + 1) * PAGE_SIZE, totalCount)} من ${totalCount}`,
+            `${Math.min(page * PAGE_SIZE + 1, totalCount)}–${Math.min((page + 1) * PAGE_SIZE, totalCount)} of ${totalCount}`,
+          )}
+          previousLabel={bi("السابق", "Previous")}
+          nextLabel={bi("التالي", "Next")}
+        />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

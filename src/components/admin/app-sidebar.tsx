@@ -120,12 +120,12 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "shadow-elevation-2 flex h-full shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "shadow-elevation-2 flex h-full shrink-0 flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         collapsed ? "w-[76px]" : "w-72",
       )}
     >
       <SignOutOverlay pending={signingOut} />
-      <div className="flex items-center justify-between gap-2 px-3 py-4">
+      <div className="flex items-center justify-between gap-2 border-b border-sidebar-border px-3 py-4">
         {!collapsed && <BrandLockup />}
         {/* الجوال: زر إغلاق صريح — الطيّ غير مُتاح على الشاشات الصغيرة */}
         {onClose && (
@@ -162,7 +162,7 @@ export function AppSidebar({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t("common.searchPages")}
-              className="h-9 border-sidebar-border bg-sidebar-accent ps-9 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
+              className="h-10 rounded-xl border-sidebar-border bg-sidebar-accent ps-9 text-sidebar-foreground placeholder:text-sidebar-foreground/50"
             />
           </div>
           {searchResults.length > 0 && (
@@ -200,7 +200,7 @@ export function AppSidebar({
                 }
                 title={collapsed ? label(m) : undefined}
                 className={cn(
-                  "flex w-full items-center gap-2.5 rounded-xl border-s-2 border-transparent px-3 py-2.5 text-sm font-semibold transition-all duration-200",
+                  "flex min-h-11 w-full items-center gap-2.5 rounded-xl border-s-2 border-transparent px-3 py-2.5 text-sm font-semibold transition-all duration-200",
                   "hover:bg-sidebar-accent",
                   open && !collapsed && "border-sidebar-primary bg-sidebar-accent",
                   collapsed && "justify-center px-0",
@@ -230,6 +230,7 @@ export function AppSidebar({
                         onClick={onNavigate}
                         title={label(p)}
                         aria-label={label(p)}
+                        aria-current={isActive(p.path) ? "page" : undefined}
                         className={cn(
                           "flex items-center justify-center rounded-lg py-2 transition-colors",
                           isActive(p.path)
@@ -431,6 +432,7 @@ function PageList({
             <Link
               to={p.path}
               onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "flex items-center gap-2 rounded-xl border-s-2 px-3 py-2 text-[13px] transition-all duration-200",
                 active

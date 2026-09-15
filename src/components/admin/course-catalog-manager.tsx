@@ -166,7 +166,11 @@ export function CourseCatalogPage() {
           )}
         </Toolbar>
 
-        <div className="mt-4 overflow-x-auto rounded-2xl bg-card">
+        <div
+          className="mt-4 overflow-x-auto rounded-2xl bg-card"
+          role="region"
+          aria-label={bi("كتالوج الكورسات", "Course catalog")}
+        >
           {isLoading ? (
             <div className="flex justify-center p-10">
               <Loader2 className="size-5 animate-spin text-primary" />
