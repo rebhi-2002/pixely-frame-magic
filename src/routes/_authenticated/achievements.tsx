@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -85,9 +85,9 @@ function Body() {
   const [pendingDelete, setPendingDelete] = useState<BadgeRow | null>(null);
 
   const isLoading = badgesQuery.isLoading || statsQuery.isLoading || subjectsQuery.isLoading;
-  const badges = badgesQuery.data ?? [];
+  const badges = useMemo(() => badgesQuery.data ?? [], [badgesQuery.data]);
   const stats = statsQuery.data ?? { streakDays: 0, achievementPoints: 0, longestStreak: 0 };
-  const subjects = subjectsQuery.data ?? [];
+  const subjects = useMemo(() => subjectsQuery.data ?? [], [subjectsQuery.data]);
   const unlockedCount = badges.filter((b) => b.unlocked).length;
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["badges"] });

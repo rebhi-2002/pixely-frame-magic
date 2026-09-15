@@ -96,7 +96,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["mistakes"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(() => {
     const open_ = list.filter((r) => r.status !== "مُتقن").length;
     const rotation = list.filter((r) => r.status === "مراجعة").length;

@@ -89,7 +89,7 @@ function Body() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<ReferralRow | null>(null);
 
-  const list = rowsQuery.data ?? [];
+  const list = useMemo(() => rowsQuery.data ?? [], [rowsQuery.data]);
   const isLoading = rowsQuery.isLoading || linkQuery.isLoading;
   const stats = useMemo(() => {
     const rewarded = list.filter((r) => r.status === "مكافأة").length;
@@ -148,7 +148,7 @@ function Body() {
               {
                 icon: "Link",
                 label: bi("رابطك", "Your link"),
-                value: `acadimia/r/${linkQuery.data?.code ?? "—"}`,
+                value: `academia/r/${linkQuery.data?.code ?? "—"}`,
               },
               {
                 icon: "UserPlus",

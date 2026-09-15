@@ -6,6 +6,8 @@ import { Loader2 } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
+import { OnboardingChecklist } from "@/components/app/onboarding-checklist";
+import { getStoredUserId, wasJustRegistered } from "@/integrations/backend/auth";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart } from "@/components/app/charts";
 import {
@@ -43,6 +45,7 @@ function PageRoute() {
 
 function Body() {
   const bi = useBi();
+  const userId = getStoredUserId();
 
   const fetchCourses = useServerFn(listTeacherCourses);
   const fetchContent = useServerFn(listContentItems);
@@ -62,11 +65,10 @@ function Body() {
     contentQuery.isLoading ||
     quizzesQuery.isLoading ||
     questionsQuery.isLoading;
-  const courses = coursesQuery.data ?? [];
-  const content = contentQuery.data ?? [];
-  const quizzes = quizzesQuery.data ?? [];
-  const openQuestions = questionsQuery.data ?? [];
-
+  const courses = useMemo(() => coursesQuery.data ?? [], [coursesQuery.data]);
+  const content = useMemo(() => contentQuery.data ?? [], [contentQuery.data]);
+  const quizzes = useMemo(() => quizzesQuery.data ?? [], [quizzesQuery.data]);
+  const openQuestions = useMemo(() => questionsQuery.data ?? [], [questionsQuery.data]);
   const enrolled = courses.reduce((s, c) => s + c.enrolledCount, 0);
   const revenue = courses.reduce((s, c) => s + c.price * c.enrolledCount, 0);
   const pendingContent = content.filter((c) => c.status === "قيد المراجعة");
@@ -117,6 +119,10 @@ function Body() {
           `${openQuestions.length} new questions in the class community`,
         ]}
       />
+
+      {userId && (
+        <OnboardingChecklist userId={userId} roleKey="teacher" showInitially={wasJustRegistered()} />
+      )}
 
       {isLoading ? (
         <div className="flex justify-center py-10">

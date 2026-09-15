@@ -17,8 +17,13 @@ import { useAccess } from "@/hooks/use-access";
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    // Demo routes remain available only in local development.
-    if (import.meta.env.DEV && isDemoSession()) {
+    const demoAllowed =
+      import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+
+    // Demo routes remain available in local dev, or on a deployment where
+    // VITE_ENABLE_DEMO_LOGIN is explicitly set — same condition everywhere
+    // demo mode is checked (auth.ts, auth-middleware.ts, login.tsx).
+    if (demoAllowed && isDemoSession()) {
       return { user: { id: getStoredUserId() ?? "u-demo" } };
     }
 

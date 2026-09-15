@@ -1,7 +1,21 @@
 import "./lib/error-capture";
 
+import * as Sentry from "@sentry/tanstackstart-react";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+
+// تهيئة Sentry لجهة السيرفر هون مباشرة (مو بس عبر instrument.server.mjs +
+// --import) لأن Vercel/Netlify (منصّات النشر المستهدفة بهالمشروع — راجع
+// nitroPreset بـvite.config.ts) بيئات serverless ما بتدعم --import بشكل
+// موثوق حسب توثيق Sentry نفسه. هالتهيئة بتشتغل مرة وحدة عند أول تحميل
+// لهالموديول (بداية كل تنفيذ سيرفرلس) — كافي لالتقاط استثناءات SSR هون.
+Sentry.init({
+  dsn:
+    (import.meta.env.VITE_SENTRY_DSN as string | undefined) ||
+    "https://21151ae17d7188a038b5b79715f5cf2d@o4512061652467712.ingest.de.sentry.io/4512061664002128",
+  environment: import.meta.env.MODE,
+  tracesSampleRate: 0.2,
+});
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -28,7 +42,9 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   const body = await response.clone().text();
   if (!isH3SwallowedErrorBody(body)) return response;
 
-  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
+  const swallowed = consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`);
+  console.error(swallowed);
+  Sentry.captureException(swallowed);
   return new Response(renderErrorPage(), {
     status: 500,
     headers: { "content-type": "text/html; charset=utf-8" },
@@ -52,6 +68,7 @@ export default {
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
+      Sentry.captureException(error);
       return new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },

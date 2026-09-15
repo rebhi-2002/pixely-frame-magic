@@ -107,7 +107,7 @@ function Body() {
   const [attemptForm, setAttemptForm] = useState(ATTEMPT_EMPTY_FORM);
   const [pendingDeleteAttempt, setPendingDeleteAttempt] = useState<ExamAttemptRow | null>(null);
 
-  const attempts = attemptsQuery.data ?? [];
+  const attempts = useMemo(() => attemptsQuery.data ?? [], [attemptsQuery.data]);
   const stats = useMemo(() => {
     if (!attempts.length) return { taken: 0, best: 0, avgMinutes: 0 };
     const best = Math.max(...attempts.map((a) => a.scorePercent));

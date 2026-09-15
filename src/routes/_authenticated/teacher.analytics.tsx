@@ -92,10 +92,9 @@ function Body() {
   const [pendingDelete, setPendingDelete] = useState<MissedQuestionRow | null>(null);
 
   const isLoading = missedQuery.isLoading || quizzesQuery.isLoading || coursesQuery.isLoading;
-  const missed = missedQuery.data ?? [];
+  const missed = useMemo(() => missedQuery.data ?? [], [missedQuery.data]);
   const quizzes = (quizzesQuery.data ?? []).filter((q) => q.attemptsCount > 0);
-  const courses = coursesQuery.data ?? [];
-
+  const courses = useMemo(() => coursesQuery.data ?? [], [coursesQuery.data]);
   const activeStudents = courses.reduce((s, c) => s + c.enrolledCount, 0);
   const avgMastery = quizzes.length
     ? Math.round(quizzes.reduce((s, q) => s + q.avgScore, 0) / quizzes.length)

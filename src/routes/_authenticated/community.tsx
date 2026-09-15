@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -102,7 +102,7 @@ function Body() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<CommunityQuestionRow | null>(null);
 
-  const questions = questionsQuery.data ?? [];
+  const questions = useMemo(() => questionsQuery.data ?? [], [questionsQuery.data]);
   const stats = statsQuery.data ?? { memberCount: 0, reputation: 0 };
   const verifiedCount = questions.filter((q) => q.status === "إجابة معلم").length;
   const isLoading = questionsQuery.isLoading || statsQuery.isLoading;

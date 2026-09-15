@@ -1,0 +1,1 @@
+import{et as e}from"./index-DEK-EjD-.js";function t(t){e(t?{id:t.id,email:t.email??void 0}:null)}export{t};

@@ -95,7 +95,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["certificates"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(() => {
     const issued = list.filter((r) => r.status === "صادرة");
     const pending = list.filter((r) => r.status === "قيد الإصدار");

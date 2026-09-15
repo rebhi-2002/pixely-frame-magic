@@ -1,4 +1,8 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
+import {
+  sentryGlobalFunctionMiddleware,
+  sentryGlobalRequestMiddleware,
+} from "@sentry/tanstackstart-react";
 
 import { renderErrorPage } from "./lib/error-page";
 
@@ -24,6 +28,9 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// وسائط Sentry لازم تكون أول عنصر بكل مصفوفة (حسب توثيق Sentry) حتى تلتقط
+// كل الأخطاء، بما فيها يلي بتصير بوسائطنا المخصصة تحتها.
 export const startInstance = createStart(() => ({
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [sentryGlobalRequestMiddleware, errorMiddleware, csrfMiddleware],
+  functionMiddleware: [sentryGlobalFunctionMiddleware],
 }));

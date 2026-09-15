@@ -32,11 +32,11 @@ export function AppPage({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen">
+    <div className="app-canvas min-h-screen pb-10">
       <PageHeader title={title} icon={icon} actions={actions} />
-      <div className="mx-auto max-w-6xl px-5 py-6">
-        {subtitle && <p className="max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
-        <div className="mt-5 space-y-5">{children}</div>
+      <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+        {subtitle && <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{subtitle}</p>}
+        <div className="mt-6 space-y-6">{children}</div>
       </div>
     </div>
   );
@@ -48,10 +48,12 @@ export function StatGrid({ items }: { items: { icon: string; label: string; valu
       {items.map((s, i) => {
         const parsed = parseStatValue(s.value);
         return (
-          <Reveal key={s.label} delay={i * 0.05}>
-            <div className="shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-4">
-              {/* بدون hover-lift: بطاقة إحصائية ثابتة بكل صفحات المنصة —
-                  نفس مبدأ تصحيح الصفحات العامة، بمكان واحد يغطي كل شي. */}
+          <Reveal key={s.label} variant="stat" delay={i * 0.05}>
+            <div className="shadow-elevation-1 h-full rounded-2xl border border-border bg-card p-4 sm:p-5">
+              {/* بدون hover-lift (لا interactive-card): بطاقة إحصائية ثابتة
+                  بكل صفحات المنصة، مش رابط أو زر — حركة الرفع عند التحويم
+                  بتوحي بتفاعل غير موجود فعليًا. نفس المبدأ مطبّق بالصفحة
+                  الرئيسية على بطاقات الإحصائيات هناك. */}
               <span className="inline-flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <DynamicIcon name={s.icon} className="size-4" />
               </span>
@@ -87,15 +89,15 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="shadow-elevation-1 rounded-2xl border border-border bg-card">
-      <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-3.5">
+    <section className="shadow-elevation-1 overflow-hidden rounded-2xl border border-border bg-card">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card/70 px-4 py-4 sm:px-5">
         <h2 className="inline-flex items-center gap-2 font-display text-sm font-bold text-foreground">
           {icon && <DynamicIcon name={icon} className="size-4 text-primary" />}
           {title}
         </h2>
         {action}
       </header>
-      <div className="p-5">{children}</div>
+      <div className="p-4 sm:p-5">{children}</div>
     </section>
   );
 }
@@ -238,7 +240,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex min-h-40 flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 p-6 text-center">
+    <div className="flex min-h-48 flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-border bg-secondary/20 p-6 text-center">
       {icon ? (
         <span className="flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground">
           <DynamicIcon name={icon} className="size-5" />
@@ -262,7 +264,7 @@ export function QuickLinks({ items }: { items: { to: string; label: string; icon
         <Link
           key={i.to}
           to={i.to}
-          className="hover-lift flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary/50"
+          className="interactive-card flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary/50"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <DynamicIcon name={i.icon} className="size-4" />
@@ -271,5 +273,67 @@ export function QuickLinks({ items }: { items: { to: string; label: string; icon
         </Link>
       ))}
     </div>
+  );
+}
+
+/**
+ * ترقيم صفحات موحّد — أرشيتايب List/Management (راجع
+ * docs/design/component-catalog.md). زر "السابق/التالي" بس (بدون أرقام
+ * صفحات مفردة) عمدًا — أبسط وأصح لـRTL، وكافي لجداول الأدمن الحالية.
+ * كل النصوص تجي جاهزة من المستدعي (نفس نمط EmptyState) — المكوّن هون
+ * عرض بس، بدون منطق ترجمة داخلي.
+ */
+export function Pagination({
+  page,
+  pageSize,
+  totalCount,
+  onPageChange,
+  summary,
+  previousLabel,
+  nextLabel,
+}: {
+  /** 0-indexed — أول صفحة = 0 (نفس مفهوم skip/pageSize بالباك اند). */
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  onPageChange: (page: number) => void;
+  /** نص جاهز زي "21–40 من 340" — مركّب من المستدعي عبر bi(). */
+  summary: string;
+  previousLabel: string;
+  nextLabel: string;
+}) {
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const canPrev = page > 0;
+  const canNext = page + 1 < totalPages;
+
+  if (totalCount <= pageSize) return null;
+
+  return (
+    <nav
+      aria-label={summary}
+      className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3"
+    >
+      <p className="text-xs text-muted-foreground">{summary}</p>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => canPrev && onPageChange(page - 1)}
+          disabled={!canPrev}
+          className="tap-target inline-flex items-center gap-1 rounded-xl border border-border px-3 text-xs font-semibold text-foreground hover:bg-secondary disabled:pointer-events-none disabled:opacity-40"
+        >
+          <DynamicIcon name="ChevronLeft" className="size-3.5 rtl:rotate-180" />
+          {previousLabel}
+        </button>
+        <button
+          type="button"
+          onClick={() => canNext && onPageChange(page + 1)}
+          disabled={!canNext}
+          className="tap-target inline-flex items-center gap-1 rounded-xl border border-border px-3 text-xs font-semibold text-foreground hover:bg-secondary disabled:pointer-events-none disabled:opacity-40"
+        >
+          {nextLabel}
+          <DynamicIcon name="ChevronRight" className="size-3.5 rtl:rotate-180" />
+        </button>
+      </div>
+    </nav>
   );
 }

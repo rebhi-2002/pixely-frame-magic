@@ -27,7 +27,7 @@ function AboutPage() {
   const { t } = useTranslation();
   const { isSignedIn } = useSession();
   const values = t("about.values", { returnObjects: true }) as { t: string; d: string }[];
-  const team = t("about.team", { returnObjects: true }) as { t: string; d: string }[];
+  const team = t("about.team", { returnObjects: true }) as { n: string; t: string; d: string }[];
 
   return (
     <PublicLayout>
@@ -75,7 +75,8 @@ function AboutPage() {
                   <div className="shadow-elevation-1 flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
                     <PhotoAvatar src={member.photo} icon={member.icon} className="size-14" />
                     <div>
-                      <h3 className="font-bold text-foreground">{m.t}</h3>
+                      <h3 className="font-bold text-foreground">{m.n}</h3>
+                      <p className="text-xs font-semibold text-primary">{m.t}</p>
                       <p className="mt-1.5 text-sm text-muted-foreground">{m.d}</p>
                     </div>
                   </div>

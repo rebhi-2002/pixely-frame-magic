@@ -91,7 +91,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(
     () => ({
       total: list.length,

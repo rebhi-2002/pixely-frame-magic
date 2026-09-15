@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { LogOut, Palette, Pencil, ShieldCheck, UserRound } from "lucide-react";
+import { KeyRound, LogOut, Palette, Pencil, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/admin/page-header";
 import { usePreferences } from "@/components/providers/preferences-provider";
@@ -13,9 +13,24 @@ import { Guard } from "@/components/app/guard";
 import { ROLE_NAME_EN } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
 import { updateOwnProfile } from "@/lib/rbac.functions";
+import {
+  isDemoSession,
+  getStoredUserId,
+  getStoredProfile,
+  updateMyProfile,
+  changeMyPassword,
+} from "@/integrations/backend/auth";
+import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -51,13 +66,34 @@ function SettingsPage() {
   const { access, can } = useAccess();
   const { signOut, pending: signingOut } = useSignOut("/login");
   const { theme, setTheme, locale, setLocale } = usePreferences();
-  const updateProfile = useServerFn(updateOwnProfile);
+  const demo = isDemoSession();
+  const userId = getStoredUserId();
+
+  // خيارات الجنس الحقيقية — نفس مصدر شاشات التسجيل/الأدمن (Backend
+  // Constants)، مش قائمة ثابتة بالكود. غير مطلوبة بوضع الديمو.
+  const { data: options } = useQuery({
+    queryKey: ["signup-options"],
+    queryFn: loadBackendUserOptions,
+    enabled: !demo,
+  });
+
+  const demoUpdateProfile = useServerFn(updateOwnProfile);
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", genderId: null as number | null });
 
   const saveMutation = useMutation({
-    mutationFn: () => updateProfile({ data: form }),
+    mutationFn: async () => {
+      if (demo) return demoUpdateProfile({ data: { full_name: form.full_name, email: form.email } });
+      if (!userId || form.genderId == null) throw new Error(bi("الجنس مطلوب", "Gender is required"));
+      return updateMyProfile({
+        id: userId,
+        name: form.full_name,
+        email: form.email,
+        phoneNumber: form.phone,
+        genderId: form.genderId,
+      });
+    },
     onSuccess: () => {
       invalidateAccess();
       setOpen(false);
@@ -67,9 +103,40 @@ function SettingsPage() {
   });
 
   function openDialog() {
-    setForm({ full_name: access?.profile?.full_name ?? "", email: access?.profile?.email ?? "" });
+    const stored = getStoredProfile();
+    setForm({
+      full_name: access?.profile?.full_name ?? "",
+      email: access?.profile?.email ?? "",
+      phone: stored?.phoneNumber ?? "",
+      genderId: typeof stored?.genderId === "number" ? stored.genderId : null,
+    });
     setOpen(true);
   }
+
+  // تغيير كلمة المرور — حقيقي 100%، غير متاح بوضع الديمو (ما في كلمة
+  // مرور حقيقية أصلاً بالحسابات التجريبية).
+  const [pwOpen, setPwOpen] = useState(false);
+  const [pwForm, setPwForm] = useState({ current: "", next: "", confirm: "" });
+
+  const changePasswordMutation = useMutation({
+    mutationFn: () => {
+      if (pwForm.next !== pwForm.confirm) {
+        throw new Error(bi("كلمتا المرور الجديدتان غير متطابقتين", "New passwords don't match"));
+      }
+      return changeMyPassword({
+        currentPassword: pwForm.current,
+        newPassword: pwForm.next,
+        confirmPassword: pwForm.confirm,
+      });
+    },
+    onSuccess: () => {
+      setPwOpen(false);
+      setPwForm({ current: "", next: "", confirm: "" });
+      toast.success(bi("تم تغيير كلمة المرور", "Password changed successfully"));
+    },
+    onError: (e) =>
+      toast.error(getErrorMessage(e, bi("تعذّر تغيير كلمة المرور", "Failed to change password"))),
+  });
 
   return (
     <div>
@@ -167,10 +234,24 @@ function SettingsPage() {
             {t("settings.security")}
           </h2>
           <p className="mt-3 text-sm text-muted-foreground">{t("settings.idleNote")}</p>
+
+          {!demo && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => setPwOpen(true)}
+            >
+              <KeyRound className="size-4" />
+              {bi("تغيير كلمة المرور", "Change password")}
+            </Button>
+          )}
+
           <button
             type="button"
             onClick={() => void signOut()}
-            className="mt-5 inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
+            className="mt-5 flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
           >
             <LogOut className="size-4" />
             {t(signingOut ? "common.signingOut" : "settings.signOut")}
@@ -201,6 +282,37 @@ function SettingsPage() {
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
               />
             </div>
+            {!demo && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="acc-phone">{bi("رقم الهاتف", "Phone number")}</Label>
+                  <Input
+                    id="acc-phone"
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{bi("الجنس", "Gender")}</Label>
+                  <Select
+                    value={form.genderId != null ? String(form.genderId) : undefined}
+                    onValueChange={(v) => setForm((f) => ({ ...f, genderId: Number(v) }))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(options?.genders ?? []).map((g) => (
+                        <SelectItem key={g.id} value={String(g.id)}>
+                          {g.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
             <Button
@@ -210,6 +322,62 @@ function SettingsPage() {
               {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>
+              {bi("إلغاء", "Cancel")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={pwOpen} onOpenChange={setPwOpen}>
+        <DialogContent className="text-start">
+          <DialogHeader>
+            <DialogTitle>{bi("تغيير كلمة المرور", "Change password")}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="pw-current">{bi("كلمة المرور الحالية", "Current password")}</Label>
+              <Input
+                id="pw-current"
+                type="password"
+                autoComplete="current-password"
+                value={pwForm.current}
+                onChange={(e) => setPwForm((f) => ({ ...f, current: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="pw-next">{bi("كلمة المرور الجديدة", "New password")}</Label>
+              <Input
+                id="pw-next"
+                type="password"
+                autoComplete="new-password"
+                value={pwForm.next}
+                onChange={(e) => setPwForm((f) => ({ ...f, next: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="pw-confirm">{bi("تأكيد كلمة المرور الجديدة", "Confirm new password")}</Label>
+              <Input
+                id="pw-confirm"
+                type="password"
+                autoComplete="new-password"
+                value={pwForm.confirm}
+                onChange={(e) => setPwForm((f) => ({ ...f, confirm: e.target.value }))}
+              />
+            </div>
+          </div>
+          <DialogFooter className="gap-2 sm:justify-start">
+            <Button
+              onClick={() => changePasswordMutation.mutate()}
+              disabled={
+                changePasswordMutation.isPending ||
+                !pwForm.current ||
+                !pwForm.next ||
+                !pwForm.confirm
+              }
+            >
+              {bi("تغيير كلمة المرور", "Change password")}
+            </Button>
+            <Button variant="outline" onClick={() => setPwOpen(false)}>
               {bi("إلغاء", "Cancel")}
             </Button>
           </DialogFooter>

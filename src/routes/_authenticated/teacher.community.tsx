@@ -50,7 +50,7 @@ function Body() {
     queryFn: () => fetchQuestions(),
   });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const open = useMemo(() => list.filter((q) => q.status === "مفتوح"), [list]);
   const answered = useMemo(() => list.filter((q) => q.status === "إجابة معلم"), [list]);
 

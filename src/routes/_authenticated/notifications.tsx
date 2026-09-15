@@ -55,7 +55,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["notifications"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const today = useMemo(() => list.filter((r) => r.category === "اليوم"), [list]);
   const earlier = useMemo(() => list.filter((r) => r.category === "سابقاً"), [list]);
   const newCount = list.filter((r) => r.isNew).length;

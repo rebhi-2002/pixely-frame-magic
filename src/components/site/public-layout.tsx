@@ -1,6 +1,17 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { LayoutDashboard, Menu } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  Home,
+  LayoutDashboard,
+  LogIn,
+  Menu,
+  Route,
+  Tag,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
 import { BrandLockup } from "@/components/site/brand-logo";
@@ -20,12 +31,12 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
-  { to: "/", key: "nav.home" },
-  { to: "/courses", key: "nav.courses" },
-  { to: "/how-it-works", key: "nav.howItWorks" },
-  { to: "/pricing", key: "nav.pricing" },
-  { to: "/for-teachers", key: "nav.forTeachers" },
-  { to: "/for-parents", key: "nav.forParents" },
+  { to: "/", key: "nav.home", icon: Home },
+  { to: "/courses", key: "nav.courses", icon: BookOpen },
+  { to: "/how-it-works", key: "nav.howItWorks", icon: Route },
+  { to: "/pricing", key: "nav.pricing", icon: Tag },
+  { to: "/for-teachers", key: "nav.forTeachers", icon: GraduationCap },
+  { to: "/for-parents", key: "nav.forParents", icon: Users },
 ] as const;
 
 const footerPlatform = [
@@ -80,7 +91,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             : "border-transparent bg-transparent",
         )}
       >
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
+        <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <BrandMark />
           <nav className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
@@ -89,7 +100,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
                 activeProps={{ className: "bg-secondary text-foreground" }}
-                className="nav-underline rounded-lg px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+                className="nav-underline rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
               >
                 {t(item.key)}
               </Link>
@@ -101,7 +112,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <button
                   type="button"
                   aria-label={t("common.openMenu")}
-                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+                  className="tap-target inline-flex items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
                 >
                   <Menu aria-hidden="true" className="size-5" />
                 </button>
@@ -123,8 +134,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       activeOptions={{ exact: item.to === "/" }}
                       activeProps={{ className: "bg-secondary text-foreground" }}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-xl px-3 py-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                      className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                     >
+                      <item.icon aria-hidden="true" className="size-4 shrink-0" />
                       {t(item.key)}
                     </Link>
                   ))}
@@ -144,15 +156,17 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       <Link
                         to="/login"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-center rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary"
                       >
+                        <LogIn aria-hidden="true" className="size-4" />
                         {t("common.signIn")}
                       </Link>
                       <Link
                         to="/signup"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
                       >
+                        <UserPlus aria-hidden="true" className="size-4" />
                         {t("common.startFree")}
                       </Link>
                     </>
@@ -174,7 +188,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               </>
             ) : (
               <>
-                <PreferenceToggles />
+                <PreferenceToggles className="hidden lg:flex" />
                 <Link
                   to="/login"
                   className="hidden rounded-lg px-3 py-2 text-sm font-semibold whitespace-nowrap text-muted-foreground hover:text-foreground sm:inline-flex"

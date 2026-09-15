@@ -107,7 +107,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["schedule-events"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(
     () => ({
       count: list.length,

@@ -44,8 +44,8 @@ export function AuthShell({
         <PreferenceToggles />
       </header>
 
-      <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <div className="mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
+      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           {/* لوحة زخرفية — تظهر بالشاشات الكبيرة بس، تعطي إحساس منتج حقيقي بدل
               فراغ حوالين الفورم */}
           <div className="hidden lg:block">
@@ -81,7 +81,7 @@ export function AuthShell({
               )}
               <div className="min-w-0">
                 <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
-                {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+                {subtitle && <p className="mt-1 max-w-md text-sm leading-6 text-muted-foreground">{subtitle}</p>}
               </div>
             </div>
             {children}
@@ -126,11 +126,11 @@ export function AuthField({
     [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
 
   return (
-    <div className="space-y-1.5">
+    <div className="min-w-0 space-y-1.5">
       <label htmlFor={id} className="block text-sm font-semibold text-foreground">
         {label}
       </label>
-      <div className="relative">
+      <div className="relative min-w-0">
         <input
           id={id}
           type={isPassword && visible ? "text" : type}
@@ -140,7 +140,7 @@ export function AuthField({
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
-          className="h-10 w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20"
+          className="h-11 w-full min-w-0 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20"
         />
         {isPassword && (
           <button

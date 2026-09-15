@@ -44,6 +44,7 @@ import { Route as AuthenticatedReferralsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
@@ -262,6 +263,11 @@ const AuthenticatedSystemModulesRoute =
     path: '/system-modules',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -512,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -585,6 +592,7 @@ export interface FileRoutesByTo {
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -660,6 +668,7 @@ export interface FileRoutesById {
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
+  '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
@@ -735,6 +744,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/system-modules'
+    | '/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -808,6 +818,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/system-modules'
+    | '/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -882,6 +893,7 @@ export interface FileRouteTypes {
     | '/_authenticated/schedule'
     | '/_authenticated/settings'
     | '/_authenticated/system-modules'
+    | '/_authenticated/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
     | '/invite/$code'
@@ -1195,6 +1207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSystemModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/wallet': {
+      id: '/_authenticated/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof AuthenticatedWalletRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -1484,6 +1503,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
+  AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
   AuthenticatedAdminBackendPermissionsRoute: typeof AuthenticatedAdminBackendPermissionsRoute
   AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
   AuthenticatedAdminConstantsRoute: typeof AuthenticatedAdminConstantsRoute
@@ -1533,6 +1553,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
+  AuthenticatedWalletRoute: AuthenticatedWalletRoute,
   AuthenticatedAdminBackendPermissionsRoute:
     AuthenticatedAdminBackendPermissionsRoute,
   AuthenticatedAdminCommunityReportsRoute:

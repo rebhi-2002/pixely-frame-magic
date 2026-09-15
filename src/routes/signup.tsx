@@ -1,6 +1,7 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { toast } from "sonner";
 import { GraduationCap, UserRound, Users, ArrowLeft, Check } from "lucide-react";
@@ -9,12 +10,31 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { FeatureStatus } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
-import { useBi } from "@/lib/bi";
+import { roleHome, useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { register, getStoredProfile } from "@/integrations/backend/auth";
+import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
+import { trackEvent, identifyUser } from "@/lib/analytics";
+import { setMonitoringUser } from "@/lib/monitoring";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const title = "إنشاء حساب | أكاديميا";
 const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
 const signupEnabled = import.meta.env.VITE_ENABLE_SIGNUP === "true";
+
+// أسماء أنواع المستخدمين متل ما هي مزروعة فعليًا بالباك اند (UserSeed.cs) —
+// بنستخدمها لمطابقة الدور المختار بالواجهة (طالب/ولي أمر) مع الـ id الصحيح
+// بدل ما نثبّت الأرقام 3/5 مباشرة بالكود.
+const BACKEND_ROLE_NAME: Record<RoleKey, string> = {
+  student: "الطالب",
+  parent: "ولي الامر",
+};
 
 export const Route = createFileRoute("/signup")({
   ssr: false,
@@ -33,32 +53,83 @@ type RoleKey = "student" | "parent";
 const schema = z.object({
   fullName: z.string().trim().min(2),
   email: z.string().trim().email(),
+  phoneNumber: z.string().trim().min(7),
   password: z.string().min(6),
 });
 
 function SignupPage() {
   const { t } = useTranslation();
   const bi = useBi();
+  const navigate = useNavigate();
   const [role, setRole] = useState<RoleKey | null>(null);
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [genderId, setGenderId] = useState<number | null>(null);
+
+  // الجنس ونوع المستخدم لازم يجيوا من الباك اند (نفس مصدر شاشة الأدمن) —
+  // القيم مش ثابتة بالكود لأنها ممكن تختلف بين البيئات.
+  const { data: options } = useQuery({
+    queryKey: ["signup-options"],
+    queryFn: loadBackendUserOptions,
+    enabled: signupEnabled,
+  });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = schema.safeParse({ fullName, email, password });
+    const parsed = schema.safeParse({ fullName, email, phoneNumber, password });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
       return;
     }
+    if (password !== confirmPassword) {
+      toast.error(bi("كلمتا المرور غير متطابقتين", "Passwords don't match"));
+      return;
+    }
+    if (genderId == null) {
+      toast.error(bi("الجنس مطلوب", "Gender is required"));
+      return;
+    }
+    if (!role) return;
+
+    const roleName = BACKEND_ROLE_NAME[role];
+    const userType = options?.roles.find((r) => r.name === roleName);
+    if (!userType) {
+      toast.error(
+        bi(
+          "تعذّر تحديد نوع الحساب — حاول تحديث الصفحة.",
+          "Couldn't determine the account type — try refreshing the page.",
+        ),
+      );
+      return;
+    }
+
     setLoading(true);
+    trackEvent("signup_attempt", { role });
     try {
-      // إنشاء الحسابات غير متاح بعد — الباك اند الجديد لسا بيدعم فقط تسجيل
-      // دخول الأدمن الحالي (/api/Auth/Login). راجع src/integrations/backend/auth.ts.
-      throw new Error("إنشاء حساب جديد غير متاح حالياً — قيد الربط مع الباك اند الجديد.");
+      await register({
+        name: parsed.data.fullName,
+        email: parsed.data.email,
+        phoneNumber: parsed.data.phoneNumber,
+        password: parsed.data.password,
+        confirmPassword: parsed.data.password,
+        genderId,
+        userTypeId: userType.id,
+      });
+      const profile = getStoredProfile();
+      if (profile) {
+        identifyUser(profile.id, { roleName: profile.roleName });
+        setMonitoringUser({ id: profile.id, email: profile.email });
+      }
+      trackEvent("signup_success", { role });
+      toast.success(bi("تم إنشاء الحساب بنجاح", "Account created successfully"));
+      navigate({ href: roleHome(profile?.roleName ?? roleName), replace: true });
     } catch (err) {
-      toast.error(getErrorMessage(err, "…"));
+      trackEvent("signup_failed", { role });
+      toast.error(getErrorMessage(err, bi("تعذّر إنشاء الحساب", "Failed to create account")));
     } finally {
       setLoading(false);
     }
@@ -156,6 +227,34 @@ function SignupPage() {
             autoComplete="email"
           />
           <AuthField
+            id="phone"
+            label={bi("رقم الهاتف", "Phone number")}
+            type="tel"
+            value={phoneNumber}
+            onChange={setPhoneNumber}
+            autoComplete="tel"
+          />
+          <div className="space-y-1.5">
+            <label className="text-sm font-semibold text-foreground">
+              {bi("الجنس", "Gender")}
+            </label>
+            <Select
+              value={genderId != null ? String(genderId) : undefined}
+              onValueChange={(v) => setGenderId(Number(v))}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+              </SelectTrigger>
+              <SelectContent>
+                {(options?.genders ?? []).map((g) => (
+                  <SelectItem key={g.id} value={String(g.id)}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <AuthField
             id="password"
             label={t("authPages.signup.password")}
             type="password"
@@ -163,6 +262,14 @@ function SignupPage() {
             onChange={setPassword}
             autoComplete="new-password"
             hint={t("authPages.signup.passwordHint")}
+          />
+          <AuthField
+            id="confirm-password"
+            label={bi("تأكيد كلمة المرور", "Confirm password")}
+            type="password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            autoComplete="new-password"
           />
           <button
             type="submit"

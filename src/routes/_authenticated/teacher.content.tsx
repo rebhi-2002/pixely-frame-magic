@@ -100,7 +100,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["teacher-content"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(
     () => ({
       published: list.filter((r) => r.status === "منشور").length,

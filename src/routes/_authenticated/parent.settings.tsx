@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -86,7 +86,7 @@ function Body() {
   const [pendingUnlink, setPendingUnlink] = useState<LinkedChildRow | null>(null);
 
   const isLoading = childrenQuery.isLoading || prefsQuery.isLoading;
-  const children = childrenQuery.data ?? [];
+  const children = useMemo(() => childrenQuery.data ?? [], [childrenQuery.data]);
   const prefs = prefsQuery.data ?? {
     weeklyReport: true,
     masteryAlert: true,

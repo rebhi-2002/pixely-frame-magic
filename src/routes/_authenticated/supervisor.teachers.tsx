@@ -104,7 +104,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["teacher-performance"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(() => {
     if (!list.length) return { active: 0, avgResponse: 0, avgGrading: 0, avgRating: 0 };
     return {

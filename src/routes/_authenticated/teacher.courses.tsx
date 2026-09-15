@@ -95,7 +95,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["teacher-courses"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(() => {
     const published = list.filter((r) => r.status === "منشور");
     const enrolled = list.reduce((s, r) => s + r.enrolledCount, 0);

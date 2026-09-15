@@ -12,6 +12,8 @@ import { currentUserHome } from "@/lib/session-home";
 import { USERS } from "@/lib/rbac-static-data";
 import { roleHome, useBi } from "@/lib/bi";
 import { Button } from "@/components/ui/button";
+import { trackEvent, identifyUser } from "@/lib/analytics";
+import { setMonitoringUser } from "@/lib/monitoring";
 
 /* أزرار دخول سريع محلية بالكامل (بدون أي نداء شبكة) للتجربة أثناء التطوير
    فقط — تُحذف قبل النشر النهائي. راجع src/integrations/backend/auth.ts. */
@@ -71,9 +73,26 @@ function LoginPage() {
       return;
     }
     setLoading(true);
+    trackEvent("login_attempt");
     try {
       await login(parsed.data.email, parsed.data.password);
       const profile = getStoredProfile();
+      if (profile) {
+        identifyUser(profile.id, { roleName: profile.roleName });
+        setMonitoringUser({ id: profile.id, email: profile.email });
+      }
+      trackEvent("login_success", { roleId: profile?.roleId ?? null });
+      if (profile && profile.roleId == null) {
+        // فشل تحديد نوع الحساب (راجع فتح Console — رح تلاقي تفاصيل الخطأ
+        // بـ "fetchUserType failed"). بنكمل تسجيل الدخول بس بنحذّر المستخدم
+        // بدل ما نوجّهه بصمت لمساحة غلط.
+        toast.warning(
+          bi(
+            "تم الدخول، لكن تعذّر تحديد نوع حسابك بدقة — إذا انتقلت لمساحة غير متوقعة تواصل مع الدعم.",
+            "You're signed in, but we couldn't determine your account type precisely — if you land in an unexpected space, contact support.",
+          ),
+        );
+      }
       toast.success(t("authPages.login.success"));
       // roleId=1 ("مدير النظام") هو الوحيد المتاح فعليًا على الباك اند حاليًا؛
       // أي نوع تاني (أو لو تعذّر جلب النوع) بيرجع لصفحة طالب افتراضية —
@@ -81,6 +100,7 @@ function LoginPage() {
       navigate({ href: roleHome(profile?.roleName ?? null, profile?.roleId === 1), replace: true });
     } catch (err) {
       const message = getErrorMessage(err, bi("تعذّر تسجيل الدخول", "Sign in failed"));
+      trackEvent("login_failed", { message });
       setServerError(message);
     } finally {
       setLoading(false);

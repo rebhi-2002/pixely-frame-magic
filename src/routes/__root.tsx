@@ -23,6 +23,7 @@ import { NotFoundIllustration } from "@/components/site/illustrations";
 import { currentUserHome } from "@/lib/session-home";
 import { SeoManager } from "@/components/app/seo-manager";
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
+import { initAnalytics } from "@/lib/analytics";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -180,6 +181,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <PreferencesProvider>
         <SeoManager />
+        <MonitoringInit />
         <AuthSync />
         <ServiceWorkerRegistrar />
         <IdleLogoutWatcher />
@@ -190,4 +192,14 @@ function RootComponent() {
       </PreferencesProvider>
     </QueryClientProvider>
   );
+}
+
+/** تهيئة تتبّع الاستخدام (PostHog) مرة وحدة عند إقلاع التطبيق — Sentry صار
+ * يتهيأ تلقائيًا عبر src/instrument.client.ts (جهة العميل) وsrc/server.ts
+ * (جهة السيرفر)، ما بحتاج تهيئة يدوية هون. */
+function MonitoringInit() {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+  return null;
 }

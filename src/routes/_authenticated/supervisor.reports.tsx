@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -62,7 +62,7 @@ function Body() {
   });
 
   const isLoading = reportsQuery.isLoading || settingsQuery.isLoading;
-  const reports = reportsQuery.data ?? [];
+  const reports = useMemo(() => reportsQuery.data ?? [], [reportsQuery.data]);
   const settings = settingsQuery.data ?? { reportFrequencyLabel: "—", dataAnonymised: true };
   const totalDownloads = reports.reduce((s, r) => s + r.downloadsCount, 0);
 

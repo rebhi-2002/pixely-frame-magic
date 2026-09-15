@@ -105,7 +105,7 @@ function Body() {
   const [pendingDelete, setPendingDelete] = useState<StudentRiskRow | null>(null);
 
   const isLoading = rowsQuery.isLoading || settingsQuery.isLoading;
-  const list = rowsQuery.data ?? [];
+  const list = useMemo(() => rowsQuery.data ?? [], [rowsQuery.data]);
   const settings = settingsQuery.data ?? { improvedThisMonth: 0 };
 
   const stats = useMemo(

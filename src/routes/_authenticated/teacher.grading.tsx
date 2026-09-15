@@ -90,7 +90,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["grading-items"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(
     () => ({
       pending: list.filter((r) => r.status === "بانتظار").length,

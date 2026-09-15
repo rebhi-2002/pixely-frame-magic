@@ -90,7 +90,7 @@ function Body() {
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["library-subjects"] });
 
   const stats = useMemo(() => {
-    const list = rows ?? [];
+    const list = useMemo(() => rows ?? [], [rows]);
     const units = list.reduce((s, r) => s + r.unitsCount, 0);
     const lessons = list.reduce((s, r) => s + r.lessonsCount, 0);
     const completedLessons = Math.round(

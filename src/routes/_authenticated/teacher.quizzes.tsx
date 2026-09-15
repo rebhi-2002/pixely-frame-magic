@@ -92,7 +92,7 @@ function Body() {
   });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["teacher-quizzes"] });
 
-  const list = rows ?? [];
+  const list = useMemo(() => rows ?? [], [rows]);
   const stats = useMemo(() => {
     const totalQuestions = list.reduce((s, r) => s + r.questionsCount, 0);
     const totalAttempts = list.reduce((s, r) => s + r.attemptsCount, 0);

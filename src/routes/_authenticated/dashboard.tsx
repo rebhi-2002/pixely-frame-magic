@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -15,6 +15,9 @@ import {
 } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
+import { OnboardingChecklist } from "@/components/app/onboarding-checklist";
+import { getStoredUserId, wasJustRegistered } from "@/integrations/backend/auth";
+import { getMyWallet } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 import { Button } from "@/components/ui/button";
@@ -96,6 +99,15 @@ function Body() {
   const bi = useBi();
   const queryClient = useQueryClient();
   const { can } = useAccess();
+  const userId = getStoredUserId();
+
+  // رصيد حقيقي من الباك اند (Wallet API) — بيُستخدم لتحديد خطوة "اشحن
+  // محفظتك" بقائمة "خطواتك الأولى" تلقائيًا لو الرصيد أكبر من صفر.
+  const walletQuery = useQuery({
+    queryKey: ["my-wallet"],
+    queryFn: getMyWallet,
+    enabled: !!userId,
+  });
 
   const fetchLog = useServerFn(listWeeklyStudyLog);
   const updateMinutes = useServerFn(updateWeeklyStudyMinutes);
@@ -175,10 +187,10 @@ function Body() {
   const isLoading =
     logQuery.isLoading || tasksQuery.isLoading || statsQuery.isLoading || subjectsQuery.isLoading;
   const hasError = logQuery.error || tasksQuery.error || statsQuery.error || subjectsQuery.error;
-  const log = logQuery.data ?? [];
-  const tasks = tasksQuery.data ?? [];
+  const log = useMemo(() => logQuery.data ?? [], [logQuery.data]);
+  const tasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
   const stats = statsQuery.data ?? { streakDays: 0, achievementPoints: 0 };
-  const subjects = subjectsQuery.data ?? [];
+  const subjects = useMemo(() => subjectsQuery.data ?? [], [subjectsQuery.data]);
   const minutesToday = log.length ? log[log.length - 1].minutes : 0;
   const tasksDoneLabel = `${subjects.filter((s) => s.progressPercent >= 100).length}/${subjects.length || 0}`;
 
@@ -222,6 +234,15 @@ function Body() {
           </Button>
         }
       />
+
+      {userId && (
+        <OnboardingChecklist
+          userId={userId}
+          roleKey="student"
+          showInitially={wasJustRegistered()}
+          walletBalance={walletQuery.data?.balance}
+        />
+      )}
 
       {isLoading ? (
         <LoadingState label={bi("عم نجهّز لوحتك…", "Preparing your dashboard…")} />
@@ -275,7 +296,7 @@ function Body() {
             </div>
           )}
 
-          <Panel title={bi("ابدأ الآن", "Start now")} icon="Zap">
+          <Panel title={bi("خطوتك التالية", "Your next step")} icon="Zap">
             <QuickLinks
               items={[
                 { to: "/library", label: bi("المكتبة", "Library"), icon: "Library" },
@@ -296,7 +317,7 @@ function Body() {
             />
           </Panel>
 
-          <Panel title={bi("دقائق الدراسة الأسبوعية", "Weekly study minutes")} icon="ChartSpline">
+          <Panel title={bi("إيقاع دراستك", "Your study rhythm")} icon="ChartSpline">
             <TrendChart data={log.map((d) => ({ label: bi(...d.day), value: d.minutes }))} />
             {can("student_dashboard", "edit") && (
               <div className="mt-3 flex flex-wrap gap-2">
@@ -320,7 +341,7 @@ function Body() {
             )}
           </Panel>
 
-          <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
+          <Panel title={bi("أين تحتاج إلى المراجعة؟", "Where to review next")} icon="LineChart">
             {subjects.length ? (
               subjects.map((s) => (
                 <Progress key={s.id} label={s.subjectName} value={s.progressPercent} />

@@ -1,11 +1,11 @@
-import { Bell, CheckCircle2, Flame, TrendingUp } from "lucide-react";
+import { Bell, BookOpenCheck, CheckCircle2, FlaskConical, Flame, TrendingUp } from "lucide-react";
 import { useBi } from "@/lib/bi";
 import type { PublicSession } from "@/hooks/use-session";
 
 const subjects = [
-  { icon: "📐", pct: 78, tone: "bg-primary" },
-  { icon: "🧪", pct: 54, tone: "bg-info" },
-  { icon: "📖", pct: 92, tone: "bg-success" },
+  { icon: BookOpenCheck, pct: 78, tone: "bg-primary" },
+  { icon: FlaskConical, pct: 54, tone: "bg-info" },
+  { icon: BookOpenCheck, pct: 92, tone: "bg-success" },
 ] as const;
 
 /** ارتفاعات ثابتة (px) لأعمدة النشاط الأسبوعي — تصميمية بحتة، لا تمثّل بيانات حقيقية */
@@ -28,9 +28,9 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const greeting = bi(`أهلاً ${displayName} 👋`, `Hi ${displayName} 👋`);
 
   return (
-    <div aria-hidden className="relative hidden select-none lg:block">
+    <div aria-hidden className="visual-orbit relative hidden min-h-[520px] select-none lg:block">
       {/* البطاقة الرئيسية — إطار متصفح مصغّر بميلان خفيف لإحساس العمق */}
-      <div className="glass-surface shadow-elevation-3 relative mx-auto w-full max-w-md rounded-3xl p-4 [transform:perspective(1400px)_rotateY(-8deg)_rotateX(3deg)] transition-transform duration-700 hover:[transform:perspective(1400px)_rotateY(-3deg)_rotateX(1deg)]">
+      <div className="glass-surface soft-glow shadow-elevation-3 relative mx-auto mt-12 w-full max-w-md rounded-3xl border border-white/10 p-4 [transform:perspective(1400px)_rotateY(-8deg)_rotateX(3deg)] transition-transform duration-700 hover:[transform:perspective(1400px)_rotateY(-3deg)_rotateX(1deg)]">
         {/* شريط المتصفح */}
         <div className="flex items-center gap-1.5 px-1 pb-3">
           <span className="size-2.5 rounded-full bg-destructive/60" />
@@ -84,9 +84,9 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
 
           {/* تقدّم المواد */}
           <div className="space-y-2.5">
-            {subjects.map((s) => (
-              <div key={s.icon} className="flex items-center gap-2.5">
-                <span className="text-sm">{s.icon}</span>
+            {subjects.map((s, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-muted-foreground"><s.icon className="size-3.5" /></span>
                 <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
                   <div className={`h-full rounded-full ${s.tone}`} style={{ width: `${s.pct}%` }} />
                 </div>

@@ -12,8 +12,8 @@ import i18n, { LOCALE_DIR, SUPPORTED_LOCALES, type Locale } from "@/i18n";
 
 export type ThemePref = "auto" | "light" | "dark";
 
-export const THEME_STORAGE_KEY = "acadimia.theme";
-export const LOCALE_STORAGE_KEY = "acadimia.locale";
+export const THEME_STORAGE_KEY = "academia.theme";
+export const LOCALE_STORAGE_KEY = "academia.locale";
 
 /** Inline, runs before hydration so there is no flash of the wrong theme/dir. */
 export const preferencesBootScript = `(function(){try{

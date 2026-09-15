@@ -64,10 +64,9 @@ function Body() {
     studentsQuery.isLoading ||
     contentQuery.isLoading ||
     reportsQuery.isLoading;
-  const teachers = teachersQuery.data ?? [];
-  const students = studentsQuery.data ?? [];
-  const content = contentQuery.data ?? [];
-
+  const teachers = useMemo(() => teachersQuery.data ?? [], [teachersQuery.data]);
+  const students = useMemo(() => studentsQuery.data ?? [], [studentsQuery.data]);
+  const content = useMemo(() => contentQuery.data ?? [], [contentQuery.data]);
   const totalStudents = teachers.reduce((s, t) => s + t.studentsCount, 0);
   const delayedTeachers = teachers.filter((t) => t.status === "تأخر تصحيح");
   const atRiskStudents = students.filter((s) => s.status === "متعثّر");
