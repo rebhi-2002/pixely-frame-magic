@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Cookie } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const CONSENT_KEY = "acadimia.cookieConsent";
+const CONSENT_KEY = "academia.cookieConsent";
 
 /** بانر الموافقة — يظهر أول زيارة فقط، ولا يُشغَّل أي تتبّع تحليلي قبل الموافقة. */
 export function CookieConsent() {
@@ -16,7 +16,7 @@ export function CookieConsent() {
 
   const decide = (value: "accepted" | "declined") => {
     localStorage.setItem(CONSENT_KEY, value);
-    window.dispatchEvent(new CustomEvent("acadimia:cookie-consent", { detail: value }));
+    window.dispatchEvent(new CustomEvent("academia:cookie-consent", { detail: value }));
     setVisible(false);
   };
 

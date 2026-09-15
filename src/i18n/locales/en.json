@@ -54,22 +54,22 @@
   "home": {
     "meta": {
       "title": "Academia | The student platform for focus and achievement",
-      "description": "Academia: an organized smart library, subject communities, achievement tracking, a mistake bank and a national-exam simulator — all your studying in one place."
+      "description": "Academia: an organized library, subject communities, achievement tracking, a mistake bank and practice-exam logging — all your studying in one place."
     },
-    "badge": "For students aged 16 to 18",
-    "h1a": "Files lost in WhatsApp?",
-    "h1b": "Academia",
-    "h1c": "organizes them so you get things done.",
-    "sub": "One place for every subject: a tidy library, questions that actually get answered, a schedule that reminds you, and practice exams that expose your weak spots before the real one.",
-    "ctaPrimary": "Start free now",
-    "ctaSecondary": "See how it works",
+    "badge": "For Palestinian Tawjihi students",
+    "h1a": "Organize your Tawjihi study",
+    "h1b": "and start with confidence",
+    "h1c": "with Academia.",
+    "sub": "Your subjects, tests, mistakes and progress in one place — so you know what to study now and where to improve.",
+    "ctaPrimary": "Start free",
+    "ctaSecondary": "See how you start",
     "stats": {
       "levels": "content classification levels",
       "rtl": "Arabic-first with RTL interface",
       "spaces": "spaces: student, teacher, parent"
     },
-    "featuresTitle": "Everything you need in one place",
-    "featuresSub": "Not a file archive — real tools that help you finish and master, built around how you actually study.",
+    "featuresTitle": "Tools built around how you study",
+    "featuresSub": "Not a file archive — a clear path from your first question to focused review.",
     "features": {
       "library": {
         "title": "Smart library",
@@ -84,16 +84,16 @@
         "text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson."
       },
       "simulator": {
-        "title": "National exam simulator",
-        "text": "Same format and timing, instant grading and weak-point analysis per unit."
+        "title": "My practice exams",
+        "text": "Log the result of every practice exam you take, and track your weak points by unit over time."
       },
       "mistakes": {
         "title": "My mistake bank",
-        "text": "Every question you get wrong is saved automatically so you can review it until you master it."
+        "text": "Save every question you get wrong at your own pace, and review it until you master it."
       },
       "review": {
         "title": "15-minute review",
-        "text": "Smart flashcards suggested from your weakest point, before bed or before the exam."
+        "text": "Flashcards from your weakest points, before bed or before the exam."
       }
     },
     "roles": {
@@ -110,9 +110,9 @@
         "d": "A short weekly report on consistency and achievement."
       }
     },
-    "ctaTitle": "Ready to start?",
-    "ctaSub": "Sign up in a minute, pick your subjects, set your first weekly goal — we handle the rest.",
-    "ctaButton": "Create a free account",
+    "ctaTitle": "Ready to start your first study session?",
+    "ctaSub": "Create your free account, choose your track and subjects, and take your first test in minutes.",
+    "ctaButton": "Start your first session free",
     "signedIn": {
       "welcome": "Welcome, {{name}} 👋",
       "cta": "Go to dashboard",
@@ -137,7 +137,37 @@
         "h1": "Platform operations at your fingertips",
         "sub": "Users, permissions, curriculum, payments and content review — from the admin panel."
       }
-    }
+    },
+    "startTitle": "What happens after you sign up?",
+    "startSub": "You do not land on an empty dashboard. Set up your study space and take a clear first step.",
+    "startSteps": [
+      {
+        "title": "Choose your track",
+        "text": "Select your track and subjects so your space fits your study."
+      },
+      {
+        "title": "Set up your space",
+        "text": "Your library, schedule and review shortcuts are in one place."
+      },
+      {
+        "title": "Take a short test",
+        "text": "See your level and weak spots instead of studying at random."
+      },
+      {
+        "title": "Review with focus",
+        "text": "Turn mistakes into a clear review list with a next step."
+      }
+    ],
+    "freeTitle": "Start free — see Academia in action",
+    "freeSub": "You do not need a teacher to begin. Set up your space, try the core study tools, then decide what fits.",
+    "freeItems": [
+      "Create a student account",
+      "Choose your track and subjects",
+      "Track your core progress",
+      "Take a diagnostic test",
+      "Save mistakes for review"
+    ],
+    "trustNote": "No card required to start • Change your subjects later • Arabic-first by design"
   },
   "howItWorks": {
     "meta": {
@@ -169,7 +199,7 @@
     "next": [
       "Finish a lesson, hit “Got it” and take a short Quiz.",
       "Every mistake is saved to your mistake bank for later review.",
-      "Before the exam, the national-exam simulator tests you with real timing.",
+      "Before the exam, log your practice results and track your progress.",
       "Your parent gets a short weekly report without digging into your daily privacy."
     ]
   },
@@ -202,9 +232,9 @@
       "badge": "Most popular",
       "features": [
         "Everything in the free plan",
-        "AI national-exam simulator",
-        "Your own mistake bank + spaced repetition",
-        "15-minute review (smart flashcards)",
+        "Unlimited practice exams + per-subject mistake bank",
+        "Your own mistake bank for every subject",
+        "15-minute review (flashcards)",
         "Weekly parent report",
         "Digital certificates on subject completion"
       ]
@@ -275,12 +305,12 @@
               "plus": true
             },
             {
-              "l": "Personal mistake bank + spaced repetition",
+              "l": "Personal mistake bank for every subject",
               "free": false,
               "plus": true
             },
             {
-              "l": "15-minute review (smart flashcards)",
+              "l": "15-minute review (flashcards)",
               "free": false,
               "plus": true
             }

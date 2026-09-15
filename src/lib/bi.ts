@@ -8,12 +8,24 @@ export function useBi() {
 
 export type RoleKey = "student" | "teacher" | "parent" | "supervisor" | "admin";
 
+// أسماء الأنواع من مصدرين مختلفين لازم يتوافقوا هون: بيانات الديمو المحلية
+// (rbac-static-data.ts) وأسماء الأنواع الحقيقية المزروعة بالباك اند (راجع
+// UserSeed.cs) — الصياغتين مختلفتين شكليًا ("طالب" مقابل "الطالب"، "ولي
+// أمر" مقابل "ولي الامر"...) رغم إنهم نفس الدور. بدون الأسماء التانية هون،
+// أي مستخدم حقيقي (غير الأدمن) كان رح ينحط افتراضيًا بمساحة الطالب حتى لو
+// كان معلم أو ولي أمر فعليًا.
 const ROLE_BY_NAME: Record<string, RoleKey> = {
+  // بيانات الديمو المحلية
   طالب: "student",
   معلم: "teacher",
   "ولي أمر": "parent",
   "مشرف أكاديمي": "supervisor",
   "مدير عام": "admin",
+  // أسماء أنواع المستخدمين الحقيقية بالباك اند (UserSeed.cs)
+  الطالب: "student",
+  المعلم: "teacher",
+  "ولي الامر": "parent",
+  "مدير النظام": "admin",
 };
 
 export const ROLE_PAGE_PREFIXES: Record<RoleKey, readonly string[]> = {

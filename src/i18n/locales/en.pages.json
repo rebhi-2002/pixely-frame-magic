@@ -167,14 +167,17 @@
     "teamSub": "A 3-person founding team building the platform from scratch — frontend and backend together.",
     "team": [
       {
+        "n": "Rebhe Ibrahim",
         "t": "Founder — Frontend & product",
         "d": "Builds the student experience and the interface, down to the last interaction detail."
       },
       {
+        "n": "Ahmed Alkhaldi",
         "t": "Founder — Backend",
         "d": "Builds the technical infrastructure and database."
       },
       {
+        "n": "Ziad Alnumailat",
         "t": "Founder — Backend",
         "d": "Builds platform security and infrastructure."
       }
