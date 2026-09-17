@@ -13,11 +13,7 @@ export default defineConfig({
   },
   ssr: {
     // دمج جميع حزم Sentry والحزم التابعة لها داخل ملف الـ SSR لـ Vercel
-    noExternal: [
-      /@sentry\/.*/,
-      "import-in-the-middle",
-      "require-in-the-middle",
-    ],
+    noExternal: [/@sentry\/.*/, "import-in-the-middle", "require-in-the-middle"],
   },
   plugins: [
     tailwindcss(),
