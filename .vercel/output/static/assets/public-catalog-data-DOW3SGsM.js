@@ -1,0 +1,1 @@
+var e={live_online:[`أونلاين مباشر`,`Live online`],onsite:[`وجاهي`,`On-site`],recorded:[`مسجّل مسبقاً`,`Recorded`]};function t(e){return`/team/teachers/${e}.jpg`}function n(e){return`/courses/covers/${e}.jpg`}export{n,t as r,e as t};

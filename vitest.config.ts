@@ -1,12 +1,15 @@
 import { defineConfig } from "vitest/config";
 import viteReact from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 // إعداد منفصل عن vite.config.ts الرئيسي عمدًا: بلوجن TanStack Start
 // (tanstackStart/nitro) مش مصمم لبيئة اختبار الوحدات، فبنستخدم هون بس
-// react + tsconfig paths (لدعم استيراد @/...) + jsdom لمحاكاة DOM.
+// react + tsconfig paths (لدعم استيراد @/...، عبر resolve.tsconfigPaths
+// الأصلية بـVite 8) + jsdom لمحاكاة DOM.
 export default defineConfig({
-  plugins: [tsconfigPaths({ projects: ["./tsconfig.json"] }), viteReact()],
+  resolve: {
+    tsconfigPaths: true,
+  },
+  plugins: [viteReact()],
   test: {
     environment: "jsdom",
     globals: true,

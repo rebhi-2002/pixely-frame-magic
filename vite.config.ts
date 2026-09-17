@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { nitro } from "nitro/vite";
 import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 
@@ -11,8 +10,12 @@ import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 const nitroPreset = process.env.NITRO_PRESET || "vercel";
 
 export default defineConfig({
+  // Vite 8 بيدعم حل مسارات tsconfig (@/...) بشكل أصلي، فما عاد لازم بلوجن
+  // "vite-tsconfig-paths" الخارجي (كان يعمل نفس الشي بس أبطأ وغير مُصان).
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
-    tsconfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
     tanstackStart({ server: { entry: "server" } }),
     viteReact(),

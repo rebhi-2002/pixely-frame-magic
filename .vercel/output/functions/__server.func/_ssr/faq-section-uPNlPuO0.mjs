@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
-import { a as Trigger2, i as Root2, n as Header, r as Item, t as Content2, v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
 import { n as useTranslation } from "../_libs/react-i18next.mjs";
-import { Dt as ChevronDown, xt as CircleQuestionMark } from "../_libs/lucide-react.mjs";
+import { a as Trigger2, i as Root2, n as Header, r as Item, t as Content2, v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { jt as ChevronDown, wt as CircleQuestionMark } from "../_libs/lucide-react.mjs";
 import { t as cn } from "./utils-C_uf36nf.mjs";
 import { t as Reveal } from "./reveal-LUGiBW7K.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/faq-section-uPNlPuO0.js

@@ -1,0 +1,1 @@
+import{Q as e}from"./index-BOB3Ju0F.js";function t(t){e(t?{id:t.id,email:t.email??void 0}:null)}export{t};

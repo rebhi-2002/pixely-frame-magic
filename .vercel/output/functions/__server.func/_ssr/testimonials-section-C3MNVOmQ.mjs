@@ -1,6 +1,6 @@
-import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
 import { n as useTranslation } from "../_libs/react-i18next.mjs";
-import { H as MessageCircleHeart, j as Quote } from "../_libs/lucide-react.mjs";
+import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { N as Quote, W as MessageCircleHeart } from "../_libs/lucide-react.mjs";
 import { t as Reveal } from "./reveal-LUGiBW7K.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/testimonials-section-C3MNVOmQ.js
 var import_jsx_runtime = require_jsx_runtime();
