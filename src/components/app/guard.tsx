@@ -1,19 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useAccess } from "@/hooks/use-access";
-import { pageMatchesRole, roleHome, roleKeyFromName, useBi } from "@/lib/bi";
+import { useCanView } from "@/hooks/use-can-view";
+import { roleHome, useBi } from "@/lib/bi";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 import { ForbiddenIllustration } from "@/components/site/illustrations";
-
-/** حراسة الصفحة على الواجهة (الحراسة الحقيقية على السيرفر في rbac.server.ts). */
-export function useCanView(pageKey: string) {
-  const { access, can, isLoading } = useAccess();
-  const role = roleKeyFromName(access?.profile?.role_name, access?.isAdmin);
-  return {
-    loading: isLoading,
-    allowed: can(pageKey, "view_list") && pageMatchesRole(pageKey, role),
-    access,
-  };
-}
 
 export function Forbidden() {
   const bi = useBi();

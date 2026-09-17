@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { Reveal } from "@/components/ui/reveal";
 import { blogPosts } from "@/content/blog-posts";
-import { usePreferences } from "@/components/providers/preferences-provider";
+import { usePreferences } from "@/hooks/use-preferences";
 import { useBi } from "@/lib/bi";
 
 const title = "مدونة أكاديميا | نصائح دراسة وتحضير للامتحان الوزاري";

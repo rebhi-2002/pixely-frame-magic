@@ -7,10 +7,11 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { DEMO_USER_COOKIE } from "./auth";
+import { env } from "@/lib/env";
 
 export const requireAuth = createMiddleware({ type: "function" }).server(async ({ next }) => {
   const demoUserId = getCookie(DEMO_USER_COOKIE);
-  const demoAllowed = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+  const demoAllowed = env.ENABLE_DEMO_LOGIN;
 
   // Static server functions are available only when demo mode is explicitly
   // enabled (local dev, or VITE_ENABLE_DEMO_LOGIN="true" on a preview

@@ -168,17 +168,17 @@
     "team": [
       {
         "n": "Rebhe Ibrahim",
-        "t": "Founder — Frontend & product",
+        "t": "Co-founder — Frontend & product",
         "d": "Builds the student experience and the interface, down to the last interaction detail."
       },
       {
         "n": "Ahmed Alkhaldi",
-        "t": "Founder — Backend",
+        "t": "Co-founder — Architecture & database",
         "d": "Builds the technical infrastructure and database."
       },
       {
         "n": "Ziad Alnumailat",
-        "t": "Founder — Backend",
+        "t": "Co-founder — Security & infrastructure",
         "d": "Builds platform security and infrastructure."
       }
     ],
@@ -190,13 +190,16 @@
   "courses": {
     "meta": {
       "title": "Courses | Academia",
-      "description": "Browse courses from verified Academia teachers by subject and level before creating an account."
+      "description": "Courses from local and international teachers — live online, in-person, or recorded. Browse by subject and track before creating an account."
     },
     "h1": "Course marketplace",
-    "sub": "Courses from verified teachers — browse without an account, sign up when you enroll.",
+    "sub": "Local and international teachers, in whatever format suits you — live online, in-person, or recorded. Browse without an account, sign up when you enroll.",
     "searchPlaceholder": "Search by course or teacher…",
     "all": "All",
+    "branchLabel": "Track:",
     "empty": "No results match your search.",
+    "emptyCatalogTitle": "The first course is on its way",
+    "emptyCatalogBody": "We're setting up courses with real teachers (live online, on-site, and recorded). The moment one is published, it'll show up here.",
     "lessons": "lessons",
     "hours": "hours",
     "free": "Free",

@@ -13,12 +13,12 @@ import { PageTransition } from "@/components/site/page-transition";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 
 import { useAccess } from "@/hooks/use-access";
+import { env } from "@/lib/env";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const demoAllowed =
-      import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+    const demoAllowed = env.ENABLE_DEMO_LOGIN;
 
     // Demo routes remain available in local dev, or on a deployment where
     // VITE_ENABLE_DEMO_LOGIN is explicitly set — same condition everywhere

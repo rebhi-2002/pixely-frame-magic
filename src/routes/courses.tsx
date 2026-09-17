@@ -3,14 +3,36 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { BookOpen, Clock, Search, Star, Users, Wallet } from "lucide-react";
+import {
+  BookOpen,
+  Clock,
+  MapPin,
+  PlayCircle,
+  Radio,
+  Search,
+  Sparkles,
+  Star,
+  Users,
+  Wallet,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
 import { listPublicCourses } from "@/lib/public-catalog.functions";
-import { courseCoverPath, teacherPhotoPath } from "@/lib/public-catalog-data";
+import {
+  COURSE_FORMAT_LABELS,
+  courseCoverPath,
+  teacherPhotoPath,
+  type CourseFormat,
+} from "@/lib/public-catalog-data";
+
+const FORMAT_ICONS: Record<CourseFormat, typeof Radio> = {
+  live_online: Radio,
+  onsite: MapPin,
+  recorded: PlayCircle,
+};
 
 export const Route = createFileRoute("/courses")({
   head: (ctx) => createSeoHead("/courses", localeFromSearch(ctx.match.search)),
@@ -74,21 +96,27 @@ function CoursesPage() {
 
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState<string>("__all");
+  const [level, setLevel] = useState<string>("__all");
 
-  const items = rows ?? [];
+  const items = useMemo(() => rows ?? [], [rows]);
   const subjects = useMemo(
     () => Array.from(new Set(items.map((i) => bi(...i.subject)))),
     [items, bi],
   );
+  // الفرع/المستوى (علمي، أدبي، صناعي، تجاري...) — فلتر منفصل عن المادة لأنه
+  // بيمثّل بُعد تصنيف مختلف (نفس المادة ممكن تتكرر بأكثر من فرع).
+  const levels = useMemo(() => Array.from(new Set(items.map((i) => bi(...i.level)))), [items, bi]);
 
   const filtered = items.filter((i) => {
     const q = query.trim();
     const title = bi(...i.title);
     const teacher = bi(...i.teacher);
     const subjectLabel = bi(...i.subject);
+    const levelLabel = bi(...i.level);
     const matchQuery = !q || title.includes(q) || teacher.includes(q);
     const matchSubject = subject === "__all" || subjectLabel === subject;
-    return matchQuery && matchSubject;
+    const matchLevel = level === "__all" || levelLabel === level;
+    return matchQuery && matchSubject && matchLevel;
   });
 
   return (
@@ -126,6 +154,28 @@ function CoursesPage() {
               ))}
             </div>
           </div>
+
+          {levels.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-muted-foreground">
+                {t("courses.branchLabel")}
+              </span>
+              {["__all", ...levels].map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLevel(l)}
+                  className={`hover-press rounded-lg border px-3 py-1.5 text-xs font-bold ${
+                    level === l
+                      ? "border-primary bg-primary/12 text-primary"
+                      : "border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {l === "__all" ? t("courses.all") : l}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -159,8 +209,23 @@ function CoursesPage() {
             ))}
           </div>
         ) : (
-          <div key={`${subject}-${filtered.length}`} className="panel-swap">
-            {filtered.length === 0 ? (
+          <div key={`${subject}-${level}-${filtered.length}`} className="panel-swap">
+            {items.length === 0 ? (
+              // لا يوجد أي كورس بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
+              // لبحثك" تحت: صادقة وواضحة، بنفس أسلوب قسم الآراء بالرئيسية
+              // (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
+              <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
+                <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Sparkles aria-hidden="true" className="size-6" />
+                </span>
+                <h2 className="text-base font-bold text-foreground">
+                  {t("courses.emptyCatalogTitle")}
+                </h2>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {t("courses.emptyCatalogBody")}
+                </p>
+              </div>
+            ) : filtered.length === 0 ? (
               <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                 {t("courses.empty")}
               </p>
@@ -182,6 +247,17 @@ function CoursesPage() {
                           {bi(...c.subject)}
                         </span>
                         <span className="text-xs text-muted-foreground">{bi(...c.level)}</span>
+                      </div>
+                      <div className="mt-2 flex items-center">
+                        {(() => {
+                          const FormatIcon = FORMAT_ICONS[c.format];
+                          return (
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-[11px] font-bold text-secondary-foreground">
+                              <FormatIcon className="size-3.5" />
+                              {bi(...COURSE_FORMAT_LABELS[c.format])}
+                            </span>
+                          );
+                        })()}
                       </div>
                       <h2 className="mt-4 text-base font-bold text-foreground">{bi(...c.title)}</h2>
                       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">

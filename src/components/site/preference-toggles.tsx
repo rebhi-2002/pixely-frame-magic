@@ -1,6 +1,6 @@
 import { Languages, Moon, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { usePreferences } from "@/components/providers/preferences-provider";
+import { usePreferences } from "@/hooks/use-preferences";
 
 const buttonClass =
   "inline-flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:text-foreground";

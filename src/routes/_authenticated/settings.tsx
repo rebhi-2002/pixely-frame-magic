@@ -6,8 +6,9 @@ import { toast } from "sonner";
 import { KeyRound, LogOut, Palette, Pencil, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/admin/page-header";
-import { usePreferences } from "@/components/providers/preferences-provider";
-import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
+import { usePreferences } from "@/hooks/use-preferences";
+import { useSignOut } from "@/hooks/use-sign-out";
+import { SignOutOverlay } from "@/components/site/sign-out-overlay";
 import { useAccess, useInvalidateAccess } from "@/hooks/use-access";
 import { Guard } from "@/components/app/guard";
 import { ROLE_NAME_EN } from "@/lib/rbac-types";
@@ -80,12 +81,19 @@ function SettingsPage() {
   const demoUpdateProfile = useServerFn(updateOwnProfile);
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", genderId: null as number | null });
+  const [form, setForm] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    genderId: null as number | null,
+  });
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      if (demo) return demoUpdateProfile({ data: { full_name: form.full_name, email: form.email } });
-      if (!userId || form.genderId == null) throw new Error(bi("الجنس مطلوب", "Gender is required"));
+      if (demo)
+        return demoUpdateProfile({ data: { full_name: form.full_name, email: form.email } });
+      if (!userId || form.genderId == null)
+        throw new Error(bi("الجنس مطلوب", "Gender is required"));
       return updateMyProfile({
         id: userId,
         name: form.full_name,
@@ -355,7 +363,9 @@ function SettingsPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="pw-confirm">{bi("تأكيد كلمة المرور الجديدة", "Confirm new password")}</Label>
+              <Label htmlFor="pw-confirm">
+                {bi("تأكيد كلمة المرور الجديدة", "Confirm new password")}
+              </Label>
               <Input
                 id="pw-confirm"
                 type="password"

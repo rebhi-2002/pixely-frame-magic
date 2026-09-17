@@ -4,6 +4,7 @@
 // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
 
 import { apiClient, ApiError } from "./client";
+import { env } from "@/lib/env";
 
 const AUTH_STORAGE_KEY = "academia.auth";
 export const AUTH_EVENT = "academia-auth-changed";
@@ -284,7 +285,7 @@ export async function register(input: RegisterInput): Promise<void> {
  * نفس شرط الظهور بالضبط يلي بيتحكم بظهور أزرار الدخول التجريبي بـlogin.tsx
  * (demoEnabled) — لازم يضلوا متطابقين وإلا الزر بيظهر بس الضغط عليه بيفشل. */
 export function loginAsDemo(userId: string): void {
-  const demoAllowed = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+  const demoAllowed = env.ENABLE_DEMO_LOGIN;
   if (!demoAllowed) {
     throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
   }

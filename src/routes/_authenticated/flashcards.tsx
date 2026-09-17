@@ -87,7 +87,7 @@ function Body() {
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["flashcard-decks"] });
 
   const stats = useMemo(() => {
-    const list = useMemo(() => rows ?? [], [rows]);
+    const list = rows ?? [];
     const due = list.reduce((s, r) => s + r.dueCards, 0);
     const mastered = list.reduce((s, r) => s + r.masteredCards, 0);
     const total = list.reduce((s, r) => s + r.totalCards, 0);

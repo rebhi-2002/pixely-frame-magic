@@ -35,7 +35,9 @@ export function AppPage({
     <div className="app-canvas min-h-screen pb-10">
       <PageHeader title={title} icon={icon} actions={actions} />
       <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
-        {subtitle && <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{subtitle}</p>}
+        {subtitle && (
+          <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{subtitle}</p>
+        )}
         <div className="mt-6 space-y-6">{children}</div>
       </div>
     </div>

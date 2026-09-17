@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { Panel, StatGrid, DataTable, Badge, EmptyState, Pagination } from "@/components/app/kit";
-import { getMyWallet, getTransactionHistory, WalletTransactionType } from "@/integrations/backend/wallet";
+import {
+  getMyWallet,
+  getTransactionHistory,
+  WalletTransactionType,
+} from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
 
 function transactionTypeLabel(type: number, bi: ReturnType<typeof useBi>): string {
@@ -68,7 +72,12 @@ export function WalletBalancePanel({ actionSlot }: { actionSlot?: React.ReactNod
           <>
             <DataTable
               caption={bi("سجل حركات المحفظة", "Wallet transaction history")}
-              head={[bi("النوع", "Type"), bi("المبلغ", "Amount"), bi("الحالة", "Status"), bi("التاريخ", "Date")]}
+              head={[
+                bi("النوع", "Type"),
+                bi("المبلغ", "Amount"),
+                bi("الحالة", "Status"),
+                bi("التاريخ", "Date"),
+              ]}
               rows={history.map((t) => [
                 transactionTypeLabel(t.type, bi),
                 <span

@@ -1,4 +1,5 @@
 import posthog from "posthog-js";
+import { env } from "@/lib/env";
 
 const CONSENT_KEY = "academia.cookieConsent";
 let consentGranted = false;
@@ -21,12 +22,11 @@ function tryInitPosthog(): void {
     return;
   }
 
-  const key = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
+  const key = env.POSTHOG_KEY;
   if (!key) return;
 
   posthog.init(key, {
-    api_host:
-      (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || "https://us.i.posthog.com",
+    api_host: env.POSTHOG_HOST,
     person_profiles: "identified_only",
     capture_pageview: true,
     capture_pageleave: true,
@@ -64,19 +64,19 @@ export type AnalyticsEventName =
 export function trackEvent(name: AnalyticsEventName, props?: Record<string, unknown>): void {
   if (!consentGranted) return;
 
-  if (import.meta.env.DEV) console.info("[analytics]", name, props ?? {});
+  if (env.DEV) console.info("[analytics]", name, props ?? {});
   if (initialized) posthog.capture(name, props);
 }
 
 export function identifyUser(userId: string, traits?: Record<string, unknown>): void {
   if (!consentGranted) return;
 
-  if (import.meta.env.DEV) console.info("[analytics] identify", userId, traits ?? {});
+  if (env.DEV) console.info("[analytics] identify", userId, traits ?? {});
   if (initialized) posthog.identify(userId, traits);
 }
 
 export function resetAnalytics(): void {
-  if (import.meta.env.DEV) console.info("[analytics] reset");
+  if (env.DEV) console.info("[analytics] reset");
   if (initialized) posthog.reset();
 }
 
@@ -136,13 +136,13 @@ export function resetAnalytics(): void {
 // export function trackEvent(name: AnalyticsEventName, props?: Record<string, unknown>): void {
 //   if (!consentGranted) return;
 
-//   if (import.meta.env.DEV) console.info("[analytics]", name, props ?? {});
+//   if (env.DEV) console.info("[analytics]", name, props ?? {});
 //   if (initialized) posthog.capture(name, props);
 // }
 
 // export function identifyUser(userId: string, traits?: Record<string, unknown>): void {
 //   if (!consentGranted) return;
 
-//   if (import.meta.env.DEV) console.info("[analytics] identify", userId, traits ?? {});
+//   if (env.DEV) console.info("[analytics] identify", userId, traits ?? {});
 //   if (initialized) posthog.identify(userId, traits);
 // }

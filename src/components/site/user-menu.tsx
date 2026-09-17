@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, LayoutDashboard, Languages, LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { usePreferences } from "@/components/providers/preferences-provider";
-import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
+import { usePreferences } from "@/hooks/use-preferences";
+import { useSignOut } from "@/hooks/use-sign-out";
+import { SignOutOverlay } from "@/components/site/sign-out-overlay";
 import type { PublicSession } from "@/hooks/use-session";
 
 const item =

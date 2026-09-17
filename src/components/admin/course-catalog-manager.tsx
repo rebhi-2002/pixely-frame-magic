@@ -25,10 +25,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { deleteCourse, listPublicCourses, saveCourse } from "@/lib/public-catalog.functions";
-import type { PublicCourseRow } from "@/lib/public-catalog-data";
+import {
+  COURSE_FORMAT_LABELS,
+  type CourseFormat,
+  type PublicCourseRow,
+} from "@/lib/public-catalog-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const EMPTY_FORM = {
   titleAr: "",
@@ -42,6 +53,7 @@ const EMPTY_FORM = {
   subjectEn: "",
   levelAr: "",
   levelEn: "",
+  format: "live_online" as CourseFormat,
   lessons: "0",
   price: "0",
   // اختيارية بقصد — فاضية = محبوسة من العرض بالبطاقة تلقائياً حتى تتوفر
@@ -130,6 +142,7 @@ export function CourseCatalogPage() {
             subjectEn: row.subject[1],
             levelAr: row.level[0],
             levelEn: row.level[1],
+            format: row.format,
             lessons: String(row.lessons),
             price: String(row.price),
             rating: row.rating != null ? String(row.rating) : "",
@@ -182,6 +195,7 @@ export function CourseCatalogPage() {
                   <th className="px-4 py-3 font-semibold">{bi("الكورس", "Course")}</th>
                   <th className="px-4 py-3 font-semibold">{bi("المعلم", "Teacher")}</th>
                   <th className="px-4 py-3 font-semibold">{bi("المادة", "Subject")}</th>
+                  <th className="px-4 py-3 font-semibold">{bi("الصيغة", "Format")}</th>
                   <th className="px-4 py-3 font-semibold">{bi("السعر", "Price")}</th>
                   <th className="w-28 px-4 py-3 font-semibold">{bi("إجراءات", "Actions")}</th>
                 </tr>
@@ -192,6 +206,9 @@ export function CourseCatalogPage() {
                     <td className="px-4 py-3 font-semibold text-foreground">{bi(...r.title)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{bi(...r.teacher)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{bi(...r.subject)}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {bi(...COURSE_FORMAT_LABELS[r.format])}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {r.price === 0 ? bi("مجاني", "Free") : `${r.price} JOD`}
                     </td>
@@ -328,6 +345,24 @@ export function CourseCatalogPage() {
                 value={form.levelEn}
                 onChange={(e) => setForm((f) => ({ ...f, levelEn: e.target.value }))}
               />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="crs-format">{bi("صيغة الكورس", "Course format")}</Label>
+              <Select
+                value={form.format}
+                onValueChange={(v: CourseFormat) => setForm((f) => ({ ...f, format: v }))}
+              >
+                <SelectTrigger id="crs-format">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(COURSE_FORMAT_LABELS) as CourseFormat[]).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {bi(...COURSE_FORMAT_LABELS[key])}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="crs-lessons">{bi("عدد الدروس", "Lessons count")}</Label>

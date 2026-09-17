@@ -26,6 +26,9 @@ export const saveCourse = createServerFn({ method: "POST" })
         subjectEn: z.string().trim().min(1, "المادة بالإنجليزي مطلوبة"),
         levelAr: z.string().trim().min(1, "المستوى بالعربي مطلوب"),
         levelEn: z.string().trim().min(1, "المستوى بالإنجليزي مطلوب"),
+        format: z.enum(["live_online", "onsite", "recorded"], {
+          message: "صيغة الكورس مطلوبة (أونلاين مباشر / وجاهي / مسجّل)",
+        }),
         lessons: z.number().int().min(0),
         price: z.number().min(0),
         // اختياريين بقصد — فاضين لحد ما تتوفر بيانات حقيقية (راجع تعليق
@@ -65,6 +68,7 @@ export const saveCourse = createServerFn({ method: "POST" })
       teacherId: data.teacherId,
       subject: [data.subjectAr, data.subjectEn] as [string, string],
       level: [data.levelAr, data.levelEn] as [string, string],
+      format: data.format,
       lessons: data.lessons,
       price: data.price,
       rating: data.rating,

@@ -134,7 +134,9 @@ export interface PendingWithdrawalRequestDto {
 }
 
 export async function getPendingTopUpRequests(): Promise<PendingTopUpRequestDto[]> {
-  const result = await apiClient.get<PendingTopUpRequestDto[]>("/api/Wallet/GetPendingTopUpRequests");
+  const result = await apiClient.get<PendingTopUpRequestDto[]>(
+    "/api/Wallet/GetPendingTopUpRequests",
+  );
   return Array.isArray(result) ? result : [];
 }
 

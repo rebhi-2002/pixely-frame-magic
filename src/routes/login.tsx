@@ -14,11 +14,12 @@ import { roleHome, useBi } from "@/lib/bi";
 import { Button } from "@/components/ui/button";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
+import { env } from "@/lib/env";
 
 /* أزرار دخول سريع محلية بالكامل (بدون أي نداء شبكة) للتجربة أثناء التطوير
    فقط — تُحذف قبل النشر النهائي. راجع src/integrations/backend/auth.ts. */
 const DEMO_USERS = USERS.filter((u) => u.id !== "u-admin");
-const demoEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_LOGIN === "true";
+const demoEnabled = env.ENABLE_DEMO_LOGIN;
 
 const title = "تسجيل الدخول | Academia";
 const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";

@@ -1,14 +1,7 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import i18n, { LOCALE_DIR, SUPPORTED_LOCALES, type Locale } from "@/i18n";
+import { PreferencesContext, type PreferencesValue } from "@/hooks/use-preferences";
 
 export type ThemePref = "auto" | "light" | "dark";
 
@@ -36,21 +29,6 @@ function resolveDark(pref: ThemePref) {
     ? window.matchMedia("(prefers-color-scheme: dark)").matches
     : true;
 }
-
-type PreferencesValue = {
-  theme: ThemePref;
-  resolvedTheme: "light" | "dark";
-  setTheme: (pref: ThemePref) => void;
-  toggleTheme: () => void;
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
-  toggleLocale: () => void;
-  dir: "rtl" | "ltr";
-  /** true أثناء انتقال تبديل اللغة (تلاشٍ ناعم بدل القفزة) */
-  switchingLocale: boolean;
-};
-
-const PreferencesContext = createContext<PreferencesValue | null>(null);
 
 /**
  * سابقاً كان هذا يحفظ التفضيل بجدول profiles على Supabase أيضاً. الباك اند
@@ -194,10 +172,4 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       <PreferencesState>{children}</PreferencesState>
     </I18nextProvider>
   );
-}
-
-export function usePreferences() {
-  const ctx = useContext(PreferencesContext);
-  if (!ctx) throw new Error("usePreferences must be used inside PreferencesProvider");
-  return ctx;
 }

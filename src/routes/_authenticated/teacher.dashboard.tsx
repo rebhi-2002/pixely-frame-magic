@@ -121,7 +121,11 @@ function Body() {
       />
 
       {userId && (
-        <OnboardingChecklist userId={userId} roleKey="teacher" showInitially={wasJustRegistered()} />
+        <OnboardingChecklist
+          userId={userId}
+          roleKey="teacher"
+          showInitially={wasJustRegistered()}
+        />
       )}
 
       {isLoading ? (

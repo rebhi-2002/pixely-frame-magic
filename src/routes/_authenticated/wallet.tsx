@@ -39,7 +39,8 @@ function WalletPage() {
 
   const submit = useMutation({
     mutationFn: () => {
-      if (!receiptFile) throw new Error(bi("أرفق صورة إشعار التحويل", "Attach the transfer receipt"));
+      if (!receiptFile)
+        throw new Error(bi("أرفق صورة إشعار التحويل", "Attach the transfer receipt"));
       const parsedAmount = Number(amount);
       if (!parsedAmount || parsedAmount <= 0) {
         throw new Error(bi("أدخل مبلغًا صحيحًا", "Enter a valid amount"));
@@ -86,7 +87,9 @@ function WalletPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="bank-ref">{bi("مرجع التحويل البنكي", "Bank reference no.")}</Label>
+                  <Label htmlFor="bank-ref">
+                    {bi("مرجع التحويل البنكي", "Bank reference no.")}
+                  </Label>
                   <Input
                     id="bank-ref"
                     value={bankReferenceNo}
@@ -94,7 +97,9 @@ function WalletPage() {
                   />
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label htmlFor="receipt">{bi("صورة إشعار التحويل", "Transfer receipt image")}</Label>
+                  <Label htmlFor="receipt">
+                    {bi("صورة إشعار التحويل", "Transfer receipt image")}
+                  </Label>
                   <Input
                     id="receipt"
                     type="file"

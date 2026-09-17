@@ -1,4 +1,4 @@
-import { usePreferences } from "@/components/providers/preferences-provider";
+import { usePreferences } from "@/hooks/use-preferences";
 
 /** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
 export function useBi() {

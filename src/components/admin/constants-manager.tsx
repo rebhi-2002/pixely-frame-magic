@@ -168,10 +168,7 @@ export function ConstantsPage() {
           aria-live="polite"
         >
           <span>
-            {bi(
-              `${totalCount} نتيجة`,
-              `${totalCount} result${totalCount === 1 ? "" : "s"}`,
-            )}
+            {bi(`${totalCount} نتيجة`, `${totalCount} result${totalCount === 1 ? "" : "s"}`)}
           </span>
         </div>
 

@@ -6,7 +6,7 @@ import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { BlogRenderer } from "@/components/site/blog-renderer";
 import { Reveal } from "@/components/ui/reveal";
-import { usePreferences } from "@/components/providers/preferences-provider";
+import { usePreferences } from "@/hooks/use-preferences";
 import { blogPosts, getBlogPost } from "@/content/blog-posts";
 import { useBi } from "@/lib/bi";
 

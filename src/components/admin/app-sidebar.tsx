@@ -15,8 +15,9 @@ import {
   X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { usePreferences } from "@/components/providers/preferences-provider";
-import { useSignOut, SignOutOverlay } from "@/hooks/use-sign-out";
+import { usePreferences } from "@/hooks/use-preferences";
+import { useSignOut } from "@/hooks/use-sign-out";
+import { SignOutOverlay } from "@/components/site/sign-out-overlay";
 import { DynamicIcon } from "./dynamic-icon";
 import { cn } from "@/lib/utils";
 import { ROLE_NAME_EN, type AccessModule, type AccessPage, type MyAccess } from "@/lib/rbac-types";

@@ -16,6 +16,7 @@ import { register, getStoredProfile } from "@/integrations/backend/auth";
 import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
+import { env } from "@/lib/env";
 import {
   Select,
   SelectContent,
@@ -26,7 +27,7 @@ import {
 
 const title = "إنشاء حساب | أكاديميا";
 const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
-const signupEnabled = import.meta.env.VITE_ENABLE_SIGNUP === "true";
+const signupEnabled = env.ENABLE_SIGNUP;
 
 // أسماء أنواع المستخدمين متل ما هي مزروعة فعليًا بالباك اند (UserSeed.cs) —
 // بنستخدمها لمطابقة الدور المختار بالواجهة (طالب/ولي أمر) مع الـ id الصحيح
@@ -235,9 +236,7 @@ function SignupPage() {
             autoComplete="tel"
           />
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-foreground">
-              {bi("الجنس", "Gender")}
-            </label>
+            <label className="text-sm font-semibold text-foreground">{bi("الجنس", "Gender")}</label>
             <Select
               value={genderId != null ? String(genderId) : undefined}
               onValueChange={(v) => setGenderId(Number(v))}

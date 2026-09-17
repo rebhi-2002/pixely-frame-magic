@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { env } from "./lib/env";
 
 // تهيئة Sentry لجهة السيرفر هون مباشرة (مو بس عبر instrument.server.mjs +
 // --import) لأن Vercel/Netlify (منصّات النشر المستهدفة بهالمشروع — راجع
@@ -10,10 +11,8 @@ import { renderErrorPage } from "./lib/error-page";
 // موثوق حسب توثيق Sentry نفسه. هالتهيئة بتشتغل مرة وحدة عند أول تحميل
 // لهالموديول (بداية كل تنفيذ سيرفرلس) — كافي لالتقاط استثناءات SSR هون.
 Sentry.init({
-  dsn:
-    (import.meta.env.VITE_SENTRY_DSN as string | undefined) ||
-    "https://21151ae17d7188a038b5b79715f5cf2d@o4512061652467712.ingest.de.sentry.io/4512061664002128",
-  environment: import.meta.env.MODE,
+  dsn: env.SENTRY_DSN,
+  environment: env.MODE,
   tracesSampleRate: 0.2,
 });
 

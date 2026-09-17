@@ -197,8 +197,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 </Link>
                 <Link
                   to="/signup"
-                  className="hover-press rounded-xl bg-primary px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-foreground sm:px-4"
+                  className="hover-press inline-flex items-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-foreground sm:px-4"
                 >
+                  <UserPlus className="size-4" />
                   {t("common.startFree")}
                 </Link>
               </>

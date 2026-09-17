@@ -1,8 +1,8 @@
 import i18n, { type Locale } from "@/i18n";
 import { getBlogPost } from "@/content/blog-posts";
+import { env } from "@/lib/env";
 
-export const DEFAULT_SITE_URL = "https://pixely-frame-magic.vercel.app";
-export const SITE_URL = (import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, "");
+export const SITE_URL = env.SITE_URL;
 
 export type SeoPayload = {
   title: string;
@@ -248,7 +248,7 @@ function upsertLink(rel: string, href: string, hreflang?: string) {
 
 function upsertJsonLd(payload: SeoPayload) {
   const id = "academia-seo-jsonld";
-  let element = document.getElementById(id);
+  let element = document.getElementById(id) as HTMLScriptElement | null;
   if (!element) {
     element = document.createElement("script");
     element.id = id;

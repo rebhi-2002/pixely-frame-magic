@@ -1,12 +1,13 @@
 // عميل HTTP للباك اند (ASP.NET) الخاص بمشروعنا — يحلّ محلّ Supabase.
 //
-// عنوان الباك اند يُقرأ من متغيّر البيئة VITE_API_BASE_URL (راجع ملف .env.example).
+// عنوان الباك اند يُقرأ من متغيّر البيئة VITE_API_BASE_URL (راجع src/lib/env.ts
+// و .env.example).
 // نرسل الكوكيز مع كل طلب (`credentials: "include"`) لأن الباك اند يدير
 // الجلسة عبر كوكي (SameSite=None; Secure) بدل Bearer token.
 
-export const API_BASE_URL: string =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/+$/, "") ??
-  "https://localhost:7176";
+import { env } from "@/lib/env";
+
+export const API_BASE_URL: string = env.API_BASE_URL;
 
 const REQUEST_TIMEOUT_MS = 30_000;
 

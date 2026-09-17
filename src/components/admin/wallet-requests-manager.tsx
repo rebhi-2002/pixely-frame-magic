@@ -373,8 +373,7 @@ function WithdrawalSection() {
             <Button
               disabled={complete.isPending || !transferReference.trim()}
               onClick={() =>
-                completing &&
-                complete.mutate({ requestId: completing.id, transferReference })
+                completing && complete.mutate({ requestId: completing.id, transferReference })
               }
             >
               {bi("تأكيد", "Confirm")}

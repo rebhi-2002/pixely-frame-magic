@@ -86,7 +86,9 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
           <div className="space-y-2.5">
             {subjects.map((s, i) => (
               <div key={i} className="flex items-center gap-2.5">
-                <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-muted-foreground"><s.icon className="size-3.5" /></span>
+                <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
+                  <s.icon className="size-3.5" />
+                </span>
                 <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
                   <div className={`h-full rounded-full ${s.tone}`} style={{ width: `${s.pct}%` }} />
                 </div>

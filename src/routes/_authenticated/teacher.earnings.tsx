@@ -47,7 +47,12 @@ function TeacherEarningsPage() {
       if (!bankIBAN.trim() || !bankName.trim() || !accountHolderName.trim()) {
         throw new Error(bi("عبّي كل حقول الحساب البنكي", "Fill in all bank account fields"));
       }
-      return submitWithdrawalRequest({ amount: parsedAmount, bankIBAN, bankName, accountHolderName });
+      return submitWithdrawalRequest({
+        amount: parsedAmount,
+        bankIBAN,
+        bankName,
+        accountHolderName,
+      });
     },
     onSuccess: () => {
       toast.success(
@@ -88,11 +93,19 @@ function TeacherEarningsPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="w-bank-name">{bi("اسم البنك", "Bank name")}</Label>
-                  <Input id="w-bank-name" value={bankName} onChange={(e) => setBankName(e.target.value)} />
+                  <Input
+                    id="w-bank-name"
+                    value={bankName}
+                    onChange={(e) => setBankName(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="w-iban">IBAN</Label>
-                  <Input id="w-iban" value={bankIBAN} onChange={(e) => setBankIBAN(e.target.value)} />
+                  <Input
+                    id="w-iban"
+                    value={bankIBAN}
+                    onChange={(e) => setBankIBAN(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="w-holder">{bi("اسم صاحب الحساب", "Account holder name")}</Label>
