@@ -7,6 +7,7 @@ This document outlines the testing strategy, performance budgets, and quality ga
 ---
 
 ## 1. The Testing Pyramid Strategy
+
 We write tests not just to prove the code works today, but to enable changes tomorrow with total confidence.
 
 ```
@@ -27,19 +28,22 @@ We write tests not just to prove the code works today, but to enable changes tom
 ## 2. Testing Layers Specifications
 
 ### 2.1 Unit Testing (Domain & Schemas)
-* **Framework:** Vitest + TypeScript
-* **Target:** Pure functions, state stores (Zustand), and Zod validation schemas.
-* **Expectation:** Test edge cases, empty states, and invalid boundary values.
+
+- **Framework:** Vitest + TypeScript
+- **Target:** Pure functions, state stores (Zustand), and Zod validation schemas.
+- **Expectation:** Test edge cases, empty states, and invalid boundary values.
 
 ### 2.2 Integration Testing (Components & Hooks)
-* **Framework:** React Testing Library + MSW (Mock Service Worker)
-* **Target:** Custom hooks handling TanStack Query mutations, form submissions, and UI state switches.
-* **Hard Rule:** Never mock the actual hook internally; mock the API responses using MSW to preserve realistic state transitions.
+
+- **Framework:** React Testing Library + MSW (Mock Service Worker)
+- **Target:** Custom hooks handling TanStack Query mutations, form submissions, and UI state switches.
+- **Hard Rule:** Never mock the actual hook internally; mock the API responses using MSW to preserve realistic state transitions.
 
 ### 2.3 End-to-End Testing (Critical User Flows)
-* **Framework:** Playwright
-* **Target:** Core business flows (e.g., User Login ➔ Course Enroll ➔ Watch Lesson ➔ Complete Task).
-* **Hard Rule:** Run these tests on actual production static builds (`next build` / `vite build`) to capture real-world chunking and load behavior.
+
+- **Framework:** Playwright
+- **Target:** Core business flows (e.g., User Login ➔ Course Enroll ➔ Watch Lesson ➔ Complete Task).
+- **Hard Rule:** Run these tests on actual production static builds (`next build` / `vite build`) to capture real-world chunking and load behavior.
 
 ---
 
@@ -56,5 +60,6 @@ Before merging any Pull Request (PR) to the primary branch, the following automa
 ---
 
 ## 4. Deployment & Canary Strategy
-* **Feature Flags:** Wrap all high-risk changes or new features in feature flags. This decouples deployment (releasing code to servers) from actual release (making it visible to users).
-* **Instant Rollback:** If the error rate on Sentry increases by more than 2% post-deployment, the CI/CD pipeline must trigger an automated rollback within 60 seconds.
+
+- **Feature Flags:** Wrap all high-risk changes or new features in feature flags. This decouples deployment (releasing code to servers) from actual release (making it visible to users).
+- **Instant Rollback:** If the error rate on Sentry increases by more than 2% post-deployment, the CI/CD pipeline must trigger an automated rollback within 60 seconds.

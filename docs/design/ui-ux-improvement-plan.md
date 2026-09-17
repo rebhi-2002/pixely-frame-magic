@@ -4,6 +4,7 @@
 > تدريجيًا حسب المراحل المقترحة بالقسم 10 (Phase 1/2/3)، مش دفعة وحدة.
 > البنود التالية من Phase 1 منفّذة فعليًا ومُتحقَّق منها (راجع
 > `full-project-report.md` بالمستودع الأساسي للتفاصيل والتحقق التقني):
+>
 > - "Improve sidebar current-page and nested-navigation clarity" — تجميع
 >   منطقي للقائمة الجانبية (13→4 عناصر للطالب، 10→4 للمعلّم) +
 >   `aria-current="page"` مضافة لكل روابط التنقل (وضعي الطبيعي والمطوي).
@@ -26,6 +27,7 @@ This plan is based on an audit of the existing Academia frontend codebase. The p
 ## 1. Current UI/UX Audit
 
 ### Visual hierarchy
+
 - The project has a coherent dark/light semantic color system.
 - Existing page composition commonly follows `AppPage → PageHeader → subtitle → panels`.
 - This is useful, but different page types need clearer composition patterns.
@@ -33,13 +35,16 @@ This plan is based on an audit of the existing Academia frontend codebase. The p
 - Preserve the existing visual language while improving hierarchy between page title, primary action, supporting actions, sections, and secondary metadata.
 
 ### Consistency
+
 - Color tokens are already centralized and should not be replaced.
 - Repeated spacing and surface utilities indicate a useful visual vocabulary, but some composition patterns are duplicated across pages.
 - Existing rounded surfaces and elevation should be retained, but assigned clearer semantic roles rather than globally changing radii or shadows.
 - Repeated status-badge implementations should be consolidated into one semantic status system.
 
 ### Accessibility
+
 Existing accessibility support is materially better than a typical unfinished frontend:
+
 - `aria-label`
 - `aria-live`
 - `aria-busy`
@@ -48,6 +53,7 @@ Existing accessibility support is materially better than a typical unfinished fr
 - reduced-motion support
 
 Remaining priorities:
+
 1. Audit all icon-only controls for accessible names.
 2. Standardize form validation and error messaging.
 3. Normalize loading semantics.
@@ -56,9 +62,11 @@ Remaining priorities:
 6. Add textual summaries or accessible alternatives for important charts.
 
 ### Responsive behavior
+
 Several admin tables intentionally use large minimum widths, including approximately 700–900px tables. This needs an explicit responsive policy.
 
 Do not automatically convert every table to cards. Instead:
+
 - Identify essential columns.
 - Keep essential information visible on small screens.
 - Move low-priority metadata into row details or expansion where appropriate.
@@ -67,7 +75,9 @@ Do not automatically convert every table to cards. Instead:
 - Audit PageHeader actions for small-screen overflow.
 
 ### Navigation and shell
+
 The authenticated shell is already feature-rich:
+
 - desktop sidebar
 - collapsed mode
 - mobile drawer
@@ -77,17 +87,20 @@ The authenticated shell is already feature-rich:
 - account actions
 
 The goal should be reducing cognitive load rather than removing functionality:
+
 - improve current-page indication
 - clarify hierarchy between primary and nested navigation
 - ensure collapsed-sidebar flyouts are understandable
 - maintain predictable mobile navigation behavior
 
 ### RTL/LTR
+
 Arabic RTL and English LTR are first-class requirements.
 
 Use logical CSS properties for layout/content wherever possible. Physical left/right positioning should remain only where it is semantically or mathematically required.
 
 Audit:
+
 - icon placement
 - directional animations
 - breadcrumbs
@@ -102,6 +115,7 @@ Audit:
 ### Typography
 
 The existing font foundation should be preserved:
+
 - Cairo for body/content
 - Tajawal for Arabic display
 - Reem Kufi for English display
@@ -124,6 +138,7 @@ Arabic typography should be validated independently for line-height, weight, and
 ### Color
 
 Keep the existing semantic token architecture:
+
 - background
 - foreground
 - card
@@ -158,6 +173,7 @@ Only extract abstractions when the same composition appears repeatedly. Avoid cr
 ### Surfaces
 
 Define semantic surface roles such as:
+
 - page canvas
 - primary panel
 - secondary panel
@@ -172,6 +188,7 @@ The purpose is to make visual hierarchy intentional without redesigning every co
 Continue using the existing Radix-based primitives and centralized UI components.
 
 High-value reusable patterns:
+
 - `Button`
 - `Dialog`
 - `Sheet`
@@ -193,6 +210,7 @@ Do not add another animation library.
 ### Interaction states
 
 Every interactive component should define:
+
 - default
 - hover
 - focus-visible
@@ -203,10 +221,13 @@ Every interactive component should define:
 - error where applicable
 
 ### Loading
+
 Prefer consistent skeletons or contextual loading states over generic centered spinners when the layout is known.
 
 ### Empty states
+
 Use empty states that explain:
+
 1. what is missing
 2. why it matters
 3. what the user can do next
@@ -214,14 +235,18 @@ Use empty states that explain:
 Avoid decorative empty states with no actionable guidance.
 
 ### Error states
+
 Errors should:
+
 - explain the problem in user language
 - preserve the current context where possible
 - provide retry/recovery
 - avoid exposing implementation details
 
 ### Motion
+
 Use motion to communicate:
+
 - navigation
 - state change
 - hierarchy
@@ -252,6 +277,7 @@ This reduces page-level inconsistency without forcing every route into the same 
 Create one semantic status model and reusable `StatusBadge`.
 
 Suggested semantic categories:
+
 - success
 - warning
 - info
@@ -260,6 +286,7 @@ Suggested semantic categories:
 - pending
 
 Replace repeated status-badge logic in areas such as:
+
 - community reports
 - content review
 - curriculum requests
@@ -271,6 +298,7 @@ Replace repeated status-badge logic in areas such as:
 Keep the existing lightweight table approach.
 
 Improve it with composable capabilities:
+
 - toolbar
 - filters
 - sorting
@@ -283,6 +311,7 @@ Do not introduce an enterprise table framework unless actual requirements justif
 ### Feedback states
 
 Unify the behavior and visual language of:
+
 - loading
 - error
 - retry
@@ -296,12 +325,14 @@ Existing shared feedback components should become the default rather than route-
 Every page should have one clear primary action when a primary action exists.
 
 Recommended hierarchy:
+
 1. Primary action
 2. Important secondary actions
 3. Tertiary actions
 4. Destructive actions separated visually and semantically
 
 On mobile:
+
 - keep the primary action visible
 - collapse lower-priority actions into an overflow menu
 - avoid wrapping a large collection of buttons across multiple rows
@@ -311,6 +342,7 @@ PageHeader should support an intentional action-overflow strategy.
 ## 6. Forms
 
 Standardize:
+
 - label placement
 - required-field indicators
 - helper text
@@ -325,6 +357,7 @@ Validation errors should appear adjacent to the relevant field and be announced 
 ## 7. Charts and Data Visualization
 
 Charts should be:
+
 - readable on mobile
 - semantically labeled
 - visually consistent with the design tokens
@@ -337,6 +370,7 @@ Do not rely on color alone to distinguish data categories.
 Keep the public site's visual composition distinct where appropriate.
 
 Share:
+
 - semantic tokens
 - typography foundations
 - accessibility standards
@@ -350,6 +384,7 @@ Do not force public marketing pages and the authenticated application into ident
 The authenticated shell currently uses client-side rendering intentionally. Do not change this casually.
 
 Prioritize:
+
 - stable shell dimensions
 - skeletons
 - avoiding layout shift
@@ -407,6 +442,7 @@ Keep CSS-based transitions for simple effects. Existing GSAP should only be used
 ## 12. What Should NOT Be Changed Unnecessarily
 
 Do not:
+
 - replace the existing color system without evidence
 - replace Cairo/Tajawal/Reem Kufi
 - remove the dark/light theme architecture
@@ -425,6 +461,7 @@ Do not:
 The current frontend does not need a cosmetic redesign. It needs a stronger design-engineering layer above an already solid foundation.
 
 The target is a system where:
+
 - visual decisions are semantic
 - page structures are predictable
 - components are reusable without over-abstraction

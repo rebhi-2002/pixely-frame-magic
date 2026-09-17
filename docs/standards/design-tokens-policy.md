@@ -9,6 +9,7 @@ This document defines the visual constraints, theme variables, and style guideli
 ## 1. The Design Token Principle (Single Source of Truth)
 
 To ensure cohesive branding, prevent style duplication, and enable painless white-label retheming:
+
 1. **NO Hardcoded Hex Codes:** Directly writing hex colors (e.g., `#3b82f6`) in Tailwind classes (e.g., `text-[#3b82f6]`) is STRICTLY FORBIDDEN.
 2. **Abstract Naming:** Styles must always be referenced by their semantic function (e.g., `bg-primary`, `text-muted-foreground`, `border-input`).
 3. **Values Isolation:** All visual values live in standard CSS variables inside the global CSS stylesheet and map straight into Tailwind configuration.
@@ -27,8 +28,8 @@ Copy this baseline configuration into the project's global stylesheet. Modifying
 @layer base {
   :root {
     /* Base Colors - Soft Neutral Light Mode */
-    --background: 0 0% 100%;             /* Pure White */
-    --foreground: 222.2 84% 4.9%;        /* Near Black */
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 222.2 84% 4.9%; /* Near Black */
 
     /* Card & Container Elements */
     --card: 0 0% 100%;
@@ -37,10 +38,10 @@ Copy this baseline configuration into the project's global stylesheet. Modifying
     --popover-foreground: 222.2 84% 4.9%;
 
     /* Semantic Branding Tokens */
-    --primary: 221.2 83.2% 53.3%;        /* Primary Indigo/Blue */
-    --primary-foreground: 210 40% 98%;   /* Contrasting text on Primary */
+    --primary: 221.2 83.2% 53.3%; /* Primary Indigo/Blue */
+    --primary-foreground: 210 40% 98%; /* Contrasting text on Primary */
 
-    --secondary: 210 40% 96.1%;          /* Muted Secondary Gray */
+    --secondary: 210 40% 96.1%; /* Muted Secondary Gray */
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     /* Supporting Accent Elements */
@@ -51,26 +52,26 @@ Copy this baseline configuration into the project's global stylesheet. Modifying
     --muted-foreground: 215.4 16.3% 46.9%; /* Lighter gray for secondary text */
 
     /* Functional Action States */
-    --destructive: 0 84.2% 60.2%;        /* Warning/Error Red */
+    --destructive: 0 84.2% 60.2%; /* Warning/Error Red */
     --destructive-foreground: 210 40% 98%;
-    
-    --success: 142.1 76.2% 36.3%;        /* Success Green */
+
+    --success: 142.1 76.2% 36.3%; /* Success Green */
     --success-foreground: 355.7 100% 97.3%;
 
     /* Structural Accents */
-    --border: 214.3 31.8% 91.4%;         /* Border lines */
-    --input: 214.3 31.8% 91.4%;          /* Form fields border */
-    --ring: 221.2 83.2% 53.3%;           /* Focus rings */
+    --border: 214.3 31.8% 91.4%; /* Border lines */
+    --input: 214.3 31.8% 91.4%; /* Form fields border */
+    --ring: 221.2 83.2% 53.3%; /* Focus rings */
 
     /* Typography & Radius Defaults */
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --radius: 0.5rem;                    /* Uniform Rounded Corner */
+    --font-sans: "Inter", system-ui, sans-serif;
+    --radius: 0.5rem; /* Uniform Rounded Corner */
   }
 
   /* Built-in Dark Mode Support */
   .dark {
-    --background: 222.2 84% 4.9%;        /* Deep Charcoal */
-    --foreground: 210 40% 98%;           /* Soft White */
+    --background: 222.2 84% 4.9%; /* Deep Charcoal */
+    --foreground: 210 40% 98%; /* Soft White */
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -158,7 +159,7 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
 ```
 
 ---
@@ -168,18 +169,21 @@ module.exports = {
 To maintain structure and prevent layout chaos, follow these standard presets:
 
 ### 📐 A. Spacing & Sizing Scale
-* **Content Padding:** `p-4` or `p-6` for normal layouts. Do not use random pixel sizing (e.g. `p-[17px]`).
-* **Component Gap:** `space-y-4` or `space-y-6` to handle vertical gaps in lists.
-* **Layout Grid:** Use standard responsive column counts: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`.
+
+- **Content Padding:** `p-4` or `p-6` for normal layouts. Do not use random pixel sizing (e.g. `p-[17px]`).
+- **Component Gap:** `space-y-4` or `space-y-6` to handle vertical gaps in lists.
+- **Layout Grid:** Use standard responsive column counts: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`.
 
 ### ✍️ B. Typography Presets
-* **Page Titles:** `text-3xl font-extrabold tracking-tight`
-* **Card Titles:** `text-lg font-semibold leading-none`
-* **Standard Body:** `text-sm text-foreground`
-* **Secondary / Descriptive Metadata:** `text-xs text-muted-foreground`
+
+- **Page Titles:** `text-3xl font-extrabold tracking-tight`
+- **Card Titles:** `text-lg font-semibold leading-none`
+- **Standard Body:** `text-sm text-foreground`
+- **Secondary / Descriptive Metadata:** `text-xs text-muted-foreground`
 
 ### 🌀 C. Interactive & Animation States
-* **Smooth Transitions:** Every clickable component MUST have smooth transitions: `transition-all duration-200 ease-in-out`.
-* **State Hover / Active:** All elements must define explicit interaction styles:
-  * Buttons: `hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:pointer-events-none disabled:opacity-50`
-* **Layout Motion Budget:** Heavy animations (e.g., Infinite CSS rotations, large scale spring transforms) are prohibited on mobile listings to protect core web vitals. Prefer subtle fade-ins (`animate-fade-in` or custom IntersectionObserver animations).
+
+- **Smooth Transitions:** Every clickable component MUST have smooth transitions: `transition-all duration-200 ease-in-out`.
+- **State Hover / Active:** All elements must define explicit interaction styles:
+  - Buttons: `hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:pointer-events-none disabled:opacity-50`
+- **Layout Motion Budget:** Heavy animations (e.g., Infinite CSS rotations, large scale spring transforms) are prohibited on mobile listings to protect core web vitals. Prefer subtle fade-ins (`animate-fade-in` or custom IntersectionObserver animations).
