@@ -5,10 +5,17 @@ import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 
+// حدد منصة النشر عبر متغير بيئة NITRO_PRESET (مثلاً "vercel" أو "netlify").
+// افتراضيًا "vercel" إذا لم يُحدَّد المتغير.
 const nitroPreset = process.env.NITRO_PRESET || "vercel";
 
 export default defineConfig({
-  // 1. إجبار Vite على تضمين حزمة Sentry داخل مخرجات الـ SSR
+  // Vite 8 بيدعم حل مسارات tsconfig (@/...) بشكل أصلي، فما عاد لازم بلوجن
+  // "vite-tsconfig-paths" الخارجي (كان يعمل نفس الشي بس أبطأ وغير مُصان).
+  resolve: {
+    tsconfigPaths: true,
+  },
+  // إجبار Vite SSR على تضمين حزمة Sentry داخل ملف الـ ssr.mjs النهائي لـ Vercel
   ssr: {
     noExternal: ["@sentry/tanstackstart-react"],
   },
@@ -16,13 +23,10 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({ server: { entry: "server" } }),
     viteReact(),
-    nitro({
-      preset: nitroPreset,
-      // 2. إجبار Nitro على دمج الحزمة داخل كود السيرفر النهائي لـ Vercel
-      externals: {
-        inline: ["@sentry/tanstackstart-react"],
-      },
-    }),
+    nitro({ preset: nitroPreset }),
+    // رفع source maps لـSentry وقت البناء — شرطي: بدون SENTRY_AUTH_TOKEN
+    // (من إعدادات مشروعك بـSentry) البلوجن ما بينضاف إطلاقًا، فما فيه خطر
+    // يكسر البناء عند حد ما ضبط التوكن بعد.
     ...(process.env.SENTRY_AUTH_TOKEN
       ? [
           sentryTanstackStart({
