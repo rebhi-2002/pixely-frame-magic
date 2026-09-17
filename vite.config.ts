@@ -19,7 +19,13 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({ server: { entry: "server" } }),
     viteReact(),
-    nitro({ preset: nitroPreset }),
+    // nitro({ preset: nitroPreset }),
+    nitro({
+      preset: nitroPreset,
+      externals: {
+        external: ["require-in-the-middle"],
+      },
+    }),
     // رفع source maps لـSentry وقت البناء — شرطي: بدون SENTRY_AUTH_TOKEN
     // (من إعدادات مشروعك بـSentry) البلوجن ما بينضاف إطلاقًا، فما فيه خطر
     // يكسر البناء عند حد ما ضبط التوكن بعد.
