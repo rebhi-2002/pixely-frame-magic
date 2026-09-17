@@ -1,0 +1,1 @@
+import{B as e}from"./rbac-static-data-BFGXRd3u.js";import{X as t}from"./index-BOB3Ju0F.js";var n=e();function r({children:e}){let r=t({select:e=>e.location.pathname});return(0,n.jsx)(`div`,{className:`route-fade`,children:e},r)}export{r as t};
