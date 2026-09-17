@@ -1,0 +1,1 @@
+import{P as e}from"./bi-BhtRHVZe.js";import{h as t,t as n}from"./lucide-react-KTBARllz.js";var r=e(),i=n;function a({name:e,...n}){let a=i[e]??t;return(0,r.jsx)(a,{...n})}export{a as t};

@@ -1,12 +1,42 @@
-import { n as __exportAll } from "../_runtime.mjs";
+import { n as __exportAll$1 } from "../_runtime.mjs";
 import { o as objectType, s as stringType } from "../_libs/zod.mjs";
-import * as Sentry from "@sentry/tanstackstart-react";
+import { $t as applySdkMetadata, Bi as addNonEnumerableProperty, Dr as getActiveSpan, Gi as isObjectLike, Lr as updateSpanName, Or as getRootSpan, Pr as spanToJSON, S as escapeStringForRegex, Wr as dsnToString, Xt as getTraceMetaTags, _ as flushIfServerless, en as handleTunnelRequest, fi as SEMANTIC_ATTRIBUTE_SENTRY_SOURCE, kn as captureException, li as SEMANTIC_ATTRIBUTE_SENTRY_OP, lr as withActiveSpan, mi as getCurrentScope, or as startSpan, pi as getClient, sr as startSpanManual, ui as SEMANTIC_ATTRIBUTE_SENTRY_ORIGIN } from "../_libs/sentry__core.mjs";
+import { ft as Ts } from "../_libs/sentry__conventions.mjs";
+import { n as getDefaultIntegrations, r as init, t as esm_exports } from "../_libs/@sentry/node+[...].mjs";
 //#region node_modules/.nitro/vite/services/ssr/index.js
-var ssr_exports = /* @__PURE__ */ __exportAll({
+var ssr_exports = /* @__PURE__ */ __exportAll$1({
+	a: () => sentryGlobalRequestMiddleware,
 	default: () => server_default,
-	n: () => renderErrorPage,
-	t: () => env
+	i: () => sentryGlobalFunctionMiddleware,
+	n: () => index_server_exports,
+	o: () => __exportAll,
+	r: () => tanstackRouterBrowserTracingIntegration,
+	t: () => renderErrorPage
 });
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 var lastCapturedError;
 var TTL_MS = 5e3;
 function record(error) {
@@ -69,6 +99,286 @@ function consumeLastCapturedError() {
 	lastCapturedError = void 0;
 	return error;
 }
+function init$1(options) {
+	const sentryOptions = {
+		defaultIntegrations: [...getDefaultIntegrations(options)],
+		...options
+	};
+	applySdkMetadata(sentryOptions, "tanstackstart-react", ["tanstackstart-react", "node"]);
+	sentryOptions.ignoreSpans = [
+		...sentryOptions.ignoreSpans || [],
+		/\/node_modules\//,
+		/\/@id\//,
+		/\/@react-refresh/,
+		/\/@vite\//
+	];
+	return init(sentryOptions);
+}
+function patternToRegex(pattern) {
+	const segments = pattern.split("/").map((segment) => {
+		if (segment.startsWith("$")) return "[^/]+";
+		return escapeStringForRegex(segment);
+	}).join("/");
+	return new RegExp(`^${segments}$`);
+}
+function matchUrlToRoutePattern(pathname, patterns) {
+	const normalizedPathname = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+	for (const pattern of patterns) if (patternToRegex(pattern).test(normalizedPathname)) return pattern;
+}
+function updateSpanWithRouteParametrization(method, pathname, patterns) {
+	const matchedPattern = matchUrlToRoutePattern(pathname, patterns);
+	if (!matchedPattern) return;
+	const activeSpan = getActiveSpan();
+	if (!activeSpan) return;
+	const rootSpan = getRootSpan(activeSpan);
+	if (spanToJSON(rootSpan).data?.["http.route"]) return;
+	const transactionName = `${method} ${matchedPattern}`;
+	updateSpanName(rootSpan, transactionName);
+	rootSpan.setAttribute(Ts, matchedPattern);
+	rootSpan.setAttribute(SEMANTIC_ATTRIBUTE_SENTRY_SOURCE, "route");
+	getCurrentScope().setTransactionName(transactionName);
+}
+function addMetaTagToHead(htmlChunk, metaTagsStr) {
+	if (typeof htmlChunk !== "string" || !metaTagsStr) return htmlChunk;
+	if (htmlChunk.includes("\"sentry-trace\"")) return htmlChunk;
+	let replaced = false;
+	return htmlChunk.replace(/"[^"]*"|'[^']*'|(<head>)/g, (match, headTag) => {
+		if (headTag && !replaced) {
+			replaced = true;
+			return `<head>${metaTagsStr}`;
+		}
+		return match;
+	});
+}
+function injectMetaTagsInResponse(originalResponse) {
+	try {
+		if (!originalResponse.headers.get("content-type")?.startsWith("text/html")) return originalResponse;
+		const originalBody = originalResponse.body;
+		if (!originalBody) return originalResponse;
+		const metaTagsStr = getTraceMetaTags();
+		const decoder = new TextDecoder();
+		const newResponseStream = new ReadableStream({ start: async (controller) => {
+			const body = originalBody;
+			async function* bodyReporter() {
+				try {
+					for await (const chunk of body) yield chunk;
+				} catch (e) {
+					captureException(e, { mechanism: {
+						type: "auto.http.tanstackstart",
+						handled: false
+					} });
+					throw e;
+				}
+			}
+			let errored = false;
+			try {
+				for await (const chunk of bodyReporter()) {
+					const modifiedHtml = addMetaTagToHead(typeof chunk === "string" ? chunk : decoder.decode(chunk, { stream: true }), metaTagsStr);
+					controller.enqueue(new TextEncoder().encode(modifiedHtml));
+				}
+			} catch (e) {
+				errored = true;
+				controller.error(e);
+			} finally {
+				if (!errored) controller.close();
+			}
+		} });
+		return new Response(newResponseStream, {
+			status: originalResponse.status,
+			statusText: originalResponse.statusText,
+			headers: new Headers(originalResponse.headers)
+		});
+	} catch (e) {
+		captureException(e, { mechanism: {
+			type: "auto.http.tanstackstart",
+			handled: false
+		} });
+		throw e;
+	}
+}
+function wrapFetchWithSentry(serverEntry) {
+	if (serverEntry.fetch) serverEntry.fetch = new Proxy(serverEntry.fetch, { async apply(target, thisArg, args) {
+		try {
+			const request = args[0];
+			const url = new URL(request.url);
+			const method = request.method || "GET";
+			if (url.pathname.includes("_serverFn") || url.pathname.includes("createServerFn")) {
+				const op = "function.tanstackstart";
+				return await startSpan({
+					op,
+					name: `${method} ${url.pathname}`,
+					attributes: {
+						[SEMANTIC_ATTRIBUTE_SENTRY_ORIGIN]: "auto.function.tanstackstart.server",
+						[SEMANTIC_ATTRIBUTE_SENTRY_OP]: op
+					}
+				}, async () => {
+					return target.apply(thisArg, args);
+				});
+			}
+			if (typeof __SENTRY_ROUTE_PATTERNS__ !== "undefined") updateSpanWithRouteParametrization(method, url.pathname, __SENTRY_ROUTE_PATTERNS__);
+			return injectMetaTagsInResponse(await target.apply(thisArg, args));
+		} finally {
+			await flushIfServerless();
+		}
+	} });
+	return serverEntry;
+}
+function getMiddlewareSpanOptions(name) {
+	return {
+		op: "middleware.tanstackstart",
+		name,
+		attributes: {
+			[SEMANTIC_ATTRIBUTE_SENTRY_ORIGIN]: "auto.middleware.tanstackstart",
+			[SEMANTIC_ATTRIBUTE_SENTRY_OP]: "middleware.tanstackstart"
+		}
+	};
+}
+var SENTRY_WRAPPED = "__SENTRY_WRAPPED__";
+var SENTRY_INTERNAL = "__SENTRY_INTERNAL__";
+function getNextProxy(next, span, prevSpan, nextState) {
+	return new Proxy(next, { apply: (originalNext, thisArgNext, argsNext) => {
+		nextState.called = true;
+		span.end();
+		if (prevSpan) return withActiveSpan(prevSpan, () => {
+			return Reflect.apply(originalNext, thisArgNext, argsNext);
+		});
+		return Reflect.apply(originalNext, thisArgNext, argsNext);
+	} });
+}
+function wrapMiddlewareWithSentry(middleware, options) {
+	if (middleware[SENTRY_WRAPPED] || middleware["__SENTRY_INTERNAL__"]) return middleware;
+	if (middleware.options?.server) {
+		middleware.options.server = new Proxy(middleware.options.server, { apply: (originalServer, thisArgServer, argsServer) => {
+			const prevSpan = getActiveSpan();
+			return startSpanManual(getMiddlewareSpanOptions(options.name), async (span) => {
+				const nextState = { called: false };
+				const middlewareArgs = argsServer[0];
+				if (isObjectLike(middlewareArgs) && typeof middlewareArgs.next === "function") middlewareArgs.next = getNextProxy(middlewareArgs.next, span, prevSpan, nextState);
+				try {
+					const result = await originalServer.apply(thisArgServer, argsServer);
+					if (!nextState.called) span.end();
+					return result;
+				} catch (e) {
+					span.end();
+					throw e;
+				}
+			});
+		} });
+		addNonEnumerableProperty(middleware, SENTRY_WRAPPED, true);
+	}
+	return middleware;
+}
+function wrapMiddlewaresWithSentry(middlewares) {
+	return Object.entries(middlewares).map(([name, middleware]) => {
+		return wrapMiddlewareWithSentry(middleware, { name });
+	});
+}
+function createSentryMiddlewareHandler(mechanismType) {
+	return async function sentryMiddlewareHandler({ next }) {
+		try {
+			return await next();
+		} catch (e) {
+			captureException(e, { mechanism: {
+				type: mechanismType,
+				handled: false
+			} });
+			throw e;
+		}
+	};
+}
+function createSentryFunctionMiddlewareHandler(mechanismType) {
+	return async function sentryFunctionMiddlewareHandler({ next, serverFnMeta }) {
+		const activeSpan = getActiveSpan();
+		const spanData = activeSpan ? spanToJSON(activeSpan) : void 0;
+		if (activeSpan && spanData?.op === "function.tanstackstart") {
+			if (serverFnMeta?.name) {
+				const method = spanData.description?.split(" ")[0] || "GET";
+				updateSpanName(activeSpan, `${method} /_serverFn/${serverFnMeta.name}`);
+				activeSpan.setAttribute(SEMANTIC_ATTRIBUTE_SENTRY_SOURCE, "route");
+			}
+			if (serverFnMeta?.id) activeSpan.setAttribute("tanstackstart.function.id", serverFnMeta.id);
+			if (serverFnMeta?.filename) activeSpan.setAttribute("tanstackstart.function.filename", serverFnMeta.filename);
+		}
+		try {
+			return await next();
+		} catch (e) {
+			captureException(e, { mechanism: {
+				type: mechanismType,
+				handled: false
+			} });
+			throw e;
+		}
+	};
+}
+var sentryGlobalRequestMiddleware = {
+	"~types": void 0,
+	_types: void 0,
+	options: { server: createSentryMiddlewareHandler("auto.middleware.tanstackstart.request") }
+};
+var sentryGlobalFunctionMiddleware = {
+	"~types": void 0,
+	_types: void 0,
+	options: { server: createSentryFunctionMiddlewareHandler("auto.middleware.tanstackstart.server_function") }
+};
+addNonEnumerableProperty(sentryGlobalRequestMiddleware, SENTRY_INTERNAL, true);
+addNonEnumerableProperty(sentryGlobalFunctionMiddleware, SENTRY_INTERNAL, true);
+var registeredTunnelRoutePaths = /* @__PURE__ */ new Set();
+function registerSentryServerTunnelRoute(path) {
+	if (registeredTunnelRoutePaths.has(path)) return;
+	const client = getClient();
+	if (!client) return;
+	registeredTunnelRoutePaths.add(path);
+	const options = client.getOptions();
+	options.ignoreSpans = [...options.ignoreSpans ?? [], { attributes: { "http.target": new RegExp(`^${escapeStringForRegex(path)}(?:[/?#]|$)`) } }];
+}
+function createSentryTunnelRoute(options) {
+	return { handlers: { POST: async ({ request }) => {
+		registerSentryServerTunnelRoute(new URL(request.url).pathname);
+		const allowedDsns = (options.allowedDsns?.length ? options.allowedDsns : void 0) ?? (() => {
+			const dsn = getClient()?.getDsn();
+			return dsn ? [dsnToString(dsn)] : void 0;
+		})();
+		if (!allowedDsns) return new Response("Tunnel route requires Sentry server SDK initialized with a DSN, or pass allowedDsns explicitly.", { status: 500 });
+		return handleTunnelRequest({
+			request,
+			allowedDsns
+		});
+	} } };
+}
+function replayIntegration(_options) {
+	return {
+		name: "Replay",
+		setup() {}
+	};
+}
+function tanstackRouterBrowserTracingIntegration(_router, _options) {
+	return {
+		name: "BrowserTracing",
+		setup() {}
+	};
+}
+var ErrorBoundary = (props) => {
+	if (!props.children) return null;
+	if (typeof props.children === "function") return props.children();
+	return props.children;
+};
+function withErrorBoundary(WrappedComponent) {
+	return WrappedComponent;
+}
+var index_server_exports = /* @__PURE__ */ __exportAll({
+	ErrorBoundary: () => ErrorBoundary,
+	createSentryTunnelRoute: () => createSentryTunnelRoute,
+	init: () => init$1,
+	registerSentryServerTunnelRoute: () => registerSentryServerTunnelRoute,
+	replayIntegration: () => replayIntegration,
+	sentryGlobalFunctionMiddleware: () => sentryGlobalFunctionMiddleware,
+	sentryGlobalRequestMiddleware: () => sentryGlobalRequestMiddleware,
+	tanstackRouterBrowserTracingIntegration: () => tanstackRouterBrowserTracingIntegration,
+	withErrorBoundary: () => withErrorBoundary,
+	wrapFetchWithSentry: () => wrapFetchWithSentry,
+	wrapMiddlewaresWithSentry: () => wrapMiddlewaresWithSentry
+});
+__reExport(index_server_exports, esm_exports);
 function renderErrorPage() {
 	return `<!doctype html>
 <html lang="en">
@@ -142,14 +452,14 @@ var env = {
 	PROD: true
 };
 if (env.PROD && env.API_BASE_URL.includes("localhost")) console.error("[env] تحذير نشر: VITE_API_BASE_URL ما زالت تشير لـ localhost ببناء إنتاجي. تأكد من ضبط متغيرات البيئة الصحيحة بمنصة الاستضافة قبل النشر.");
-Sentry.init({
+init$1({
 	dsn: env.SENTRY_DSN,
 	environment: env.MODE,
 	tracesSampleRate: .2
 });
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-D1qnk3uY.mjs").then((n) => n.t).then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-CAmRZeTC.mjs").then((n) => n.t).then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -159,7 +469,7 @@ async function normalizeCatastrophicSsrResponse(response) {
 	if (!isH3SwallowedErrorBody(body)) return response;
 	const swallowed = consumeLastCapturedError() ?? /* @__PURE__ */ new Error(`h3 swallowed SSR error: ${body}`);
 	console.error(swallowed);
-	Sentry.captureException(swallowed);
+	index_server_exports.captureException(swallowed);
 	return new Response(renderErrorPage(), {
 		status: 500,
 		headers: { "content-type": "text/html; charset=utf-8" }
@@ -178,7 +488,7 @@ var server_default = { async fetch(request, env, ctx) {
 		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
 	} catch (error) {
 		console.error(error);
-		Sentry.captureException(error);
+		index_server_exports.captureException(error);
 		return new Response(renderErrorPage(), {
 			status: 500,
 			headers: { "content-type": "text/html; charset=utf-8" }
@@ -186,4 +496,4 @@ var server_default = { async fetch(request, env, ctx) {
 	}
 } };
 //#endregion
-export { server_default as default, renderErrorPage as n, ssr_exports as r, env as t };
+export { sentryGlobalRequestMiddleware as a, server_default as default, sentryGlobalFunctionMiddleware as i, index_server_exports as n, __exportAll as o, tanstackRouterBrowserTracingIntegration as r, ssr_exports as s, renderErrorPage as t };

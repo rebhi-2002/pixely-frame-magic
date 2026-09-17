@@ -1,7 +1,7 @@
 import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
 import { At as ChevronLeft } from "../_libs/lucide-react.mjs";
 import { t as Button } from "./button-DfTXnEII.mjs";
-import { t as DynamicIcon } from "./dynamic-icon-Cf94UsPA.mjs";
+import { t as DynamicIcon } from "./dynamic-icon-CJJsN6oz.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/page-header-D4CknVcT.js
 var import_jsx_runtime = require_jsx_runtime();
 function PageHeader({ title, icon, actions, onBack }) {
