@@ -1,0 +1,1 @@
+import{T as e}from"./index-BN7hfFbf.js";function t(t){e(t?{id:t.id,email:t.email??void 0}:null)}export{t};

@@ -1,6 +1,5 @@
 import { n as __exportAll } from "../_runtime.mjs";
 import { o as objectType, s as stringType } from "../_libs/zod.mjs";
-import * as Sentry from "@sentry/tanstackstart-react";
 //#region node_modules/.nitro/vite/services/ssr/index.js
 var ssr_exports = /* @__PURE__ */ __exportAll({
 	default: () => server_default,
@@ -142,14 +141,25 @@ var env = {
 	PROD: true
 };
 if (env.PROD && env.API_BASE_URL.includes("localhost")) console.error("[env] تحذير نشر: VITE_API_BASE_URL ما زالت تشير لـ localhost ببناء إنتاجي. تأكد من ضبط متغيرات البيئة الصحيحة بمنصة الاستضافة قبل النشر.");
-Sentry.init({
-	dsn: env.SENTRY_DSN,
-	environment: env.MODE,
-	tracesSampleRate: .2
-});
+var sentryReady = null;
+function getSentry() {
+	if (!sentryReady) sentryReady = import("@sentry/tanstackstart-react").then((mod) => {
+		mod.init({
+			dsn: env.SENTRY_DSN,
+			environment: env.MODE,
+			tracesSampleRate: .2
+		});
+		return mod;
+	}).catch((err) => {
+		console.error("[server] تعذّر تحميل/تهيئة Sentry بجهة السيرفر — سيتابع بدونه:", err);
+		return null;
+	});
+	return sentryReady;
+}
+getSentry();
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-D1qnk3uY.mjs").then((n) => n.t).then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-CQPo-kzR.mjs").then((n) => n.t).then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -159,7 +169,7 @@ async function normalizeCatastrophicSsrResponse(response) {
 	if (!isH3SwallowedErrorBody(body)) return response;
 	const swallowed = consumeLastCapturedError() ?? /* @__PURE__ */ new Error(`h3 swallowed SSR error: ${body}`);
 	console.error(swallowed);
-	Sentry.captureException(swallowed);
+	getSentry().then((sentry) => sentry?.captureException(swallowed));
 	return new Response(renderErrorPage(), {
 		status: 500,
 		headers: { "content-type": "text/html; charset=utf-8" }
@@ -178,7 +188,7 @@ var server_default = { async fetch(request, env, ctx) {
 		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
 	} catch (error) {
 		console.error(error);
-		Sentry.captureException(error);
+		getSentry().then((sentry) => sentry?.captureException(error));
 		return new Response(renderErrorPage(), {
 			status: 500,
 			headers: { "content-type": "text/html; charset=utf-8" }
