@@ -8,10 +8,6 @@ import { blogPosts } from "@/content/blog-posts";
 import { usePreferences } from "@/hooks/use-preferences";
 import { useBi } from "@/lib/bi";
 
-const title = "مدونة أكاديميا | نصائح دراسة وتحضير للامتحان الوزاري";
-const description =
-  "مقالات عملية عن تنظيم وقت المذاكرة، تقنيات الاستدعاء النشط، والتحضير للامتحان الوزاري — من فريق أكاديميا.";
-
 export const Route = createFileRoute("/blog")({
   head: (ctx) => createSeoHead("/blog", localeFromSearch(ctx.match.search)),
   component: BlogIndex,

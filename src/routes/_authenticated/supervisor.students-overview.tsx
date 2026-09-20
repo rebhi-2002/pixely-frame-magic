@@ -43,22 +43,22 @@ import type { StudentRiskRow, StudentRiskStatus } from "@/lib/supervisor-oversig
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "نظرة الطلاب | أكاديميا";
 const description = "الطلاب المتعثّرون أولاً: من يحتاج تدخّلاً الآن ولماذا.";
 
 export const Route = createFileRoute("/_authenticated/supervisor/students-overview")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "نظرة الطلاب | أكاديميا",
+        description: "الطلاب المتعثّرون أولاً: من يحتاج تدخّلاً الآن ولماذا.",
+      },
+      {
+        title: "Students overview | Academia",
+        description: "Struggling students first: who needs intervention now, and why.",
+      },
+    ),
   component: PageRoute,
 });
 

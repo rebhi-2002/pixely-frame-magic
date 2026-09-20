@@ -43,22 +43,23 @@ import type { ScheduleEventRow, ScheduleEventType } from "@/lib/student-social-d
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "الجدول | أكاديميا";
 const description = "جدول دراسي بمكان واحد: حصص، واجبات، امتحانات، وجلسات مراجعة.";
 
 export const Route = createFileRoute("/_authenticated/schedule")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "الجدول | أكاديميا",
+        description: "جدول دراسي بمكان واحد: حصص، واجبات، امتحانات، وجلسات مراجعة.",
+      },
+      {
+        title: "Schedule | Academia",
+        description:
+          "A study schedule in one place: sessions, assignments, exams, and review sessions.",
+      },
+    ),
   component: PageRoute,
 });
 

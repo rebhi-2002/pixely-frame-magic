@@ -22,22 +22,23 @@ import { listTeacherCourses } from "@/lib/teacher-teaching.functions";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "ملفي العام | أكاديميا";
 const description = "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.";
 
 export const Route = createFileRoute("/_authenticated/teacher/profile/edit")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "ملفي العام | أكاديميا",
+        description: "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.",
+      },
+      {
+        title: "My public profile | Academia",
+        description:
+          "What students and parents see: your bio, subjects, and verified certificates.",
+      },
+    ),
   component: PageRoute,
 });
 

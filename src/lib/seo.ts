@@ -313,3 +313,30 @@ export function applySeo(payload: SeoPayload) {
   }
   upsertJsonLd(payload);
 }
+
+/**
+ * عنوان/وصف `<head>` لصفحات لوحة التحكم (بعد تسجيل الدخول) — كلها
+ * `noindex` أصلاً (راجع NOINDEX_PATHS فوق)، فما بتحتاج آلية createSeoHead
+ * الكاملة (canonical/hreflang/JSON-LD مالها معنى لصفحة غير مفهرسة). بس
+ * لازم عنوان تبويب المتصفح (<title>) يتبدّل مع اللغة زي باقي محتوى
+ * الصفحة — قبل هالدالة (2026-09-18) كان ثابت عربي دائمًا بكل صفحات لوحة
+ * التحكم (~63 ملف)، بغض النظر عن اللغة المختارة فعليًا.
+ *
+ * `i18n.language` هون (مش hook زي useTranslation) لأنه head() بتيجي من
+ * TanStack Router خارج شجرة الكومبوننت — نفس أسلوب translateMeta فوق.
+ */
+export function authPageHead(ar: { title: string; description: string }, en = ar) {
+  const isEn = i18n.language === "en";
+  const { title, description } = isEn ? en : ar;
+  return {
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
+    ],
+  };
+}

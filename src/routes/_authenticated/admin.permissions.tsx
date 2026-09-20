@@ -7,21 +7,20 @@ import { PageHeader } from "@/components/admin/page-header";
 import { listRoles } from "@/lib/rbac.functions";
 import { useBi } from "@/lib/bi";
 
-const title = "مصفوفة الصلاحيات | Academia";
-const description = "اختر نوع المستخدم لتحرير شجرة صلاحياته في Academia.";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/admin/permissions")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: "مصفوفة الصلاحيات" },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "مصفوفة الصلاحيات | Academia",
+        description: "اختر نوع المستخدم لتحرير شجرة صلاحياته في Academia.",
+      },
+      {
+        title: "Permissions matrix | Academia",
+        description: "Pick a user type to edit its permission tree on Academia.",
+      },
+    ),
   component: () => (
     <Guard pageKey="admin_roles">
       <PermissionsMatrixPage />

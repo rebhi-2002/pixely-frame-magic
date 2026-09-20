@@ -40,16 +40,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/settings")({
-  head: () => ({
-    meta: [
-      { title: "الإعدادات | أكاديميا" },
-      { name: "description", content: "اللغة، الثيم، وبيانات حسابك في أكاديميا." },
-      { property: "og:title", content: "الإعدادات | أكاديميا" },
-      { property: "og:description", content: "تفضيلاتك تُحفظ على جهازك وعلى حسابك معاً." },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      { title: "الإعدادات | أكاديميا", description: "اللغة، الثيم، وبيانات حسابك في أكاديميا." },
+      {
+        title: "Settings | Academia",
+        description: "Language, theme, and your account details on Academia.",
+      },
+    ),
   component: () => (
     <Guard pageKey="account_settings">
       <SettingsPage />

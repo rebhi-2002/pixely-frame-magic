@@ -22,9 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const title = "تسجيل معلّم | أكاديميا";
-const description = "سجّل كمعلّم في أكاديميا.";
-
 export const Route = createFileRoute("/teacher/register")({
   ssr: false,
   beforeLoad: async () => {

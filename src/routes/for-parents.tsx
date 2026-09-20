@@ -10,10 +10,6 @@ import { Reveal } from "@/components/ui/reveal";
 import { ParentReportIllustration } from "@/components/site/illustrations";
 import { cn } from "@/lib/utils";
 
-const title = "لأولياء الأمور | ملخص واضح بدون تدخل زايد";
-const description =
-  "تابع انتظام وإنجاز ابنك أو بنتك بتقرير أسبوعي مختصر، مع الحفاظ على خصوصية مساحتهم الشخصية.";
-
 export const Route = createFileRoute("/for-parents")({
   head: (ctx) => createSeoHead("/for-parents", localeFromSearch(ctx.match.search)),
   component: ForParents,

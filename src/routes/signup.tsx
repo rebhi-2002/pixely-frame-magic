@@ -25,8 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const title = "إنشاء حساب | أكاديميا";
-const description = "أنشئ حسابك في أكاديميا واختر دورك: طالب، ولي أمر، أو معلّم.";
 const signupEnabled = env.ENABLE_SIGNUP;
 
 // أسماء أنواع المستخدمين متل ما هي مزروعة فعليًا بالباك اند (UserSeed.cs) —

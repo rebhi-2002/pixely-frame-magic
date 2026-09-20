@@ -34,10 +34,6 @@ import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
 import { allowedPublicPaths, useBi } from "@/lib/bi";
 
-const title = "Academia | منصة الطالب للتنظيم والإنجاز";
-const description =
-  "Academia: مكتبة ذكية مرتبة، مجتمعات مواد، متابعة إنجاز، بنك أخطاء ومحاكي امتحان وزاري — كل دراستك بمكان واحد.";
-
 export const Route = createFileRoute("/")({
   head: (ctx) => createSeoHead("/", localeFromSearch(ctx.match.search)),
   component: Landing,
@@ -197,9 +193,7 @@ function Landing() {
 
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="max-w-2xl">
-          <span className="text-sm font-bold text-primary">
-            01 · {t("home.startEyebrow", { defaultValue: "خطوتك الأولى" })}
-          </span>
+          <span className="text-sm font-bold text-primary">01 · {t("home.startEyebrow")}</span>
           <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
           <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
         </div>
@@ -226,9 +220,7 @@ function Landing() {
       <section className="border-y border-border bg-primary/5">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <span className="text-sm font-bold text-primary">
-              02 · {t("home.freeEyebrow", { defaultValue: "ابدأ بدون مخاطرة" })}
-            </span>
+            <span className="text-sm font-bold text-primary">02 · {t("home.freeEyebrow")}</span>
             <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.freeTitle")}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
               {t("home.freeSub")}
@@ -236,9 +228,7 @@ function Landing() {
             <p className="mt-5 text-sm font-semibold text-foreground">{t("home.trustNote")}</p>
           </div>
           <div className="rounded-2xl border border-primary/20 bg-background p-6 shadow-elevation-1 lg:min-w-80">
-            <p className="mb-4 font-bold text-foreground">
-              {t("home.freeListTitle", { defaultValue: "يتضمن البدء المجاني:" })}
-            </p>
+            <p className="mb-4 font-bold text-foreground">{t("home.freeListTitle")}</p>
             <ul className="space-y-3">
               {[0, 1, 2, 3, 4].map((i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">

@@ -43,22 +43,22 @@ import type { CommunityQuestionRow, QuestionStatus } from "@/lib/student-social-
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "أسئلتي | أكاديميا";
 const description = "سجّل أسئلتك بكل مادة، وتابع حالتها لحد ما توصلك إجابة.";
 
 export const Route = createFileRoute("/_authenticated/community")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "أسئلتي | أكاديميا",
+        description: "سجّل أسئلتك بكل مادة، وتابع حالتها لحد ما توصلك إجابة.",
+      },
+      {
+        title: "My questions | Academia",
+        description: "Log your questions in every subject, and track them until answered.",
+      },
+    ),
   component: PageRoute,
 });
 

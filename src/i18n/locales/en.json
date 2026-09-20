@@ -142,6 +142,7 @@
         "sub": "Users, permissions, curriculum, payments and content review — from the admin panel."
       }
     },
+    "startEyebrow": "Your first step",
     "startTitle": "What happens after you sign up?",
     "startSub": "You do not land on an empty dashboard. Set up your study space and take a clear first step.",
     "startSteps": [
@@ -162,8 +163,10 @@
         "text": "Turn mistakes into a clear review list with a next step."
       }
     ],
+    "freeEyebrow": "Start with zero risk",
     "freeTitle": "Start free — see Academia in action",
     "freeSub": "You do not need a teacher to begin. Set up your space, try the core study tools, then decide what fits.",
+    "freeListTitle": "A free start includes:",
     "freeItems": [
       "Create a student account",
       "Choose your track and subjects",
@@ -576,5 +579,19 @@
     "title": "Stories from students and teachers",
     "sub": "We're still building the Academia community. Once our first users are in, real stories will show up right here.",
     "placeholder": "Reviews from our students and teachers will appear here soon."
+  },
+  "illustrations": {
+    "chapter": "Chapter",
+    "math": "Math",
+    "science": "Science",
+    "unit3": "Unit 3",
+    "unit1": "Unit 1",
+    "uploadContent": "Upload",
+    "basicReview": "Review",
+    "published": "Published",
+    "forReview": "Review",
+    "gathersHere": "Saved here",
+    "min15": "15 min",
+    "weekly": "Weekly"
   }
 }

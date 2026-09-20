@@ -21,9 +21,6 @@ import { env } from "@/lib/env";
 const DEMO_USERS = USERS.filter((u) => u.id !== "u-admin");
 const demoEnabled = env.ENABLE_DEMO_LOGIN;
 
-const title = "تسجيل الدخول | Academia";
-const description = "سجّل الدخول إلى حسابك في Academia وتابع دراستك من حيث توقفت.";
-
 export const Route = createFileRoute("/login")({
   ssr: false,
   beforeLoad: async () => {

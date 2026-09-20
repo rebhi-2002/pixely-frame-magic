@@ -38,22 +38,23 @@ import type { MistakeRow, MistakeStatus } from "@/lib/student-evaluation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "بنك الأخطاء | أكاديميا";
 const description = "سجّل الأسئلة يلي بتخطئ فيها بنفسك، وتابع تكرارها لحد ما تتقنها.";
 
 export const Route = createFileRoute("/_authenticated/mistakes-bank")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "بنك الأخطاء | أكاديميا",
+        description: "سجّل الأسئلة يلي بتخطئ فيها بنفسك، وتابع تكرارها لحد ما تتقنها.",
+      },
+      {
+        title: "My mistake bank | Academia",
+        description:
+          "Log the questions you get wrong yourself, and track repeats until you master them.",
+      },
+    ),
   component: PageRoute,
 });
 

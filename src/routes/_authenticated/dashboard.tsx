@@ -61,22 +61,24 @@ import type { UpcomingTaskRow, UpcomingTaskType } from "@/lib/student-learning-d
 import { useAccess } from "@/hooks/use-access";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "لوحة الطالب | أكاديميا";
 const description = "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "لوحة الطالب | أكاديميا",
+        description:
+          "كل دراستك بمكان واحد: تقدّمك اليوم، مهامك القريبة، والمواد التي تحتاج مراجعة.",
+      },
+      {
+        title: "Student dashboard | Academia",
+        description:
+          "All your studying in one place: today's progress, upcoming tasks, and subjects that need review.",
+      },
+    ),
   component: PageRoute,
 });
 

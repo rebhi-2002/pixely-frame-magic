@@ -6,10 +6,6 @@ import { SessionCta } from "@/components/site/session-cta";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
-const title = "كيف تعمل أكاديميا؟ | خطوات البداية";
-const description =
-  "أربع خطوات فقط: سجّل واختر دورك، حدّد نظامك وصفك وموادك، ابدأ من المكتبة المرتّبة، وتابع إنجازك أسبوعياً.";
-
 export const Route = createFileRoute("/how-it-works")({
   head: (ctx) => createSeoHead("/how-it-works", localeFromSearch(ctx.match.search)),
   component: HowItWorks,

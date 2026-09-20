@@ -14,22 +14,23 @@ import {
   listTeacherPerformance,
 } from "@/lib/supervisor-oversight.functions";
 import { listContentItems } from "@/lib/teacher-teaching.functions";
+import { authPageHead } from "@/lib/seo";
 
-const title = "لوحة الإشراف | أكاديميا";
 const description = "جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.";
 
 export const Route = createFileRoute("/_authenticated/supervisor/dashboard")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "لوحة الإشراف | أكاديميا",
+        description: "جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.",
+      },
+      {
+        title: "Supervision dashboard | Academia",
+        description:
+          "Teaching quality across teachers and classes: alerts, follow-ups, and mastery indicators.",
+      },
+    ),
   component: PageRoute,
 });
 

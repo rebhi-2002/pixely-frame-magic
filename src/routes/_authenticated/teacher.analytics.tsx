@@ -43,22 +43,23 @@ import type { MissedPriority, MissedQuestionRow } from "@/lib/teacher-followup-d
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "التحليلات | أكاديميا";
 const description = "أين يتعثّر طلابك بالضبط: أسئلة يخطئ فيها الأكثر، وإتقان كل اختبار.";
 
 export const Route = createFileRoute("/_authenticated/teacher/analytics")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "التحليلات | أكاديميا",
+        description: "أين يتعثّر طلابك بالضبط: أسئلة يخطئ فيها الأكثر، وإتقان كل اختبار.",
+      },
+      {
+        title: "Analytics | Academia",
+        description:
+          "Exactly where your students struggle: most-missed questions, and mastery per quiz.",
+      },
+    ),
   component: PageRoute,
 });
 

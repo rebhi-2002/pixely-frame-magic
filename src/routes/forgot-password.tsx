@@ -7,9 +7,6 @@ import { KeyRound, MailCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 
-const title = "استعادة كلمة المرور | أكاديميا";
-const description = "أرسل رابط استعادة كلمة المرور إلى بريدك الإلكتروني.";
-
 export const Route = createFileRoute("/forgot-password")({
   head: (ctx) => createSeoHead("/forgot-password", localeFromSearch(ctx.match.search)),
   component: ForgotPasswordPage,

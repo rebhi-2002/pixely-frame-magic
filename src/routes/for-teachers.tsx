@@ -10,10 +10,6 @@ import { Reveal } from "@/components/ui/reveal";
 import { ContentFlowIllustration } from "@/components/site/illustrations";
 import { cn } from "@/lib/utils";
 
-const title = "للمعلمين | انشر محتواك واربح مع أكاديميا";
-const description =
-  "ارفع محتواك التعليمي، جهّز بنوك أسئلة، تابع أداء طلابك بتحليلات دقيقة، واحصل على دخل من اشتراكات المنصة.";
-
 export const Route = createFileRoute("/for-teachers")({
   head: (ctx) => createSeoHead("/for-teachers", localeFromSearch(ctx.match.search)),
   component: ForTeachers,

@@ -11,18 +11,22 @@ import { WalletBalancePanel } from "@/components/wallet/wallet-balance-panel";
 import { submitWithdrawalRequest } from "@/integrations/backend/wallet";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { useBi } from "@/lib/bi";
+import { authPageHead } from "@/lib/seo";
 
-const title = "الأرباح | أكاديميا";
 const description = "أرباحك من التدريس، وطلبات سحب رصيدك لحسابك البنكي.";
 
 export const Route = createFileRoute("/_authenticated/teacher/earnings")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "الأرباح | أكاديميا",
+        description: "أرباحك من التدريس، وطلبات سحب رصيدك لحسابك البنكي.",
+      },
+      {
+        title: "Earnings | Academia",
+        description: "Your teaching earnings, and your bank withdrawal requests.",
+      },
+    ),
   component: () => (
     <Guard pageKey="teacher_earnings">
       <TeacherEarningsPage />

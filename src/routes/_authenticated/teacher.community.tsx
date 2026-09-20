@@ -11,22 +11,22 @@ import { answerClassQuestion, listClassQuestions } from "@/lib/teacher-followup.
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "أسئلة طلابي | أكاديميا";
 const description = "أسئلة طلابك في مكان واحد، وسجّل جوابك عليها.";
 
 export const Route = createFileRoute("/_authenticated/teacher/community")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "أسئلة طلابي | أكاديميا",
+        description: "أسئلة طلابك في مكان واحد، وسجّل جوابك عليها.",
+      },
+      {
+        title: "My students' questions | Academia",
+        description: "Your students' questions in one place — log your answer to each.",
+      },
+    ),
   component: PageRoute,
 });
 

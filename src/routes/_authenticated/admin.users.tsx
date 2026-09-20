@@ -1,19 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Guard } from "@/components/app/guard";
 import { UsersPage } from "@/components/admin/users-manager";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
-  head: () => ({
-    meta: [
-      { title: "المستخدمون | Academia" },
-      { name: "description", content: "إدارة حسابات المستخدمين على Academia." },
-      { property: "og:title", content: "المستخدمون" },
-      { property: "og:description", content: "إدارة حسابات المستخدمين على Academia." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      { title: "المستخدمون | Academia", description: "إدارة حسابات المستخدمين على Academia." },
+      { title: "Users | Academia", description: "Manage user accounts on Academia." },
+    ),
   component: () => (
     <Guard pageKey="admin_users">
       <UsersPage />

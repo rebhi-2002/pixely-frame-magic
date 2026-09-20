@@ -129,14 +129,20 @@ function TeacherProfilePage() {
         <h2 className="mt-12 text-xl font-bold text-foreground">
           {t("teacherProfile.reviewsTitle")}
         </h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          {reviews.map((r) => (
-            <blockquote key={r.n} className="rounded-2xl border border-border bg-card p-6">
-              <p className="text-sm leading-relaxed text-foreground">{r.d}</p>
-              <footer className="mt-3 text-xs text-muted-foreground">{r.n}</footer>
-            </blockquote>
-          ))}
-        </div>
+        {reviews.length > 0 ? (
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {reviews.map((r) => (
+              <blockquote key={r.n} className="rounded-2xl border border-border bg-card p-6">
+                <p className="text-sm leading-relaxed text-foreground">{r.d}</p>
+                <footer className="mt-3 text-xs text-muted-foreground">{r.n}</footer>
+              </blockquote>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 rounded-2xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
+            {t("teacherProfile.reviewsEmpty")}
+          </p>
+        )}
 
         <div className="mt-12 text-center">
           <SessionCta

@@ -18,16 +18,16 @@ export function BrandLogo({ className = "size-9" }: { className?: string }) {
   return <img src="/brand/logo-mark.png" alt="" className={`${className} object-contain`} />;
 }
 
-/** العلامة + الاسم الرسمي الثابت.
- *  الأيقونة بتاخد كامل مساحة صندوقها بأي حجم (بدون تجاوز حدوده) — هيك
- *  بتضمن نفس النسبة البصرية بالضبط عبر كل breakpoints، فما بترجع تكبر
- *  بشاشة وتصغر بشاشة تانية بشكل غير متوقّع. */
+/** العلامة + الاسم الرسمي الثابت — عرض بسيط بدون صندوق خلفية ملوّن ولا
+ *  حركة hover (كانت "الميلان" hover:rotate + الصندوق المدوّر خاصّين
+ *  بشخصية الماسكوت الكرتونية القديمة؛ شعار الصورة الثابتة الحالي (crest)
+ *  بيُعرض بسيط وهادئ، بدون أي حركة أو زخرفة إضافية — أنسب لهوية بصرية
+ *  رسمية). الأيقونة بتاخد كامل مساحتها بأي حجم بنفس النسبة عبر كل
+ *  breakpoints، فما بترجع تكبر بشاشة وتصغر بشاشة تانية بشكل غير متوقّع. */
 export function BrandLockup({ className = "" }: { className?: string }) {
   return (
-    <span className={`group inline-flex items-center gap-3 ${className}`}>
-      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/12 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 lg:size-9">
-        <BrandLogo className="size-7 lg:size-6" />
-      </span>
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      <BrandLogo className="size-9 lg:size-8" />
       <span className="font-display text-lg font-extrabold text-foreground">Academia</span>
     </span>
   );

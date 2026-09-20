@@ -33,22 +33,23 @@ import type { BadgeRow } from "@/lib/student-evaluation-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "الإنجاز | أكاديميا";
 const description = "تقدّمك يُقاس بالإتقان لا بالساعات: شارات، سلاسل أيام، ونسب إتقان لكل مادة.";
 
 export const Route = createFileRoute("/_authenticated/achievements")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "الإنجاز | أكاديميا",
+        description: "تقدّمك يُقاس بالإتقان لا بالساعات: شارات، سلاسل أيام، ونسب إتقان لكل مادة.",
+      },
+      {
+        title: "Achievements | Academia",
+        description:
+          "Your progress is measured by mastery, not hours: badges, day streaks, and mastery rates per subject.",
+      },
+    ),
   component: PageRoute,
 });
 

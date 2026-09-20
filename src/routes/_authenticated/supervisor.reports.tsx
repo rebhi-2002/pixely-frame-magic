@@ -16,22 +16,22 @@ import {
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "تقارير الإشراف | أكاديميا";
 const description = "تقارير دورية عن جودة التدريس، الإتقان، والالتزام.";
 
 export const Route = createFileRoute("/_authenticated/supervisor/reports")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "تقارير الإشراف | أكاديميا",
+        description: "تقارير دورية عن جودة التدريس، الإتقان، والالتزام.",
+      },
+      {
+        title: "Supervision reports | Academia",
+        description: "Periodic reports on teaching quality, mastery, and commitment.",
+      },
+    ),
   component: PageRoute,
 });
 

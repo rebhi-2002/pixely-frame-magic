@@ -10,6 +10,7 @@ import { OnboardingChecklist } from "@/components/app/onboarding-checklist";
 import { getStoredUserId, wasJustRegistered } from "@/integrations/backend/auth";
 import { useBi } from "@/lib/bi";
 import { ComparisonChart } from "@/components/app/charts";
+import { authPageHead } from "@/lib/seo";
 import {
   listContentItems,
   listOpenClassQuestions,
@@ -17,21 +18,21 @@ import {
   listTeacherCourses,
 } from "@/lib/teacher-teaching.functions";
 
-const title = "لوحة المعلم | أكاديميا";
 const description = "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.";
 
 export const Route = createFileRoute("/_authenticated/teacher/dashboard")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "لوحة المعلم | أكاديميا",
+        description: "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.",
+      },
+      {
+        title: "Teacher dashboard | Academia",
+        description:
+          "Today's classes: what needs grading, questions awaiting your answer, and your students' performance.",
+      },
+    ),
   component: PageRoute,
 });
 

@@ -2,7 +2,12 @@
  * مكتبة رسومات SVG خفيفة مبنية بهوية الموقع (ألوان عبر currentColor/CSS vars
  * فبتتبدّل تلقائيًا مع dark/light) — بديل عن الصور الفوتوغرافية الحقيقية غير
  * المتوفرة حاليًا. كل رسمة عبارة عن مكوّن React بسيط، صفر طلبات شبكة إضافية.
+ *
+ * أي نص داخل هالرسومات (عبر <text>) لازم يمر بـt("illustrations.xxx") —
+ * مش نص عربي ثابت — وإلا بيضل عربي حتى بالوضع الإنجليزي (باگ صار مصلّح
+ * 2026-09-18، راجع docs/operations لنفس التاريخ).
  */
+import { useTranslation } from "react-i18next";
 
 type IllustrationProps = { className?: string };
 
@@ -95,11 +100,12 @@ export function NotFoundIllustration({ className }: IllustrationProps) {
  * بدل أيقونة كتاب عامة. تُستخدم بالبطاقة الرئيسية (Flagship) بقسم مزايا الرئيسية.
  */
 export function LibraryTreeIllustration({ className }: IllustrationProps) {
+  const { t } = useTranslation();
   return (
     <svg viewBox="0 0 220 150" fill="none" className={className} aria-hidden>
       <rect x="18" y="18" width="70" height="24" rx="8" className="fill-primary/15" />
       <text x="53" y="34" textAnchor="middle" className="fill-primary text-[10px] font-bold">
-        الفصل
+        {t("illustrations.chapter")}
       </text>
       <path d="M53 42 L53 56" className="stroke-border" strokeWidth="2" />
       <path d="M53 56 H150" className="stroke-border" strokeWidth="2" />
@@ -115,7 +121,7 @@ export function LibraryTreeIllustration({ className }: IllustrationProps) {
         strokeWidth="1.5"
       />
       <text x="78" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
-        رياضيات
+        {t("illustrations.math")}
       </text>
       <rect
         x="120"
@@ -127,19 +133,19 @@ export function LibraryTreeIllustration({ className }: IllustrationProps) {
         strokeWidth="1.5"
       />
       <text x="152" y="80" textAnchor="middle" className="fill-foreground text-[9px] font-semibold">
-        علوم
+        {t("illustrations.science")}
       </text>
 
       <path d="M78 88 V98" className="stroke-border" strokeWidth="1.5" />
       <rect x="52" y="98" width="52" height="18" rx="6" className="fill-primary/10" />
       <text x="78" y="110" textAnchor="middle" className="fill-primary text-[8px] font-medium">
-        وحدة 3
+        {t("illustrations.unit3")}
       </text>
 
       <path d="M152 88 V98" className="stroke-border" strokeWidth="1.5" />
       <rect x="126" y="98" width="52" height="18" rx="6" className="fill-success/10" />
       <text x="152" y="110" textAnchor="middle" className="fill-success text-[8px] font-medium">
-        وحدة 1
+        {t("illustrations.unit1")}
       </text>
 
       <circle cx="192" cy="30" r="12" className="fill-info/15" />
@@ -209,6 +215,7 @@ export function ExamSimIllustration({ className }: IllustrationProps) {
 
 /** رسمة "من الرفع للنشر" — تدفق مرئي (رفع → مراجعة → منشور) لصفحة "للمعلمين". */
 export function ContentFlowIllustration({ className }: IllustrationProps) {
+  const { t } = useTranslation();
   return (
     <svg viewBox="0 0 320 140" fill="none" className={className} aria-hidden>
       <rect
@@ -234,7 +241,7 @@ export function ContentFlowIllustration({ className }: IllustrationProps) {
         textAnchor="middle"
         className="fill-muted-foreground text-[9px] font-medium"
       >
-        رفع المحتوى
+        {t("illustrations.uploadContent")}
       </text>
 
       <path d="M100 74 H128" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
@@ -262,7 +269,7 @@ export function ContentFlowIllustration({ className }: IllustrationProps) {
         textAnchor="middle"
         className="fill-muted-foreground text-[9px] font-medium"
       >
-        مراجعة أساسية
+        {t("illustrations.basicReview")}
       </text>
 
       <path d="M222 74 H250" className="stroke-border" strokeWidth="2" strokeDasharray="4 4" />
@@ -291,7 +298,7 @@ export function ContentFlowIllustration({ className }: IllustrationProps) {
         textAnchor="middle"
         className="fill-muted-foreground text-[9px] font-medium"
       >
-        منشور
+        {t("illustrations.published")}
       </text>
     </svg>
   );
@@ -331,6 +338,7 @@ export function PlanChoiceIllustration({ className }: IllustrationProps) {
  * بدل أيقونة X عامة. بيانات توضيحية (demo) فقط، مافي رقم حقيقي.
  */
 export function MistakeBankIllustration({ className }: IllustrationProps) {
+  const { t } = useTranslation();
   return (
     <svg viewBox="0 0 220 90" fill="none" className={className} aria-hidden>
       <rect
@@ -359,7 +367,7 @@ export function MistakeBankIllustration({ className }: IllustrationProps) {
       />
       <rect x="28" y="56" width="46" height="14" rx="7" className="fill-primary/10" />
       <text x="51" y="66" textAnchor="middle" className="fill-primary text-[8px] font-bold">
-        للمراجعة
+        {t("illustrations.forReview")}
       </text>
 
       <rect
@@ -379,7 +387,7 @@ export function MistakeBankIllustration({ className }: IllustrationProps) {
         strokeLinecap="round"
       />
       <text x="185" y="66" textAnchor="middle" className="fill-muted-foreground text-[7px]">
-        يتجمّع هنا
+        {t("illustrations.gathersHere")}
       </text>
     </svg>
   );
@@ -390,6 +398,7 @@ export function MistakeBankIllustration({ className }: IllustrationProps) {
  * بيانات توضيحية (demo) فقط.
  */
 export function ReviewSessionIllustration({ className }: IllustrationProps) {
+  const { t } = useTranslation();
   return (
     <svg viewBox="0 0 220 90" fill="none" className={className} aria-hidden>
       <circle cx="45" cy="45" r="32" className="fill-card stroke-border" strokeWidth="2" />
@@ -403,7 +412,7 @@ export function ReviewSessionIllustration({ className }: IllustrationProps) {
         textAnchor="middle"
         className="fill-muted-foreground text-[8px] font-medium"
       >
-        15 دقيقة
+        {t("illustrations.min15")}
       </text>
 
       <g>
@@ -422,6 +431,7 @@ export function ReviewSessionIllustration({ className }: IllustrationProps) {
  * تجسّد الفكرتين الأساسيتين لصفحة أولياء الأمور: ملخص واضح + خصوصية الطالب.
  */
 export function ParentReportIllustration({ className }: IllustrationProps) {
+  const { t } = useTranslation();
   return (
     <svg viewBox="0 0 260 120" fill="none" className={className} aria-hidden>
       <rect
@@ -440,7 +450,7 @@ export function ParentReportIllustration({ className }: IllustrationProps) {
       <rect x="32" y="64" width="54" height="10" rx="5" className="fill-primary/45" />
       <rect x="32" y="84" width="46" height="14" rx="7" className="fill-info/12" />
       <text x="55" y="94" textAnchor="middle" className="fill-info text-[8px] font-bold">
-        أسبوعي
+        {t("illustrations.weekly")}
       </text>
 
       <circle

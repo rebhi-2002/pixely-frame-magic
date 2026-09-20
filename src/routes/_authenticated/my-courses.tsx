@@ -42,22 +42,23 @@ import type { EnrollmentRow, EnrollmentStatus } from "@/lib/student-learning-dat
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "كورساتي | أكاديميا";
 const description = "الكورسات التي اشتركت فيها فعلياً — تقدّمك، الحصة القادمة، وشهادة الإتمام.";
 
 export const Route = createFileRoute("/_authenticated/my-courses")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "كورساتي | أكاديميا",
+        description: "الكورسات التي اشتركت فيها فعلياً — تقدّمك، الحصة القادمة، وشهادة الإتمام.",
+      },
+      {
+        title: "My courses | Academia",
+        description:
+          "Courses you're actually enrolled in — your progress, next session, and completion certificate.",
+      },
+    ),
   component: PageRoute,
 });
 

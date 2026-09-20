@@ -42,22 +42,23 @@ import type { ContentItemRow, ContentStatus } from "@/lib/teacher-teaching-data"
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "المحتوى | أكاديميا";
 const description = "دروسك وملفاتك: أضفها، رتّبها على شجرة المنهاج، وتابع حالة مراجعتها.";
 
 export const Route = createFileRoute("/_authenticated/teacher/content")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "المحتوى | أكاديميا",
+        description: "دروسك وملفاتك: أضفها، رتّبها على شجرة المنهاج، وتابع حالة مراجعتها.",
+      },
+      {
+        title: "Content | Academia",
+        description:
+          "Your lessons and files: add them, organize them on the curriculum tree, and track review status.",
+      },
+    ),
   component: PageRoute,
 });
 

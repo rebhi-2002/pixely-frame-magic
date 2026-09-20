@@ -1,5 +1,14 @@
 // بيانات ثابتة (in-memory) لصفحات "تقييم وإنجاز" بمساحة الطالب — محاكي
 // الامتحان، بنك الأخطاء، الإنجاز، شهاداتي. نفس مبدأ باقي ملفات *-data.ts.
+//
+// ملاحظة مهمة: MOCK_EXAMS تحت هي قوالب امتحانات (محتوى، مش بيانات شخصية)
+// فبقيت كما هي. أما EXAM_ATTEMPTS وMISTAKES وBADGES وCERTIFICATES فكانت
+// تحتوي صفوف بيانات إنجاز شخصي وهمية (محاولات امتحان، أخطاء، شارات
+// "مفتوحة"، شهادات "صادرة") تظهر لأي مستخدم يسجّل دخول وكأنها إنجازه
+// الفعلي — قبل ما يستخدم المنصة إطلاقاً. صفّرت الأربعة عمدًا (2026-09-17):
+// كل صفحة مستهلكة (exam-simulator, mistakes-bank, achievements,
+// my-certificates, parent.report) عندها أصلاً حالة فراغ صادقة (EmptyState)
+// جاهزة، فما احتجنا أي تعديل واجهة — بس شيل البيانات الابتدائية الوهمية.
 
 export interface MockExamRow {
   id: string;
@@ -22,29 +31,10 @@ export interface ExamAttemptRow {
   minutesTaken: number;
 }
 
-export const EXAM_ATTEMPTS: ExamAttemptRow[] = [
-  {
-    id: "att-1",
-    examTitle: "رياضيات — نموذج 2",
-    dateLabel: "2026/07/28",
-    scorePercent: 88,
-    minutesTaken: 54,
-  },
-  {
-    id: "att-2",
-    examTitle: "فيزياء — وحدة 2",
-    dateLabel: "2026/07/21",
-    scorePercent: 72,
-    minutesTaken: 31,
-  },
-  {
-    id: "att-3",
-    examTitle: "كيمياء — سريع",
-    dateLabel: "2026/07/14",
-    scorePercent: 54,
-    minutesTaken: 11,
-  },
-];
+/** فاضية عمداً — راجع الملاحظة أعلى الملف. تُملأ فعليًا لما يبدأ طلاب
+ *  حقيقيون يحلّوا امتحانات فعلاً (عبر saveExamAttempt بـ
+ *  student-evaluation.functions.ts)، مش بصفوف بذرة. */
+export const EXAM_ATTEMPTS: ExamAttemptRow[] = [];
 
 export type MistakeStatus = "أولوية" | "مراجعة" | "مُتقن";
 
@@ -56,36 +46,8 @@ export interface MistakeRow {
   status: MistakeStatus;
 }
 
-export const MISTAKES: MistakeRow[] = [
-  {
-    id: "mis-1",
-    questionTitle: "قوانين نيوتن — الاحتكاك",
-    subjectName: "الفيزياء",
-    wrongCount: 4,
-    status: "أولوية",
-  },
-  {
-    id: "mis-2",
-    questionTitle: "المعادلات التربيعية",
-    subjectName: "الرياضيات",
-    wrongCount: 3,
-    status: "أولوية",
-  },
-  {
-    id: "mis-3",
-    questionTitle: "التفاعلات الطاردة",
-    subjectName: "الكيمياء",
-    wrongCount: 2,
-    status: "مراجعة",
-  },
-  {
-    id: "mis-4",
-    questionTitle: "إعراب الجملة الاسمية",
-    subjectName: "اللغة العربية",
-    wrongCount: 1,
-    status: "مُتقن",
-  },
-];
+/** فاضية عمداً — راجع الملاحظة أعلى الملف. */
+export const MISTAKES: MistakeRow[] = [];
 
 export interface BadgeRow {
   id: string;
@@ -94,11 +56,13 @@ export interface BadgeRow {
   unlocked: boolean;
 }
 
-export const BADGES: BadgeRow[] = [
-  { id: "bdg-1", title: "مُتقن المشتقات", subtitle: "رياضيات · وحدة 4", unlocked: true },
-  { id: "bdg-2", title: "21 يوم متتالي", subtitle: "انتظام", unlocked: true },
-  { id: "bdg-3", title: "صائد الأخطاء", subtitle: "أتقن 50 خطأ", unlocked: false },
-];
+/** فاضية عمداً — راجع الملاحظة أعلى الملف. لسا مافي آلية حقيقية "تمنح"
+ *  الشارة تلقائيًا (لا يوجد Achievements/Badges endpoint بالباك اند بعد،
+ *  راجع docs/api/frontend-integration-status.md)، فأي شارة "مفتوحة" حاليًا
+ *  بتنضاف يدويًا (صفحة /achievements، خلف صلاحية student_achievements) —
+ *  قرار مين بالضبط يقدر يمنحها (أدمن/معلم فقط، مش الطالب لنفسه) قرار
+ *  منتج منفصل لسا ما اتحسم، راجعه قبل ما تفتح الصلاحية لأي دور. */
+export const BADGES: BadgeRow[] = [];
 
 export type CertificateStatus = "صادرة" | "قيد الإصدار";
 
@@ -110,22 +74,11 @@ export interface CertificateRow {
   shareCount: number;
 }
 
-export const CERTIFICATES: CertificateRow[] = [
-  {
-    id: "cert-1",
-    courseTitle: "مهارات المراجعة الذكية",
-    code: "ACD-2026-0142",
-    status: "صادرة",
-    shareCount: 3,
-  },
-  {
-    id: "cert-2",
-    courseTitle: "أساسيات الكيمياء",
-    code: "ACD-2026-0091",
-    status: "صادرة",
-    shareCount: 2,
-  },
-];
+/** فاضية عمداً — نفس ملاحظة BADGES فوق بالضبط، وأهم: صفحة /certificate
+ *  العامة بتتحقق من صحة رقم الشهادة اعتمادًا على وجوده بهاي القائمة —
+ *  فأي صف هون بصير "شهادة صالحة" فعليًا بصفحة التحقق العامة. لا تضف صف
+ *  هون إلا لشهادة صدرت فعلاً. */
+export const CERTIFICATES: CertificateRow[] = [];
 
 export function nextEvalId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;

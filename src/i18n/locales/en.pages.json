@@ -220,16 +220,8 @@
     "about": "An Academia teacher who uploads content classified by term, subject, unit and lesson, and tracks student performance through quizzes and periodic reports.",
     "coursesTitle": "Courses by this teacher",
     "reviewsTitle": "Student reviews",
-    "reviews": [
-      {
-        "n": "Science-track student",
-        "d": "The explanation is organized and the quizzes after each lesson made it stick."
-      },
-      {
-        "n": "General-track student",
-        "d": "First time I'm not lost between files — every unit is where it should be."
-      }
-    ],
+    "reviews": [],
+    "reviewsEmpty": "No reviews for this teacher yet — be the first to leave one.",
     "cta": "Sign up to follow this teacher",
     "notFound": "We couldn't find this teacher."
   },

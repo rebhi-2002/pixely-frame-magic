@@ -7,9 +7,6 @@ import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
-const title = "تعيين كلمة مرور جديدة | أكاديميا";
-const description = "اختر كلمة مرور جديدة لحسابك في أكاديميا.";
-
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: (ctx) => createSeoHead("/reset-password", localeFromSearch(ctx.match.search)),

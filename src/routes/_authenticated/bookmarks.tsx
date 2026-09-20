@@ -38,22 +38,23 @@ import type { BookmarkRow, BookmarkType } from "@/lib/student-social-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "المحفوظات | أكاديميا";
 const description = "كل ما حفظته: دروس، أسئلة، ونقاشات — بمكان واحد للرجوع السريع.";
 
 export const Route = createFileRoute("/_authenticated/bookmarks")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "المحفوظات | أكاديميا",
+        description: "كل ما حفظته: دروس، أسئلة، ونقاشات — بمكان واحد للرجوع السريع.",
+      },
+      {
+        title: "Bookmarks | Academia",
+        description:
+          "Everything you saved: lessons, questions, and discussions — in one place for quick access.",
+      },
+    ),
   component: PageRoute,
 });
 

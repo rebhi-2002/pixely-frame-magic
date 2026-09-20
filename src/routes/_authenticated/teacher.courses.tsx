@@ -42,22 +42,22 @@ import type { TeacherCourseRow, TeacherCourseStatus } from "@/lib/teacher-teachi
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "كورساتي (معلم) | أكاديميا";
 const description = "كورساتك المنشورة: الأسعار، المشتركون، والحصص القادمة.";
 
 export const Route = createFileRoute("/_authenticated/teacher/courses")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "كورساتي (معلم) | أكاديميا",
+        description: "كورساتك المنشورة: الأسعار، المشتركون، والحصص القادمة.",
+      },
+      {
+        title: "My courses (teacher) | Academia",
+        description: "Your published courses: pricing, enrolled students, and upcoming sessions.",
+      },
+    ),
   component: PageRoute,
 });
 

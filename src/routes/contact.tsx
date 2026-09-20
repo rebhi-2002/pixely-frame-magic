@@ -8,9 +8,6 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { Reveal } from "@/components/ui/reveal";
 
-const title = "تواصل معنا | أكاديميا";
-const description = "عندك سؤال، اقتراح، أو بدك تعمل شراكة مدرسية؟ فريق أكاديميا جاهز يسمعك.";
-
 export const Route = createFileRoute("/contact")({
   head: (ctx) => createSeoHead("/contact", localeFromSearch(ctx.match.search)),
   component: ContactPage,

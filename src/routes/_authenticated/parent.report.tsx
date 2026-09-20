@@ -9,22 +9,23 @@ import { Button } from "@/components/ui/button";
 import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 import { getChildReport } from "@/lib/supervisor-oversight.functions";
+import { authPageHead } from "@/lib/seo";
 
-const title = "تقرير الابن | أكاديميا";
 const description = "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.";
 
 export const Route = createFileRoute("/_authenticated/parent/report")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "تقرير الابن | أكاديميا",
+        description: "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.",
+      },
+      {
+        title: "Child's report | Academia",
+        description:
+          "A clear weekly report: commitment, mastery, and weak points — without misleading numbers.",
+      },
+    ),
   component: PageRoute,
 });
 

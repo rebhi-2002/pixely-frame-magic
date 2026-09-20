@@ -1,22 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Guard } from "@/components/app/guard";
 import { SystemModulesPage } from "@/components/admin/modules-manager";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/system-modules")({
-  head: () => ({
-    meta: [
-      { title: "وحدات النظام | Academia" },
+  head: () =>
+    authPageHead(
       {
-        name: "description",
-        content: "تفعيل أو تعطيل وحدات النظام على مستوى كل المستخدمين بضغطة واحدة.",
+        title: "وحدات النظام | Academia",
+        description: "تفعيل أو تعطيل وحدات النظام على مستوى كل المستخدمين بضغطة واحدة.",
       },
-      { property: "og:title", content: "وحدات النظام | Academia" },
-      { property: "og:description", content: "التحكم العام بتفعيل وحدات النظام." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+      {
+        title: "System modules | Academia",
+        description: "Turn system modules on or off for all users with one click.",
+      },
+    ),
   component: () => (
     <Guard pageKey="admin_settings">
       <SystemModulesPage />

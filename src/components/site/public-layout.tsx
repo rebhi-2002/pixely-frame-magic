@@ -2,17 +2,28 @@ import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   BookOpen,
+  Facebook,
   GraduationCap,
   Home,
+  Instagram,
   LayoutDashboard,
   LogIn,
+  MessageCircle,
   Menu,
   Route,
   Tag,
   UserPlus,
   Users,
+  Youtube,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SOCIAL_LINKS, whatsappLink, type SocialLink } from "@/lib/social-links";
+
+const SOCIAL_ICONS: Record<SocialLink["icon"], typeof Instagram> = {
+  Instagram,
+  Facebook,
+  Youtube,
+};
 import { PreferenceToggles } from "@/components/site/preference-toggles";
 import { BrandLockup } from "@/components/site/brand-logo";
 import { PageTransition } from "@/components/site/page-transition";
@@ -66,7 +77,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
 }
 
 export function PublicLayout({ children }: { children: ReactNode }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { session, isSignedIn } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
@@ -217,6 +228,41 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           <div className="max-w-sm space-y-3">
             <BrandMark />
             <p className="text-sm text-muted-foreground">{t("nav.tagline")}</p>
+            {(() => {
+              const links = SOCIAL_LINKS.filter((s) => s.url);
+              const wa = whatsappLink();
+              if (links.length === 0 && !wa) return null;
+              return (
+                <div className="flex items-center gap-3 pt-1">
+                  {links.map((s) => {
+                    const Icon = SOCIAL_ICONS[s.icon];
+                    return (
+                      <a
+                        key={s.icon}
+                        href={s.url ?? undefined}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={i18n.language === "ar" ? s.labelAr : s.labelEn}
+                        className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                      >
+                        <Icon className="size-4" />
+                      </a>
+                    );
+                  })}
+                  {wa && (
+                    <a
+                      href={wa}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="WhatsApp"
+                      className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
+                    >
+                      <MessageCircle className="size-4" />
+                    </a>
+                  )}
+                </div>
+              );
+            })()}
           </div>
           <div className="grid grid-cols-2 gap-8 text-sm">
             <div className="space-y-2">

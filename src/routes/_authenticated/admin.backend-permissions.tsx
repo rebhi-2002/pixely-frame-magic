@@ -1,22 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Guard } from "@/components/app/guard";
 import { BackendPermissionsPage } from "@/components/admin/backend-permissions-manager";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/admin/backend-permissions")({
-  head: () => ({
-    meta: [
-      { title: "صلاحيات الباك اند | Academia" },
-      { name: "description", content: "إدارة صلاحيات أنواع المستخدمين الحقيقية على Academia." },
-      { property: "og:title", content: "صلاحيات الباك اند" },
+  head: () =>
+    authPageHead(
       {
-        property: "og:description",
-        content: "إدارة صلاحيات أنواع المستخدمين الحقيقية على Academia.",
+        title: "صلاحيات الباك اند | Academia",
+        description: "إدارة صلاحيات أنواع المستخدمين الحقيقية على Academia.",
       },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+      {
+        title: "Backend permissions | Academia",
+        description: "Manage real user-type permissions on Academia.",
+      },
+    ),
   component: () => (
     <Guard pageKey="admin_backend_permissions">
       <BackendPermissionsPage />

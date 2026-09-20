@@ -8,9 +8,6 @@ import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 
-const title = "تفعيل الحساب | أكاديميا";
-const description = "فعّل حسابك في أكاديميا من الرابط المرسل إلى بريدك.";
-
 export const Route = createFileRoute("/verify-email")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>) => ({

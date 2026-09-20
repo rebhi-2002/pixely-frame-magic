@@ -19,19 +19,21 @@ import {
 import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
-  head: () => ({
-    meta: [
-      { title: "صلاحيات نوع المستخدم | نظام الصلاحيات" },
+  head: () =>
+    authPageHead(
       {
-        name: "description",
-        content: "شجرة صلاحيات من ثلاث مستويات: الوحدة ثم الصفحة ثم أدوات العرض والإضافة والتعديل.",
+        title: "صلاحيات نوع المستخدم | نظام الصلاحيات",
+        description:
+          "شجرة صلاحيات من ثلاث مستويات: الوحدة ثم الصفحة ثم أدوات العرض والإضافة والتعديل.",
       },
-      { property: "og:title", content: "صلاحيات نوع المستخدم" },
-      { property: "og:description", content: "تحديد صلاحيات دقيقة لكل صفحة داخل النظام." },
-    ],
-  }),
+      {
+        title: "User type permissions | Permissions system",
+        description: "A three-level permission tree: module, then page, then view/add/edit tools.",
+      },
+    ),
   component: RolePermissionsPage,
 });
 

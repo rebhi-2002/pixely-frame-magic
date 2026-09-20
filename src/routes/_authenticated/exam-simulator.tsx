@@ -46,22 +46,23 @@ import type { ExamAttemptRow, MockExamRow } from "@/lib/student-evaluation-data"
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "امتحاناتي التجريبية | أكاديميا";
 const description = "خطّط لامتحاناتك التجريبية، وسجّل نتيجتك وتحسّنك بعد كل محاولة.";
 
 export const Route = createFileRoute("/_authenticated/exam-simulator")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "امتحاناتي التجريبية | أكاديميا",
+        description: "خطّط لامتحاناتك التجريبية، وسجّل نتيجتك وتحسّنك بعد كل محاولة.",
+      },
+      {
+        title: "My practice exams | Academia",
+        description:
+          "Plan your practice exams, and log your score and improvement after each attempt.",
+      },
+    ),
   component: PageRoute,
 });
 

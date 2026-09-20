@@ -11,18 +11,22 @@ import { WalletBalancePanel } from "@/components/wallet/wallet-balance-panel";
 import { submitTopUpRequest } from "@/integrations/backend/wallet";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { useBi } from "@/lib/bi";
+import { authPageHead } from "@/lib/seo";
 
-const title = "محفظتي | أكاديميا";
 const description = "رصيدك الحالي، سجل حركاتك، وطلب شحن رصيد جديد.";
 
 export const Route = createFileRoute("/_authenticated/wallet")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "محفظتي | أكاديميا",
+        description: "رصيدك الحالي، سجل حركاتك، وطلب شحن رصيد جديد.",
+      },
+      {
+        title: "My wallet | Academia",
+        description: "Your current balance, transaction history, and requesting a new top-up.",
+      },
+    ),
   component: () => (
     <Guard pageKey="student_wallet">
       <WalletPage />

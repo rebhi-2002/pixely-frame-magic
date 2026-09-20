@@ -35,22 +35,23 @@ import type { LibrarySubjectRow } from "@/lib/student-learning-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "المكتبة | أكاديميا";
 const description = "مكتبة مرتّبة: فصل ← مادة ← وحدة ← درس، لتتابع تقدّمك بكل مادة بمكان واحد.";
 
 export const Route = createFileRoute("/_authenticated/library")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "المكتبة | أكاديميا",
+        description: "مكتبة مرتّبة: فصل ← مادة ← وحدة ← درس، لتتابع تقدّمك بكل مادة بمكان واحد.",
+      },
+      {
+        title: "Library | Academia",
+        description:
+          "An organized library: term, subject, unit, lesson — track your progress in every subject in one place.",
+      },
+    ),
   component: PageRoute,
 });
 

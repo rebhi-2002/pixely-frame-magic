@@ -42,22 +42,23 @@ import type { TeacherPerfStatus, TeacherPerformanceRow } from "@/lib/supervisor-
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "المعلمون | أكاديميا";
 const description = "أداء كل معلم: سرعة الرد، زمن التصحيح، وإتقان طلابه.";
 
 export const Route = createFileRoute("/_authenticated/supervisor/teachers")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "المعلمون | أكاديميا",
+        description: "أداء كل معلم: سرعة الرد، زمن التصحيح، وإتقان طلابه.",
+      },
+      {
+        title: "Teachers | Academia",
+        description:
+          "Each teacher's performance: response speed, grading time, and student mastery.",
+      },
+    ),
   component: PageRoute,
 });
 

@@ -9,10 +9,6 @@ import { PricingCompareTable } from "@/components/site/pricing-compare-table";
 import { Reveal } from "@/components/ui/reveal";
 import { PlanChoiceIllustration } from "@/components/site/illustrations";
 
-const title = "الأسعار | أكاديميا مجاناً أو بريميوم";
-const description =
-  "ابدأ مجاناً بالمكتبة والمجتمعات ومتابعة الإنجاز، أو اشترك ببريميوم لمحاكي الامتحان الوزاري وبنك الأخطاء والتقارير.";
-
 export const Route = createFileRoute("/pricing")({
   head: (ctx) => createSeoHead("/pricing", localeFromSearch(ctx.match.search)),
   component: Pricing,

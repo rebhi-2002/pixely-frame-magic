@@ -15,22 +15,21 @@ import {
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
-
-const title = "صفحة الدرس (معاينة تصميم) | أكاديميا";
-const description = "معاينة تصميم لشكل صفحة الدرس المستقبلية — لسا مش موصولة بمحتوى حقيقي.";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/library/lesson/$id")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "صفحة الدرس (معاينة تصميم) | أكاديميا",
+        description: "معاينة تصميم لشكل صفحة الدرس المستقبلية — لسا مش موصولة بمحتوى حقيقي.",
+      },
+      {
+        title: "Lesson page (design preview) | Academia",
+        description:
+          "A design preview of the future lesson page — not yet connected to real content.",
+      },
+    ),
   component: PageRoute,
 });
 

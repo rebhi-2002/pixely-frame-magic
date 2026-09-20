@@ -3,10 +3,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 
-const title = "شروط الاستخدام | أكاديميا";
-const description =
-  "قواعد استخدام أكاديميا: حساب واحد لكل مستخدم، احترام المجتمع، حقوق المحتوى، وسياسة الاشتراكات.";
-
 export const Route = createFileRoute("/terms")({
   head: (ctx) => createSeoHead("/terms", localeFromSearch(ctx.match.search)),
   component: LegalPage,

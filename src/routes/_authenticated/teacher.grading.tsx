@@ -36,22 +36,23 @@ import type { GradingItemRow } from "@/lib/teacher-followup-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "التصحيح | أكاديميا";
 const description = "قائمة التصحيح: الأسئلة المقالية والملفات المرفوعة، مع ملاحظات لكل طالب.";
 
 export const Route = createFileRoute("/_authenticated/teacher/grading")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "التصحيح | أكاديميا",
+        description: "قائمة التصحيح: الأسئلة المقالية والملفات المرفوعة، مع ملاحظات لكل طالب.",
+      },
+      {
+        title: "Grading | Academia",
+        description:
+          "Your grading queue: essay questions and uploaded files, with notes for each student.",
+      },
+    ),
   component: PageRoute,
 });
 

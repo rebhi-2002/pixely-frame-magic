@@ -16,19 +16,17 @@ import {
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/notifications")({
-  head: () => ({
-    meta: [
-      { title: "الإشعارات | Academia" },
-      { name: "description", content: "إشعارات الحساب والمهام التعليمية." },
-      { property: "og:title", content: "الإشعارات | Academia" },
-      { property: "og:description", content: "إشعارات الحساب والمهام التعليمية." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      { title: "الإشعارات | Academia", description: "إشعارات الحساب والمهام التعليمية." },
+      {
+        title: "Notifications | Academia",
+        description: "Account and learning task notifications.",
+      },
+    ),
   component: NotificationsPage,
 });
 

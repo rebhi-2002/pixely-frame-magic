@@ -38,22 +38,23 @@ import type { LinkedChildRow } from "@/lib/account-pages-data";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { authPageHead } from "@/lib/seo";
 
-const title = "إعدادات ولي الأمر | أكاديميا";
 const description = "الأبناء المرتبطون بحسابك، فك الربط، وتفضيلات الإشعارات والتقارير.";
 
 export const Route = createFileRoute("/_authenticated/parent/settings")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () =>
+    authPageHead(
+      {
+        title: "إعدادات ولي الأمر | أكاديميا",
+        description: "الأبناء المرتبطون بحسابك، فك الربط، وتفضيلات الإشعارات والتقارير.",
+      },
+      {
+        title: "Parent settings | Academia",
+        description:
+          "Children linked to your account, unlinking, and notification/report preferences.",
+      },
+    ),
   component: PageRoute,
 });
 
