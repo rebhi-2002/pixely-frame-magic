@@ -19,12 +19,26 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({ server: { entry: "server" } }),
     viteReact(),
-    // nitro({ preset: nitroPreset }),
+    // مشكلة معروفة: @sentry/tanstackstart-react (وتبعياته الديناميكية
+    // require-in-the-middle/import-in-the-middle الخاصة بالـauto-
+    // instrumentation) بتستخدم require() ديناميكي ما بتقدر أداة تتبّع
+    // الحزم التلقائية بـNitro (لتحديد شو يترحّل لدالة السيرفرلس على
+    // Vercel/Netlify) تكتشفه بشكل موثوق. النتيجة: الحزمة تتثبّت وتُبنى
+    // محليًا بدون أي مشكلة، بس تختفي وقت التشغيل الفعلي بالسيرفرلس
+    // (ERR_MODULE_NOT_FOUND) — وبما إنها مستوردة بأول src/server.ts،
+    // هيك بتكسر كل طلب SSR (كل صفحة بالموقع!). صار مؤكد فعليًا بسجلات
+    // Vercel بتاريخ 2026-09-17 (راجع docs/operations/2026-09-17-*.md).
+    // traceDeps مع بادئة "*" = "انسخ كل ملفات الحزمة" بدل الاعتماد على
+    // التتبّع التلقائي الناقص لهاي الحزم تحديدًا. راجع أيضًا src/server.ts
+    // (import() ديناميكي محاط بـtry/catch) كخط دفاع ثاني لو تكرر نفس
+    // النوع من المشاكل بحزمة تانية بالمستقبل.
     nitro({
       preset: nitroPreset,
-      externals: {
-        external: ["require-in-the-middle"],
-      },
+      traceDeps: [
+        "@sentry/tanstackstart-react*",
+        "require-in-the-middle*",
+        "import-in-the-middle*",
+      ],
     }),
     // رفع source maps لـSentry وقت البناء — شرطي: بدون SENTRY_AUTH_TOKEN
     // (من إعدادات مشروعك بـSentry) البلوجن ما بينضاف إطلاقًا، فما فيه خطر
