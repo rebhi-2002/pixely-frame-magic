@@ -1,10 +1,7 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
-import {
-  sentryGlobalFunctionMiddleware,
-  sentryGlobalRequestMiddleware,
-} from "@sentry/tanstackstart-react";
 
 import { renderErrorPage } from "./lib/error-page";
+import { captureServerException } from "./lib/server-sentry";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -14,6 +11,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
       throw error;
     }
     console.error(error);
+    captureServerException(error);
     return new Response(renderErrorPage(), {
       status: 500,
       headers: { "content-type": "text/html; charset=utf-8" },
@@ -28,9 +26,11 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
-// وسائط Sentry لازم تكون أول عنصر بكل مصفوفة (حسب توثيق Sentry) حتى تلتقط
-// كل الأخطاء، بما فيها يلي بتصير بوسائطنا المخصصة تحتها.
+// ملاحظة: ما منستورد sentryGlobalRequestMiddleware/sentryGlobalFunctionMiddleware
+// هون عمدًا — import ثابت لحزمة Sentry بمسار الـSSR كان يكسر كل صفحات الموقع
+// (500) لما الحزمة تغيب عن دالة السيرفرلس. التقاط أخطاء السيرفر صار عبر
+// captureServerException (import ديناميكي آمن — راجع src/lib/server-sentry.ts).
+// Sentry جهة المتصفح (src/instrument.client.ts) ما تأثّر.
 export const startInstance = createStart(() => ({
-  requestMiddleware: [sentryGlobalRequestMiddleware, errorMiddleware, csrfMiddleware],
-  functionMiddleware: [sentryGlobalFunctionMiddleware],
+  requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));

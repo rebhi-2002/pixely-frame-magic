@@ -18,7 +18,13 @@ const booleanFlag = z
   .transform((v) => v === "true");
 
 const envSchema = z.object({
-  VITE_API_BASE_URL: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
+  // فاضي ("") = نفس أصل الموقع (same-origin) — الوضع الموصى به: طلبات /api/*
+  // بتمرّ عبر بروكسي (Nitro routeRules بالإنتاج، Vite proxy بالتطوير — راجع
+  // vite.config.ts) فالكوكي بتصير first-party ولا تتأثر بحجب كوكيز الطرف الثالث.
+  // رابط كامل = اتصال مباشر cross-origin (يتطلب CORS + SameSite=None بالباك اند).
+  VITE_API_BASE_URL: z
+    .union([z.literal(""), z.string().url("لازم يكون رابط صالح (https://...)")])
+    .optional(),
   VITE_SITE_URL: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
   VITE_ENABLE_DEMO_LOGIN: booleanFlag,
   VITE_ENABLE_SIGNUP: booleanFlag,
@@ -41,7 +47,9 @@ if (!parsed.success) {
 
 const raw = parsed.success ? parsed.data : ({} as z.infer<typeof envSchema>);
 
-const DEFAULT_API_BASE_URL = "https://localhost:7176";
+// الافتراضي: same-origin (عبر البروكسي). ما عاد فيه fallback لـlocalhost لأنه
+// كان بيمرّ بصمت بنشر ناسي حدا يضبط المتغير ويخلي كل الطلبات تفشل.
+const DEFAULT_API_BASE_URL = "";
 const DEFAULT_SITE_URL = "https://pixely-frame-magic.vercel.app";
 const DEFAULT_SENTRY_DSN =
   "https://21151ae17d7188a038b5b79715f5cf2d@o4512061652467712.ingest.de.sentry.io/4512061664002128";
@@ -60,10 +68,10 @@ export const env = {
   PROD: import.meta.env.PROD,
 } as const;
 
-// فحص أمان إضافي: لو البناء إنتاجي وعنوان الباك اند لسا localhost، هاد شبه
-// أكيد غلطة نشر (نسي حدا يضبط VITE_API_BASE_URL بمنصة الاستضافة). بنصرخ
-// بوضوح بالـ console (و Sentry بالتقاطها كـ error لو مفعّل) بدل ما يكتشفها
-// المستخدم لما تفشل كل الطلبات بصمت.
+// فحص أمان إضافي: لو البناء إنتاجي وعنوان الباك اند صريح لـlocalhost، هاد شبه
+// أكيد غلطة نشر (قيمة محلية انرفعت للاستضافة). بنصرخ بوضوح بالـ console
+// (و Sentry بالتقاطها كـ error لو مفعّل) بدل ما يكتشفها المستخدم لما تفشل كل
+// الطلبات بصمت.
 if (env.PROD && env.API_BASE_URL.includes("localhost")) {
   console.error(
     "[env] تحذير نشر: VITE_API_BASE_URL ما زالت تشير لـ localhost ببناء إنتاجي. " +

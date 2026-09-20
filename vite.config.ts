@@ -9,6 +9,15 @@ import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 // افتراضيًا "vercel" إذا لم يُحدَّد المتغير.
 const nitroPreset = process.env.NITRO_PRESET || "vercel";
 
+// عنوان الباك اند الحقيقي يلي بنمرّر له طلبات /api/* (بروكسي same-origin).
+// بالإنتاج: Nitro routeRules (تشتغل كـrewrite على Vercel/Netlify وبنفس الوقت
+// بتمنع مشاكل CORS وحجب كوكيز الطرف الثالث لأن المتصفح بيشوف كل شي من دومين
+// الموقع نفسه). بالتطوير: Vite server.proxy. بدّله بمتغير بيئة (وقت البناء/
+// التشغيل) لو انتقل الباك اند لعنوان تاني، مثلاً https://localhost:7176.
+const API_PROXY_TARGET = (
+  process.env.API_PROXY_TARGET || "https://ziadkamalaln2842-001-site1.etempurl.com"
+).replace(/\/+$/, "");
+
 export default defineConfig({
   // Vite 8 بيدعم حل مسارات tsconfig (@/...) بشكل أصلي، فما عاد لازم بلوجن
   // "vite-tsconfig-paths" الخارجي (كان يعمل نفس الشي بس أبطأ وغير مُصان).
@@ -34,6 +43,9 @@ export default defineConfig({
     // النوع من المشاكل بحزمة تانية بالمستقبل.
     nitro({
       preset: nitroPreset,
+      routeRules: {
+        "/api/**": { proxy: `${API_PROXY_TARGET}/api/**` },
+      },
       traceDeps: [
         "@sentry/tanstackstart-react*",
         "require-in-the-middle*",
@@ -55,5 +67,8 @@ export default defineConfig({
   ],
   server: {
     host: true,
+    proxy: {
+      "/api": { target: API_PROXY_TARGET, changeOrigin: true, secure: false },
+    },
   },
 });

@@ -29,12 +29,22 @@ export default tseslint.config(
               message:
                 "TanStack Start does not use the Next.js `server-only` package. Rename the module to `*.server.ts` or mark it with `@tanstack/react-start/server-only`.",
             },
+            {
+              name: "@sentry/tanstackstart-react",
+              message:
+                "No static Sentry imports outside src/instrument.client.ts — they end up in the SSR bundle and take down every page (500 ERR_MODULE_NOT_FOUND) when the package is missing from the serverless function. Use dynamic import() with catch (see src/lib/server-sentry.ts).",
+            },
           ],
         },
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
     },
+  },
+  {
+    // الملف الوحيد المسموح له بـimport ثابت لـSentry: نقطة دخول المتصفح فقط.
+    files: ["src/instrument.client.ts"],
+    rules: { "no-restricted-imports": "off" },
   },
   eslintPluginPrettier,
 );
