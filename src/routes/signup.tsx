@@ -118,12 +118,10 @@ function SignupPage() {
     if (!role) return;
 
     const roleName = BACKEND_ROLE_NAME[role];
-    // مطابقة بالاسم أولًا، وإلا بالـid المعياري من الباك اند (UserTypeIds: الطالب=3،
-    // ولي الأمر=5) لو اختلفت صياغة الاسم بقاعدة البيانات.
-    const fallbackId = role === "student" ? 3 : 5;
-    const userType =
-      options?.roles.find((r) => r.name === roleName) ??
-      options?.roles.find((r) => r.id === fallbackId);
+    // مطابقة بالاسم فقط: مطابقة بالـid كانت خطرة لأن أرقام أنواع المستخدمين بقاعدة
+    // البيانات ممكن تختلف عن الثوابت بالكود (UserSeed.cs بيزرع الطالب=2/المعلم=3)
+    // فكان ممكن مستخدم يسجّل كطالب وينحفظ معلّم. الأفضل رسالة خطأ من نوع غلط.
+    const userType = options?.roles.find((r) => r.name === roleName);
     if (!userType) {
       toast.error(
         bi(

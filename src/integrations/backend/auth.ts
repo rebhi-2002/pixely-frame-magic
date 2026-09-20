@@ -235,20 +235,34 @@ async function fetchUserType(
 }
 
 /**
- * يجيب ملف المستخدم مباشرة بعد Login/Register ناجحين. لو رجع 401 هون فمعناها
- * إن الباك اند قَبِل الدخول لكن المتصفح ما رجّع كوكي الجلسة بالطلب التالي
- * (كوكيز الطرف الثالث محجوبة، أو اتصال مباشر cross-origin بدون بروكسي) —
- * منوضّح السبب بدل رسالة "انتهت جلستك" المضلّلة.
+ * يجيب ملف المستخدم مباشرة بعد Login/Register ناجحين، ويشرح للمستخدم سبب الفشل
+ * بدل رسالة عامة:
+ * - 401: الباك اند قَبِل الدخول لكن المتصفح ما رجّع كوكي الجلسة بالطلب التالي
+ *   (كوكيز الطرف الثالث محجوبة، أو اتصال مباشر cross-origin بدون بروكسي).
+ * - 403: الحساب اتأكّد (الدخول/التسجيل نجح) لكن الخادم رفض تحميل الملف الشخصي —
+ *   يعني صلاحيات هالنوع من الحسابات مش مكتملة بالخادم (مو خطأ ببيانات المستخدم).
  */
-async function fetchProfilePayloadAfterAuth(): Promise<ProfileEnvelope> {
+async function fetchProfilePayloadAfterAuth(kind: "login" | "register"): Promise<ProfileEnvelope> {
   try {
     return await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
   } catch (err) {
+    const ar = currentLang() === "ar";
     if (err instanceof ApiError && err.status === 401) {
       throw new Error(
-        currentLang() === "ar"
+        ar
           ? "تم قبول بيانات الدخول لكن المتصفح لم يحتفظ بجلسة الدخول (الكوكي). جرّب تعطيل حظر الكوكيز لهذا الموقع أو تحديث الصفحة، وإذا استمرت المشكلة بلّغ الدعم."
           : "Your credentials were accepted but the browser did not keep the sign-in session (cookie). Allow cookies for this site or refresh, and contact support if it persists.",
+      );
+    }
+    if (err instanceof ApiError && err.status === 403) {
+      throw new Error(
+        kind === "register"
+          ? ar
+            ? "تم إنشاء حسابك بنجاح، لكن الخادم لم يسمح بتحميل ملفك الشخصي بعد (صلاحيات الحساب غير مكتملة). لا تُعد التسجيل بنفس البيانات؛ حاول تسجيل الدخول لاحقًا أو تواصل مع الدعم."
+            : "Your account was created, but the server didn't allow loading your profile yet (account permissions are incomplete). Don't register again with the same details — try signing in later or contact support."
+          : ar
+            ? "تم التحقق من بياناتك، لكن الخادم لم يسمح بتحميل ملفك الشخصي (صلاحيات حسابك غير مكتملة). ليس الخطأ من بياناتك — تواصل مع الدعم."
+            : "Your credentials are correct, but the server didn't allow loading your profile (your account permissions are incomplete). This isn't caused by your details — contact support.",
       );
     }
     throw err;
@@ -277,7 +291,7 @@ export async function login(email: string, password: string): Promise<void> {
     throw operationError(result, "تعذّر تسجيل الدخول");
   }
 
-  const payload = await fetchProfilePayloadAfterAuth();
+  const payload = await fetchProfilePayloadAfterAuth("login");
   const profile = normalizeProfile(payload);
   if (!profile) {
     // TODO(temp-debug): احذف هالسطر بعد ما نتأكد من شكل الاستجابة الحقيقي.
@@ -313,21 +327,35 @@ export interface RegisterInput {
 /** الباك اند بينشئ الحساب، ينشئ Wallet تلقائيًا، ويسجّل الدخول فورًا لو نجح
  * (SignInManager.SignInAsync)، فمنجيب البروفايل فورًا بعدها متل login(). */
 export async function register(input: RegisterInput): Promise<void> {
-  const result = await apiClient.post<OperationResult>("/api/Auth/Register", {
-    name: input.name,
-    email: input.email,
-    phoneNumber: input.phoneNumber,
-    password: input.password,
-    confirmPassword: input.confirmPassword,
-    genderId: input.genderId,
-    userTypeId: input.userTypeId,
-  });
+  let result: OperationResult;
+  try {
+    result = await apiClient.post<OperationResult>("/api/Auth/Register", {
+      name: input.name,
+      email: input.email,
+      phoneNumber: input.phoneNumber,
+      password: input.password,
+      confirmPassword: input.confirmPassword,
+      genderId: input.genderId,
+      userTypeId: input.userTypeId,
+    });
+  } catch (err) {
+    // خطأ خادم (5xx) وقت التسجيل: بالتجربة أكثر سبب معروف هو رقم هاتف مسجّل مسبقًا
+    // (فهرس فريد بقاعدة البيانات) — بنوضّحه بدل "حدث خطأ بالخادم" العامة.
+    if (err instanceof ApiError && err.status >= 500) {
+      throw new Error(
+        currentLang() === "ar"
+          ? "تعذّر إنشاء الحساب بسبب خطأ في الخادم. قد يكون رقم الهاتف أو البريد الإلكتروني مسجّلًا مسبقًا — جرّب بيانات مختلفة، وإن استمر الخطأ تواصل مع الدعم."
+          : "We couldn't create your account because of a server error. The phone number or email may already be registered — try different details, and contact support if it persists.",
+      );
+    }
+    throw err;
+  }
 
   if (!result?.success) {
     throw operationError(result, "تعذّر إنشاء الحساب");
   }
 
-  const payload = await fetchProfilePayloadAfterAuth();
+  const payload = await fetchProfilePayloadAfterAuth("register");
   const profile = normalizeProfile(payload);
   if (!profile) {
     throw new Error("تم إنشاء الحساب، لكن تعذّر التحقق من الملف الشخصي");

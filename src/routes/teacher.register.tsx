@@ -101,10 +101,9 @@ function TeacherRegisterPage() {
       toast.error(bi("الجنس مطلوب", "Gender is required"));
       return;
     }
-    // مطابقة بالاسم أولًا، وإلا بالـid المعياري (UserTypeIds.Teacher = 4).
-    const userType =
-      options?.roles.find((r) => r.name === TEACHER_ROLE_NAME) ??
-      options?.roles.find((r) => r.id === 4);
+    // مطابقة بالاسم فقط (راجع التعليق بـsignup.tsx: المطابقة بالـid خطرة لو اختلفت
+    // أرقام الأنواع بقاعدة البيانات عن ثوابت الكود).
+    const userType = options?.roles.find((r) => r.name === TEACHER_ROLE_NAME);
     if (!userType) {
       toast.error(
         bi(
