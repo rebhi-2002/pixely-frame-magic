@@ -374,8 +374,7 @@ export async function verifyServerSession(): Promise<boolean> {
     // صفحة) فيصير المستخدم "بلا دور" ويظهر "تعذّر تحميل صلاحياتك". منحافظ
     // على الدور: من ردّ السيرفر، وإلا من الجلسة المخزّنة لنفس المستخدم، وإلا
     // من fetchUserType.
-    const previous =
-      current?.profile && current.profile.id === profile.id ? current.profile : null;
+    const previous = current?.profile && current.profile.id === profile.id ? current.profile : null;
     const fromEnvelope = roleFromEnvelope(payload);
     profile.roleId = fromEnvelope.roleId ?? previous?.roleId ?? null;
     profile.roleName = fromEnvelope.roleName ?? previous?.roleName ?? null;
