@@ -3525,7 +3525,7 @@ ZodVoid.create;
 var arrayType = ZodArray.create;
 var objectType = ZodObject.create;
 ZodObject.strictCreate;
-ZodUnion.create;
+var unionType = ZodUnion.create;
 ZodDiscriminatedUnion.create;
 ZodIntersection.create;
 ZodTuple.create;
@@ -3544,4 +3544,4 @@ ZodNullable.create;
 ZodEffects.createWithPreprocess;
 ZodPipeline.create;
 //#endregion
-export { numberType as a, literalType as i, booleanType as n, objectType as o, enumType as r, stringType as s, arrayType as t };
+export { numberType as a, unionType as c, literalType as i, booleanType as n, objectType as o, enumType as r, stringType as s, arrayType as t };

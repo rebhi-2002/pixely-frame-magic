@@ -1,1 +1,0 @@
-import{W as e}from"./rbac-static-data-CwL0Db_S.js";import{C as t}from"./index-BN7hfFbf.js";var n=e();function r({children:e}){let r=t({select:e=>e.location.pathname});return(0,n.jsx)(`div`,{className:`route-fade`,children:e},r)}export{r as t};

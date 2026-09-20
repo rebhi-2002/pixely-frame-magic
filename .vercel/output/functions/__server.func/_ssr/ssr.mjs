@@ -1,10 +1,11 @@
 import { n as __exportAll } from "../_runtime.mjs";
-import { o as objectType, s as stringType } from "../_libs/zod.mjs";
+import { c as unionType, i as literalType, o as objectType, s as stringType } from "../_libs/zod.mjs";
 //#region node_modules/.nitro/vite/services/ssr/index.js
 var ssr_exports = /* @__PURE__ */ __exportAll({
 	default: () => server_default,
-	n: () => renderErrorPage,
-	t: () => env
+	n: () => env,
+	r: () => renderErrorPage,
+	t: () => captureServerException
 });
 var lastCapturedError;
 var TTL_MS = 5e3;
@@ -100,7 +101,7 @@ function renderErrorPage() {
 }
 var booleanFlag = stringType().optional().transform((v) => v === "true");
 var parsed = objectType({
-	VITE_API_BASE_URL: stringType().url("لازم يكون رابط صالح (https://...)").optional(),
+	VITE_API_BASE_URL: unionType([literalType(""), stringType().url("لازم يكون رابط صالح (https://...)")]).optional(),
 	VITE_SITE_URL: stringType().url("لازم يكون رابط صالح (https://...)").optional(),
 	VITE_ENABLE_DEMO_LOGIN: booleanFlag,
 	VITE_ENABLE_SIGNUP: booleanFlag,
@@ -120,8 +121,8 @@ var parsed = objectType({
 	"TSS_INLINE_CSS_ENABLED": "false",
 	"TSS_ROUTER_BASEPATH": "",
 	"TSS_SERVER_FN_BASE": "/_serverFn/",
-	"VITE_API_BASE_URL": "https://ziadkamalaln2842-001-site1.etempurl.com",
-	"VITE_ENABLE_DEMO_LOGIN": "true",
+	"VITE_API_BASE_URL": "",
+	"VITE_ENABLE_DEMO_LOGIN": "false",
 	"VITE_ENABLE_SIGNUP": "true",
 	"VITE_POSTHOG_HOST": "https://us.i.posthog.com",
 	"VITE_POSTHOG_KEY": "phc_xiySFLRMy4zcoZSAk2tJrFa7PwPYiS2tZYkPH8zRYuAv"
@@ -129,7 +130,7 @@ var parsed = objectType({
 if (!parsed.success) console.error("[env] متغيرات بيئة غير صالحة — راجع .env.example:", parsed.error.flatten().fieldErrors);
 var raw = parsed.success ? parsed.data : {};
 var env = {
-	API_BASE_URL: (raw.VITE_API_BASE_URL ?? "https://localhost:7176").replace(/\/+$/, ""),
+	API_BASE_URL: (raw.VITE_API_BASE_URL ?? "").replace(/\/+$/, ""),
 	SITE_URL: (raw.VITE_SITE_URL ?? "https://pixely-frame-magic.vercel.app").replace(/\/$/, ""),
 	ENABLE_DEMO_LOGIN: raw.VITE_ENABLE_DEMO_LOGIN === true,
 	ENABLE_SIGNUP: raw.VITE_ENABLE_SIGNUP === true,
@@ -142,7 +143,7 @@ var env = {
 };
 if (env.PROD && env.API_BASE_URL.includes("localhost")) console.error("[env] تحذير نشر: VITE_API_BASE_URL ما زالت تشير لـ localhost ببناء إنتاجي. تأكد من ضبط متغيرات البيئة الصحيحة بمنصة الاستضافة قبل النشر.");
 var sentryReady = null;
-function getSentry() {
+function getServerSentry() {
 	if (!sentryReady) sentryReady = import("@sentry/tanstackstart-react").then((mod) => {
 		mod.init({
 			dsn: env.SENTRY_DSN,
@@ -156,10 +157,14 @@ function getSentry() {
 	});
 	return sentryReady;
 }
-getSentry();
+/** يرسل الخطأ لـSentry إن كان متاحًا، وإلا يتجاهله بصمت (لا يرمي أبدًا). */
+function captureServerException(error) {
+	getServerSentry().then((sentry) => sentry?.captureException(error)).catch(() => void 0);
+}
+getServerSentry();
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-CQPo-kzR.mjs").then((n) => n.t).then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-B5p42gG_.mjs").then((n) => n.t).then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -169,7 +174,7 @@ async function normalizeCatastrophicSsrResponse(response) {
 	if (!isH3SwallowedErrorBody(body)) return response;
 	const swallowed = consumeLastCapturedError() ?? /* @__PURE__ */ new Error(`h3 swallowed SSR error: ${body}`);
 	console.error(swallowed);
-	getSentry().then((sentry) => sentry?.captureException(swallowed));
+	captureServerException(swallowed);
 	return new Response(renderErrorPage(), {
 		status: 500,
 		headers: { "content-type": "text/html; charset=utf-8" }
@@ -188,7 +193,7 @@ var server_default = { async fetch(request, env, ctx) {
 		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
 	} catch (error) {
 		console.error(error);
-		getSentry().then((sentry) => sentry?.captureException(error));
+		captureServerException(error);
 		return new Response(renderErrorPage(), {
 			status: 500,
 			headers: { "content-type": "text/html; charset=utf-8" }
@@ -196,4 +201,4 @@ var server_default = { async fetch(request, env, ctx) {
 	}
 } };
 //#endregion
-export { server_default as default, renderErrorPage as n, ssr_exports as r, env as t };
+export { server_default as default, ssr_exports as i, env as n, renderErrorPage as r, captureServerException as t };

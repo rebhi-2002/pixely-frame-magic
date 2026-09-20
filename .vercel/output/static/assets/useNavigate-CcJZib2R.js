@@ -1,1 +1,0 @@
-import{B as e,Ot as t,Tt as n}from"./rbac-static-data-CwL0Db_S.js";var r=t(n(),1);function i(t){let n=e();return r.useCallback(e=>n.navigate({...e,from:e.from??t?.from}),[t?.from,n])}export{i as t};
