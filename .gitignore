@@ -44,3 +44,4 @@ test-results/
 # لـGit. لو انرفع .vercel/output، الـ.gitignore أعلاه (node_modules) بيمنع رفع
 # node_modules الخاص بدالة السيرفرلس، فبتوصل Vercel دالة ناقصة الحزم.
 .vercel
+".vercel/" 
