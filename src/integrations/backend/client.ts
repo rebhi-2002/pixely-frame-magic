@@ -11,6 +11,33 @@ export const API_BASE_URL: string = env.API_BASE_URL;
 
 const REQUEST_TIMEOUT_MS = 30_000;
 
+/** يُطلق لما أي طلب (غير مصادقة) يرجع 401 — أي الجلسة/الكوكي انتهت أو ما وصلت
+ * للباك اند. مستمع واحد بـ_authenticated/route.tsx بيمسح الجلسة المحلية
+ * ويرجّع المستخدم لصفحة الدخول بدل ما يضل عالق بصفحة فاضية بعد "نجاح" ظاهري. */
+export const SESSION_EXPIRED_EVENT = "academia-session-expired";
+
+/** الباك اند بيجمّع رسائل التحقق بـ"<br>" (نص HTML) — منحوّلها لنص عادي مقروء. */
+export function cleanBackendMessage(message: string): string {
+  const withBreaks = message.replace(/<br\s*\/?>/gi, " — ");
+  return withBreaks.replace(/\s+/g, " ").trim();
+}
+
+/** يستخرج رسالة المستخدم من ردّ خطأ الباك اند بشكليه: {message} (OperationResult)
+ * أو ProblemDetails/{errors:{Field:[...]}} يلي بيرجعه [ApiController] تلقائيًا
+ * عند فشل التحقق (400) — كان الشكل التاني بينتجاهل ويظهر نص عام "البيانات غير صحيحة". */
+function extractBackendMessage(data: unknown): string | undefined {
+  if (!data || typeof data !== "object") return undefined;
+  const { message, errors } = data as { message?: unknown; errors?: unknown };
+  if (typeof message === "string" && message.trim()) return cleanBackendMessage(message);
+  if (errors && typeof errors === "object") {
+    const messages = Object.values(errors as Record<string, unknown>)
+      .flatMap((value) => (Array.isArray(value) ? value : [value]))
+      .filter((m): m is string => typeof m === "string" && m.trim().length > 0);
+    if (messages.length > 0) return cleanBackendMessage(messages.join("<br>"));
+  }
+  return undefined;
+}
+
 export type ApiErrorKind = "network" | "timeout" | "http" | "parse";
 
 export class ApiError extends Error {
@@ -124,6 +151,12 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
     clearTimeout(timeoutId);
   }
 
+  // 401 على أي endpoint غير مصادقة = الجلسة غير موجودة/منتهية (نبلّغ قبل أي
+  // معالجة للجسم عشان يصير حتى لو الجسم مش JSON).
+  if (res.status === 401 && typeof window !== "undefined" && !path.startsWith("/api/Auth/")) {
+    window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+  }
+
   const text = await res.text();
   let data: unknown = null;
   if (text) {
@@ -144,15 +177,12 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
   }
 
   if (!res.ok) {
-    const backendMessage =
-      data && typeof data === "object" && "message" in data
-        ? (data as { message?: string | null }).message
-        : undefined;
+    const backendMessage = extractBackendMessage(data);
     const technicalMessage = backendMessage || `${res.status} ${res.statusText}`;
     // رسالة الباك اند (لو موجودة وواضحة) لها الأولوية كـ userMessage — هي
     // أصلاً مكتوبة عربي وموجّهة للمستخدم بمعظم الحالات بهالمشروع. غير هيك
     // منستخدم رسالة عامة واضحة حسب نوع الخطأ بدل النص التقني.
-    const userMessage = backendMessage?.trim() || friendlyMessageFor("http", res.status);
+    const userMessage = backendMessage || friendlyMessageFor("http", res.status);
     throw new ApiError(technicalMessage, res.status, "http", userMessage);
   }
 

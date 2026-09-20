@@ -12,8 +12,7 @@ import { FeatureStatus } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
 import { roleHome, useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { register, getStoredProfile } from "@/integrations/backend/auth";
-import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
+import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
 import { env } from "@/lib/env";
@@ -49,12 +48,29 @@ export const Route = createFileRoute("/signup")({
 
 type RoleKey = "student" | "parent";
 
-const schema = z.object({
-  fullName: z.string().trim().min(2),
-  email: z.string().trim().email(),
-  phoneNumber: z.string().trim().min(7),
-  password: z.string().min(6),
-});
+// قواعد كلمة المرور مطابقة لإعدادات Identity بالباك اند (Program.cs): 8 أحرف
+// على الأقل + رقم واحد على الأقل. كان الفرونت يقبل 6 فيرفضها الباك اند برسالة
+// إنجليزية تقنية بعد ما المستخدم يكون ضغط "إنشاء حساب".
+function buildSchema(bi: ReturnType<typeof useBi>) {
+  return z.object({
+    fullName: z.string().trim().min(2, bi("الاسم قصير جدًا", "Name is too short")),
+    email: z.string().trim().email(bi("البريد الإلكتروني غير صالح", "Invalid email address")),
+    phoneNumber: z.string().trim().min(7, bi("رقم الهاتف غير صالح", "Invalid phone number")),
+    password: z
+      .string()
+      .min(
+        8,
+        bi("كلمة المرور يجب أن تكون 8 أحرف على الأقل", "Password must be at least 8 characters"),
+      )
+      .regex(
+        /\d/,
+        bi(
+          "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
+          "Password must contain at least one digit",
+        ),
+      ),
+  });
+}
 
 function SignupPage() {
   const { t } = useTranslation();
@@ -73,13 +89,14 @@ function SignupPage() {
   // القيم مش ثابتة بالكود لأنها ممكن تختلف بين البيئات.
   const { data: options } = useQuery({
     queryKey: ["signup-options"],
-    queryFn: loadBackendUserOptions,
+    queryFn: loadRegistrationOptions,
     enabled: signupEnabled,
+    retry: 1,
   });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = schema.safeParse({ fullName, email, phoneNumber, password });
+    const parsed = buildSchema(bi).safeParse({ fullName, email, phoneNumber, password });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
       return;
@@ -95,7 +112,12 @@ function SignupPage() {
     if (!role) return;
 
     const roleName = BACKEND_ROLE_NAME[role];
-    const userType = options?.roles.find((r) => r.name === roleName);
+    // مطابقة بالاسم أولًا، وإلا بالـid المعياري من الباك اند (UserTypeIds: الطالب=3،
+    // ولي الأمر=5) لو اختلفت صياغة الاسم بقاعدة البيانات.
+    const fallbackId = role === "student" ? 3 : 5;
+    const userType =
+      options?.roles.find((r) => r.name === roleName) ??
+      options?.roles.find((r) => r.id === fallbackId);
     if (!userType) {
       toast.error(
         bi(

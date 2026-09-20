@@ -5,8 +5,9 @@ import {
   getStoredProfile,
   getStoredUserId,
   isAuthenticated,
+  isDemoSession,
 } from "@/integrations/backend/auth";
-import { roleHome, type RoleKey } from "@/lib/bi";
+import { roleHome, roleKeyFromName, type RoleKey } from "@/lib/bi";
 import { ROLES, USERS } from "@/lib/rbac-static-data";
 
 export interface PublicSession {
@@ -32,6 +33,25 @@ function buildSession(): PublicSession | null {
   if (!isAuthenticated()) return null;
   const userId = getStoredUserId() ?? "u-admin";
   const profile = getStoredProfile();
+
+  // جلسة حقيقية من الباك اند: الدور من نوع المستخدم الفعلي. ما منرجع لـUSERS[0]
+  // (الأدمن التجريبي) لأن الـid الحقيقي (GUID) ما بيطابق بيانات الديمو — كان كل
+  // مستخدم حقيقي (حتى الطالب) بيظهر له رابط/دور "مدير عام" بالهيدر العام.
+  if (!isDemoSession() && profile) {
+    const isAdmin = profile.roleId === 1;
+    const roleKey = roleKeyFromName(profile.roleName, isAdmin);
+    return {
+      userId,
+      email: profile.email ?? getStoredEmail(),
+      fullName: profile.name,
+      avatarUrl: profile.avatar ?? null,
+      roleName: profile.roleName ?? null,
+      roleKey,
+      isAdmin,
+      home: roleHome(profile.roleName, isAdmin),
+    };
+  }
+
   const user = USERS.find((u) => u.id === userId) ?? USERS[0];
   const role = ROLES.find((r) => r.id === user.role_id);
   const isAdmin = role?.name === "مدير عام";

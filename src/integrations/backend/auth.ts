@@ -3,7 +3,7 @@
 // إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
 // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
 
-import { apiClient, ApiError } from "./client";
+import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
 import { env } from "@/lib/env";
 
 const AUTH_STORAGE_KEY = "academia.auth";
@@ -49,7 +49,30 @@ interface StoredSession {
 type ProfileEnvelope = {
   myProfileDto?: Partial<StoredProfile> | null;
   MyProfileDto?: Partial<StoredProfile> | null;
+  /** نوع المستخدم — الباك اند صار يرجّعه بنفس ردّ MyProfileModal (مستوى الغلاف،
+   * مش داخل MyProfileDto لأنه DTO مشترك مع تعديل الملف الشخصي). */
+  userTypeId?: number | null;
+  UserTypeId?: number | null;
+  userTypeName?: string | null;
+  UserTypeName?: string | null;
 };
+
+function roleFromEnvelope(payload: ProfileEnvelope): {
+  roleId: number | null;
+  roleName: string | null;
+} {
+  const id = payload?.userTypeId ?? payload?.UserTypeId;
+  const name = payload?.userTypeName ?? payload?.UserTypeName;
+  return {
+    roleId: typeof id === "number" ? id : null,
+    roleName: typeof name === "string" && name.length > 0 ? name : null,
+  };
+}
+
+/** نتيجة عملية (OperationResult) فاشلة → Error برسالة نظيفة (بدون <br>). */
+function operationError(result: { message?: string | null } | null | undefined, fallback: string) {
+  return new Error(result?.message ? cleanBackendMessage(result.message) : fallback);
+}
 
 function readStoredSession(): StoredSession | null {
   if (typeof window === "undefined") return null;
@@ -94,7 +117,7 @@ export async function updateMyProfile(input: UpdateProfileInput): Promise<void> 
     },
   );
   if (!result?.success) {
-    throw new Error(result?.message || "تعذّر حفظ التعديلات");
+    throw operationError(result, "تعذّر حفظ التعديلات");
   }
   patchStoredProfile({
     name: input.name,
@@ -124,7 +147,7 @@ export async function changeMyPassword(input: ChangePasswordInput): Promise<void
     },
   );
   if (!result?.success) {
-    throw new Error(result?.message || "تعذّر تغيير كلمة المرور");
+    throw operationError(result, "تعذّر تغيير كلمة المرور");
   }
 }
 
@@ -200,6 +223,38 @@ async function fetchUserType(
   }
 }
 
+/**
+ * يجيب ملف المستخدم مباشرة بعد Login/Register ناجحين. لو رجع 401 هون فمعناها
+ * إن الباك اند قَبِل الدخول لكن المتصفح ما رجّع كوكي الجلسة بالطلب التالي
+ * (كوكيز الطرف الثالث محجوبة، أو اتصال مباشر cross-origin بدون بروكسي) —
+ * منوضّح السبب بدل رسالة "انتهت جلستك" المضلّلة.
+ */
+async function fetchProfilePayloadAfterAuth(): Promise<ProfileEnvelope> {
+  try {
+    return await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 401) {
+      throw new Error(
+        currentLang() === "ar"
+          ? "تم قبول بيانات الدخول لكن المتصفح لم يحتفظ بجلسة الدخول (الكوكي). جرّب تعطيل حظر الكوكيز لهذا الموقع أو تحديث الصفحة، وإذا استمرت المشكلة بلّغ الدعم."
+          : "Your credentials were accepted but the browser did not keep the sign-in session (cookie). Allow cookies for this site or refresh, and contact support if it persists.",
+      );
+    }
+    throw err;
+  }
+}
+
+/** الدور من ردّ MyProfileModal مباشرة (الأدق)، وإلا fallback لنداء CreateEditModal
+ * (بيشتغل للأدمن بس — غير الأدمن بياخد 403 فبنرجع null). */
+async function resolveRole(
+  payload: ProfileEnvelope,
+  userId: string,
+): Promise<{ roleId: number | null; roleName: string | null }> {
+  const fromEnvelope = roleFromEnvelope(payload);
+  if (fromEnvelope.roleId != null) return fromEnvelope;
+  return fetchUserType(userId);
+}
+
 export async function login(email: string, password: string): Promise<void> {
   const result = await apiClient.post<OperationResult>("/api/Auth/Login", {
     email,
@@ -208,10 +263,10 @@ export async function login(email: string, password: string): Promise<void> {
   });
 
   if (!result?.success) {
-    throw new Error(result?.message || "تعذّر تسجيل الدخول");
+    throw operationError(result, "تعذّر تسجيل الدخول");
   }
 
-  const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+  const payload = await fetchProfilePayloadAfterAuth();
   const profile = normalizeProfile(payload);
   if (!profile) {
     // TODO(temp-debug): احذف هالسطر بعد ما نتأكد من شكل الاستجابة الحقيقي.
@@ -219,7 +274,7 @@ export async function login(email: string, password: string): Promise<void> {
     throw new Error("تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي");
   }
 
-  const userType = await fetchUserType(profile.id);
+  const userType = await resolveRole(payload, profile.id);
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
 
@@ -258,16 +313,16 @@ export async function register(input: RegisterInput): Promise<void> {
   });
 
   if (!result?.success) {
-    throw new Error(result?.message || "تعذّر إنشاء الحساب");
+    throw operationError(result, "تعذّر إنشاء الحساب");
   }
 
-  const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
+  const payload = await fetchProfilePayloadAfterAuth();
   const profile = normalizeProfile(payload);
   if (!profile) {
     throw new Error("تم إنشاء الحساب، لكن تعذّر التحقق من الملف الشخصي");
   }
 
-  const userType = await fetchUserType(profile.id);
+  const userType = await resolveRole(payload, profile.id);
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
 
@@ -313,6 +368,23 @@ export async function verifyServerSession(): Promise<boolean> {
     if (!profile) return false;
 
     const current = readStoredSession();
+
+    // MyProfileDto ما فيه دور، فـnormalizeProfile بيرجّع roleId=null — وكان
+    // هالسطر بيمسح الدور المخزّن عند كل فحص جلسة (كل دخول لمسار محمي/تحديث
+    // صفحة) فيصير المستخدم "بلا دور" ويظهر "تعذّر تحميل صلاحياتك". منحافظ
+    // على الدور: من ردّ السيرفر، وإلا من الجلسة المخزّنة لنفس المستخدم، وإلا
+    // من fetchUserType.
+    const previous =
+      current?.profile && current.profile.id === profile.id ? current.profile : null;
+    const fromEnvelope = roleFromEnvelope(payload);
+    profile.roleId = fromEnvelope.roleId ?? previous?.roleId ?? null;
+    profile.roleName = fromEnvelope.roleName ?? previous?.roleName ?? null;
+    if (profile.roleId == null) {
+      const fetched = await fetchUserType(profile.id);
+      profile.roleId = fetched.roleId;
+      profile.roleName = fetched.roleName;
+    }
+
     writeStoredSession({
       email: profile.email,
       loggedInAt: current?.loggedInAt ?? Date.now(),
@@ -327,6 +399,31 @@ export async function verifyServerSession(): Promise<boolean> {
     }
     return false;
   }
+}
+
+/** يمسح الجلسة المحلية (localStorage + كوكي الواجهة) ويُعلم المستمعين — يُستخدم
+ * لما الباك اند يرد 401 (الجلسة انتهت) عشان ما نضل نعرض واجهة مسجّل دخول. */
+export function clearStoredSession(): void {
+  writeStoredSession(null);
+}
+
+export interface RegistrationOptions {
+  roles: Array<{ id: number; name: string }>;
+  genders: Array<{ id: number; name: string }>;
+}
+
+/**
+ * خيارات صفحة التسجيل (الجنس + أنواع الحسابات المسموح التسجيل بها) — endpoint
+ * عام بالباك اند (AllowAnonymous). كانت الصفحة تستخدم /api/User/CreateEditModal
+ * (endpoint إدارة بيتطلب دخول + صلاحية) فكانت بترجع 401 للزائر وتضل قائمة الجنس
+ * فاضية ويفشل "تحديد نوع الحساب".
+ */
+export async function loadRegistrationOptions(): Promise<RegistrationOptions> {
+  const result = await apiClient.get<{
+    genders?: Array<{ id: number; name: string }> | null;
+    userTypes?: Array<{ id: number; name: string }> | null;
+  }>("/api/Auth/RegistrationOptions");
+  return { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
 }
 
 export async function logout(): Promise<void> {

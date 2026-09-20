@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
+import { toast } from "sonner";
 import {
+  clearStoredSession,
   getStoredUserId,
   isAuthenticated,
   isDemoSession,
@@ -12,7 +15,9 @@ import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/site/page-transition";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 
+import { SESSION_EXPIRED_EVENT } from "@/integrations/backend/client";
 import { useAccess } from "@/hooks/use-access";
+import { useBi } from "@/lib/bi";
 import { env } from "@/lib/env";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -49,6 +54,33 @@ function AuthenticatedLayout() {
   }, [collapsed]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { access, isLoading, error } = useAccess();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const bi = useBi();
+
+  /* أي طلب للباك اند رجع 401 (الكوكي انتهت/ما وصلت) = الجلسة الفعلية انتهت رغم
+     إن الواجهة لسا مخزّنة "مسجّل دخول". بدل ما تضل الصفحة عالقة بأخطاء، منمسح
+     الجلسة المحلية ونرجّع المستخدم لصفحة الدخول. جلسات الديمو ما بتتأثر (ما
+     بتنادي الباك اند). */
+  useEffect(() => {
+    let handled = false;
+    const onExpired = () => {
+      if (handled) return;
+      if (env.ENABLE_DEMO_LOGIN && isDemoSession()) return;
+      handled = true;
+      clearStoredSession();
+      queryClient.clear();
+      toast.error(
+        bi(
+          "انتهت جلستك. سجّل الدخول مجددًا للمتابعة.",
+          "Your session has ended. Please sign in again to continue.",
+        ),
+      );
+      navigate({ to: "/login", replace: true });
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
+  }, [bi, navigate, queryClient]);
 
   if (isLoading) {
     return <DashboardSkeleton />;
