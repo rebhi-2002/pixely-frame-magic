@@ -10,6 +10,7 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { FeatureStatus } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
+import { genderNameEn } from "@/lib/gender";
 import { roleHome, useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
@@ -87,7 +88,12 @@ function SignupPage() {
 
   // الجنس ونوع المستخدم لازم يجيوا من الباك اند (نفس مصدر شاشة الأدمن) —
   // القيم مش ثابتة بالكود لأنها ممكن تختلف بين البيئات.
-  const { data: options } = useQuery({
+  const {
+    data: options,
+    isLoading: optionsLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ["signup-options"],
     queryFn: loadRegistrationOptions,
     enabled: signupEnabled,
@@ -262,16 +268,30 @@ function SignupPage() {
               onValueChange={(v) => setGenderId(Number(v))}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+                <SelectValue
+                  placeholder={
+                    optionsLoading
+                      ? bi("جارٍ التحميل…", "Loading…")
+                      : bi("اختر الجنس", "Select gender")
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
                 {(options?.genders ?? []).map((g) => (
                   <SelectItem key={g.id} value={String(g.id)}>
-                    {g.name}
+                    {bi(g.name, genderNameEn(g))}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {isError && (
+              <p className="text-xs text-destructive">
+                {bi("تعذّر تحميل قائمة الجنس.", "Couldn't load the gender list.")}{" "}
+                <button type="button" className="font-bold underline" onClick={() => refetch()}>
+                  {bi("إعادة المحاولة", "Retry")}
+                </button>
+              </p>
+            )}
           </div>
           <AuthField
             id="password"

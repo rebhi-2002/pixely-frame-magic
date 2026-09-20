@@ -17,6 +17,12 @@ const booleanFlag = z
   .optional()
   .transform((v) => v === "true");
 
+// متغير بيئة فاضي ("") = غير معرّف. بلوحات الاستضافة (Vercel...) بيتساهل الناس
+// وبينسخوا .env.example بقيمه الفاضية — وبدون هالتحويل كان "VITE_SITE_URL=''" لحاله
+// بيفشّل السكيما كلها ويرجّع *كل* المتغيرات للقيم الافتراضية (فينطفي التسجيل
+// والدخول التجريبي حتى لو مفعّلين).
+const emptyAsUndefined = (value: unknown) => (value === "" ? undefined : value);
+
 const envSchema = z.object({
   // فاضي ("") = نفس أصل الموقع (same-origin) — الوضع الموصى به: طلبات /api/*
   // بتمرّ عبر بروكسي (Nitro routeRules بالإنتاج، Vite proxy بالتطوير — راجع
@@ -25,27 +31,44 @@ const envSchema = z.object({
   VITE_API_BASE_URL: z
     .union([z.literal(""), z.string().url("لازم يكون رابط صالح (https://...)")])
     .optional(),
-  VITE_SITE_URL: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
+  VITE_SITE_URL: z.preprocess(
+    emptyAsUndefined,
+    z.string().url("لازم يكون رابط صالح (https://...)").optional(),
+  ),
   VITE_ENABLE_DEMO_LOGIN: booleanFlag,
   VITE_ENABLE_SIGNUP: booleanFlag,
   VITE_SENTRY_DSN: z.string().optional(),
   VITE_POSTHOG_KEY: z.string().optional(),
-  VITE_POSTHOG_HOST: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
+  VITE_POSTHOG_HOST: z.preprocess(
+    emptyAsUndefined,
+    z.string().url("لازم يكون رابط صالح (https://...)").optional(),
+  ),
 });
 
 const parsed = envSchema.safeParse(import.meta.env);
 
 if (!parsed.success) {
   // ما منرمي (throw) عمداً: خطأ بمتغيّر بيئة ثانوي (زي PostHog host غلط) ما
-  // لازم يوقف التطبيق كله عن الشغل. بنطبع تحذير واضح وبنكمل بالقيم
-  // الافتراضية تحت، وبيضل يبين بالـ console/Sentry لحد ما ينحل.
+  // لازم يوقف التطبيق كله عن الشغل. بنطبع تحذير واضح وبنكمل — والأهم: بنعتمد كل
+  // متغيّر صالح لحاله (salvage) بدل ما نرجّع *كل* القيم للافتراضي لأن متغيّر واحد
+  // غلط (هيك كان يختفي نموذج التسجيل والدخول التجريبي بالإنتاج).
   console.error(
     "[env] متغيرات بيئة غير صالحة — راجع .env.example:",
     parsed.error.flatten().fieldErrors,
   );
 }
 
-const raw = parsed.success ? parsed.data : ({} as z.infer<typeof envSchema>);
+function salvageValidFields(): z.infer<typeof envSchema> {
+  const source = import.meta.env as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const [key, fieldSchema] of Object.entries(envSchema.shape)) {
+    const result = (fieldSchema as z.ZodType).safeParse(source[key]);
+    if (result.success && result.data !== undefined) out[key] = result.data;
+  }
+  return out as z.infer<typeof envSchema>;
+}
+
+const raw = parsed.success ? parsed.data : salvageValidFields();
 
 // الافتراضي: same-origin (عبر البروكسي). ما عاد فيه fallback لـlocalhost لأنه
 // كان بيمرّ بصمت بنشر ناسي حدا يضبط المتغير ويخلي كل الطلبات تفشل.

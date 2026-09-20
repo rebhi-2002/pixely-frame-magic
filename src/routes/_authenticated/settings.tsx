@@ -20,8 +20,9 @@ import {
   getStoredProfile,
   updateMyProfile,
   changeMyPassword,
+  loadRegistrationOptions,
 } from "@/integrations/backend/auth";
-import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
+import { genderNameEn } from "@/lib/gender";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,7 +76,7 @@ function SettingsPage() {
   // Constants)، مش قائمة ثابتة بالكود. غير مطلوبة بوضع الديمو.
   const { data: options } = useQuery({
     queryKey: ["signup-options"],
-    queryFn: loadBackendUserOptions,
+    queryFn: loadRegistrationOptions,
     enabled: !demo,
   });
 
@@ -314,7 +315,7 @@ function SettingsPage() {
                     <SelectContent>
                       {(options?.genders ?? []).map((g) => (
                         <SelectItem key={g.id} value={String(g.id)}>
-                          {g.name}
+                          {bi(g.name, genderNameEn(g))}
                         </SelectItem>
                       ))}
                     </SelectContent>

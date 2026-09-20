@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { register, getStoredProfile } from "@/integrations/backend/auth";
-import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
+import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
+import { genderNameEn } from "@/lib/gender";
 import { roleHome, useBi } from "@/lib/bi";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
@@ -34,12 +34,31 @@ export const Route = createFileRoute("/teacher/register")({
 // نفس حقول /api/Auth/Register بالضبط — الباك اند حاليًا ما بيدعم أي حقل
 // إضافي لملف المعلّم (لا مادة، لا خبرة، لا نبذة، لا رفع وثيقة توثيق)، فما
 // منجمعهم بالنموذج حتى ما نوهم المستخدم إنهم بينحفظوا.
-const schema = z.object({
-  fullName: z.string().trim().min(2),
-  email: z.string().trim().email(),
-  password: z.string().min(6),
-  phone: z.string().trim().min(6).max(30),
-});
+// قواعد كلمة المرور مطابقة لإعدادات Identity بالباك اند: 8 أحرف على الأقل + رقم.
+function buildSchema(bi: ReturnType<typeof useBi>) {
+  return z.object({
+    fullName: z.string().trim().min(2, bi("الاسم قصير جدًا", "Name is too short")),
+    email: z.string().trim().email(bi("البريد الإلكتروني غير صالح", "Invalid email address")),
+    password: z
+      .string()
+      .min(
+        8,
+        bi("كلمة المرور يجب أن تكون 8 أحرف على الأقل", "Password must be at least 8 characters"),
+      )
+      .regex(
+        /\d/,
+        bi(
+          "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
+          "Password must contain at least one digit",
+        ),
+      ),
+    phone: z
+      .string()
+      .trim()
+      .min(6, bi("رقم الهاتف غير صالح", "Invalid phone number"))
+      .max(30, bi("رقم الهاتف غير صالح", "Invalid phone number")),
+  });
+}
 
 // اسم نوع "المعلم" متل ما هو مزروع فعليًا بالباك اند (UserSeed.cs).
 const TEACHER_ROLE_NAME = "المعلم";
@@ -56,14 +75,20 @@ function TeacherRegisterPage() {
   const [phone, setPhone] = useState("");
   const [genderId, setGenderId] = useState<number | null>(null);
 
-  const { data: options } = useQuery({
+  const {
+    data: options,
+    isLoading: optionsLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ["signup-options"],
-    queryFn: loadBackendUserOptions,
+    queryFn: loadRegistrationOptions,
+    retry: 1,
   });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = schema.safeParse({ fullName, email, password, phone });
+    const parsed = buildSchema(bi).safeParse({ fullName, email, password, phone });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
       return;
@@ -76,7 +101,10 @@ function TeacherRegisterPage() {
       toast.error(bi("الجنس مطلوب", "Gender is required"));
       return;
     }
-    const userType = options?.roles.find((r) => r.name === TEACHER_ROLE_NAME);
+    // مطابقة بالاسم أولًا، وإلا بالـid المعياري (UserTypeIds.Teacher = 4).
+    const userType =
+      options?.roles.find((r) => r.name === TEACHER_ROLE_NAME) ??
+      options?.roles.find((r) => r.id === 4);
     if (!userType) {
       toast.error(
         bi(
@@ -152,6 +180,10 @@ function TeacherRegisterPage() {
           value={password}
           onChange={setPassword}
           autoComplete="new-password"
+          hint={bi(
+            "8 أحرف على الأقل، وتحتوي على رقم واحد على الأقل.",
+            "At least 8 characters, including at least one digit.",
+          )}
         />
         <AuthField
           id="confirm-password"
@@ -170,16 +202,30 @@ function TeacherRegisterPage() {
             onValueChange={(v) => setGenderId(Number(v))}
           >
             <SelectTrigger className="w-full sm:w-1/2">
-              <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+              <SelectValue
+                placeholder={
+                  optionsLoading
+                    ? bi("جارٍ التحميل…", "Loading…")
+                    : bi("اختر الجنس", "Select gender")
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               {(options?.genders ?? []).map((g) => (
                 <SelectItem key={g.id} value={String(g.id)}>
-                  {g.name}
+                  {bi(g.name, genderNameEn(g))}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {isError && (
+            <p className="text-xs text-destructive">
+              {bi("تعذّر تحميل قائمة الجنس.", "Couldn't load the gender list.")}{" "}
+              <button type="button" className="font-bold underline" onClick={() => refetch()}>
+                {bi("إعادة المحاولة", "Retry")}
+              </button>
+            </p>
+          )}
         </div>
 
         <button

@@ -3,6 +3,7 @@
 // إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
 // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
 
+import { loadBackendUserOptions } from "./admin-users";
 import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
 import { env } from "@/lib/env";
 
@@ -154,14 +155,24 @@ export async function changeMyPassword(input: ChangePasswordInput): Promise<void
 function writeStoredSession(session: StoredSession | null) {
   if (typeof window === "undefined") return;
 
+  const previous = localStorage.getItem(AUTH_STORAGE_KEY);
+  const next = session ? JSON.stringify(session) : null;
+
   if (session) {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+    localStorage.setItem(AUTH_STORAGE_KEY, next as string);
     // هذه الكوكي مؤقتة لحراسة الواجهة المحلية فقط، وليست حدًا أمنيًا.
     document.cookie = `${DEMO_USER_COOKIE}=${encodeURIComponent(session.userId)}; path=/; max-age=86400; samesite=lax`;
   } else {
     localStorage.removeItem(AUTH_STORAGE_KEY);
     document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0; samesite=lax`;
   }
+
+  // ما منبلّغ المستمعين إلا لو الجلسة تغيّرت فعلاً. verifyServerSession بيكتب
+  // الجلسة عند كل فحص (كل beforeLoad)، وAuthSync (__root.tsx) بيعمل
+  // router.invalidate() عند كل AUTH_EVENT → بدون هالشرط كانت حلقة لا نهائية:
+  // beforeLoad → verify → كتابة → حدث → invalidate → beforeLoad → ... (عشرات طلبات
+  // MyProfileModal بالثانية، وتنقّل عالق بصفحة الدخول).
+  if (next === previous) return;
 
   window.dispatchEvent(new Event(AUTH_EVENT));
 }
@@ -412,17 +423,39 @@ export interface RegistrationOptions {
 }
 
 /**
- * خيارات صفحة التسجيل (الجنس + أنواع الحسابات المسموح التسجيل بها) — endpoint
- * عام بالباك اند (AllowAnonymous). كانت الصفحة تستخدم /api/User/CreateEditModal
- * (endpoint إدارة بيتطلب دخول + صلاحية) فكانت بترجع 401 للزائر وتضل قائمة الجنس
- * فاضية ويفشل "تحديد نوع الحساب".
+ * خيارات صفحات التسجيل والإعدادات (الجنس + أنواع الحسابات) من الباك اند.
+ * المصدر المفضّل: /api/Auth/RegistrationOptions (عام، AllowAnonymous). لو ما
+ * كان منشور بعد على الباك اند (404) أو رجّع قوائم فاضية، منرجع لـ
+ * /api/User/CreateEditModal (المسار القديم يلي كان شغّال) بدل ما تضل القائمة فاضية.
+ * لو الاتنين فشلوا بيرمي خطأ الأول ليعرض الفرونت رسالة + إعادة محاولة.
  */
 export async function loadRegistrationOptions(): Promise<RegistrationOptions> {
-  const result = await apiClient.get<{
-    genders?: Array<{ id: number; name: string }> | null;
-    userTypes?: Array<{ id: number; name: string }> | null;
-  }>("/api/Auth/RegistrationOptions");
-  return { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
+  let primary: RegistrationOptions = { genders: [], roles: [] };
+  let primaryError: unknown = null;
+
+  try {
+    const result = await apiClient.get<{
+      genders?: Array<{ id: number; name: string }> | null;
+      userTypes?: Array<{ id: number; name: string }> | null;
+    }>("/api/Auth/RegistrationOptions");
+    primary = { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
+  } catch (err) {
+    primaryError = err;
+    console.warn("[auth] RegistrationOptions غير متاح — نجرّب CreateEditModal:", err);
+  }
+
+  if (primary.genders.length > 0 && primary.roles.length > 0) return primary;
+
+  try {
+    const legacy = await loadBackendUserOptions();
+    return {
+      genders: primary.genders.length > 0 ? primary.genders : legacy.genders,
+      roles: primary.roles.length > 0 ? primary.roles : legacy.roles,
+    };
+  } catch (legacyError) {
+    if (primary.genders.length > 0 || primary.roles.length > 0) return primary;
+    throw primaryError ?? legacyError;
+  }
 }
 
 export async function logout(): Promise<void> {

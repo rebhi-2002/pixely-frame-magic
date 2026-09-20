@@ -1,0 +1,412 @@
+diff --git a/.env.production b/.env.production
+index 564b63e..85a5ff4 100644
+--- a/.env.production
++++ b/.env.production
+@@ -6,4 +6,4 @@
+ # (راجع vite.config.ts → routeRules). هيك الكوكي first-party وما في CORS.
+ VITE_API_BASE_URL=""
+ VITE_ENABLE_SIGNUP="true"
+-VITE_ENABLE_DEMO_LOGIN="false"
++VITE_ENABLE_DEMO_LOGIN="true"
+diff --git a/src/integrations/backend/auth.ts b/src/integrations/backend/auth.ts
+index 17657c1..07ff44f 100644
+--- a/src/integrations/backend/auth.ts
++++ b/src/integrations/backend/auth.ts
+@@ -3,6 +3,7 @@
+ // إلى أن يضيف الباك إند endpoint /me وصلاحيات فعلية، تبقى حراسة الواجهة
+ // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
+ 
++import { loadBackendUserOptions } from "./admin-users";
+ import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
+ import { env } from "@/lib/env";
+ 
+@@ -154,8 +155,11 @@ export async function changeMyPassword(input: ChangePasswordInput): Promise<void
+ function writeStoredSession(session: StoredSession | null) {
+   if (typeof window === "undefined") return;
+ 
++  const previous = localStorage.getItem(AUTH_STORAGE_KEY);
++  const next = session ? JSON.stringify(session) : null;
++
+   if (session) {
+-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
++    localStorage.setItem(AUTH_STORAGE_KEY, next as string);
+     // هذه الكوكي مؤقتة لحراسة الواجهة المحلية فقط، وليست حدًا أمنيًا.
+     document.cookie = `${DEMO_USER_COOKIE}=${encodeURIComponent(session.userId)}; path=/; max-age=86400; samesite=lax`;
+   } else {
+@@ -163,6 +167,13 @@ function writeStoredSession(session: StoredSession | null) {
+     document.cookie = `${DEMO_USER_COOKIE}=; path=/; max-age=0; samesite=lax`;
+   }
+ 
++  // ما منبلّغ المستمعين إلا لو الجلسة تغيّرت فعلاً. verifyServerSession بيكتب
++  // الجلسة عند كل فحص (كل beforeLoad)، وAuthSync (__root.tsx) بيعمل
++  // router.invalidate() عند كل AUTH_EVENT → بدون هالشرط كانت حلقة لا نهائية:
++  // beforeLoad → verify → كتابة → حدث → invalidate → beforeLoad → ... (عشرات طلبات
++  // MyProfileModal بالثانية، وتنقّل عالق بصفحة الدخول).
++  if (next === previous) return;
++
+   window.dispatchEvent(new Event(AUTH_EVENT));
+ }
+ 
+@@ -412,17 +423,39 @@ export interface RegistrationOptions {
+ }
+ 
+ /**
+- * خيارات صفحة التسجيل (الجنس + أنواع الحسابات المسموح التسجيل بها) — endpoint
+- * عام بالباك اند (AllowAnonymous). كانت الصفحة تستخدم /api/User/CreateEditModal
+- * (endpoint إدارة بيتطلب دخول + صلاحية) فكانت بترجع 401 للزائر وتضل قائمة الجنس
+- * فاضية ويفشل "تحديد نوع الحساب".
++ * خيارات صفحات التسجيل والإعدادات (الجنس + أنواع الحسابات) من الباك اند.
++ * المصدر المفضّل: /api/Auth/RegistrationOptions (عام، AllowAnonymous). لو ما
++ * كان منشور بعد على الباك اند (404) أو رجّع قوائم فاضية، منرجع لـ
++ * /api/User/CreateEditModal (المسار القديم يلي كان شغّال) بدل ما تضل القائمة فاضية.
++ * لو الاتنين فشلوا بيرمي خطأ الأول ليعرض الفرونت رسالة + إعادة محاولة.
+  */
+ export async function loadRegistrationOptions(): Promise<RegistrationOptions> {
+-  const result = await apiClient.get<{
+-    genders?: Array<{ id: number; name: string }> | null;
+-    userTypes?: Array<{ id: number; name: string }> | null;
+-  }>("/api/Auth/RegistrationOptions");
+-  return { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
++  let primary: RegistrationOptions = { genders: [], roles: [] };
++  let primaryError: unknown = null;
++
++  try {
++    const result = await apiClient.get<{
++      genders?: Array<{ id: number; name: string }> | null;
++      userTypes?: Array<{ id: number; name: string }> | null;
++    }>("/api/Auth/RegistrationOptions");
++    primary = { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
++  } catch (err) {
++    primaryError = err;
++    console.warn("[auth] RegistrationOptions غير متاح — نجرّب CreateEditModal:", err);
++  }
++
++  if (primary.genders.length > 0 && primary.roles.length > 0) return primary;
++
++  try {
++    const legacy = await loadBackendUserOptions();
++    return {
++      genders: primary.genders.length > 0 ? primary.genders : legacy.genders,
++      roles: primary.roles.length > 0 ? primary.roles : legacy.roles,
++    };
++  } catch (legacyError) {
++    if (primary.genders.length > 0 || primary.roles.length > 0) return primary;
++    throw primaryError ?? legacyError;
++  }
+ }
+ 
+ export async function logout(): Promise<void> {
+diff --git a/src/lib/env.ts b/src/lib/env.ts
+index 5592a14..bf74540 100644
+--- a/src/lib/env.ts
++++ b/src/lib/env.ts
+@@ -17,6 +17,12 @@ const booleanFlag = z
+   .optional()
+   .transform((v) => v === "true");
+ 
++// متغير بيئة فاضي ("") = غير معرّف. بلوحات الاستضافة (Vercel...) بيتساهل الناس
++// وبينسخوا .env.example بقيمه الفاضية — وبدون هالتحويل كان "VITE_SITE_URL=''" لحاله
++// بيفشّل السكيما كلها ويرجّع *كل* المتغيرات للقيم الافتراضية (فينطفي التسجيل
++// والدخول التجريبي حتى لو مفعّلين).
++const emptyAsUndefined = (value: unknown) => (value === "" ? undefined : value);
++
+ const envSchema = z.object({
+   // فاضي ("") = نفس أصل الموقع (same-origin) — الوضع الموصى به: طلبات /api/*
+   // بتمرّ عبر بروكسي (Nitro routeRules بالإنتاج، Vite proxy بالتطوير — راجع
+@@ -25,27 +31,44 @@ const envSchema = z.object({
+   VITE_API_BASE_URL: z
+     .union([z.literal(""), z.string().url("لازم يكون رابط صالح (https://...)")])
+     .optional(),
+-  VITE_SITE_URL: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
++  VITE_SITE_URL: z.preprocess(
++    emptyAsUndefined,
++    z.string().url("لازم يكون رابط صالح (https://...)").optional(),
++  ),
+   VITE_ENABLE_DEMO_LOGIN: booleanFlag,
+   VITE_ENABLE_SIGNUP: booleanFlag,
+   VITE_SENTRY_DSN: z.string().optional(),
+   VITE_POSTHOG_KEY: z.string().optional(),
+-  VITE_POSTHOG_HOST: z.string().url("لازم يكون رابط صالح (https://...)").optional(),
++  VITE_POSTHOG_HOST: z.preprocess(
++    emptyAsUndefined,
++    z.string().url("لازم يكون رابط صالح (https://...)").optional(),
++  ),
+ });
+ 
+ const parsed = envSchema.safeParse(import.meta.env);
+ 
+ if (!parsed.success) {
+   // ما منرمي (throw) عمداً: خطأ بمتغيّر بيئة ثانوي (زي PostHog host غلط) ما
+-  // لازم يوقف التطبيق كله عن الشغل. بنطبع تحذير واضح وبنكمل بالقيم
+-  // الافتراضية تحت، وبيضل يبين بالـ console/Sentry لحد ما ينحل.
++  // لازم يوقف التطبيق كله عن الشغل. بنطبع تحذير واضح وبنكمل — والأهم: بنعتمد كل
++  // متغيّر صالح لحاله (salvage) بدل ما نرجّع *كل* القيم للافتراضي لأن متغيّر واحد
++  // غلط (هيك كان يختفي نموذج التسجيل والدخول التجريبي بالإنتاج).
+   console.error(
+     "[env] متغيرات بيئة غير صالحة — راجع .env.example:",
+     parsed.error.flatten().fieldErrors,
+   );
+ }
+ 
+-const raw = parsed.success ? parsed.data : ({} as z.infer<typeof envSchema>);
++function salvageValidFields(): z.infer<typeof envSchema> {
++  const source = import.meta.env as Record<string, unknown>;
++  const out: Record<string, unknown> = {};
++  for (const [key, fieldSchema] of Object.entries(envSchema.shape)) {
++    const result = (fieldSchema as z.ZodType).safeParse(source[key]);
++    if (result.success && result.data !== undefined) out[key] = result.data;
++  }
++  return out as z.infer<typeof envSchema>;
++}
++
++const raw = parsed.success ? parsed.data : salvageValidFields();
+ 
+ // الافتراضي: same-origin (عبر البروكسي). ما عاد فيه fallback لـlocalhost لأنه
+ // كان بيمرّ بصمت بنشر ناسي حدا يضبط المتغير ويخلي كل الطلبات تفشل.
+diff --git a/src/lib/gender.ts b/src/lib/gender.ts
+new file mode 100644
+index 0000000..c4837af
+--- /dev/null
++++ b/src/lib/gender.ts
+@@ -0,0 +1,16 @@
++// أسماء خيارات الجنس بتيجي من الباك اند (جدول Constants — مزروعة بالعربي: ذكر/أنثى).
++// بالواجهة الإنجليزية منعرضها Male/Female. المطابقة بالـid الثابت من الباك اند
++// (GeneralEnums.Male=6، Female=7) وبالاسم كاحتياط لو اختلفت الأرقام بقاعدة بيانات
++// تانية. أي قيمة جديدة ما منعرفها بتنعرض باسمها العربي القادم من الباك اند كما هو
++// (ما منخترع ترجمة).
++
++const GENDER_EN_BY_ID: Record<number, string> = { 6: "Male", 7: "Female" };
++const GENDER_EN_BY_NAME: Record<string, string> = {
++  ذكر: "Male",
++  أنثى: "Female",
++  انثى: "Female",
++};
++
++export function genderNameEn(gender: { id: number; name: string }): string {
++  return GENDER_EN_BY_ID[gender.id] ?? GENDER_EN_BY_NAME[gender.name.trim()] ?? gender.name;
++}
+diff --git a/src/routes/_authenticated/settings.tsx b/src/routes/_authenticated/settings.tsx
+index 2dad85d..5136776 100644
+--- a/src/routes/_authenticated/settings.tsx
++++ b/src/routes/_authenticated/settings.tsx
+@@ -20,8 +20,9 @@ import {
+   getStoredProfile,
+   updateMyProfile,
+   changeMyPassword,
++  loadRegistrationOptions,
+ } from "@/integrations/backend/auth";
+-import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
++import { genderNameEn } from "@/lib/gender";
+ import { Button } from "@/components/ui/button";
+ import { Input } from "@/components/ui/input";
+ import { Label } from "@/components/ui/label";
+@@ -75,7 +76,7 @@ function SettingsPage() {
+   // Constants)، مش قائمة ثابتة بالكود. غير مطلوبة بوضع الديمو.
+   const { data: options } = useQuery({
+     queryKey: ["signup-options"],
+-    queryFn: loadBackendUserOptions,
++    queryFn: loadRegistrationOptions,
+     enabled: !demo,
+   });
+ 
+@@ -314,7 +315,7 @@ function SettingsPage() {
+                     <SelectContent>
+                       {(options?.genders ?? []).map((g) => (
+                         <SelectItem key={g.id} value={String(g.id)}>
+-                          {g.name}
++                          {bi(g.name, genderNameEn(g))}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+diff --git a/src/routes/signup.tsx b/src/routes/signup.tsx
+index 1d5344f..73c66e2 100644
+--- a/src/routes/signup.tsx
++++ b/src/routes/signup.tsx
+@@ -10,6 +10,7 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
+ import { currentUserHome } from "@/lib/session-home";
+ import { FeatureStatus } from "@/components/app/feedback-states";
+ import { Button } from "@/components/ui/button";
++import { genderNameEn } from "@/lib/gender";
+ import { roleHome, useBi } from "@/lib/bi";
+ import { getErrorMessage } from "@/integrations/backend/client";
+ import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
+@@ -87,7 +88,12 @@ function SignupPage() {
+ 
+   // الجنس ونوع المستخدم لازم يجيوا من الباك اند (نفس مصدر شاشة الأدمن) —
+   // القيم مش ثابتة بالكود لأنها ممكن تختلف بين البيئات.
+-  const { data: options } = useQuery({
++  const {
++    data: options,
++    isLoading: optionsLoading,
++    isError,
++    refetch,
++  } = useQuery({
+     queryKey: ["signup-options"],
+     queryFn: loadRegistrationOptions,
+     enabled: signupEnabled,
+@@ -262,16 +268,30 @@ function SignupPage() {
+               onValueChange={(v) => setGenderId(Number(v))}
+             >
+               <SelectTrigger className="w-full">
+-                <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
++                <SelectValue
++                  placeholder={
++                    optionsLoading
++                      ? bi("جارٍ التحميل…", "Loading…")
++                      : bi("اختر الجنس", "Select gender")
++                  }
++                />
+               </SelectTrigger>
+               <SelectContent>
+                 {(options?.genders ?? []).map((g) => (
+                   <SelectItem key={g.id} value={String(g.id)}>
+-                    {g.name}
++                    {bi(g.name, genderNameEn(g))}
+                   </SelectItem>
+                 ))}
+               </SelectContent>
+             </Select>
++            {isError && (
++              <p className="text-xs text-destructive">
++                {bi("تعذّر تحميل قائمة الجنس.", "Couldn't load the gender list.")}{" "}
++                <button type="button" className="font-bold underline" onClick={() => refetch()}>
++                  {bi("إعادة المحاولة", "Retry")}
++                </button>
++              </p>
++            )}
+           </div>
+           <AuthField
+             id="password"
+diff --git a/src/routes/teacher.register.tsx b/src/routes/teacher.register.tsx
+index 8f1ebee..0b302e9 100644
+--- a/src/routes/teacher.register.tsx
++++ b/src/routes/teacher.register.tsx
+@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
+ import { AuthShell, AuthField } from "@/components/site/auth-shell";
+ import { currentUserHome } from "@/lib/session-home";
+ import { getErrorMessage } from "@/integrations/backend/client";
+-import { register, getStoredProfile } from "@/integrations/backend/auth";
+-import { loadBackendUserOptions } from "@/integrations/backend/admin-users";
++import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
++import { genderNameEn } from "@/lib/gender";
+ import { roleHome, useBi } from "@/lib/bi";
+ import { trackEvent, identifyUser } from "@/lib/analytics";
+ import { setMonitoringUser } from "@/lib/monitoring";
+@@ -34,12 +34,31 @@ export const Route = createFileRoute("/teacher/register")({
+ // نفس حقول /api/Auth/Register بالضبط — الباك اند حاليًا ما بيدعم أي حقل
+ // إضافي لملف المعلّم (لا مادة، لا خبرة، لا نبذة، لا رفع وثيقة توثيق)، فما
+ // منجمعهم بالنموذج حتى ما نوهم المستخدم إنهم بينحفظوا.
+-const schema = z.object({
+-  fullName: z.string().trim().min(2),
+-  email: z.string().trim().email(),
+-  password: z.string().min(6),
+-  phone: z.string().trim().min(6).max(30),
+-});
++// قواعد كلمة المرور مطابقة لإعدادات Identity بالباك اند: 8 أحرف على الأقل + رقم.
++function buildSchema(bi: ReturnType<typeof useBi>) {
++  return z.object({
++    fullName: z.string().trim().min(2, bi("الاسم قصير جدًا", "Name is too short")),
++    email: z.string().trim().email(bi("البريد الإلكتروني غير صالح", "Invalid email address")),
++    password: z
++      .string()
++      .min(
++        8,
++        bi("كلمة المرور يجب أن تكون 8 أحرف على الأقل", "Password must be at least 8 characters"),
++      )
++      .regex(
++        /\d/,
++        bi(
++          "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
++          "Password must contain at least one digit",
++        ),
++      ),
++    phone: z
++      .string()
++      .trim()
++      .min(6, bi("رقم الهاتف غير صالح", "Invalid phone number"))
++      .max(30, bi("رقم الهاتف غير صالح", "Invalid phone number")),
++  });
++}
+ 
+ // اسم نوع "المعلم" متل ما هو مزروع فعليًا بالباك اند (UserSeed.cs).
+ const TEACHER_ROLE_NAME = "المعلم";
+@@ -56,14 +75,20 @@ function TeacherRegisterPage() {
+   const [phone, setPhone] = useState("");
+   const [genderId, setGenderId] = useState<number | null>(null);
+ 
+-  const { data: options } = useQuery({
++  const {
++    data: options,
++    isLoading: optionsLoading,
++    isError,
++    refetch,
++  } = useQuery({
+     queryKey: ["signup-options"],
+-    queryFn: loadBackendUserOptions,
++    queryFn: loadRegistrationOptions,
++    retry: 1,
+   });
+ 
+   async function submit(e: React.FormEvent) {
+     e.preventDefault();
+-    const parsed = schema.safeParse({ fullName, email, password, phone });
++    const parsed = buildSchema(bi).safeParse({ fullName, email, password, phone });
+     if (!parsed.success) {
+       toast.error(parsed.error.issues[0].message);
+       return;
+@@ -76,7 +101,10 @@ function TeacherRegisterPage() {
+       toast.error(bi("الجنس مطلوب", "Gender is required"));
+       return;
+     }
+-    const userType = options?.roles.find((r) => r.name === TEACHER_ROLE_NAME);
++    // مطابقة بالاسم أولًا، وإلا بالـid المعياري (UserTypeIds.Teacher = 4).
++    const userType =
++      options?.roles.find((r) => r.name === TEACHER_ROLE_NAME) ??
++      options?.roles.find((r) => r.id === 4);
+     if (!userType) {
+       toast.error(
+         bi(
+@@ -152,6 +180,10 @@ function TeacherRegisterPage() {
+           value={password}
+           onChange={setPassword}
+           autoComplete="new-password"
++          hint={bi(
++            "8 أحرف على الأقل، وتحتوي على رقم واحد على الأقل.",
++            "At least 8 characters, including at least one digit.",
++          )}
+         />
+         <AuthField
+           id="confirm-password"
+@@ -170,16 +202,30 @@ function TeacherRegisterPage() {
+             onValueChange={(v) => setGenderId(Number(v))}
+           >
+             <SelectTrigger className="w-full sm:w-1/2">
+-              <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
++              <SelectValue
++                placeholder={
++                  optionsLoading
++                    ? bi("جارٍ التحميل…", "Loading…")
++                    : bi("اختر الجنس", "Select gender")
++                }
++              />
+             </SelectTrigger>
+             <SelectContent>
+               {(options?.genders ?? []).map((g) => (
+                 <SelectItem key={g.id} value={String(g.id)}>
+-                  {g.name}
++                  {bi(g.name, genderNameEn(g))}
+                 </SelectItem>
+               ))}
+             </SelectContent>
+           </Select>
++          {isError && (
++            <p className="text-xs text-destructive">
++              {bi("تعذّر تحميل قائمة الجنس.", "Couldn't load the gender list.")}{" "}
++              <button type="button" className="font-bold underline" onClick={() => refetch()}>
++                {bi("إعادة المحاولة", "Retry")}
++              </button>
++            </p>
++          )}
+         </div>
+ 
+         <button
