@@ -87,9 +87,9 @@ const stats = [
 ] as const;
 
 const roles = [
-  { icon: Users, key: "student" },
-  { icon: BookOpenCheck, key: "teacher" },
-  { icon: LineChart, key: "parent" },
+  { icon: Users, key: "student", image: "/visuals/role-student.png" },
+  { icon: BookOpenCheck, key: "teacher", image: "/visuals/role-teacher.png" },
+  { icon: LineChart, key: "parent", image: "/visuals/role-parent.png" },
 ] as const;
 
 const latestPosts = blogPosts.slice(-2).reverse();
@@ -167,34 +167,6 @@ function Landing() {
                 </>
               )}
 
-              <div
-                className="mt-10 grid gap-3 sm:grid-cols-3"
-                aria-label={t("home.roles.student.t")}
-              >
-                {[
-                  { key: "student", to: "/courses", icon: Users },
-                  { key: "teacher", to: "/for-teachers", icon: BookOpenCheck },
-                  { key: "parent", to: "/for-parents", icon: LineChart },
-                ].map(({ key, to, icon: Icon }) => (
-                  <Link
-                    key={key}
-                    to={to}
-                    className="group flex items-center gap-3 rounded-2xl border border-border/80 bg-card/70 p-3.5 text-start hover:border-primary/50 hover:bg-card"
-                  >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                      <Icon className="size-4" aria-hidden="true" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-xs font-bold text-foreground">
-                        {t(`home.roles.${key}.t`)}
-                      </span>
-                      <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
-                        {t(`home.roles.${key}.d`)}
-                      </span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
 
               <div className="mt-10 grid items-stretch gap-4 sm:grid-cols-3">
                 {stats.map((s, i) => (
@@ -326,16 +298,26 @@ function Landing() {
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
           {roles.map((r) => (
-            <div
+            <article
               key={r.key}
-              className="rounded-2xl border border-border bg-background p-6"
-              // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
-              // مش رابط ولا زر — نفس المبدأ بكل الملف.
+              className="overflow-hidden rounded-2xl border border-border bg-background shadow-elevation-1"
             >
-              <r.icon className="size-6 text-success" />
-              <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
-            </div>
+              <img
+                src={r.image}
+                alt={t(`home.roles.${r.key}.t`)}
+                className="aspect-[4/3] w-full object-cover"
+                loading="lazy"
+              />
+              <div className="p-6">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
+                    <r.icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <h3 className="font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
+              </div>
+            </article>
           ))}
         </div>
       </section>
