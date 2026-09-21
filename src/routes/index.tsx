@@ -163,10 +163,40 @@ function Landing() {
                       {t("home.ctaSecondary")}
                     </Link>
                   </div>
+                  <p className="mt-4 text-sm text-muted-foreground">{t("home.trustNote")}</p>
                 </>
               )}
 
-              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
+              <div
+                className="mt-10 grid gap-3 sm:grid-cols-3"
+                aria-label={t("home.roles.student.t")}
+              >
+                {[
+                  { key: "student", to: "/courses", icon: Users },
+                  { key: "teacher", to: "/for-teachers", icon: BookOpenCheck },
+                  { key: "parent", to: "/for-parents", icon: LineChart },
+                ].map(({ key, to, icon: Icon }) => (
+                  <Link
+                    key={key}
+                    to={to}
+                    className="group flex items-center gap-3 rounded-2xl border border-border/80 bg-card/70 p-3.5 text-start hover:border-primary/50 hover:bg-card"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                      <Icon className="size-4" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-xs font-bold text-foreground">
+                        {t(`home.roles.${key}.t`)}
+                      </span>
+                      <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                        {t(`home.roles.${key}.d`)}
+                      </span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-10 grid items-stretch gap-4 sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
                     <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">

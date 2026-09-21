@@ -79,16 +79,16 @@
 :root,
 :root[data-theme="dark"] {
   --radius: 0.875rem;
-  --ink-950: #0a0f1c;
-  --ink-900: #0d1321;
-  --ink-800: #141b2e;
+  --ink-950: #080b12;
+  --ink-900: #0d121c;
+  --ink-800: #151c2a;
   --background: var(--ink-950);
-  --foreground: #f3f1ea;
+  --foreground: #f7f4ed;
   --card: var(--ink-800);
-  --card-foreground: #f3f1ea;
+  --card-foreground: #f7f4ed;
   --popover: var(--ink-900);
-  --popover-foreground: #f3f1ea;
-  --primary: #f0a62e;
+  --popover-foreground: #f7f4ed;
+  --primary: #f4b33f;
   --primary-foreground: var(--ink-950);
   --secondary: #1b2338;
   --secondary-foreground: #f3f1ea;
