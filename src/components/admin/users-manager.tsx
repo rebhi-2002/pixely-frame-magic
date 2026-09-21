@@ -45,6 +45,7 @@ import { useAccess } from "@/hooks/use-access";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { UserRow } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
+import { genderNameEn } from "@/lib/gender";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const EMPTY_FORM = {
@@ -224,7 +225,7 @@ export function UsersPage() {
             placeholder={bi("الجنس", "Gender")}
             options={[
               { value: "all", label: bi("الكل", "All") },
-              ...genders.map((g) => ({ value: String(g.id), label: g.name })),
+              ...genders.map((g) => ({ value: String(g.id), label: bi(g.name, genderNameEn(g)) })),
             ]}
           />
           <FilterSelect
@@ -436,7 +437,7 @@ export function UsersPage() {
                   </SelectItem>
                   {genders.map((gender) => (
                     <SelectItem key={gender.id} value={String(gender.id)}>
-                      {gender.name}
+                      {bi(gender.name, genderNameEn(gender))}
                     </SelectItem>
                   ))}
                 </SelectContent>

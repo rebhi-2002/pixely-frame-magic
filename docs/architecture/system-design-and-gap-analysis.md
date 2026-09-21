@@ -41,7 +41,7 @@ Model, Gap Analysis, API & UI/UX Guidelines
 **Prepared By** Ahmed Alkhaldi • Rebhe Ibrahim • Ziad ALNUMAILAT
 
 **Compiled With** Claude (Anthropic) --- drafted from the team\'s
-SRS, Milestones, ERD, and the academia GitHub
+SRS, Milestones, ERD, and the Academia GitHub
 repository, for team review
 
 **Supervisor** Hamza Abu Jarad
@@ -96,7 +96,7 @@ Chapter 3, to be read together with:
 
 - Academia-ERD.png --- the current database diagram.
 
-- The academia GitHub repository (ziad-kamal2001/academia) --- the
+- The Academia GitHub repository (ziad-kamal2001/academia) --- the
   actual ASP.NET Core solution, used to verify the ERD against real
   model classes and migrations rather than the picture alone.
 

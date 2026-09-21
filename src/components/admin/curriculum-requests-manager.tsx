@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Check, Loader2, Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Badge as StatusBadge } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
@@ -45,6 +45,7 @@ import type {
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { LoadingState } from "@/components/app/feedback-states";
 
 const ENTITY_TYPES: CurriculumEntityType[] = ["وحدة", "مادة", "مجموعة", "صف", "كورس"];
 const STATUSES: CurriculumRequestStatus[] = [
@@ -210,9 +211,10 @@ export function CurriculumRequestsPage() {
           aria-label={bi("طلبات المنهج", "Curriculum requests")}
         >
           {isLoading ? (
-            <div className="flex justify-center p-10">
-              <Loader2 className="size-5 animate-spin text-primary" />
-            </div>
+            <LoadingState
+              label={bi("جارٍ التحميل…", "Loading…")}
+              className="border-none bg-transparent"
+            />
           ) : (
             <table className="w-full min-w-3xl text-start text-sm">
               <thead>

@@ -252,7 +252,7 @@ function CoursesPage() {
                         {(() => {
                           const FormatIcon = FORMAT_ICONS[c.format];
                           return (
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-[11px] font-bold text-secondary-foreground">
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
                               <FormatIcon className="size-3.5" />
                               {bi(...COURSE_FORMAT_LABELS[c.format])}
                             </span>
@@ -269,7 +269,7 @@ function CoursesPage() {
                           {c.tags.map((tag) => (
                             <span
                               key={bi(...tag)}
-                              className="rounded-md bg-secondary px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
+                              className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
                             >
                               {bi(...tag)}
                             </span>

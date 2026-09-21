@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { DynamicIcon } from "@/components/admin/dynamic-icon";
 import { Switch } from "@/components/ui/switch";
@@ -9,6 +8,7 @@ import { listModules, setModuleEnabled } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY, useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { LoadingState } from "@/components/app/feedback-states";
 
 export function SystemModulesPage() {
   const queryClient = useQueryClient();
@@ -48,9 +48,10 @@ export function SystemModulesPage() {
 
         <div className="overflow-hidden rounded-2xl bg-card">
           {isLoading ? (
-            <div className="flex justify-center p-10">
-              <Loader2 className="size-5 animate-spin text-primary" />
-            </div>
+            <LoadingState
+              label={bi("جارٍ التحميل…", "Loading…")}
+              className="border-none bg-transparent"
+            />
           ) : (
             <table className="w-full text-start text-sm">
               <thead>

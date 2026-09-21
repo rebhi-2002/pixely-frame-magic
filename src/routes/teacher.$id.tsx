@@ -2,12 +2,13 @@ import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { BadgeCheck, BookOpen, Loader2, Star, Users } from "lucide-react";
+import { BadgeCheck, BookOpen, Star, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { useBi } from "@/lib/bi";
 import { listPublicCourses } from "@/lib/public-catalog.functions";
+import { LoadingState } from "@/components/app/feedback-states";
 
 export const Route = createFileRoute("/teacher/$id")({
   head: (ctx) => {
@@ -38,9 +39,10 @@ function TeacherProfilePage() {
   if (isLoading) {
     return (
       <PublicLayout>
-        <div className="flex justify-center py-24">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </PublicLayout>
     );
   }

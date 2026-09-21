@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2, Pencil, Settings2, Trash2, Plus } from "lucide-react";
+import { Pencil, Settings2, Trash2, Plus } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +31,7 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { ROLE_NAME_EN, type RoleRow } from "@/lib/rbac-types";
 import { getErrorMessage } from "@/integrations/backend/client";
+import { LoadingState } from "@/components/app/feedback-states";
 
 export function UserTypesPage() {
   const queryClient = useQueryClient();
@@ -94,9 +95,10 @@ export function UserTypesPage() {
 
         <div className="mt-4 overflow-hidden rounded-2xl bg-card">
           {isLoading ? (
-            <div className="flex justify-center p-10">
-              <Loader2 className="size-5 animate-spin text-primary" />
-            </div>
+            <LoadingState
+              label={bi("جارٍ التحميل…", "Loading…")}
+              className="border-none bg-transparent"
+            />
           ) : (
             <table className="w-full text-start text-sm">
               <thead>

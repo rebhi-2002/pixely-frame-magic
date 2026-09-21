@@ -114,7 +114,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold",
+        "inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-micro font-bold",
         tone === "primary" && "bg-primary/15 text-primary",
         tone === "success" && "bg-success/15 text-success",
         tone === "danger" && "bg-destructive/15 text-destructive",

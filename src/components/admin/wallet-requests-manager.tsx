@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, Loader2, X, ImageIcon } from "lucide-react";
+import { Check, X, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ import {
 } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
 import { EmptyState } from "@/components/app/kit";
+import { LoadingState } from "@/components/app/feedback-states";
 
 // ملاحظة: الباك اند حاليًا بيرجّع StudentId/InstructorId (نص) بدون اسم
 // المستخدم — راجع تعليق wallet.ts. لهيك بنعرض الـ id هون مؤقتًا.
@@ -77,9 +78,10 @@ function TopUpSection() {
         aria-label={bi("طلبات شحن الرصيد", "Top-up requests")}
       >
         {isLoading ? (
-          <div className="flex justify-center p-10">
-            <Loader2 className="size-5 animate-spin text-primary" />
-          </div>
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : !rows?.length ? (
           <EmptyState
             icon="Wallet"
@@ -242,9 +244,10 @@ function WithdrawalSection() {
         aria-label={bi("طلبات السحب", "Withdrawal requests")}
       >
         {isLoading ? (
-          <div className="flex justify-center p-10">
-            <Loader2 className="size-5 animate-spin text-primary" />
-          </div>
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : !rows?.length ? (
           <EmptyState
             icon="Wallet"

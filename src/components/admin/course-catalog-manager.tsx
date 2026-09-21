@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LoadingState } from "@/components/app/feedback-states";
 
 const EMPTY_FORM = {
   titleAr: "",
@@ -185,9 +186,10 @@ export function CourseCatalogPage() {
           aria-label={bi("كتالوج الكورسات", "Course catalog")}
         >
           {isLoading ? (
-            <div className="flex justify-center p-10">
-              <Loader2 className="size-5 animate-spin text-primary" />
-            </div>
+            <LoadingState
+              label={bi("جارٍ التحميل…", "Loading…")}
+              className="border-none bg-transparent"
+            />
           ) : (
             <table className="w-full min-w-3xl text-start text-sm">
               <thead>

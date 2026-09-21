@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2 } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
@@ -17,6 +16,7 @@ import {
   listQuizItems,
   listTeacherCourses,
 } from "@/lib/teacher-teaching.functions";
+import { LoadingState } from "@/components/app/feedback-states";
 
 const description = "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.";
 
@@ -130,9 +130,10 @@ function Body() {
       )}
 
       {isLoading ? (
-        <div className="flex justify-center py-10">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       ) : (
         <>
           <StatGrid

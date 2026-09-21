@@ -8,7 +8,7 @@ graph TD
   Components --> UI[UI primitives]
   Routes --> Hooks[Hooks]
   Hooks --> Integrations[API adapters]
-  Integrations --> Backend[academia API]
+  Integrations --> Backend[Academia API]
   Routes --> LocalState[Local/session state]
 ```
 

@@ -92,6 +92,15 @@ export function PagesPage() {
     });
   }, [pages, search]);
 
+  // تحقق حقيقي قبل الإرسال — نفس نمط users-manager.tsx (راجع
+  // full-project-report.md لسياق ليش أُضيف).
+  function validatePageForm(): string | null {
+    if (!form.name.trim()) return bi("الاسم بالعربي مطلوب", "Arabic name is required");
+    if (!form.name_en.trim()) return bi("الاسم بالإنجليزي مطلوب", "English name is required");
+    if (form.category_id == null) return bi("الفئة مطلوبة", "Category is required");
+    return null;
+  }
+
   const saveMutation = useMutation({
     mutationFn: () => saveBackendPage({ ...form, id: editingId ?? undefined }),
     onSuccess: () => {
@@ -413,7 +422,17 @@ export function PagesPage() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
-            <Button onClick={() => saveMutation.mutate()} loading={saveMutation.isPending}>
+            <Button
+              onClick={() => {
+                const error = validatePageForm();
+                if (error) {
+                  toast.error(error);
+                  return;
+                }
+                saveMutation.mutate();
+              }}
+              loading={saveMutation.isPending}
+            >
               {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>

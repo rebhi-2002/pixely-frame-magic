@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, Settings2 } from "lucide-react";
+import { Settings2 } from "lucide-react";
 import { Guard } from "@/components/app/guard";
 import { PageHeader } from "@/components/admin/page-header";
 import { listRoles } from "@/lib/rbac.functions";
 import { useBi } from "@/lib/bi";
 
 import { authPageHead } from "@/lib/seo";
+import { LoadingState } from "@/components/app/feedback-states";
 
 export const Route = createFileRoute("/_authenticated/admin/permissions")({
   head: () =>
@@ -39,9 +40,10 @@ function PermissionsMatrixPage() {
 
       <div className="px-4 py-5 md:px-6">
         {isLoading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 className="size-6 animate-spin text-primary" />
-          </div>
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(data ?? []).map((role) => (

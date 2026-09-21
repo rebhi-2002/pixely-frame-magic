@@ -94,6 +94,12 @@ export function ConstantsPage() {
     retry: false,
   });
 
+  // تحقق حقيقي قبل الإرسال — نفس نمط users-manager.tsx/pages-manager.tsx.
+  function validateConstantForm(): string | null {
+    if (!form.name.trim()) return bi("الاسم مطلوب", "Name is required");
+    return null;
+  }
+
   const saveMutation = useMutation({
     mutationFn: () => saveBackendConstant({ ...form, id: editingId ?? undefined }),
     onSuccess: () => {
@@ -319,7 +325,17 @@ export function ConstantsPage() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
-            <Button onClick={() => saveMutation.mutate()} loading={saveMutation.isPending}>
+            <Button
+              onClick={() => {
+                const error = validateConstantForm();
+                if (error) {
+                  toast.error(error);
+                  return;
+                }
+                saveMutation.mutate();
+              }}
+              loading={saveMutation.isPending}
+            >
               {bi("حفظ", "Save")}
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>

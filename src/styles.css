@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * academia design system — Arabic RTL.
+ * Academia design system — Arabic RTL.
  * Ink navy canvas, amber (إنجاز) primary, emerald (إتقان) success,
  * azure info, coral destructive. Never hardcode colors in components.
  */
@@ -656,4 +656,17 @@
     border-color: color-mix(in oklab, var(--color-primary) 52%, var(--color-border));
     box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-ring) 14%, transparent);
   }
+}
+
+/* نص تنقّل/شارات مسمّى — بدل أحجام حرة text-[13px]/text-[11px] متكررة
+   بأكتر من مكان بدون توثيق. الحجمين بينهم "xs" (12px) و"sm" (14px)
+   بمقياس Tailwind الافتراضي عمدًا — كثافة القائمة الجانبية/الشارات
+   محسوبة بدقة، مو إهمال. راجع docs/design/design-system.md للقاعدة. */
+@utility text-nav {
+  font-size: 13px;
+  line-height: 1.35;
+}
+@utility text-micro {
+  font-size: 11px;
+  line-height: 1.3;
 }

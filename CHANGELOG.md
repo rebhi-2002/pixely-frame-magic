@@ -1,5 +1,23 @@
 # Changelog
 
+## 21 سبتمبر — دمج تحسينات UI/UX من النسخة الفرعية (بنود #5 و#6 و#7 و#8)
+
+- **#7 حالات التحميل**: ترحيل 41 ملفًا من `<Loader2 animate-spin>` الحر إلى
+  `LoadingState` الموحّد (`role="status"`/`aria-live`) — 11 مكوّنًا أدمن/محفظة،
+  وصفحة `teacher.$id`، و29 صفحة `_authenticated`. `payments-manager.tsx` (ملف ميت) حُذف بدل ترحيله — راجع بند "تنظيف".
+- **#6 الطباعة**: utilities مسمّاة `text-nav` (13px) و`text-micro` (11px) بـ`styles.css`
+  بدل `text-[13px]`/`text-[11px]` الحرة، مطبّقة بـ`app-sidebar` و`kit` و`courses` و`role-permissions`.
+- **#8 RTL**: `left-0 right-0` → `inset-x-0` بـ`role-permissions.$roleId`، وتوثيق القاعدة.
+- **#5 التحقق**: تحقق نموذج قبل الإرسال بـ`pages-manager` و`constants-manager`
+  (نفس نمط `users-manager`).
+- **اختبار**: `src/lib/onboarding.test.ts` (12 حالة، يقفل قاعدة "حساب قديم ما يتفاجأ بالـonboarding").
+- **تنظيف**: حذف `src/hooks/use-sign-out.tsx` (نسخة قديمة بقيت بعد تقسيمه إلى
+  `use-sign-out.ts` + `sign-out-overlay.tsx`)، وحذف `payments-manager.tsx` (شاشة CRUD وهمية
+  غير مستخدمة)، وإزالة نحو 220 سطر كود معلّق من آخر `admin-dashboard.tsx`، وإعادة تجاهل
+  `.env`/`.env.local` بـ`.gitignore`، وتوحيد كتابة اسم Academia بالتوثيق.
+- **توثيق**: قسما "مقياس الطباعة" و"قواعد RTL/LTR" بـ`docs/design/design-system.md`،
+  وأقسام 41–45 وقائمة "الباقي" بـ`Shared/full-project-report.md`.
+
 ## 19 سبتمبر — تسريع CI + تجهيز مكان السوشال ميديا + إكمال توثيق ناقص
 
 - **سرعة `npm run validate`**: تشغيل متوازي (`npm-run-all2`) + كاش لـ

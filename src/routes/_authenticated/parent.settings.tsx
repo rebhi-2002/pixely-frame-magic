@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Loader2, Plus, UserMinus } from "lucide-react";
+import { Plus, UserMinus } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
+import { LoadingState } from "@/components/app/feedback-states";
 
 const description = "الأبناء المرتبطون بحسابك، فك الربط، وتفضيلات الإشعارات والتقارير.";
 
@@ -131,9 +132,10 @@ function Body() {
       subtitle={bi(description, "Linked children, unlinking, and notification/report preferences.")}
     >
       {isLoading ? (
-        <div className="flex justify-center py-10">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       ) : (
         <>
           <StatGrid

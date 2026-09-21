@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 import { Panel, StatGrid, DataTable, Badge, EmptyState, Pagination } from "@/components/app/kit";
 import {
   getMyWallet,
@@ -8,6 +7,7 @@ import {
   WalletTransactionType,
 } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
+import { LoadingState } from "@/components/app/feedback-states";
 
 function transactionTypeLabel(type: number, bi: ReturnType<typeof useBi>): string {
   switch (type) {
@@ -63,9 +63,10 @@ export function WalletBalancePanel({ actionSlot }: { actionSlot?: React.ReactNod
 
       <Panel title={bi("سجل الحركات", "Transaction history")} icon="History">
         {historyLoading ? (
-          <div className="flex justify-center py-10">
-            <Loader2 className="size-5 animate-spin text-primary" />
-          </div>
+          <LoadingState
+            label={bi("جارٍ تحميل السجل…", "Loading history…")}
+            className="border-none bg-transparent"
+          />
         ) : !history.length ? (
           <EmptyState icon="Wallet" text={bi("لا يوجد حركات بعد.", "No transactions yet.")} />
         ) : (

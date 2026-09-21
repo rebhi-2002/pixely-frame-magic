@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, Progress, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
@@ -10,6 +10,7 @@ import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 import { getChildReport } from "@/lib/supervisor-oversight.functions";
 import { authPageHead } from "@/lib/seo";
+import { LoadingState } from "@/components/app/feedback-states";
 
 const description = "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.";
 
@@ -48,9 +49,10 @@ function Body() {
   if (isLoading) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
-        <div className="flex justify-center py-16">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }

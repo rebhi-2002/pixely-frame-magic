@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { ChevronDown, Loader2, Save } from "lucide-react";
+import { ChevronDown, Save } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { DynamicIcon } from "@/components/admin/dynamic-icon";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
+import { LoadingState } from "@/components/app/feedback-states";
 
 export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
   head: () =>
@@ -128,9 +129,10 @@ function RolePermissionsPage() {
     return (
       <div>
         <PageHeader title={bi("الصلاحيات", "Permissions")} icon="ShieldCheck" />
-        <div className="flex justify-center p-16">
-          <Loader2 className="size-6 animate-spin text-primary" />
-        </div>
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </div>
     );
   }
@@ -189,7 +191,7 @@ function RolePermissionsPage() {
                     {bi(mod.name, mod.nameEn)}
                   </span>
                   {!mod.enabled && (
-                    <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-micro text-muted-foreground">
                       {bi("الوحدة معطّلة بالنظام", "Module disabled system-wide")}
                     </span>
                   )}
@@ -223,7 +225,7 @@ function RolePermissionsPage() {
         })}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 p-4 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/95 p-4 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground">
             {bi(
