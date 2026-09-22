@@ -14,7 +14,11 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    exclude: ["node_modules", "e2e", "dist", ".output"],
+    // فقط اختبارات المشروع نفسه. exclude لحاله كان يستبدل الافتراضي (**/node_modules/**)
+    // فكان vitest يفحص node_modules المتداخلة بمجلدات زي .netlify/plugins (آلاف اختبارات مكتبات
+    // خارجية، 148 ثانية، وبعضها يفشل بدون علاقة بالمشروع).
+    include: ["src/**/*.test.{ts,tsx}"],
+    exclude: ["**/node_modules/**", "e2e/**", "dist/**", ".output/**", ".vercel/**", ".netlify/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],

@@ -41,6 +41,10 @@ coverage/
 playwright-report/
 test-results/
 
+# Netlify CLI (المشروع انتقل لـVercel): مجلد محلي بيحوي node_modules لمكتبات Netlify — ما لازم
+# يترفع لـGit ولا يدخل الاختبارات/الفحوصات. يُحذف بأمان لو مش مستخدم.
+.netlify
+
 # Vercel CLI: مخرجات البناء المحلي (.vercel/output) وربط المشروع — ما لازم تنرفع
 # لـGit. لو انرفع .vercel/output، الـ.gitignore أعلاه (node_modules) بيمنع رفع
 # node_modules الخاص بدالة السيرفرلس، فبتوصل Vercel دالة ناقصة الحزم.
