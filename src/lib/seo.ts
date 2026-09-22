@@ -21,6 +21,7 @@ const PAGE_META_KEYS: Record<string, string> = {
   "/": "home",
   "/about": "about",
   "/courses": "courses",
+  "/teachers": "teachersDirectory",
   "/for-teachers": "forTeachers",
   "/for-parents": "forParents",
   "/how-it-works": "howItWorks",
@@ -136,6 +137,8 @@ export function getSeoForPath(pathname: string, locale: Locale): SeoPayload {
     meta = translateMeta(locale, "certificate");
   } else if (normalizedPath.startsWith("/teacher/") && !isNoIndex(normalizedPath)) {
     meta = translateMeta(locale, "teacherProfile");
+  } else if (normalizedPath.startsWith("/course/") && !isNoIndex(normalizedPath)) {
+    meta = translateMeta(locale, "courseDetail");
   } else {
     const key = PAGE_META_KEYS[normalizedPath] ?? "notFound";
     meta = translateMeta(locale, key);

@@ -3,8 +3,10 @@ import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PhotoAvatarProps {
-  /** مسار الصورة المتوقّع، مثلاً /team/teachers/sami-khalil.jpg */
-  src: string;
+  /** مسار الصورة المتوقّع، مثلاً /team/teachers/sami-khalil.jpg. null/فاضي
+   *  (بيانات حقيقية من الباك اند ما رفعت صورة بعد) → الأيقونة البديلة مباشرة
+   *  بدون محاولة تحميل فاشلة. */
+  src?: string | null;
   alt?: string;
   /** أيقونة بديلة تظهر تلقائياً لو الصورة غير موجودة بعد (fallback). */
   icon?: typeof User;
@@ -26,7 +28,7 @@ export function PhotoAvatar({
 }: PhotoAvatarProps) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <span
         className={cn(

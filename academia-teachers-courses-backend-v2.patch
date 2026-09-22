@@ -1,0 +1,2893 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 3b23046..8418ec5 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,5 +1,30 @@
+ # Changelog
+ 
++## 21 سبتمبر — إتمام ربط ما كان جاهزًا بالباك اند وغير مربوط
++
++- **صفحة جديدة `/course/$id`** (تفاصيل كورس) على `Course/GetById` الجاهزة أصلًا بدون واجهة.
++  عنوان الكورس بـ`/courses` وبروفايل المعلم صار رابطًا إليها.
++- **قسم "أوقات التوفّر"** ببروفايل المعلم على `Teacher/Availability` (عرض فقط، بدون حجز).
++- تدقيق شامل على كل الـcontrollers أثبت أن كل شي تاني غير مربوط يعتمد فعليًا على P0-1 (صلاحيات)
++  أو P1-1 (لا صف `Teacher` لحساب معلم) أو P1-3 (لا `CourseCategory` endpoint ولا بيانات) — موثّق
++  بالتفصيل، ولم نلتفّ على أي منها.
++
++## 21 سبتمبر — ربط تصفّح المعلمين والكورسات بالباك اند (المرحلة 1)
++
++- **الكتالوج الحقيقي**: `/courses` صار على `Course/GetPublished` (العام) بشكل الرد المسطّح الفعلي
++  (`teacherName`/`subjectName`)، بدل بيانات محلية. بنسخة الفرع الجانبي كان على `GetAll` (أدمن/معلم فقط)
++  وعلى كيان متداخل، فصُحّح على كود الباك اند الحالي.
++- **صفحة جديدة `/teachers`** (دليل المعلمين: بحث مؤخَّر + صيغة + "عرض المزيد") مع رابطها بالقائمة
++  للزائر والطالب وولي الأمر، ومفاتيح ترجمة وSEO.
++- **بروفايل المعلم حقيقي** (`/teacher/$id`): تقييم وسنوات خبرة ومؤهلات ولغات وأسعار وكورسات المعلم.
++  أُزيلت أرقام وهمية كانت ثابتة لكل المعلمين (1,240 طالب، 4.8، "موثّق") ونصوص ترجمة ميتة.
++- **حالات صادقة**: تحميل/خطأ اتصال مع إعادة محاولة/لا كتالوج بعد/لا نتائج. لا بيانات وهمية fallback.
++  `getTeacherPublicProfile` و`getPublishedCourse` بيرجّعوا `null` لـ404 فقط.
++- **Sitemap**: إضافة `/teachers` وإزالة 6 روابط معلمين وهمية.
++- **اختبارات**: `courses.test.ts` و`teachers.test.ts` (12 سيناريو).
++- **توثيق**: تقرير الربط، ومتطلبات الباك اند (`backend-requirements.md`، بما فيها ثغرة الصلاحيات P0-1)،
++  وخارطة المتبقي وملاحظات المستقبل، وتحديث `frontend-integration-status.md` (61 endpoint).
++
+ ## 21 سبتمبر — دمج تحسينات UI/UX من النسخة الفرعية (بنود #5 و#6 و#7 و#8)
+ 
+ - **#7 حالات التحميل**: ترحيل 41 ملفًا من `<Loader2 animate-spin>` الحر إلى
+diff --git a/docs/api/frontend-integration-status.md b/docs/api/frontend-integration-status.md
+index 3203807..e180dbc 100644
+--- a/docs/api/frontend-integration-status.md
++++ b/docs/api/frontend-integration-status.md
+@@ -1,30 +1,31 @@
+ # حالة الربط بين الباك اند والفرونت اند — تدقيق شامل (كل Endpoint)
+ 
+ > مصدر هذا الملف: مقارنة مباشرة بين كل الـcontrollers الفعلية بالباك اند
+-> (8 ملفات، 32 endpoint) وكل نداء فعلي موجود بـ`src/integrations/backend/*.ts`
++> (12 ملف، 61 endpoint) وكل نداء فعلي موجود بـ`src/integrations/backend/*.ts`
+ > — مش قائمة مبنية على الذاكرة أو الافتراض. أُعدّ بعد جلسة عمل طويلة على
+ > ربط المشروعين، ويُحدَّث كل ما تغيّر شي فعليًا (لا تُبقيه "صورة لحظة"
+ > قديمة — عدّله وقت أي تغيير حقيقي).
+ 
+-## AuthController (3/3 مربوطة)
++## AuthController (4/4 مربوطة)
+ 
+-| Endpoint                  | مربوط؟ | ملاحظات                                                |
+-| ------------------------- | ------ | ------------------------------------------------------ |
+-| `POST /api/Auth/Login`    | ✅     | `auth.ts: login()`                                     |
+-| `POST /api/Auth/Register` | ✅     | `auth.ts: register()` — يدعم كل الأدوار (`userTypeId`) |
+-| `POST /api/Auth/Logout`   | ✅     | `auth.ts: logout()`                                    |
++| Endpoint                            | مربوط؟ | ملاحظات                                                                                         |
++| ----------------------------------- | ------ | ----------------------------------------------------------------------------------------------- |
++| `POST /api/Auth/Login`              | ✅     | `auth.ts: login()`                                                                              |
++| `POST /api/Auth/Register`           | ✅     | `auth.ts: register()` — يدعم كل الأدوار (`userTypeId`)                                          |
++| `GET /api/Auth/RegistrationOptions` | ✅     | `auth.ts: loadRegistrationOptions()` — الجنس + أنواع الحسابات (عام)؛ احتياطي: `CreateEditModal` |
++| `POST /api/Auth/Logout`             | ✅     | `auth.ts: logout()`                                                                             |
+ 
+ ## UserController (5/8 مربوطة)
+ 
+-| Endpoint                            | مربوط؟      | ملاحظات                                                       |
+-| ----------------------------------- | ----------- | ------------------------------------------------------------- |
+-| `POST /api/User/GetAll`             | ✅          | `admin-users.ts: listBackendUsers()` — ترقيم صفحات حقيقي      |
+-| `GET /api/User/CreateEditModal`     | ✅          | نفسها مستخدمة لجلب Genders/UserTypes بالتسجيل كمان            |
+-| `POST /api/User/CreateEdit`         | ✅          | إنشاء/تعديل مستخدم من شاشة الأدمن                             |
+-| `DELETE /api/User/Delete`           | ✅          |                                                               |
+-| `GET /api/User/MyProfileModal`      | ✅          | `auth.ts` — أساس بناء الجلسة بعد الدخول                       |
++| Endpoint                            | مربوط؟      | ملاحظات                                                      |
++| ----------------------------------- | ----------- | ------------------------------------------------------------ |
++| `POST /api/User/GetAll`             | ✅          | `admin-users.ts: listBackendUsers()` — ترقيم صفحات حقيقي     |
++| `GET /api/User/CreateEditModal`     | ✅          | نفسها مستخدمة لجلب Genders/UserTypes بالتسجيل كمان           |
++| `POST /api/User/CreateEdit`         | ✅          | إنشاء/تعديل مستخدم من شاشة الأدمن                            |
++| `DELETE /api/User/Delete`           | ✅          |                                                              |
++| `GET /api/User/MyProfileModal`      | ✅          | `auth.ts` — أساس بناء الجلسة بعد الدخول                      |
+ | `GET /api/User/ChangePasswordModal` | ⬜          | لا حاجة فعلية — النموذج ثابت (3 حقول)، ما بيرجّع شي ديناميكي  |
+-| `POST /api/User/MyProfile`          | ✅ **جديد** | `auth.ts: updateMyProfile()` — كان مربوط بديمو فقط لحد الآن   |
++| `POST /api/User/MyProfile`          | ✅ **جديد** | `auth.ts: updateMyProfile()` — كان مربوط بديمو فقط لحد الآن  |
+ | `POST /api/User/ChangePassword`     | ✅ **جديد** | `auth.ts: changeMyPassword()` — ما كان موجود إطلاقًا بالفرونت |
+ 
+ ## ConstantController (4/4 مربوطة)
+@@ -38,12 +39,12 @@
+ 
+ ## PageController (4/4 مربوطة)
+ 
+-| Endpoint                        | مربوط؟ | ملاحظات                                                                                            |
+-| ------------------------------- | ------ | -------------------------------------------------------------------------------------------------- |
++| Endpoint                        | مربوط؟ | ملاحظات                                                                                           |
++| ------------------------------- | ------ | ------------------------------------------------------------------------------------------------- |
+ | `POST /api/Page/GetAll`         | ✅     | `admin-pages.ts` — بدون ترقيم صفحات (قرار مقصود: أقصى 72 صف حاليًا، بنية تطبيق لا بيانات مستخدمين) |
+-| `GET /api/Page/CreateEditModal` | ✅     |                                                                                                    |
+-| `POST /api/Page/CreateEdit`     | ✅     |                                                                                                    |
+-| `DELETE /api/Page/Delete`       | ✅     |                                                                                                    |
++| `GET /api/Page/CreateEditModal` | ✅     |                                                                                                   |
++| `POST /api/Page/CreateEdit`     | ✅     |                                                                                                   |
++| `DELETE /api/Page/Delete`       | ✅     |                                                                                                   |
+ 
+ ## UserPermissionController (2/2 مربوطة)
+ 
+@@ -69,11 +70,11 @@
+ 
+ ## ParentController (3/3 مربوطة بالكود — 🔴 غير فعّالة عمليًا)
+ 
+-| Endpoint                           | مربوط؟ | ملاحظات                                                              |
+-| ---------------------------------- | ------ | -------------------------------------------------------------------- |
++| Endpoint                           | مربوط؟ | ملاحظات                                                             |
++| ---------------------------------- | ------ | ------------------------------------------------------------------- |
+ | `GET /api/Parent/MyChildren`       | ✅     | `parent.ts` — بيرجع دايمًا مصفوفة فاضية (فجوة باك اند، مو خطأ فرونت) |
+-| `GET /api/Parent/ChildAttendance`  | ✅     | نفس السبب                                                            |
+-| `GET /api/Parent/ChildExamResults` | ✅     | نفس السبب                                                            |
++| `GET /api/Parent/ChildAttendance`  | ✅     | نفس السبب                                                           |
++| `GET /api/Parent/ChildExamResults` | ✅     | نفس السبب                                                           |
+ 
+ **🔴 فجوة باك اند حرجة (مش شغل فرونت):**
+ 
+@@ -89,22 +90,77 @@
+ | -------- | ------ | ----------------------------------------------------- |
+ | `GET /`  | —      | Redirect لـswagger فقط، بدون منطق فعلي — لا يستحق ربط |
+ 
++## CourseController (2/7 مربوطة)
++
++| Endpoint                                  | مربوط؟      | ملاحظات                                                                                                                        |
++| ----------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
++| `POST /api/Course/GetPublished`           | ✅ **جديد** | `courses.ts: listPublishedCoursesPage()/listAllPublishedCourses()` — كتالوج `/courses` وبروفايل المعلم (عام، منشور فقط، حد 50) |
++| `GET /api/Course/GetById`                 | ✅ **جديد** | `courses.ts: getPublishedCourse()` — صفحة `/course/$id`                                                                        |
++| `POST /api/Course/GetAll`                 | ⬜          | أدمن/معلم فقط — لمدير الكورسات (ينتظر P1-3)                                                                                    |
++| `GET /api/Course/GetMineById`             | ⬜          | معلم — لوحة المعلم (ينتظر P1-1)                                                                                                |
++| `GET /api/Course/GetGroupStudents`        | ⬜          | معلم — طلاب المجموعة (ينتظر P1-1)                                                                                              |
++| `POST /api/Course/CreateEdit`             | ⬜          | ينتظر P1-1 وP1-3                                                                                                               |
++| `POST /api/Course/ConfigureGroupSchedule` | ⬜          | ينتظر P1-1                                                                                                                     |
++
++## TeacherController (4/9 مربوطة)
++
++| Endpoint                            | مربوط؟      | ملاحظات                                                                                 |
++| ----------------------------------- | ----------- | --------------------------------------------------------------------------------------- |
++| `POST /api/Teacher/Search`          | ✅ **جديد** | `teachers.ts: searchTeachers()` — `/teachers`                                           |
++| `GET /api/Teacher/PublicProfile`    | ✅ **جديد** | `teachers.ts: getTeacherPublicProfile()` — `/teacher/$id`                               |
++| `GET /api/Teacher/Availability`     | ✅ **جديد** | `teachers.ts: getTeacherAvailability()` — قسم "أوقات التوفّر" بـ`/teacher/$id` (عرض فقط) |
++| `POST /api/Teacher/UpdateProfile`   | ⬜          | ينتظر P1-1 (لا صف `Teacher` لحساب معلم)                                                 |
++| `POST /api/Teacher/SetAvailability` | ⬜          | ينتظر P1-1                                                                              |
++| `POST /api/Teacher/GetAll`          | ⬜          | أدمن (بدون تحقق صلاحيات حاليًا — P0-1)                                                   |
++| `GET /api/Teacher/CreateEditModal`  | ⬜          | أدمن                                                                                    |
++| `POST /api/Teacher/CreateEdit`      | ⬜          | أدمن — بدون `UserId` (P1-1)                                                             |
++| `DELETE /api/Teacher/Delete`        | ⬜          | أدمن                                                                                    |
++
++## BookingController (0/7 — المرحلة 2)
++
++| Endpoint                           | مربوط؟ | ملاحظات                                        |
++| ---------------------------------- | ------ | ---------------------------------------------- |
++| `POST /api/Booking/Submit`         | ⬜     | طالب/ولي أمر — ينتظر P0-1 وP1-1 وقرار منتج     |
++| `POST /api/Booking/Decide`         | ⬜     | معلم — القبول يخصم المحفظة (بيصير `Confirmed`) |
++| `POST /api/Booking/Cancel`         | ⬜     |                                                |
++| `POST /api/Booking/Complete`       | ⬜     | معلم                                           |
++| `POST /api/Booking/Rate`           | ⬜     | طالب بعد الاكتمال                              |
++| `GET /api/Booking/MyBookings`      | ⬜     |                                                |
++| `GET /api/Booking/TeacherBookings` | ⬜     | معلم                                           |
++
++## LessonController (0/5 — المرحلة 3)
++
++| Endpoint                           | مربوط؟ | ملاحظات           |
++| ---------------------------------- | ------ | ----------------- |
++| `POST /api/Lesson/Create`          | ⬜     | معلم — ينتظر P1-1 |
++| `PUT /api/Lesson/Update`           | ⬜     |                   |
++| `PUT /api/Lesson/ConfigureMeeting` | ⬜     |                   |
++| `PUT /api/Lesson/Cancel`           | ⬜     |                   |
++| `GET /api/Lesson/GetSchedule`      | ⬜     |                   |
++
++> الجداول الأربعة أعلاه اتحقّقت من كود الباك اند الحالي (`Acadimia-main.zip`). خطة الاستكمال:
++> `docs/operations/2026-09-21-remaining-integration-roadmap.md`؛ وما ينتظره الباك اند:
++> `docs/operations/2026-09-21-backend-requirements.md`.
++
+ ---
+ 
+ ## الخلاصة الرقمية
+ 
+-- **32 endpoint حقيقي بالباك اند.**
+-- **29 مربوط فعليًا وشغال** (بما فيها الاثنين الجداد هالجولة: تعديل
+-  الملف الشخصي، تغيير كلمة المرور).
+-- **1 بدون حاجة فعلية** (`ChangePasswordModal` — نموذج ثابت).
+-- **1 بدون حاجة أصلاً** (`HomeController.Index`).
+-- **3 مربوطة كودًا بس غير فعّالة عمليًا** (Parent — بانتظار endpoint ربط
+-  الأبناء وحل مسألة كيان Student من تيم الباك اند).
+-
+-**يعني: لا يوجد أي endpoint حقيقي بالباك اند غير مستخدم بالفرونت لسبب
+-إهمال — الوحيد الناقص فعليًا (تعديل الملف/تغيير كلمة المرور) اكتُشف
+-وصُلح بهالجولة.** الفجوة الوحيدة المتبقية (بوابة ولي الأمر) سببها الباك
+-اند حصرًا، موثّقة ومفصولة بوضوح أعلاه.
++**الـ32 endpoint الأصلية** (Auth/User/Constant/Page/UserPermission/Wallet/Parent/Home): بدون تغيير عن
++التدقيق السابق — 29 مربوطة فعليًا، و1 بدون حاجة فعلية (`ChangePasswordModal`)، و1 بدون حاجة أصلًا
++(`HomeController.Index`)، و3 مربوطة كودًا بس غير فعّالة عمليًا (Parent).
++
++**الجديد (21 سبتمبر):**
++
++- `Auth/RegistrationOptions`: مربوط (1).
++- 4 controllers جدد = **28 endpoint**: **5 مربوطة بواجهة** (`Course/GetPublished`،
++  `Course/GetById`، `Teacher/Search`، `Teacher/PublicProfile`، `Teacher/Availability`)،
++  و**23 غير مربوطة** (5 كورس + 5 معلم + 7 حجز + 5 دروس + تحقّق شامل: كلها تعتمد فعليًا على P0-1
++  أو P1-1 أو P1-3 — لا شيء منها "نُسي").
++- **الإجمالي: 61 endpoint.**
++
++المتبقي كله **ينتظر الباك اند** — مفصّل بـ`docs/operations/2026-09-21-backend-requirements.md`.
++ما عم نسبق الأحداث ولا نضيف حلول التفافية.
+ 
+ ## كيف تحدّث هذا الملف مستقبلًا
+ 
+diff --git a/docs/operations/2026-09-21-backend-requirements.md b/docs/operations/2026-09-21-backend-requirements.md
+new file mode 100644
+index 0000000..7eef42e
+--- /dev/null
++++ b/docs/operations/2026-09-21-backend-requirements.md
+@@ -0,0 +1,136 @@
++# مطلوب من فريق الباك اند لاستكمال الربط — 2026-09-21
++
++**الجمهور:** فريق الباك اند. مرجع الفحص: `Acadimia-main.zip` (الباك اند الحالي) + الباتش الموحّد
++`academia-backend-auth-fix-v3` (يُعتبر مطبّقًا). كل بند فيه: **الموقع**، **المشكلة**، **الأثر على
++الفرونت**، **الحل المقترح**، و**شو بيسوي الفرونت لما ينحل**. الفرونت ما رح يلتفّ على أي بند
++هون (لا بيانات مؤقتة ولا حلول ملتوية بعد اللي مذكور) — بنربط كل بند لما ينحل.
++
++الأولوية: 🔴 أمان (يُصلَّح قبل أي نشر عام) — 🟠 يمنع ميزة كاملة — 🟡 تحسين.
++
++---
++
++## 🔴 P0-1 — أغلب الـControllers بلا أي تحقق صلاحيات
++
++**الموقع:** كل ملفات `Acadimia.Api/Controllers`. بالـzip الحالي **فقط** `UserController`
++(`[RequirePagePermission]`) و`CourseController` (`[RequireUserTypes]` على 3 actions +
++`[AllowAnonymous]` على 2) وفيهم تحقق. الباقي: `WalletController`، `UserPermissionController`،
++`ConstantController`، `PageController`، `TeacherController`، `BookingController`، `LessonController`،
++`ParentController` — **صفر** `[Authorize]`/`RequireUserTypes`/`RequirePagePermission`، و`Program.cs`
++ما فيه `FallbackPolicy` ولا `AddAuthorization`.
++
++**الأثر (لو الباك اند المنشور = هالكود):** أي شخص بدون حساب يقدر ينادي مباشرة، مثلًا:
++`Wallet/VerifyTopUpRequest` (يشحن محافظ)، `Wallet/DecideWithdrawalRequest`،
++`UserPermission/SavePermissions` (يعطي نفسه صلاحيات)، `Teacher/CreateEdit` و`Teacher/Delete`،
++`Constant/*`، `Page/*`، وكل `Booking/*` (بـ`userId` فاضي). الفرونت بيحمي الواجهة فقط، وهاد مو حماية.
++
++**الحل المقترح (بهالترتيب):**
++
++1. `Program.cs`: `options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();`
++   (كل شي يتطلب دخول افتراضيًا).
++2. `[AllowAnonymous]` **صراحةً** على العام فقط: `Auth/*`، `Course/GetPublished`، `Course/GetById`،
++   `Teacher/Search`، `Teacher/PublicProfile`، `Teacher/Availability`. (وأي قراءة ثوابت عامة
++   لاحقًا — راجع P1-3.)
++3. أدوار: `RequireUserTypes(UserTypeIds.Admin)` على Wallet (بنود الأدمن)، UserPermission، Constant،
++   Page، `Teacher/GetAll|CreateEditModal|CreateEdit|Delete`؛ `RequireUserTypes(Teacher)` على
++   `Teacher/UpdateProfile|SetAvailability` وكل `Lesson/*`؛ `RequireUserTypes(Student, Parent)`
++   على `Booking/Submit|Cancel|Rate|MyBookings`؛ المعلم على `Booking/Decide|Complete|TeacherBookings`.
++4. إضافة التحقق من الملكية داخل الخدمات (زي `OwnsCourseAsync`) وين ما ناقص (مثلًا `Booking/Cancel`).
++
++**لما ينحل:** الفرونت ما بيحتاج تعديل للنقاط العامة (`/courses`، `/teachers`، `/teacher/:id`)
++طالما `[AllowAnonymous]` موجودة. لو شدّدتوا بدون ما تضيفوها، الصفحات العامة بترجع 401 وبتظهر
++"ما قدرنا نحمّل…".
++
++## 🟠 P1-1 — ما في مسار ينشئ صف `Teacher` لحساب معلم
++
++**الموقع:** `Teacher.UserId` (nullable) هو الربط بحساب الدخول، وكل الملكية بتعتمد عليه:
++`OwnershipService.GetTeacherIdForUserAsync/OwnsTeacherAsync/OwnsCourseAsync`،
++`TeacherService.UpdateProfileAsync/SetAvailabilityAsync` (بيبحثوا `Teachers.SingleOrDefault(t =>
++t.UserId == userId)`). لكن:
++
++- `AuthController.Register` ما بينشئ صف `Teacher` لما `UserTypeId = Teacher`.
++- `TeacherService.CreateEditAsync` بينشئ `new Teacher { GradeId }` **بدون `UserId`**.
++- `Teacher.GradeId` إلزامي (FK لجدول `Grade`) ومش عنده قيمة منطقية لمعلم جديد.
++
++**الأثر:** ما في معلم حقيقي بيقدر: يعدّل ملفه (`UpdateProfile`)، يحدّد أوقاته، ينشئ كورس
++(`Course/CreateEdit` بيفحص `OwnsTeacher`)، أو يستقبل حجوزات. وبالتالي ما حدا رح يظهر بـ`/teachers`
++(`IsPublicForDiscovery` مش قابل للتفعيل). **هاد يوقف المرحلتين 2 و3 كاملتين عند المعلم.**
++
++**الحل المقترح:** عند التسجيل بنوع معلم، أنشئ `Teacher { UserId = user.Id }` بنفس المعاملة، وخلّي
++`GradeId` nullable (أو استبدله بـ`TeacherGradeLevel` اللي موجود أصلًا وشيله من الكيان) — تغيير
++نموذج بيانات يحتاج Migration، لذلك قرار فريقكم. بديل: endpoint أدمن يربط `Teacher` بمستخدم.
++
++**لما ينحل:** بننفّذ مباشرة (بالفرونت): (أ) حقول ملف المعلم بنموذج التسجيل + نداء `UpdateProfile`
++بعد `Register` (bio، qualifications، experienceYears 0–60، serviceArea، languages، supportsOnline/
++InPerson، أسعار الساعة، خيار "إظهار ملفي بدليل المعلمين" = `IsPublicForDiscovery`)، (ب) صفحة
++"تعديل ملفي العام"، (ج) محرّر أوقات التوفّر، (د) دروسي المجدولة، (هـ) لوحة طلبات الحجز.
++
++## 🟠 P1-2 — `Course/GetPublished` ما بيدعم فلتر المعلم
++
++**الموقع:** `CourseController.GetPublished` بياخد `DataTableRequestDto` (ما فيه `TeacherId`).
++الخدمة أصلًا بتفلتر بـ`SearchValue.TeacherId` (جاهزة).
++
++**الأثر:** صفحة المعلم بتجلب كل الكتالوج المنشور وتفلتر عندنا (حل مؤقت مقيّد بـ300 كورس).
++
++**الحل:** `PublishedCoursesRequestDto : DataTableRequestDto { int? TeacherId }` (أو query param) وتمريره
++لـ`SearchValue.TeacherId`. **لما ينحل:** بنستبدل `coursesOfTeacher` بنداء مباشر ونحذف السقف.
++
++## 🟠 P1-3 — قوائم المواد/الصفوف/فئات الكورس (مصدر الاختيارات)
++
++**الموقع:** `ConstantController.GetAll` (بيقبل `DataTableRequestDto` بدون `ParentId` رغم إن
++`ConstantsService.GetAllAsync` بيدعمه)، و`CourseCategory` كيان منفصل عن الـConstants، وكمان
++**ما في بيانات seed** للمواد والصفوف والفئات (`SeedHeper/*`).
++
++**الأثر:** ما بنقدر نبني: نموذج إنشاء كورس (بلوحة الأدمن/المعلم)، اختيار مواد/صفوف المعلم
++(`subjectIds`/`gradeIds` بـ`UpdateProfile`)، ولا فلتر مادة بدليل المعلمين (`Search.SubjectId`).
++
++**الحل:** (1) `ParentId` بـ`Constant/GetAll`، (2) endpoints **قراءة عامة** (`[AllowAnonymous]`)
++للمواد والصفوف والفئات، (3) إدخال البيانات الحقيقية (عبر `/admin/constants` الموجودة أو seed).
++**لما ينحل:** `integrations/backend/constants.ts` جديد + فلاتر مادة/صف بـ`/teachers` + إعادة بناء
++`course-catalog-manager.tsx` على `Course/CreateEdit`، وحذف `public-catalog*` المحلية.
++
++## 🟠 P1-4 — لا يوجد endpoint لتسجيل طالب بكورس
++
++ما في `Enrollment` controller/endpoint (الكيان `Enrollment` موجود). زر "سجّل"/"افتح" ببطاقة
++الكورس حاليًا بيروح للتسجيل/`/my-courses` المحلي. **لما ينحل:** ربط الزر بالتسجيل الحقيقي ودفع
++المحفظة.
++
++## 🟡 P2 — تحسينات على ما هو موجود
++
++1. **`Teacher/Search`:** لا `OrderBy` قبل `Skip/Take` (ترقيم غير ثابت)، `PageSize` بلا حد أقصى،
++   وفلتر `MinRating` بيُطبَّق **بعد** الترقيم (فالإجمالي غلط). _(الفرونت يستخدمه بـ"عرض المزيد" بلا
++   فلتر تقييم حاليًا.)_
++2. **`CourseListItemDto`:** أضيفوا لما يتوفر: عدد الدروس، عدد المسجّلين، تقييم الكورس، الصف/المستوى
++   (`GradeId` موجود بالإدخال فقط)، وصورة الغلاف. الواجهة جاهزة وبتظهرها تلقائيًا (الحقول موجودة
++   اختيارية بـ`BackendCourseRow`).
++3. **`TeacherProfileDto`:** علم توثيق المعلم (`IsVerified`) — الفرونت أزال شارة "موثّق" الثابتة
++   لغياب البيانات؛ ونصوص التقييمات (endpoint يرجّع `Review`) لقسم "آراء الطلاب"؛ وعدد الطلاب.
++4. **`Teacher.ProfileImage`:** وضّحوا الصيغة (رابط كامل أم اسم ملف؟) ومين بيخدمها، ولا يوجد endpoint
++   رفع صورة. الفرونت بيعرض الصورة لو كانت رابطًا صالحًا وإلا الأيقونة البديلة.
++5. **الحجز (`Booking`):**
++   - الواقع بالكود (`BookingService`): `Submit` → `Pending`؛ `Decide` (قبول) بيخصم من محفظة الطالب
++     (لو الرصيد كافٍ، وإلا "رصيد المحفظة غير كافٍ") ويقتطع عمولة افتراضية 10% ويودّع للمعلم، وبيحوّل
++     الحالة **مباشرة إلى `Confirmed`** — قيمة `Accepted` بالـenum ما بتُستخدم أبدًا. `Complete`
++     للمعلم فقط من `Confirmed`، و`Rate` للطالب بعد `Completed`. وثّقوا هالآلة رسميًا (وهل `Accepted`
++     محذوفة أم مخطط لها)، وسياسة الإلغاء والاسترداد بعد الخصم. **مطلوب قرار منتج قبل بناء واجهة
++     الحجز** (الفرونت رح يعرض: لم يُقبل بعد / مؤكّد / مكتمل / مرفوض / ملغى).
++   - `Date` (`DateTime`) و`StartTime` (`TimeSpan`) بدون منطقة زمنية — حدّدوا المنطقة (الأردن؟) أو ارجعوا UTC.
++   - `Booking/Cancel` و`Complete` بياخدوا `bookingId` كـquery/form وحيد؛ وثّقوا الشكل.
++6. **`Lesson`:** ما في `Complete` (الفرونت كان فاهم عكس ذلك من تقرير سابق). تأكدوا إذا مطلوب.
++7. **`Register`/الطالب:** كيان `Student` (`int Id`، `FatherId`) منفصل عن `User` ولا كود ينشئه —
++   بوابة ولي الأمر غير فعّالة (موثّق بـ`docs/api/frontend-integration-status.md`).
++8. **Seed:** `UserSeed.cs` بيزرع أنواع المستخدمين 1..4 (الطالب=2، المعلم=3) بينما `UserTypeIds` بالكود
++   الطالب=3، المعلم=4، ولي الأمر=5؛ وفيه كلمة مرور أدمن نصية بالمستودع. تحقّقوا بـ
++   `SELECT Id, Name FROM UserTypes` ووحّدوا. (تفاصيل: `docs/AUTH_FRONTEND_INTEGRATION.md` بالباك.)
++
++---
++
++## العقد اللي الفرونت معتمد عليه (لا تغيّروه بدون إبلاغ)
++
++| النقطة                           | الشكل المتوقّع                                                                    |
++| -------------------------------- | -------------------------------------------------------------------------------- |
++| `POST /api/Course/GetPublished`  | `{ recordsFiltered, totalCount, data: CourseListItemDto[] }`، `PageSize` ≤ 50    |
++| `GET /api/Course/GetById?id=`    | `CourseListItemDto` أو 404 (غير منشور/غير موجود)                                 |
++| `POST /api/Teacher/Search`       | `{ totalCount, data: TeacherProfileDto[] }` للمعلمين `IsPublicForDiscovery` فقط  |
++| `GET /api/Teacher/PublicProfile` | `TeacherProfileDto` أو 404                                                       |
++| `GET /api/Teacher/Availability`  | قائمة `TeacherAvailability` (جدول أسبوعي متكرر، `TimeSpan` كنص `HH:mm:ss`)       |
++| أسماء الحقول                     | camelCase (الافتراضي)، وأي تغيير اسم/نوع = تعديل مقابل بـ`integrations/backend`. |
+diff --git a/docs/operations/2026-09-21-remaining-integration-roadmap.md b/docs/operations/2026-09-21-remaining-integration-roadmap.md
+new file mode 100644
+index 0000000..e4b2a12
+--- /dev/null
++++ b/docs/operations/2026-09-21-remaining-integration-roadmap.md
+@@ -0,0 +1,84 @@
++# خارطة ما تبقّى من ربط الباك اند + ملاحظات المستقبل — 2026-09-21
++
++تحلّ محل الخارطة المرافقة للفرع الجانبي (`2026-09-19-remaining-backend-integration-roadmap.md`) بعد
++تصحيحها على كود الباك اند الحالي. مبدأ العمل: **ما منسبق الأحداث** — بنربط الموجود فعلًا ولما
++الباك اند ينفّذ بند من `2026-09-21-backend-requirements.md` منربطه بنفس الجولة.
++
++## الوضع الآن
++
++| المرحلة                                               | الحالة                                                              |
++| ----------------------------------------------------- | ------------------------------------------------------------------- |
++| 1 — تصفّح الكورسات والمعلمين + بروفايل المعلم          | ✅ منفّذة (`2026-09-21-teachers-courses-real-backend-connection.md`) |
++| 2 — الحجز (طالب/ولي أمر ↔ معلم)                       | ⏳ بانتظار P0-1 وP1-1 وقرار منتج (خصم المحفظة)                      |
++| 3 — إضافات لوحة المعلم (ملف، توفّر، دروس، طلبات الحجز) | ⏳ بانتظار P1-1 (صف `Teacher`)                                      |
++| إدارة الكورسات بالأدمن + مصدر المواد/الصفوف           | ⏳ بانتظار P1-3                                                     |
++| تسجيل الطالب بكورس                                    | ⏳ بانتظار P1-4                                                     |
++
++## المرحلة 2 — الحجز (لما ينحل P0-1 وP1-1)
++
++الـendpoints جاهزة بالباك اند: `Booking/Submit`، `Decide`، `Cancel`، `Complete`، `Rate`، `MyBookings`،
++`TeacherBookings` + `Teacher/Availability`. شو بنبني بالفرونت (كإضافات على الموجود):
++
++1. زر "احجز حصة" ببروفايل المعلم (`teacher.$id.tsx`) — بدل زر التسجيل الحالي للمسجَّل دخوله.
++2. **اختيار الموعد:** جدول التوفّر الأسبوعي (`getTeacherAvailability` جاهزة) → اختيار تاريخ ضمن
++   الأيام المتاحة → وقت + مدة + صيغة (أونلاين/وجاهي). السعر بيحسبه الباك اند؛ نعرضه قبل التأكيد.
++3. **حالات الحجز** لصفحة الطالب/ولي الأمر (المدمجة بـ`schedule.tsx` أو صفحة "حجوزاتي"): لم يُقبل بعد،
++   مؤكّد، مكتمل، مرفوض، ملغى — + إلغاء + تقييم بعد الاكتمال. `Accepted` مش مستخدمة بالباك اند.
++4. أخطاء حقيقية: "رصيد المحفظة غير كافٍ" (رسالة الباك اند نفسها) مع رابط `/wallet`.
++5. قرارات منتج مطلوبة قبل البدء: متى بيصير الخصم، سياسة الإلغاء/الاسترداد، المنطقة الزمنية.
++
++## المرحلة 3 — لوحة المعلم (لما ينحل P1-1)
++
++إضافات على صفحات المعلم **الموجودة** (مبنية حاليًا على بيانات ديمو محلية)، مش بناء من الصفر:
++
++- `teacher.profile.edit.tsx` → نموذج `Teacher/UpdateProfile` الحقيقي (كل حقول `TeacherProfileInputDto`).
++- محرّر التوفّر الأسبوعي → `Teacher/SetAvailability` (شرائح: يوم، بداية، نهاية، صيغة، من/إلى).
++- الدروس → `Lesson/Create|Update|ConfigureMeeting|Cancel|GetSchedule` (**ما في `Complete`**؛ الخارطة
++  القديمة كانت غلط).
++- طلبات الحجز → `Booking/TeacherBookings` + قبول/رفض/إكمال.
++- إنشاء كورس → `Course/CreateEdit` + `ConfigureGroupSchedule` (يحتاج P1-3 للمواد/الفئات).
++
++## ملاحظات المستقبل (وُعدنا فيها — لا تُنسى)
++
++### 1) حقول المعلم بنموذج التسجيل (`teacher.register.tsx`) — بانتظار P1-1
++
++تعليق قديم بالملف كان يقول إن الباك اند ما بيدعم هالحقول؛ ما عاد صحيح: `POST /api/Teacher/UpdateProfile`
++بيقبل `bio`، `qualifications`، `experienceYears` (0–60)، `serviceArea`، `languages`،
++`supportsOnline`، `supportsInPerson`، `hourlyPriceOnline`، `hourlyPriceInPerson`،
++`isPublicForDiscovery`، `subjectIds`، `gradeIds`. **بس النداء رح يفشل لأي معلم حقيقي حاليًا** (ما في
++صف `Teacher` — P1-1)، ولهيك ما نُفّذ بعد بدل ما نضيف حقول ما بتنحفظ. عند الجاهزية:
++
++- بعد `Register` الناجح (المستخدم صار مسجّل دخول بالكوكي) نداء `UpdateProfile` بحقول اختيارية؛ فشلها
++  ما يلغي التسجيل — رسالة صريحة "تم إنشاء الحساب؛ أكمل ملفك من إعدادات المعلم".
++- `isPublicForDiscovery` خيار صريح (موافقة) — مش افتراضيًا.
++- `subjectIds/gradeIds` بعد P1-3 (لسا ما في مصدر اختيارات).
++- تحقق حقول بنفس قواعد الباك اند (`experienceYears` 0–60، أسعار ≥ 0…) + اختبارات.
++
++### 2) الحقول اللي بتنتظر بيانات من الباك اند (الواجهة جاهزة)
++
++`rating`/`studentsCount`/`durationHours`/`lessonsCount`/`tags`/`level` ببطاقة الكورس، وعدد الطلاب
++وشارة التوثيق ونصوص التقييمات ببروفايل المعلم — بتظهر تلقائيًا أو بتنضاف بسطر لما تتوفر
++(`2026-09-21-backend-requirements.md` P2-2/P2-3).
++
++### 3) تنظيف بعد إعادة بناء مدير الكورسات (P1-3)
++
++`course-catalog-manager.tsx` و`admin-curriculum-data.ts` ما زالوا على `public-catalog-data.ts` المحلي؛
++لما ينتقلوا لـ`Course/CreateEdit` بنحذف `public-catalog-data.ts` و`public-catalog.functions.ts`
++و`COURSE_FORMAT_LABELS` (وقتها بيصير "مسجّل مسبقًا" قرار منتج جديد).
++
++### 4) بنود صغيرة مؤجلة
++
++- **دالة جنس موحّدة بالـid** (`gender.ts` عندها الـid أولًا ثم الاسم؛ فحوصات `"أنثى"`/`"أنث"` النصية
++  بـ`users-manager` و`admin-users.ts` تنتقل إليها) — اختياري، الحالي شغّال.
++- **وسيط Sentry للطلبات بالسيرفر** (`sentryGlobalRequestMiddleware`) أزلناه لأن الاستيراد الثابت
++  كسر الـSSR؛ يرجع فقط بعد التأكد أن Vercel بيبني فعليًا وأن الحزمة بتوصل الدالة (بناء > 5 ثوانٍ).
++- **مرجع ناقص:** تعليق `brand-logo.tsx` بيشير لـ`docs/design/brand-guidelines.md` وهو غير موجود.
++- **متغيرات Vercel:** `VITE_POSTHOG_KEY`/`VITE_POSTHOG_HOST` لازم تنضاف بلوحة Vercel بعد إعادة تجاهل `.env`.
++- **تحقق قاعدة البيانات:** `SELECT Id, Name FROM UserTypes` (تطابق أرقام الأنواع مع `UserTypeIds`).
++- `useState` غير مستخدم بـ`supervisor.reports.tsx` و`teacher.community.tsx` (قديم، قاعدة
++  `no-unused-vars` مطفأة).
++
++## كيف نتحدّث
++
++كل ما تنفّذ الباك اند بندًا: نحدّث `frontend-integration-status.md` و`backend-requirements.md`
++(بنشطب البند) بنفس جولة ربطه بالفرونت.
+diff --git a/docs/operations/2026-09-21-teachers-courses-real-backend-connection.md b/docs/operations/2026-09-21-teachers-courses-real-backend-connection.md
+new file mode 100644
+index 0000000..e5ffbd7
+--- /dev/null
++++ b/docs/operations/2026-09-21-teachers-courses-real-backend-connection.md
+@@ -0,0 +1,102 @@
++# تقرير: ربط تصفّح المعلمين والكورسات بالباك اند الحقيقي (المرحلة 1) — 2026-09-21
++
++أول جزء فعلي من ربط الكونترولرز الجديدة (`Teacher`/`Course`/`Booking`/`Lesson`). هالتقرير يوثّق
++**التنفيذ الفعلي** بعد ما تحقّقنا من كل نداء على كود الباك اند الحالي (`Acadimia-main.zip`)،
++وبعد دمج الأجزاء الصحيحة من الفرع الجانبي `pixely-frame-magic-fixed` **مع تحديثها** بحسب شغلنا
++(مش نسخ حرفي). خريطة الـendpoints: `docs/api/frontend-integration-status.md`.
++
++المتبقي وما ينتظر الباك اند: `2026-09-21-remaining-integration-roadmap.md` و
++`2026-09-21-backend-requirements.md`.
++
++## شو انبنى
++
++| الملف                                           | الوصف                                                                       |
++| ----------------------------------------------- | --------------------------------------------------------------------------- |
++| `src/integrations/backend/teachers.ts`          | `searchTeachers`، `getTeacherPublicProfile`، `getTeacherAvailability`       |
++| `src/integrations/backend/courses.ts`           | `listPublishedCoursesPage`، `listAllPublishedCourses`، `getPublishedCourse` |
++| `src/routes/teachers.tsx`                       | **صفحة جديدة**: دليل المعلمين (بحث + صيغة + "عرض المزيد")                   |
++| `src/routes/courses.tsx`                        | صار بيقرأ الكتالوج الحقيقي (بدل `PUBLIC_COURSES` المحلية)                   |
++| `src/routes/teacher.$id.tsx`                    | بروفايل معلم حقيقي + كورساته                                                |
++| `src/components/site/photo-avatar.tsx`          | `src` صار اختياري (المعلم ممكن ما يكون رافع صورة)                           |
++| `public-layout.tsx` + `bi.ts` + `seo.ts` + i18n | رابط "دليل المعلمين" (للزائر والطالب وولي الأمر)، ومفاتيح الترجمة والـSEO   |
++| `scripts/generate-sitemap.mjs`                  | إضافة `/teachers` وإزالة 6 روابط معلمين وهمية                               |
++| `courses.test.ts` + `teachers.test.ts`          | 12 سيناريو (ترقيم الصفحات، 404 مقابل خطأ شبكة، الاقتطاع)                    |
++
++## نتيجة التحقق على كود الباك اند (وشو صحّحنا عن الفرع)
++
++**`Teacher/Search` و`Teacher/PublicProfile` و`Teacher/Availability`** — مطابقة للـDTOs
++(`TeacherSearchFilterDto`، `TeacherProfileDto`، `TeacherAvailability`). المعلم بيظهر بالبحث
++والبروفايل فقط لو `IsPublicForDiscovery = true`، وإلا 404.
++
++**الكورسات — هون كان الاختلاف الجوهري:** نسخة الفرع كتبت `courses.ts` على `Course/GetAll` وعلى
++كيان `Course` متداخل (`teacher.user.name`). الباك اند الحالي:
++
++1. `GetAll` مقصور على `RequireUserTypes(Admin, Teacher)` → الزائر والطالب يأخذوا 401/403.
++   **الكتالوج العام = `POST /api/Course/GetPublished`** (`[AllowAnonymous]`، منشور فقط، حد الصفحة 50).
++2. الرد **DTO مسطّح** (`CourseListItemDto`): `teacherName`، `subjectName`، `categoryName`، بدون
++   كيان متداخل. (ثغرة "اسم المعلم ما بيوصل" اللي ذكرها تقرير الفرع انحلّت بالباك اند.)
++3. ما في فلتر `teacherId` بـ`GetPublished`؛ الفرع كان يمرّره والباك اند بيتجاهله، فكانت صفحة أي
++   معلم بتعرض **كل** الكورسات.
++
++## قرارات ومعالجة
++
++- **كورسات معلم بعينه (مؤقت):** بنجلب كل الكتالوج المنشور (صفحات ٥٠، سقف 6 صفحات) ونفلتر عندنا
++  بـ`coursesOfTeacher`. نفس الاستعلام (`["published-courses"]`) مشترك بين `/courses` وبروفايل
++  المعلم فما في طلبات مكرّرة. لو الباك اند أكبر من السقف، بنعرض ملاحظة صادقة ("يعرض أول N من M").
++  الحل النهائي: `TeacherId` بـ`GetPublished` (مطلوب موثّق).
++- **ما في بيانات وهمية كـfallback:** خطأ اتصال = `ErrorState` مع إعادة محاولة، مش شاشة فاضية ولا
++  بيانات مزيّفة. حالات صادقة منفصلة: تحميل / خطأ / "لا يوجد كتالوج بعد" / "لا نتائج لبحثك".
++- **`getTeacherPublicProfile` و`getPublishedCourse`:** بيرجّعوا `null` لـ404 **فقط**؛ أي خطأ تاني
++  (شبكة، 5xx) بيرتفع. نسخة الفرع كانت بتبلع كل الأخطاء فيظهر انقطاع الشبكة "معلم غير موجود".
++- **أرقام وهمية أُزيلت من بروفايل المعلم** (كانت موجودة بنسختنا كمان): `1,240` طالب و`4.8` تقييم
++  و"حساب موثّق" و"نبذة" عامة لكل المعلمين. صارت أرقام حقيقية (`averageRating` + `ratingCount`،
++  سنوات الخبرة، المؤهلات، اللغات، الأسعار)، وحالة "لا تقييمات بعد" لو ما في تقييم. شارة "موثّق"
++  مسحوبة لأن الباك اند ما عنده علم توثيق للمعلم (مطلوب موثّق). مفاتيح الترجمة الميتة
++  (`teacherProfile.verified/students/about/reviews`) انحذفت.
++- **صور الغلاف والمعلم:** كنا نجرّب صور محلية بمسار `id` (`courseCoverPath`/`teacherPhotoPath`).
++  مع معرّفات الباك اند الحقيقية ممكن تطابق صورة كورس/معلم **مختلف**، فصارت تدرّج لوني + أول حرف
++  للكورس، وأيقونة بديلة للمعلم (`PhotoAvatar` بدون `src`) لحد ما يتوفر حقل صورة حقيقي.
++- **حقول الكورس اللي الباك اند ما بيرجعها** (`rating`، `studentsCount`، `durationHours`،
++  `lessonsCount`، `tags`، `level`): بقيت اختيارية بالنوع والواجهة بتعرضها بس لو موجودة (تصميم
++  البطاقة الغني محفوظ، الحقول بتظهر تلقائيًا لما الباك اند يضيفها). بديل عن "عدد الطلاب" منعرض
++  سعة الكورس الحقيقية (`maxStudents`): "حتى N طلاب".
++- **صيغة الكورس:** `deliveryType` بيدعم وجاهي/أونلاين فقط، فـ"مسجّل مسبقًا" ما بتنعرض على هالصفحة
++  (ثابت `COURSE_FORMAT_LABELS` بقي بملف البيانات المحلي لأن مدير الكورسات بالأدمن ما زال عليه).
++- **دليل المعلمين:** بحث مؤخَّر (400ms) لتجنب طلب لكل ضغطة زر، سعر الساعة حسب فلتر الصيغة، نصوص
++  الترجمة صُحّحت لتطابق الواقع (ما في فلتر مادة ولا "معلمين معتمدين" بالباك اند).
++- **التنقّل حسب الدور:** `PUBLIC_NAV_FOR_ROLE` (بند 9) بيخفي الروابط العامة غير المناسبة للدور،
++  فأُضيف `/teachers` للطالب وولي الأمر فقط. (نسخة الفرع ما انتبهت لهالتفاعل.)
++- **Sitemap:** أُزيلت 6 روابط `/teacher/<slug>` وهمية (كانت 404 لمحركات البحث) وأُضيف `/teachers`.
++  الروابط الفردية للمعلمين (أرقام من الباك اند) مش قائمة ثابتة.
++
++## ما لم يُؤخذ من الفرع (وليش)
++
++نسخ الفرع من الملفات الأقدم من شغلنا: `auth.ts`/`signup`/`env`/Sentry/`LoadingState`/الطباعة، وتعديلاته
++على `courses.tsx` و`teacher.$id.tsx` (استخدمت `text-[11px]` والدوّارة الحرة وكيان Course
++المتداخل)، و`admin-dashboard.tsx` (خطأ ترتيب hooks)، و`payments-manager.tsx` (ملف ميت). أُخذت
++الأفكار والأجزاء الصحيحة فقط وطُبّقت على ملفاتنا.
++
++## للتحقق اليدوي بعد النشر
++
++1. `/teachers` بدون بيانات: حالة "أول معلّم بالطريق" (لا معلمين `IsPublicForDiscovery` بعد).
++2. `/courses`: يعرض المنشور فقط؛ إيقاف الباك اند → `ErrorState` مع زر إعادة المحاولة.
++3. `/teacher/abc` أو `/teacher/999`: "لم نجد هذا المعلّم" بدون طلب شبكة للأولى.
++4. الترجمة: `?lang=en` يعرض "Find a teacher" و"Teacher directory".
++
++## تتمة (نفس اليوم): ربط ما كان جاهزًا بالباك اند وغير مربوط
++
++بعد تدقيق شامل على كل الـcontrollers (`Acadimia-main.zip` + باتش `v3` مُطبَّق)، تبيّن إنه بقي شيئين
++**جاهزين فعليًا وبدون أي عائق باك اند** وما كانوا مربوطين:
++
++- **`GET /api/Course/GetById`** — كانت الدالة `getPublishedCourse` موجودة بـ`courses.ts` من الجولة
++  الأولى لكن بدون صفحة تستخدمها. أُنشئت **صفحة جديدة** `/course/$id` (تفاصيل كورس)، وصار عنوان
++  الكورس ببطاقات `/courses` وبروفايل المعلم رابطًا إليها.
++- **`GET /api/Teacher/Availability`** — نفس الحالة (`getTeacherAvailability` جاهزة بدون واجهة).
++  أُضيف قسم "أوقات التوفّر" لبروفايل المعلم (`/teacher/$id`)، للعرض فقط (بدون حجز — المرحلة 2).
++  بما إن ما في معلم حقيقي عنده صف `Teacher` مربوط بحسابه بعد (P1-1)، القسم عمليًا بيضل مخفي (ما
++  عندنا بيانات نعرضها) لحد ما ينحل ذاك البند — بس الربط نفسه جاهز وما رح يحتاج تعديل وقتها.
++
++كل شي تاني غير مربوط (كل `Booking`/`Lesson`، ومعظم `Teacher`، و`Course/GetAll`/`CreateEdit`) يعتمد
++فعليًا على P0-1 أو P1-1 أو P1-3 — اتأكّد من هذا بقراءة الكود (`Teacher.GradeId` إلزامي وما في FK
++لـ`CourseCategory` ولا endpoint إله أصلًا)، مش افتراضًا. **ما استُبق شي منها** — بانتظار الباك اند
++كما هو موثّق بـ`2026-09-21-backend-requirements.md` و`2026-09-21-remaining-integration-roadmap.md`.
+diff --git a/scripts/generate-sitemap.mjs b/scripts/generate-sitemap.mjs
+index 69a9225..26d67af 100644
+--- a/scripts/generate-sitemap.mjs
++++ b/scripts/generate-sitemap.mjs
+@@ -8,6 +8,7 @@ const publicPaths = [
+   "/",
+   "/about",
+   "/courses",
++  "/teachers",
+   "/for-teachers",
+   "/for-parents",
+   "/how-it-works",
+@@ -24,14 +25,9 @@ const blogSlugs = [
+   "مادة-بتكرهها-كيف-تتحملها-لنهاية-السنة",
+   "بنك-الأخطاء-أذكى-أداة-ما-بتستخدمها",
+ ];
+-const teacherIds = [
+-  "sami-khalil",
+-  "rana-haddad",
+-  "maha-zeidan",
+-  "luay-darwish",
+-  "noor-abed",
+-  "omar-sharif",
+-];
++// صفحات المعلمين (/teacher/:id) مش مُدرجة هون عمدًا: معرّفاتها أرقام من الباك اند ومش قائمة ثابتة.
++// (كانت هون 6 روابط وهمية بأسماء slug ما بتطابق أي معلم حقيقي — كانت بتعطي 404/"غير موجود" لمحركات البحث.)
++// لما نحتاجها بالـsitemap: جلبها وقت البناء من Teacher/Search (يتطلب الباك اند شغّال وقت البناء).
+ 
+ function localizedUrl(pathname, lang) {
+   const url = new URL(pathname, siteUrl);
+@@ -50,7 +46,6 @@ function alternateLinks(pathname) {
+ const paths = [
+   ...publicPaths,
+   ...blogSlugs.map((slug) => `/blog/${encodeURIComponent(slug)}`),
+-  ...teacherIds.map((id) => `/teacher/${encodeURIComponent(id)}`),
+ ];
+ const urls = [];
+ for (const pathname of paths) {
+diff --git a/src/components/site/photo-avatar.tsx b/src/components/site/photo-avatar.tsx
+index f544912..b81665d 100644
+--- a/src/components/site/photo-avatar.tsx
++++ b/src/components/site/photo-avatar.tsx
+@@ -3,8 +3,10 @@ import { User } from "lucide-react";
+ import { cn } from "@/lib/utils";
+ 
+ interface PhotoAvatarProps {
+-  /** مسار الصورة المتوقّع، مثلاً /team/teachers/sami-khalil.jpg */
+-  src: string;
++  /** مسار الصورة المتوقّع، مثلاً /team/teachers/sami-khalil.jpg. null/فاضي
++   *  (بيانات حقيقية من الباك اند ما رفعت صورة بعد) → الأيقونة البديلة مباشرة
++   *  بدون محاولة تحميل فاشلة. */
++  src?: string | null;
+   alt?: string;
+   /** أيقونة بديلة تظهر تلقائياً لو الصورة غير موجودة بعد (fallback). */
+   icon?: typeof User;
+@@ -26,7 +28,7 @@ export function PhotoAvatar({
+ }: PhotoAvatarProps) {
+   const [failed, setFailed] = useState(false);
+ 
+-  if (failed) {
++  if (failed || !src) {
+     return (
+       <span
+         className={cn(
+diff --git a/src/components/site/public-layout.tsx b/src/components/site/public-layout.tsx
+index f8eebf6..2b3eaba 100644
+--- a/src/components/site/public-layout.tsx
++++ b/src/components/site/public-layout.tsx
+@@ -13,6 +13,7 @@ import {
+   Route,
+   Tag,
+   UserPlus,
++  UserSearch,
+   Users,
+   Youtube,
+ } from "lucide-react";
+@@ -44,6 +45,7 @@ import {
+ const navItems = [
+   { to: "/", key: "nav.home", icon: Home },
+   { to: "/courses", key: "nav.courses", icon: BookOpen },
++  { to: "/teachers", key: "nav.teachers", icon: UserSearch },
+   { to: "/how-it-works", key: "nav.howItWorks", icon: Route },
+   { to: "/pricing", key: "nav.pricing", icon: Tag },
+   { to: "/for-teachers", key: "nav.forTeachers", icon: GraduationCap },
+@@ -52,6 +54,7 @@ const navItems = [
+ 
+ const footerPlatform = [
+   { to: "/courses", key: "nav.courses" },
++  { to: "/teachers", key: "nav.teachers" },
+   { to: "/how-it-works", key: "nav.howItWorks" },
+   { to: "/pricing", key: "nav.pricing" },
+   { to: "/for-teachers", key: "nav.forTeachers" },
+diff --git a/src/i18n/locales/ar.pages.json b/src/i18n/locales/ar.pages.json
+index 70acf99..5b101d6 100644
+--- a/src/i18n/locales/ar.pages.json
++++ b/src/i18n/locales/ar.pages.json
+@@ -2,6 +2,7 @@
+   "nav": {
+     "about": "من نحن",
+     "courses": "الكورسات",
++    "teachers": "دليل المعلمين",
+     "help": "المساعدة",
+     "support": "الدعم",
+     "certificateVerify": "التحقق من شهادة",
+@@ -187,6 +188,14 @@
+     "ctaPrimary": "ابدأ مجاناً",
+     "ctaSecondary": "سجّل كمعلّم"
+   },
++  "courseDetail": {
++    "meta": {
++      "title": "الكورس | أكاديميا",
++      "description": "شوف تفاصيل الكورس والسعر وابدأ من غير حساب على أكاديميا."
++    },
++    "aboutTitle": "عن الكورس",
++    "notFound": "لم نجد هذا الكورس"
++  },
+   "courses": {
+     "meta": {
+       "title": "الكورسات | أكاديميا",
+@@ -207,20 +216,32 @@
+     "byTeacher": "المعلّم",
+     "open": "افتح الكورس"
+   },
++  "teachersDirectory": {
++    "meta": {
++      "title": "دليل المعلمين | أكاديميا",
++      "description": "تصفّح المعلمين على أكاديميا حسب الاسم وصيغة التدريس (أونلاين/وجاهي)، وشوف أسعارهم وتقييماتهم قبل ما تسجّل."
++    },
++    "h1": "دليل المعلمين",
++    "sub": "تصفّح المعلمين، شوف الأسعار والتقييمات، وابدأ من غير حساب.",
++    "searchPlaceholder": "ابحث باسم المعلّم…",
++    "onlineOnly": "أونلاين",
++    "inPersonOnly": "وجاهي",
++    "empty": "لا نتائج مطابقة لبحثك.",
++    "emptyDirectoryTitle": "أول معلّم بالطريق",
++    "emptyDirectoryBody": "نجهّز حالياً قائمة المعلمين. أول ما ينضم أي معلّم ويفعّل ظهور ملفه رح يظهر هون مباشرة.",
++    "viewProfile": "شوف الملف الشخصي",
++    "perHour": "/ساعة"
++  },
+   "teacherProfile": {
+     "meta": {
+       "title": "ملف المعلّم | أكاديميا",
+       "description": "تعرّف على المعلّم، كورساته، وتقييمات طلابه على أكاديميا."
+     },
+-    "verified": "حساب موثّق",
+-    "students": "طالب",
+     "courses": "كورس",
+     "rating": "التقييم",
+     "aboutTitle": "نبذة",
+-    "about": "معلّم على منصة أكاديميا، يرفع محتواه مصنّفاً حسب الفصل والمادة والوحدة والدرس، ويتابع أداء طلابه عبر Quizzes وتقارير دورية.",
+     "coursesTitle": "كورسات المعلّم",
+     "reviewsTitle": "آراء الطلاب",
+-    "reviews": [],
+     "reviewsEmpty": "لسا ما في تقييمات على هذا المعلّم — كن أول من يقيّمه.",
+     "cta": "سجّل لمتابعة هذا المعلّم",
+     "notFound": "لم نجد هذا المعلّم."
+diff --git a/src/i18n/locales/en.pages.json b/src/i18n/locales/en.pages.json
+index 17ae0e2..dca7318 100644
+--- a/src/i18n/locales/en.pages.json
++++ b/src/i18n/locales/en.pages.json
+@@ -2,6 +2,7 @@
+   "nav": {
+     "about": "About",
+     "courses": "Courses",
++    "teachers": "Find a teacher",
+     "help": "Help",
+     "support": "Support",
+     "certificateVerify": "Verify a certificate",
+@@ -187,6 +188,14 @@
+     "ctaPrimary": "Start free",
+     "ctaSecondary": "Register as a teacher"
+   },
++  "courseDetail": {
++    "meta": {
++      "title": "Course | Academia",
++      "description": "See the course details and price, and get started on Academia without an account."
++    },
++    "aboutTitle": "About this course",
++    "notFound": "We couldn’t find this course"
++  },
+   "courses": {
+     "meta": {
+       "title": "Courses | Academia",
+@@ -207,20 +216,32 @@
+     "byTeacher": "Teacher",
+     "open": "Open course"
+   },
++  "teachersDirectory": {
++    "meta": {
++      "title": "Teacher directory | Academia",
++      "description": "Browse teachers on Academia by name and teaching format (online/in-person), and check their prices and ratings before you sign up."
++    },
++    "h1": "Teacher directory",
++    "sub": "Browse teachers, check prices and ratings, and get started without an account.",
++    "searchPlaceholder": "Search by teacher name…",
++    "onlineOnly": "Online",
++    "inPersonOnly": "In-person",
++    "empty": "No results match your search.",
++    "emptyDirectoryTitle": "The first teacher is on its way",
++    "emptyDirectoryBody": "We're setting up the teacher list. As soon as a teacher joins and makes their profile visible, they'll show up here.",
++    "viewProfile": "View profile",
++    "perHour": "/hour"
++  },
+   "teacherProfile": {
+     "meta": {
+       "title": "Teacher profile | Academia",
+       "description": "Meet the teacher, their courses, and student reviews on Academia."
+     },
+-    "verified": "Verified account",
+-    "students": "students",
+     "courses": "courses",
+     "rating": "Rating",
+     "aboutTitle": "About",
+-    "about": "An Academia teacher who uploads content classified by term, subject, unit and lesson, and tracks student performance through quizzes and periodic reports.",
+     "coursesTitle": "Courses by this teacher",
+     "reviewsTitle": "Student reviews",
+-    "reviews": [],
+     "reviewsEmpty": "No reviews for this teacher yet — be the first to leave one.",
+     "cta": "Sign up to follow this teacher",
+     "notFound": "We couldn't find this teacher."
+diff --git a/src/integrations/backend/courses.test.ts b/src/integrations/backend/courses.test.ts
+new file mode 100644
+index 0000000..eef6ae4
+--- /dev/null
++++ b/src/integrations/backend/courses.test.ts
+@@ -0,0 +1,115 @@
++import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
++import { ApiError, apiClient } from "./client";
++import {
++  PUBLISHED_PAGE_SIZE,
++  coursesOfTeacher,
++  getPublishedCourse,
++  listAllPublishedCourses,
++  listPublishedCoursesPage,
++  type BackendCourseRow,
++} from "./courses";
++
++vi.mock("./client", async (importOriginal) => {
++  const actual = await importOriginal<typeof import("./client")>();
++  return { ...actual, apiClient: { get: vi.fn(), post: vi.fn() } };
++});
++
++// apiClient.get/post دوال generic — cast لـMock بسيط يتجنّب تعارض أنواع الـgeneric مع mockResolvedValue.
++const post = apiClient.post as unknown as Mock;
++const get = apiClient.get as unknown as Mock;
++
++function course(id: number, teacherId = 1): BackendCourseRow {
++  return {
++    id,
++    title: `كورس ${id}`,
++    price: 10,
++    deliveryType: 2,
++    status: 2,
++    maxStudents: 20,
++    teacherId,
++  };
++}
++
++/** يحاكي GetPublished: يرجّع الصفحة المطلوبة من total كورس. */
++function fakeBackend(total: number) {
++  post.mockImplementation(async (_path: string, body?: unknown) => {
++    const { skip = 0, pageSize = 1 } = body as { skip?: number; pageSize?: number };
++    const size = Math.min(Math.max(pageSize, 1), PUBLISHED_PAGE_SIZE);
++    const data = Array.from({ length: total }, (_, i) => course(i + 1)).slice(skip, skip + size);
++    return { totalCount: total, data };
++  });
++}
++
++describe("courses.ts — الكتالوج العام (GetPublished)", () => {
++  beforeEach(() => {
++    post.mockReset();
++    get.mockReset();
++  });
++
++  it("يستخدم GetPublished (مش GetAll المقصور على الأدمن/المعلم)", async () => {
++    fakeBackend(3);
++    await listAllPublishedCourses();
++    expect(post.mock.calls[0][0]).toBe("/api/Course/GetPublished");
++  });
++
++  it("يرسل PageSize صريح ومقصوص عند 50 (الباك اند يقصّ الصفر لـ1)", async () => {
++    fakeBackend(0);
++    await listPublishedCoursesPage({ pageSize: 500 });
++    expect(post.mock.calls[0][1]).toMatchObject({ skip: 0, pageSize: 50 });
++    await listPublishedCoursesPage();
++    expect(post.mock.calls[1][1]).toMatchObject({ pageSize: 50 });
++  });
++
++  it("صفحة وحيدة: كل العناصر وبدون اقتطاع", async () => {
++    fakeBackend(3);
++    const catalog = await listAllPublishedCourses();
++    expect(catalog.items).toHaveLength(3);
++    expect(catalog.totalCount).toBe(3);
++    expect(catalog.truncated).toBe(false);
++    expect(post).toHaveBeenCalledTimes(1);
++  });
++
++  it("عدة صفحات: يجلبها كلها بترتيب skip صحيح", async () => {
++    fakeBackend(120);
++    const catalog = await listAllPublishedCourses();
++    expect(catalog.items).toHaveLength(120);
++    expect(catalog.items.map((c) => c.id)).toEqual(Array.from({ length: 120 }, (_, i) => i + 1));
++    expect(catalog.truncated).toBe(false);
++    expect(post.mock.calls.map((c) => (c[1] as { skip: number }).skip)).toEqual([0, 50, 100]);
++  });
++
++  it("يقف عند سقف الصفحات ويعلّم الاقتطاع بصدق", async () => {
++    fakeBackend(500);
++    const catalog = await listAllPublishedCourses(2);
++    expect(post).toHaveBeenCalledTimes(2);
++    expect(catalog.items).toHaveLength(100);
++    expect(catalog.totalCount).toBe(500);
++    expect(catalog.truncated).toBe(true);
++  });
++
++  it("كتالوج فاضي بدون أخطاء", async () => {
++    fakeBackend(0);
++    const catalog = await listAllPublishedCourses();
++    expect(catalog).toEqual({ items: [], totalCount: 0, truncated: false });
++  });
++
++  it("خطأ الشبكة بيرتفع (ما يتحوّل لكتالوج فاضي وهمي)", async () => {
++    post.mockRejectedValue(new ApiError("down", 0, "network"));
++    await expect(listAllPublishedCourses()).rejects.toBeInstanceOf(ApiError);
++  });
++
++  it("coursesOfTeacher: فلترة حسب المعلم فقط", () => {
++    const items = [course(1, 7), course(2, 8), course(3, 7)];
++    expect(coursesOfTeacher(items, 7).map((c) => c.id)).toEqual([1, 3]);
++    expect(coursesOfTeacher(items, 99)).toEqual([]);
++  });
++
++  it("getPublishedCourse: 404 → null، وغيره يرتفع", async () => {
++    get.mockRejectedValueOnce(new ApiError("nf", 404, "http"));
++    await expect(getPublishedCourse(5)).resolves.toBeNull();
++    get.mockRejectedValueOnce(new ApiError("boom", 500, "http"));
++    await expect(getPublishedCourse(5)).rejects.toBeInstanceOf(ApiError);
++    get.mockResolvedValueOnce(course(5));
++    await expect(getPublishedCourse(5)).resolves.toMatchObject({ id: 5 });
++  });
++});
+diff --git a/src/integrations/backend/courses.ts b/src/integrations/backend/courses.ts
+new file mode 100644
+index 0000000..1d8e11e
+--- /dev/null
++++ b/src/integrations/backend/courses.ts
+@@ -0,0 +1,114 @@
++// ربط حقيقي مع CourseController بالباك اند — الشكل متحقَّق منه من كود الباك الحالي
++// (CourseController + CourseService + CourseListItemDto)، وليس من نسخة أقدم:
++//
++// - الكتالوج العام = POST /api/Course/GetPublished ([AllowAnonymous]، منشور فقط،
++//   PageSize محصور بين 1 و50). أما GetAll فمقصور على الأدمن والمعلم (RequireUserTypes) —
++//   لا يصلح للزوار ولا للطلاب (401/403).
++// - الرد DTO مسطّح (CourseListItemDto): teacherName/subjectName/categoryName — مش كيان
++//   Course متداخل.
++// - GetPublished ما يقبل فلتر teacherId (DataTableRequestDto ما فيه هالحقل)؛ فكورسات معلم
++//   بعينه بتُفلتر عندنا بعد جلب الصفحات (مؤقت) لحد ما الباك اند يضيف TeacherId —
++//   موثّق بـdocs/operations/2026-09-21-backend-requirements.md.
++
++import { ApiError, apiClient } from "./client";
++import type { PagedResult } from "./teachers";
++
++export type BackendCourseDeliveryType = 1 | 2; // 1=InPerson, 2=Online
++export type BackendCourseStatus = 1 | 2 | 3; // 1=Draft, 2=Published, 3=Archived
++
++export interface BackendCourseRow {
++  id: number;
++  title: string;
++  description?: string | null;
++  price: number;
++  deliveryType: BackendCourseDeliveryType;
++  status: BackendCourseStatus;
++  maxStudents: number;
++  teacherId: number;
++  /** null لو حساب المعلم ما إله اسم. */
++  teacherName?: string | null;
++  subjectName?: string | null;
++  categoryName?: string | null;
++  /* ⬇️ الحقول تحت ما بيرجعها الباك اند حاليًا (لا بـCourse entity ولا بـCourseListItemDto).
++     محفوظة كاختيارية (undefined دايمًا لهلق) بدل ما تنحذف من الواجهة: بطاقة /courses أصلاً
++     مبنية تعرضها بس لو موجودة، فلما الباك اند يضيفها بتُملأ هون بدون تعديل على العرض. */
++  /** تقييم الكورس من 5 — التقييمات موجودة على المعلم فقط (TeacherRating). */
++  rating?: number;
++  /** عدد المسجّلين فعليًا — ما فيه حقل مقابل (MaxStudents بس). */
++  studentsCount?: number;
++  /** مدة تقريبية بالساعات. */
++  durationHours?: number;
++  /** عدد الدروس — ما فيه حقل مقابل بالـDTO. */
++  lessonsCount?: number;
++  /** وسوم قصيرة (chips). */
++  tags?: string[];
++  /** الفرع/المستوى (علمي/أدبي…) — Course ما فيه Grade/Level بالقراءة. */
++  level?: string;
++}
++
++/** أقصى PageSize يقبله GetPublished (يُقصّ بالباك اند عند 50). */
++export const PUBLISHED_PAGE_SIZE = 50;
++
++export interface PublishedCoursesPageRequest {
++  skip?: number;
++  pageSize?: number;
++  sortColumn?: "Id" | "Title" | "Price" | "DeliveryType" | "CreatedOn";
++  sortColumnDirection?: "asc" | "desc";
++}
++
++/** صفحة واحدة من الكورسات المنشورة. لازم PageSize صريح: الباك اند يقصّه لـ1 لو صفر. */
++export async function listPublishedCoursesPage(
++  request: PublishedCoursesPageRequest = {},
++): Promise<PagedResult<BackendCourseRow>> {
++  return apiClient.post<PagedResult<BackendCourseRow>>("/api/Course/GetPublished", {
++    skip: request.skip ?? 0,
++    pageSize: Math.min(request.pageSize ?? PUBLISHED_PAGE_SIZE, PUBLISHED_PAGE_SIZE),
++    sortColumn: request.sortColumn,
++    sortColumnDirection: request.sortColumnDirection,
++  });
++}
++
++export interface PublishedCatalog {
++  items: BackendCourseRow[];
++  totalCount: number;
++  /** true لو بالباك اند أكتر مما جلبناه (وصلنا سقف الصفحات) — بنعرض ملاحظة صادقة. */
++  truncated: boolean;
++}
++
++/**
++ * كل الكورسات المنشورة (بترقيم صفحات ٥٠) بسقف `maxPages` — الكتالوج الحالي صغير، والفلترة
++ * والبحث بتصير عندنا لأن GetPublished ما بيدعم بحثًا ولا فلاتر. الصفحة الأولى بتحدّد
++ * الإجمالي، وباقي الصفحات بتنجلب بالتوازي.
++ */
++export async function listAllPublishedCourses(maxPages = 6): Promise<PublishedCatalog> {
++  const first = await listPublishedCoursesPage({ skip: 0 });
++  const total = first.totalCount ?? first.data.length;
++  const pagesNeeded = Math.min(Math.ceil(total / PUBLISHED_PAGE_SIZE), maxPages);
++
++  if (pagesNeeded <= 1) {
++    return { items: first.data, totalCount: total, truncated: total > first.data.length };
++  }
++
++  const rest = await Promise.all(
++    Array.from({ length: pagesNeeded - 1 }, (_, i) =>
++      listPublishedCoursesPage({ skip: (i + 1) * PUBLISHED_PAGE_SIZE }),
++    ),
++  );
++  const items = [first, ...rest].flatMap((page) => page.data);
++  return { items, totalCount: total, truncated: total > items.length };
++}
++
++/** كورسات معلم بعينه من كتالوج جُلب أصلاً (مؤقت لحد ما يدعم الباك اند TeacherId). */
++export function coursesOfTeacher(items: BackendCourseRow[], teacherId: number): BackendCourseRow[] {
++  return items.filter((course) => course.teacherId === teacherId);
++}
++
++/** تفاصيل كورس منشور واحد. null فقط لـ404 (غير موجود أو غير منشور)؛ غيره يرتفع كخطأ. */
++export async function getPublishedCourse(id: number): Promise<BackendCourseRow | null> {
++  try {
++    return await apiClient.get<BackendCourseRow>(`/api/Course/GetById?id=${id}`);
++  } catch (err) {
++    if (err instanceof ApiError && err.status === 404) return null;
++    throw err;
++  }
++}
+diff --git a/src/integrations/backend/teachers.test.ts b/src/integrations/backend/teachers.test.ts
+new file mode 100644
+index 0000000..08fed42
+--- /dev/null
++++ b/src/integrations/backend/teachers.test.ts
+@@ -0,0 +1,57 @@
++import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
++import { ApiError, apiClient } from "./client";
++import { getTeacherAvailability, getTeacherPublicProfile, searchTeachers } from "./teachers";
++
++vi.mock("./client", async (importOriginal) => {
++  const actual = await importOriginal<typeof import("./client")>();
++  return { ...actual, apiClient: { get: vi.fn(), post: vi.fn() } };
++});
++
++// apiClient.get/post دوال generic — cast لـMock بسيط يتجنّب تعارض أنواع الـgeneric مع mockResolvedValue.
++const post = apiClient.post as unknown as Mock;
++const get = apiClient.get as unknown as Mock;
++
++describe("teachers.ts", () => {
++  beforeEach(() => {
++    post.mockReset();
++    get.mockReset();
++  });
++
++  it("getTeacherPublicProfile: 404 فقط يعني 'غير موجود' (null)", async () => {
++    get.mockRejectedValueOnce(new ApiError("nf", 404, "http"));
++    await expect(getTeacherPublicProfile(3)).resolves.toBeNull();
++  });
++
++  it("getTeacherPublicProfile: خطأ شبكة/خادم يرتفع ولا يتحوّل لـ'غير موجود'", async () => {
++    get.mockRejectedValueOnce(new ApiError("down", 0, "network"));
++    await expect(getTeacherPublicProfile(3)).rejects.toBeInstanceOf(ApiError);
++    get.mockRejectedValueOnce(new ApiError("boom", 500, "http"));
++    await expect(getTeacherPublicProfile(3)).rejects.toBeInstanceOf(ApiError);
++  });
++
++  it("getTeacherPublicProfile: يرجّع الملف عند النجاح", async () => {
++    get.mockResolvedValueOnce({ id: 3, name: "معلم", subjects: [], grades: [] });
++    await expect(getTeacherPublicProfile(3)).resolves.toMatchObject({ id: 3 });
++    expect(get.mock.calls[0][0]).toBe("/api/Teacher/PublicProfile?id=3");
++  });
++
++  it("searchTeachers: يرسل الفلتر كما هو لـTeacher/Search", async () => {
++    post.mockResolvedValueOnce({ totalCount: 0, data: [] });
++    await searchTeachers({ keyword: "سامي", online: true, pageSize: 24 });
++    expect(post).toHaveBeenCalledWith("/api/Teacher/Search", {
++      keyword: "سامي",
++      online: true,
++      pageSize: 24,
++    });
++  });
++
++  it("getTeacherAvailability: يبني الاستعلام (mode/date اختياريين)", async () => {
++    get.mockResolvedValue([]);
++    await getTeacherAvailability(4);
++    expect(get.mock.calls[0][0]).toBe("/api/Teacher/Availability?teacherId=4");
++    await getTeacherAvailability(4, 2, "2026-09-25");
++    expect(get.mock.calls[1][0]).toBe(
++      "/api/Teacher/Availability?teacherId=4&mode=2&date=2026-09-25",
++    );
++  });
++});
+diff --git a/src/integrations/backend/teachers.ts b/src/integrations/backend/teachers.ts
+new file mode 100644
+index 0000000..824cd27
+--- /dev/null
++++ b/src/integrations/backend/teachers.ts
+@@ -0,0 +1,97 @@
++// ربط حقيقي مع TeacherController بالباك اند — كل حقل بالـDTOs متحقَّق منه من كود الباك
++// (TeacherSearchFilterDto, TeacherProfileDto, TeacherAvailability) مش تخمين. السياق الكامل
++// وقيود الباك اند الحالية: docs/operations/2026-09-21-teachers-courses-real-backend-connection.md
++// وdocs/operations/2026-09-21-backend-requirements.md.
++//
++// ⚠️ النقاط الثلاث هون (Search/PublicProfile/Availability) شغّالة للزوار حاليًا لأن
++// TeacherController ما عليه [Authorize] ولا سياسة عامة — مش لأن عليها [AllowAnonymous] صريحة.
++// لو الباك اند شدّد الصلاحيات لازم يضيف [AllowAnonymous] عليها (مطلوب موثّق للفريق).
++
++import { ApiError, apiClient } from "./client";
++
++export interface TeacherSearchFilter {
++  keyword?: string;
++  subjectId?: number;
++  gradeId?: number;
++  serviceArea?: string;
++  online?: boolean;
++  inPerson?: boolean;
++  minPrice?: number;
++  maxPrice?: number;
++  minRating?: number;
++  minExperienceYears?: number;
++  language?: string;
++  /** DayOfWeek بترميز .NET: 0=الأحد … 6=السبت. */
++  availableDay?: number;
++  skip?: number;
++  pageSize?: number;
++}
++
++export interface TeacherProfileRow {
++  id: number;
++  /** الباك اند يرجّع null لو حساب المعلم ما إله اسم (User?.Name) — تعامل معه بحذر بالعرض. */
++  name?: string | null;
++  bio?: string | null;
++  qualifications?: string | null;
++  experienceYears: number;
++  serviceArea?: string | null;
++  languages?: string | null;
++  profileImage?: string | null;
++  subjects: string[];
++  grades: string[];
++  hourlyPriceOnline?: number | null;
++  hourlyPriceInPerson?: number | null;
++  supportsOnline: boolean;
++  supportsInPerson: boolean;
++  averageRating?: number | null;
++  ratingCount: number;
++}
++
++export interface PagedResult<T> {
++  totalCount: number;
++  data: T[];
++}
++
++/** تصفّح/فلترة المعلمين (FR-T01/T02) — صفحة عامة، بدون حساب.
++ *  الباك اند بيرجّع بس المعلمين يلي IsPublicForDiscovery=true. */
++export async function searchTeachers(
++  filter: TeacherSearchFilter,
++): Promise<PagedResult<TeacherProfileRow>> {
++  return apiClient.post<PagedResult<TeacherProfileRow>>("/api/Teacher/Search", filter);
++}
++
++/** بروفايل معلم عام (FR-T03) — يقابل صفحة /teacher/$id.
++ *  يرجّع null **فقط** لـ404 (معلم غير موجود أو غير معروض للتصفّح)؛ أي خطأ تاني
++ *  (شبكة، 5xx) بيرتفع ليعرضه المستدعي كخطأ اتصال، مش كـ"غير موجود". */
++export async function getTeacherPublicProfile(id: number): Promise<TeacherProfileRow | null> {
++  try {
++    return await apiClient.get<TeacherProfileRow>(`/api/Teacher/PublicProfile?id=${id}`);
++  } catch (err) {
++    if (err instanceof ApiError && err.status === 404) return null;
++    throw err;
++  }
++}
++
++/** جدول أسبوعي متكرر (مش تواريخ محددة) — DayOfWeek بترميز .NET:
++ *  0=الأحد...6=السبت. StartTime/EndTime نص "HH:mm:ss". */
++export interface AvailabilitySlot {
++  id: number;
++  dayOfWeek: number;
++  startTime: string;
++  endTime: string;
++  teachingMode: 1 | 2; // 1=InPerson, 2=Online
++  effectiveFrom?: string | null;
++  effectiveTo?: string | null;
++}
++
++/** أوقات توفّر معلم (FR-T04) — جاهزة لشاشة الحجز (المرحلة 2)، لسا ما استُخدمت بواجهة. */
++export async function getTeacherAvailability(
++  teacherId: number,
++  mode?: 1 | 2,
++  date?: string,
++): Promise<AvailabilitySlot[]> {
++  const params = new URLSearchParams({ teacherId: String(teacherId) });
++  if (mode) params.set("mode", String(mode));
++  if (date) params.set("date", date);
++  return apiClient.get<AvailabilitySlot[]>(`/api/Teacher/Availability?${params.toString()}`);
++}
+diff --git a/src/lib/bi.ts b/src/lib/bi.ts
+index 3d3ac5e..4947b98 100644
+--- a/src/lib/bi.ts
++++ b/src/lib/bi.ts
+@@ -64,9 +64,9 @@ export function roleHome(name?: string | null, isAdmin = false): string {
+  * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
+  */
+ export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
+-  student: ["/", "/courses", "/how-it-works", "/pricing", "/blog"],
++  student: ["/", "/courses", "/teachers", "/how-it-works", "/pricing", "/blog"],
+   teacher: ["/", "/for-teachers", "/how-it-works", "/blog"],
+-  parent: ["/", "/for-parents", "/how-it-works", "/pricing", "/blog"],
++  parent: ["/", "/for-parents", "/teachers", "/how-it-works", "/pricing", "/blog"],
+   supervisor: ["/", "/how-it-works", "/blog"],
+   admin: ["/", "/blog"],
+ };
+diff --git a/src/lib/seo.ts b/src/lib/seo.ts
+index 70de00f..954f40e 100644
+--- a/src/lib/seo.ts
++++ b/src/lib/seo.ts
+@@ -21,6 +21,7 @@ const PAGE_META_KEYS: Record<string, string> = {
+   "/": "home",
+   "/about": "about",
+   "/courses": "courses",
++  "/teachers": "teachersDirectory",
+   "/for-teachers": "forTeachers",
+   "/for-parents": "forParents",
+   "/how-it-works": "howItWorks",
+@@ -136,6 +137,8 @@ export function getSeoForPath(pathname: string, locale: Locale): SeoPayload {
+     meta = translateMeta(locale, "certificate");
+   } else if (normalizedPath.startsWith("/teacher/") && !isNoIndex(normalizedPath)) {
+     meta = translateMeta(locale, "teacherProfile");
++  } else if (normalizedPath.startsWith("/course/") && !isNoIndex(normalizedPath)) {
++    meta = translateMeta(locale, "courseDetail");
+   } else {
+     const key = PAGE_META_KEYS[normalizedPath] ?? "notFound";
+     meta = translateMeta(locale, key);
+diff --git a/src/routeTree.gen.ts b/src/routeTree.gen.ts
+index 5ff9c5e..3361afc 100644
+--- a/src/routeTree.gen.ts
++++ b/src/routeTree.gen.ts
+@@ -26,6 +26,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
+ import { Route as PrivacyRouteImport } from './routes/privacy'
+ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+ import { Route as SignupRouteImport } from './routes/signup'
++import { Route as TeachersRouteImport } from './routes/teachers'
+ import { Route as TermsRouteImport } from './routes/terms'
+ import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+ import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+@@ -49,6 +50,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+ import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
+ import { Route as InviteCodeRouteImport } from './routes/invite.$code'
+ import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
++import { Route as CourseIdRouteImport } from './routes/course.$id'
+ import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
+ import { Route as AuthenticatedAdminBackendPermissionsRouteImport } from './routes/_authenticated/admin.backend-permissions'
+ import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
+@@ -167,6 +169,11 @@ const SignupRoute = SignupRouteImport.update({
+   path: '/signup',
+   getParentRoute: () => rootRouteImport,
+ } as any)
++const TeachersRoute = TeachersRouteImport.update({
++  id: '/teachers',
++  path: '/teachers',
++  getParentRoute: () => rootRouteImport,
++} as any)
+ const TermsRoute = TermsRouteImport.update({
+   id: '/terms',
+   path: '/terms',
+@@ -288,6 +295,11 @@ const TeacherIdRoute = TeacherIdRouteImport.update({
+   path: '/teacher/$id',
+   getParentRoute: () => rootRouteImport,
+ } as any)
++const CourseIdRoute = CourseIdRouteImport.update({
++  id: '/course/$id',
++  path: '/course/$id',
++  getParentRoute: () => rootRouteImport,
++} as any)
+ const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
+   id: '/teacher/register',
+   path: '/teacher/register',
+@@ -500,6 +512,7 @@ export interface FileRoutesByFullPath {
+   '/privacy': typeof PrivacyRoute
+   '/reset-password': typeof ResetPasswordRoute
+   '/signup': typeof SignupRoute
++  '/teachers': typeof TeachersRoute
+   '/terms': typeof TermsRoute
+   '/unsubscribe': typeof UnsubscribeRoute
+   '/verify-email': typeof VerifyEmailRoute
+@@ -523,6 +536,7 @@ export interface FileRoutesByFullPath {
+   '/certificate/$id': typeof CertificateIdRoute
+   '/invite/$code': typeof InviteCodeRoute
+   '/teacher/$id': typeof TeacherIdRoute
++  '/course/$id': typeof CourseIdRoute
+   '/teacher/register': typeof TeacherRegisterRoute
+   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
+   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+@@ -574,6 +588,7 @@ export interface FileRoutesByTo {
+   '/privacy': typeof PrivacyRoute
+   '/reset-password': typeof ResetPasswordRoute
+   '/signup': typeof SignupRoute
++  '/teachers': typeof TeachersRoute
+   '/terms': typeof TermsRoute
+   '/unsubscribe': typeof UnsubscribeRoute
+   '/verify-email': typeof VerifyEmailRoute
+@@ -597,6 +612,7 @@ export interface FileRoutesByTo {
+   '/certificate/$id': typeof CertificateIdRoute
+   '/invite/$code': typeof InviteCodeRoute
+   '/teacher/$id': typeof TeacherIdRoute
++  '/course/$id': typeof CourseIdRoute
+   '/teacher/register': typeof TeacherRegisterRoute
+   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
+   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+@@ -650,6 +666,7 @@ export interface FileRoutesById {
+   '/privacy': typeof PrivacyRoute
+   '/reset-password': typeof ResetPasswordRoute
+   '/signup': typeof SignupRoute
++  '/teachers': typeof TeachersRoute
+   '/terms': typeof TermsRoute
+   '/unsubscribe': typeof UnsubscribeRoute
+   '/verify-email': typeof VerifyEmailRoute
+@@ -673,6 +690,7 @@ export interface FileRoutesById {
+   '/certificate/$id': typeof CertificateIdRoute
+   '/invite/$code': typeof InviteCodeRoute
+   '/teacher/$id': typeof TeacherIdRoute
++  '/course/$id': typeof CourseIdRoute
+   '/teacher/register': typeof TeacherRegisterRoute
+   '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
+   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
+@@ -726,6 +744,7 @@ export interface FileRouteTypes {
+     | '/privacy'
+     | '/reset-password'
+     | '/signup'
++    | '/teachers'
+     | '/terms'
+     | '/unsubscribe'
+     | '/verify-email'
+@@ -749,6 +768,7 @@ export interface FileRouteTypes {
+     | '/certificate/$id'
+     | '/invite/$code'
+     | '/teacher/$id'
++    | '/course/$id'
+     | '/teacher/register'
+     | '/admin/backend-permissions'
+     | '/admin/community-reports'
+@@ -800,6 +820,7 @@ export interface FileRouteTypes {
+     | '/privacy'
+     | '/reset-password'
+     | '/signup'
++    | '/teachers'
+     | '/terms'
+     | '/unsubscribe'
+     | '/verify-email'
+@@ -823,6 +844,7 @@ export interface FileRouteTypes {
+     | '/certificate/$id'
+     | '/invite/$code'
+     | '/teacher/$id'
++    | '/course/$id'
+     | '/teacher/register'
+     | '/admin/backend-permissions'
+     | '/admin/community-reports'
+@@ -875,6 +897,7 @@ export interface FileRouteTypes {
+     | '/privacy'
+     | '/reset-password'
+     | '/signup'
++    | '/teachers'
+     | '/terms'
+     | '/unsubscribe'
+     | '/verify-email'
+@@ -898,6 +921,7 @@ export interface FileRouteTypes {
+     | '/certificate/$id'
+     | '/invite/$code'
+     | '/teacher/$id'
++    | '/course/$id'
+     | '/teacher/register'
+     | '/_authenticated/admin/backend-permissions'
+     | '/_authenticated/admin/community-reports'
+@@ -951,12 +975,14 @@ export interface RootRouteChildren {
+   PrivacyRoute: typeof PrivacyRoute
+   ResetPasswordRoute: typeof ResetPasswordRoute
+   SignupRoute: typeof SignupRoute
++  TeachersRoute: typeof TeachersRoute
+   TermsRoute: typeof TermsRoute
+   UnsubscribeRoute: typeof UnsubscribeRoute
+   VerifyEmailRoute: typeof VerifyEmailRoute
+   CertificateIdRoute: typeof CertificateIdRoute
+   InviteCodeRoute: typeof InviteCodeRoute
+   TeacherIdRoute: typeof TeacherIdRoute
++  CourseIdRoute: typeof CourseIdRoute
+   TeacherRegisterRoute: typeof TeacherRegisterRoute
+ }
+ 
+@@ -1081,6 +1107,13 @@ declare module '@tanstack/react-router' {
+       preLoaderRoute: typeof SignupRouteImport
+       parentRoute: typeof rootRouteImport
+     }
++    '/teachers': {
++      id: '/teachers'
++      path: '/teachers'
++      fullPath: '/teachers'
++      preLoaderRoute: typeof TeachersRouteImport
++      parentRoute: typeof rootRouteImport
++    }
+     '/terms': {
+       id: '/terms'
+       path: '/terms'
+@@ -1242,6 +1275,13 @@ declare module '@tanstack/react-router' {
+       preLoaderRoute: typeof TeacherIdRouteImport
+       parentRoute: typeof rootRouteImport
+     }
++    '/course/$id': {
++      id: '/course/$id'
++      path: '/course/$id'
++      fullPath: '/course/$id'
++      preLoaderRoute: typeof CourseIdRouteImport
++      parentRoute: typeof rootRouteImport
++    }
+     '/teacher/register': {
+       id: '/teacher/register'
+       path: '/teacher/register'
+@@ -1623,12 +1663,14 @@ const rootRouteChildren: RootRouteChildren = {
+   PrivacyRoute: PrivacyRoute,
+   ResetPasswordRoute: ResetPasswordRoute,
+   SignupRoute: SignupRoute,
++  TeachersRoute: TeachersRoute,
+   TermsRoute: TermsRoute,
+   UnsubscribeRoute: UnsubscribeRoute,
+   VerifyEmailRoute: VerifyEmailRoute,
+   CertificateIdRoute: CertificateIdRoute,
+   InviteCodeRoute: InviteCodeRoute,
+   TeacherIdRoute: TeacherIdRoute,
++  CourseIdRoute: CourseIdRoute,
+   TeacherRegisterRoute: TeacherRegisterRoute,
+ }
+ export const routeTree = rootRouteImport
+diff --git a/src/routes/course.$id.tsx b/src/routes/course.$id.tsx
+new file mode 100644
+index 0000000..9f11ab3
+--- /dev/null
++++ b/src/routes/course.$id.tsx
+@@ -0,0 +1,214 @@
++import { createSeoHead, localeFromSearch } from "@/lib/seo";
++import { createFileRoute, Link } from "@tanstack/react-router";
++import { useQuery } from "@tanstack/react-query";
++import { BookOpen, MapPin, Radio, Star, Users, Wallet } from "lucide-react";
++import { useTranslation } from "react-i18next";
++import { PublicLayout } from "@/components/site/public-layout";
++import { PhotoAvatar } from "@/components/site/photo-avatar";
++import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
++import { useSession } from "@/hooks/use-session";
++import { useBi } from "@/lib/bi";
++import {
++  getPublishedCourse,
++  type BackendCourseDeliveryType,
++} from "@/integrations/backend/courses";
++
++export const Route = createFileRoute("/course/$id")({
++  head: (ctx) => {
++    const { params } = ctx;
++    return createSeoHead(
++      `/course/${encodeURIComponent(params.id)}`,
++      localeFromSearch(ctx.match.search),
++    );
++  },
++  component: CourseDetailPage,
++});
++
++const DELIVERY_ICON: Record<BackendCourseDeliveryType, typeof Radio> = { 1: MapPin, 2: Radio };
++const DELIVERY_LABEL: Record<BackendCourseDeliveryType, [string, string]> = {
++  1: ["وجاهي", "On-site"],
++  2: ["أونلاين", "Online"],
++};
++
++function CourseDetailPage() {
++  const { id } = Route.useParams();
++  const { t } = useTranslation();
++  const bi = useBi();
++  const { isSignedIn } = useSession();
++
++  const courseId = Number(id);
++  const validId = Number.isInteger(courseId) && courseId > 0;
++
++  const {
++    data: course,
++    isLoading,
++    isError,
++    isFetching,
++    refetch,
++  } = useQuery({
++    queryKey: ["published-course", courseId],
++    queryFn: () => getPublishedCourse(courseId),
++    enabled: validId,
++    retry: 1,
++  });
++
++  if (!validId || (!isLoading && !isError && !course)) {
++    return (
++      <PublicLayout>
++        <div className="mx-auto max-w-3xl px-5 py-24 text-center">
++          <h1 className="text-2xl font-bold text-foreground">{t("courseDetail.notFound")}</h1>
++          <Link
++            to="/courses"
++            className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
++          >
++            {t("nav.courses")}
++          </Link>
++        </div>
++      </PublicLayout>
++    );
++  }
++
++  if (isLoading) {
++    return (
++      <PublicLayout>
++        <LoadingState
++          label={bi("جارٍ التحميل…", "Loading…")}
++          className="border-none bg-transparent"
++        />
++      </PublicLayout>
++    );
++  }
++
++  if (isError || !course) {
++    return (
++      <PublicLayout>
++        <div className="mx-auto max-w-lg px-5 py-24">
++          <ErrorState
++            title={bi("ما قدرنا نحمّل الصفحة", "Couldn't load this page")}
++            description={bi(
++              "ممكن في مشكلة اتصال مؤقتة. جرّب تاني بعد شوي.",
++              "There might be a temporary connection issue. Please try again shortly.",
++            )}
++            action={
++              <RetryButton
++                label={bi("إعادة المحاولة", "Retry")}
++                onClick={() => refetch()}
++                loading={isFetching}
++              />
++            }
++          />
++        </div>
++      </PublicLayout>
++    );
++  }
++
++  const subjectName = course.subjectName ?? course.categoryName ?? "";
++  const DeliveryIcon = DELIVERY_ICON[course.deliveryType] ?? Radio;
++  const deliveryLabel = DELIVERY_LABEL[course.deliveryType];
++
++  return (
++    <PublicLayout>
++      <section className="surface-grid border-b border-border">
++        <div className="mx-auto max-w-4xl px-5 py-16">
++          <div className="flex flex-wrap items-center gap-2">
++            {subjectName && (
++              <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
++                {subjectName}
++              </span>
++            )}
++            {course.level && (
++              <span className="text-xs text-muted-foreground">{course.level}</span>
++            )}
++            {deliveryLabel && (
++              <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++                <DeliveryIcon className="size-3.5" />
++                {bi(...deliveryLabel)}
++              </span>
++            )}
++          </div>
++          <h1 className="mt-4 text-3xl font-bold text-foreground md:text-4xl">{course.title}</h1>
++
++          <div className="mt-5 flex items-center gap-2.5">
++            <PhotoAvatar className="size-9" iconClassName="size-4" />
++            <Link
++              to="/teacher/$id"
++              params={{ id: String(course.teacherId) }}
++              className="text-sm font-semibold text-primary hover:underline"
++            >
++              {course.teacherName || bi("معلّم", "Teacher")}
++            </Link>
++            {typeof course.rating === "number" && (
++              <span className="inline-flex items-center gap-1 text-xs font-bold text-foreground">
++                <Star className="size-3.5 fill-primary text-primary" />
++                {course.rating.toFixed(1)}
++              </span>
++            )}
++          </div>
++        </div>
++      </section>
++
++      <section className="mx-auto max-w-4xl px-5 py-14">
++        <div className="grid gap-8 md:grid-cols-[1fr_18rem]">
++          <div>
++            {course.description && (
++              <>
++                <h2 className="text-lg font-bold text-foreground">
++                  {t("courseDetail.aboutTitle")}
++                </h2>
++                <p className="mt-3 leading-relaxed text-muted-foreground">{course.description}</p>
++              </>
++            )}
++
++            {course.tags && course.tags.length > 0 && (
++              <div className="mt-6 flex flex-wrap gap-1.5">
++                {course.tags.map((tag) => (
++                  <span
++                    key={tag}
++                    className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
++                  >
++                    {tag}
++                  </span>
++                ))}
++              </div>
++            )}
++
++            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
++              {typeof course.lessonsCount === "number" && (
++                <span className="inline-flex items-center gap-1.5">
++                  <BookOpen className="size-4" />
++                  {course.lessonsCount} {t("courses.lessons")}
++                </span>
++              )}
++              {typeof course.studentsCount === "number" ? (
++                <span className="inline-flex items-center gap-1.5">
++                  <Users className="size-4" />
++                  {course.studentsCount}
++                </span>
++              ) : (
++                course.maxStudents > 0 && (
++                  <span className="inline-flex items-center gap-1.5">
++                    <Users className="size-4" />
++                    {bi(`حتى ${course.maxStudents} طلاب`, `Up to ${course.maxStudents} students`)}
++                  </span>
++                )
++              )}
++            </div>
++          </div>
++
++          <aside className="h-fit rounded-2xl border border-border bg-card p-6">
++            <p className="inline-flex items-center gap-1.5 text-2xl font-bold text-foreground">
++              <Wallet className="size-5 text-primary" />
++              {course.price === 0 ? t("courses.free") : `${course.price} JOD`}
++            </p>
++            <Link
++              to={isSignedIn ? "/my-courses" : "/signup"}
++              className="hover-press mt-5 flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
++            >
++              {t(isSignedIn ? "courses.open" : "courses.enroll")}
++            </Link>
++          </aside>
++        </div>
++      </section>
++    </PublicLayout>
++  );
++}
+diff --git a/src/routes/courses.tsx b/src/routes/courses.tsx
+index 473eee1..d337e36 100644
+--- a/src/routes/courses.tsx
++++ b/src/routes/courses.tsx
+@@ -2,12 +2,10 @@ import { createSeoHead, localeFromSearch } from "@/lib/seo";
+ import { useMemo, useState } from "react";
+ import { createFileRoute, Link } from "@tanstack/react-router";
+ import { useQuery } from "@tanstack/react-query";
+-import { useServerFn } from "@tanstack/react-start";
+ import {
+   BookOpen,
+   Clock,
+   MapPin,
+-  PlayCircle,
+   Radio,
+   Search,
+   Sparkles,
+@@ -18,20 +16,20 @@ import {
+ import { useTranslation } from "react-i18next";
+ import { PublicLayout } from "@/components/site/public-layout";
+ import { PhotoAvatar } from "@/components/site/photo-avatar";
++import { ErrorState, RetryButton } from "@/components/app/feedback-states";
+ import { useSession } from "@/hooks/use-session";
+ import { useBi } from "@/lib/bi";
+-import { listPublicCourses } from "@/lib/public-catalog.functions";
+ import {
+-  COURSE_FORMAT_LABELS,
+-  courseCoverPath,
+-  teacherPhotoPath,
+-  type CourseFormat,
+-} from "@/lib/public-catalog-data";
++  listAllPublishedCourses,
++  type BackendCourseDeliveryType,
++} from "@/integrations/backend/courses";
+ 
+-const FORMAT_ICONS: Record<CourseFormat, typeof Radio> = {
+-  live_online: Radio,
+-  onsite: MapPin,
+-  recorded: PlayCircle,
++// الباك اند (CourseDeliveryType) بيدعم أونلاين/وجاهي بس — "مسجّل مسبقًا" مش موجودة
++// كقيمة، فما منعرضها هون (بتنضاف لما الباك اند يدعمها).
++const DELIVERY_ICON: Record<BackendCourseDeliveryType, typeof Radio> = { 1: MapPin, 2: Radio };
++const DELIVERY_LABEL: Record<BackendCourseDeliveryType, [string, string]> = {
++  1: ["وجاهي", "On-site"],
++  2: ["أونلاين", "Online"],
+ };
+ 
+ export const Route = createFileRoute("/courses")({
+@@ -40,7 +38,8 @@ export const Route = createFileRoute("/courses")({
+ });
+ 
+ // شريط لوني علوي حسب المادة — يكسر تكرار البطاقات البيضاء المتطابقة،
+-// ويعطي تصنيف بصري سريع بدون الحاجة لصورة غلاف حقيقية غير متوفرة بعد.
++// ويعطي تصنيف بصري سريع. الغلاف تدرّج لوني + أول حرف (بدل صورة): الباك اند ما
++// عنده حقل صورة غلاف للكورس، وصور محلية بمسار id كانت رح تطابق كورسات مختلفة.
+ const SUBJECT_ACCENTS = [
+   "bg-primary",
+   "bg-success",
+@@ -55,32 +54,15 @@ function subjectAccent(subject: string) {
+   return SUBJECT_ACCENTS[hash % SUBJECT_ACCENTS.length];
+ }
+ 
+-/**
+- * غلاف الكورس: يحاول عرض صورة حقيقية، ولو غير موجودة بعد يظهر تدرّج لوني
+- * حسب المادة + أول حرف من عنوانها — بديل صادق (مش placeholder عام بلا معنى)
+- * لحد ما تتوفر صور غلاف حقيقية بنفس المسار (courseCoverPath).
+- */
+-function CourseCover({ src, subject, accent }: { src: string; subject: string; accent: string }) {
+-  const [failed, setFailed] = useState(false);
+-  if (failed) {
+-    return (
+-      <div className={`flex h-28 w-full items-center justify-center ${accent}/15`}>
+-        <span
+-          className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}
+-        >
+-          {subject.charAt(0)}
+-        </span>
+-      </div>
+-    );
+-  }
++function CourseCover({ subject, accent }: { subject: string; accent: string }) {
+   return (
+-    <img
+-      src={src}
+-      alt=""
+-      aria-hidden
+-      onError={() => setFailed(true)}
+-      className="h-28 w-full object-cover"
+-    />
++    <div className={`flex h-28 w-full items-center justify-center ${accent}/15`}>
++      <span
++        className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}
++      >
++        {subject ? subject.charAt(0) : "؟"}
++      </span>
++    </div>
+   );
+ }
+ 
+@@ -88,34 +70,40 @@ function CoursesPage() {
+   const { t } = useTranslation();
+   const bi = useBi();
+   const { isSignedIn } = useSession();
+-  const fetchCourses = useServerFn(listPublicCourses);
+-  const { data: rows, isLoading } = useQuery({
+-    queryKey: ["public-courses"],
+-    queryFn: () => fetchCourses(),
++  const { data, isLoading, isError, refetch, isFetching } = useQuery({
++    queryKey: ["published-courses"],
++    queryFn: () => listAllPublishedCourses(),
++    retry: 1,
+   });
+ 
+   const [query, setQuery] = useState("");
+   const [subject, setSubject] = useState<string>("__all");
+   const [level, setLevel] = useState<string>("__all");
+ 
+-  const items = useMemo(() => rows ?? [], [rows]);
++  const items = useMemo(() => data?.items ?? [], [data]);
++  // المادة (Subject) اختيارية بالكورس؛ لو غايبة منستخدم فئة الكورس كبديل تصنيفي حقيقي.
++  const subjectOf = (c: (typeof items)[number]) => c.subjectName ?? c.categoryName ?? "";
+   const subjects = useMemo(
+-    () => Array.from(new Set(items.map((i) => bi(...i.subject)))),
+-    [items, bi],
++    () =>
++      Array.from(new Set(items.map((c) => c.subjectName ?? c.categoryName ?? "").filter(Boolean))),
++    [items],
++  );
++  // الفرع/المستوى (علمي، أدبي…): Course ما بيرجّعه بالباك اند حاليًا فالقائمة فاضية دايمًا
++  // وقسم الفلتر بيختفي تلقائيًا (شرط levels.length > 0 تحت) لحد ما يتوفر — بدون حذف المنطق.
++  const levels = useMemo(
++    () => Array.from(new Set(items.map((c) => c.level).filter((l): l is string => !!l))),
++    [items],
+   );
+-  // الفرع/المستوى (علمي، أدبي، صناعي، تجاري...) — فلتر منفصل عن المادة لأنه
+-  // بيمثّل بُعد تصنيف مختلف (نفس المادة ممكن تتكرر بأكثر من فرع).
+-  const levels = useMemo(() => Array.from(new Set(items.map((i) => bi(...i.level)))), [items, bi]);
+ 
+-  const filtered = items.filter((i) => {
++  const filtered = items.filter((c) => {
+     const q = query.trim();
+-    const title = bi(...i.title);
+-    const teacher = bi(...i.teacher);
+-    const subjectLabel = bi(...i.subject);
+-    const levelLabel = bi(...i.level);
+-    const matchQuery = !q || title.includes(q) || teacher.includes(q);
+-    const matchSubject = subject === "__all" || subjectLabel === subject;
+-    const matchLevel = level === "__all" || levelLabel === level;
++    const matchQuery =
++      !q ||
++      c.title.includes(q) ||
++      (c.description ?? "").includes(q) ||
++      (c.teacherName ?? "").includes(q);
++    const matchSubject = subject === "__all" || subjectOf(c) === subject;
++    const matchLevel = level === "__all" || c.level === level;
+     return matchQuery && matchSubject && matchLevel;
+   });
+ 
+@@ -137,22 +125,24 @@ function CoursesPage() {
+                 className="h-11 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+               />
+             </div>
+-            <div className="flex flex-wrap gap-2">
+-              {["__all", ...subjects].map((s) => (
+-                <button
+-                  key={s}
+-                  type="button"
+-                  onClick={() => setSubject(s)}
+-                  className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
+-                    subject === s
+-                      ? "border-primary bg-primary text-primary-foreground"
+-                      : "border-border bg-card text-muted-foreground hover:text-foreground"
+-                  }`}
+-                >
+-                  {s === "__all" ? t("courses.all") : s}
+-                </button>
+-              ))}
+-            </div>
++            {subjects.length > 0 && (
++              <div className="flex flex-wrap gap-2">
++                {["__all", ...subjects].map((s) => (
++                  <button
++                    key={s}
++                    type="button"
++                    onClick={() => setSubject(s)}
++                    className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
++                      subject === s
++                        ? "border-primary bg-primary text-primary-foreground"
++                        : "border-border bg-card text-muted-foreground hover:text-foreground"
++                    }`}
++                  >
++                    {s === "__all" ? t("courses.all") : s}
++                  </button>
++                ))}
++              </div>
++            )}
+           </div>
+ 
+           {levels.length > 0 && (
+@@ -208,12 +198,29 @@ function CoursesPage() {
+               </div>
+             ))}
+           </div>
++        ) : isError ? (
++          // خطأ اتصال حقيقي بالباك اند (سيرفر واقع، مشكلة شبكة...) — رسالة صادقة مع إعادة
++          // محاولة، مش بيانات وهمية بديلة ومش شاشة فاضية.
++          <ErrorState
++            className="mx-auto max-w-lg p-10"
++            title={bi("ما قدرنا نحمّل الكورسات", "Couldn't load courses")}
++            description={bi(
++              "ممكن في مشكلة اتصال مؤقتة بالخادم. جرّب تاني بعد شوي.",
++              "There might be a temporary server connection issue. Please try again shortly.",
++            )}
++            action={
++              <RetryButton
++                label={bi("إعادة المحاولة", "Retry")}
++                onClick={() => refetch()}
++                loading={isFetching}
++              />
++            }
++          />
+         ) : (
+           <div key={`${subject}-${level}-${filtered.length}`} className="panel-swap">
+             {items.length === 0 ? (
+-              // لا يوجد أي كورس بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
+-              // لبحثك" تحت: صادقة وواضحة، بنفس أسلوب قسم الآراء بالرئيسية
+-              // (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
++              // لا يوجد أي كورس منشور بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
++              // لبحثك" تحت: صادقة وواضحة (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
+               <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
+                 <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                   <Sparkles aria-hidden="true" className="size-6" />
+@@ -231,106 +238,134 @@ function CoursesPage() {
+               </p>
+             ) : (
+               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+-                {filtered.map((c) => (
+-                  <article
+-                    key={c.id}
+-                    className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
+-                  >
+-                    <CourseCover
+-                      src={courseCoverPath(c.id)}
+-                      subject={bi(...c.subject)}
+-                      accent={subjectAccent(bi(...c.subject))}
+-                    />
+-                    <div className="flex flex-1 flex-col p-6">
+-                      <div className="flex items-center justify-between">
+-                        <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+-                          {bi(...c.subject)}
+-                        </span>
+-                        <span className="text-xs text-muted-foreground">{bi(...c.level)}</span>
+-                      </div>
+-                      <div className="mt-2 flex items-center">
+-                        {(() => {
+-                          const FormatIcon = FORMAT_ICONS[c.format];
+-                          return (
+-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+-                              <FormatIcon className="size-3.5" />
+-                              {bi(...COURSE_FORMAT_LABELS[c.format])}
++                {filtered.map((c) => {
++                  const subjectName = subjectOf(c);
++                  const DeliveryIcon = DELIVERY_ICON[c.deliveryType] ?? Radio;
++                  const deliveryLabel = DELIVERY_LABEL[c.deliveryType];
++                  return (
++                    <article
++                      key={c.id}
++                      className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
++                    >
++                      <CourseCover subject={subjectName} accent={subjectAccent(subjectName)} />
++                      <div className="flex flex-1 flex-col p-6">
++                        <div className="flex items-center justify-between">
++                          {subjectName && (
++                            <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
++                              {subjectName}
+                             </span>
+-                          );
+-                        })()}
+-                      </div>
+-                      <h2 className="mt-4 text-base font-bold text-foreground">{bi(...c.title)}</h2>
+-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+-                        {bi(...c.description)}
+-                      </p>
+-
+-                      {c.tags && c.tags.length > 0 && (
+-                        <div className="mt-3 flex flex-wrap gap-1.5">
+-                          {c.tags.map((tag) => (
+-                            <span
+-                              key={bi(...tag)}
+-                              className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
+-                            >
+-                              {bi(...tag)}
+-                            </span>
+-                          ))}
++                          )}
++                          {c.level && (
++                            <span className="text-xs text-muted-foreground">{c.level}</span>
++                          )}
+                         </div>
+-                      )}
+-
+-                      <div className="mt-3 flex items-center gap-2.5">
+-                        <PhotoAvatar
+-                          src={teacherPhotoPath(c.teacherId)}
+-                          className="size-7"
+-                          iconClassName="size-3.5"
+-                        />
++                        {deliveryLabel && (
++                          <div className="mt-2 flex items-center">
++                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++                              <DeliveryIcon className="size-3.5" />
++                              {bi(...deliveryLabel)}
++                            </span>
++                          </div>
++                        )}
+                         <Link
+-                          to="/teacher/$id"
+-                          params={{ id: c.teacherId }}
+-                          className="text-sm font-semibold text-primary hover:underline"
++                          to="/course/$id"
++                          params={{ id: String(c.id) }}
++                          className="mt-4 block text-base font-bold text-foreground hover:text-primary"
+                         >
+-                          {bi(...c.teacher)}
++                          {c.title}
+                         </Link>
+-                        {typeof c.rating === "number" && (
+-                          <span className="ms-auto inline-flex items-center gap-1 text-xs font-bold text-foreground">
+-                            <Star className="size-3.5 fill-primary text-primary" />
+-                            {c.rating.toFixed(1)}
+-                          </span>
++                        {c.description && (
++                          <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
++                            {c.description}
++                          </p>
+                         )}
+-                      </div>
+ 
+-                      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+-                        <span className="inline-flex items-center gap-1.5">
+-                          <BookOpen className="size-4" />
+-                          {c.lessons} {t("courses.lessons")}
+-                        </span>
+-                        {typeof c.durationHours === "number" && (
+-                          <span className="inline-flex items-center gap-1.5">
+-                            <Clock className="size-4" />
+-                            {c.durationHours} {t("courses.hours")}
+-                          </span>
++                        {c.tags && c.tags.length > 0 && (
++                          <div className="mt-3 flex flex-wrap gap-1.5">
++                            {c.tags.map((tag) => (
++                              <span
++                                key={tag}
++                                className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
++                              >
++                                {tag}
++                              </span>
++                            ))}
++                          </div>
+                         )}
+-                        {typeof c.studentsCount === "number" && (
++
++                        <div className="mt-3 flex items-center gap-2.5">
++                          {/* صورة المعلم: CourseListItemDto ما فيه profileImage — الأيقونة البديلة
++                              أصدق من صورة محلية بمسار id قد تطابق معلمًا مختلفًا. */}
++                          <PhotoAvatar className="size-7" iconClassName="size-3.5" />
++                          <Link
++                            to="/teacher/$id"
++                            params={{ id: String(c.teacherId) }}
++                            className="text-sm font-semibold text-primary hover:underline"
++                          >
++                            {c.teacherName || bi("معلّم", "Teacher")}
++                          </Link>
++                          {typeof c.rating === "number" && (
++                            <span className="ms-auto inline-flex items-center gap-1 text-xs font-bold text-foreground">
++                              <Star className="size-3.5 fill-primary text-primary" />
++                              {c.rating.toFixed(1)}
++                            </span>
++                          )}
++                        </div>
++
++                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
++                          {typeof c.lessonsCount === "number" && (
++                            <span className="inline-flex items-center gap-1.5">
++                              <BookOpen className="size-4" />
++                              {c.lessonsCount} {t("courses.lessons")}
++                            </span>
++                          )}
++                          {typeof c.durationHours === "number" && (
++                            <span className="inline-flex items-center gap-1.5">
++                              <Clock className="size-4" />
++                              {c.durationHours} {t("courses.hours")}
++                            </span>
++                          )}
++                          {typeof c.studentsCount === "number" ? (
++                            <span className="inline-flex items-center gap-1.5">
++                              <Users className="size-4" />
++                              {c.studentsCount}
++                            </span>
++                          ) : (
++                            c.maxStudents > 0 && (
++                              <span className="inline-flex items-center gap-1.5">
++                                <Users className="size-4" />
++                                {bi(
++                                  `حتى ${c.maxStudents} طلاب`,
++                                  `Up to ${c.maxStudents} students`,
++                                )}
++                              </span>
++                            )
++                          )}
+                           <span className="inline-flex items-center gap-1.5">
+-                            <Users className="size-4" />
+-                            {c.studentsCount}
++                            <Wallet className="size-4 text-primary" />
++                            {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+                           </span>
+-                        )}
+-                        <span className="inline-flex items-center gap-1.5">
+-                          <Wallet className="size-4 text-primary" />
+-                          {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+-                        </span>
++                        </div>
++                        <Link
++                          to={isSignedIn ? "/my-courses" : "/signup"}
++                          className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
++                        >
++                          {t(isSignedIn ? "courses.open" : "courses.enroll")}
++                        </Link>
+                       </div>
+-                      <Link
+-                        to={isSignedIn ? "/my-courses" : "/signup"}
+-                        className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+-                      >
+-                        {t(isSignedIn ? "courses.open" : "courses.enroll")}
+-                      </Link>
+-                    </div>
+-                  </article>
+-                ))}
++                    </article>
++                  );
++                })}
+               </div>
+             )}
++            {data?.truncated && (
++              <p className="mt-6 text-center text-xs text-muted-foreground">
++                {bi(
++                  `يعرض أول ${items.length} من ${data.totalCount} كورس.`,
++                  `Showing the first ${items.length} of ${data.totalCount} courses.`,
++                )}
++              </p>
++            )}
+           </div>
+         )}
+       </section>
+diff --git a/src/routes/teacher.$id.tsx b/src/routes/teacher.$id.tsx
+index e603cfb..8a6530c 100644
+--- a/src/routes/teacher.$id.tsx
++++ b/src/routes/teacher.$id.tsx
+@@ -1,14 +1,16 @@
+ import { createSeoHead, localeFromSearch } from "@/lib/seo";
+ import { createFileRoute, Link } from "@tanstack/react-router";
+ import { useQuery } from "@tanstack/react-query";
+-import { useServerFn } from "@tanstack/react-start";
+-import { BadgeCheck, BookOpen, Star, Users } from "lucide-react";
++import { Award, BookOpen, Calendar, MapPin, Radio, Star } from "lucide-react";
++import { useMemo } from "react";
+ import { useTranslation } from "react-i18next";
+ import { PublicLayout } from "@/components/site/public-layout";
++import { PhotoAvatar } from "@/components/site/photo-avatar";
+ import { SessionCta } from "@/components/site/session-cta";
++import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
+ import { useBi } from "@/lib/bi";
+-import { listPublicCourses } from "@/lib/public-catalog.functions";
+-import { LoadingState } from "@/components/app/feedback-states";
++import { getTeacherAvailability, getTeacherPublicProfile } from "@/integrations/backend/teachers";
++import { coursesOfTeacher, listAllPublishedCourses } from "@/integrations/backend/courses";
+ 
+ export const Route = createFileRoute("/teacher/$id")({
+   head: (ctx) => {
+@@ -21,22 +23,97 @@ export const Route = createFileRoute("/teacher/$id")({
+   component: TeacherProfilePage,
+ });
+ 
++// DayOfWeek بترميز .NET: 0=الأحد...6=السبت (راجع تعليق teachers.ts).
++const DAY_NAMES: [string, string][] = [
++  ["الأحد", "Sunday"],
++  ["الاثنين", "Monday"],
++  ["الثلاثاء", "Tuesday"],
++  ["الأربعاء", "Wednesday"],
++  ["الخميس", "Thursday"],
++  ["الجمعة", "Friday"],
++  ["السبت", "Saturday"],
++];
++
++/** "14:30:00" → "14:30" (لو الشكل غير متوقّع منرجّعه كما هو بدل ما نكسر العرض). */
++function shortTime(time: string): string {
++  const match = /^(\d{1,2}:\d{2})/.exec(time);
++  return match ? match[1] : time;
++}
++
+ function TeacherProfilePage() {
+   const { id } = Route.useParams();
+   const { t } = useTranslation();
+   const bi = useBi();
+-  const fetchCourses = useServerFn(listPublicCourses);
+-  const { data: rows, isLoading } = useQuery({
+-    queryKey: ["public-courses"],
+-    queryFn: () => fetchCourses(),
++
++  // معرّف المعلم رقمي بالباك اند. أي شي تاني (مثلًا روابط قديمة بشكل sami-khalil) = غير موجود
++  // مباشرة، بدون طلب شبكة.
++  const teacherId = Number(id);
++  const validId = Number.isInteger(teacherId) && teacherId > 0;
++
++  const {
++    data: teacher,
++    isLoading: teacherLoading,
++    isError: teacherError,
++    isFetching: teacherFetching,
++    refetch: refetchTeacher,
++  } = useQuery({
++    queryKey: ["backend-teacher-profile", teacherId],
++    queryFn: () => getTeacherPublicProfile(teacherId),
++    enabled: validId,
++    retry: 1,
+   });
+-  const courses = (rows ?? []).filter((c) => c.teacherId === id);
+-  const reviews = t("teacherProfile.reviews", { returnObjects: true }) as {
+-    n: string;
+-    d: string;
+-  }[];
+ 
+-  if (isLoading) {
++  // GetPublished ما بيدعم فلتر المعلم (مطلوب موثّق للباك اند) — منستخدم نفس كتالوج /courses
++  // المُخزَّن مؤقتًا ونفلتره هون.
++  const {
++    data: catalog,
++    isLoading: coursesLoading,
++    isError: coursesError,
++    isFetching: coursesFetching,
++    refetch: refetchCourses,
++  } = useQuery({
++    queryKey: ["published-courses"],
++    queryFn: () => listAllPublishedCourses(),
++    enabled: validId && !!teacher,
++    retry: 1,
++  });
++  const courses = useMemo(
++    () => coursesOfTeacher(catalog?.items ?? [], teacherId),
++    [catalog, teacherId],
++  );
++
++  // جدول التوفّر الأسبوعي — للعرض فقط بهالجولة (بدون حجز؛ المرحلة 2). بيانات عامة بلا حساب.
++  const { data: availability } = useQuery({
++    queryKey: ["backend-teacher-availability", teacherId],
++    queryFn: () => getTeacherAvailability(teacherId),
++    enabled: validId && !!teacher,
++    retry: 1,
++  });
++  const slotsByDay = useMemo(() => {
++    const grouped = new Map<number, typeof availability>();
++    for (const slot of availability ?? []) {
++      grouped.set(slot.dayOfWeek, [...(grouped.get(slot.dayOfWeek) ?? []), slot]);
++    }
++    return grouped;
++  }, [availability]);
++
++  if (!validId || (!teacherLoading && !teacherError && !teacher)) {
++    return (
++      <PublicLayout>
++        <div className="mx-auto max-w-3xl px-5 py-24 text-center">
++          <h1 className="text-2xl font-bold text-foreground">{t("teacherProfile.notFound")}</h1>
++          <Link
++            to="/courses"
++            className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
++          >
++            {t("nav.courses")}
++          </Link>
++        </div>
++      </PublicLayout>
++    );
++  }
++
++  if (teacherLoading) {
+     return (
+       <PublicLayout>
+         <LoadingState
+@@ -47,105 +124,291 @@ function TeacherProfilePage() {
+     );
+   }
+ 
+-  if (courses.length === 0) {
++  if (teacherError || !teacher) {
+     return (
+       <PublicLayout>
+-        <div className="mx-auto max-w-3xl px-5 py-24 text-center">
+-          <h1 className="text-2xl font-bold text-foreground">{t("teacherProfile.notFound")}</h1>
+-          <Link
+-            to="/courses"
+-            className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+-          >
+-            {t("nav.courses")}
+-          </Link>
++        <div className="mx-auto max-w-lg px-5 py-24">
++          <ErrorState
++            title={bi("ما قدرنا نحمّل الصفحة", "Couldn't load this page")}
++            description={bi(
++              "ممكن في مشكلة اتصال مؤقتة. جرّب تاني بعد شوي.",
++              "There might be a temporary connection issue. Please try again shortly.",
++            )}
++            action={
++              <RetryButton
++                label={bi("إعادة المحاولة", "Retry")}
++                onClick={() => refetchTeacher()}
++                loading={teacherFetching}
++              />
++            }
++          />
+         </div>
+       </PublicLayout>
+     );
+   }
+ 
+-  const teacher = bi(...courses[0].teacher);
+-  const lessons = courses.reduce((sum, c) => sum + c.lessons, 0);
++  const hasRating = typeof teacher.averageRating === "number" && teacher.ratingCount > 0;
++  const hasPrices = teacher.hourlyPriceOnline != null || teacher.hourlyPriceInPerson != null;
++  const hasDetails =
++    !!teacher.qualifications ||
++    !!teacher.languages ||
++    !!teacher.serviceArea ||
++    teacher.supportsOnline ||
++    teacher.supportsInPerson ||
++    hasPrices;
+ 
+   return (
+     <PublicLayout>
+       <section className="surface-grid border-b border-border">
+         <div className="mx-auto max-w-5xl px-5 py-16">
+           <div className="flex flex-wrap items-center gap-4">
+-            <span className="flex size-16 items-center justify-center rounded-2xl bg-primary/15 font-display text-2xl font-bold text-primary">
+-              {teacher.slice(2, 4)}
+-            </span>
+-            <div>
+-              <h1 className="text-3xl font-bold text-foreground">{teacher}</h1>
+-              <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-semibold text-success">
+-                <BadgeCheck className="size-4" />
+-                {t("teacherProfile.verified")}
+-              </p>
+-            </div>
++            <PhotoAvatar src={teacher.profileImage} className="size-16 rounded-2xl" />
++            <h1 className="text-3xl font-bold text-foreground">
++              {teacher.name || bi("معلّم", "Teacher")}
++            </h1>
+           </div>
+ 
++          {/* أرقام حقيقية بس. لا "موثّق" ولا "4.8" ولا "1,240 طالب" ثابتة لكل معلم كما كان قبل:
++              الباك اند ما عنده علم توثيق ولا عدد طلاب للمعلم، ولو ما في تقييمات منعرض
++              "لا تقييمات بعد" بصدق (راجع docs/operations/2026-09-21-teachers-courses-real-backend-connection.md). */}
+           <div className="mt-8 grid gap-4 sm:grid-cols-3">
+-            <Stat
+-              icon={<Users className="size-4" />}
+-              value="1,240"
+-              label={t("teacherProfile.students")}
+-            />
+             <Stat
+               icon={<BookOpen className="size-4" />}
+-              value={String(courses.length)}
++              value={coursesLoading ? "…" : coursesError ? "—" : String(courses.length)}
+               label={t("teacherProfile.courses")}
+             />
+-            <Stat
+-              icon={<Star className="size-4" />}
+-              value="4.8"
+-              label={t("teacherProfile.rating")}
+-            />
++            {hasRating ? (
++              <Stat
++                icon={<Star className="size-4" />}
++                value={(teacher.averageRating as number).toFixed(1)}
++                label={`${t("teacherProfile.rating")} (${teacher.ratingCount})`}
++              />
++            ) : (
++              <Stat
++                icon={<Star className="size-4" />}
++                value="—"
++                label={bi("لا تقييمات بعد", "No ratings yet")}
++              />
++            )}
++            {teacher.experienceYears > 0 && (
++              <Stat
++                icon={<Award className="size-4" />}
++                value={String(teacher.experienceYears)}
++                label={bi("سنوات الخبرة", "Years of experience")}
++              />
++            )}
+           </div>
+         </div>
+       </section>
+ 
+       <section className="mx-auto max-w-5xl px-5 py-14">
+-        <h2 className="text-xl font-bold text-foreground">{t("teacherProfile.aboutTitle")}</h2>
+-        <p className="mt-3 leading-relaxed text-muted-foreground">{t("teacherProfile.about")}</p>
++        {teacher.bio && (
++          <>
++            <h2 className="text-xl font-bold text-foreground">{t("teacherProfile.aboutTitle")}</h2>
++            <p className="mt-3 leading-relaxed text-muted-foreground">{teacher.bio}</p>
++          </>
++        )}
+ 
+-        <h2 className="mt-12 text-xl font-bold text-foreground">
+-          {t("teacherProfile.coursesTitle")}
+-        </h2>
+-        <p className="mt-1 text-sm text-muted-foreground">
+-          {lessons} {t("courses.lessons")}
+-        </p>
+-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+-          {courses.map((c) => (
+-            <article key={c.id} className="rounded-2xl border border-border bg-card p-6">
+-              <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+-                {bi(...c.subject)}
++        {(teacher.subjects.length > 0 || teacher.grades.length > 0) && (
++          <div className="mt-6 flex flex-wrap gap-2">
++            {[...teacher.subjects, ...teacher.grades].map((tag) => (
++              <span
++                key={tag}
++                className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary"
++              >
++                {tag}
+               </span>
+-              <h3 className="mt-3 font-bold text-foreground">{bi(...c.title)}</h3>
+-              <p className="mt-1.5 text-sm text-muted-foreground">
+-                {c.lessons} {t("courses.lessons")} —{" "}
+-                {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+-              </p>
+-            </article>
+-          ))}
+-        </div>
++            ))}
++          </div>
++        )}
++
++        {hasDetails && (
++          <dl className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-6 sm:grid-cols-2">
++            {teacher.qualifications && (
++              <div>
++                <dt className="text-xs font-semibold text-muted-foreground">
++                  {bi("المؤهلات", "Qualifications")}
++                </dt>
++                <dd className="mt-1 text-sm text-foreground">{teacher.qualifications}</dd>
++              </div>
++            )}
++            {teacher.languages && (
++              <div>
++                <dt className="text-xs font-semibold text-muted-foreground">
++                  {bi("اللغات", "Languages")}
++                </dt>
++                <dd className="mt-1 text-sm text-foreground">{teacher.languages}</dd>
++              </div>
++            )}
++            {teacher.serviceArea && (
++              <div>
++                <dt className="text-xs font-semibold text-muted-foreground">
++                  {bi("منطقة الخدمة", "Service area")}
++                </dt>
++                <dd className="mt-1 text-sm text-foreground">{teacher.serviceArea}</dd>
++              </div>
++            )}
++            {(teacher.supportsOnline || teacher.supportsInPerson) && (
++              <div>
++                <dt className="text-xs font-semibold text-muted-foreground">
++                  {bi("صيغة التدريس", "Teaching format")}
++                </dt>
++                <dd className="mt-1 flex flex-wrap gap-2">
++                  {teacher.supportsOnline && (
++                    <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++                      <Radio className="size-3.5" />
++                      {bi("أونلاين", "Online")}
++                    </span>
++                  )}
++                  {teacher.supportsInPerson && (
++                    <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++                      <MapPin className="size-3.5" />
++                      {bi("وجاهي", "In-person")}
++                    </span>
++                  )}
++                </dd>
++              </div>
++            )}
++            {hasPrices && (
++              <div>
++                <dt className="text-xs font-semibold text-muted-foreground">
++                  {bi("سعر الساعة", "Hourly rate")}
++                </dt>
++                <dd className="mt-1 space-y-0.5 text-sm text-foreground">
++                  {teacher.hourlyPriceOnline != null && (
++                    <p>
++                      {bi("أونلاين", "Online")}: {teacher.hourlyPriceOnline} JOD
++                    </p>
++                  )}
++                  {teacher.hourlyPriceInPerson != null && (
++                    <p>
++                      {bi("وجاهي", "In-person")}: {teacher.hourlyPriceInPerson} JOD
++                    </p>
++                  )}
++                </dd>
++              </div>
++            )}
++          </dl>
++        )}
++
++        {slotsByDay.size > 0 && (
++          <>
++            <h2 className="mt-12 text-xl font-bold text-foreground">
++              {bi("أوقات التوفّر", "Availability")}
++            </h2>
++            <div className="mt-6 grid gap-3 sm:grid-cols-2">
++              {DAY_NAMES.map(([dayAr, dayEn], dayOfWeek) => {
++                const slots = slotsByDay.get(dayOfWeek);
++                if (!slots || slots.length === 0) return null;
++                return (
++                  <div key={dayOfWeek} className="rounded-xl border border-border bg-card p-4">
++                    <p className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
++                      <Calendar className="size-4 text-primary" />
++                      {bi(dayAr, dayEn)}
++                    </p>
++                    <ul className="mt-2 space-y-1">
++                      {slots.map((slot) => (
++                        <li
++                          key={slot.id}
++                          className="flex items-center justify-between text-xs text-muted-foreground"
++                        >
++                          <span>
++                            {shortTime(slot.startTime)}–{shortTime(slot.endTime)}
++                          </span>
++                          <span className="inline-flex items-center gap-1">
++                            {slot.teachingMode === 2 ? (
++                              <Radio className="size-3.5" />
++                            ) : (
++                              <MapPin className="size-3.5" />
++                            )}
++                            {slot.teachingMode === 2
++                              ? bi("أونلاين", "Online")
++                              : bi("وجاهي", "In-person")}
++                          </span>
++                        </li>
++                      ))}
++                    </ul>
++                  </div>
++                );
++              })}
++            </div>
++          </>
++        )}
+ 
+         <h2 className="mt-12 text-xl font-bold text-foreground">
+-          {t("teacherProfile.reviewsTitle")}
++          {t("teacherProfile.coursesTitle")}
+         </h2>
+-        {reviews.length > 0 ? (
++        {coursesLoading ? (
++          <LoadingState
++            label={bi("جارٍ تحميل الكورسات…", "Loading courses…")}
++            className="mt-6 min-h-24 border-none bg-transparent"
++          />
++        ) : coursesError ? (
++          <ErrorState
++            className="mt-6 min-h-24"
++            title={bi("ما قدرنا نحمّل الكورسات", "Couldn't load courses")}
++            description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
++            action={
++              <RetryButton
++                label={bi("إعادة المحاولة", "Retry")}
++                onClick={() => refetchCourses()}
++                loading={coursesFetching}
++              />
++            }
++          />
++        ) : courses.length === 0 ? (
++          <p className="mt-6 rounded-2xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
++            {bi(
++              "ما في كورسات منشورة لهذا المعلّم بعد.",
++              "No published courses from this teacher yet.",
++            )}
++          </p>
++        ) : (
+           <div className="mt-6 grid gap-4 md:grid-cols-2">
+-            {reviews.map((r) => (
+-              <blockquote key={r.n} className="rounded-2xl border border-border bg-card p-6">
+-                <p className="text-sm leading-relaxed text-foreground">{r.d}</p>
+-                <footer className="mt-3 text-xs text-muted-foreground">{r.n}</footer>
+-              </blockquote>
++            {courses.map((c) => (
++              <article key={c.id} className="rounded-2xl border border-border bg-card p-6">
++                {(c.subjectName ?? c.categoryName) && (
++                  <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
++                    {c.subjectName ?? c.categoryName}
++                  </span>
++                )}
++                <Link
++                  to="/course/$id"
++                  params={{ id: String(c.id) }}
++                  className="mt-3 block font-bold text-foreground hover:text-primary"
++                >
++                  {c.title}
++                </Link>
++                {c.description && (
++                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
++                    {c.description}
++                  </p>
++                )}
++                <p className="mt-2 text-sm font-semibold text-foreground">
++                  {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
++                </p>
++              </article>
+             ))}
+           </div>
+-        ) : (
+-          <p className="mt-6 rounded-2xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
+-            {t("teacherProfile.reviewsEmpty")}
++        )}
++        {catalog?.truncated && (
++          <p className="mt-3 text-xs text-muted-foreground">
++            {bi(
++              "قد تكون هناك كورسات إضافية لم تُحمَّل بعد.",
++              "There may be additional courses that haven't loaded yet.",
++            )}
+           </p>
+         )}
+ 
++        {/* آراء نصّية: الباك اند فيه تقييم إجمالي (TeacherRating) بس، مفيش endpoint يرجّع نصوص
++            التقييمات — حالة صادقة بدل بيانات وهمية. */}
++        <h2 className="mt-12 text-xl font-bold text-foreground">
++          {t("teacherProfile.reviewsTitle")}
++        </h2>
++        <p className="mt-6 rounded-2xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
++          {t("teacherProfile.reviewsEmpty")}
++        </p>
++
+         <div className="mt-12 text-center">
+           <SessionCta
+             to="/signup"
+diff --git a/src/routes/teacher.register.tsx b/src/routes/teacher.register.tsx
+index b73f5f1..5d156cb 100644
+--- a/src/routes/teacher.register.tsx
++++ b/src/routes/teacher.register.tsx
+@@ -31,9 +31,10 @@ export const Route = createFileRoute("/teacher/register")({
+   component: TeacherRegisterPage,
+ });
+ 
+-// نفس حقول /api/Auth/Register بالضبط — الباك اند حاليًا ما بيدعم أي حقل
+-// إضافي لملف المعلّم (لا مادة، لا خبرة، لا نبذة، لا رفع وثيقة توثيق)، فما
+-// منجمعهم بالنموذج حتى ما نوهم المستخدم إنهم بينحفظوا.
++// نفس حقول /api/Auth/Register بالضبط. حقول ملف المعلّم (نبذة، خبرة، مؤهلات، أسعار، مواد…)
++// مدعومة بالباك اند عبر Teacher/UpdateProfile، لكن ما بتنحفظ لأي معلم حقيقي حاليًا لأن
++// التسجيل ما بينشئ صف Teacher (مطلوب P1-1)، فما منجمعها بالنموذج حتى ما نوهم المستخدم إنها
++// بينحفظوا. الخطة عند الجاهزية: docs/operations/2026-09-21-remaining-integration-roadmap.md.
+ // قواعد كلمة المرور مطابقة لإعدادات Identity بالباك اند: 8 أحرف على الأقل + رقم.
+ function buildSchema(bi: ReturnType<typeof useBi>) {
+   return z.object({
+diff --git a/src/routes/teachers.tsx b/src/routes/teachers.tsx
+new file mode 100644
+index 0000000..147ce38
+--- /dev/null
++++ b/src/routes/teachers.tsx
+@@ -0,0 +1,295 @@
++import { createSeoHead, localeFromSearch } from "@/lib/seo";
++import { useMemo, useState } from "react";
++import { createFileRoute, Link } from "@tanstack/react-router";
++import { keepPreviousData, useQuery } from "@tanstack/react-query";
++import { Award, MapPin, Radio, Search, Sparkles, Star, Wallet } from "lucide-react";
++import { useTranslation } from "react-i18next";
++import { PublicLayout } from "@/components/site/public-layout";
++import { PhotoAvatar } from "@/components/site/photo-avatar";
++import { ErrorState, RetryButton } from "@/components/app/feedback-states";
++import { Button } from "@/components/ui/button";
++import { useDebouncedValue } from "@/hooks/use-debounced-value";
++import { useBi } from "@/lib/bi";
++import { searchTeachers, type TeacherProfileRow } from "@/integrations/backend/teachers";
++
++export const Route = createFileRoute("/teachers")({
++  head: (ctx) => createSeoHead("/teachers", localeFromSearch(ctx.match.search)),
++  component: TeachersDirectoryPage,
++});
++
++type DeliveryFilter = "__all" | "online" | "inperson";
++
++const PAGE_SIZE = 24;
++
++/** سعر الساعة المناسب لفلتر الصيغة: أونلاين → سعر الأونلاين، وجاهي → سعر الوجاهي، الكل → المتوفر. */
++function hourlyPrice(teacher: TeacherProfileRow, delivery: DeliveryFilter): number | null {
++  const online = teacher.hourlyPriceOnline ?? null;
++  const inPerson = teacher.hourlyPriceInPerson ?? null;
++  if (delivery === "online") return online;
++  if (delivery === "inperson") return inPerson;
++  return online ?? inPerson;
++}
++
++function TeacherCard({
++  teacher,
++  delivery,
++}: {
++  teacher: TeacherProfileRow;
++  delivery: DeliveryFilter;
++}) {
++  const { t } = useTranslation();
++  const bi = useBi();
++  const price = hourlyPrice(teacher, delivery);
++
++  return (
++    <article className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6">
++      <div className="flex items-start gap-3">
++        <PhotoAvatar src={teacher.profileImage} className="size-14 rounded-2xl" />
++        <div className="min-w-0 flex-1">
++          <h2 className="truncate text-base font-bold text-foreground">
++            {teacher.name || bi("معلّم", "Teacher")}
++          </h2>
++          {typeof teacher.averageRating === "number" && teacher.ratingCount > 0 ? (
++            <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-bold text-foreground">
++              <Star className="size-3.5 fill-primary text-primary" />
++              {teacher.averageRating.toFixed(1)}
++              <span className="font-normal text-muted-foreground">({teacher.ratingCount})</span>
++            </p>
++          ) : (
++            <p className="mt-0.5 text-xs text-muted-foreground">
++              {bi("لا تقييمات بعد", "No ratings yet")}
++            </p>
++          )}
++        </div>
++      </div>
++
++      {teacher.bio && (
++        <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
++          {teacher.bio}
++        </p>
++      )}
++
++      {teacher.subjects.length > 0 && (
++        <div className="mt-3 flex flex-wrap gap-1.5">
++          {teacher.subjects.slice(0, 4).map((s) => (
++            <span
++              key={s}
++              className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary"
++            >
++              {s}
++            </span>
++          ))}
++        </div>
++      )}
++
++      <div className="mt-4 flex flex-wrap items-center gap-2">
++        {teacher.supportsOnline && (
++          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++            <Radio className="size-3.5" />
++            {bi("أونلاين", "Online")}
++          </span>
++        )}
++        {teacher.supportsInPerson && (
++          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++            <MapPin className="size-3.5" />
++            {bi("وجاهي", "In-person")}
++          </span>
++        )}
++        {teacher.experienceYears > 0 && (
++          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
++            <Award className="size-3.5" />
++            {bi(`${teacher.experienceYears} سنة خبرة`, `${teacher.experienceYears} yrs experience`)}
++          </span>
++        )}
++      </div>
++
++      <div className="mt-auto flex items-center justify-between pt-5">
++        {price != null ? (
++          <span className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
++            <Wallet className="size-4 text-primary" />
++            {price} JOD
++            <span className="text-xs font-normal text-muted-foreground">
++              {t("teachersDirectory.perHour")}
++            </span>
++          </span>
++        ) : (
++          <span />
++        )}
++        <Link
++          to="/teacher/$id"
++          params={{ id: String(teacher.id) }}
++          className="hover-press rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
++        >
++          {t("teachersDirectory.viewProfile")}
++        </Link>
++      </div>
++    </article>
++  );
++}
++
++function TeachersDirectoryPage() {
++  const { t } = useTranslation();
++  const bi = useBi();
++
++  const [query, setQuery] = useState("");
++  const [delivery, setDelivery] = useState<DeliveryFilter>("__all");
++  const [limit, setLimit] = useState(PAGE_SIZE);
++  // بحث الباك اند بيصير بكل تغيير بالفلتر — نؤخّر نص البحث عشان ما يُرسل طلب بكل ضغطة زر.
++  const keyword = useDebouncedValue(query.trim(), 400);
++
++  const filter = useMemo(
++    () => ({
++      keyword: keyword || undefined,
++      online: delivery === "online" ? true : undefined,
++      inPerson: delivery === "inperson" ? true : undefined,
++      skip: 0,
++      pageSize: limit,
++    }),
++    [keyword, delivery, limit],
++  );
++
++  const { data, isLoading, isError, isFetching, refetch } = useQuery({
++    queryKey: ["backend-teachers-search", filter],
++    queryFn: () => searchTeachers(filter),
++    placeholderData: keepPreviousData,
++    retry: 1,
++  });
++
++  const teachers = data?.data ?? [];
++  const total = data?.totalCount ?? teachers.length;
++  const hasMore = total > teachers.length;
++  const isFiltering = !!keyword || delivery !== "__all";
++
++  // أي تغيير بالبحث/الصيغة يرجّع العدّاد للصفحة الأولى.
++  const changeDelivery = (next: DeliveryFilter) => {
++    setDelivery(next);
++    setLimit(PAGE_SIZE);
++  };
++  const changeQuery = (next: string) => {
++    setQuery(next);
++    setLimit(PAGE_SIZE);
++  };
++
++  return (
++    <PublicLayout>
++      <section className="surface-grid border-b border-border">
++        <div className="mx-auto max-w-6xl px-5 py-16">
++          <h1 className="text-4xl font-bold text-foreground md:text-5xl">
++            {t("teachersDirectory.h1")}
++          </h1>
++          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
++            {t("teachersDirectory.sub")}
++          </p>
++
++          <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
++            <div className="relative flex-1">
++              <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
++              <input
++                value={query}
++                onChange={(e) => changeQuery(e.target.value)}
++                placeholder={t("teachersDirectory.searchPlaceholder")}
++                aria-label={t("teachersDirectory.searchPlaceholder")}
++                className="h-11 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
++              />
++            </div>
++            <div className="flex flex-wrap gap-2">
++              {(["__all", "online", "inperson"] as const).map((d) => (
++                <button
++                  key={d}
++                  type="button"
++                  onClick={() => changeDelivery(d)}
++                  className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
++                    delivery === d
++                      ? "border-primary bg-primary text-primary-foreground"
++                      : "border-border bg-card text-muted-foreground hover:text-foreground"
++                  }`}
++                >
++                  {d === "__all"
++                    ? t("courses.all")
++                    : d === "online"
++                      ? t("teachersDirectory.onlineOnly")
++                      : t("teachersDirectory.inPersonOnly")}
++                </button>
++              ))}
++            </div>
++          </div>
++        </div>
++      </section>
++
++      <section className="mx-auto max-w-6xl px-5 py-14">
++        {isLoading ? (
++          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
++            {Array.from({ length: 6 }).map((_, i) => (
++              <div
++                key={i}
++                className="animate-pulse space-y-3 rounded-2xl border border-border bg-card p-6"
++              >
++                <div className="flex items-center gap-3">
++                  <div className="size-14 rounded-2xl bg-secondary" />
++                  <div className="flex-1 space-y-2">
++                    <div className="h-4 w-2/3 rounded bg-secondary" />
++                    <div className="h-3 w-1/3 rounded bg-secondary" />
++                  </div>
++                </div>
++                <div className="h-4 w-full rounded bg-secondary" />
++                <div className="h-9 w-28 rounded-xl bg-secondary" />
++              </div>
++            ))}
++          </div>
++        ) : isError ? (
++          <ErrorState
++            className="mx-auto max-w-lg p-10"
++            title={bi("ما قدرنا نحمّل المعلمين", "Couldn't load teachers")}
++            description={bi(
++              "ممكن في مشكلة اتصال مؤقتة بالخادم. جرّب تاني بعد شوي.",
++              "There might be a temporary server connection issue. Please try again shortly.",
++            )}
++            action={
++              <RetryButton
++                label={bi("إعادة المحاولة", "Retry")}
++                onClick={() => refetch()}
++                loading={isFetching}
++              />
++            }
++          />
++        ) : teachers.length === 0 ? (
++          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
++            <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
++              <Sparkles aria-hidden="true" className="size-6" />
++            </span>
++            <h2 className="text-base font-bold text-foreground">
++              {isFiltering
++                ? t("teachersDirectory.empty")
++                : t("teachersDirectory.emptyDirectoryTitle")}
++            </h2>
++            {!isFiltering && (
++              <p className="text-sm leading-relaxed text-muted-foreground">
++                {t("teachersDirectory.emptyDirectoryBody")}
++              </p>
++            )}
++          </div>
++        ) : (
++          <>
++            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
++              {teachers.map((teacher) => (
++                <TeacherCard key={teacher.id} teacher={teacher} delivery={delivery} />
++              ))}
++            </div>
++            {hasMore && (
++              <div className="mt-8 flex justify-center">
++                <Button
++                  type="button"
++                  variant="outline"
++                  onClick={() => setLimit((n) => n + PAGE_SIZE)}
++                  loading={isFetching}
++                >
++                  {bi("عرض المزيد", "Show more")}
++                </Button>
++              </div>
++            )}
++          </>
++        )}
++      </section>
++    </PublicLayout>
++  );
++}

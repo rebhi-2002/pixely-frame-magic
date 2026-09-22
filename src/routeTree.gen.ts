@@ -26,6 +26,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as TeachersRouteImport } from './routes/teachers'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
@@ -49,6 +50,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
+import { Route as CourseIdRouteImport } from './routes/course.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as AuthenticatedAdminBackendPermissionsRouteImport } from './routes/_authenticated/admin.backend-permissions'
 import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
@@ -165,6 +167,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeachersRoute = TeachersRouteImport.update({
+  id: '/teachers',
+  path: '/teachers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -286,6 +293,11 @@ const InviteCodeRoute = InviteCodeRouteImport.update({
 const TeacherIdRoute = TeacherIdRouteImport.update({
   id: '/teacher/$id',
   path: '/teacher/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CourseIdRoute = CourseIdRouteImport.update({
+  id: '/course/$id',
+  path: '/course/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
@@ -500,6 +512,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -523,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -574,6 +588,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -597,6 +612,7 @@ export interface FileRoutesByTo {
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -650,6 +666,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -673,6 +690,7 @@ export interface FileRoutesById {
   '/certificate/$id': typeof CertificateIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -726,6 +744,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/signup'
+    | '/teachers'
     | '/terms'
     | '/unsubscribe'
     | '/verify-email'
@@ -749,6 +768,7 @@ export interface FileRouteTypes {
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
+    | '/course/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
     | '/admin/community-reports'
@@ -800,6 +820,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/signup'
+    | '/teachers'
     | '/terms'
     | '/unsubscribe'
     | '/verify-email'
@@ -823,6 +844,7 @@ export interface FileRouteTypes {
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
+    | '/course/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
     | '/admin/community-reports'
@@ -875,6 +897,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/signup'
+    | '/teachers'
     | '/terms'
     | '/unsubscribe'
     | '/verify-email'
@@ -898,6 +921,7 @@ export interface FileRouteTypes {
     | '/certificate/$id'
     | '/invite/$code'
     | '/teacher/$id'
+    | '/course/$id'
     | '/teacher/register'
     | '/_authenticated/admin/backend-permissions'
     | '/_authenticated/admin/community-reports'
@@ -951,12 +975,14 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  TeachersRoute: typeof TeachersRoute
   TermsRoute: typeof TermsRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   CertificateIdRoute: typeof CertificateIdRoute
   InviteCodeRoute: typeof InviteCodeRoute
   TeacherIdRoute: typeof TeacherIdRoute
+  CourseIdRoute: typeof CourseIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
 
@@ -1079,6 +1105,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teachers': {
+      id: '/teachers'
+      path: '/teachers'
+      fullPath: '/teachers'
+      preLoaderRoute: typeof TeachersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1240,6 +1273,13 @@ declare module '@tanstack/react-router' {
       path: '/teacher/$id'
       fullPath: '/teacher/$id'
       preLoaderRoute: typeof TeacherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/course/$id': {
+      id: '/course/$id'
+      path: '/course/$id'
+      fullPath: '/course/$id'
+      preLoaderRoute: typeof CourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/register': {
@@ -1623,12 +1663,14 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  TeachersRoute: TeachersRoute,
   TermsRoute: TermsRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   CertificateIdRoute: CertificateIdRoute,
   InviteCodeRoute: InviteCodeRoute,
   TeacherIdRoute: TeacherIdRoute,
+  CourseIdRoute: CourseIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }
 export const routeTree = rootRouteImport

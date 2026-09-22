@@ -31,9 +31,10 @@ export const Route = createFileRoute("/teacher/register")({
   component: TeacherRegisterPage,
 });
 
-// نفس حقول /api/Auth/Register بالضبط — الباك اند حاليًا ما بيدعم أي حقل
-// إضافي لملف المعلّم (لا مادة، لا خبرة، لا نبذة، لا رفع وثيقة توثيق)، فما
-// منجمعهم بالنموذج حتى ما نوهم المستخدم إنهم بينحفظوا.
+// نفس حقول /api/Auth/Register بالضبط. حقول ملف المعلّم (نبذة، خبرة، مؤهلات، أسعار، مواد…)
+// مدعومة بالباك اند عبر Teacher/UpdateProfile، لكن ما بتنحفظ لأي معلم حقيقي حاليًا لأن
+// التسجيل ما بينشئ صف Teacher (مطلوب P1-1)، فما منجمعها بالنموذج حتى ما نوهم المستخدم إنها
+// بينحفظوا. الخطة عند الجاهزية: docs/operations/2026-09-21-remaining-integration-roadmap.md.
 // قواعد كلمة المرور مطابقة لإعدادات Identity بالباك اند: 8 أحرف على الأقل + رقم.
 function buildSchema(bi: ReturnType<typeof useBi>) {
   return z.object({

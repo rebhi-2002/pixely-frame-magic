@@ -13,6 +13,7 @@ import {
   Route,
   Tag,
   UserPlus,
+  UserSearch,
   Users,
   Youtube,
 } from "lucide-react";
@@ -44,6 +45,7 @@ import {
 const navItems = [
   { to: "/", key: "nav.home", icon: Home },
   { to: "/courses", key: "nav.courses", icon: BookOpen },
+  { to: "/teachers", key: "nav.teachers", icon: UserSearch },
   { to: "/how-it-works", key: "nav.howItWorks", icon: Route },
   { to: "/pricing", key: "nav.pricing", icon: Tag },
   { to: "/for-teachers", key: "nav.forTeachers", icon: GraduationCap },
@@ -52,6 +54,7 @@ const navItems = [
 
 const footerPlatform = [
   { to: "/courses", key: "nav.courses" },
+  { to: "/teachers", key: "nav.teachers" },
   { to: "/how-it-works", key: "nav.howItWorks" },
   { to: "/pricing", key: "nav.pricing" },
   { to: "/for-teachers", key: "nav.forTeachers" },

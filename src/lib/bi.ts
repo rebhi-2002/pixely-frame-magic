@@ -64,9 +64,9 @@ export function roleHome(name?: string | null, isAdmin = false): string {
  * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
  */
 export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
-  student: ["/", "/courses", "/how-it-works", "/pricing", "/blog"],
+  student: ["/", "/courses", "/teachers", "/how-it-works", "/pricing", "/blog"],
   teacher: ["/", "/for-teachers", "/how-it-works", "/blog"],
-  parent: ["/", "/for-parents", "/how-it-works", "/pricing", "/blog"],
+  parent: ["/", "/for-parents", "/teachers", "/how-it-works", "/pricing", "/blog"],
   supervisor: ["/", "/how-it-works", "/blog"],
   admin: ["/", "/blog"],
 };

@@ -8,6 +8,7 @@ const publicPaths = [
   "/",
   "/about",
   "/courses",
+  "/teachers",
   "/for-teachers",
   "/for-parents",
   "/how-it-works",
@@ -24,14 +25,9 @@ const blogSlugs = [
   "مادة-بتكرهها-كيف-تتحملها-لنهاية-السنة",
   "بنك-الأخطاء-أذكى-أداة-ما-بتستخدمها",
 ];
-const teacherIds = [
-  "sami-khalil",
-  "rana-haddad",
-  "maha-zeidan",
-  "luay-darwish",
-  "noor-abed",
-  "omar-sharif",
-];
+// صفحات المعلمين (/teacher/:id) مش مُدرجة هون عمدًا: معرّفاتها أرقام من الباك اند ومش قائمة ثابتة.
+// (كانت هون 6 روابط وهمية بأسماء slug ما بتطابق أي معلم حقيقي — كانت بتعطي 404/"غير موجود" لمحركات البحث.)
+// لما نحتاجها بالـsitemap: جلبها وقت البناء من Teacher/Search (يتطلب الباك اند شغّال وقت البناء).
 
 function localizedUrl(pathname, lang) {
   const url = new URL(pathname, siteUrl);
@@ -50,7 +46,6 @@ function alternateLinks(pathname) {
 const paths = [
   ...publicPaths,
   ...blogSlugs.map((slug) => `/blog/${encodeURIComponent(slug)}`),
-  ...teacherIds.map((id) => `/teacher/${encodeURIComponent(id)}`),
 ];
 const urls = [];
 for (const pathname of paths) {
