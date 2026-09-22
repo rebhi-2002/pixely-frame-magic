@@ -31,7 +31,6 @@ import { Reveal } from "@/components/ui/reveal";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
-import { cn } from "@/lib/utils";
 import { allowedPublicPaths, useBi } from "@/lib/bi";
 
 export const Route = createFileRoute("/")({
@@ -105,18 +104,18 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
+      <section className="relative overflow-hidden border-b border-border bg-background">
+        <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 md:py-24 lg:px-10">
+          <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.8fr)]">
             <div>
-              <span className="glass-surface inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-primary shadow-elevation-1">
+              <span className="inline-flex items-center gap-2 border-y border-primary/50 py-2 text-xs font-bold uppercase tracking-[0.16em] text-primary">
                 <Trophy className="size-4" />
                 {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
               </span>
 
               {session && role ? (
                 <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
+                  <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[1.08] tracking-[-0.04em] text-foreground sm:text-6xl md:text-7xl">
                     {t(`home.signedIn.${role}.h1`)}
                   </h1>
                   <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
@@ -142,7 +141,7 @@ function Landing() {
                 </>
               ) : (
                 <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
+                  <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[1.08] tracking-[-0.04em] text-foreground sm:text-6xl md:text-7xl">
                     {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
                     {t("home.h1c")}
                   </h1>
@@ -168,10 +167,10 @@ function Landing() {
               )}
 
 
-              <div className="mt-10 grid items-stretch gap-4 sm:grid-cols-3">
+              <div className="mt-12 grid max-w-2xl grid-cols-3 divide-x divide-border border-y border-border py-5 rtl:divide-x-reverse">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
+                    <div className="flex h-full flex-col justify-center px-4 first:ps-0 last:pe-0">
                       {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
                           حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">
@@ -219,7 +218,7 @@ function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-primary/5">
+      <section className="border-y border-border bg-primary/[0.04]">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <span className="text-sm font-bold text-primary">02 · {t("home.freeEyebrow")}</span>
@@ -247,48 +246,21 @@ function Landing() {
         <h2 className="text-3xl font-bold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-        {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
-            (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
-            بالشاشات الصغيرة عبر md:grid-cols-2، وبيصير Bento فعلي من lg وفوق. */}
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:auto-rows-fr lg:grid-cols-4">
+        <div className="mt-10 divide-y divide-border border-y border-border">
           {features.map((f, i) => (
-            <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
-              <article
-                className={cn(
-                  // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
-                  // نفس منطق تصحيح الإحصائيات فوق.
-                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
-                  f.flagship
-                    ? "surface-mesh border-primary/30 bg-primary/5"
-                    : "border-border bg-card",
-                )}
-              >
-                {f.Illustration ? (
-                  <f.Illustration className={cn("w-full", f.flagship ? "h-32" : "h-20")} />
-                ) : (
-                  <span
-                    className={cn(
-                      "flex size-11 items-center justify-center rounded-xl",
-                      f.flagship
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-primary/12 text-primary",
-                    )}
-                  >
-                    <f.icon className="size-5" />
+            <Reveal key={f.key} delay={(i % 3) * 0.08}>
+              <article className="group grid gap-6 py-8 md:grid-cols-[5rem_minmax(12rem,0.7fr)_minmax(0,1fr)] md:items-center md:gap-10">
+                <span className="font-mono text-3xl font-light text-primary/70">{String(i + 1).padStart(2, "0")}</span>
+                <div className="flex items-start gap-4">
+                  <span className="mt-1 flex size-9 shrink-0 items-center justify-center border border-primary/40 text-primary">
+                    <f.icon className="size-4" aria-hidden="true" />
                   </span>
-                )}
-                <h3
-                  className={cn(
-                    "font-bold text-foreground",
-                    f.Illustration ? "mt-3" : "mt-4",
-                    f.flagship ? "text-lg" : "text-base",
-                  )}
-                >
-                  {t(`home.features.${f.key}.title`)}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {t(`home.features.${f.key}.text`)}
-                </p>
+                  <h3 className="text-xl font-bold leading-tight text-foreground">{t(`home.features.${f.key}.title`)}</h3>
+                </div>
+                <div className="flex items-center gap-6">
+                  <p className="max-w-xl text-sm leading-7 text-muted-foreground">{t(`home.features.${f.key}.text`)}</p>
+                  {f.Illustration && <f.Illustration className="hidden h-16 w-28 shrink-0 md:block" />}
+                </div>
               </article>
             </Reveal>
           ))}
@@ -296,19 +268,19 @@ function Landing() {
       </section>
 
       <section className="border-y border-border bg-card/40">
-        <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl divide-y divide-border px-5 py-16 md:grid-cols-3 md:divide-x md:divide-y-0 rtl:md:divide-x-reverse">
           {roles.map((r) => (
             <article
               key={r.key}
-              className="overflow-hidden rounded-2xl border border-border bg-background shadow-elevation-1"
+              className="overflow-hidden border-border py-4 first:pt-0 last:pb-0 md:px-7 md:py-0 md:first:ps-0 md:last:pe-0"
             >
               <img
                 src={r.image}
                 alt={t(`home.roles.${r.key}.t`)}
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[16/9] w-full object-cover grayscale contrast-110 transition duration-500 group-hover:grayscale-0"
                 loading="lazy"
               />
-              <div className="p-6">
+              <div className="pt-5">
                 <div className="flex items-center gap-3">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
                     <r.icon className="size-5" aria-hidden="true" />
@@ -341,7 +313,7 @@ function Landing() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
+                className="group flex h-full flex-col border-t border-border py-6 transition-colors hover:border-primary"
               >
                 <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
                   {bi(post.category, post.categoryEn)}

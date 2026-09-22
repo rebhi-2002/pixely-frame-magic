@@ -15,7 +15,7 @@ import {
   preferencesBootScript,
 } from "@/components/providers/preferences-provider";
 
-import appCss from "../styles.css?url";
+const appCss = "/src/styles.css?direct";
 import { AUTH_EVENT } from "@/integrations/backend/auth";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
@@ -106,9 +106,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       links: [
         ...seo.links,
+        { rel: "stylesheet", href: appCss },
         // القسم PWA — يربط بيانات التثبيت (الاسم/الأيقونات/الألوان) بالصفحة
         { rel: "manifest", href: "/manifest.json" },
-        { rel: "stylesheet", href: appCss },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
         {
