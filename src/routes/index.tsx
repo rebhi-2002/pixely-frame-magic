@@ -93,11 +93,15 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="relative overflow-hidden border-b-2 border-foreground bg-sidebar text-[#fffdf8]">
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-end gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+      <section className="academia-hero relative overflow-hidden border-b border-border bg-background">
+        <div className="mx-auto max-w-[90rem] px-5 py-8 sm:px-8 md:py-12 lg:px-12">
+          <div className="mb-12 flex items-center justify-between border-b border-border pb-5 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            <span>ACADEMIA / LEARNING SYSTEM</span>
+            <span className="hidden sm:inline">01 — FOCUS / PROGRESS / MASTERY</span>
+          </div>
+          <div className="grid items-stretch gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)] lg:gap-16">
             <div>
-              <span className="inline-flex items-center gap-2 border-s-2 border-[#e45d3d] px-4 py-1.5 text-sm font-semibold text-[#fffdf8]">
+              <span className="inline-flex items-center gap-3 border-s-2 border-primary px-4 py-1.5 text-sm font-bold text-primary">
                 <Trophy className="size-4" />
                 {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
               </span>
@@ -130,11 +134,11 @@ function Landing() {
                 </>
               ) : (
                 <>
-                  <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] tracking-[-0.04em] text-[#fffdf8] sm:text-5xl md:text-7xl">
+                  <h1 className="mt-8 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.06em] text-foreground sm:text-6xl md:text-8xl">
                     {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
                     {t("home.h1c")}
                   </h1>
-                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#fffdf8]/80 sm:text-lg">
+                  <p className="mt-7 max-w-xl border-s-2 border-border ps-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
                     {t("home.sub")}
                   </p>
                   <div className="mt-9 flex flex-wrap gap-3">
@@ -154,10 +158,10 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-14 grid items-stretch gap-px overflow-hidden border-y border-[#fffdf8]/30 bg-[#fffdf8]/30 sm:grid-cols-3">
+              <div className="mt-16 grid items-stretch gap-0 border-y border-border sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="flex h-full flex-col justify-center bg-sidebar p-5 sm:p-6">
+                    <div className="flex h-full flex-col justify-center border-e border-border py-5 pe-5 sm:p-6">
                       {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
                           حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">
@@ -174,7 +178,7 @@ function Landing() {
 
             <Reveal delay={0.15} y={16}>
               <div className="relative mx-auto w-full max-w-lg">
-                <div className="overflow-hidden border-2 border-[#fffdf8]/60 bg-[#fffdf8] shadow-[14px_14px_0_#e45d3d]">
+                <div className="overflow-hidden border border-foreground bg-card shadow-[12px_12px_0_var(--color-primary)]">
                   <img
                     src="/media/editorial/study-desk.png"
                     alt={t(
@@ -223,7 +227,7 @@ function Landing() {
         <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-4">
           {([Compass, ListChecks, ClipboardCheck, Check] as const).map((Icon, i) => (
             <Reveal key={i} delay={i * 0.07}>
-              <article className="relative h-full rounded-2xl border border-border bg-card p-6 shadow-elevation-1">
+              <article className="relative h-full border-s-2 border-border bg-card p-6">
                 <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
                   <Icon className="size-5" />
                 </span>
@@ -250,7 +254,7 @@ function Landing() {
             </p>
             <p className="mt-5 text-sm font-semibold text-foreground">{t("home.trustNote")}</p>
           </div>
-          <div className="rounded-2xl border border-primary/20 bg-background p-6 shadow-elevation-1 lg:min-w-80">
+          <div className="border-s-2 border-primary bg-background p-6 lg:min-w-80">
             <p className="mb-4 font-bold text-foreground">{t("home.freeListTitle")}</p>
             <ul className="space-y-3">
               {[0, 1, 2, 3, 4].map((i) => (
@@ -347,9 +351,9 @@ function Landing() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
+                className="group flex h-full flex-col border-t border-foreground bg-card p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
               >
-                <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
+                <span className="w-fit border-s-2 border-primary px-3 py-1 text-xs font-bold text-primary group-hover:text-primary-foreground">
                   {bi(post.category, post.categoryEn)}
                 </span>
                 <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
