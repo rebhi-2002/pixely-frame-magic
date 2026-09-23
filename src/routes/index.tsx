@@ -104,7 +104,7 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="relative overflow-hidden border-b-2 border-foreground bg-[#145c8c] text-[#fffdf8]">
+      <section className="relative overflow-hidden border-b-2 border-foreground bg-sidebar text-[#fffdf8]">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="grid items-end gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
             <div>
@@ -168,7 +168,7 @@ function Landing() {
               <div className="mt-14 grid items-stretch gap-px overflow-hidden border-y border-[#fffdf8]/30 bg-[#fffdf8]/30 sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="flex h-full flex-col justify-center bg-[#145c8c] p-5 sm:p-6">
+                    <div className="flex h-full flex-col justify-center bg-sidebar p-5 sm:p-6">
                       {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
                           حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">

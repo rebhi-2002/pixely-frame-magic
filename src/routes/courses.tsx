@@ -334,10 +334,7 @@ function CoursesPage() {
                             c.maxStudents > 0 && (
                               <span className="inline-flex items-center gap-1.5">
                                 <Users className="size-4" />
-                                {bi(
-                                  `حتى ${c.maxStudents} طلاب`,
-                                  `Up to ${c.maxStudents} students`,
-                                )}
+                                {bi(`حتى ${c.maxStudents} طلاب`, `Up to ${c.maxStudents} students`)}
                               </span>
                             )
                           )}

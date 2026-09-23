@@ -8,10 +8,7 @@ import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
-import {
-  getPublishedCourse,
-  type BackendCourseDeliveryType,
-} from "@/integrations/backend/courses";
+import { getPublishedCourse, type BackendCourseDeliveryType } from "@/integrations/backend/courses";
 
 export const Route = createFileRoute("/course/$id")({
   head: (ctx) => {
@@ -116,9 +113,7 @@ function CourseDetailPage() {
                 {subjectName}
               </span>
             )}
-            {course.level && (
-              <span className="text-xs text-muted-foreground">{course.level}</span>
-            )}
+            {course.level && <span className="text-xs text-muted-foreground">{course.level}</span>}
             {deliveryLabel && (
               <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
                 <DeliveryIcon className="size-3.5" />

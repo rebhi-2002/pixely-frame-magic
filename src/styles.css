@@ -133,50 +133,46 @@
   --paper-100: #182632;
   --paper-200: #243744;
   --background: var(--paper-50);
-  --foreground: #1f2937;
+  --foreground: #f5f1e8;
   --card: var(--paper-100);
-  --card-foreground: #1f2937;
+  --card-foreground: #f5f1e8;
   --popover: var(--paper-100);
-  --popover-foreground: #1f2937;
-  /* WCAG AA: كانت #d68e1e بنسبة تباين 2.71:1 (فاشلة)؛ عدّلناها لـ5.26:1 على أبيض
-     مع الحفاظ على نفس العائلة اللونية (كهرماني/ذهبي) لهوية العلامة التجارية. */
-  --primary: #8d5d08;
-  --primary-foreground: #fffdf8;
+  --popover-foreground: #f5f1e8;
+  --primary: #f0b34a;
+  --primary-foreground: #101820;
   --secondary: var(--paper-200);
-  --secondary-foreground: #1f2937;
-  --muted: var(--paper-200);
-  --muted-foreground: #52606d;
-  --muted-3: #8a94a3;
-  --accent: var(--paper-200);
-  --accent-foreground: #1f2937;
-  --destructive: #c9402a;
-  --destructive-foreground: #ffffff;
-  /* WCAG AA: كانت #128f62 بنسبة 3.75-4.09:1 (فاشلة كنص عادي). عدّلناها لـ4.71-5.14:1. */
-  --success: #0f7d55;
-  --success-foreground: #ffffff;
-  /* WCAG AA: كانت #2f74bb بنسبة 4.44:1 (على الحافة). عدّلناها لـ5.36-5.85:1. */
-  --info: #2a67a6;
-  --info-foreground: #ffffff;
-  --tools: #2f74bb;
-  --tools-foreground: #ffffff;
+  --secondary-foreground: #f5f1e8;
+  --muted: #243744;
+  --muted-foreground: #c1cbd1;
+  --muted-3: #9ba8b0;
+  --accent: #304957;
+  --accent-foreground: #f5f1e8;
+  --destructive: #f07a67;
+  --destructive-foreground: #101820;
+  --success: #55d6a4;
+  --success-foreground: #101820;
+  --info: #78b8ef;
+  --info-foreground: #101820;
+  --tools: #78b8ef;
+  --tools-foreground: #101820;
   --section: var(--paper-200);
-  --section-foreground: #1f2937;
-  --border: rgba(15, 23, 42, 0.1);
-  --input: rgba(15, 23, 42, 0.16);
-  --ring: #d68e1e;
-  --chart-1: #d68e1e;
-  --chart-2: #128f62;
-  --chart-3: #2f74bb;
-  --chart-4: #c9402a;
-  --chart-5: #7a4fbe;
-  --sidebar: #0d1321;
-  --sidebar-foreground: #f3f1ea;
-  --sidebar-primary: #f0a62e;
-  --sidebar-primary-foreground: #0a0f1c;
-  --sidebar-accent: #1b2338;
-  --sidebar-accent-foreground: #f3f1ea;
-  --sidebar-border: rgba(180, 190, 210, 0.13);
-  --sidebar-ring: #f0a62e;
+  --section-foreground: #f5f1e8;
+  --border: rgba(245, 241, 232, 0.18);
+  --input: rgba(245, 241, 232, 0.24);
+  --ring: #f0b34a;
+  --chart-1: #f0b34a;
+  --chart-2: #55d6a4;
+  --chart-3: #78b8ef;
+  --chart-4: #f07a67;
+  --chart-5: #c19bea;
+  --sidebar: #0b1117;
+  --sidebar-foreground: #f5f1e8;
+  --sidebar-primary: #f0b34a;
+  --sidebar-primary-foreground: #101820;
+  --sidebar-accent: #243744;
+  --sidebar-accent-foreground: #f5f1e8;
+  --sidebar-border: rgba(245, 241, 232, 0.18);
+  --sidebar-ring: #f0b34a;
 }
 
 /* القسم 06 + القسم 10 — احترام prefers-reduced-motion بشكل مستقل عن الثيم */
@@ -227,17 +223,11 @@
 }
 
 @utility surface-grid {
-  background-image:
-    radial-gradient(
-      circle at 85% 12%,
-      color-mix(in oklab, var(--color-primary) 16%, transparent),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 10% 80%,
-      color-mix(in oklab, var(--color-success) 14%, transparent),
-      transparent 45%
-    );
+  background-color: var(--color-background);
+}
+
+@utility surface-mesh {
+  background-color: var(--color-background);
 }
 
 /* ——— طبقة الارتفاع (Elevation) — ظلال متدرجة بدل الاعتماد فقط على الحدود ——— */
@@ -637,11 +627,7 @@
 }
 
 @utility app-canvas {
-  background-image: radial-gradient(
-    circle at 50% -10%,
-    color-mix(in oklab, var(--color-primary) 6%, transparent),
-    transparent 38%
-  );
+  background-color: var(--color-background);
 }
 @utility interactive-card {
   transition:

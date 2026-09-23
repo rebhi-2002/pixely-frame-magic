@@ -101,8 +101,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         className={cn(
           "sticky top-0 z-40 border-b transition-all duration-300",
           scrolled
-            ? "shadow-elevation-2 border-border bg-background/85 backdrop-blur"
-            : "border-transparent bg-transparent",
+            ? "shadow-elevation-2 border-border bg-background/95 backdrop-blur"
+            : "border-border/70 bg-background",
         )}
       >
         <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
