@@ -46,6 +46,7 @@ export default defineConfig({
     // النوع من المشاكل بحزمة تانية بالمستقبل.
     nitro({
       preset: nitroPreset,
+      ...(nitroOutputDir ? { output: { dir: nitroOutputDir } } : {}),
       routeRules: {
         "/api/**": { proxy: `${API_PROXY_TARGET}/api/**` },
       },
