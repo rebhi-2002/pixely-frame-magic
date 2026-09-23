@@ -114,7 +114,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
                 activeProps={{ className: "bg-secondary text-foreground" }}
-                className="nav-underline rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                className="nav-underline rounded-lg px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
               >
                 {t(item.key)}
               </Link>

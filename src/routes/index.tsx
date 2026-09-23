@@ -104,7 +104,7 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="editorial-canvas relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden border-b border-border bg-background">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-16">
             <div>
@@ -188,22 +188,36 @@ function Landing() {
                 <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-elevation-3">
                   <img
                     src="/media/editorial/study-desk.png"
-                    alt={t("home.editorialImageAlt", "A student studying with an open textbook and notebook")}
+                    alt={t(
+                      "home.editorialImageAlt",
+                      "A student studying with an open textbook and notebook",
+                    )}
                     className="aspect-[4/3] w-full object-cover"
                   />
                   <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-t border-border p-5">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Academia / 01</p>
-                      <p className="mt-2 font-display text-lg font-bold text-foreground">{t("home.editorialCaption", "Study with intention")}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                        Academia / 01
+                      </p>
+                      <p className="mt-2 font-display text-lg font-bold text-foreground">
+                        {t("home.editorialCaption", "Study with intention")}
+                      </p>
                     </div>
-                    <span className="flex size-12 items-center justify-center rounded-full border border-primary/40 text-primary" aria-hidden="true">
+                    <span
+                      className="flex size-12 items-center justify-center rounded-full border border-primary/40 text-primary"
+                      aria-hidden="true"
+                    >
                       <BookOpenCheck className="size-5" />
                     </span>
                   </div>
                 </div>
                 <div className="absolute -bottom-5 -start-5 hidden max-w-[12rem] rounded-2xl border border-border bg-background p-4 shadow-elevation-2 sm:block">
-                  <p className="text-xs text-muted-foreground">{t("home.editorialNote", "A calmer way to keep moving")}</p>
-                  <div className="mt-3 flex items-center gap-2 text-sm font-bold text-success"><Check className="size-4" /> {t("home.editorialStatus", "On track")}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {t("home.editorialNote", "A calmer way to keep moving")}
+                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-sm font-bold text-success">
+                    <Check className="size-4" /> {t("home.editorialStatus", "On track")}
+                  </div>
                 </div>
               </div>
             </Reveal>
@@ -268,17 +282,15 @@ function Landing() {
         {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
             (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
             بالشاشات الصغيرة عبر md:grid-cols-2، وبيصير Bento فعلي من lg وفوق. */}
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:auto-rows-fr lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
             <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
               <article
                 className={cn(
                   // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
                   // نفس منطق تصحيح الإحصائيات فوق.
-                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
-                  f.flagship
-                    ? "surface-mesh border-primary/30 bg-primary/5"
-                    : "border-border bg-card",
+                  "shadow-elevation-1 flex h-full flex-col rounded-xl border p-6",
+                  f.flagship ? "border-primary/30 bg-primary/5" : "border-border bg-card",
                 )}
               >
                 {f.Illustration ? (

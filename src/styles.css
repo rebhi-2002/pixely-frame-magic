@@ -78,7 +78,7 @@
 /* الوضع الغامق — الافتراضي (القسم 04 + القسم 06) */
 :root,
 :root[data-theme="dark"] {
-  --radius: 0.875rem;
+  --radius: 0.75rem;
   --ink-950: #0a0f1c;
   --ink-900: #0d1321;
   --ink-800: #141b2e;
@@ -129,9 +129,9 @@
 
 /* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
 :root[data-theme="light"] {
-  --paper-50: #f3f5f9;
-  --paper-100: #ffffff;
-  --paper-200: #e7eaf0;
+  --paper-50: #f7f5f0;
+  --paper-100: #fffdf8;
+  --paper-200: #e9e4d9;
   --background: var(--paper-50);
   --foreground: #1f2937;
   --card: var(--paper-100);
