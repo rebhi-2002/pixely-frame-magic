@@ -27,7 +27,7 @@ function ForTeachers() {
 
   return (
     <PublicLayout>
-      <section className="surface-mesh border-b border-border">
+      <section className="surface-mesh-quiet border-b border-border">
         <div className="mx-auto max-w-5xl px-5 py-20">
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-foreground sm:text-5xl">
             {t("forTeachers.h1")}

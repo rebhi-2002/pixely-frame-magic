@@ -15,12 +15,13 @@ import {
   ClipboardCheck,
   ListChecks,
   Store,
+  FlaskConical,
+  Calculator,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
-import { HeroMockup } from "@/components/site/hero-mockup";
 import {
   LibraryTreeIllustration,
   ExamSimIllustration,
@@ -28,7 +29,6 @@ import {
   ReviewSessionIllustration,
 } from "@/components/site/illustrations";
 import { Reveal } from "@/components/ui/reveal";
-import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
@@ -79,11 +79,38 @@ const features = [
   },
 ] as const;
 
-/* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */
-const stats = [
-  { prefix: "", value: 4, suffix: "", key: "levels" },
-  { prefix: "", value: 100, suffix: "%", key: "rtl" },
-  { prefix: "", value: 3, suffix: "", key: "spaces" },
+/* بطاقة "الدليل الحقيقي" فوق صورة الهيرو — مواد توجيهي فعلية (مو أيقونات
+   صامتة)، بنفس ألوان النظام الدلالي (primary/info/success) المستخدمة
+   بباقي الموقع، مش أزرق عام. الأرقام توضيحية (demo) لحد ما يتوفر مصدر
+   بيانات حقيقي، نفس ملاحظة home.stats القديمة. */
+const heroSubjects = [
+  {
+    key: "arabic",
+    nameAr: "اللغة العربية",
+    nameEn: "Arabic",
+    pct: 78,
+    icon: BookOpenCheck,
+    chipClass: "bg-primary/12 text-primary",
+    barClass: "bg-primary",
+  },
+  {
+    key: "physics",
+    nameAr: "الفيزياء",
+    nameEn: "Physics",
+    pct: 54,
+    icon: FlaskConical,
+    chipClass: "bg-info/12 text-info",
+    barClass: "bg-info",
+  },
+  {
+    key: "math",
+    nameAr: "الرياضيات",
+    nameEn: "Math",
+    pct: 92,
+    icon: Calculator,
+    chipClass: "bg-success/12 text-success",
+    barClass: "bg-success",
+  },
 ] as const;
 
 const roles = [
@@ -105,7 +132,7 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
             <div>
@@ -165,27 +192,71 @@ function Landing() {
                   </div>
                 </>
               )}
-
-              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
-                {stats.map((s, i) => (
-                  <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
-                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
-                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
-                      <p className="font-display text-3xl font-bold text-primary">
-                        <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`home.stats.${s.key}`)}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+              {/* لا صف إحصائيات هون عمدًا — كانت مكررة حرفيًا لبطاقة المواد
+                  بجانبها، وأرقامها (4 مستويات، 3 مساحات) مش دليل ثقة مقنع.
+                  الفراغ بعد الأزرار مقصود، مش نقص. */}
             </div>
 
             <Reveal delay={0.15} y={16}>
-              <HeroMockup session={session} />
+              <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                {/* توهّج عنبري واحد خلف الصورة — بدل الشبكة + 3 دوائر تنافسية
+                    اللي كانت بالنسخة القديمة. */}
+                <div className="soft-glow relative overflow-hidden rounded-3xl border border-border">
+                  <img
+                    src="/images/home/hero-student.jpg"
+                    alt={bi(
+                      "طالب يذاكر على مكتبه، دفتر ملاحظات وكتب مواد التوجيهي وحاسوب محمول بجانبه",
+                      "A student studying at their desk with notes, Tawjihi textbooks, and a laptop",
+                    )}
+                    width={1112}
+                    height={941}
+                    className="aspect-[1112/941] w-full object-cover"
+                  />
+                </div>
+
+                {/* بطاقة تقدّم حقيقية — خلفية معتمة بالكامل (مش زجاجية)، وألوان
+                    النظام الدلالي الفعلية. المواد الثلاث فعلية (توجيهي)، مش
+                    أيقونات صامتة زي النسخة القديمة. موضعها ثابت فيزيائيًا على
+                    الصورة (right- مش end-) لأنه ما بينعكس مع تبديل اللغة. */}
+                <div className="shadow-elevation-2 absolute right-[4%] top-[8%] w-[54%] min-w-[15rem] rounded-2xl border border-border bg-card p-3.5">
+                  <ul className="space-y-3">
+                    {heroSubjects.map((s) => (
+                      <li key={s.key} className="flex items-center gap-2.5">
+                        <span
+                          className={cn(
+                            "flex size-8 shrink-0 items-center justify-center rounded-lg",
+                            s.chipClass,
+                          )}
+                        >
+                          <s.icon className="size-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="truncate text-xs font-bold text-foreground">
+                              {bi(s.nameAr, s.nameEn)}
+                            </span>
+                            <span className="text-xs font-bold text-muted-foreground">
+                              {s.pct}%
+                            </span>
+                          </div>
+                          <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
+                            <div
+                              className={cn("h-full rounded-full", s.barClass)}
+                              style={{ width: `${s.pct}%` }}
+                            />
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-3 flex items-center gap-2 rounded-xl bg-success/10 px-3 py-2">
+                    <Trophy className="size-3.5 shrink-0 text-success" />
+                    <span className="text-xs font-bold text-success">
+                      {bi("أحسنت! تقدّم رائع", "Nice! Great progress")}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </Reveal>
           </div>
         </div>
