@@ -6,8 +6,11 @@ import { nitro } from "nitro/vite";
 import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 
 // حدد منصة النشر عبر متغير بيئة NITRO_PRESET (مثلاً "vercel" أو "netlify").
-// افتراضيًا "vercel" إذا لم يُحدَّد المتغير.
-const nitroPreset = process.env.NITRO_PRESET || "vercel";
+// على Vercel بينكشف تلقائيًا عبر متغير VERCEL. غير هيك الافتراضي هو
+// cloudflare_module (منصة استضافة Lovable) مع مخرجات ببـ dist/.
+const nitroPreset =
+  process.env.NITRO_PRESET || (process.env.VERCEL ? "vercel" : "cloudflare_module");
+const nitroOutputDir = nitroPreset.startsWith("cloudflare") ? "dist" : undefined;
 
 // عنوان الباك اند الحقيقي يلي بنمرّر له طلبات /api/* (بروكسي same-origin).
 // بالإنتاج: Nitro routeRules (تشتغل كـrewrite على Vercel/Netlify وبنفس الوقت
@@ -43,6 +46,7 @@ export default defineConfig({
     // النوع من المشاكل بحزمة تانية بالمستقبل.
     nitro({
       preset: nitroPreset,
+      ...(nitroOutputDir ? { output: { dir: nitroOutputDir } } : {}),
       routeRules: {
         "/api/**": { proxy: `${API_PROXY_TARGET}/api/**` },
       },
