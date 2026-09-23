@@ -107,7 +107,7 @@ function Landing() {
     <PublicLayout>
       <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-16">
             <div>
               <span className="glass-surface inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-primary shadow-elevation-1">
                 <Trophy className="size-4" />
@@ -166,10 +166,10 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
+              <div className="mt-14 grid items-stretch gap-px overflow-hidden border-y border-border bg-border sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
+                    <div className="flex h-full flex-col justify-center bg-card p-5 sm:p-6">
                       {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
                           حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">
@@ -197,7 +197,7 @@ function Landing() {
           <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
           <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-4">
+        <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-4">
           {([Compass, ListChecks, ClipboardCheck, Check] as const).map((Icon, i) => (
             <Reveal key={i} delay={i * 0.07}>
               <article className="relative h-full rounded-2xl border border-border bg-card p-6 shadow-elevation-1">
