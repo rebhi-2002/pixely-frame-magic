@@ -88,8 +88,8 @@
   --card-foreground: #f3f1ea;
   --popover: var(--ink-900);
   --popover-foreground: #f3f1ea;
-  --primary: #f0a62e;
-  --primary-foreground: var(--ink-950);
+  --primary: #e3a53a;
+  --primary-foreground: #17130d;
   --secondary: #1b2338;
   --secondary-foreground: #f3f1ea;
   --muted: #1b2338;
@@ -140,8 +140,8 @@
   --popover-foreground: #1f2937;
   /* WCAG AA: كانت #d68e1e بنسبة تباين 2.71:1 (فاشلة)؛ عدّلناها لـ5.26:1 على أبيض
      مع الحفاظ على نفس العائلة اللونية (كهرماني/ذهبي) لهوية العلامة التجارية. */
-  --primary: #976006;
-  --primary-foreground: #ffffff;
+  --primary: #8d5d08;
+  --primary-foreground: #fffdf8;
   --secondary: var(--paper-200);
   --secondary-foreground: #1f2937;
   --muted: var(--paper-200);

@@ -104,11 +104,11 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="relative overflow-hidden border-b border-border bg-background">
+      <section className="editorial-canvas relative overflow-hidden border-b border-border bg-background">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-16">
             <div>
-              <span className="glass-surface inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-primary shadow-elevation-1">
+              <span className="inline-flex items-center gap-2 border-s-2 border-primary px-4 py-1.5 text-sm font-semibold text-primary">
                 <Trophy className="size-4" />
                 {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
               </span>
@@ -151,7 +151,7 @@ function Landing() {
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Link
                       to="/signup"
-                      className="btn-shine glow-primary hover-press inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+                      className="hover-press inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-elevation-2"
                     >
                       {t("home.ctaPrimary")}
                     </Link>
@@ -282,15 +282,15 @@ function Landing() {
         {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
             (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
             بالشاشات الصغيرة عبر md:grid-cols-2، وبيصير Bento فعلي من lg وفوق. */}
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="editorial-rule mt-10 grid gap-x-6 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
             <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
               <article
                 className={cn(
                   // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
                   // نفس منطق تصحيح الإحصائيات فوق.
-                  "shadow-elevation-1 flex h-full flex-col rounded-xl border p-6",
-                  f.flagship ? "border-primary/30 bg-primary/5" : "border-border bg-card",
+                  "flex h-full flex-col border-b border-border py-8 md:min-h-64 md:px-4",
+                  f.flagship ? "bg-primary/5" : "bg-transparent",
                 )}
               >
                 {f.Illustration ? (
