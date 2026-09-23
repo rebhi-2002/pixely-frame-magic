@@ -75,29 +75,29 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* الوضع الغامق — الافتراضي (القسم 04 + القسم 06) */
+/* Swiss-editorial light foundation: paper, ink, cobalt and one warm signal. */
 :root,
-:root[data-theme="dark"] {
-  --radius: 0.75rem;
-  --ink-950: #0a0f1c;
-  --ink-900: #0d1321;
-  --ink-800: #141b2e;
-  --background: var(--ink-950);
-  --foreground: #f3f1ea;
-  --card: var(--ink-800);
-  --card-foreground: #f3f1ea;
-  --popover: var(--ink-900);
-  --popover-foreground: #f3f1ea;
-  --primary: #e3a53a;
-  --primary-foreground: #17130d;
-  --secondary: #1b2338;
-  --secondary-foreground: #f3f1ea;
-  --muted: #1b2338;
-  --muted-foreground: #a6b0c3;
-  --muted-3: #6e7893;
-  --accent: #202a42;
-  --accent-foreground: #f3f1ea;
-  --destructive: #e4573d;
+:root[data-theme="light"] {
+  --radius: 0.35rem;
+  --ink-950: #101820;
+  --ink-900: #182632;
+  --ink-800: #243744;
+  --background: #f5f1e8;
+  --foreground: #101820;
+  --card: #fffdf8;
+  --card-foreground: #101820;
+  --popover: #fffdf8;
+  --popover-foreground: #101820;
+  --primary: #145c8c;
+  --primary-foreground: #fffdf8;
+  --secondary: #e8e1d4;
+  --secondary-foreground: #101820;
+  --muted: #e8e1d4;
+  --muted-foreground: #53616b;
+  --muted-3: #7b8790;
+  --accent: #e45d3d;
+  --accent-foreground: #fffdf8;
+  --destructive: #b9382a;
   /* WCAG AA: نص فاتح (#f3f1ea) على هالأحمر كان 3.24:1 (فاشل). نفس نمط باقي
      الألوان الدلالية بالوضع الغامق (نص ink-950 غامق) بيوصلها لـ5.23:1. */
   --destructive-foreground: var(--ink-950);
@@ -128,10 +128,10 @@
 }
 
 /* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
-:root[data-theme="light"] {
-  --paper-50: #f7f5f0;
-  --paper-100: #fffdf8;
-  --paper-200: #e9e4d9;
+:root[data-theme="dark"] {
+  --paper-50: #101820;
+  --paper-100: #182632;
+  --paper-200: #243744;
   --background: var(--paper-50);
   --foreground: #1f2937;
   --card: var(--paper-100);

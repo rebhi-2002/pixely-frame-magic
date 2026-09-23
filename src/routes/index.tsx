@@ -104,11 +104,11 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="editorial-canvas relative overflow-hidden border-b border-border bg-background">
+      <section className="relative overflow-hidden border-b-2 border-foreground bg-[#145c8c] text-[#fffdf8]">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-16">
+          <div className="grid items-end gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
             <div>
-              <span className="inline-flex items-center gap-2 border-s-2 border-primary px-4 py-1.5 text-sm font-semibold text-primary">
+              <span className="inline-flex items-center gap-2 border-s-2 border-[#e45d3d] px-4 py-1.5 text-sm font-semibold text-[#fffdf8]">
                 <Trophy className="size-4" />
                 {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
               </span>
@@ -141,17 +141,17 @@ function Landing() {
                 </>
               ) : (
                 <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
+                  <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] tracking-[-0.04em] text-[#fffdf8] sm:text-5xl md:text-7xl">
                     {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
                     {t("home.h1c")}
                   </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#fffdf8]/80 sm:text-lg">
                     {t("home.sub")}
                   </p>
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Link
                       to="/signup"
-                      className="hover-press inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-elevation-2"
+                      className="hover-press inline-flex min-h-12 items-center justify-center border-2 border-[#fffdf8] bg-[#fffdf8] px-7 py-3.5 text-sm font-bold text-[#145c8c] shadow-[5px_5px_0_#e45d3d]"
                     >
                       {t("home.ctaPrimary")}
                     </Link>
@@ -165,10 +165,10 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-14 grid items-stretch gap-px overflow-hidden border-y border-border bg-border sm:grid-cols-3">
+              <div className="mt-14 grid items-stretch gap-px overflow-hidden border-y border-[#fffdf8]/30 bg-[#fffdf8]/30 sm:grid-cols-3">
                 {stats.map((s, i) => (
                   <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="flex h-full flex-col justify-center bg-card p-5 sm:p-6">
+                    <div className="flex h-full flex-col justify-center bg-[#145c8c] p-5 sm:p-6">
                       {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
                           حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
                       <p className="font-display text-3xl font-bold text-primary">
@@ -185,7 +185,7 @@ function Landing() {
 
             <Reveal delay={0.15} y={16}>
               <div className="relative mx-auto w-full max-w-lg">
-                <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-elevation-3">
+                <div className="overflow-hidden border-2 border-[#fffdf8]/60 bg-[#fffdf8] shadow-[14px_14px_0_#e45d3d]">
                   <img
                     src="/media/editorial/study-desk.png"
                     alt={t(
