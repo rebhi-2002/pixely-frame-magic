@@ -37,18 +37,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/courses" />
   </url>
   <url>
-    <loc>https://pixely-frame-magic.vercel.app/teachers</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teachers" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teachers?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teachers" />
-  </url>
-  <url>
-    <loc>https://pixely-frame-magic.vercel.app/teachers?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teachers" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teachers?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teachers" />
-  </url>
-  <url>
     <loc>https://pixely-frame-magic.vercel.app/for-teachers</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/for-teachers" />
     <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/for-teachers?lang=en" />
@@ -203,5 +191,77 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/blog/%D8%A8%D9%86%D9%83-%D8%A7%D9%84%D8%A3%D8%AE%D8%B7%D8%A7%D8%A1-%D8%A3%D8%B0%D9%83%D9%89-%D8%A3%D8%AF%D8%A7%D8%A9-%D9%85%D8%A7-%D8%A8%D8%AA%D8%B3%D8%AA%D8%AE%D8%AF%D9%85%D9%87%D8%A7" />
     <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/blog/%D8%A8%D9%86%D9%83-%D8%A7%D9%84%D8%A3%D8%AE%D8%B7%D8%A7%D8%A1-%D8%A3%D8%B0%D9%83%D9%89-%D8%A3%D8%AF%D8%A7%D8%A9-%D9%85%D8%A7-%D8%A8%D8%AA%D8%B3%D8%AA%D8%AE%D8%AF%D9%85%D9%87%D8%A7?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/blog/%D8%A8%D9%86%D9%83-%D8%A7%D9%84%D8%A3%D8%AE%D8%B7%D8%A7%D8%A1-%D8%A3%D8%B0%D9%83%D9%89-%D8%A3%D8%AF%D8%A7%D8%A9-%D9%85%D8%A7-%D8%A8%D8%AA%D8%B3%D8%AA%D8%AE%D8%AF%D9%85%D9%87%D8%A7" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/sami-khalil</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/sami-khalil?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/sami-khalil" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/rana-haddad</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/rana-haddad?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/rana-haddad" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/maha-zeidan</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/maha-zeidan?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/maha-zeidan" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/luay-darwish</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/luay-darwish?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/luay-darwish" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/noor-abed</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/noor-abed?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/noor-abed" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/omar-sharif</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif" />
+  </url>
+  <url>
+    <loc>https://pixely-frame-magic.vercel.app/teacher/omar-sharif?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pixely-frame-magic.vercel.app/teacher/omar-sharif" />
   </url>
 </urlset>

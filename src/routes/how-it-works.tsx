@@ -20,7 +20,7 @@ function HowItWorks() {
 
   return (
     <PublicLayout>
-      <section className="surface-mesh-quiet border-b border-border">
+      <section className="surface-mesh border-b border-border">
         <div className="mx-auto max-w-4xl px-5 py-16 text-center">
           <h1 className="text-4xl font-bold text-foreground">{t("howItWorks.h1")}</h1>
           <p className="mt-4 text-lg text-muted-foreground">{t("howItWorks.sub")}</p>

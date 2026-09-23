@@ -301,64 +301,7 @@
   }
 }
 
-/* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ———
-   القاعدة (زي نظام Reveal بالضبط): variant مسمّى حسب دور الصفحة، مش نفس
-   الخلفية بكل مكان. راجع docs/design/visual-refinement-log.md لخريطة
-   أي صفحة تستخدم أي variant وليش.
-
-   - surface-mesh (افتراضي/الأقدم): يبقى كـalias لـsurface-mesh-hero
-     لأي مكان ما انتقل بعد، حتى ما ينكسر شي أثناء الترحيل التدريجي.
-   - surface-mesh-hero: الصفحة الرئيسية فقط — أغنى نسخة (3 دوائر لونية)،
-     هي "العلامة" البصرية الأقوى، ما لازم تتكرر بمكان تاني.
-   - surface-mesh-quiet: صفحات تسويقية داخلية (كيف تعمل/الأسعار/للمعلمين/
-     لأولياء الأمور/من نحن/المدونة/المساعدة/تواصل معنا) — دائرة واحدة
-     خافتة بس، تفرّق عن الرئيسية بدل ما تستنسخها.
-   - surface-mesh-auth: شاشات المصادقة (دخول/تسجيل/تسجيل معلم) — توزيع
-     مختلف (من الأسفل) عشان ما تحس إنها نفس هيرو الصفحة الرئيسية. */
-@utility surface-mesh-hero {
-  position: relative;
-  background-image:
-    radial-gradient(
-      circle at 88% 8%,
-      color-mix(in oklab, var(--color-primary) 22%, transparent),
-      transparent 42%
-    ),
-    radial-gradient(
-      circle at 6% 18%,
-      color-mix(in oklab, var(--color-info) 16%, transparent),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 20% 92%,
-      color-mix(in oklab, var(--color-success) 14%, transparent),
-      transparent 45%
-    );
-}
-
-@utility surface-mesh-quiet {
-  position: relative;
-  background-image: radial-gradient(
-    circle at 82% 0%,
-    color-mix(in oklab, var(--color-primary) 12%, transparent),
-    transparent 55%
-  );
-}
-
-@utility surface-mesh-auth {
-  position: relative;
-  background-image:
-    radial-gradient(
-      circle at 12% 100%,
-      color-mix(in oklab, var(--color-primary) 18%, transparent),
-      transparent 48%
-    ),
-    radial-gradient(
-      circle at 90% 30%,
-      color-mix(in oklab, var(--color-info) 10%, transparent),
-      transparent 45%
-    );
-}
-
+/* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ——— */
 @utility surface-mesh {
   position: relative;
   background-image:
