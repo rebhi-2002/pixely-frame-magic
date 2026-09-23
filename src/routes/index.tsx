@@ -109,9 +109,12 @@ function EditorialHero({ session, role }: { session: ReturnType<typeof useSessio
         </div>
       </div>
       <div className="editorial-hero__manifesto">
-        <div className="editorial-hero__art" aria-hidden="true"><span>أ</span></div>
+        <div className="editorial-hero__art">
+          <img src="/media/editorial/study-desk.png" alt="طالب يدرس أمام كتاب ودفتر" />
+          <span className="editorial-hero__art-label">تعلّم بوضوح</span>
+        </div>
         <p className="editorial-hero__quote">من أول سؤال<br />إلى فهم حقيقي.</p>
-        <div className="editorial-hero__meta"><span>فلسطين</span><span>2026</span><span>RTL / 100%</span></div>
+        <div className="editorial-hero__meta"><span>فلسطين</span><span>2026</span><span>تعلم RTL</span></div>
       </div>
     </section>
   );
