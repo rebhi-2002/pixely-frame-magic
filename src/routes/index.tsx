@@ -82,50 +82,95 @@ const roles = [
 
 const latestPosts = blogPosts.slice(-2).reverse();
 
+function EditorialHero({ session, role }: { session: ReturnType<typeof useSession>["session"]; role?: string }) {
+  const { t } = useTranslation();
+  const signedIn = Boolean(session && role);
+
+  return (
+    <section className="editorial-hero" aria-labelledby="home-hero-title">
+      <div className="editorial-hero__rail">
+        <span className="editorial-hero__index">01</span>
+        <span className="editorial-hero__line" />
+        <span className="editorial-hero__rail-label">مساحتك الدراسية</span>
+      </div>
+      <div className="editorial-hero__copy">
+        <p className="eyebrow editorial-hero__eyebrow">أكاديميا / نظام تعلّم فلسطيني</p>
+        <h1 id="home-hero-title">
+          {signedIn && role ? t(`home.signedIn.${role}.h1`) : <>رتّب دراستك<br /><em>وابدأ بثقة.</em></>}
+        </h1>
+        <p className="editorial-hero__lede">
+          {signedIn && role ? t(`home.signedIn.${role}.sub`) : t("home.sub")}
+        </p>
+        <div className="editorial-hero__actions">
+          <Link to={signedIn && session ? session.home : "/signup"} className="button button--solid">
+            {signedIn ? t("home.signedIn.cta") : t("home.ctaPrimary")}
+          </Link>
+          <Link to="/how-it-works" className="button button--text">كيف تعمل أكاديميا <span aria-hidden="true">↗</span></Link>
+        </div>
+      </div>
+      <div className="editorial-hero__manifesto">
+        <div className="editorial-hero__art" aria-hidden="true"><span>أ</span></div>
+        <p className="editorial-hero__quote">من أول سؤال<br />إلى فهم حقيقي.</p>
+        <div className="editorial-hero__meta"><span>فلسطين</span><span>2026</span><span>RTL / 100%</span></div>
+      </div>
+    </section>
+  );
+}
+
 function Landing() {
   const { t } = useTranslation();
   const bi = useBi();
   const { session } = useSession();
   const role = session?.roleKey;
-  // زر "تصفح الكورسات" مخصص للطالب بس — لباقي الأدوار (معلم/ولي أمر/مشرف/أدمن)
-  // صفحة /courses مو من صلاحياتهم، فما لازم يظهرلهم زر يودّيهم لصفحة "غير مصرح".
   const canBrowseCourses = role ? (allowedPublicPaths(role) ?? []).includes("/courses") : false;
 
   return (
     <PublicLayout>
-      <section className="academia-hero relative overflow-hidden border-b border-border bg-background">
-        <div className="mx-auto max-w-[90rem] px-5 py-8 sm:px-8 md:py-12 lg:px-12">
-          <div className="mb-12 flex items-center justify-between border-b border-border pb-5 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
-            <span>ACADEMIA / LEARNING SYSTEM</span>
-            <span className="hidden sm:inline">01 — FOCUS / PROGRESS / MASTERY</span>
-          </div>
-          <div className="grid items-stretch gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)] lg:gap-16">
-            <div>
-              <span className="inline-flex items-center gap-3 border-s-2 border-primary px-4 py-1.5 text-sm font-bold text-primary">
-                <Trophy className="size-4" />
-                {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
-              </span>
+      <EditorialHero session={session} role={role} />
+      {/* Previous hero retained below for signed-in compatibility but removed from visual flow. */}
+      <section className="legacy-hero hidden" aria-hidden="true">
+        {/* Decorative gradient orbs */}
+        <div className="absolute -top-40 -start-40 h-96 w-96 rounded-full bg-gradient-to-br from-[#0066cc]/20 to-transparent blur-3xl opacity-40" />
+        <div className="absolute -bottom-20 -end-20 h-80 w-80 rounded-full bg-gradient-to-tl from-[#ff6b35]/10 to-transparent blur-3xl opacity-30" />
 
+        <div className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">
+          {/* Header label */}
+          <div className="mb-20 flex items-center gap-3">
+            <span className="h-px w-6 bg-[#0066cc]" />
+            <span className="text-xs font-bold uppercase tracking-widest text-[#0066cc]">
+              لطلاب التوجيهي في فلسطين
+            </span>
+          </div>
+
+          {/* Split content */}
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            {/* Left: Content */}
+            <div className="flex flex-col space-y-8">
               {session && role ? (
                 <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
-                    {t(`home.signedIn.${role}.h1`)}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t(`home.signedIn.${role}.sub`)}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
+                  <div className="space-y-6">
+                    <p className="text-sm font-bold uppercase tracking-widest text-[#0066cc]">
+                      {t("home.signedIn.welcome", { name: session.fullName })}
+                    </p>
+                    <h1 className="font-display max-w-2xl text-5xl font-bold leading-[1.15] tracking-tight text-white sm:text-6xl md:text-7xl">
+                      {t(`home.signedIn.${role}.h1`)}
+                    </h1>
+                    <p className="max-w-xl text-lg leading-relaxed text-gray-300">
+                      {t(`home.signedIn.${role}.sub`)}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
                     <Link
                       to={session.home}
-                      className="glow-primary hover-press inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0066cc] px-8 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#0052a3] active:scale-95"
                     >
-                      <LayoutDashboard className="size-4" />
+                      <LayoutDashboard className="size-5" />
                       {t("home.signedIn.cta")}
                     </Link>
                     {canBrowseCourses && (
                       <Link
                         to="/courses"
-                        className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+                        className="inline-flex items-center justify-center rounded-lg border border-gray-600 px-8 py-3.5 text-sm font-bold text-white transition-all hover:border-gray-400 hover:bg-gray-900/50"
                       >
                         {t("home.signedIn.browse")}
                       </Link>
@@ -134,23 +179,27 @@ function Landing() {
                 </>
               ) : (
                 <>
-<h1 className="mt-8 max-w-3xl text-[2.75rem] font-bold leading-[1.2] tracking-normal text-foreground sm:text-6xl md:text-7xl">
-  {t("home.h1a")} <span className="text-primary">{t("home.h1b")}</span>{" "}
-  {t("home.h1c")}
-  </h1>
-                  <p className="mt-7 max-w-xl border-s-2 border-border ps-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    {t("home.sub")}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
+                  <div className="space-y-6">
+                    <p className="text-sm font-bold uppercase tracking-widest text-[#0066cc]">
+                      نظام الدراسة الذكي
+                    </p>
+                    <h1 className="font-display max-w-3xl text-5xl font-bold leading-[1.15] tracking-tight text-white sm:text-6xl md:text-7xl">
+                      رتّب <span className="text-[#ff6b35]">دراستك</span> وابدأ <span className="text-[#0066cc]">بثقة</span>
+                    </h1>
+                    <p className="max-w-xl text-lg leading-relaxed text-gray-300">
+                      {t("home.sub")}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
                     <Link
                       to="/signup"
-                      className="hover-press inline-flex min-h-12 items-center justify-center border-2 border-[#fffdf8] bg-[#fffdf8] px-7 py-3.5 text-sm font-bold text-[#145c8c] shadow-[5px_5px_0_#e45d3d]"
+                      className="inline-flex items-center justify-center rounded-lg bg-[#0066cc] px-8 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#0052a3] active:scale-95"
                     >
                       {t("home.ctaPrimary")}
                     </Link>
                     <Link
                       to="/how-it-works"
-                      className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
+                      className="inline-flex items-center justify-center rounded-lg border border-gray-600 px-8 py-3.5 text-sm font-bold text-white transition-all hover:border-gray-400 hover:bg-gray-900/50"
                     >
                       {t("home.ctaSecondary")}
                     </Link>
@@ -158,58 +207,42 @@ function Landing() {
                 </>
               )}
 
-              <div className="mt-16 grid items-stretch gap-0 border-y border-border sm:grid-cols-3">
-                {stats.map((s, i) => (
-                  <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="flex h-full flex-col justify-center border-e border-border py-5 pe-5 sm:p-6">
-                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
-                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
-                      <p className="font-display text-3xl font-bold text-primary">
-                        <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`home.stats.${s.key}`)}
-                      </p>
-                    </div>
-                  </Reveal>
+              {/* Stats grid */}
+              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-gray-800 pt-8">
+                {stats.map((s) => (
+                  <div key={s.key} className="space-y-2">
+                    <p className="text-3xl font-bold text-[#0066cc]">
+                      <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
+                    </p>
+                    <p className="text-xs text-gray-400">{t(`home.stats.${s.key}`)}</p>
+                  </div>
                 ))}
               </div>
             </div>
 
-            <Reveal delay={0.15} y={16}>
-              <div className="relative mx-auto w-full max-w-lg">
-                <div className="overflow-hidden border border-foreground bg-card shadow-[12px_12px_0_var(--color-primary)]">
+            {/* Right: Visual element */}
+            <Reveal delay={0.15} className="flex justify-center lg:justify-end">
+              <div className="relative w-full max-w-sm">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#0066cc]/20 to-[#ff6b35]/10 blur-2xl opacity-50" />
+                <div className="relative overflow-hidden rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-950 p-8 shadow-2xl">
                   <img
                     src="/media/editorial/study-desk.png"
-                    alt={t(
-                      "home.editorialImageAlt",
-                      "A student studying with an open textbook and notebook",
-                    )}
-                    className="aspect-[4/3] w-full object-cover"
+                    alt={t("home.editorialImageAlt", "A student studying with an open textbook and notebook")}
+                    className="w-full rounded-lg object-cover"
                   />
-                  <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-t border-border p-5">
+                  <div className="mt-6 space-y-4 border-t border-gray-800 pt-6">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
-                        Academia / 01
+                      <p className="text-xs font-bold uppercase tracking-widest text-[#0066cc]">
+                        Academia / Study
                       </p>
-                      <p className="mt-2 font-display text-lg font-bold text-foreground">
+                      <p className="mt-2 text-lg font-bold text-white">
                         {t("home.editorialCaption", "Study with intention")}
                       </p>
                     </div>
-                    <span
-                      className="flex size-12 items-center justify-center rounded-full border border-primary/40 text-primary"
-                      aria-hidden="true"
-                    >
-                      <BookOpenCheck className="size-5" />
-                    </span>
-                  </div>
-                </div>
-                <div className="absolute -bottom-5 -start-5 hidden max-w-[12rem] rounded-2xl border border-border bg-background p-4 shadow-elevation-2 sm:block">
-                  <p className="text-xs text-muted-foreground">
-                    {t("home.editorialNote", "A calmer way to keep moving")}
-                  </p>
-                  <div className="mt-3 flex items-center gap-2 text-sm font-bold text-success">
-                    <Check className="size-4" /> {t("home.editorialStatus", "On track")}
+                    <div className="flex items-center gap-2 text-sm font-bold text-green-400">
+                      <Check className="size-5" />
+                      {t("home.editorialStatus", "On track")}
+                    </div>
                   </div>
                 </div>
               </div>
