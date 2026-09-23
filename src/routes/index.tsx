@@ -20,12 +20,6 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
-import {
-  LibraryTreeIllustration,
-  ExamSimIllustration,
-  MistakeBankIllustration,
-  ReviewSessionIllustration,
-} from "@/components/site/illustrations";
 import { Reveal } from "@/components/ui/reveal";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
@@ -44,37 +38,32 @@ const features = [
     key: "library",
     span: "lg:col-span-2 lg:row-span-2",
     flagship: true,
-    Illustration: LibraryTreeIllustration,
   },
   {
     icon: Bot,
     key: "simulator",
     span: "lg:col-span-2",
     flagship: false,
-    Illustration: ExamSimIllustration,
   },
-  { icon: MessagesSquare, key: "community", span: "", flagship: false, Illustration: null },
-  { icon: LineChart, key: "tracker", span: "", flagship: false, Illustration: null },
+  { icon: MessagesSquare, key: "community", span: "", flagship: false },
+  { icon: LineChart, key: "tracker", span: "", flagship: false },
   {
     icon: XCircle,
     key: "mistakes",
     span: "lg:col-span-2",
     flagship: false,
-    Illustration: MistakeBankIllustration,
   },
   {
     icon: Timer,
     key: "review",
     span: "lg:col-span-2",
     flagship: false,
-    Illustration: ReviewSessionIllustration,
   },
   {
     icon: Store,
     key: "courses",
     span: "lg:col-span-2",
     flagship: false,
-    Illustration: null,
   },
 ] as const;
 
@@ -293,24 +282,21 @@ function Landing() {
                   f.flagship ? "bg-primary/5" : "bg-transparent",
                 )}
               >
-                {f.Illustration ? (
-                  <f.Illustration className={cn("w-full", f.flagship ? "h-32" : "h-20")} />
-                ) : (
                   <span
                     className={cn(
-                      "flex size-11 items-center justify-center rounded-xl",
+                      "flex size-12 items-center justify-center border border-current/20",
                       f.flagship
                         ? "bg-primary text-primary-foreground"
-                        : "bg-primary/12 text-primary",
+                        : "bg-primary/10 text-primary",
                     )}
+                    aria-hidden="true"
                   >
-                    <f.icon className="size-5" />
+                    <f.icon className="size-5" strokeWidth={1.8} />
                   </span>
-                )}
                 <h3
                   className={cn(
                     "font-bold text-foreground",
-                    f.Illustration ? "mt-3" : "mt-4",
+                      f.flagship ? "mt-3" : "mt-4",
                     f.flagship ? "text-lg" : "text-base",
                   )}
                 >
