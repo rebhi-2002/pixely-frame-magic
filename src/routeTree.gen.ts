@@ -48,9 +48,9 @@ import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authen
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
+import { Route as CourseIdRouteImport } from './routes/course.$id'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
-import { Route as CourseIdRouteImport } from './routes/course.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as AuthenticatedAdminBackendPermissionsRouteImport } from './routes/_authenticated/admin.backend-permissions'
 import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
@@ -285,6 +285,11 @@ const CertificateIdRoute = CertificateIdRouteImport.update({
   path: '/certificate/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CourseIdRoute = CourseIdRouteImport.update({
+  id: '/course/$id',
+  path: '/course/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteCodeRoute = InviteCodeRouteImport.update({
   id: '/invite/$code',
   path: '/invite/$code',
@@ -293,11 +298,6 @@ const InviteCodeRoute = InviteCodeRouteImport.update({
 const TeacherIdRoute = TeacherIdRouteImport.update({
   id: '/teacher/$id',
   path: '/teacher/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CourseIdRoute = CourseIdRouteImport.update({
-  id: '/course/$id',
-  path: '/course/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeacherRegisterRoute = TeacherRegisterRouteImport.update({
@@ -534,9 +534,9 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
-  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -610,9 +610,9 @@ export interface FileRoutesByTo {
   '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
-  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -688,9 +688,9 @@ export interface FileRoutesById {
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/certificate/$id': typeof CertificateIdRoute
+  '/course/$id': typeof CourseIdRoute
   '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
-  '/course/$id': typeof CourseIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
@@ -766,9 +766,9 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
+    | '/course/$id'
     | '/invite/$code'
     | '/teacher/$id'
-    | '/course/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
     | '/admin/community-reports'
@@ -842,9 +842,9 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
+    | '/course/$id'
     | '/invite/$code'
     | '/teacher/$id'
-    | '/course/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
     | '/admin/community-reports'
@@ -919,9 +919,9 @@ export interface FileRouteTypes {
     | '/_authenticated/wallet'
     | '/blog/$slug'
     | '/certificate/$id'
+    | '/course/$id'
     | '/invite/$code'
     | '/teacher/$id'
-    | '/course/$id'
     | '/teacher/register'
     | '/_authenticated/admin/backend-permissions'
     | '/_authenticated/admin/community-reports'
@@ -980,9 +980,9 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   CertificateIdRoute: typeof CertificateIdRoute
+  CourseIdRoute: typeof CourseIdRoute
   InviteCodeRoute: typeof InviteCodeRoute
   TeacherIdRoute: typeof TeacherIdRoute
-  CourseIdRoute: typeof CourseIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
 
@@ -1261,6 +1261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CertificateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/course/$id': {
+      id: '/course/$id'
+      path: '/course/$id'
+      fullPath: '/course/$id'
+      preLoaderRoute: typeof CourseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$code': {
       id: '/invite/$code'
       path: '/invite/$code'
@@ -1273,13 +1280,6 @@ declare module '@tanstack/react-router' {
       path: '/teacher/$id'
       fullPath: '/teacher/$id'
       preLoaderRoute: typeof TeacherIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/course/$id': {
-      id: '/course/$id'
-      path: '/course/$id'
-      fullPath: '/course/$id'
-      preLoaderRoute: typeof CourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/register': {
@@ -1668,9 +1668,9 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   CertificateIdRoute: CertificateIdRoute,
+  CourseIdRoute: CourseIdRoute,
   InviteCodeRoute: InviteCodeRoute,
   TeacherIdRoute: TeacherIdRoute,
-  CourseIdRoute: CourseIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }
 export const routeTree = rootRouteImport
