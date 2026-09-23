@@ -134,10 +134,10 @@ function Landing() {
                 </>
               ) : (
                 <>
-                  <h1 className="mt-8 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.06em] text-foreground sm:text-6xl md:text-8xl">
-                    {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
-                    {t("home.h1c")}
-                  </h1>
+<h1 className="mt-8 max-w-3xl text-[2.75rem] font-bold leading-[1.2] tracking-normal text-foreground sm:text-6xl md:text-7xl">
+  {t("home.h1a")} <span className="text-primary">{t("home.h1b")}</span>{" "}
+  {t("home.h1c")}
+  </h1>
                   <p className="mt-7 max-w-xl border-s-2 border-border ps-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
                     {t("home.sub")}
                   </p>
