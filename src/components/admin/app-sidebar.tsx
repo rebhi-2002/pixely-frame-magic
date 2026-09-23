@@ -113,7 +113,7 @@ export function AppSidebar({
 
   const accountItem = (extra?: string) =>
     cn(
-      "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-nav font-medium text-sidebar-foreground/85 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+      "flex min-h-11 w-full items-center gap-2.5 rounded-lg px-3 py-2 text-nav font-medium text-sidebar-foreground/85 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground",
       collapsed && "justify-center px-0",
       extra,
     );

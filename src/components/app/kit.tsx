@@ -55,7 +55,7 @@ export function StatGrid({ items }: { items: { icon: string; label: string; valu
         const parsed = parseStatValue(s.value);
         return (
           <Reveal key={s.label} variant="stat" delay={i * 0.05}>
-            <div className="shadow-elevation-1 h-full rounded-xl border border-border bg-card p-4 sm:p-5">
+            <div className="shadow-elevation-1 h-full rounded-lg border border-border bg-card p-4 sm:p-5">
               {/* بدون hover-lift (لا interactive-card): بطاقة إحصائية ثابتة
                   بكل صفحات المنصة، مش رابط أو زر — حركة الرفع عند التحويم
                   بتوحي بتفاعل غير موجود فعليًا. نفس المبدأ مطبّق بالصفحة
@@ -95,7 +95,7 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="shadow-elevation-1 overflow-hidden rounded-xl border border-border bg-card">
+    <section className="shadow-elevation-1 overflow-hidden rounded-lg border border-border bg-card">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card/70 px-4 py-4 sm:px-5">
         <h2 className="inline-flex items-center gap-2 font-display text-sm font-bold text-foreground">
           {icon && <DynamicIcon name={icon} className="size-4 text-primary" />}
@@ -270,7 +270,7 @@ export function QuickLinks({ items }: { items: { to: string; label: string; icon
         <Link
           key={i.to}
           to={i.to}
-          className="interactive-card flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary/50"
+          className="interactive-card flex min-h-16 items-center gap-3 rounded-lg border border-border bg-card p-4 hover:border-primary/50"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <DynamicIcon name={i.icon} className="size-4" />
