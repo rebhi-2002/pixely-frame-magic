@@ -18,7 +18,12 @@ const API_PROXY_TARGET = (
   process.env.API_PROXY_TARGET || "https://ziadkamalaln2842-001-site1.etempurl.com"
 ).replace(/\/+$/, "");
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // Nitro is only needed for the deployable server bundle. Keeping it out of
+  // the dev graph prevents its separate Vite environment from racing the
+  // client entry during automatic restarts, which can surface as a failed
+  // dynamic import of /src/client.tsx.
+  // Vite's proxy above provides the same local /api behavior during dev.
   // Vite 8 بيدعم حل مسارات tsconfig (@/...) بشكل أصلي، فما عاد لازم بلوجن
   // "vite-tsconfig-paths" الخارجي (كان يعمل نفس الشي بس أبطأ وغير مُصان).
   resolve: {
@@ -41,17 +46,21 @@ export default defineConfig({
     // التتبّع التلقائي الناقص لهاي الحزم تحديدًا. راجع أيضًا src/server.ts
     // (import() ديناميكي محاط بـtry/catch) كخط دفاع ثاني لو تكرر نفس
     // النوع من المشاكل بحزمة تانية بالمستقبل.
-    nitro({
-      preset: nitroPreset,
-      routeRules: {
-        "/api/**": { proxy: `${API_PROXY_TARGET}/api/**` },
-      },
-      traceDeps: [
-        "@sentry/tanstackstart-react*",
-        "require-in-the-middle*",
-        "import-in-the-middle*",
-      ],
-    }),
+    ...(command === "build"
+      ? [
+          nitro({
+            preset: nitroPreset,
+            routeRules: {
+              "/api/**": { proxy: `${API_PROXY_TARGET}/api/**` },
+            },
+            traceDeps: [
+              "@sentry/tanstackstart-react*",
+              "require-in-the-middle*",
+              "import-in-the-middle*",
+            ],
+          }),
+        ]
+      : []),
     // رفع source maps لـSentry وقت البناء — شرطي: بدون SENTRY_AUTH_TOKEN
     // (من إعدادات مشروعك بـSentry) البلوجن ما بينضاف إطلاقًا، فما فيه خطر
     // يكسر البناء عند حد ما ضبط التوكن بعد.
@@ -71,4 +80,4 @@ export default defineConfig({
       "/api": { target: API_PROXY_TARGET, changeOrigin: true, secure: false },
     },
   },
-});
+}));
