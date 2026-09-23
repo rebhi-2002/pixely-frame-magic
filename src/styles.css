@@ -756,7 +756,88 @@
   body { font-family: "Plus Jakarta Sans", "Cairo", ui-sans-serif, system-ui, sans-serif; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 18px 18px; }
   [dir="rtl"] body { font-family: "Cairo", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; }
   h1, h2, h3, h4, .font-display { font-family: "Outfit", "Cairo", ui-sans-serif, system-ui, sans-serif; }
-  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] .font-display { font-family: "Cairo", "Outfit", ui-sans-serif, system-ui, sans-serif; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] .font-display { font-family: "Cairo", "Outfit", ui-sans-serif, system-ui, sans-serif; }
+
+/* Final homepage pass: breathable content, blue-steel dark mode, and Gen-Z card rhythm. */
+:root[data-theme="dark"] {
+  --background: #24445c;
+  --foreground: #f7fbff;
+  --card: #2e5872;
+  --card-foreground: #f7fbff;
+  --muted: #315f7b;
+  --muted-foreground: #d2e5f2;
+  --primary: #69b7f2;
+  --primary-foreground: #10344b;
+  --secondary: #4d8caf;
+  --secondary-foreground: #f7fbff;
+  --accent: #8ed8f8;
+  --accent-foreground: #10344b;
+  --border: #b7d7e8;
+  --ring: #8ed8f8;
+}
+
+body {
+  background-color: var(--color-background);
+  background-image: radial-gradient(color-mix(in oklab, var(--color-primary) 28%, transparent) 1px, transparent 1px);
+}
+
+.home-section {
+  padding-block: clamp(4.5rem, 9vw, 7.5rem);
+}
+.home-section > h2,
+.home-section > div > h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+.home-section > div > p,
+.home-section > p {
+  max-width: 42rem;
+  line-height: 1.85;
+}
+
+.playful-card {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-height: 100%;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) !important;
+  border-width: 2px;
+  border-color: var(--color-foreground);
+  background: color-mix(in oklab, var(--color-card) 94%, transparent);
+}
+.playful-card h3 { margin-top: 1rem; line-height: 1.35; }
+.playful-card p { line-height: 1.8; }
+.playful-icon { flex: 0 0 auto; }
+
+.editorial-rule { gap: clamp(1rem, 2vw, 1.5rem); }
+.editorial-rule > * { min-width: 0; }
+.editorial-rule article { gap: .25rem; }
+
+.playful-section-wash { border-color: var(--color-foreground); }
+.playful-section-wash .playful-card,
+.playful-section-wash > div > div:last-child {
+  border: 2px solid var(--color-foreground);
+  border-radius: 1.25rem;
+  box-shadow: 6px 6px 0 var(--color-primary);
+}
+
+section.border-y.border-border > div { padding-block: clamp(4rem, 8vw, 6.5rem); }
+section.border-y.border-border .playful-card { padding: 1.5rem !important; }
+
+.home-section .group h3 { line-height: 1.4; }
+.home-section .group p { line-height: 1.8; }
+
+@media (max-width: 767px) {
+  .home-section { padding-inline: 1.25rem; }
+  .home-section > h2,
+  .home-section > div > h2 { max-width: 15ch; }
+  .playful-card { padding: 1.25rem !important; }
+  .playful-section-wash { border-radius: 1.5rem; }
+  .playful-section-wash > div { padding-inline: 1.25rem; }
+}
+
   .editorial-hero { grid-template-columns: 58px minmax(0, 1fr) minmax(260px, .72fr); min-height: min(760px, calc(100svh - 4rem)); padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 5rem); background: var(--background); color: var(--foreground); border: 0; }
   .editorial-hero::before { content: ""; position: absolute; width: 26rem; height: 26rem; border-radius: 999px; background: var(--accent); inset-inline-start: 5%; top: 12%; opacity: .9; z-index: -1; }
   .editorial-hero::after { content: ""; position: absolute; width: 16rem; height: 16rem; border: 2px dashed var(--primary); border-radius: 50%; inset-inline-end: 8%; bottom: 8%; opacity: .65; }
