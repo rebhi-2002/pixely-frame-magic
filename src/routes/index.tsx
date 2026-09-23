@@ -20,7 +20,6 @@ import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
-import { HeroMockup } from "@/components/site/hero-mockup";
 import {
   LibraryTreeIllustration,
   ExamSimIllustration,
@@ -105,7 +104,7 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
+      <section className="editorial-canvas relative overflow-hidden border-b border-border">
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-16">
             <div>
@@ -185,7 +184,28 @@ function Landing() {
             </div>
 
             <Reveal delay={0.15} y={16}>
-              <HeroMockup session={session} />
+              <div className="relative mx-auto w-full max-w-lg">
+                <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-elevation-3">
+                  <img
+                    src="/media/editorial/study-desk.png"
+                    alt={t("home.editorialImageAlt", "A student studying with an open textbook and notebook")}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-t border-border p-5">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Academia / 01</p>
+                      <p className="mt-2 font-display text-lg font-bold text-foreground">{t("home.editorialCaption", "Study with intention")}</p>
+                    </div>
+                    <span className="flex size-12 items-center justify-center rounded-full border border-primary/40 text-primary" aria-hidden="true">
+                      <BookOpenCheck className="size-5" />
+                    </span>
+                  </div>
+                </div>
+                <div className="absolute -bottom-5 -start-5 hidden max-w-[12rem] rounded-2xl border border-border bg-background p-4 shadow-elevation-2 sm:block">
+                  <p className="text-xs text-muted-foreground">{t("home.editorialNote", "A calmer way to keep moving")}</p>
+                  <div className="mt-3 flex items-center gap-2 text-sm font-bold text-success"><Check className="size-4" /> {t("home.editorialStatus", "On track")}</div>
+                </div>
+              </div>
             </Reveal>
           </div>
         </div>

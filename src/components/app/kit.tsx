@@ -35,6 +35,10 @@ export function AppPage({
     <div className="app-canvas min-h-screen pb-10">
       <PageHeader title={title} icon={icon} actions={actions} />
       <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+        <div className="mb-6 hidden items-center justify-between border-b border-border pb-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-muted-foreground sm:flex">
+          <span>Academia / workspace</span>
+          <span className="text-primary">Focused learning</span>
+        </div>
         {subtitle && (
           <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{subtitle}</p>
         )}

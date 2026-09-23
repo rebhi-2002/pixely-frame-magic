@@ -332,6 +332,32 @@
   }
 }
 
+/* Academia visual direction: editorial surfaces use quiet structure instead of a wall of cards. */
+@utility editorial-canvas {
+  background:
+    linear-gradient(90deg, color-mix(in oklab, var(--color-border) 45%, transparent) 1px, transparent 1px),
+    var(--color-background);
+  background-size: 25% 100%;
+}
+
+@utility editorial-rule {
+  border-block-start: 1px solid var(--color-border);
+  border-block-end: 1px solid var(--color-border);
+}
+
+@utility image-frame {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0.65rem;
+    z-index: -1;
+    border: 1px solid color-mix(in oklab, var(--color-primary) 45%, transparent);
+    transform: translate(0.65rem, 0.65rem);
+  }
+}
+
 /* ——— سطح زجاجي (Glassmorphism) — للبطاقات فوق الخلفيات المتدرجة ——— */
 @utility glass-surface {
   background: color-mix(in oklab, var(--color-card) 62%, transparent);
