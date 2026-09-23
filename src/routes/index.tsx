@@ -251,17 +251,17 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
+      <section className="home-section mx-auto max-w-6xl px-5 py-24">
         <div className="max-w-2xl">
           <span className="text-sm font-bold text-primary">01 · {t("home.startEyebrow")}</span>
           <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
           <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
         </div>
-        <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-4">
           {([Compass, ListChecks, ClipboardCheck, Check] as const).map((Icon, i) => (
             <Reveal key={i} delay={i * 0.07}>
-              <article className="relative h-full border-s-2 border-border bg-card p-6">
-                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
+              <article className="playful-card relative h-full p-6">
+                <span className="playful-icon">
                   <Icon className="size-5" />
                 </span>
                 <span className="mt-5 block text-xs font-bold text-muted-foreground">0{i + 1}</span>
@@ -277,7 +277,7 @@ function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-primary/5">
+      <section className="home-section playful-section-wash border-y-2 border-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <span className="text-sm font-bold text-primary">02 · {t("home.freeEyebrow")}</span>
@@ -301,11 +301,11 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
+      <section className="home-section mx-auto max-w-6xl px-5 py-24">
         <h2 className="text-3xl font-bold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-        {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
+        {/* Bento grid — بطاقة ر��يسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
             (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
             بالشاشات الصغيرة عبر md:grid-cols-2، وبيصير Bento فعلي من lg وفوق. */}
         <div className="editorial-rule mt-10 grid gap-x-6 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
@@ -313,15 +313,13 @@ function Landing() {
             <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
               <article
                 className={cn(
-                  // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
-                  // نفس منطق تصحيح الإحصائيات فوق.
-                  "flex h-full flex-col border-b border-border py-8 md:min-h-64 md:px-4",
-                  f.flagship ? "bg-primary/5" : "bg-transparent",
+                  "playful-card flex h-full flex-col p-6 md:min-h-64 md:px-4",
+                  f.flagship ? "bg-primary/10" : "bg-card",
                 )}
               >
                   <span
                     className={cn(
-                      "flex size-12 items-center justify-center border border-current/20",
+                      "playful-icon",
                       f.flagship
                         ? "bg-primary text-primary-foreground"
                         : "bg-primary/10 text-primary",
@@ -353,11 +351,11 @@ function Landing() {
           {roles.map((r) => (
             <div
               key={r.key}
-              className="rounded-2xl border border-border bg-background p-6"
+              className="playful-card bg-background p-6"
               // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
               // مش رابط ولا زر — نفس المبدأ بكل الملف.
             >
-              <r.icon className="size-6 text-success" />
+              <span className="playful-icon"><r.icon className="size-5" /></span>
               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
             </div>
@@ -365,7 +363,7 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
+      <section className="home-section mx-auto max-w-6xl px-5 py-24">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold text-foreground">{t("blog.teaserTitle")}</h2>
@@ -384,7 +382,7 @@ function Landing() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="group flex h-full flex-col border-t border-foreground bg-card p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
+                className="playful-card group flex h-full flex-col p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <span className="w-fit border-s-2 border-primary px-3 py-1 text-xs font-bold text-primary group-hover:text-primary-foreground">
                   {bi(post.category, post.categoryEn)}
@@ -401,13 +399,13 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-5 py-20 text-center">
+      <section className="home-section playful-section-wash mx-auto max-w-4xl rounded-[2rem] px-5 py-24 text-center md:my-12 md:border-2 md:border-foreground md:shadow-[8px_8px_0_var(--color-primary)]">
         <h2 className="text-3xl font-bold text-foreground">{t("home.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
         <SessionCta
           to="/signup"
           label={t("home.ctaButton")}
-          className="btn-shine glow-primary hover-press mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground"
+          className="btn-shine glow-primary hover-press mt-7 inline-flex min-h-12 items-center justify-center rounded-full border-2 border-foreground bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-[4px_4px_0_var(--color-foreground)]"
         />
       </section>
 
