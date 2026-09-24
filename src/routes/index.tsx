@@ -160,21 +160,23 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
-        <div className="max-w-2xl">
-          <span className="text-sm font-bold text-primary">01 · {t("home.startEyebrow", { defaultValue: "خطوتك الأولى" })}</span>
-          <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
-          <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
+        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+          <div className="max-w-xl">
+            <span className="text-sm font-bold text-primary">01 · {t("home.startEyebrow", { defaultValue: "خطوتك الأولى" })}</span>
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-foreground sm:text-4xl">{t("home.startTitle")}</h2>
+          </div>
+          <p className="max-w-xl text-base leading-relaxed text-muted-foreground lg:pb-1">{t("home.startSub")}</p>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-4">
+        <div className="mt-12 grid divide-y divide-border border-y border-border md:grid-cols-4 md:divide-x md:divide-y-0 rtl:md:divide-x-reverse">
           {([Compass, ListChecks, ClipboardCheck, Check] as const).map((Icon, i) => (
             <Reveal key={i} delay={i * 0.07}>
-              <article className="relative h-full rounded-2xl border border-border bg-card p-6 shadow-elevation-1">
-                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <span className="mt-5 block text-xs font-bold text-muted-foreground">0{i + 1}</span>
-                <h3 className="mt-2 font-bold text-foreground">{t(`home.startSteps.${i}.title`)}</h3>
+              <article className="group h-full px-1 py-7 md:px-6 md:first:ps-0 md:last:pe-0">
+                <div className="flex items-start justify-between gap-4">
+                  <span className="font-mono text-xs font-bold text-muted-foreground">0{i + 1}</span>
+                  <Icon aria-hidden="true" className="size-5 text-primary transition-transform group-hover:-translate-y-1" />
+                </div>
+                <h3 className="mt-8 font-bold text-foreground">{t(`home.startSteps.${i}.title`)}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`home.startSteps.${i}.text`)}</p>
               </article>
             </Reveal>
@@ -182,15 +184,15 @@ function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-primary/5">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
+      <section className="border-y border-border bg-section">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center lg:px-10">
           <div>
             <span className="text-sm font-bold text-primary">02 · {t("home.freeEyebrow", { defaultValue: "ابدأ بدون مخاطرة" })}</span>
             <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.freeTitle")}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{t("home.freeSub")}</p>
             <p className="mt-5 text-sm font-semibold text-foreground">{t("home.trustNote")}</p>
           </div>
-          <div className="rounded-2xl border border-primary/20 bg-background p-6 shadow-elevation-1 lg:min-w-80">
+          <div className="border-s-4 border-primary bg-background p-6 lg:min-w-80">
             <p className="mb-4 font-bold text-foreground">{t("home.freeListTitle", { defaultValue: "يتضمن البدء المجاني:" })}</p>
             <ul className="space-y-3">
               {[0, 1, 2, 3, 4].map((i) => (
@@ -205,8 +207,10 @@ function Landing() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-20">
-        <h2 className="text-3xl font-bold text-foreground">{t("home.featuresTitle")}</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
+        <div className="grid gap-4 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+          <h2 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">{t("home.featuresTitle")}</h2>
+          <p className="max-w-2xl text-muted-foreground lg:pb-1">{t("home.featuresSub")}</p>
+        </div>
 
         {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
             (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
@@ -218,7 +222,7 @@ function Landing() {
                 className={cn(
                   // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
                   // نفس منطق تصحيح الإحصائيات فوق.
-                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
+                  "flex h-full flex-col border p-6",
                   f.flagship
                     ? "surface-mesh border-primary/30 bg-primary/5"
                     : "border-border bg-card",
@@ -257,13 +261,11 @@ function Landing() {
       </section>
 
       <section className="border-y border-border bg-card/40">
-        <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
+        <div className="mx-auto grid max-w-7xl gap-0 px-5 py-12 sm:px-8 md:grid-cols-3 lg:px-10">
           {roles.map((r) => (
             <div
               key={r.key}
-              className="rounded-2xl border border-border bg-background p-6"
-              // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
-              // مش رابط ولا زر — نفس المبدأ بكل الملف.
+              className="border-s border-border bg-background px-6 py-7 first:border-s-0"
             >
               <r.icon className="size-6 text-success" />
               <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
@@ -292,7 +294,7 @@ function Landing() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
+                className="hover-lift flex h-full flex-col border border-border bg-card p-6"
               >
                 <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
                   {bi(post.category, post.categoryEn)}
@@ -309,14 +311,18 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-5 py-20 text-center">
-        <h2 className="text-3xl font-bold text-foreground">{t("home.ctaTitle")}</h2>
+      <section className="relative mx-auto max-w-7xl overflow-hidden px-5 py-20 sm:px-8 lg:px-10">
+        <div aria-hidden="true" className="pointer-events-none absolute -end-16 top-10 size-40 rounded-full border border-primary/25" />
+        <div className="relative max-w-2xl">
+        <span className="text-sm font-bold text-primary">08 · {t("home.ctaEyebrow", { defaultValue: "خطوتك القادمة" })}</span>
+        <h2 className="mt-3 text-3xl font-bold text-foreground sm:text-4xl">{t("home.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
         <SessionCta
           to="/signup"
           label={t("home.ctaButton")}
           className="btn-shine glow-primary hover-press mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground"
         />
+        </div>
       </section>
 
       <TestimonialsSection className="border-t border-border bg-card/40" />
