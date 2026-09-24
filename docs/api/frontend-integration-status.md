@@ -17,15 +17,15 @@
 
 ## UserController (5/8 مربوطة)
 
-| Endpoint                            | مربوط؟      | ملاحظات                                                      |
-| ----------------------------------- | ----------- | ------------------------------------------------------------ |
-| `POST /api/User/GetAll`             | ✅          | `admin-users.ts: listBackendUsers()` — ترقيم صفحات حقيقي     |
-| `GET /api/User/CreateEditModal`     | ✅          | نفسها مستخدمة لجلب Genders/UserTypes بالتسجيل كمان           |
-| `POST /api/User/CreateEdit`         | ✅          | إنشاء/تعديل مستخدم من شاشة الأدمن                            |
-| `DELETE /api/User/Delete`           | ✅          |                                                              |
-| `GET /api/User/MyProfileModal`      | ✅          | `auth.ts` — أساس بناء الجلسة بعد الدخول                      |
+| Endpoint                            | مربوط؟      | ملاحظات                                                       |
+| ----------------------------------- | ----------- | ------------------------------------------------------------- |
+| `POST /api/User/GetAll`             | ✅          | `admin-users.ts: listBackendUsers()` — ترقيم صفحات حقيقي      |
+| `GET /api/User/CreateEditModal`     | ✅          | نفسها مستخدمة لجلب Genders/UserTypes بالتسجيل كمان            |
+| `POST /api/User/CreateEdit`         | ✅          | إنشاء/تعديل مستخدم من شاشة الأدمن                             |
+| `DELETE /api/User/Delete`           | ✅          |                                                               |
+| `GET /api/User/MyProfileModal`      | ✅          | `auth.ts` — أساس بناء الجلسة بعد الدخول                       |
 | `GET /api/User/ChangePasswordModal` | ⬜          | لا حاجة فعلية — النموذج ثابت (3 حقول)، ما بيرجّع شي ديناميكي  |
-| `POST /api/User/MyProfile`          | ✅ **جديد** | `auth.ts: updateMyProfile()` — كان مربوط بديمو فقط لحد الآن  |
+| `POST /api/User/MyProfile`          | ✅ **جديد** | `auth.ts: updateMyProfile()` — كان مربوط بديمو فقط لحد الآن   |
 | `POST /api/User/ChangePassword`     | ✅ **جديد** | `auth.ts: changeMyPassword()` — ما كان موجود إطلاقًا بالفرونت |
 
 ## ConstantController (4/4 مربوطة)
@@ -39,12 +39,12 @@
 
 ## PageController (4/4 مربوطة)
 
-| Endpoint                        | مربوط؟ | ملاحظات                                                                                           |
-| ------------------------------- | ------ | ------------------------------------------------------------------------------------------------- |
+| Endpoint                        | مربوط؟ | ملاحظات                                                                                            |
+| ------------------------------- | ------ | -------------------------------------------------------------------------------------------------- |
 | `POST /api/Page/GetAll`         | ✅     | `admin-pages.ts` — بدون ترقيم صفحات (قرار مقصود: أقصى 72 صف حاليًا، بنية تطبيق لا بيانات مستخدمين) |
-| `GET /api/Page/CreateEditModal` | ✅     |                                                                                                   |
-| `POST /api/Page/CreateEdit`     | ✅     |                                                                                                   |
-| `DELETE /api/Page/Delete`       | ✅     |                                                                                                   |
+| `GET /api/Page/CreateEditModal` | ✅     |                                                                                                    |
+| `POST /api/Page/CreateEdit`     | ✅     |                                                                                                    |
+| `DELETE /api/Page/Delete`       | ✅     |                                                                                                    |
 
 ## UserPermissionController (2/2 مربوطة)
 
@@ -70,11 +70,11 @@
 
 ## ParentController (3/3 مربوطة بالكود — 🔴 غير فعّالة عمليًا)
 
-| Endpoint                           | مربوط؟ | ملاحظات                                                             |
-| ---------------------------------- | ------ | ------------------------------------------------------------------- |
+| Endpoint                           | مربوط؟ | ملاحظات                                                              |
+| ---------------------------------- | ------ | -------------------------------------------------------------------- |
 | `GET /api/Parent/MyChildren`       | ✅     | `parent.ts` — بيرجع دايمًا مصفوفة فاضية (فجوة باك اند، مو خطأ فرونت) |
-| `GET /api/Parent/ChildAttendance`  | ✅     | نفس السبب                                                           |
-| `GET /api/Parent/ChildExamResults` | ✅     | نفس السبب                                                           |
+| `GET /api/Parent/ChildAttendance`  | ✅     | نفس السبب                                                            |
+| `GET /api/Parent/ChildExamResults` | ✅     | نفس السبب                                                            |
 
 **🔴 فجوة باك اند حرجة (مش شغل فرونت):**
 
@@ -104,17 +104,17 @@
 
 ## TeacherController (4/9 مربوطة)
 
-| Endpoint                            | مربوط؟      | ملاحظات                                                                                 |
-| ----------------------------------- | ----------- | --------------------------------------------------------------------------------------- |
-| `POST /api/Teacher/Search`          | ✅ **جديد** | `teachers.ts: searchTeachers()` — `/teachers`                                           |
-| `GET /api/Teacher/PublicProfile`    | ✅ **جديد** | `teachers.ts: getTeacherPublicProfile()` — `/teacher/$id`                               |
+| Endpoint                            | مربوط؟      | ملاحظات                                                                                  |
+| ----------------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
+| `POST /api/Teacher/Search`          | ✅ **جديد** | `teachers.ts: searchTeachers()` — `/teachers`                                            |
+| `GET /api/Teacher/PublicProfile`    | ✅ **جديد** | `teachers.ts: getTeacherPublicProfile()` — `/teacher/$id`                                |
 | `GET /api/Teacher/Availability`     | ✅ **جديد** | `teachers.ts: getTeacherAvailability()` — قسم "أوقات التوفّر" بـ`/teacher/$id` (عرض فقط) |
-| `POST /api/Teacher/UpdateProfile`   | ⬜          | ينتظر P1-1 (لا صف `Teacher` لحساب معلم)                                                 |
-| `POST /api/Teacher/SetAvailability` | ⬜          | ينتظر P1-1                                                                              |
+| `POST /api/Teacher/UpdateProfile`   | ⬜          | ينتظر P1-1 (لا صف `Teacher` لحساب معلم)                                                  |
+| `POST /api/Teacher/SetAvailability` | ⬜          | ينتظر P1-1                                                                               |
 | `POST /api/Teacher/GetAll`          | ⬜          | أدمن (بدون تحقق صلاحيات حاليًا — P0-1)                                                   |
-| `GET /api/Teacher/CreateEditModal`  | ⬜          | أدمن                                                                                    |
-| `POST /api/Teacher/CreateEdit`      | ⬜          | أدمن — بدون `UserId` (P1-1)                                                             |
-| `DELETE /api/Teacher/Delete`        | ⬜          | أدمن                                                                                    |
+| `GET /api/Teacher/CreateEditModal`  | ⬜          | أدمن                                                                                     |
+| `POST /api/Teacher/CreateEdit`      | ⬜          | أدمن — بدون `UserId` (P1-1)                                                              |
+| `DELETE /api/Teacher/Delete`        | ⬜          | أدمن                                                                                     |
 
 ## BookingController (0/7 — المرحلة 2)
 

@@ -2,7 +2,7 @@
 
 المشكلة الأساسية هي أن Academia عنده الآن **Design System جيد هندسيًا، لكنه ليس لديه بعد Art Direction قوي بما يكفي ليجعل المنتج يبدو كمنتج صممه فريق UI/UX له شخصية، وليس منتجًا جرى توليده وتحسينه بواسطة أدوات AI.**
 
-راجعت المستودع الحالي والوثائق الموجودة فيه، بما فيها `design-system.md` و`ui-ux-improvement-plan.md`، إضافة إلى الـSRS وSystem Design. الـSRS نفسه يضع الـUI/UX كجزء أساسي من Stage 4، مع wireframes وuser flows وinteractive prototypes، وليس مجرد تجميل للواجهة. 
+راجعت المستودع الحالي والوثائق الموجودة فيه، بما فيها `design-system.md` و`ui-ux-improvement-plan.md`، إضافة إلى الـSRS وSystem Design. الـSRS نفسه يضع الـUI/UX كجزء أساسي من Stage 4، مع wireframes وuser flows وinteractive prototypes، وليس مجرد تجميل للواجهة.
 
 [مستودع Academia على GitHub](https://github.com/rebhi-2002/pixely-frame-magic?utm_source=chatgpt.com)
 
@@ -14,20 +14,20 @@
 
 من الكود والـdocumentation الحالي، واضح أن عندك بالفعل:
 
-* semantic design tokens
-* RTL/LTR discipline
-* typography foundation
-* shared UI primitives
-* accessibility considerations
-* motion vocabulary
-* responsive considerations
-* page architecture
-* loading/error/empty states
-* dashboard archetypes
-* public/authenticated separation
-* role-based experiences
+- semantic design tokens
+- RTL/LTR discipline
+- typography foundation
+- shared UI primitives
+- accessibility considerations
+- motion vocabulary
+- responsive considerations
+- page architecture
+- loading/error/empty states
+- dashboard archetypes
+- public/authenticated separation
+- role-based experiences
 
-بل إن المشروع يوثق بالفعل استخدام Cairo / Tajawal / Reem Kufi / IBM Plex Mono، ويضع قواعد واضحة للـspacing والـmotion والـRTL. 
+بل إن المشروع يوثق بالفعل استخدام Cairo / Tajawal / Reem Kufi / IBM Plex Mono، ويضع قواعد واضحة للـspacing والـmotion والـRTL.
 
 والـ`ui-ux-improvement-plan.md` نفسه يقول صراحة إن الاتجاه الصحيح هو **refinement and systematization rather than a visual rewrite**. وهذا صحيح من الناحية الهندسية. لكنني أرى أن الخطة الحالية **ناقصة طبقة مهمة جدًا**: الـArt Direction والـVisual Identity.
 
@@ -85,18 +85,18 @@ ring
 
 لأن النموذج سيأخذ أسهل patterns الموجودة في بياناته:
 
-* rounded cards
-* gradient
-* glass
-* icon + heading
-* 3-column grid
-* generic hero
-* soft shadows
-* blue/purple palette
-* animated counters
-* generic dashboard
-* floating blobs
-* Lucide icons everywhere
+- rounded cards
+- gradient
+- glass
+- icon + heading
+- 3-column grid
+- generic hero
+- soft shadows
+- blue/purple palette
+- animated counters
+- generic dashboard
+- floating blobs
+- Lucide icons everywhere
 
 والنتيجة technically جيدة، لكن **recognizable as AI-generated**.
 
@@ -298,18 +298,18 @@ Whitespace
 
 أقترح:
 
-* authentic students
-* real learning environments
-* teachers interacting with students
-* notebooks
-* desks
-* textbooks
-* study sessions
-* university / classroom environments
-* close crops
-* hands / objects / environment
-* natural light
-* imperfect human details
+- authentic students
+- real learning environments
+- teachers interacting with students
+- notebooks
+- desks
+- textbooks
+- study sessions
+- university / classroom environments
+- close crops
+- hands / objects / environment
+- natural light
+- imperfect human details
 
 وليس:
 
@@ -428,35 +428,35 @@ export const academyMedia = {
 
 صور مرتبطة:
 
-* studying
-* books
-* notes
-* classroom
-* focus
+- studying
+- books
+- notes
+- classroom
+- focus
 
 ### 02 — Progress
 
 صور/graphics مرتبطة:
 
-* pathways
-* milestones
-* upward movement
-* completion
-* achievement
+- pathways
+- milestones
+- upward movement
+- completion
+- achievement
 
 ### 03 — Connect
 
-* teacher/student
-* collaboration
-* mentoring
-* classroom
+- teacher/student
+- collaboration
+- mentoring
+- classroom
 
 ### 04 — Grow
 
-* achievement
-* graduation
-* confidence
-* future
+- achievement
+- graduation
+- confidence
+- future
 
 وهكذا تصبح الصور جزءًا من **brand storytelling**.
 
@@ -589,10 +589,10 @@ text-sm
 
 عندك حاليًا أساس ممتاز:
 
-* Cairo
-* Tajawal
-* Reem Kufi
-* IBM Plex Mono
+- Cairo
+- Tajawal
+- Reem Kufi
+- IBM Plex Mono
 
 وهذا موجود أصلًا في الخطة الحالية.
 
@@ -625,12 +625,12 @@ Label
 
 مع:
 
-* font-size
-* line-height
-* weight
-* max-width
-* tracking
-* Arabic-specific adjustments
+- font-size
+- line-height
+- weight
+- max-width
+- tracking
+- Arabic-specific adjustments
 
 وهذا يجعل الـtypography نفسها جزءًا من الهوية.
 
@@ -702,10 +702,10 @@ Base
 
 مثلاً:
 
-* green = progress / success
-* amber = achievement / attention
-* blue = navigation / action / Academia identity
-* red = error only
+- green = progress / success
+- amber = achievement / attention
+- blue = navigation / action / Academia identity
+- red = error only
 
 وليس rainbow UI.
 
@@ -852,7 +852,7 @@ Progress
 Next learning action
 ```
 
-والـSRS بالفعل يصف workflow من اكتشاف المعلم والحجز، مرورًا بالموافقة والدفع والجدولة، وحتى الحضور وإكمال الدرس والتقييم. 
+والـSRS بالفعل يصف workflow من اكتشاف المعلم والحجز، مرورًا بالموافقة والدفع والجدولة، وحتى الحضور وإكمال الدرس والتقييم.
 
 هذا يجب أن يصبح **spine للـUX**.
 
@@ -884,16 +884,16 @@ Withdraw
 
 والـSystem Design الحالي يؤكد أن Teacher أصبح أيضًا public discovery profile، مع:
 
-* qualifications
-* experience
-* service area
-* languages
-* online/in-person
-* hourly pricing
-* profile image
-* discovery visibility
+- qualifications
+- experience
+- service area
+- languages
+- online/in-person
+- hourly pricing
+- profile image
+- discovery visibility
 
-وهذه فرصة بصرية ضخمة. 
+وهذه فرصة بصرية ضخمة.
 
 لأن **Teacher Marketplace يمكن أن يصبح أحد أكثر أجزاء Academia تميزًا بصريًا.**
 
@@ -928,7 +928,7 @@ Recent changes
 Notifications
 ```
 
-لأن الـParent لديه read-only monitoring حسب الـSRS. 
+لأن الـParent لديه read-only monitoring حسب الـSRS.
 
 وهذا يعني أن الـUX يجب أن يشعره بأنه **monitoring**, وليس learning workspace.
 
@@ -972,26 +972,26 @@ illustrations
 
 ### EdTech
 
-* Khan Academy
-* Coursera
-* edX
-* Udemy
-* Brilliant
-* Duolingo
+- Khan Academy
+- Coursera
+- edX
+- Udemy
+- Brilliant
+- Duolingo
 
 ### Teacher marketplaces
 
-* Preply
-* Superprof
-* Outschool
+- Preply
+- Superprof
+- Outschool
 
 ### Product quality references
 
-* Linear
-* Notion
-* Stripe
-* Vercel
-* Apple
+- Linear
+- Notion
+- Stripe
+- Vercel
+- Apple
 
 لكن ليس لنسخ التصميم.
 
@@ -1125,24 +1125,24 @@ stock illustration بلا علاقة بالـcontent.
 
 ### Academia feels:
 
-* intelligent
-* academic
-* human
-* focused
-* trustworthy
-* modern
-* calm
-* purposeful
+- intelligent
+- academic
+- human
+- focused
+- trustworthy
+- modern
+- calm
+- purposeful
 
 ### Academia does NOT feel:
 
-* generic SaaS
-* childish EdTech
-* corporate LMS
-* crypto dashboard
-* AI-generated landing page
-* overly gamified
-* glassmorphism-heavy
+- generic SaaS
+- childish EdTech
+- corporate LMS
+- crypto dashboard
+- AI-generated landing page
+- overly gamified
+- glassmorphism-heavy
 
 هذا يصبح **creative constraint**.
 
@@ -1205,17 +1205,17 @@ Academia References
 
 إذا كانت المنصة تستهدف المستخدم العربي، يمكن أن يكون لدينا photography أكثر واقعية:
 
-* Arabic student
-* Arabic classroom
-* Arabic teacher
-* notebooks with Arabic writing
-* local educational environments
+- Arabic student
+- Arabic classroom
+- Arabic teacher
+- notebooks with Arabic writing
+- local educational environments
 
 بدل stock photography أمريكية generic.
 
 وهذا يعطي المنتج **contextual authenticity**.
 
-خصوصًا أن الـSRS يحدد العربية كـdefault language ومتطلبات RTL/LTR كجزء من الـfrontend. 
+خصوصًا أن الـSRS يحدد العربية كـdefault language ومتطلبات RTL/LTR كجزء من الـfrontend.
 
 ---
 
@@ -1419,9 +1419,9 @@ docs/
 
 بحيث لو شلنا:
 
-* logo
-* name
-* colors
+- logo
+- name
+- colors
 
 وظلّت الصفحة أمام مصمم، يستطيع أن يقول:
 
@@ -1519,7 +1519,7 @@ reusable هندسيًا، لكن compositions متنوعة.
 
 ### خلاصة تشخيصي
 
-المشروع الحالي **ليس في حالة تستدعي رمي الـUI الحالي وإعادة بنائه**. الـengineering/design-system foundation أقوى من ذلك، والـSRS نفسه يعطي أساسًا واضحًا للأدوار والرحلات والوظائف. 
+المشروع الحالي **ليس في حالة تستدعي رمي الـUI الحالي وإعادة بنائه**. الـengineering/design-system foundation أقوى من ذلك، والـSRS نفسه يعطي أساسًا واضحًا للأدوار والرحلات والوظائف.
 
 المرحلة التالية التي أراها صحيحة هي:
 

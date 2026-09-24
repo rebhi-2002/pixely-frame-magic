@@ -4,15 +4,15 @@
 
 بما أن المحادثة تحتوي على قرارات مهمة حول Academia مثل:
 
-* المشكلة ليست نقص Design System فقط، بل **Art Direction / Visual Identity**.
-* عدم السماح للـAI بأن يقرر الـlayout والـtypography والـimagery بشكل عشوائي.
-* UX Audit كامل قبل تعديل الواجهة.
-* User Journeys لكل من Student / Teacher / Parent / Admin.
-* AI Design Anti-Patterns.
-* استخدام **صور حقيقية** وليس فقط icons / SVGs.
-* Grid وcomposition أكثر تميزاً.
-* Typography وcolor composition مقصودة.
-* الحفاظ على الكود الجيد وعدم إعادة كتابة المشروع بلا داعٍ.
+- المشكلة ليست نقص Design System فقط، بل **Art Direction / Visual Identity**.
+- عدم السماح للـAI بأن يقرر الـlayout والـtypography والـimagery بشكل عشوائي.
+- UX Audit كامل قبل تعديل الواجهة.
+- User Journeys لكل من Student / Teacher / Parent / Admin.
+- AI Design Anti-Patterns.
+- استخدام **صور حقيقية** وليس فقط icons / SVGs.
+- Grid وcomposition أكثر تميزاً.
+- Typography وcolor composition مقصودة.
+- الحفاظ على الكود الجيد وعدم إعادة كتابة المشروع بلا داعٍ.
 
 فإرسالها لـClaude مفيد جداً، خصوصاً إذا كان Claude سيعمل مباشرة على الـrepository.
 
@@ -106,26 +106,26 @@ Do not start changing components until the audit and design direction are establ
 
 Identify unnecessary or repetitive use of:
 
-* identical cards everywhere
-* icon + title + description patterns
-* generic 3-column grids
-* excessive rounded containers
-* excessive borders
-* excessive gradients
-* excessive glassmorphism
-* decorative blobs
-* meaningless visual effects
-* centered headings everywhere
-* identical page structures
-* generic SaaS dashboard layouts
-* excessive dashboard statistics
-* excessive blue glow / dark SaaS aesthetics
-* animation without a UX purpose
-* generic stock illustrations
-* excessive SVG-only visual communication
-* every section having the same visual density
-* every CTA being visually emphasized
-* components looking like they were generated from a component library rather than composed intentionally
+- identical cards everywhere
+- icon + title + description patterns
+- generic 3-column grids
+- excessive rounded containers
+- excessive borders
+- excessive gradients
+- excessive glassmorphism
+- decorative blobs
+- meaningless visual effects
+- centered headings everywhere
+- identical page structures
+- generic SaaS dashboard layouts
+- excessive dashboard statistics
+- excessive blue glow / dark SaaS aesthetics
+- animation without a UX purpose
+- generic stock illustrations
+- excessive SVG-only visual communication
+- every section having the same visual density
+- every CTA being visually emphasized
+- components looking like they were generated from a component library rather than composed intentionally
 
 ### Visual direction
 
@@ -137,25 +137,25 @@ Instead, determine how the existing system can be refined into a stronger visual
 
 The visual language should communicate:
 
-* intelligent
-* academic
-* human
-* focused
-* trustworthy
-* modern
-* calm
-* purposeful
+- intelligent
+- academic
+- human
+- focused
+- trustworthy
+- modern
+- calm
+- purposeful
 
 Avoid making it feel:
 
-* generic SaaS
-* generic LMS
-* childish EdTech
-* corporate enterprise software
-* crypto/AI dashboard
-* generic AI-generated landing page
-* excessively gamified
-* excessively glassmorphic
+- generic SaaS
+- generic LMS
+- childish EdTech
+- corporate enterprise software
+- crypto/AI dashboard
+- generic AI-generated landing page
+- excessively gamified
+- excessively glassmorphic
 
 ### Imagery
 
@@ -163,18 +163,18 @@ I specifically want Academia to use actual photography and meaningful imagery, n
 
 Research and define:
 
-* what types of photography fit Academia
-* when photography should be used
-* when illustrations should be used
-* image aspect ratios
-* cropping rules
-* image treatment
-* placement within layouts
-* overlays
-* subject positioning
-* RTL-aware composition
-* authentic educational contexts
-* how imagery should support the user's task rather than merely decorate the page
+- what types of photography fit Academia
+- when photography should be used
+- when illustrations should be used
+- image aspect ratios
+- cropping rules
+- image treatment
+- placement within layouts
+- overlays
+- subject positioning
+- RTL-aware composition
+- authentic educational contexts
+- how imagery should support the user's task rather than merely decorate the page
 
 Avoid generic "student with laptop" stock imagery unless there is a strong reason.
 
@@ -184,20 +184,20 @@ Do not assume every page should use the same structure.
 
 Define page archetypes and composition rules for at least:
 
-* Student
-* Teacher
-* Parent
-* Admin
-* Public / Marketing
-* Authentication
-* Course / Teacher discovery
-* Course / teacher detail
-* Booking / scheduling
-* Learning experience
-* Assessment / exam
-* Progress
-* Financial / wallet
-* Operational admin interfaces
+- Student
+- Teacher
+- Parent
+- Admin
+- Public / Marketing
+- Authentication
+- Course / Teacher discovery
+- Course / teacher detail
+- Booking / scheduling
+- Learning experience
+- Assessment / exam
+- Progress
+- Financial / wallet
+- Operational admin interfaces
 
 Use the existing 12-column/grid foundations where appropriate, but investigate asymmetric composition, varied column spans, editorial layouts, image-led sections, and intentional whitespace.
 
@@ -205,16 +205,16 @@ Use the existing 12-column/grid foundations where appropriate, but investigate a
 
 Audit the current typography system and determine:
 
-* display typography
-* page headings
-* section headings
-* body
-* UI labels
-* metadata
-* numbers / metrics
-* Arabic typography
-* English typography
-* technical typography where appropriate
+- display typography
+- page headings
+- section headings
+- body
+- UI labels
+- metadata
+- numbers / metrics
+- Arabic typography
+- English typography
+- technical typography where appropriate
 
 Do not introduce fonts simply because they are fashionable.
 
@@ -258,11 +258,11 @@ Create a structured audit containing:
 
 For every major recommendation, distinguish between:
 
-* Existing repository evidence
-* Requirement/SRS evidence
-* UX best practice
-* Visual/art-direction recommendation
-* Your own inference
+- Existing repository evidence
+- Requirement/SRS evidence
+- UX best practice
+- Visual/art-direction recommendation
+- Your own inference
 
 Do not invent requirements that are not supported by the repository or SRS.
 
@@ -290,17 +290,17 @@ ACADEMIA-DESIGN-CONTEXT.md
 
 بحيث لا يكون transcript للمحادثة، بل **Design Brief احترافي** يستخرج منه:
 
-* القرارات التي اتخذناها
-* المشاكل المكتشفة
-* المبادئ
-* الـUX audit framework
-* Art Direction
-* Visual Identity
-* AI anti-patterns
-* imagery strategy
-* typography
-* layout
-* المطلوب من Claude
-* وما **يمنع** Claude من تغييره
+- القرارات التي اتخذناها
+- المشاكل المكتشفة
+- المبادئ
+- الـUX audit framework
+- Art Direction
+- Visual Identity
+- AI anti-patterns
+- imagery strategy
+- typography
+- layout
+- المطلوب من Claude
+- وما **يمنع** Claude من تغييره
 
 وهذا سيكون أفضل بكثير من إرسال transcript طويل كما هو.

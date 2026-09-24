@@ -43,10 +43,7 @@ function alternateLinks(pathname) {
   ].join("\n");
 }
 
-const paths = [
-  ...publicPaths,
-  ...blogSlugs.map((slug) => `/blog/${encodeURIComponent(slug)}`),
-];
+const paths = [...publicPaths, ...blogSlugs.map((slug) => `/blog/${encodeURIComponent(slug)}`)];
 const urls = [];
 for (const pathname of paths) {
   for (const lang of ["ar", "en"]) {
