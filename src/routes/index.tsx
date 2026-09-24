@@ -101,89 +101,62 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
-            <div>
-              <span className="glass-surface inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-primary shadow-elevation-1">
-                <Trophy className="size-4" />
-                {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
-              </span>
-
-              {session && role ? (
-                <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
-                    {t(`home.signedIn.${role}.h1`)}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t(`home.signedIn.${role}.sub`)}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
-                    <Link
-                      to={session.home}
-                      className="glow-primary hover-press inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
-                    >
-                      <LayoutDashboard className="size-4" />
-                      {t("home.signedIn.cta")}
-                    </Link>
-                    {canBrowseCourses && (
-                      <Link
-                        to="/courses"
-                        className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
-                      >
-                        {t("home.signedIn.browse")}
-                      </Link>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
-                    {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
-                    {t("home.h1c")}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t("home.sub")}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
-                    <Link
-                      to="/signup"
-                      className="btn-shine glow-primary hover-press inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
-                    >
-                      {t("home.ctaPrimary")}
-                    </Link>
-                    <Link
-                      to="/how-it-works"
-                      className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
-                    >
-                      {t("home.ctaSecondary")}
-                    </Link>
-                  </div>
-                </>
-              )}
-
-              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
-                {stats.map((s, i) => (
-                  <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
-                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
-                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
-                      <p className="font-display text-3xl font-bold text-primary">
-                        <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`home.stats.${s.key}`)}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0A0F1C] text-[#F3F1EA]">
+        <div aria-hidden="true" className="pointer-events-none absolute -end-24 -top-24 size-72 rounded-full border border-[#F0A62E]/25 sm:size-96" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-20 start-[42%] size-44 rounded-full bg-[#F0A62E]/10 blur-3xl" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:px-10">
+          <div className="max-w-2xl">
+            <div className="mb-7 flex items-center gap-3 text-sm font-semibold text-[#F0A62E]">
+              <span aria-hidden="true" className="h-px w-10 bg-[#F0A62E]" />
+              <Trophy className="size-4" />
+              {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
             </div>
 
-            <Reveal delay={0.15} y={16}>
-              <HeroMockup session={session} />
-            </Reveal>
+            {session && role ? (
+              <>
+                <h1 className="font-display text-4xl font-bold leading-[1.18] tracking-tight sm:text-5xl md:text-6xl">
+                  {t(`home.signedIn.${role}.h1`)}
+                </h1>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#A6B0C3]">
+                  {t(`home.signedIn.${role}.sub`)}
+                </p>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Link to={session.home} className="hover-press inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#F0A62E] px-6 py-3 text-sm font-bold text-[#0A0F1C]">
+                    <LayoutDashboard className="size-4" />
+                    {t("home.signedIn.cta")}
+                  </Link>
+                  {canBrowseCourses && <Link to="/courses" className="hover-press inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-bold text-[#F3F1EA] hover:bg-white/10">{t("home.signedIn.browse")}</Link>}
+                </div>
+              </>
+            ) : (
+              <>
+                <h1 className="font-display text-4xl font-bold leading-[1.12] tracking-tight sm:text-5xl md:text-7xl">
+                  {t("home.h1a")} <span className="text-[#F0A62E]">{t("home.h1b")}</span>{" "}{t("home.h1c")}
+                </h1>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#A6B0C3]">{t("home.sub")}</p>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Link to="/signup" className="hover-press inline-flex min-h-12 items-center justify-center rounded-lg bg-[#F0A62E] px-7 py-3 text-sm font-bold text-[#0A0F1C]">{t("home.ctaPrimary")}</Link>
+                  <Link to="/how-it-works" className="hover-press inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 px-7 py-3 text-sm font-bold text-[#F3F1EA] hover:bg-white/10">{t("home.ctaSecondary")}</Link>
+                </div>
+              </>
+            )}
+
+            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6">
+              {stats.map((s) => (
+                <div key={s.key}>
+                  <p className="font-display text-2xl font-bold text-[#F3F1EA]"><AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} /></p>
+                  <p className="mt-1 text-xs text-[#A6B0C3]">{t(`home.stats.${s.key}`)}</p>
+                </div>
+              ))}
+            </div>
           </div>
+
+          <Reveal delay={0.15} y={16}>
+            <div className="relative lg:-me-8">
+              <div aria-hidden="true" className="absolute -end-5 top-8 h-32 w-32 rounded-full border border-[#3E8EDE]/40" />
+              <HeroMockup session={session} />
+            </div>
+          </Reveal>
         </div>
       </section>
 
