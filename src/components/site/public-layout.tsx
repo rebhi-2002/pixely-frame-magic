@@ -87,8 +87,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         className={cn(
           "sticky top-0 z-40 border-b transition-all duration-300",
           scrolled
-            ? "shadow-elevation-2 border-border bg-background/85 backdrop-blur"
-            : "border-transparent bg-transparent",
+            ? "shadow-elevation-2 border-border bg-background/90 backdrop-blur"
+            : "border-border/70 bg-background/90 backdrop-blur",
         )}
       >
         <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -212,12 +212,13 @@ export function PublicLayout({ children }: { children: ReactNode }) {
       </main>
 
       <footer className="border-t border-border bg-card/40">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-sm space-y-3">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[1.1fr_1.9fr] lg:px-10">
+          <div className="relative max-w-md pe-8">
+            <span aria-hidden="true" className="absolute -start-5 top-0 size-3 rounded-full bg-primary" />
             <BrandMark />
-            <p className="text-sm text-muted-foreground">{t("nav.tagline")}</p>
+            <p className="mt-4 max-w-xs text-sm leading-7 text-muted-foreground">{t("nav.tagline")}</p>
           </div>
-          <div className="grid grid-cols-2 gap-8 text-sm">
+          <div className="grid grid-cols-2 gap-8 text-sm sm:grid-cols-3">
             <div className="space-y-2">
               <p className="font-bold text-foreground">{t("nav.platform")}</p>
               {visible(footerPlatform).map((i) => (
