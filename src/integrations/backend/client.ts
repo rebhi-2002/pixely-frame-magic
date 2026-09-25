@@ -192,6 +192,7 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
 export const apiClient = {
   get: <T>(path: string) => request<T>(path, { method: "GET" }),
   post: <T>(path: string, json?: unknown) => request<T>(path, { method: "POST", json }),
+  put: <T>(path: string, json?: unknown) => request<T>(path, { method: "PUT", json }),
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
   /** لـ endpoints [FromForm] (زي رفع الملفات) — بدون Content-Type يدوي حتى
    * يحدد المتصفح boundary الـ multipart تلقائيًا. */
