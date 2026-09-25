@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
@@ -14,7 +14,7 @@ import {
 } from "@/lib/supervisor-oversight.functions";
 import { listContentItems } from "@/lib/teacher-teaching.functions";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const description = "جودة التعليم عبر المعلمين والصفوف: تنبيهات، متابعات، ومؤشرات إتقان.";
 
@@ -43,6 +43,7 @@ function PageRoute() {
 }
 
 function Body() {
+  const queryClient = useQueryClient();
   const bi = useBi();
   const fetchTeachers = useServerFn(listTeacherPerformance);
   const fetchStudents = useServerFn(listStudentRisk);
@@ -65,6 +66,8 @@ function Body() {
     studentsQuery.isLoading ||
     contentQuery.isLoading ||
     reportsQuery.isLoading;
+  const hasError =
+    teachersQuery.isError || studentsQuery.isError || contentQuery.isError || reportsQuery.isError;
   const teachers = useMemo(() => teachersQuery.data ?? [], [teachersQuery.data]);
   const students = useMemo(() => studentsQuery.data ?? [], [studentsQuery.data]);
   const content = useMemo(() => contentQuery.data ?? [], [contentQuery.data]);
@@ -141,7 +144,21 @@ function Body() {
         ]}
       />
 
-      {isLoading ? (
+      {hasError ? (
+        <ErrorState
+          title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
+      ) : isLoading ? (
         <LoadingState
           label={bi("جارٍ التحميل…", "Loading…")}
           className="border-none bg-transparent"

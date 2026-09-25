@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AppPage, StatGrid, Panel, RowList, QuickLinks, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
@@ -16,7 +16,7 @@ import {
   listQuizItems,
   listTeacherCourses,
 } from "@/lib/teacher-teaching.functions";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const description = "صفوفك اليوم: ما يحتاج تصحيحاً، أسئلة تنتظر جوابك، وأداء طلابك.";
 
@@ -45,6 +45,7 @@ function PageRoute() {
 }
 
 function Body() {
+  const queryClient = useQueryClient();
   const bi = useBi();
   const userId = getStoredUserId();
 
@@ -66,6 +67,8 @@ function Body() {
     contentQuery.isLoading ||
     quizzesQuery.isLoading ||
     questionsQuery.isLoading;
+  const hasError =
+    coursesQuery.isError || contentQuery.isError || quizzesQuery.isError || questionsQuery.isError;
   const courses = useMemo(() => coursesQuery.data ?? [], [coursesQuery.data]);
   const content = useMemo(() => contentQuery.data ?? [], [contentQuery.data]);
   const quizzes = useMemo(() => quizzesQuery.data ?? [], [quizzesQuery.data]);
@@ -129,7 +132,21 @@ function Body() {
         />
       )}
 
-      {isLoading ? (
+      {hasError ? (
+        <ErrorState
+          title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
+      ) : isLoading ? (
         <LoadingState
           label={bi("جارٍ التحميل…", "Loading…")}
           className="border-none bg-transparent"

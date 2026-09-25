@@ -20,7 +20,8 @@ import { useBi } from "@/lib/bi";
 import { cn } from "@/lib/utils";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
+import { Guard } from "@/components/app/guard";
 
 export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")({
   head: () =>
@@ -35,7 +36,11 @@ export const Route = createFileRoute("/_authenticated/role-permissions/$roleId")
         description: "A three-level permission tree: module, then page, then view/add/edit tools.",
       },
     ),
-  component: RolePermissionsPage,
+  component: () => (
+    <Guard pageKey="admin_roles">
+      <RolePermissionsPage />
+    </Guard>
+  ),
 });
 
 function collectPages(pages: TreePage[]): TreePage[] {
@@ -53,7 +58,7 @@ function RolePermissionsPage() {
   const [granted, setGranted] = useState<Set<string>>(new Set());
   const [openModules, setOpenModules] = useState<Set<string>>(new Set());
 
-  const { data, isLoading } = useQuery<PermissionMatrix>({
+  const { data, isLoading, isError, isFetching, refetch } = useQuery<PermissionMatrix>({
     queryKey: ["permission-matrix", roleId],
     queryFn: () => fetchMatrix({ data: { roleId } }),
   });
@@ -123,6 +128,28 @@ function RolePermissionsPage() {
       }
     if (!on) return "none";
     return on === total ? "all" : "some";
+  }
+
+  if (isError) {
+    return (
+      <div>
+        <PageHeader title={bi("الصلاحيات", "Permissions")} icon="ShieldCheck" />
+        <ErrorState
+          title={bi("ما قدرنا نحمّل الصلاحيات", "Couldn't load permissions")}
+          description={bi(
+            "جرّب تاني بعد شوي. إذا استمرت المشكلة، ارجع لصفحة الأدوار وحاول من جديد.",
+            "Please try again shortly. If it persists, go back to the roles page and retry.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Retry")}
+              onClick={() => refetch()}
+              loading={isFetching}
+            />
+          }
+        />
+      </div>
+    );
   }
 
   if (isLoading || !data) {

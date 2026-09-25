@@ -8,7 +8,7 @@ import { listRoles } from "@/lib/rbac.functions";
 import { useBi } from "@/lib/bi";
 
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 export const Route = createFileRoute("/_authenticated/admin/permissions")({
   head: () =>
@@ -32,14 +32,30 @@ export const Route = createFileRoute("/_authenticated/admin/permissions")({
 function PermissionsMatrixPage() {
   const bi = useBi();
   const fetchRoles = useServerFn(listRoles);
-  const { data, isLoading } = useQuery({ queryKey: ["roles"], queryFn: () => fetchRoles() });
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
+    queryKey: ["roles"],
+    queryFn: () => fetchRoles(),
+  });
 
   return (
     <div className="pb-24">
       <PageHeader icon="ShieldCheck" title={bi("مصفوفة الصلاحيات", "Permission matrix")} />
 
       <div className="px-4 py-5 md:px-6">
-        {isLoading ? (
+        {isError ? (
+          <ErrorState
+            className="border-none"
+            title={bi("ما قدرنا نحمّل الأدوار", "Couldn't load roles")}
+            description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+            action={
+              <RetryButton
+                label={bi("إعادة المحاولة", "Retry")}
+                onClick={() => refetch()}
+                loading={isFetching}
+              />
+            }
+          />
+        ) : isLoading ? (
           <LoadingState
             label={bi("جارٍ التحميل…", "Loading…")}
             className="border-none bg-transparent"

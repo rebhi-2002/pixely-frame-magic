@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { UserPlus } from "lucide-react";
 import { AppPage, StatGrid, Panel, RowList, Progress, EmptyState } from "@/components/app/kit";
@@ -10,7 +10,7 @@ import { useBi } from "@/lib/bi";
 import { TrendChart } from "@/components/app/charts";
 import { getChildReport } from "@/lib/supervisor-oversight.functions";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const description = "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.";
 
@@ -40,11 +40,39 @@ function PageRoute() {
 
 function Body() {
   const bi = useBi();
+  const queryClient = useQueryClient();
   const fetchReport = useServerFn(getChildReport);
-  const { data: report, isLoading } = useQuery({
+  const {
+    data: report,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["child-report"],
     queryFn: () => fetchReport(),
   });
+
+  // مهم: هالفحص لازم قبل "!report" تحت — فشل الجلب بيخلي report=undefined
+  // بالضبط متل حالة "ما في ابن مرتبط بعد"، وبدونه كان بيظهر لولي أمر حقيقي
+  // رسالة "اربط أول ابن" غلط تمامًا وقت انقطاع فعلي بالاتصال.
+  if (isError) {
+    return (
+      <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
+        <ErrorState
+          title={bi("ما قدرنا نحمّل التقرير", "Couldn't load the report")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
+      </AppPage>
+    );
+  }
 
   if (isLoading) {
     return (
