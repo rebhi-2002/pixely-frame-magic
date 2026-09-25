@@ -1,5 +1,36 @@
 # Changelog
 
+## 21 سبتمبر — تشخيص شامل: لماذا صفحات أدمن حقيقية تظهر فاضية + إصلاحات
+
+- **السبب الجذري موثَّق بالكامل**: عشر ملفات `lib/*.functions.ts` (rbac، منهج، بلاغات،
+  تقييم طالب، متابعة معلم، إشراف...) محمية عمدًا بـ`requireAuth` لحسابات الدخول السريع
+  فقط (قرار أمان مقصود)، وكان 39 من 40 مستهلك لهالدوال يتجاهل فشل الجلب بصمت.
+  التفاصيل والقائمة الكاملة: `docs/operations/2026-09-21-role-space-silent-failures-audit.md`.
+- **13 ملف أُصلح هالجولة**: `modules-manager`، `roles-manager`، `role-permissions.$roleId`
+  (+ Guard كان ناقص كليًا)، `admin.permissions`، `admin-dashboard`، `community-reports-manager`،
+  `content-review-manager`، `teacher-verification-manager`، `curriculum-manager`،
+  `curriculum-requests-manager`، `teacher.dashboard`، `supervisor.dashboard`، `parent.report`
+  (كانت تعرض رسالة غلط "اربط أول ابن" بدل خطأ اتصال حقيقي).
+- **القائمة الجانبية للأدمن**: صارت تعرض صفحات الإدارة فقط (`buildFullAdminAccess`)،
+  بدون مساحات الطالب/المعلم/الإشراف الأكاديمي/ولي الأمر — الوصول المباشر بالرابط كان
+  أصلًا محجوبًا (`ROLE_PAGE_PREFIXES.admin`)، هالتعديل يوقف تعارض القائمة مع الواقع فقط.
+- **تحقّق شامل من Guard/403**: كل `<Guard pageKey>` بالمشروع (~120 مسار) يطابق سجل
+  `PAGES` تمامًا، صفر تعارض. الاستثناء الوحيد (`role-permissions.$roleId` بلا Guard)
+  أُصلح.
+- **تحقيق خطأ تعديل صلاحيات المستخدم** ("Password required" عند التعديل): الكود الحالي
+  بالباك اند (حتى بدون أي patch) فيه أصلًا `ModelState.Remove("Password")` الصحيح لحالة
+  التعديل — الخطأ لا يُفسَّر من الكود المرفوع، الأرجح أن الخادم المنشور لسا ما تحدّث.
+- **`bookings.ts` و`lessons.ts`**: طبقة ربط جاهزة (أنواع + دوال) بدون واجهة بعد — بانتظار
+  P0-1/P1-1 (خطر عرض حجز حي ضد معلم بلا حساب مرتبط). أثناء بنائها تبيّن `apiClient` ما
+  فيه `put` أصلًا رغم إن `Lesson/Update`/`ConfigureMeeting` بالباك اند `[HttpPut]` — أُضيفت.
+- **تنظيف**: حذف `teacherPhotoPath`/`courseCoverPath` من `public-catalog-data.ts` (كود ميت
+  مؤكَّد — استبدلناهم بتدرّج لوني/أيقونة بجولة ربط الكورسات). فحصت 24 تصدير آخر يبدو غير
+  مستخدَم؛ أغلبها تحضير مقصود لميزات لسا ما لها واجهة (بنفس نمط bookings.ts/lessons.ts)
+  وليس كودًا ميتًا، فتُركت بدون حذف افتراضي.
+- **`docs/design/brand-guidelines.md`**: ملف جديد يوثّق قرار الشعار (لون ذهبي ثابت،
+  مش يتبع الثيم) والـhex الدقيقة، مستخرج من تقريري 15 سبتمبر — كان `brand-logo.tsx` يشير
+  لملف غير موجود.
+
 ## 21 سبتمبر — إتمام ربط ما كان جاهزًا بالباك اند وغير مربوط
 
 - **صفحة جديدة `/course/$id`** (تفاصيل كورس) على `Course/GetById` الجاهزة أصلًا بدون واجهة.
