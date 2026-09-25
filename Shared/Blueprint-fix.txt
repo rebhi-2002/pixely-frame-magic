@@ -1,0 +1,274 @@
+بالضبط. وهذا تصحيح جوهري على الـBlueprint السابق. النسخة السابقة ما زالت تنطلق جزئيًا من الـHome الحالية كمرجع بصري، بينما المطلوب منك الآن مختلف:
+
+نحن لا نريد تحسين التصميم الحالي؛ نريد إعادة تصميم تجربة الـHome من الصفر، مع اعتبار الكود والمحتوى الحاليين مصادر معلومات فقط، وليسوا مرجعًا بصريًا.
+
+وهذا هو الأسلوب الصحيح إذا أردنا نتيجة تبدو كعمل UI/UX Designer + Product Designer + Frontend Engineer وليس كـAI أخذ UI موجود وغيّر ألوانه.
+
+التغيير الذي سأعتمده 
+
+لن يكون عندنا بعد الآن قاعدة:
+
+"Hero Mockup موجود، إذن نحافظ عليه ونحسنه."
+
+بل:
+
+هل يحتاج Hero أصلًا إلى Mockup؟
+
+وقد تكون الإجابة:
+
+صورة حقيقية + typography Screenshot حقيقي من المنصة صورة + جزء من UI composition تحريري صورة كبيرة مع overlay visual storytelling أو حتى لا صورة إطلاقًا إذا كان المحتوى أقوى بدونها. 
+
+ونفس الشيء ينطبق على كل Section.
+
+ما الذي يجب أن يتغير في الملف؟ 
+
+أريد أن نرفع مستوى الوثيقة من:
+
+Redesign Blueprint
+
+إلى:
+
+ACADEMIA — HOME PAGE UX/UI DESIGN AUDIT & ART DIRECTION 
+
+بحيث لا نفترض أي عنصر موجود حاليًا.
+
+القاعدة الأساسية الجديدة Current code ≠ Design reference 
+
+الكود الحالي نستخدمه لمعرفة:
+
+ما الذي يقدمه المنتج ما المحتوى الموجود ما الـfeatures الحقيقية ما الـroutes ما الـdata ما الـcomponents القابلة لإعادة الاستخدام 
+
+لكن لا نستخدمه لتحديد شكل التصميم الجديد.
+
+منهجية كل Section 
+
+لكل قسم سنعمل بهذا التسلسل:
+
+01 — UX Purpose 
+
+لماذا هذا القسم موجود أصلًا؟
+
+ما السؤال الذي يجب أن يجيب عليه للمستخدم؟
+
+02 — User Need 
+
+ما الذي يحتاج المستخدم معرفته في هذه اللحظة؟
+
+وليس:
+
+ماذا نريد نحن أن نخبره؟
+
+03 — Content Audit 
+
+نراجع كل النصوص:
+
+KEEP REWRITE REMOVE MERGE NEW 
+
+ونمنع النصوص التقنية أو التسويقية غير المفيدة.
+
+04 — Information Hierarchy 
+
+نحدد:
+
+Primary message Secondary message Supporting information CTA Optional information 
+
+حتى لا يكون كل شيء بنفس الأهمية.
+
+05 — Visual Concept 
+
+هنا يبدأ التصميم الحقيقي.
+
+نسأل:
+
+ما أقوى طريقة بصرية لشرح هذه الفكرة؟
+
+والخيارات ليست فقط:
+
+Card SVG Icon Gradient Mockup 
+
+بل:
+
+Photography Real product screenshot Editorial composition Typographic composition Image crop Collage Geometric framing Data visualization Product interaction Illustration عندما تكون ضرورية White/negative space 06 — Image Direction 
+
+إذا احتاج صورة، نحدد نوعها قبل توليدها:
+
+Subject Environment Camera angle Lighting Composition Crop Aspect ratio Color treatment Relationship with typography Relationship with background 
+
+وبالتالي عندما نولد صورة، لن تكون:
+
+"صورة طالب يدرس"
+
+بل Asset له وظيفة تصميمية محددة.
+
+07 — Placement 
+
+لا نفترض أن الصورة يجب أن تكون بجانب النص.
+
+نقرر:
+
+foreground background full bleed edge crop overlap behind typography inside frame split composition masked floating 
+
+وإذا لم يكن هناك سبب لوضع صورة:
+
+No image.
+
+08 — Geometry 
+
+Playful Geometric هنا تصبح لغة بصرية وليست مجموعة جاهزة من:
+
+circle triangle squiggle blob 
+
+نسأل:
+
+هل الشكل يخدم composition؟
+
+إذا لا:
+
+يحذف.
+
+09 — UI Elements 
+
+نفس الشيء:
+
+لا:
+
+"نحتاج Card هنا."
+
+بل:
+
+هل يحتاج المستخدم Card أصلًا؟
+
+قد يكون الأفضل:
+
+قائمة timeline editorial block screenshot split layout large statement interactive selector 10 — Motion 
+
+الحركة يجب أن يكون لها سبب:
+
+feedback orientation storytelling hierarchy continuity 
+
+وليس:
+
+animate-float لأن الموقع يبدو أكثر AI.
+
+وبالنسبة للـSVG 
+
+هنا أريد تعديلًا مهمًا على كلامي السابق.
+
+لن يكون لدينا:
+
+"احتفظ بالـSVG إذا كان مفيدًا."
+
+بل بالنسبة لهذا الـredesign:
+
+SVG ليس default visual asset. 
+
+إذا كان هناك SVG:
+
+يجب أن يكون له وظيفة UX أو communication واضحة.
+
+أما:
+
+decorative SVG abstract wave random blob generic illustration icon replacing a meaningful visual geometric filler 
+
+فالأصل:
+
+REMOVE.
+
+ولا نستبدله تلقائيًا بصورة.
+
+قد يكون البديل:
+
+لا شيء.
+
+وهذه نقطة مهمة جدًا في التصميم الاحترافي.
+
+والأهم: الصور 
+
+أنا متفق معك أن Academia يجب ألا تبدو كـdashboard template.
+
+لكن أيضًا لا أريد أن نقع في الطرف الآخر:
+
+"كل قسم لازم نحط فيه صورة."
+
+هذا سيجعل الموقع يبدو كـstock-photo website.
+
+لذلك سيكون عندنا Visual Budget لكل صفحة.
+
+مثلاً:
+
+القسم Visual treatment Hero Hero-level visual Learning Journey Visual storytelling Features Product evidence Roles Contextual photography/product Blog Editorial imagery CTA Typography + geometry فقط 
+
+يعني الصورة تظهر حيث تضيف معنى.
+
+مثال: Hero 
+
+بدل القرار السابق:
+
+احتفظ بالـHero Mockup وأعد تصميمه.
+
+القرار الجديد سيكون:
+
+Hero — Design Exploration 
+
+نختبر أولًا 3 compositions:
+
+A — Photography-led
+
+النص صورة طالب/بيئة تعليمية كبيرة ومقصوصة 
+
+B — Product-led
+
+النص Screenshot حقيقي من Academia 
+
+C — Hybrid
+
+النص صورة حقيقية + جزء product UI 
+
+ثم نقارنها وفق:
+
+clarity emotional connection product communication brand differentiation visual hierarchy Arabic RTL composition mobile behavior 
+
+وليس وفق:
+
+أيهم أجمل؟
+
+وهنا يبدأ شغل الـUI/UX الحقيقي.
+
+وحتى الـPlayful Geometric Prompt نفسه 
+
+لن نطبقه كما هو.
+
+الـPrompt الذي أرسلته ممتاز كـمصدر visual vocabulary، لكنه إذا طُبق حرفيًا سيخرج غالبًا:
+
+Startup landing page generated by AI.
+
+لأن فيه وصفًا جاهزًا جدًا لـ:
+
+Candy Button Sticker Card hard shadow confetti blob wiggle bounce marquee 
+
+لو استخدمنا كل هذه الأشياء معًا، سنحصل على Style Explosion وليس Academia.
+
+لذلك سيكون عندنا:
+
+Academia Visual Language Playful Geometric + Editorial Design + Arabic Typography + Educational Photography + Real Product Evidence + Restrained Motion + Academia Color Identity 
+
+وليس:
+
+Playful Geometric Prompt ↓ Apply Everything إذن نعم، الملف السابق يحتاج إعادة بناء 
+
+وأنا لا أنصحك بتطبيقه على Claude بصورته الحالية.
+
+نحتاج إصدارًا V2 يكون أعمق بكثير، ومبنيًا على مبدأ:
+
+Design from user need → content → composition → visual asset → interaction → implementation.
+
+وليس:
+
+Existing component → restyle component.
+
+والـHome فقط ستكون موضوع الملف.
+
+وبعد إنهائها، ننتقل للصفحة التالية بنفس المنهج من الصفر، ثم التي بعدها، وبعد اكتمال الصفحات نعمل قرار الـOne-page النهائي.
+
+هذا سيعطيك فرصة فعلية للوصول إلى تصميم له شخصية Academia بدل أن يكون مجرد UI محسّن عن النسخة التي صنعها AI.
+
