@@ -1,4 +1,5 @@
 # Academia — Home Page UI/UX & Visual Redesign Blueprint
+
 ## Phase 01 — Audit the Home Page before merging the public site into one page
 
 > Status: Design decision document — no implementation code.
@@ -281,6 +282,7 @@ Keep.
 Secondary:
 
 Current:
+
 > شوف كيف بتبدأ
 
 Change conceptually to an anchor action:
@@ -1073,16 +1075,16 @@ Not every section needs an image.
 
 Recommended:
 
-| Section | Image? | Reason |
-|---|---|---|
-| Hero | Product visual | Product evidence |
-| Learning Journey | Optional illustration | Explain process |
-| Free Start | No | Functional conversion section |
-| Features | Yes | Product evidence / contextual imagery |
-| Roles | Yes | Show different experiences |
-| Blog | Yes | Editorial content |
-| Final CTA | No | Keep conclusion focused |
-| Testimonials | Only when real | Real people/proof |
+| Section          | Image?                | Reason                                |
+| ---------------- | --------------------- | ------------------------------------- |
+| Hero             | Product visual        | Product evidence                      |
+| Learning Journey | Optional illustration | Explain process                       |
+| Free Start       | No                    | Functional conversion section         |
+| Features         | Yes                   | Product evidence / contextual imagery |
+| Roles            | Yes                   | Show different experiences            |
+| Blog             | Yes                   | Editorial content                     |
+| Final CTA        | No                    | Keep conclusion focused               |
+| Testimonials     | Only when real        | Real people/proof                     |
 
 ---
 
@@ -1200,15 +1202,19 @@ Use one dominant accent per composition.
 Example:
 
 Hero:
+
 - neutral + amber
 
 Progress:
+
 - neutral + emerald
 
 Interactive:
+
 - neutral + azure
 
 Achievement:
+
 - neutral + amber
 
 ---
@@ -1392,32 +1398,32 @@ based on the answer.
 
 # 30. Current Home Page Decisions — Summary
 
-| Current element | Decision |
-|---|---|
-| Hero | Rebuild |
-| Hero headline | Keep meaning, refine presentation |
-| Hero supporting text | Keep meaning, refine |
-| Primary CTA | Keep |
-| Secondary CTA | Convert to anchor |
-| Hero 3D mockup | Keep concept, rebuild |
-| Hero glass | Reduce heavily |
-| Hero gradients | Replace with one controlled amber focal light |
-| Floating glass cards | Remove |
-| Hero external statistics | Remove |
-| Subject names | Add |
-| Learning journey 4 cards | Keep content, change to path composition |
-| Free-start section | Keep, simplify |
-| 7 feature cards | Consolidate into 3–4 capability groups |
-| Feature illustrations | Keep only when they explain something |
-| Roles cards | Replace with role-oriented composition |
-| Blog teaser | Optional; keep only if strategically active |
-| Final CTA | Keep, simplify |
-| Testimonials placeholder | Remove until real testimonials exist |
-| Fake/social proof | Never add |
-| Technical copy | Remove from marketing content |
-| Header | Convert to anchor navigation |
-| Footer | Keep secondary navigation |
-| Public pages | Merge later, after Home is validated |
+| Current element          | Decision                                      |
+| ------------------------ | --------------------------------------------- |
+| Hero                     | Rebuild                                       |
+| Hero headline            | Keep meaning, refine presentation             |
+| Hero supporting text     | Keep meaning, refine                          |
+| Primary CTA              | Keep                                          |
+| Secondary CTA            | Convert to anchor                             |
+| Hero 3D mockup           | Keep concept, rebuild                         |
+| Hero glass               | Reduce heavily                                |
+| Hero gradients           | Replace with one controlled amber focal light |
+| Floating glass cards     | Remove                                        |
+| Hero external statistics | Remove                                        |
+| Subject names            | Add                                           |
+| Learning journey 4 cards | Keep content, change to path composition      |
+| Free-start section       | Keep, simplify                                |
+| 7 feature cards          | Consolidate into 3–4 capability groups        |
+| Feature illustrations    | Keep only when they explain something         |
+| Roles cards              | Replace with role-oriented composition        |
+| Blog teaser              | Optional; keep only if strategically active   |
+| Final CTA                | Keep, simplify                                |
+| Testimonials placeholder | Remove until real testimonials exist          |
+| Fake/social proof        | Never add                                     |
+| Technical copy           | Remove from marketing content                 |
+| Header                   | Convert to anchor navigation                  |
+| Footer                   | Keep secondary navigation                     |
+| Public pages             | Merge later, after Home is validated          |
 
 ---
 
