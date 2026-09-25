@@ -45,7 +45,7 @@ import type {
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const ENTITY_TYPES: CurriculumEntityType[] = ["وحدة", "مادة", "مجموعة", "صف", "كورس"];
 const STATUSES: CurriculumRequestStatus[] = [
@@ -102,7 +102,13 @@ export function CurriculumRequestsPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<CurriculumRequestRow | null>(null);
 
-  const { data: rows, isLoading } = useQuery({
+  const {
+    data: rows,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["curriculum-requests"],
     queryFn: () => fetchRows(),
   });
@@ -210,7 +216,20 @@ export function CurriculumRequestsPage() {
           role="region"
           aria-label={bi("طلبات المنهج", "Curriculum requests")}
         >
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل الطلبات", "Couldn't load requests")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"

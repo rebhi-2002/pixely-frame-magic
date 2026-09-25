@@ -43,18 +43,6 @@ export interface PublicCourseRow {
   updatedAt?: string;
 }
 
-/** مسار صورة المعلم — حسب teacherId، ثابت الاسم عشان تحط الصورة الحقيقية
- *  لاحقاً بنفس الاسم بدون أي تعديل كود (نفس مبدأ صور الفريق). */
-export function teacherPhotoPath(teacherId: string): string {
-  return `/team/teachers/${teacherId}.jpg`;
-}
-
-/** مسار غلاف الكورس — حسب id الكورس، بنفس مبدأ صورة المعلم (fallback تلقائي
- *  لتدرّج لوني + أيقونة المادة لو الملف غير موجود بعد). */
-export function courseCoverPath(courseId: string): string {
-  return `/courses/covers/${courseId}.jpg`;
-}
-
 /**
  * فاضي عمداً — لسا ما في كورسات أو أساتذة حقيقيين على المنصة (قيد التطوير).
  * صفحة /courses بتعرض حالة "قريباً" صادقة بدل بيانات وهمية (راجع

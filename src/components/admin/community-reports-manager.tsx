@@ -41,7 +41,7 @@ import type { CommunityReportRow, ReportPriority, ReportStatus } from "@/lib/adm
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const PRIORITIES: ReportPriority[] = ["عالية", "متوسطة", "منخفضة"];
 const STATUSES: ReportStatus[] = ["مفتوح", "مغلق", "مؤجل"];
@@ -87,7 +87,13 @@ export function CommunityReportsPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<CommunityReportRow | null>(null);
 
-  const { data: rows, isLoading } = useQuery({
+  const {
+    data: rows,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["community-reports"],
     queryFn: () => fetchRows(),
   });
@@ -208,7 +214,20 @@ export function CommunityReportsPage() {
           role="region"
           aria-label={bi("بلاغات المجتمع", "Community reports")}
         >
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل البلاغات", "Couldn't load reports")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"

@@ -41,7 +41,7 @@ import type { ContentStatus, ContentSubmissionRow, ContentType } from "@/lib/adm
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const TYPES: ContentType[] = ["درس", "اختبار", "كورس"];
 const STATUSES: ContentStatus[] = ["جديد", "مراجعة ثانية", "جاهز للاعتماد", "معتمد", "مرفوض"];
@@ -91,7 +91,13 @@ export function ContentReviewPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<ContentSubmissionRow | null>(null);
 
-  const { data: rows, isLoading } = useQuery({
+  const {
+    data: rows,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["content-submissions"],
     queryFn: () => fetchRows(),
   });
@@ -196,7 +202,20 @@ export function ContentReviewPage() {
           role="region"
           aria-label={bi("مراجعة المحتوى", "Content review")}
         >
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل المحتوى", "Couldn't load content")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"

@@ -45,7 +45,7 @@ import type {
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const STATUSES: TeacherVerificationStatus[] = ["قيد المراجعة", "مكتمل", "ينقص مستند", "مرفوض"];
 
@@ -85,7 +85,13 @@ export function TeacherVerificationPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [pendingDelete, setPendingDelete] = useState<TeacherVerificationRow | null>(null);
 
-  const { data: rows, isLoading } = useQuery({
+  const {
+    data: rows,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["teacher-verifications"],
     queryFn: () => fetchRows(),
   });
@@ -185,7 +191,20 @@ export function TeacherVerificationPage() {
           role="region"
           aria-label={bi("طلبات توثيق المعلمين", "Teacher verification requests")}
         >
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل طلبات التحقّق", "Couldn't load verification requests")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"

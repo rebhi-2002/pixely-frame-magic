@@ -100,11 +100,32 @@ function buildAccessTree(
   };
 }
 
+// مساحات الأدوار الأربعة (طالب/معلم/مشرف/ولي أمر) بادئتها ثابتة (راجع
+// ROLE_PAGE_PREFIXES بـbi.ts) — أي pageKey غيرها فهو صفحة أدمن حقيقية (سواء
+// كانت بوحدة "m-admin" أو "m-academic"؛ كل صفحات m-academic مفاتيحها admin_*
+// رغم اسم الوحدة، لأنها أصلاً لوحات تحكّم إدارية: نظرة عامة، منهج، مراجعة
+// محتوى، كتالوج عام، معلمون (تحقّق/قائمة)، بلاغات، مدفوعات — مش "مساحة
+// أكاديمية" يستخدمها طالب أو معلم بنفسه).
+const ROLE_SPACE_PREFIXES = ["student_", "teacher_", "supervisor_", "parent_"] as const;
+
 export function buildFullAdminAccess(
   userId: string,
   profile: { name: string; email: string; avatar: string | null },
 ): MyAccess {
-  return buildAccessTree(userId, profile, "backend-admin", "مدير النظام", true, () => true);
+  return buildAccessTree(
+    userId,
+    profile,
+    "backend-admin",
+    "مدير النظام",
+    true,
+    // الأدمن له وصول كامل لصفحاته هو (admin_* + notifications/account_settings)
+    // فقط — مش لمساحات الأدوار التانية. راجع Guard: حتى قبل هالتعديل كان أي
+    // تنقّل مباشر لرابط طالب/معلم/مشرف/ولي أمر بيرجع 403 صحيح (pageMatchesRole
+    // بـROLE_PAGE_PREFIXES.admin أصلاً ما فيها هالبادئات) — التعديل هون بيخلي
+    // القائمة الجانبية نفسها ما تعرض روابط الأدمن بعدين بيوصلها 403 لما يدوس
+    // عليها، وبيقلل ضجيج البحث بالقائمة (Ctrl+K) كمان.
+    (pageKey) => !ROLE_SPACE_PREFIXES.some((prefix) => pageKey.startsWith(prefix)),
+  );
 }
 
 /**

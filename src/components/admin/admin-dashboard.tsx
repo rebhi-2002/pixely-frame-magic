@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AppPage, Badge, DataTable, Panel, StatGrid } from "@/components/app/kit";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
@@ -16,10 +16,11 @@ import {
   listPayments,
 } from "@/lib/admin-curriculum.functions";
 import { useBi } from "@/lib/bi";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 export function AdminDashboardPage() {
   const bi = useBi();
+  const queryClient = useQueryClient();
 
   const teacherVerifications = useServerFn(listTeacherVerifications);
   const contentSubmissions = useServerFn(listContentSubmissions);
@@ -53,8 +54,29 @@ export function AdminDashboardPage() {
   const allRoles = useMemo(() => q8.data ?? [], [q8.data]);
 
   const isLoading = [q1, q2, q3, q4, q5, q6, q7, q8].some((q) => q.isLoading);
+  const hasError = [q1, q2, q3, q4, q5, q6, q7, q8].some((q) => q.isError);
 
   // 2. جملة الشرط والـ return المبكر أصبحت بعد كل الـ Hooks
+  if (hasError) {
+    return (
+      <AppPage title={bi("لوحة إدارة Academia", "Academia admin dashboard")} icon="LayoutDashboard">
+        <ErrorState
+          title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
+      </AppPage>
+    );
+  }
+
   if (isLoading) {
     return (
       <AppPage title={bi("لوحة إدارة Academia", "Academia admin dashboard")} icon="LayoutDashboard">

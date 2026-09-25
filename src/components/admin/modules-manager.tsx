@@ -8,7 +8,7 @@ import { listModules, setModuleEnabled } from "@/lib/rbac.functions";
 import { ACCESS_QUERY_KEY, useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 export function SystemModulesPage() {
   const queryClient = useQueryClient();
@@ -17,7 +17,7 @@ export function SystemModulesPage() {
   const fetchModules = useServerFn(listModules);
   const toggle = useServerFn(setModuleEnabled);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: ["modules"],
     queryFn: () => fetchModules(),
   });
@@ -47,7 +47,20 @@ export function SystemModulesPage() {
         </p>
 
         <div className="overflow-hidden rounded-2xl bg-card">
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل الوحدات", "Couldn't load modules")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"

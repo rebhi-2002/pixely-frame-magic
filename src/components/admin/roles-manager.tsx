@@ -31,7 +31,7 @@ import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
 import { ROLE_NAME_EN, type RoleRow } from "@/lib/rbac-types";
 import { getErrorMessage } from "@/integrations/backend/client";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 export function UserTypesPage() {
   const queryClient = useQueryClient();
@@ -47,7 +47,10 @@ export function UserTypesPage() {
   const [description, setDescription] = useState("");
   const [pendingDelete, setPendingDelete] = useState<RoleRow | null>(null);
 
-  const { data, isLoading } = useQuery({ queryKey: ["roles"], queryFn: () => fetchRoles() });
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
+    queryKey: ["roles"],
+    queryFn: () => fetchRoles(),
+  });
 
   const saveMutation = useMutation({
     mutationFn: () =>
@@ -94,7 +97,20 @@ export function UserTypesPage() {
         )}
 
         <div className="mt-4 overflow-hidden rounded-2xl bg-card">
-          {isLoading ? (
+          {isError ? (
+            <ErrorState
+              className="border-none"
+              title={bi("ما قدرنا نحمّل الأدوار", "Couldn't load roles")}
+              description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+              action={
+                <RetryButton
+                  label={bi("إعادة المحاولة", "Retry")}
+                  onClick={() => refetch()}
+                  loading={isFetching}
+                />
+              }
+            />
+          ) : isLoading ? (
             <LoadingState
               label={bi("جارٍ التحميل…", "Loading…")}
               className="border-none bg-transparent"
