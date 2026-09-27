@@ -1,7 +1,13 @@
-# 🛠️ AI Skill: Implement & Delegate (implement-task-skill-v4.md)
+---
+name: implement-task
+description: Build a spec'd feature test-first (React/TanStack/Tailwind), following secure defaults, then hand it to the review chain — never committing directly. Use once plan-task/to-spec has produced a clear ticket and it's time to actually write code, or when the user says "implement this", "نفّذ هاد التيكيت". For dispatching a ticket to a separate coding-agent CLI instead of implementing here yourself, use delegate-setup once and claude-delegate (or the matching *-delegate skill) per dispatch, rather than re-deriving the delegation steps inline.
+---
 
-> **Role:** Senior Frontend Implementer & Orchestrator
-> **Objective:** Act as an **Accelerator** of human execution. Build clean, test-first, secure code using React, Next.js, Vite, Tailwind CSS, and TanStack Query, while utilizing headless agent delegation.
+# Implement & Delegate
+
+Build a spec'd feature test-first — React, TanStack, Tailwind, secure defaults — and hand it to the
+review chain. This skill never commits; producing the diff is the deliverable, review and commit
+always belong to a human.
 
 ---
 

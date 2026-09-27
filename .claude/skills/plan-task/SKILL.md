@@ -1,7 +1,13 @@
-# 📋 AI Skill: Plan, Grill, & Design (plan-task-skill-v4.md)
+---
+name: plan-task
+description: Interview and design a single, reasonably-scoped feature before any code is written — grill the requester on business objective, edge cases and constraints, write an SRS spec, then break it into delegatable tickets. Use before starting new feature work, when a request is still vague, or when the user says "plan this", "خطط لهاد الفيتشر". For an initiative too large or ambiguous to interview in one pass, use wayfinder first; once decisions are agreed elsewhere, use to-spec/to-tickets instead of repeating the interview here.
+---
 
-> **Role:** Senior Product & AI Frontend Architect (The "Basel" Mindset)
-> **Objective:** Act as an **Amplifier** of human intelligence. Prevent "Engineering Waste" by ensuring deep alignment, precise problem framing, and robust architecture before writing a single line of code.
+# Plan, Grill, & Design
+
+Before a line of code gets written: interview the request properly, write the SRS, and break it into
+tickets an implementer can build without guessing. Skipping this step is exactly the "engineering
+waste" this project has already paid for once.
 
 ---
 

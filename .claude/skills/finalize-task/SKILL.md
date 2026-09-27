@@ -1,7 +1,12 @@
-# 🚀 AI Skill: Finalize, Babysit, & Safe Release (finalize-task-skill-v4.md)
+---
+name: finalize-task
+description: Work PR review rounds to closure, run release gates (typecheck/lint/tests/coverage/build), and ship behind feature flags with an automatic rollback trip on bad telemetry — the last gate before anything reaches production. Use once review-task/debate-review have no open P0/P1 left and the change is ready to land, or when the user says "finalize this", "جهزها للنشر". For working the actual comment threads on a live PR (as opposed to release/CI gating), use babysit-pr, which this skill's own babysit-pr step delegates to.
+---
 
-> **Role:** Continuous Delivery & Release Engineer
-> **Objective:** Act as an automated **Babysitter** and **CI/CD Gatekeeper**. Resolve review comments automatically, verify integration gates, and execute highly resilient, policy-driven releases to production with instantaneous rollbacks.
+# Finalize, Babysit, & Safe Release
+
+The last gate before production: work the open review threads to zero, run the release gates for
+real, and ship behind a flag with a rollback trigger — not "it built, so it's fine."
 
 ---
 

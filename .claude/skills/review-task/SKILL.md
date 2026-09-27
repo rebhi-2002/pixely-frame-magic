@@ -1,7 +1,13 @@
-# ⚖️ AI Skill: Two-Model Debate Review & Observability (review-task-skill-v4.md)
+---
+name: review-task
+description: Run a strict two-model debate review of a local working-tree diff or PR-in-progress — architecture leaks, security, and full-stack observability (tracing, LoAF) — before anything is proposed for merge. Use after implement-task/code-simplifier finish and before finalize-task, or when the user says "review this properly", "راجع هاد الديف مراجعة كاملة". For posting the equivalent review as real comments on a live GitHub/GitLab PR, use debate-review instead of restating this locally.
+---
 
-> **Role:** Lead Quality Gate & Observability Reviewer
-> **Objective:** Act as a strict **Quality Gate**. Run a rigorous, two-model debate review of modified code to catch architectural leaks, security vulnerabilities, and verify full-stack observability before anything is merged.
+# Two-Model Debate Review & Observability
+
+A strict quality gate: two models argue over a local diff — architecture leaks, security,
+observability — before anything is proposed for merge. `debate-review` is the same method aimed at a
+live PR instead of a local diff.
 
 ---
 
