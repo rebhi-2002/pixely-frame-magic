@@ -77,11 +77,11 @@ export async function loadAccess(userId: string): Promise<MyAccess> {
         .map((p) => {
           const children = build(p.id);
           const roleOk = pageMatchesRole(p.key, sessionRoleKey);
-          const perms = isAdmin
-            ? allPermKeys
-            : roleOk
-              ? allPermKeys.filter((k) => grantedSet?.has(`${p.id}:${k}`))
-              : [];
+          const perms = !roleOk
+            ? []
+            : isAdmin
+              ? allPermKeys
+              : allPermKeys.filter((k) => grantedSet?.has(`${p.id}:${k}`));
           return {
             id: p.id,
             key: p.key,

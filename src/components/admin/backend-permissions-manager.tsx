@@ -152,7 +152,7 @@ export function BackendPermissionsPage() {
                       className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-muted/50"
                     >
                       <Checkbox checked={checked.has(p.id)} onCheckedChange={() => toggle(p.id)} />
-                      <span className="text-foreground">{p.name}</span>
+                      <span className="text-foreground">{bi(p.name, p.name_en || p.name)}</span>
                     </label>
                   ))}
                 </div>
