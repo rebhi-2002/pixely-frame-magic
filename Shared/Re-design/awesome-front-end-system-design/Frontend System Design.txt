@@ -1,0 +1,17 @@
+https://www.linkedin.com/posts/yangshun_i-got-better-at-frontend-system-design-after-share-7502002819776958465-JEWI/?utm_source=share&utm_medium=member_android&rcm=ACoAADyWWX0BlieUWxCE2Rhj6v8fdvSOWw4jrwI
+
+01: https://engineering.fb.com/2020/05/08/web/facebook-redesign/
+02: https://blog.x.com/engineering/en_us/topics/open-source/2017/how-we-built-twitter-lite
+03: https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
+04: https://medium.com/dev-channel/a-pinterest-progressive-web-app-performance-case-study-3bd6ed2e6154
+05: https://web.dev/case-studies/better-youtube-web-part1
+06: https://netflixtechblog.com/modernizing-the-web-playback-ui-1ad2f184a5a0?gi=3821e2d39108
+07: https://engineering.atspotify.com/2021/04/building-the-future-of-our-desktop-apps
+08: https://www.figma.com/blog/how-figmas-multiplayer-technology-works/
+09: https://www.notion.com/blog/data-model-behind-notion
+10: https://medium.com/google-design/google-photos-45b714dfbed1
+11: https://linear.app/now/scaling-the-linear-sync-engine
+12: https://shopify.engineering/how-we-built-hydrogen
+13: https://medium.engineering/why-contenteditable-is-terrible-122d8a40e480
+14: https://www.atlassian.com/blog/how-we-build/rendering-like-butter-a-confluence-whiteboards-story
+15: https://github.com/greatfrontend/awesome-front-end-system-design
