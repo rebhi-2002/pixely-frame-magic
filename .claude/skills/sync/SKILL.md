@@ -6,7 +6,7 @@ description: The last step after any change is complete, around merge — reconc
 # Sync
 
 `project-atlas` is the heavy, occasional rescan for when something appears that doesn't fit any known
-pattern. `sync` is the light, routine pass that runs after *every* merge — small, surgical, and
+pattern. `sync` is the light, routine pass that runs after _every_ merge — small, surgical, and
 specifically about keeping the durable files honest with what just happened, not about discovering new
 structure.
 

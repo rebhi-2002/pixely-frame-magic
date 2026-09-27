@@ -43,6 +43,7 @@ Diff-only by default (`git diff` against the base branch). If asked for a full s
 ### 2️⃣ Step 2 — Run the fixed checklist against the scope
 
 **Input handling**
+
 - Every server function and form validates input with Zod (or equivalent) before use — not just on the
   client.
 - No `dangerouslySetInnerHTML`, `eval`, `new Function`, or template-built HTML without sanitization.
@@ -50,30 +51,35 @@ Diff-only by default (`git diff` against the base branch). If asked for a full s
   a user-controlled URL (open-redirect risk).
 
 **Authentication & authorization**
+
 - Every new route or action that should require a session actually checks one server-side, not just via
   a client-side `<ProtectedRoute>` wrapper.
 - Role/permission checks match `docs/architecture/auth-and-route-protection.md`; no client-only
   role gating.
 - No session/JWT/PII stored in plain `localStorage`; cookies (if used) are `HttpOnly, Secure,
-  SameSite=Strict` server-side.
+SameSite=Strict` server-side.
 
 **Secrets & configuration**
+
 - No API keys, tokens, or connection strings committed anywhere, including `Shared/` and docs.
 - Every new `VITE_*` variable is genuinely public; anything sensitive goes through a server function
   instead.
 - `.env.example` stays in sync with real env vars, with placeholder values only.
 
 **XSS / CSRF / injection**
+
 - Third-party scripts and iframes are from trusted, pinned sources only.
 - Outbound requests that mutate state use the project's existing CSRF/session pattern rather than a bare
   fetch with credentials.
 - User-supplied strings rendered as text, never concatenated into HTML or SQL-like query strings.
 
 **Data exposure (project-specific truth rule)**
+
 - Per `academia-conventions`: no page renders another real user's data (counts, names, ratings) that
   the current backend doesn't actually provide — that's a trust/security issue here, not just a content one.
 
 **Dependencies**
+
 - New dependencies are checked against `npm audit` (`npm run audit`); flag any high/critical advisory.
 - No new dependency duplicates functionality already in the project (extra attack surface for no reason).
 

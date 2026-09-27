@@ -6,7 +6,7 @@ description: Save a compressed summary of what matters to memory.md at the end o
 # Remember
 
 An AI has no memory between sessions — every new chat starts blank, even in this same tool. `CLAUDE.md`
-covers what's true about the *project*; this covers what was true about the *last session* — where
+covers what's true about the _project_; this covers what was true about the _last session_ — where
 things were left, what was decided in conversation that isn't written anywhere else yet.
 
 ## 📌 How this differs from handoff
@@ -16,7 +16,7 @@ start.
 `handoff` → deliberate, for a specific long task or a specific continuer (a teammate, a delegated CLI),
 detailed: goal, done, tried-and-rejected, next step.
 
-Use `handoff`'s deliverable format *inside* a `remember save` when the session being closed was long
+Use `handoff`'s deliverable format _inside_ a `remember save` when the session being closed was long
 enough to need it — they compose rather than compete.
 
 ## 📌 Non-Negotiable Hard Rules
@@ -35,7 +35,7 @@ enough to need it — they compose rather than compete.
 
 1. Compress into a few lines: what was worked on, what got decided (especially anything decided in
    conversation that isn't written into a spec/doc yet), where it was left.
-2. Write/overwrite `memory.md` at the project root — this file holds only the *latest* snapshot, it's
+2. Write/overwrite `memory.md` at the project root — this file holds only the _latest_ snapshot, it's
    not an append-only log (that's what `CHANGELOG.md`/`docs/operations/` are for).
 
 ### `remember restore` — start of session

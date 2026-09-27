@@ -29,11 +29,12 @@ git status                      # list conflicted files
 git log --oneline --left-right --merge -- <file>   # commits touching this file on both sides
 ```
 
-Read what each side changed and *why* (commit message, surrounding diff), not just the marker content.
+Read what each side changed and _why_ (commit message, surrounding diff), not just the marker content.
 
 ### 2️⃣ Step 2 — Resolve hunk by hunk
 
 For each `<<<<<<<` ... `=======` ... `>>>>>>>` block:
+
 - If the two sides touch unrelated parts of the same function/region: keep both changes, merged
   correctly, not just concatenated.
 - If they genuinely conflict on the same logic: decide based on which is correct given current intent

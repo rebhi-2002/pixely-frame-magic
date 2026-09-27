@@ -35,6 +35,7 @@ need a third-party design-intelligence skill for that first-pass reasoning.
 ### 2️⃣ Step 2 — Make one deliberate choice, not ten default ones
 
 For a new screen or component, decide on purpose:
+
 - **One typographic anchor** (what carries hierarchy: size, weight, or color — not all three at once).
 - **One layout rhythm** (a spacing scale used consistently, not ad hoc `mt-3`, `mt-5`, `mt-7` scattered
   around).

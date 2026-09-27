@@ -42,6 +42,7 @@ other dot-folder, excluding build/dependency output (`node_modules`, `dist`, gen
 ### 2️⃣ Step 2 — Classify each item
 
 For each file: read enough to state one-line purpose, then decide:
+
 - **Named entry** (root docs, config files, genuinely one-off files) → gets its own row.
 - **Pattern entry** (a folder that grows by convention) → gets one row describing the naming pattern and
   purpose, not one row per file.

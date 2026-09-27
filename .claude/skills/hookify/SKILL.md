@@ -44,7 +44,7 @@ reads the tool-call JSON on stdin and exits non-zero (with a stderr message) to 
 ### 3️⃣ Step 3 — Test it deliberately
 
 Trigger the exact condition on purpose (e.g. attempt an edit to `routeTree.gen.ts`) and confirm the hook
-blocks it with a clear message, then confirm it does *not* block unrelated, legitimate calls
+blocks it with a clear message, then confirm it does _not_ block unrelated, legitimate calls
 (no false positives on normal `src/` edits).
 
 ### 4️⃣ Step 4 — Document it where the rule already lives

@@ -50,8 +50,8 @@ For each surviving item: type (bug / feature request / question / security conce
 
 ## 📥 Deliverable Format
 
-| Item | Type | Severity | Duplicates rolled in | Routed to |
-| --- | --- | --- | --- | --- |
-| ... | ... | P0/P1/P2 | count | skill name |
+| Item | Type | Severity | Duplicates rolled in | Routed to  |
+| ---- | ---- | -------- | -------------------- | ---------- |
+| ...  | ...  | P0/P1/P2 | count                | skill name |
 
 Plus a one-line callout for anything escalated to `check-security` immediately.

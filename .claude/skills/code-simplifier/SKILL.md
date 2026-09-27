@@ -43,7 +43,7 @@ simplification target.
 - **Deep nesting:** early returns / guard clauses over pyramid-of-doom conditionals.
 - **Unclear naming:** a variable or function whose name doesn't say what it holds/does — rename for
   clarity, using `typescript-lsp`'s find-all-usages step so nothing is missed.
-- **Prop drilling / oversized components:** a component doing presentation *and* data-fetching *and*
+- **Prop drilling / oversized components:** a component doing presentation _and_ data-fetching _and_
   business logic — split along `docs/architecture/api-boundary.md` boundaries.
 
 ### 3️⃣ Step 3 — Apply changes incrementally, re-verifying each step

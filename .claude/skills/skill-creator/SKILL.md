@@ -11,7 +11,7 @@ one fits in immediately instead of needing a `claude-md-management` pass to reco
 ## 📌 Non-Negotiable Hard Rules
 
 1. **Every skill needs YAML frontmatter with `name` and `description`.** The `description` is the entire
-   trigger mechanism — it must state both *what the skill does* and *when to use it*, with concrete
+   trigger mechanism — it must state both _what the skill does_ and _when to use it_, with concrete
    trigger phrases, not just a topic label. Weak descriptions under-trigger; be a little "pushy" about
    naming the situations that should fire this skill.
 2. **Check for overlap before creating.** Read the existing skills under `.claude/skills/` first. If a
@@ -57,17 +57,20 @@ description: <what it does> + <concrete trigger phrases/situations>
 
 # <Plain Title, no "AI Skill" prefix, no repeating the kebab-name>
 
-<One short paragraph, no Role/Objective labels: why this skill exists in *this* project — what
+<One short paragraph, no Role/Objective labels: why this skill exists in _this_ project — what
 recurring problem it's solving, referencing a real file/decision/incident where it helps. Write it the
 way `academia-conventions` and `README.md` already write — direct, no corporate framing.>
 
 ## 📌 Non-Negotiable Hard Rules
+
 1. ...
 
 ## 🔄 Workflow Steps
+
 ### 1️⃣ Step 1 — ...
 
 ## 📥 Deliverable Format
+
 1. ...
 ```
 

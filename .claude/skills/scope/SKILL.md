@@ -13,7 +13,7 @@ than what was once planned.
 ## 📌 How this differs from wayfinder and plan-task
 
 `wayfinder` → settles open decisions for something too big/ambiguous to spec directly.
-`scope` → keeps the ongoing list of *what* to build next, coarse-grained, always current.
+`scope` → keeps the ongoing list of _what_ to build next, coarse-grained, always current.
 `plan-task`/`to-spec` → takes one item scope has named and turns it into a real spec + tickets.
 
 ## 📌 Non-Negotiable Hard Rules
@@ -49,6 +49,7 @@ to be bigger than scope's one-line entry implied).
 
 ```markdown
 ## docs/scope/<area>.md
+
 - [x] <shipped entry> — reconciled against <PR/commit>
 - [ ] <open entry> — <one-line intent>
 - [~] <descoped entry> — why

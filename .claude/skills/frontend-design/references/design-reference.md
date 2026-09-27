@@ -3,7 +3,7 @@
 Read this from `frontend-design` when a new screen/component needs a concrete style decision. This
 exists so the project doesn't need to install a third-party design-intelligence skill (e.g.
 `ui-ux-pro-max`) just to get a starting palette or type pairing — the actual source of truth for token
-*values* stays `docs/standards/design-tokens-policy.md`; this file is the reasoning layer on top of it.
+_values_ stays `docs/standards/design-tokens-policy.md`; this file is the reasoning layer on top of it.
 
 ## 1. How to pick a look, in order
 
@@ -27,18 +27,18 @@ exists so the project doesn't need to install a third-party design-intelligence 
 
 Use this only to sanity-check tone, not to pick literal colors (colors still come from the tokens file):
 
-| Product area in this app | Tone that fits | Tone that would clash |
-| --- | --- | --- |
-| Auth / login / signup | Calm, low-friction, minimal color | Playful gradients, heavy motion |
+| Product area in this app     | Tone that fits                                      | Tone that would clash                                               |
+| ---------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
+| Auth / login / signup        | Calm, low-friction, minimal color                   | Playful gradients, heavy motion                                     |
 | Student dashboard / progress | Encouraging, warm accents on real achievements only | Loud/urgent colors on numbers that aren't real yet (see truth rule) |
-| Admin / internal tools | Dense, functional, high information density | Marketing-style whitespace, big illustrations |
-| Public marketing pages | Confident, can describe the target end-state | — |
+| Admin / internal tools       | Dense, functional, high information density         | Marketing-style whitespace, big illustrations                       |
+| Public marketing pages       | Confident, can describe the target end-state        | —                                                                   |
 
 ## 4. Type pairing guidance (apply only via the existing token type scale)
 
 - One typeface family for headings, one (can be the same) for body — don't introduce a third for
   "accents" unless the tokens file already defines one.
-- Hierarchy comes from **one** lever at a time per screen: size *or* weight *or* color — stacking all
+- Hierarchy comes from **one** lever at a time per screen: size _or_ weight _or_ color — stacking all
   three on every heading reads as noisy, not confident.
 
 ## 5. Accessibility checklist (always, not optional polish)

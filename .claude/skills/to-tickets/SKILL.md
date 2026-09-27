@@ -36,6 +36,7 @@ splitting by arbitrary size.
 
 ```markdown
 ### Ticket: <name>
+
 **Files:** create/modify — exact paths
 **Depends on:** <ticket name or "none">
 **Requirements:** <from the spec, restated concretely>

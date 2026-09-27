@@ -11,7 +11,7 @@ The reflex version of `check-security`: catch a risky pattern the moment it's wr
 ## 📌 How this differs from check-security
 
 `check-security` is a full checklist run once a feature is otherwise done. `security-guidance` is meant
-to fire *during* implementation — the moment a risky pattern appears in the code being written — and
+to fire _during_ implementation — the moment a risky pattern appears in the code being written — and
 either fix it inline or flag it for the end-of-feature pass. Don't run both as separate full audits on
 the same change; use this one to reduce what the other one finds.
 
@@ -27,16 +27,16 @@ the same change; use this one to reduce what the other one finds.
 
 ## 🔄 Reminder Table (fire on sight)
 
-| Pattern seen | Immediate reminder |
-| --- | --- |
-| New form / user input | Is it validated with Zod before use, client *and* server side? |
-| New `src/lib/*.functions.ts` | Does it re-check authorization server-side, or does it trust a client-passed role/flag? |
+| Pattern seen                          | Immediate reminder                                                                                                                 |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| New form / user input                 | Is it validated with Zod before use, client _and_ server side?                                                                     |
+| New `src/lib/*.functions.ts`          | Does it re-check authorization server-side, or does it trust a client-passed role/flag?                                            |
 | `localStorage`/`sessionStorage` write | Is this UX convenience only, or is something treating it as proof of identity/permission (forbidden — see `academia-conventions`)? |
-| New `VITE_*` variable | Is this value safe to ship to every browser, with nothing sensitive folded in? |
-| `dangerouslySetInnerHTML` | Is the input sanitized (DOMPurify or equivalent) right at this call site? |
-| New redirect / `window.open` | Is the target a fixed, trusted URL, or could a user-controlled value redirect elsewhere? |
-| New third-party `<script>`/embed | Is the source pinned and trusted, not a loosely-versioned CDN URL? |
-| New dependency added | Has `npm run audit` been checked for it? |
+| New `VITE_*` variable                 | Is this value safe to ship to every browser, with nothing sensitive folded in?                                                     |
+| `dangerouslySetInnerHTML`             | Is the input sanitized (DOMPurify or equivalent) right at this call site?                                                          |
+| New redirect / `window.open`          | Is the target a fixed, trusted URL, or could a user-controlled value redirect elsewhere?                                           |
+| New third-party `<script>`/embed      | Is the source pinned and trusted, not a loosely-versioned CDN URL?                                                                 |
+| New dependency added                  | Has `npm run audit` been checked for it?                                                                                           |
 
 ## 🔄 Workflow Steps
 

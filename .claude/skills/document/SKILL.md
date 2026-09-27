@@ -6,7 +6,7 @@ description: Draft the human-facing prose about a change — a PR description, a
 # Document
 
 The gap this fills: `commit-commands` writes commit messages, `finalize-task` gates the release, but
-nothing owns writing the actual prose a reviewer or a user reads about *what changed and why*. This
+nothing owns writing the actual prose a reviewer or a user reads about _what changed and why_. This
 does — and only that; it never touches code, tests, or specs.
 
 ## 📌 Non-Negotiable Hard Rules

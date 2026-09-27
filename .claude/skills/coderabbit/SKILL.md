@@ -47,6 +47,7 @@ developer reading the report doesn't have to learn a second severity system:
 ### 4️⃣ Step 4 — Reconcile with in-house review
 
 Cross-check CodeRabbit's findings against what `code-review`/`check-security` already flagged:
+
 - **Both flagged it:** high-confidence, fix first.
 - **Only CodeRabbit flagged it:** investigate before dismissing — this is the whole point of a second
   opinion.

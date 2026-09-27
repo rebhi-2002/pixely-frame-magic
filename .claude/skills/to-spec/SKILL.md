@@ -10,7 +10,7 @@ write-up into this repo's real SRS template is missing.
 
 ## 📌 How this differs from plan-task
 
-`plan-task` does the interviewing *and* the write-up together for one reasonably-scoped feature.
+`plan-task` does the interviewing _and_ the write-up together for one reasonably-scoped feature.
 `to-spec` is the write-up step alone, for when the deciding already happened elsewhere (a `wayfinder`
 map, a meeting, a Slack thread) and just needs to become a real document.
 

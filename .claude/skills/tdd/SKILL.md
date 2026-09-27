@@ -20,7 +20,8 @@ then refactor. This is that loop written down once, so nothing else has to re-ex
 ## 🔄 The loop
 
 ### 🔴 Red
-Write the test for the next smallest piece of behavior. Run it. Confirm it fails, and read *why* it
+
+Write the test for the next smallest piece of behavior. Run it. Confirm it fails, and read _why_ it
 failed — a failure from a missing import isn't the same signal as a failure from wrong logic.
 
 ```bash
@@ -29,14 +30,17 @@ npm run test:e2e            # end-to-end, Playwright, for full-flow behavior
 ```
 
 ### 🟢 Green
+
 Write the minimum implementation to pass that specific test — not the whole feature. Re-run and confirm
 green, and confirm nothing else broke.
 
 ### 🔁 Refactor
+
 Once green, clean up (naming, duplication, structure) with tests as the safety net — this step is
 `code-simplifier`'s job description exactly: behavior-preserving, tests must stay identical pass/fail.
 
 ### Repeat
+
 Next smallest piece of behavior, next red.
 
 ## 📌 What kind of test, for what kind of behavior
@@ -44,7 +48,7 @@ Next smallest piece of behavior, next red.
 - Pure logic / hooks / server functions (`src/lib/*.functions.ts`) → Vitest unit test.
 - Full user flow across routes (login, checkout-like flows) → Playwright, per
   `docs/testing-guidelines.md`.
-- A bug fix → the regression test from `diagnosing-bugs`'s workflow *is* the red step here.
+- A bug fix → the regression test from `diagnosing-bugs`'s workflow _is_ the red step here.
 
 ## 📥 Deliverable Format
 

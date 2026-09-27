@@ -47,7 +47,8 @@ flow and fix the failing assertion in `e2e/login.spec.ts`").
 
 ```markdown
 ## Handoff — <short title>
-**Branch:** <name>            **Gate status:** typecheck ✅/❌, tests ✅/❌
+
+**Branch:** <name> **Gate status:** typecheck ✅/❌, tests ✅/❌
 **Goal:** <one line>
 **Done:** <bullets>
 **Tried and rejected:** <bullets, each with why>

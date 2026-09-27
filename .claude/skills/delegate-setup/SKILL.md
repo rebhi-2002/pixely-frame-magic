@@ -40,6 +40,7 @@ done
 ### 2️⃣ Step 2 — Propose lanes
 
 Map discovered CLIs to lanes based on strength, matching the upstream convention:
+
 - **`feature`** — complex business logic, Zod validation, state wiring.
 - **`tests`** — Vitest/Playwright assertions and mocks.
 - **`ui`** — styling, layout, presentation components (pairs with `frontend-design`).
