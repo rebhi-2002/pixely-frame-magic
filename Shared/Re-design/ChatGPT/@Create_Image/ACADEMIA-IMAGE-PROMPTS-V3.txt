@@ -1,0 +1,1002 @@
+ACADEMIA — IMAGE PROMPTS & VISUAL GENERATION GUIDE
+V3
+===============================================================
+
+PURPOSE
+-------
+This file consolidates the image-related directions found across the 11
+Academia UX/UI audit documents supplied in the ZIP.
+
+IMPORTANT:
+Most of the source documents do NOT contain AI image-generation prompts.
+They contain UX/UI "Capture Briefs" describing real product screenshots,
+real photography, or real team photography.
+
+Therefore this file separates:
+
+1. SOURCE-DERIVED ASSET BRIEFS
+   What the original Academia UX/UI documents actually require.
+
+2. IMPROVED GENERATION PROMPTS
+   AI-generation versions created from those briefs where generation is
+   appropriate.
+
+3. VISUAL STYLE / CONSISTENCY RULES
+   Shared rules that should be applied across generated imagery.
+
+4. DO-NOT-GENERATE ASSETS
+   Assets that should come from the actual product or real people instead.
+
+The goal is NOT to generate everything with AI.
+
+===============================================================
+01 — MASTER VISUAL STYLE FOR GENERATED PHOTOGRAPHY
+===============================================================
+
+STYLE NAME
+-----------
+Academia Human Editorial Photography
+
+STYLE CHARACTER
+---------------
+Authentic documentary-style educational photography.
+Editorial rather than commercial stock photography.
+Natural, observational, human, calm, youthful, culturally appropriate,
+premium but not luxurious.
+
+VISUAL CHARACTER
+----------------
+- Realistic photography
+- Documentary/editorial feeling
+- Natural human behavior
+- Subtle imperfections
+- Warm evening interior lighting
+- Slightly desaturated color grade
+- Deep navy / warm amber environmental relationship
+- Natural skin tones
+- Soft contrast
+- Controlled highlights
+- Gentle shadow detail
+- No glossy advertising look
+- No artificial "perfect student" pose
+- No exaggerated cinematic effects
+
+CAMERA LANGUAGE
+---------------
+- 3/4 or observational angles
+- Slightly above eye level when appropriate
+- Medium shots or environmental portraits
+- Natural depth of field
+- Subject integrated into environment
+- Avoid extreme wide-angle distortion
+- Avoid overly shallow depth of field that destroys context
+- Avoid straight-on corporate headshots unless the asset specifically requires
+  a team portrait
+
+LIGHTING
+--------
+- Warm domestic / educational interior light
+- Desk lamp + ambient evening light where appropriate
+- Soft directional light
+- Natural shadow falloff
+- No bright white studio lighting
+- No glossy commercial lighting
+- No dramatic movie lighting
+- No excessive rim light
+
+COLOR
+-----
+Base visual grade:
+- Deep navy environment: #0A0F1C
+- Warm amber accent: #F0A62E
+- Optional subtle azure: #3E8EDE
+- Optional subtle emerald: #17A672
+- Violet should be rare.
+
+Do not force these colors into the photograph unnaturally.
+The photo should remain photorealistic.
+
+The site UI may carry the brand colors; the photograph does not need to
+contain literal amber/blue/green objects.
+
+COMPOSITION
+-----------
+- Editorial asymmetry
+- Intentional negative space
+- Clear subject hierarchy
+- Composition must support Arabic RTL layouts
+- Never place important facial detail where headline text will sit
+- Do not automatically center the subject
+- Avoid symmetrical stock-photo composition
+
+AUTHENTICITY
+------------
+The image should look like a real photograph taken in Palestine / the
+local educational context, not a generic international stock photo.
+
+Avoid:
+- Silicon Valley aesthetics
+- Western corporate classroom stereotypes
+- exaggerated "happy student" expressions
+- fake futuristic education interfaces
+- unrealistic holograms
+- generic AI classroom scenes
+
+===============================================================
+02 — UNIVERSAL NEGATIVE PROMPT
+===============================================================
+
+Use as a base negative prompt when the image tool supports negative prompts:
+
+generic stock photography, corporate advertising pose, fake smile,
+looking directly at camera unless explicitly required, glossy commercial
+lighting, sterile studio, overexposed white background, unrealistic skin,
+plastic skin, excessive beauty retouching, western corporate classroom,
+silicon valley aesthetic, futuristic holographic interface, floating UI,
+fake dashboard, fake statistics, fake testimonials, fake text, random
+letters, random numbers, illegible interface text, watermark, logo,
+oversaturated colors, excessive orange, excessive blue, excessive purple,
+heavy cinematic grading, extreme HDR, excessive bokeh, fisheye distortion,
+wide-angle facial distortion, duplicated objects, extra fingers,
+deformed hands, malformed anatomy, unnatural eyes, duplicate people,
+artificial symmetry, excessive lens flare, excessive glow, excessive
+vignette, glassmorphism, 3D floating cards, sticker UI, Memphis chaos,
+confetti, decorative UI elements without purpose
+
+===============================================================
+03 — HERO: HERO-STUDENT-PRIMARY
+===============================================================
+
+SOURCE STATUS
+-------------
+SOURCE DOCUMENT:
+ACADEMIA-HOME-PAGE-UXUI-AUDIT-V2.md
+
+The source explicitly recommends the Hybrid Hero direction:
+real student photography + a small real Academia product screenshot.
+
+This image is intended to be the primary human visual.
+
+SOURCE-DERIVED BRIEF
+--------------------
+Asset:
+hero-student-primary
+
+Subject:
+Palestinian Tawjihi student, female or male, approximately 17–18 years old,
+studying at home in the evening.
+
+Behavior:
+Focused on studying.
+Looking down at work.
+Not looking at camera.
+Natural, candid behavior.
+
+Environment:
+Simple home study setup.
+Desk.
+Open notebook.
+Phone or laptop nearby.
+The product may appear faintly on the nearby device, but it should not
+be staged as a glossy advertisement.
+
+Camera:
+Slightly above eye level.
+3/4 observational angle.
+Documentary feeling.
+Not a posed portrait.
+
+Lighting:
+Warm low-key evening lighting.
+Desk lamp / ambient warm light.
+Avoid bright flat studio daylight.
+
+Composition:
+Subject positioned to one side.
+Large negative space on the opposite side for Arabic headline content.
+The face must remain unobstructed.
+Do not put text over the face.
+
+Crop:
+Desktop source: approximately 4:5 portrait.
+Mobile crop: approximately 3:4.
+Mobile crop must preserve the subject and study context.
+
+Treatment:
+Slightly desaturated.
+Warm.
+Compatible with Academia's dark navy / amber visual language.
+No hard photo frame.
+No glass card.
+No heavy drop shadow.
+
+IMPROVED AI GENERATION PROMPT
+-----------------------------
+
+Create a photorealistic editorial documentary photograph of a Palestinian
+Tawjihi student, approximately 17–18 years old, studying seriously at home
+during the evening.
+
+The student is naturally focused on an open notebook at a simple study desk,
+with a laptop or phone nearby. The student is looking down at the study
+material, not at the camera. The behavior should feel candid and observational,
+as if captured during a real study session rather than posed for an
+advertisement.
+
+Use a slightly elevated 3/4 camera angle, medium environmental portrait,
+natural perspective, realistic anatomy, authentic skin texture, and subtle
+depth of field while keeping enough environmental context visible.
+
+The home study environment should feel believable and modest: notebook,
+pens, textbooks, a practical desk, and a nearby personal device. Avoid
+luxury interiors and avoid staged "perfect student" compositions.
+
+Use warm evening illumination from a desk lamp combined with soft ambient
+room light. Preserve realistic shadow detail and natural skin tones. The
+lighting should feel calm and intimate, not cinematic or dramatic.
+
+Compose the subject toward one side of the frame and intentionally preserve
+clean negative space on the opposite side for Arabic RTL headline content.
+Do not place important visual details in the negative-space area.
+
+The image should feel culturally and geographically appropriate to Palestine,
+authentic, youthful, calm, focused, and human.
+
+Color grade: subtly warm and slightly desaturated, natural skin tones,
+soft contrast, restrained highlights, visually compatible with Academia's
+deep navy #0A0F1C and amber #F0A62E identity without artificially tinting
+the skin or environment.
+
+No text, no logos, no generated UI, no futuristic interface.
+
+OUTPUT:
+Photorealistic editorial photography, vertical 4:5 composition, high detail,
+clean composition, realistic proportions.
+
+===============================================================
+04 — HERO MOBILE VARIANT
+===============================================================
+
+Do NOT generate a completely different scene.
+
+Generate or crop the same visual concept for a 3:4 mobile composition.
+
+PROMPT
+------
+Create a vertical 3:4 crop of the same authentic Palestinian Tawjihi student
+studying at home in the evening. Preserve the same person, clothing,
+environment, lighting, color grade, and documentary feeling.
+
+Center the student enough to survive a narrow mobile crop while preserving
+visible study context. Keep the student's face unobstructed. Maintain a
+clear area for the surrounding layout rather than placing important details
+at the extreme edges.
+
+No new objects, no different environment, no different lighting, no
+advertising pose, no text, no logo.
+
+===============================================================
+05 — HERO PRODUCT EVIDENCE
+===============================================================
+
+SOURCE STATUS
+-------------
+This is NOT an AI-generation asset.
+
+The source document explicitly states that this should be an actual
+screenshot from the real Academia dashboard.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+hero-product-evidence
+
+Source:
+Actual /dashboard for a real or properly prepared demo student account.
+
+Content:
+- welcome title
+- one or two real subject names
+- e.g. mathematics / physics
+- one meaningful progress indicator
+- a percentage or progress bar
+- no collection of fake statistics
+
+Crop:
+Narrow application-window crop.
+
+Do NOT include:
+- fake browser frame
+- macOS traffic-light circles
+- glassmorphism
+- 3D tilt
+- artificial dashboard mockup
+- decorative floating cards
+
+Relative size:
+Clearly smaller than the student photograph.
+
+Placement:
+Partially overlaps the edge of the human visual with a restrained offset.
+
+===============================================================
+06 — LEARNING JOURNEY
+===============================================================
+
+SOURCE STATUS
+-------------
+The source recommends a continuous path with four milestones and small
+contextual imagery/illustration where useful.
+
+This is NOT a request for four generic AI illustrations.
+
+VISUAL CONCEPT
+--------------
+One continuous visual path.
+Four milestones.
+Strong typography.
+Large numbers.
+One restrained geometric shape per milestone.
+
+Potential steps:
+01 — اختر مسارك
+02 — جهّز مساحتك
+03 — اختبر مستواك
+04 — راجع وتقدّم
+
+AI VISUAL OPTION
+----------------
+If contextual imagery is needed, generate small editorial educational details,
+not four character illustrations.
+
+PROMPT
+------
+Create a minimal editorial educational visual showing a continuous learning
+journey represented by one elegant flowing path across a clean composition,
+with four distinct milestone points.
+
+The visual should feel like modern editorial information design rather than
+a children's infographic. Use restrained geometric forms, subtle depth,
+strong negative space, and a premium Arabic EdTech atmosphere.
+
+Include no readable text, no letters, no numbers, no labels, no UI cards.
+Leave clear areas where the actual Arabic milestone labels can be placed
+later in HTML.
+
+Use Academia's visual language:
+deep navy #0A0F1C, amber #F0A62E as the primary accent, restrained emerald
+#17A672 and azure #3E8EDE only when necessary.
+
+The path should feel purposeful and continuous, not decorative.
+
+Style:
+editorial geometric illustration, refined educational art direction,
+minimal flat-to-soft dimensional treatment, clean vector-inspired forms,
+restrained Playful Geometric vocabulary, no Memphis chaos.
+
+Transparent or clean background depending on implementation.
+
+===============================================================
+07 — HOME PRODUCT FEATURE: LIBRARY
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Use an actual screenshot from /library.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+feature-library-evidence
+
+Show:
+- real classification tree
+- chapter → subject → unit
+- a reasonable expanded level
+- one search result OR one saved/favorited item
+- demonstrate organization + save/search value
+
+Avoid:
+- empty screen
+- overloaded screen
+- browser frame
+- fake dashboard
+- heavy shadow
+
+RECOMMENDED VISUAL TREATMENT
+----------------------------
+Real product screenshot.
+Clean crop.
+Editorial placement.
+No fake mockup frame.
+
+===============================================================
+08 — HOME PRODUCT FEATURE: EXAM SIMULATOR
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Use an actual screenshot from /exam-simulator.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+feature-exam-simulator-evidence
+
+Show:
+- actual mock-exam result
+- percentage or score
+- meaningful weakness analysis
+- preferably weakness by unit/topic
+
+The screenshot should visually demonstrate:
+"Take a practice exam → understand your weak areas."
+
+Do not create an AI-generated fake dashboard.
+
+===============================================================
+09 — HOME PRODUCT FEATURE: MISTAKES BANK
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Use an actual screenshot from /mistakes-bank.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+feature-mistakes-bank-evidence
+
+Show:
+- one saved question
+- visible review status
+- e.g. "needs review"
+- enough surrounding UI to prove this is an actual feature
+
+Keep the crop simple.
+
+Do not add decorative icons or fake explanatory UI.
+
+===============================================================
+10 — FOR TEACHERS: HERO PRODUCT EVIDENCE
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Use an actual staging/demo teacher account.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+for-teachers-hero-evidence
+
+Source:
+Actual teacher content-upload page after uploading one real lesson,
+file, or video.
+
+Show:
+- uploaded lesson
+- automatic classification
+- chapter → subject → unit
+- clear status such as "under review" or "published"
+
+Purpose:
+Prove that teacher content is organized and saved.
+
+Crop:
+16:10.
+Clean application window.
+No fake browser frame.
+No exaggerated shadow.
+
+Placement:
+Under or beside the main message depending on the approved layout.
+
+===============================================================
+11 — FOR TEACHERS: ANALYTICS EVIDENCE
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Source:
+Actual /teacher.analytics page using a properly populated demo account.
+
+Show:
+One clear class-performance indicator.
+
+Example:
+Mastery percentage for one unit/topic.
+
+The screenshot should directly prove the claim:
+"See who understood and who is struggling."
+
+Crop:
+16:10.
+Clean application window.
+
+Use this visual for the analytics benefit only.
+Do not create four screenshots for four benefits.
+
+===============================================================
+12 — FOR PARENTS: HERO PRODUCT EVIDENCE
+===============================================================
+
+SOURCE STATUS
+-------------
+NOT AI-GENERATED.
+
+Source:
+Actual staging parent account and weekly report page.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Asset:
+for-parents-hero-evidence
+
+Show:
+A general weekly summary only.
+
+Possible content:
+- general activity such as "5 of 7 days active"
+- general progress in one or two subjects
+- high-level achievement
+
+Do NOT show:
+- exact question mistakes
+- exact login times
+- detailed student behavior
+- private granular data
+
+The visual itself should prove the privacy promise.
+
+Demo student identity:
+Use a clearly non-real explanatory name such as "الطالب/ة".
+
+Crop:
+Clean application window.
+16:10.
+
+===============================================================
+13 — ABOUT / TEAM PORTRAITS
+===============================================================
+
+SOURCE STATUS
+-------------
+These should be REAL photographs of the actual founders.
+
+Do NOT generate AI portraits of real people whose identities are presented
+on the website.
+
+SOURCE CAPTURE BRIEF
+--------------------
+Assets:
+- /team/frontend.jpg
+- /team/backend-1.jpg
+- /team/backend-2.jpg
+
+Style:
+Natural warm half-body/headshot portrait.
+Natural lighting.
+Simple non-distracting background.
+Natural expression.
+Avoid rigid LinkedIn-style corporate portraiture.
+
+Source:
+Real photography of the actual founders.
+
+Crop:
+Square source.
+Circular display in UI.
+
+Resolution:
+Moderate resolution is sufficient for the small avatar size.
+
+OPTIONAL PHOTO-SHOOT PROMPT / BRIEF
+-----------------------------------
+Photograph a natural, warm, authentic portrait of the actual Academia founder
+in a simple environment with soft natural light, relaxed expression, and
+minimal background distraction.
+
+Use a half-body or head-and-shoulders composition, realistic skin texture,
+natural posture, subtle environmental context, and a documentary/editorial
+feeling rather than a corporate LinkedIn portrait.
+
+Keep the face centered enough for a circular crop.
+
+Do not artificially beautify, retouch, or generate the person's identity.
+
+===============================================================
+14 — FOR PARENTS: SUPPORTING VISUAL
+===============================================================
+
+SOURCE STATUS
+-------------
+The parent audit explicitly says there is no need to add an additional
+photograph in the benefits section.
+
+Therefore:
+
+DO NOT GENERATE AN EXTRA IMAGE.
+
+Use typography, spacing, and the real product evidence instead.
+
+===============================================================
+15 — FOR TEACHERS: BENEFIT SECTION
+===============================================================
+
+The source recommends numbered benefits and a single analytics screenshot
+rather than repeated icon cards.
+
+Therefore:
+
+DO NOT generate four decorative illustrations.
+
+Use:
+- 01 / upload
+- 02 / analytics
+- 03 / verified
+- 04 / income in preparation
+
+Only analytics receives the actual visual evidence screenshot.
+
+===============================================================
+16 — PRICING PAGE
+===============================================================
+
+SOURCE DECISION
+---------------
+The Pricing Hero does NOT need an image.
+
+The existing PlanChoiceIllustration should be removed.
+
+DO NOT GENERATE A REPLACEMENT IMAGE.
+
+The page should rely on:
+- pricing hierarchy
+- plan comparison
+- typography
+- CTA
+- trust/clarity
+
+===============================================================
+17 — HOW IT WORKS
+===============================================================
+
+SOURCE DECISION
+---------------
+No decorative SVG replacement is required.
+
+The page should explain the actual process.
+
+If a visual is introduced later, it must demonstrate the real process rather
+than decorate it.
+
+Preferred:
+- real screenshots
+- process visualization
+- typography
+- restrained geometry
+
+Avoid:
+- generic AI characters
+- generic education illustrations
+- icon grids
+
+===============================================================
+18 — AUTH PAGES
+===============================================================
+
+SOURCE DECISION
+---------------
+Remove the decorative WelcomeIllustration and full-page surface mesh.
+
+Do NOT replace them with another large AI illustration.
+
+The authentication experience should prioritize:
+- form clarity
+- trust
+- hierarchy
+- accessibility
+- low distraction
+
+If imagery is ever introduced, it must be secondary to authentication.
+
+===============================================================
+19 — HEADER / FOOTER
+===============================================================
+
+SOURCE DECISION
+---------------
+No additional image is required.
+
+Do not add decorative imagery simply to make the header/footer "richer."
+
+===============================================================
+20 — LEGAL / FUNCTIONAL PAGES
+===============================================================
+
+SOURCE DECISION
+---------------
+No decorative image generation is required.
+
+Prioritize:
+- readability
+- hierarchy
+- navigation
+- legal clarity
+- accessibility
+
+===============================================================
+21 — CATALOG PAGES
+===============================================================
+
+SOURCE DECISION
+---------------
+The supplied audit does not define a dedicated AI image-generation prompt.
+
+Do not invent one.
+
+Where course/content imagery is required, use meaningful real/editorial
+course imagery or actual content thumbnails only when it improves browsing.
+
+===============================================================
+22 — GLOBAL HUMAN-PHOTOGRAPHY CONSISTENCY
+===============================================================
+
+These rules are taken from the supplied Academia visual direction and should
+be applied to every future human photograph.
+
+COLOR GRADE
+-----------
+- warm
+- slightly desaturated
+- natural skin tones
+- compatible with ink-950 / amber-primary
+- no cold blue cast
+- no oversaturation
+
+LIGHTING
+--------
+- warm indoor / evening where context permits
+- soft directional light
+- realistic shadows
+- avoid bright white studio light
+
+PEOPLE
+------
+Use subjects that feel culturally appropriate to the Palestinian educational
+context.
+
+Do not make every image look like the same person, same wardrobe, or same
+stock-photo session.
+
+CAMERA
+------
+Prefer:
+- 3/4
+- observational
+- candid
+- environmental
+
+Avoid:
+- direct-to-camera advertising portraits
+- artificial smiles
+- rigid corporate poses
+
+TREATMENT
+---------
+- no glass frame
+- no heavy drop shadow
+- no artificial 3D perspective
+- no decorative border unless composition requires it
+- allow images to breathe into the page
+
+===============================================================
+23 — IMAGE PLACEMENT RULES
+===============================================================
+
+Do not automatically use:
+
+rounded card + shadow + centered image
+
+Instead choose intentionally between:
+
+- edge crop
+- editorial crop
+- asymmetric frame
+- partial overlap
+- full-bleed image
+- product screenshot
+- masked geometry
+- image behind text only if contrast remains excellent
+
+Blurred image backgrounds should be rare.
+
+Do not put a blurred image behind every section.
+
+===============================================================
+24 — GENERATION STYLE MATRIX
+===============================================================
+
+ASSET TYPE                    STYLE
+---------------------------------------------------------------
+Hero student                 Photorealistic editorial documentary
+Learning journey             Editorial geometric illustration
+Product screenshots          Real product capture
+Teacher evidence             Real product capture
+Parent evidence              Real product capture
+Founder portraits            Real photography only
+Blog imagery                 Editorial photography
+Pricing                      No image
+Auth                         No decorative image
+Legal                        No image
+Header/footer                No image
+
+===============================================================
+25 — RECOMMENDED GENERATION SETTINGS
+===============================================================
+
+These are guidance values, not hard requirements.
+
+HERO STUDENT
+------------
+Aspect ratio: 4:5
+Resolution: highest available
+Composition: portrait editorial
+Camera: 35–50mm equivalent
+Depth of field: moderate
+Lighting: warm practical light
+Realism: high
+Stylization: low
+
+MOBILE HERO
+-----------
+Aspect ratio: 3:4
+Same scene / same subject as desktop whenever possible.
+
+EDITORIAL ILLUSTRATION
+----------------------
+Aspect ratio: based on section
+Background: transparent when compositing requires it
+Style: refined geometric editorial
+Detail: medium
+Text: none
+Numbers: none
+Letters: none
+
+PRODUCT EVIDENCE
+----------------
+No generation.
+Capture from actual product.
+
+TEAM PORTRAITS
+--------------
+No generation.
+Photograph actual people.
+
+===============================================================
+26 — WHAT SHOULD NEVER BE GENERATED
+===============================================================
+
+Never generate AI imagery to fake:
+
+- actual Academia UI
+- actual student testimonials
+- actual founders
+- actual teachers
+- actual users
+- actual statistics
+- actual course results
+- actual product performance
+- real customer quotes
+- social proof
+
+If the asset represents evidence, capture the real evidence.
+
+===============================================================
+27 — FINAL ACADEMIA IMAGE PROMPT TEMPLATE
+===============================================================
+
+Use this structure whenever a NEW generated image is approved:
+
+[SUBJECT]
+Who/what is shown.
+
+[CONTEXT]
+Where the subject exists and why.
+
+[ACTION]
+What the subject is doing.
+
+[CAMERA]
+Angle, focal length feel, framing, perspective.
+
+[LIGHTING]
+Direction, temperature, intensity.
+
+[COMPOSITION]
+Subject placement, negative space, RTL considerations.
+
+[COLOR]
+Natural grade + Academia-compatible accents.
+
+[ART DIRECTION]
+Editorial / documentary / geometric / educational.
+
+[AUTHENTICITY]
+Local/cultural context and realistic imperfections.
+
+[OUTPUT]
+Aspect ratio, resolution, background requirements.
+
+[NEGATIVE]
+Stock-photo behavior, fake UI, text, logos, excessive effects, etc.
+
+===============================================================
+28 — CRITICAL RULE FOR IMAGE TOOLS
+===============================================================
+
+Do not let the image generator decide the art direction.
+
+The approved section design decides:
+
+1. Why the image exists.
+2. What the image communicates.
+3. Where the image appears.
+4. What composition it needs.
+5. What aspect ratio it requires.
+6. What visual style it uses.
+
+Only then should the image tool generate the asset.
+
+===============================================================
+29 — SOURCE COVERAGE NOTE
+===============================================================
+
+The 11 supplied Markdown files do not all contain image-generation prompts.
+
+Some explicitly require:
+- no image;
+- real product screenshots;
+- real founder photographs;
+- typography-only treatment;
+- removal of decorative SVGs.
+
+Those decisions are preserved here rather than inventing prompts for them.
+
+The generated prompts in this document are therefore deliberately limited to
+places where AI generation is appropriate and consistent with the source
+documents.
+
+===============================================================
+30 — FINAL ART-DIRECTION CHECK
+===============================================================
+
+Before approving any generated image, ask:
+
+[ ] Does it communicate a real product/user idea?
+[ ] Is it specific to Academia?
+[ ] Does it fit Arabic RTL composition?
+[ ] Does it feel culturally appropriate?
+[ ] Does it look editorial rather than stock?
+[ ] Is the subject behavior believable?
+[ ] Is the lighting consistent with the visual language?
+[ ] Is the color grade consistent?
+[ ] Does it leave the required negative space?
+[ ] Does it avoid competing with typography?
+[ ] Does it avoid generic AI aesthetics?
+[ ] Does it avoid fake product evidence?
+[ ] Is the image actually necessary?
+[ ] Would removing it make the section clearer?
+
+If the final answer is "no" to the last question, remove the image.

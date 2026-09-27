@@ -1,0 +1,1405 @@
+ACADEMIA — AI VISUAL GENERATION PACK
+V4 — FULL IMAGE GENERATION SPECIFICATION
+
+PURPOSE
+-------
+This pack converts the supplied Academia UX/UI documentation into detailed,
+copy-ready AI image-generation specifications.
+
+IMPORTANT
+---------
+- Generated product UI is CONCEPT ONLY unless replaced by real Academia screenshots.
+- Generated portraits must NOT be presented as real founders, teachers, students, users, or testimonials.
+- Real product evidence should ultimately come from the actual product.
+- Every image has a defined purpose, style, composition, aspect ratio, lighting,
+  color direction, prompt, and negative prompt.
+- Do not generate an image merely because a section has empty space.
+
+============================================================
+01 — MASTER ACADEMIA VISUAL DNA
+============================================================
+
+STYLE
+-----
+Human Editorial Geometry.
+
+Influences:
+- Editorial photography
+- Documentary educational photography
+- Restrained Playful Geometric design
+- Modern Arabic EdTech
+- Product-led visual storytelling
+- Quietly expressive composition
+- Deliberate asymmetry
+
+FEEL
+----
+Human, credible, focused, youthful, intelligent, optimistic, calm,
+contemporary, culturally appropriate, premium without luxury,
+playful without childishness.
+
+BRAND COLORS
+------------
+Deep Navy #0A0F1C
+Azure #3E8EDE
+Amber #F0A62E
+Emerald #17A672
+Violet #9A6AD6
+
+Use navy as grounding, amber as the primary accent, azure/emerald as
+secondary accents, and violet rarely. Do not artificially tint photographs
+with brand colors.
+
+DO NOT TURN THIS INTO
+---------------------
+Memphis chaos, generic Gen-Z SaaS, childish education art, generic AI
+landing-page imagery, Dribbble dashboard showcases, glassmorphism, gradient
+mesh, sticker UI, excessive blobs, confetti, or glossy 3D.
+
+============================================================
+02 — GLOBAL PHOTOGRAPHY STYLE
+============================================================
+
+STYLE NAME
+----------
+Academia Human Editorial Photography
+
+CHARACTER
+---------
+Photorealistic documentary/editorial educational photography.
+Authentic rather than commercial stock.
+
+CAMERA
+------
+35–50mm equivalent.
+Natural perspective.
+3/4 observational angles.
+Medium environmental portraits.
+Moderate depth of field.
+
+LIGHTING
+--------
+Natural window light or warm desk-lamp/ambient evening light.
+Soft directional light.
+Realistic shadows.
+Natural highlight rolloff.
+
+AVOID
+-----
+Studio-white lighting, extreme rim light, nightclub colors, movie lighting,
+excessive bloom, excessive lens flare, extreme bokeh, fisheye distortion,
+wide-angle facial distortion.
+
+SKIN
+----
+Natural skin texture, realistic complexion, minimal retouching.
+
+ENVIRONMENT
+-----------
+Believable Palestinian educational/home context.
+Avoid luxury interiors, futuristic classrooms, Silicon Valley offices,
+generic Western school stereotypes.
+
+COMPOSITION
+-----------
+Editorial asymmetry.
+Intentional negative space.
+Strong subject hierarchy.
+When paired with Arabic RTL copy, reserve a clean area for the text and
+never place the face beneath the text.
+
+============================================================
+03 — GLOBAL ILLUSTRATION STYLE
+============================================================
+
+STYLE NAME
+----------
+Academia Editorial Geometric Illustration
+
+USE
+---
+For conceptual journeys, abstract progression, and supporting editorial
+visuals where photography or real product UI cannot communicate the idea.
+
+STYLE
+-----
+Modern vector-inspired editorial geometry.
+Restrained Playful Geometric vocabulary.
+Flat-to-soft minimal shading.
+No heavy 3D.
+
+USE
+---
+Circles, arches, rounded rectangles, paths, simple geometric objects,
+subtle dimensional layering.
+
+AVOID
+-----
+Childish cartoons, excessive outlines, Memphis chaos, sticker packs,
+confetti, generic 3D icons, glossy gradients, isometric SaaS illustrations,
+excessive floating objects.
+
+BACKGROUND
+----------
+Transparent when compositing is required.
+
+TEXT
+----
+Never bake text, letters, numbers, or logos into generated illustrations.
+
+============================================================
+04 — MASTER NEGATIVE PROMPT: PHOTOGRAPHY
+============================================================
+
+generic stock photography, corporate advertising pose, fake smile,
+looking directly at camera unless explicitly required, glossy commercial
+lighting, sterile studio, overexposed white background, plastic skin,
+beauty filter, excessive retouching, western corporate classroom,
+Silicon Valley aesthetic, futuristic classroom, holographic UI,
+floating interface, fake dashboard, fake statistics, fake testimonials,
+fake product evidence, generated text, random letters, random numbers,
+watermark, logo, oversaturated colors, excessive blue, excessive orange,
+excessive purple, extreme HDR, heavy cinematic grading, excessive bokeh,
+fisheye distortion, wide-angle facial distortion, duplicate people,
+extra fingers, malformed hands, malformed anatomy, unnatural eyes,
+artificial symmetry, excessive lens flare, excessive glow, excessive
+vignette, glassmorphism, floating glass cards, sticker UI, Memphis chaos,
+confetti, childish cartoon aesthetic
+
+============================================================
+05 — MASTER NEGATIVE PROMPT: ILLUSTRATION
+============================================================
+
+generic SaaS illustration, generic startup illustration, childish cartoon,
+corporate vector art, isometric dashboard, 3D floating UI, glassmorphism,
+Memphis chaos, excessive confetti, random decorative shapes, excessive
+gradients, glossy plastic, chrome, neon cyberpunk, heavy outlines, text,
+letters, numbers, words, logo, watermark, fake UI, fake statistics,
+random interface elements, excessive shadows, photorealistic rendering,
+over-detailed scene, visual clutter, low contrast, distorted geometry
+
+============================================================
+06 — IMAGE 01: HERO STUDENT PRIMARY
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Hero
+
+STATUS
+------
+AI concept may be generated for visual direction.
+Final human asset should ideally be authentic photography.
+
+VISUAL TYPE
+-----------
+Photorealistic editorial documentary photography.
+
+ASPECT RATIO
+------------
+4:5 portrait.
+
+OUTPUT
+------
+Generate at the highest available quality; target at least 2048px on the
+long edge.
+
+SUBJECT
+-------
+Palestinian Tawjihi student, approximately 17–18 years old.
+Male or female.
+Natural everyday student appearance.
+
+WARDROBE
+--------
+Simple contemporary modest everyday clothing.
+No artificial school-uniform styling unless required.
+
+ACTION
+------
+Studying naturally at home.
+Writing in an open notebook or reviewing study material.
+Looking down, never posing for camera.
+
+ENVIRONMENT
+-----------
+Simple believable home study setup:
+desk, notebook, pens, textbooks, laptop or phone.
+Modest and lived-in, not luxury.
+
+CAMERA
+------
+35–50mm equivalent.
+Slightly elevated 3/4 observational angle.
+Medium environmental portrait.
+
+LIGHTING
+--------
+Warm evening light.
+Desk lamp plus soft ambient room light.
+Natural shadows.
+
+COLOR
+-----
+Slightly warm.
+Slightly desaturated.
+Natural skin tones.
+Soft contrast.
+Restrained highlights.
+
+COMPOSITION
+-----------
+Place student toward one side.
+Reserve substantial clean negative space on the opposite side for Arabic
+RTL headline and CTA.
+Never put text area over the face.
+
+EMOTION
+-------
+Focused, calm, youthful, intelligent, quietly ambitious.
+Not stressed, not exaggeratedly happy.
+
+PROMPT
+------
+Create a photorealistic editorial documentary photograph of a Palestinian
+Tawjihi student, approximately 17–18 years old, studying naturally at home
+during the evening.
+
+The student is seated at a simple study desk, reviewing an open notebook and
+study material, with a laptop or phone nearby. The student is looking down at
+the material and is unaware of the camera, creating an authentic observational
+moment rather than an advertising pose.
+
+The environment should feel like a believable Palestinian student's home:
+modest, practical, lived-in, organized enough for studying, with notebooks,
+pens, textbooks, and a personal device. Avoid luxury interiors and staged
+perfection.
+
+Photograph from a slightly elevated 3/4 angle using a natural 35–50mm
+equivalent perspective. Use realistic proportions and moderate depth of field:
+the student is clearly the visual subject while enough environmental context
+remains visible.
+
+Use warm evening illumination from a desk lamp combined with subtle ambient
+room light. Preserve natural skin texture, realistic shadows, and soft
+highlight rolloff.
+
+Compose the student toward one side and deliberately leave clean negative
+space on the opposite side for Arabic RTL website typography. Do not place
+important objects or facial details inside the intended text area.
+
+The emotional tone is focused, calm, youthful, intelligent, and quietly
+ambitious. The photograph should feel documentary and human rather than
+commercial.
+
+Color grade: natural skin tones, subtly warm, slightly desaturated, soft
+contrast, restrained highlights. Harmonize with Academia's deep navy
+#0A0F1C and amber #F0A62E without artificially tinting skin.
+
+No text, no logos, no generated UI, no futuristic interface.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: PHOTOGRAPHY.
+
+============================================================
+07 — IMAGE 02: HERO STUDENT ALTERNATE
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Hero
+
+TYPE
+----
+Photorealistic editorial photography.
+
+ASPECT RATIO
+------------
+4:5.
+
+PURPOSE
+-------
+Alternative composition for visual comparison.
+
+PROMPT
+------
+Create a photorealistic editorial photograph of a Palestinian Tawjihi
+student studying alone in a quiet home environment during the evening.
+
+Use a wider environmental composition than a typical portrait. Show the
+student, desk, notebook, textbooks, and study device clearly enough to
+establish a real learning context.
+
+The student is naturally focused on studying and looking down rather than
+at the camera.
+
+Use a natural 35mm perspective, moderate depth of field, warm desk-lamp
+lighting, soft ambient evening light, natural skin texture, subtle
+imperfections, and slightly desaturated editorial color grading.
+
+Create an asymmetric composition with the student occupying approximately
+one-third to one-half of the frame and generous negative space for Arabic
+headline placement.
+
+The image should communicate quiet concentration, independence, and a real
+student study routine.
+
+No advertising pose, perfect staged desk, generic stock aesthetic, text,
+logos, or fake UI.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: PHOTOGRAPHY.
+
+============================================================
+08 — IMAGE 03: HERO MOBILE
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Hero / Mobile
+
+TYPE
+----
+Photorealistic editorial photography.
+
+ASPECT RATIO
+------------
+3:4.
+
+PROMPT
+------
+Create a vertical 3:4 editorial photograph based on the Academia Hero visual:
+a Palestinian Tawjihi student studying naturally at home during the evening.
+
+Preserve the documentary realism, warm desk-lamp lighting, natural skin,
+simple study desk, notebook, textbooks, and nearby personal device.
+
+Frame the student so the composition survives a narrow mobile crop. Keep the
+face unobstructed and preserve enough environmental context to communicate
+studying.
+
+No new visual style, no different environment, no text, no logo, no generated UI.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: PHOTOGRAPHY.
+
+============================================================
+09 — IMAGE 04: LEARNING JOURNEY
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Learning Journey
+
+TYPE
+----
+Editorial geometric illustration.
+
+ASPECT RATIO
+------------
+16:9 master composition.
+
+BACKGROUND
+----------
+Transparent preferred.
+
+PURPOSE
+-------
+Communicate progression through a structured learning process.
+
+CONCEPT
+-------
+One continuous flowing path with four visually distinct milestones.
+
+Conceptual stages:
+01 Choose your path
+02 Prepare your learning space
+03 Assess your level
+04 Review and progress
+
+Do not render those labels into the image.
+
+GEOMETRY
+--------
+Circles, rounded markers, arches, restrained geometric anchors.
+
+COLOR
+-----
+Deep navy #0A0F1C.
+Amber #F0A62E primary.
+Emerald #17A672 and Azure #3E8EDE only as small supporting accents.
+
+SHADING
+-------
+Flat-to-soft minimal shading.
+No heavy 3D.
+No glossy plastic.
+No isometric perspective.
+
+PROMPT
+------
+Create a refined editorial geometric illustration representing a student's
+continuous learning journey through four milestones.
+
+Use one elegant flowing path that travels naturally across the composition,
+connecting four distinct milestone points. The visual should communicate
+progression, structure, continuity, and learning—not a generic roadmap or
+business process diagram.
+
+Use modern geometric forms such as circles, rounded markers, arches, and
+simple educational objects only where they strengthen the narrative.
+
+Combine restrained Playful Geometric principles with premium Arabic editorial
+design: clean, spacious, intentional, modern, and slightly tactile.
+
+Use deep navy #0A0F1C as grounding color, amber #F0A62E as primary accent,
+with restrained emerald #17A672 and azure #3E8EDE accents.
+
+Leave clear negative space around each milestone so Arabic labels can be
+placed later in HTML.
+
+Transparent background.
+No text.
+No letters.
+No numbers.
+No logo.
+No watermark.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: ILLUSTRATION.
+
+============================================================
+10 — IMAGE 05: LEARNING JOURNEY DETAIL
+============================================================
+
+TYPE
+----
+Editorial geometric illustration.
+
+ASPECT RATIO
+------------
+1:1.
+
+PROMPT
+------
+Create a minimal editorial geometric educational illustration showing one
+learning milestone: a student reaching a clear point of progress after
+studying.
+
+Represent the idea using a simple abstract path, one progress marker,
+notebook/book forms, and subtle upward movement.
+
+Do not depict a cartoon character.
+
+Use deep navy, amber, emerald, and restrained azure.
+Soft minimal shading.
+Clean negative space.
+Modern Arabic EdTech mood.
+
+No text, letters, numbers, logo, or watermark.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: ILLUSTRATION.
+
+============================================================
+11 — IMAGE 06: LIBRARY CONCEPT
+============================================================
+
+STATUS
+------
+CONCEPT ONLY.
+Final site should use a real Academia /library screenshot.
+
+TYPE
+----
+Photorealistic editorial still life.
+
+ASPECT RATIO
+------------
+16:10.
+
+PROMPT
+------
+Create a premium editorial educational photograph showing an organized
+collection of Tawjihi study resources on a real student's desk.
+
+Include several textbooks, notebook, handwritten study notes, tabs or
+bookmarks, and a laptop or tablet used for studying.
+
+The composition should communicate organization and discoverability rather
+than mess.
+
+Use a slightly elevated 3/4 camera angle, natural 35–50mm perspective,
+warm evening light, realistic Palestinian home-study context, natural
+materials, subtle imperfections, and slightly desaturated editorial grading.
+
+No readable text on books or screens.
+No logos.
+No generated interface.
+No futuristic elements.
+
+CONCEPT ONLY — replace with real Academia Library screenshot.
+
+============================================================
+12 — IMAGE 07: EXAM SIMULATOR CONCEPT
+============================================================
+
+STATUS
+------
+CONCEPT ONLY.
+Final site should use a real Academia /exam-simulator screenshot.
+
+ASPECT RATIO
+------------
+16:10.
+
+PROMPT
+------
+Create a photorealistic editorial scene of a Tawjihi student reviewing the
+results of a completed practice exam on a laptop at home.
+
+The student is shown from behind or a 3/4 side angle so the screen is visible
+only as a non-readable interface glow, not generated product UI.
+
+Include notebook, pen, study material, and focused posture.
+
+The emotional message is: practice reveals where I need to improve.
+
+Warm evening lighting.
+Natural home environment.
+Moderate depth of field.
+Slightly desaturated editorial color grade.
+
+Do not generate readable UI, scores, percentages, logos, or fake product evidence.
+
+CONCEPT ONLY — replace with real Academia exam simulator screenshot.
+
+============================================================
+13 — IMAGE 08: MISTAKES BANK CONCEPT
+============================================================
+
+STATUS
+------
+CONCEPT ONLY.
+Final site should use real Academia Mistakes Bank evidence.
+
+ASPECT RATIO
+------------
+16:10.
+
+PROMPT
+------
+Create a photorealistic editorial educational scene showing a Tawjihi
+student reviewing a previously incorrect exam question in a notebook.
+
+Show the student comparing an incorrect handwritten answer with corrected
+notes and reviewing the mistake calmly.
+
+The student should not look frustrated or embarrassed. The emotional message
+is constructive: mistakes become part of learning.
+
+Warm natural study lighting.
+Close environmental composition.
+Natural desk details.
+Slightly desaturated editorial color grade.
+
+No readable text.
+No generated UI.
+No logos.
+
+CONCEPT ONLY — replace with real Academia Mistakes Bank screenshot.
+
+============================================================
+14 — IMAGE 09: TEACHER CONTENT CREATION
+============================================================
+
+PAGE / SECTION
+--------------
+For Teachers / Hero
+
+TYPE
+----
+Photorealistic educational documentary photography.
+
+ASPECT RATIO
+------------
+16:10.
+
+SUBJECT
+-------
+Palestinian teacher, adult approximately 30–50.
+
+ACTION
+------
+Preparing a lesson using a laptop while printed notes, textbooks, and
+teaching resources are nearby.
+
+PROMPT
+------
+Create a photorealistic documentary editorial photograph of a Palestinian
+teacher preparing a lesson on a laptop in a quiet educational workspace.
+
+The teacher is focused on preparing lesson material, with printed notes,
+textbooks, and teaching resources nearby.
+
+Use a natural 3/4 camera angle and realistic 35–50mm perspective. The teacher
+should not pose for the camera.
+
+Use soft natural daylight or warm indoor educational lighting. The scene
+should feel authentic, practical, and professional without becoming corporate.
+
+Use natural skin texture, realistic proportions, subtle environmental
+imperfections, and slightly desaturated editorial color grading.
+
+Leave clean negative space for Arabic website copy.
+
+No readable text on laptop.
+No fake UI.
+No logos.
+No futuristic interface.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: PHOTOGRAPHY.
+
+============================================================
+15 — IMAGE 10: TEACHER ANALYTICS CONCEPT
+============================================================
+
+STATUS
+------
+CONCEPT ONLY.
+Final site should use actual teacher analytics screenshot.
+
+ASPECT RATIO
+------------
+16:10.
+
+PROMPT
+------
+Create a photorealistic editorial scene of a teacher reviewing student
+learning performance on a laptop after a lesson.
+
+The teacher appears focused and analytical, not worried or stressed.
+
+Include subtle educational context: notebook, class notes, lesson materials.
+
+The laptop screen is visible but contains only an abstract non-readable
+interface. Do not generate readable charts, numbers, names, or fake product UI.
+
+Composition should leave space for surrounding Arabic website copy.
+
+Natural warm lighting.
+Realistic educational workspace.
+Editorial documentary style.
+Slightly desaturated colors.
+
+CONCEPT ONLY — replace with actual Academia teacher analytics screenshot.
+
+============================================================
+16 — IMAGE 11: PARENT / WEEKLY PROGRESS
+============================================================
+
+PAGE / SECTION
+--------------
+For Parents / Hero
+
+TYPE
+----
+Photorealistic documentary/editorial photography.
+
+ASPECT RATIO
+------------
+16:10.
+
+PURPOSE
+-------
+Communicate calm visibility into a student's learning progress.
+
+SUBJECTS
+--------
+Parent/guardian and student.
+
+ACTION
+------
+Reviewing a general weekly learning update together.
+
+PRIVACY DIRECTION
+-----------------
+Supportive, not surveillant.
+
+Do not show detailed mistakes, exact login times, private behavior data,
+or intrusive monitoring.
+
+PROMPT
+------
+Create a photorealistic editorial documentary photograph of a Palestinian
+parent or guardian calmly reviewing a student's general weekly learning
+progress together with the student at home.
+
+The atmosphere should communicate trust, support, and constructive academic
+conversation—not surveillance.
+
+The student and parent interact naturally around a laptop or tablet, with
+notebooks and study materials nearby.
+
+Use a warm evening home environment with soft practical lighting and
+realistic shadow detail.
+
+Camera: 35–50mm equivalent, natural 3/4 environmental angle, moderate depth
+of field.
+
+Composition: subjects toward one side with negative space for Arabic copy.
+
+The device screen must not contain readable personal information or fake
+product data.
+
+Natural skin texture.
+Authentic expressions.
+No staged smiling at camera.
+Slightly warm, slightly desaturated editorial grade.
+
+No logos.
+No readable text.
+No surveillance imagery.
+No futuristic parent-control UI.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: PHOTOGRAPHY.
+
+============================================================
+17 — IMAGE 12: PARENT SUPPORTING VISUAL
+============================================================
+
+STATUS
+------
+OPTIONAL ONLY.
+The UX audit does not require this additional image.
+
+ASPECT RATIO
+------------
+4:3.
+
+PROMPT
+------
+Create a quiet editorial photograph showing a student's study environment
+with subtle evidence of family support: organized desk, notebook, textbooks,
+glass of water, and a second chair nearby.
+
+No people required.
+
+The image should feel warm, calm, and supportive without becoming sentimental.
+
+Natural evening light.
+Soft shadows.
+Minimal composition.
+Slightly desaturated editorial grade.
+
+No text.
+No logos.
+No generated UI.
+
+============================================================
+18 — IMAGE 13: FOUNDER PORTRAIT CONCEPT
+============================================================
+
+STATUS
+------
+CONCEPT ONLY.
+Final website should use real founder photography.
+
+ASPECT RATIO
+------------
+1:1.
+
+PROMPT
+------
+Create a natural editorial portrait concept for a technology education
+startup founder.
+
+Photograph the person from shoulders/chest upward in a simple real
+environment with soft natural light and a relaxed authentic expression.
+
+Use realistic skin texture, natural posture, subtle environmental context,
+and a warm professional tone.
+
+Composition must survive a circular crop.
+
+Avoid corporate LinkedIn styling, suit-and-tie staging, artificial smile,
+beauty retouching, dramatic studio lighting, excessive bokeh.
+
+CONCEPT ONLY — never use generated identity as a real founder.
+
+============================================================
+19 — IMAGE 14: TEAM ENVIRONMENT CONCEPT
+============================================================
+
+STATUS
+------
+OPTIONAL CONCEPT ONLY.
+
+ASPECT RATIO
+------------
+16:10.
+
+PROMPT
+------
+Create a photorealistic editorial scene of a small Palestinian educational
+technology team collaborating around a laptop and printed product notes in a
+modest creative workspace.
+
+The team appears naturally engaged in discussion rather than posing for a
+company advertisement.
+
+Warm natural lighting.
+Realistic workspace details.
+Subtle imperfections.
+Editorial documentary perspective.
+
+Do not show readable screens or fake product UI.
+
+The scene should communicate collaboration, technical craftsmanship, and
+purpose without corporate stock-photo behavior.
+
+CONCEPT ONLY — replace with real team photography if used as factual
+representation.
+
+============================================================
+20 — IMAGE 15: HOW IT WORKS PROCESS
+============================================================
+
+PAGE / SECTION
+--------------
+How It Works
+
+TYPE
+----
+Editorial geometric illustration.
+
+ASPECT RATIO
+------------
+16:9.
+
+PROMPT
+------
+Create a refined editorial geometric visualization of a student's learning
+process from starting a course to reviewing progress.
+
+Represent the process as one continuous visual flow with four connected
+stages: selection, learning, assessment, review.
+
+Do not include text or numbers.
+
+Use geometric markers, subtle paths, simple educational objects, and clear
+directionality.
+
+Style: modern Arabic editorial design, restrained Playful Geometric
+vocabulary, deep navy #0A0F1C, amber #F0A62E, small emerald and azure accents,
+minimal soft shading.
+
+No generic SaaS flowchart.
+No arrows everywhere.
+No cards.
+No icon grid.
+No text.
+No letters.
+No numbers.
+
+NEGATIVE
+--------
+Use MASTER NEGATIVE PROMPT: ILLUSTRATION.
+
+============================================================
+21 — IMAGE 16: COURSE COVER CONCEPT
+============================================================
+
+PAGE / SECTION
+--------------
+Catalog / Courses
+
+STATUS
+------
+CONCEPT ONLY.
+Use only when course imagery genuinely improves browsing.
+
+ASPECT RATIO
+------------
+4:3.
+
+PROMPT
+------
+Create a premium editorial educational image representing a Tawjihi academic
+subject.
+
+Use a real study context with one or two physical educational objects,
+subtle geometric composition, and restrained Academia color accents.
+
+The image should communicate a subject while remaining clean enough for a
+course thumbnail.
+
+No readable text.
+No generated title.
+No logo.
+No generic graduation-cap imagery.
+No cartoon teacher.
+No generic student smiling at camera.
+
+Style: editorial educational photography with restrained geometric art direction.
+
+============================================================
+22 — IMAGE 17: BLOG / STUDY
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Blog
+
+TYPE
+----
+Editorial photography.
+
+ASPECT RATIO
+------------
+16:9.
+
+PROMPT
+------
+Create a photorealistic editorial photograph for an Arabic educational
+article about effective studying.
+
+Show a believable Palestinian student study environment with an open notebook,
+textbook, handwritten notes, and laptop or phone nearby.
+
+Composition should be visually interesting but quiet enough for an article
+thumbnail.
+
+Use natural warm lighting, realistic materials, slight imperfections,
+moderate depth of field, and slightly desaturated editorial color grading.
+
+No readable text.
+No logos.
+No generic stock-photo pose.
+No fake UI.
+
+============================================================
+23 — IMAGE 18: BLOG / EXAM PREPARATION
+============================================================
+
+ASPECT RATIO
+------------
+16:9.
+
+PROMPT
+------
+Create a photorealistic editorial photograph showing a Palestinian Tawjihi
+student preparing for an upcoming exam.
+
+Show realistic study materials, notebook, pen, textbook, and a simple desk.
+
+The student is focused and calm, not distressed.
+
+Use an observational 3/4 angle, warm evening light, natural skin texture,
+moderate depth of field, and restrained slightly desaturated editorial
+grading.
+
+No readable text.
+No logos.
+No dramatic cinematic effects.
+No stock-photo smile.
+
+============================================================
+24 — IMAGE 19: BLOG / LEARNING FROM MISTAKES
+============================================================
+
+ASPECT RATIO
+------------
+16:9.
+
+PROMPT
+------
+Create a photorealistic editorial educational scene showing a Palestinian
+Tawjihi student reviewing a previous mistake in a notebook and writing a
+corrected solution.
+
+The mood is constructive and focused.
+
+Use realistic home-study environment, warm soft evening lighting, natural
+materials, moderate depth of field, and slightly desaturated editorial
+color grading.
+
+No shame.
+No frustration.
+No dramatic failure imagery.
+No readable text.
+No logos.
+No fake UI.
+
+============================================================
+25 — IMAGE 20: FINAL CTA SUPPORTING VISUAL
+============================================================
+
+PAGE / SECTION
+--------------
+Home / Final CTA
+
+TYPE
+----
+Optional editorial geometric visual.
+
+ASPECT RATIO
+------------
+4:3.
+
+PROMPT
+------
+Create a minimal refined editorial geometric composition representing the
+feeling of starting a new academic journey.
+
+Use clean forward or upward visual movement, one strong amber geometric
+accent, deep navy grounding shapes, and subtle emerald/azure details.
+
+The composition should feel optimistic, focused, and mature.
+
+Do not depict a cartoon student.
+Do not use confetti.
+Do not use excessive shapes.
+Do not use a generic rocket or graduation cap.
+No text.
+No numbers.
+No logo.
+
+Transparent background preferred.
+
+============================================================
+26 — IMAGE 21: ABSTRACT SECTION DIVIDER
+============================================================
+
+TYPE
+----
+Editorial geometric abstraction.
+
+ASPECT RATIO
+------------
+16:9.
+
+STATUS
+------
+Optional.
+
+PROMPT
+------
+Create a sophisticated abstract geometric composition for an Arabic
+educational platform.
+
+Use a small number of carefully balanced circles, arches, lines, and rounded
+forms with generous negative space.
+
+Suggest learning, progression, and structure without literally depicting
+books, graduation caps, students, or classrooms.
+
+Primary color: deep navy #0A0F1C.
+Accent: amber #F0A62E.
+Secondary accents: very small amounts of emerald #17A672 and azure #3E8EDE.
+
+Style: restrained editorial geometry, modern Arabic visual identity,
+refined Playful Geometric vocabulary, premium but approachable.
+
+No text.
+No numbers.
+No logo.
+No Memphis chaos.
+No confetti.
+No excessive decoration.
+
+============================================================
+27 — IMAGE 22: HERO GEOMETRIC ACCENT
+============================================================
+
+TYPE
+----
+Transparent editorial geometric accent.
+
+ASPECT RATIO
+------------
+1:1.
+
+STATUS
+------
+Optional.
+
+PROMPT
+------
+Create a refined transparent-background geometric accent consisting of one
+large warm amber circular form intersecting subtly with a deep navy geometric
+shape and one very small emerald or azure detail.
+
+The forms should feel tactile and editorial, with soft minimal depth rather
+than a flat generic icon.
+
+Use asymmetric balance and generous transparent negative space.
+
+This is a framing element, not the main image.
+
+No text.
+No letters.
+No numbers.
+No logo.
+No confetti.
+No Memphis pattern.
+No glossy 3D.
+
+============================================================
+28 — IMAGE 23: STUDY DESK STILL LIFE
+============================================================
+
+TYPE
+----
+Photorealistic editorial still life.
+
+ASPECT RATIO
+------------
+4:3.
+
+PROMPT
+------
+Create a photorealistic editorial still life of a real student's study desk
+in Palestine.
+
+Include open notebook, textbook, pen, simple laptop or phone, subtle desk
+lamp, and one or two practical study objects.
+
+Arrange objects naturally, not as a product advertisement.
+
+Use warm evening light, natural materials, realistic imperfections, moderate
+depth of field, and slightly desaturated editorial grading.
+
+Communicate focused study and quiet preparation.
+
+No readable text.
+No logos.
+No fake UI.
+No excessive props.
+No luxury desk aesthetic.
+
+============================================================
+29 — IMAGE 24: EDUCATIONAL ENVIRONMENT
+============================================================
+
+TYPE
+----
+Photorealistic editorial photography.
+
+ASPECT RATIO
+------------
+16:9.
+
+PROMPT
+------
+Create a photorealistic editorial photograph of a modest Palestinian
+educational environment during a quiet study period.
+
+Show a few students naturally studying or preparing work without looking at
+the camera.
+
+Use realistic desks, notebooks, books, and practical classroom/study details.
+
+The scene should feel documentary and authentic rather than staged.
+
+Use natural or warm soft lighting, realistic skin tones, moderate depth of
+field, and subtle desaturated editorial grading.
+
+No corporate classroom aesthetic.
+No perfect synchronized posing.
+No exaggerated smiling.
+No text.
+No logos.
+
+============================================================
+30 — IMAGE 25: HUMAN + PRODUCT HYBRID
+============================================================
+
+TYPE
+----
+Photorealistic editorial scene with subtle device context.
+
+ASPECT RATIO
+------------
+16:10.
+
+PURPOSE
+-------
+Optional concept for sections where both human context and digital learning
+need to be understood.
+
+PROMPT
+------
+Create a photorealistic editorial photograph of a Palestinian student
+studying at home with a laptop showing an intentionally non-readable
+educational interface.
+
+The student is the primary subject.
+The device is secondary evidence of digital learning.
+
+Use a 3/4 environmental camera angle, warm evening lighting, realistic desk
+objects, natural skin texture, moderate depth of field, and slightly
+desaturated editorial color grading.
+
+The laptop screen should be visible enough to communicate digital learning but
+must not contain readable fake UI, statistics, logos, or invented features.
+
+Leave negative space for Arabic copy.
+
+No floating UI.
+No holograms.
+No glassmorphism.
+No fake dashboard mockup.
+
+============================================================
+31 — IMAGE 26: LEARNING PROGRESS ABSTRACT
+============================================================
+
+TYPE
+----
+Editorial geometric illustration.
+
+ASPECT RATIO
+------------
+1:1.
+
+PROMPT
+------
+Create a refined abstract editorial geometric composition representing
+learning progress.
+
+Use clear upward visual movement through three or four geometric stages, with
+the final stage subtly more developed than the starting stage.
+
+Use deep navy #0A0F1C, amber #F0A62E, emerald #17A672, and very limited
+azure #3E8EDE.
+
+Flat-to-soft minimal shading.
+Clean negative space.
+
+No text.
+No numbers.
+No arrows.
+No generic analytics chart.
+No dashboard.
+No icon grid.
+
+The result should feel like modern Arabic editorial design, not a business
+infographic.
+
+============================================================
+32 — IMAGE GENERATION WORKFLOW
+============================================================
+
+For each approved image:
+
+1. Generate 3–4 variations.
+2. Reject anatomy/cultural/composition failures.
+3. Select one direction.
+4. Run a refined second generation.
+5. Upscale only after composition is approved.
+6. Create separate desktop/mobile crops.
+7. Compress/optimize for web only after final crop approval.
+
+Do not stretch one crop across every breakpoint.
+
+============================================================
+33 — QUALITY CHECKLIST
+============================================================
+
+[ ] Correct subject
+[ ] Correct visual purpose
+[ ] Correct aspect ratio
+[ ] Realistic anatomy
+[ ] Natural hands
+[ ] Natural eyes
+[ ] Natural skin
+[ ] No duplicate people/objects
+[ ] No random text
+[ ] No random logos
+[ ] No fake product evidence
+[ ] Correct negative space
+[ ] Correct RTL composition
+[ ] Correct lighting
+[ ] Correct color restraint
+[ ] Correct cultural context
+[ ] No stock-photo behavior
+[ ] No excessive effects
+[ ] Does not compete with typography
+[ ] Image is actually necessary
+
+============================================================
+34 — GENERATED UI RULE
+============================================================
+
+If AI generates UI inside an image, treat it as a visual concept only.
+
+Never publish generated UI as evidence of:
+- actual Academia features,
+- real statistics,
+- real analytics,
+- real user data,
+- real product behavior.
+
+Final implementation:
+AI concept → reference.
+Actual Academia UI → evidence.
+
+============================================================
+35 — RECOMMENDED FILE NAMES
+============================================================
+
+01-hero-student-primary.webp
+02-hero-student-alternate.webp
+03-hero-student-mobile.webp
+04-learning-journey.webp
+05-learning-journey-detail.webp
+06-library-concept.webp
+07-exam-simulator-concept.webp
+08-mistakes-bank-concept.webp
+09-teacher-content.webp
+10-teacher-analytics-concept.webp
+11-parent-weekly-progress.webp
+12-parent-supporting.webp
+13-founder-portrait-concept.webp
+14-team-environment-concept.webp
+15-how-it-works-process.webp
+16-course-cover-concept.webp
+17-blog-study.webp
+18-blog-exam.webp
+19-blog-mistakes.webp
+20-final-cta.webp
+21-geometric-divider.webp
+22-hero-geometric-accent.webp
+23-study-desk-still-life.webp
+24-educational-environment.webp
+25-human-product-hybrid.webp
+26-learning-progress-abstract.webp
+
+============================================================
+36 — FINAL ART-DIRECTION RULE
+============================================================
+
+The image must serve the product.
+
+Do not add an image because a section looks empty.
+Do not generate an image because AI can generate one.
+
+Generate only when the visual improves:
+- understanding,
+- emotion,
+- credibility,
+- navigation,
+- product comprehension,
+- or visual rhythm.
+
+The final Academia experience should feel designed first and generated second.
