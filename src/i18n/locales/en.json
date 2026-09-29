@@ -41,419 +41,263 @@
   "nav": {
     "home": "Home",
     "howItWorks": "How it works",
-    "pricing": "Pricing",
     "forTeachers": "For teachers",
     "forParents": "For parents",
     "platform": "Platform",
     "legal": "Legal",
     "privacy": "Privacy policy",
     "terms": "Terms of use",
-    "tagline": "An Arabic-first platform helping high-school students organize their subjects, track achievement, and prepare for the national exam with confidence.",
+    "tagline": "An Arabic platform connecting students and parents with teachers and online or in-person courses.",
     "rights": "© {{year}} Academia — All rights reserved."
   },
   "home": {
     "meta": {
-      "title": "Academia | The student platform for focus and achievement",
-      "description": "Academia: an organized library, subject communities, achievement tracking, a mistake bank and practice-exam logging — all your studying in one place."
+      "title": "Academia | Lessons and courses with trusted teachers",
+      "description": "Academia: a teacher directory, online and in-person courses, a schedule and wallet, and attendance and results for parents — all in one place."
     },
-    "badge": "For Palestinian Tawjihi students",
-    "h1a": "Organize your Tawjihi study",
+    "badge": "Private lessons and courses platform",
+    "h1a": "Find the right teacher",
     "h1b": "and start with confidence",
     "h1c": "with Academia.",
-    "sub": "Your subjects, tests, mistakes and progress in one place — so you know what to study now and where to improve.",
+    "sub": "Browse teachers and courses, see their availability and prices, and follow your schedule and wallet from one place.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "See how you start",
     "stats": {
-      "levels": "content classification levels",
-      "rtl": "Arabic-first with RTL interface",
-      "spaces": "spaces: student, teacher, parent"
+      "levels": "Teaching modes: online and in-person",
+      "rtl": "Arabic with full RTL",
+      "spaces": "Spaces: student, teacher, parent"
     },
-    "featuresTitle": "Tools built around how you study",
-    "featuresSub": "Not a file archive — a clear path from your first question to focused review.",
+    "featuresTitle": "Everything you need to learn with a teacher",
+    "featuresSub": "From finding a teacher to following attendance and results.",
     "features": {
       "library": {
-        "title": "Smart library",
-        "text": "A strict tree: term → subject → unit → lesson. Advanced search and favorites."
+        "title": "Teacher directory",
+        "text": "Search by subject, grade, area and price, and filter by online or in-person."
       },
       "community": {
-        "title": "Subject communities",
-        "text": "A channel per subject, Q&A with a pinned correct answer, and quiet hours at night."
+        "title": "Teacher profile",
+        "text": "Bio, qualifications, experience, overall rating, and availability on one page."
       },
       "tracker": {
-        "title": "Achievement tracking",
-        "text": "A progress counter per subject, an interactive study plan, and a short Quiz after every lesson."
+        "title": "Your schedule and lessons",
+        "text": "See your upcoming lessons and bookings, with the meeting link for online lessons."
       },
       "simulator": {
-        "title": "My practice exams",
-        "text": "Log the result of every practice exam you take, and track your weak points by unit over time."
+        "title": "Online and in-person lessons",
+        "text": "Pick the format that suits you: a live online session or an in-person lesson."
       },
       "mistakes": {
-        "title": "My mistake bank",
-        "text": "Save every question you get wrong at your own pace, and review it until you master it."
+        "title": "Built-in wallet",
+        "text": "Top up by transfer and receipt, and track your transaction history clearly."
       },
       "courses": {
-        "title": "Teachers from anywhere, your way",
-        "text": "Live online, recorded, or in-person sessions — from local and international teachers. Pick the teacher and format that fits your schedule."
+        "title": "Group courses",
+        "text": "Online or in-person courses with a fixed schedule, a clear teacher, and a listed price."
       },
       "review": {
-        "title": "15-minute review",
-        "text": "Flashcards from your weakest points, before bed or before the exam."
+        "title": "Parent follow-up",
+        "text": "Your child's attendance and exam results in one clear report."
       }
     },
     "roles": {
       "student": {
         "t": "Student",
-        "d": "A Dashboard with today's tasks, your progress, and your badges."
+        "d": "A dashboard with your upcoming lessons, bookings and wallet."
       },
       "teacher": {
         "t": "Teacher",
-        "d": "Upload your content, build Quizzes, and follow your sections' performance."
+        "d": "Manage your profile and availability, and track earnings and withdrawal requests."
       },
       "parent": {
         "t": "Parent",
-        "d": "A short weekly report on consistency and achievement."
+        "d": "Follow your children's attendance and exam results."
       }
     },
-    "ctaTitle": "Ready to start your first study session?",
-    "ctaSub": "Create your free account, choose your track and subjects, and take your first test in minutes.",
-    "ctaButton": "Start your first session free",
+    "ctaTitle": "Ready to find your teacher?",
+    "ctaSub": "Create a free account and browse teachers and courses in minutes.",
+    "ctaButton": "Start for free",
     "signedIn": {
       "welcome": "Welcome, {{name}} 👋",
       "cta": "Go to dashboard",
       "browse": "Browse courses",
       "student": {
         "h1": "Ready to pick up where you left off?",
-        "sub": "Your library, schedule and mistakes bank are waiting — open your dashboard."
+        "sub": "Your schedule, wallet and bookings are waiting — open your dashboard."
       },
       "teacher": {
-        "h1": "Your students are waiting for the next lesson",
-        "sub": "Create a course, grade submissions and track earnings from your dashboard."
+        "h1": "Your students are waiting",
+        "sub": "Update your profile and availability, and track your earnings from your dashboard."
       },
       "parent": {
-        "h1": "Follow your children's progress live",
-        "sub": "Progress, attendance and grades — all in the parent report."
-      },
-      "supervisor": {
-        "h1": "A full view of academic performance",
-        "sub": "Monitor teachers, students and content quality from the supervision panel."
+        "h1": "Follow your children's progress",
+        "sub": "Attendance and exam results — all in the parent report."
       },
       "admin": {
-        "h1": "Platform operations at your fingertips",
-        "sub": "Users, permissions, curriculum, payments and content review — from the admin panel."
+        "h1": "Run the platform from one place",
+        "sub": "Users, permissions, courses and payments — from the admin dashboard."
       }
     },
     "startEyebrow": "Your first step",
     "startTitle": "What happens after you sign up?",
-    "startSub": "You do not land on an empty dashboard. Set up your study space and take a clear first step.",
+    "startSub": "Your account is ready in a few simple steps — no empty dashboard.",
     "startSteps": [
       {
-        "title": "Choose your track",
-        "text": "Select your track and subjects so your space fits your study."
+        "title": "Choose your role",
+        "text": "Student, teacher or parent — each role has its own space."
       },
       {
-        "title": "Set up your space",
-        "text": "Your library, schedule and review shortcuts are in one place."
+        "title": "Browse teachers",
+        "text": "Search by subject, grade, price and teaching mode."
       },
       {
-        "title": "Take a short test",
-        "text": "See your level and weak spots instead of studying at random."
+        "title": "Check availability",
+        "text": "See a teacher's open hours before you decide."
       },
       {
-        "title": "Review with focus",
-        "text": "Turn mistakes into a clear review list with a next step."
+        "title": "Track everything",
+        "text": "Your schedule, wallet and notifications from one dashboard."
       }
     ],
     "freeEyebrow": "Start with zero risk",
     "freeTitle": "Start free — see Academia in action",
-    "freeSub": "You do not need a teacher to begin. Set up your space, try the core study tools, then decide what fits.",
+    "freeSub": "Creating an account and browsing teachers and courses is completely free.",
     "freeListTitle": "A free start includes:",
     "freeItems": [
-      "Create a student account",
-      "Choose your track and subjects",
-      "Track your core progress",
-      "Take a diagnostic test",
-      "Save mistakes for review"
+      "Create a student, parent or teacher account",
+      "Browse the teacher directory and course pages",
+      "View a teacher's profile and availability",
+      "A dashboard with your lessons and wallet",
+      "Full Arabic and English interface"
     ],
-    "trustNote": "No card required to start • Change your subjects later • Arabic-first by design"
+    "trustNote": "No bank card to start • Wallet payments by manual transfer • Designed Arabic-first"
   },
   "howItWorks": {
     "meta": {
       "title": "How Academia works | Getting started",
-      "description": "Four steps only: sign up and pick your role, set your system, grade and subjects, start from the organized library, and track your progress weekly."
+      "description": "Simple steps: sign up and pick your role, browse teachers and courses, check availability, and follow your schedule and wallet."
     },
     "h1": "How does Academia work?",
-    "sub": "From your first sign-in, four quick steps (skippable anytime) and you're ready.",
+    "sub": "From your first sign-up, clear steps get you ready.",
     "steps": {
       "role": {
         "t": "Pick your role",
-        "d": "Student, teacher, or parent — each role opens a completely different space with its own permissions."
+        "d": "Student, teacher or parent — each role opens a space with its own permissions."
       },
       "system": {
-        "t": "System and grade",
-        "d": "Palestinian or Jordanian, the track (scientific/literary), and the grade — so the right content is tailored to you."
+        "t": "Browse teachers",
+        "d": "Search by subject, grade, area, price and teaching mode."
       },
       "subjects": {
-        "t": "Pick your subjects",
-        "d": "Choose the subjects you follow, and your Dashboard and library are built around them right away."
+        "t": "Check availability",
+        "d": "See a teacher's profile, open hours and overall rating."
       },
       "goal": {
-        "t": "First weekly goal",
-        "d": "A simple goal that starts the achievement counter from minute one, and kicks off your Streak."
+        "t": "Follow from your dashboard",
+        "d": "Your schedule, lessons, wallet and notifications in one place."
       }
     },
     "cta": "Start now for free",
-    "nextTitle": "And then?",
+    "nextTitle": "What next?",
     "next": [
-      "Finish a lesson, hit “Got it” and take a short Quiz.",
-      "Every mistake is saved to your mistake bank for later review.",
-      "Before the exam, log your practice results and track your progress.",
-      "Your parent gets a short weekly report without digging into your daily privacy."
+      "Top up your wallet by transfer and receipt; the admin reviews the request.",
+      "Follow your upcoming lessons and the meeting link for online ones.",
+      "Teachers manage their profile and availability and request earnings withdrawals.",
+      "Parents follow their child's attendance and exam results."
     ]
-  },
-  "pricing": {
-    "meta": {
-      "title": "Academia pricing | Start free",
-      "description": "A fully free plan to start, and a premium plan for the exam simulator, mistake bank and advanced reports."
-    },
-    "h1": "Simple plans, no complexity",
-    "sub": "Start completely free. Upgrade to Premium whenever you need the exam-prep tools.",
-    "perMonth": "/ month",
-    "free": {
-      "name": "Free",
-      "price": "0",
-      "note": "forever",
-      "cta": "Start free",
-      "features": [
-        "Smart library and access to every subject",
-        "Save lessons to favorites",
-        "Subject communities and Q&A",
-        "Interactive study schedule",
-        "Basic achievement counter"
-      ]
-    },
-    "plus": {
-      "name": "Premium",
-      "price": "29",
-      "note": "per month",
-      "cta": "Get Premium",
-      "badge": "Most popular",
-      "features": [
-        "Everything in the free plan",
-        "Unlimited practice exams + per-subject mistake bank",
-        "Your own mistake bank for every subject",
-        "15-minute review (flashcards)",
-        "Weekly parent report",
-        "Digital certificates on subject completion"
-      ]
-    },
-    "note": "Prices in Israeli shekels (ILS). Cancel anytime.",
-    "currency": "ILS",
-    "forever": "forever",
-    "monthly": "per month",
-    "faq": [
-      {
-        "q": "Is Academia really free?",
-        "a": "Yes — the free plan is complete with no time limit: the library, communities, schedule, and basic achievement counter. Premium is optional for advanced exam-prep tools."
-      },
-      {
-        "q": "Can I cancel anytime?",
-        "a": "Absolutely. Cancel your Premium subscription anytime from your account settings, no conditions or cancellation fees, and you'll keep access until the end of your paid period."
-      },
-      {
-        "q": "What's the difference between the student and teacher plans?",
-        "a": "The student plan (free/premium) gives access to content and tools. The teacher plan is separate and lets you upload content, build quizzes, and track your students' performance."
-      },
-      {
-        "q": "Do you offer discounts for school groups?",
-        "a": "We're currently building special packages for schools and groups. Reach out via the Help page and we'll get back to you with details."
-      },
-      {
-        "q": "Where is my data stored, and is it secure?",
-        "a": "Your data is stored securely and encrypted, and we never share it with third parties for marketing purposes. Full details are on our Privacy Policy page."
-      }
-    ],
-    "compare": {
-      "title": "Compare the plans in detail",
-      "sub": "See exactly what you get with each plan before deciding.",
-      "colFree": "Free",
-      "colPlus": "Premium",
-      "groups": [
-        {
-          "t": "Content & learning",
-          "rows": [
-            {
-              "l": "Smart library across all subjects",
-              "free": true,
-              "plus": true
-            },
-            {
-              "l": "Save lessons to favorites",
-              "free": true,
-              "plus": true
-            },
-            {
-              "l": "Subject communities & Q&A",
-              "free": true,
-              "plus": true
-            },
-            {
-              "l": "Interactive study schedule",
-              "free": true,
-              "plus": true
-            }
-          ]
-        },
-        {
-          "t": "Exam preparation",
-          "rows": [
-            {
-              "l": "AI-powered ministerial exam simulator",
-              "free": false,
-              "plus": true
-            },
-            {
-              "l": "Personal mistake bank for every subject",
-              "free": false,
-              "plus": true
-            },
-            {
-              "l": "15-minute review (flashcards)",
-              "free": false,
-              "plus": true
-            }
-          ]
-        },
-        {
-          "t": "Tracking & reports",
-          "rows": [
-            {
-              "l": "Basic achievement counter",
-              "free": true,
-              "plus": true
-            },
-            {
-              "l": "Detailed weekly parent report",
-              "free": false,
-              "plus": true
-            },
-            {
-              "l": "Digital certificates on subject completion",
-              "free": false,
-              "plus": true
-            }
-          ]
-        },
-        {
-          "t": "Support",
-          "rows": [
-            {
-              "l": "Help center support",
-              "free": true,
-              "plus": true
-            },
-            {
-              "l": "Priority email support",
-              "free": false,
-              "plus": true
-            }
-          ]
-        }
-      ]
-    }
   },
   "forParents": {
     "meta": {
-      "title": "Academia for parents | A clear summary, no micromanaging",
-      "description": "Track your child's engagement and progress with a short weekly report, while their personal learning space stays private."
+      "title": "Academia for parents | Clear follow-up, no micromanaging",
+      "description": "Follow your child's attendance and exam results from one place, with read-only access."
     },
     "h1": "Follow your child's progress, without watching every step.",
     "h1a": "Follow your child's progress, ",
     "h1b": "without watching every step",
     "h1c": ".",
-    "sub": "Academia gives you a clear weekly summary of your child's engagement and progress, while keeping their personal learning space private.",
+    "sub": "Academia gives you a clear picture of your child's attendance and exam results, with read-only access.",
     "cta": "Create a parent account",
     "benefits": {
       "report": {
-        "t": "A clear weekly report",
-        "d": "A weekly summary of engagement and overall progress, delivered without you having to check in every day."
+        "t": "Attendance and results, clearly",
+        "d": "Attendance rate, average exam score, and the session and result history in one report."
       },
       "privacy": {
-        "t": "Your child's privacy is protected",
-        "d": "You see a general summary only — not every question they got wrong or every click. The student's personal space stays private by design."
+        "t": "Read-only access",
+        "d": "Parents follow but never change anything — the account is built for academic follow-up only."
       },
       "multiKids": {
         "t": "More than one child, one account",
-        "d": "Link all your children to a single account and follow each of them individually from one place."
+        "d": "Link your children to one account and follow each one separately."
       },
       "alerts": {
-        "t": "Alerts only when it matters",
-        "d": "If there's a noticeable drop or an important exam is coming up, you'll get a message — not constant notifications."
+        "t": "Notifications coming soon",
+        "d": "Parent notifications are under development and will be added later."
       }
     },
     "faq": [
       {
-        "q": "Can I see every detail of my child's activity?",
-        "a": "No, by design — you see a general summary (engagement, progress), not every small detail. This keeps the student's personal space intact and encourages independence."
+        "q": "Can I edit my child's data?",
+        "a": "No. A parent account is for follow-up only (read-only)."
       },
       {
-        "q": "How do I link my child's account to mine?",
-        "a": "From your parent account settings, add your child's name and grade. (Automatic linking to the student's own account is coming later)."
+        "q": "How do I link my child's account?",
+        "a": "Linking a parent to a student is under development; until it ships, linking is done with help from our support team."
       },
       {
         "q": "Is there an extra cost for a parent account?",
-        "a": "The parent account itself is free. Any cost is tied to the student's own subscription — see the pricing page for details."
+        "a": "Creating the account is free. Any cost relates to the lessons and courses themselves."
       },
       {
-        "q": "What if I notice an issue with some content?",
-        "a": "You can reach us from the Contact page and our team will follow up directly."
+        "q": "What if I notice a problem?",
+        "a": "Reach us from the \"Contact us\" page and our team will follow up."
       }
     ]
   },
   "forTeachers": {
     "meta": {
-      "title": "Academia for teachers | Organizing and assessment tools",
-      "description": "Upload your content once, build auto-graded Quizzes, and track your students with clear reports."
+      "title": "Academia for teachers | Profile, availability and earnings",
+      "description": "Create your professional profile, set your availability and prices, and track your earnings and withdrawals from your wallet."
     },
-    "h1": "Teach more, grade less, reach more students.",
-    "h1a": "Teach more, ",
-    "h1b": "grade less",
-    "h1c": ", reach more students.",
-    "sub": "Academia gives you an organized home for your content, auto-graded Quizzes, and analytics that show exactly where to focus.",
+    "h1": "Teach on your schedule, reach more students.",
+    "h1a": "Teach on your schedule, ",
+    "h1b": "reach more students",
+    "h1c": ".",
+    "sub": "Academia gives you a professional profile in the teacher directory, an availability schedule you control, and a wallet for your earnings.",
     "cta": "Sign up as a teacher",
     "benefits": {
       "upload": {
-        "t": "Your content, organized",
-        "d": "Upload files and videos once; they are classified automatically by term, subject, unit and lesson."
+        "t": "Your professional profile",
+        "d": "Bio, qualifications, experience, service area, languages, and online and in-person prices."
       },
       "analytics": {
-        "t": "Analytics per student and section",
-        "d": "See who understood and who is struggling, and exactly which unit is the weak point."
+        "t": "Your availability",
+        "d": "Set the days and hours you accept students, online or in person."
       },
       "income": {
-        "t": "Income coming from your content",
-        "d": "Part of a teacher income model currently being finalized, based on student engagement with your content — full details and rates will be announced before official launch."
+        "t": "Earnings and wallet",
+        "d": "Track your balance and request a withdrawal to your bank account; the admin reviews it."
       },
       "verified": {
-        "t": "Verified account",
-        "d": "Verify by uploading an ID/certificate; once approved your badge appears next to your name."
+        "t": "Directory visibility",
+        "d": "Turn on directory visibility so students can find you."
       }
     },
     "faq": [
       {
-        "q": "How do I become a verified teacher?",
-        "a": "Sign up via \"Start as a teacher\", fill in your details and qualifications, and our team reviews your application within a few days."
+        "q": "How do I get a teacher account?",
+        "a": "Sign up with the \"Start as a teacher\" button, fill in your basic details, then complete your professional profile from your dashboard."
       },
       {
-        "q": "How will teacher income work?",
-        "a": "The income model is being finalized (rates and payout method are not yet official). Once ready, you'll get a clear notice with the details before it's enabled on your account."
+        "q": "How do I get paid?",
+        "a": "Your earnings are added to your wallet; you request a withdrawal to your bank account and the admin reviews it."
       },
       {
-        "q": "Does my content go live immediately?",
-        "a": "Any content you upload goes through a basic review by our team before it appears to students, to keep the library's quality reliable."
+        "q": "Why isn't my profile in the directory?",
+        "a": "You must turn on directory visibility on the profile edit page, and your account must be linked to a teacher record."
       },
       {
-        "q": "What kind of content can I upload?",
-        "a": "Written lessons, PDF files, question banks, and short quizzes — all organized by grade, subject, and unit."
+        "q": "Can I create courses myself?",
+        "a": "Teacher-created courses are under development and will be enabled later."
       }
     ]
   },
@@ -540,7 +384,7 @@
       },
       {
         "t": "Accounts & Roles",
-        "d": "You're responsible for keeping your login credentials confidential. Available roles: student, teacher, parent, supervisor, system admin. The platform may suspend or terminate any account that violates these terms or is used fraudulently."
+        "d": "You are responsible for keeping your login details confidential. Available roles: student, teacher, parent, system admin. The platform may suspend or terminate any account that violates these terms or is used fraudulently."
       },
       {
         "t": "Wallet & Financial Transactions",

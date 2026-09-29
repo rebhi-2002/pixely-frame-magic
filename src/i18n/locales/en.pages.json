@@ -5,8 +5,6 @@
     "teachers": "Find a teacher",
     "help": "Help",
     "support": "Support",
-    "certificateVerify": "Verify a certificate",
-    "unsubscribe": "Email preferences",
     "contact": "Contact",
     "blog": "Blog"
   },
@@ -28,7 +26,6 @@
       "email": "Email",
       "password": "Password",
       "submit": "Sign in",
-      "forgot": "Forgot your password?",
       "google": "Continue with Google",
       "or": "or",
       "noAccount": "No account yet?",
@@ -47,15 +44,15 @@
       "roles": {
         "student": {
           "t": "Student",
-          "d": "Tidy library, study schedule, achievement tracking, and an exam simulator."
+          "d": "Browse teachers and courses, and follow your schedule and wallet."
         },
         "parent": {
           "t": "Parent",
-          "d": "A short weekly report on your child's consistency and progress."
+          "d": "Follow your child's attendance and exam results."
         },
         "teacher": {
           "t": "Teacher",
-          "d": "Upload content, build quizzes, track your sections — extended sign-up with verification."
+          "d": "Build your professional profile and availability, and track your earnings."
         }
       },
       "chosen": "Selected role",
@@ -74,94 +71,46 @@
     },
     "teacherRegister": {
       "meta": {
-        "title": "Teacher registration | Academia",
-        "description": "Register as a teacher on Academia and upload your verification document for review."
+        "title": "Teacher sign-up | Academia",
+        "description": "Sign up as a teacher on Academia, then complete your professional profile and availability."
       },
       "h1": "Teacher registration",
-      "sub": "A few extra details so we can verify you before your content goes live.",
+      "sub": "Create your teacher account, then complete your profile from your dashboard.",
       "fullName": "Full name",
       "email": "Email",
       "password": "Password",
       "phone": "Phone number",
-      "subject": "Main subject",
-      "experience": "Years of experience",
-      "bio": "Short bio",
-      "bioPlaceholder": "Tell students about your experience and teaching style.",
-      "document": "Verification document (ID/certificate)",
-      "documentHint": "PDF or image — reviewed by our team within 48 hours.",
       "submit": "Submit registration",
-      "pending": "Request received, we will notify you once verification is reviewed.",
       "back": "Register as a student or parent instead"
-    },
-    "forgot": {
-      "meta": {
-        "title": "Reset password | Academia",
-        "description": "Send a password reset link to your email."
-      },
-      "h1": "Forgot your password?",
-      "sub": "Enter your email and we'll send you a link to set a new password.",
-      "email": "Email",
-      "submit": "Send reset link",
-      "sent": "If that email is registered, the link is on its way.",
-      "back": "Back to sign in"
-    },
-    "reset": {
-      "meta": {
-        "title": "Set a new password | Academia",
-        "description": "Choose a new password for your Academia account."
-      },
-      "h1": "New password",
-      "sub": "Pick a strong password you don't use anywhere else.",
-      "password": "New password",
-      "confirm": "Confirm password",
-      "mismatch": "Passwords do not match",
-      "submit": "Save password",
-      "success": "Password updated",
-      "invalid": "This link is invalid or expired. Request a new one.",
-      "requestNew": "Request a new link"
-    },
-    "verify": {
-      "meta": {
-        "title": "Verify your email | Academia",
-        "description": "Activate your Academia account from the link sent to your inbox."
-      },
-      "h1": "Verify your email",
-      "sub": "We sent an activation link to your inbox. Open it, then come back here.",
-      "verified": "Your account is verified.",
-      "goDashboard": "Go to dashboard",
-      "resend": "Resend link",
-      "resent": "A new link is on its way.",
-      "emailPlaceholder": "Your email",
-      "back": "Back to sign in"
     }
   },
   "about": {
     "meta": {
       "title": "About us | Academia",
-      "description": "The Academia story: an Arabic-first team building an organization and achievement platform for high-school students."
+      "description": "The Academia story: an Arabic team building a platform that connects students with trusted teachers and courses."
     },
-    "h1": "We built Academia because we lived the chaos",
-    "h1a": "We built Academia because we lived the ",
-    "h1b": "chaos",
-    "sub": "Files lost in group chats, questions with no answers, and a national exam getting closer. So we built the tidy place we wished we had.",
+    "h1": "We built Academia to make finding the right teacher easy",
+    "h1a": "We built Academia to make finding ",
+    "h1b": "the right teacher easy",
+    "sub": "Finding a teacher through chat groups is messy: unclear prices, unknown hours. We set out to build an organised place.",
     "missionTitle": "Our mission",
-    "mission": "Help every Arabic-speaking student turn a pile of files into a clear plan they can actually finish, step by step.",
+    "mission": "We help every student and parent find a suitable teacher clearly: a profile, availability, and a listed price.",
     "values": [
       {
         "t": "Clarity over quantity",
-        "d": "A strict tree: term → subject → unit → lesson. Nothing gets lost, nothing lands in the wrong place."
+        "d": "A clear teacher profile: experience, qualifications, prices and availability."
       },
       {
         "t": "Student privacy",
-        "d": "Parents see consistency and progress summaries only — not your chats or your daily details."
+        "d": "Parents follow attendance and results with read-only access."
       },
       {
         "t": "Arabic first",
         "d": "An RTL interface designed in Arabic from scratch, with full English as a second option."
       },
       {
-        "t": "Measurable achievement",
-        "d": "A progress counter, a day streak, and a mistake bank — progress you can see, not just feel."
+        "t": "Financial transparency",
+        "d": "A built-in wallet with a clear transaction history, and top-up and withdrawal requests reviewed by admins."
       }
     ],
     "teamTitle": "The team",
@@ -184,7 +133,7 @@
       }
     ],
     "ctaTitle": "Want to be part of the story?",
-    "ctaSub": "Start free as a student, or register as a teacher and share your content.",
+    "ctaSub": "Start free as a student, or sign up as a teacher and build your professional profile.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "Register as a teacher"
   },
@@ -246,44 +195,10 @@
     "cta": "Sign up to follow this teacher",
     "notFound": "We couldn't find this teacher."
   },
-  "certificate": {
-    "meta": {
-      "title": "Verify a certificate | Academia",
-      "description": "Verify the authenticity of a digital certificate issued by Academia using its ID."
-    },
-    "h1": "Certificate verification",
-    "sub": "Enter the certificate ID or open the verification link printed on it.",
-    "placeholder": "Certificate ID (e.g. ACD-2026-00184)",
-    "check": "Verify",
-    "valid": "Valid certificate issued by Academia",
-    "invalid": "No certificate found with this ID. Check it and try again.",
-    "holder": "Holder name",
-    "course": "Subject / course",
-    "issued": "Issue date",
-    "id": "Certificate ID",
-    "note": "Verification runs against the platform's official certificate registry."
-  },
-  "invite": {
-    "meta": {
-      "title": "An invite to Academia",
-      "description": "Join Academia through an invite link and get starter perks."
-    },
-    "h1": "You've been invited to Academia",
-    "sub": "Your friend uses Academia to organize their studying. Join through their link and get a free premium month.",
-    "codeLabel": "Invite code",
-    "perks": [
-      "A free premium month once you finish signing up",
-      "Your subjects are built automatically from your system and grade",
-      "You join the same subject communities as your friends"
-    ],
-    "cta": "Accept invite & sign up",
-    "login": "I have an account — sign in",
-    "disclaimer": "Perks activate after your email is confirmed."
-  },
   "help": {
     "meta": {
       "title": "Help center | Academia",
-      "description": "Quick answers about accounts, subscriptions, the library, and privacy on Academia."
+      "description": "Quick answers about your account, wallet, teachers and courses, and privacy on Academia."
     },
     "h1": "Help center",
     "sub": "Short answers to the most common questions. Can't find yours? Contact us.",
@@ -294,45 +209,45 @@
     "contactCta": "Contact support",
     "topics": [
       {
-        "t": "Account & sign in",
+        "t": "Account and sign-in",
         "items": [
           {
             "q": "How do I create an account?",
-            "a": "On the sign-up page pick your role (student or parent) then fill in your name, email and password. Teachers register from the teacher page because their account needs verification."
+            "a": "On the sign-up page choose your role (student, teacher or parent), then fill in your name, email, phone and password."
           },
           {
-            "q": "I forgot my password, what now?",
-            "a": "Open the reset page, enter your email, and you'll get a link to set a new password."
+            "q": "I forgot my password — what now?",
+            "a": "Email password recovery isn't available yet. Contact support, or change it from your account settings if you're signed in."
           },
           {
             "q": "Do I stay signed in after closing the browser?",
-            "a": "Yes, your session is saved. For your security you're signed out automatically after two hours of inactivity."
+            "a": "Yes, your session is kept until you sign out or it expires."
           }
         ]
       },
       {
-        "t": "Subscription & payment",
+        "t": "Wallet and payments",
         "items": [
           {
-            "q": "What's the difference between Free and Premium?",
-            "a": "Free includes the library, communities, schedule and the progress counter. Premium adds the exam simulator, mistake bank, the 15-minute review, and the parent report."
+            "q": "How do I top up my wallet?",
+            "a": "Submit a top-up request with the amount, the transfer reference and a receipt image; an admin reviews it and the balance is added."
           },
           {
-            "q": "Can I cancel?",
-            "a": "Yes, any time. Your subscription stays active until the end of the paid period."
+            "q": "How does a teacher withdraw earnings?",
+            "a": "From the Earnings page, submit a withdrawal request with your bank details; an admin reviews it and makes the transfer."
           }
         ]
       },
       {
-        "t": "Library & content",
+        "t": "Teachers and courses",
         "items": [
           {
-            "q": "How is content classified?",
-            "a": "In a strict tree: term → subject → unit → lesson, with advanced search and favorites."
+            "q": "How do I find a teacher?",
+            "a": "In the teacher directory, search by subject, grade, area, price and teaching mode, then open the profile to see availability."
           },
           {
-            "q": "I found violating content, what do I do?",
-            "a": "Use the report button on the lesson; our moderation team reviews it and violating content may be removed."
+            "q": "What's the difference between a course and a private lesson?",
+            "a": "A course is for a group with a fixed schedule and a listed price; a private lesson is with one teacher, based on their availability."
           }
         ]
       },
@@ -341,35 +256,15 @@
         "items": [
           {
             "q": "What can a parent see?",
-            "a": "A weekly summary of consistency and progress only — not your community chats or daily activity details."
+            "a": "Their children's attendance and exam results, with read-only access."
           },
           {
             "q": "How do I delete my account?",
-            "a": "From the settings page, or by contacting support; your account and related data are removed."
+            "a": "Contact support and your account and its related data will be deleted."
           }
         ]
       }
     ]
-  },
-  "unsubscribe": {
-    "meta": {
-      "title": "Unsubscribe | Academia",
-      "description": "Stop Academia emails without signing in."
-    },
-    "h1": "Unsubscribe from notifications",
-    "sub": "Pick what you want to stop — no sign-in needed.",
-    "email": "Email",
-    "options": {
-      "weekly": "Weekly report",
-      "reminders": "Study schedule reminders",
-      "community": "Subject community notifications",
-      "marketing": "Platform news and offers"
-    },
-    "all": "Stop all emails",
-    "submit": "Save preferences",
-    "done": "Your email preferences were updated.",
-    "note": "Security emails (password reset and email confirmation) always stay on.",
-    "back": "Back home"
   },
   "notFound": {
     "meta": {
@@ -433,9 +328,9 @@
       "message": "Message is too short — add a bit more detail (10+ characters)"
     },
     "success": {
-      "title": "Your message is in! ✅",
-      "sub": "Our team will review it and reply to your email within 1–2 business days.",
-      "again": "Send another message"
+      "title": "Your message is ready ✉️",
+      "sub": "We opened your email app with the message prefilled — press Send to reach us. If nothing opened, write to support@academia.app directly.",
+      "again": "Write another message"
     },
     "sidebar": {
       "emailTitle": "Email us directly",
@@ -460,7 +355,7 @@
     "notFoundSub": "The link might be wrong, or the article was removed.",
     "backToBlog": "Back to blog",
     "ctaTitle": "Want to put these ideas into practice?",
-    "ctaSub": "Academia has a study schedule, a mistake bank, and an exam simulator to help you apply all this daily.",
+    "ctaSub": "Academia helps you find the right teacher and follow your lessons in one place.",
     "ctaButton": "Try Academia for free",
     "moreTitle": "More articles you'll like",
     "teaserTitle": "From our blog",
