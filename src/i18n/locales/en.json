@@ -106,7 +106,8 @@
       },
       "teacher": {
         "t": "Teacher",
-        "d": "Manage your profile and availability, and track earnings and withdrawal requests."
+        "d": "Manage your profile and availability, and track earnings and withdrawal requests.",
+        "cta": "See all teachers"
       },
       "parent": {
         "t": "Parent",

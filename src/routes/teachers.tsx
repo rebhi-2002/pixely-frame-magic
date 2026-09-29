@@ -8,6 +8,8 @@ import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, RetryButton } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useBi } from "@/lib/bi";
 import { searchTeachers, type TeacherProfileRow } from "@/integrations/backend/teachers";
@@ -42,9 +44,16 @@ function TeacherCard({
   const price = hourlyPrice(teacher, delivery);
 
   return (
-    <article className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6">
+    <article
+      className={cn(
+        "flex flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]",
+      )}
+    >
       <div className="flex items-start gap-3">
-        <PhotoAvatar src={teacher.profileImage} className="size-14 rounded-2xl" />
+        <PhotoAvatar
+          src={teacher.profileImage}
+          className="size-14 rounded-2xl border-2 border-[var(--border-strong)]"
+        />
         <div className="min-w-0 flex-1">
           <h2 className="truncate text-base font-bold text-foreground">
             {teacher.name || bi("معلّم", "Teacher")}
@@ -74,7 +83,7 @@ function TeacherCard({
           {teacher.subjects.slice(0, 4).map((s) => (
             <span
               key={s}
-              className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary"
+              className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary"
             >
               {s}
             </span>
@@ -118,7 +127,7 @@ function TeacherCard({
         <Link
           to="/teacher/$id"
           params={{ id: String(teacher.id) }}
-          className="hover-press rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+          className={buttonVariants({ variant: "default", className: "h-auto px-4 py-2 text-sm" })}
         >
           {t("teachersDirectory.viewProfile")}
         </Link>
@@ -172,7 +181,7 @@ function TeachersDirectoryPage() {
 
   return (
     <PublicLayout>
-      <section className="surface-grid border-b border-border">
+      <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16">
           <h1 className="text-4xl font-bold text-foreground md:text-5xl">
             {t("teachersDirectory.h1")}
@@ -189,7 +198,7 @@ function TeachersDirectoryPage() {
                 onChange={(e) => changeQuery(e.target.value)}
                 placeholder={t("teachersDirectory.searchPlaceholder")}
                 aria-label={t("teachersDirectory.searchPlaceholder")}
-                className="h-11 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                className="h-11 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -198,11 +207,12 @@ function TeachersDirectoryPage() {
                   key={d}
                   type="button"
                   onClick={() => changeDelivery(d)}
-                  className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
+                  className={cn(
+                    "rounded-lg border-2 px-3 py-2 text-xs font-bold transition-colors",
                     delivery === d
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-card text-muted-foreground hover:text-foreground"
-                  }`}
+                      ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
+                      : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
+                  )}
                 >
                   {d === "__all"
                     ? t("courses.all")
@@ -222,7 +232,7 @@ function TeachersDirectoryPage() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse space-y-3 rounded-2xl border border-border bg-card p-6"
+                className="animate-pulse space-y-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6"
               >
                 <div className="flex items-center gap-3">
                   <div className="size-14 rounded-2xl bg-secondary" />
@@ -253,8 +263,8 @@ function TeachersDirectoryPage() {
             }
           />
         ) : teachers.length === 0 ? (
-          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
-            <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)] bg-card p-10 text-center">
+            <span className="flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/10 text-primary">
               <Sparkles aria-hidden="true" className="size-6" />
             </span>
             <h2 className="text-base font-bold text-foreground">

@@ -1,5 +1,6 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import {
   BookOpenCheck,
   LineChart,
@@ -16,18 +17,30 @@ import {
   CalendarDays,
   Video,
   Wallet,
+  ArrowLeft,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
 import { HeroMockup } from "@/components/site/hero-mockup";
+import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { Reveal } from "@/components/ui/reveal";
-import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
 import { blogPosts } from "@/content/blog-posts";
 import { cn } from "@/lib/utils";
 import { allowedPublicPaths, useBi } from "@/lib/bi";
+import { searchTeachers } from "@/integrations/backend/teachers";
+import { buttonVariants } from "@/components/ui/button-variants";
+
+/** بطاقة الحد الصلب + الظل بلا ضبابية — نمط Neo-Brutalism الدافئ الموحّد لكل
+ * بطاقات الرئيسية غير القابلة للنقر (إحصائية/توضيحية). */
+const brutalCard =
+  "rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]";
+/** تفاعل الضغط لأي عنصر قابل للنقر يحمل brutalCard — نفس منطق الزر: يرتفع
+ * عند التحويم ويغوص بظلّه عند الضغط. */
+const brutalInteractive =
+  "transition-all duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--shadow-brutal-color)] active:translate-x-1 active:translate-y-1 active:shadow-none";
 
 export const Route = createFileRoute("/")({
   head: (ctx) => createSeoHead("/", localeFromSearch(ctx.match.search)),
@@ -35,32 +48,12 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  {
-    icon: Search,
-    key: "library",
-    span: "lg:col-span-2 lg:row-span-2",
-    flagship: true,
-    Illustration: null,
-  },
-  { icon: UserRound, key: "community", span: "", flagship: false, Illustration: null },
-  { icon: CalendarDays, key: "tracker", span: "", flagship: false, Illustration: null },
-  { icon: Video, key: "simulator", span: "lg:col-span-2", flagship: false, Illustration: null },
-  { icon: Wallet, key: "mistakes", span: "lg:col-span-2", flagship: false, Illustration: null },
-  { icon: Store, key: "courses", span: "lg:col-span-2", flagship: false, Illustration: null },
-  {
-    icon: ClipboardCheck,
-    key: "review",
-    span: "lg:col-span-2",
-    flagship: false,
-    Illustration: null,
-  },
-] as const;
-
-/* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */
-const stats = [
-  { prefix: "", value: 2, suffix: "", key: "levels" },
-  { prefix: "", value: 100, suffix: "%", key: "rtl" },
-  { prefix: "", value: 3, suffix: "", key: "spaces" },
+  { icon: Search, key: "library", flagship: true },
+  { icon: UserRound, key: "community", flagship: false },
+  { icon: CalendarDays, key: "tracker", flagship: false },
+  { icon: Video, key: "simulator", flagship: false },
+  { icon: Wallet, key: "mistakes", flagship: false },
+  { icon: Store, key: "courses", flagship: false },
 ] as const;
 
 const roles = [
@@ -68,6 +61,8 @@ const roles = [
   { icon: BookOpenCheck, key: "teacher" },
   { icon: LineChart, key: "parent" },
 ] as const;
+
+const journeySteps = [Compass, ListChecks, ClipboardCheck, Check] as const;
 
 const latestPosts = blogPosts.slice(-2).reverse();
 
@@ -82,129 +77,134 @@ function Landing() {
 
   return (
     <PublicLayout>
-      <section className="visual-canvas surface-mesh surface-mesh-fade relative overflow-hidden border-b border-border">
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
-            <div>
-              <span className="glass-surface inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-primary shadow-elevation-1">
-                <Trophy className="size-4" />
-                {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
-              </span>
+      {/* Hero — اللحظة البصرية الوحيدة المتعمّدة بالصفحة. تسلسل دخول واحد
+          منسّق (Reveal بمجموعة واحدة لا لكل عنصر على حدة)، ولا حركة سكرول
+          متكررة بعدها. HeroMockup يحتل مساحة أكبر لأنه أصدق عنصر بالصفحة —
+          حالة حقيقية من المنصة، لا رسم توضيحي. */}
+      <section className="relative overflow-hidden border-b-2 border-[var(--border-strong)] bg-card">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <Reveal delay={0}>
+            <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-background px-4 py-1.5 text-sm font-semibold text-primary">
+              <Trophy className="size-4" />
+              {session ? t("home.signedIn.welcome", { name: session.fullName }) : t("home.badge")}
+            </span>
 
-              {session && role ? (
-                <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
-                    {t(`home.signedIn.${role}.h1`)}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t(`home.signedIn.${role}.sub`)}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
+            {session && role ? (
+              <>
+                <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
+                  {t(`home.signedIn.${role}.h1`)}
+                </h1>
+                <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                  {t(`home.signedIn.${role}.sub`)}
+                </p>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Link
+                    to={session.home}
+                    className={buttonVariants({
+                      variant: "default",
+                      className: "h-auto px-7 py-3.5 text-sm",
+                    })}
+                  >
+                    <LayoutDashboard className="size-4" />
+                    {t("home.signedIn.cta")}
+                  </Link>
+                  {canBrowseCourses && (
                     <Link
-                      to={session.home}
-                      className="glow-primary hover-press inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
+                      to="/courses"
+                      className={buttonVariants({
+                        variant: "outline",
+                        className: "h-auto px-7 py-3.5 text-sm",
+                      })}
                     >
-                      <LayoutDashboard className="size-4" />
-                      {t("home.signedIn.cta")}
+                      {t("home.signedIn.browse")}
                     </Link>
-                    {canBrowseCourses && (
-                      <Link
-                        to="/courses"
-                        className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
-                      >
-                        {t("home.signedIn.browse")}
-                      </Link>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
-                    {t("home.h1a")} <span className="text-gradient">{t("home.h1b")}</span>{" "}
-                    {t("home.h1c")}
-                  </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t("home.sub")}
-                  </p>
-                  <div className="mt-9 flex flex-wrap gap-3">
-                    <Link
-                      to="/signup"
-                      className="btn-shine glow-primary hover-press inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground"
-                    >
-                      {t("home.ctaPrimary")}
-                    </Link>
-                    <Link
-                      to="/how-it-works"
-                      className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-bold text-foreground hover:bg-secondary"
-                    >
-                      {t("home.ctaSecondary")}
-                    </Link>
-                  </div>
-                </>
-              )}
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
+                  {t("home.h1a")} {t("home.h1b")} {t("home.h1c")}
+                </h1>
+                <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                  {t("home.sub")}
+                </p>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Link
+                    to="/signup"
+                    className={buttonVariants({
+                      variant: "default",
+                      className: "h-auto px-7 py-3.5 text-sm",
+                    })}
+                  >
+                    {t("home.ctaPrimary")}
+                  </Link>
+                  <Link
+                    to="/how-it-works"
+                    className={buttonVariants({
+                      variant: "outline",
+                      className: "h-auto px-7 py-3.5 text-sm",
+                    })}
+                  >
+                    {t("home.ctaSecondary")}
+                  </Link>
+                </div>
+              </>
+            )}
+          </Reveal>
 
-              <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-3">
-                {stats.map((s, i) => (
-                  <Reveal key={s.key} variant="stat" delay={i * 0.08} className="h-full">
-                    <div className="shadow-elevation-1 flex h-full flex-col justify-center rounded-2xl border border-border bg-card p-5">
-                      {/* بدون hover-lift: بطاقة إحصائية ثابتة، مش عنصر قابل للنقر —
-                          حركة "ارتفاع عند التحويم" بتوحي بتفاعل مش موجود فعليًا. */}
-                      <p className="font-display text-3xl font-bold text-primary">
-                        <AnimatedCounter prefix={s.prefix} value={s.value} suffix={s.suffix} />
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`home.stats.${s.key}`)}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-
-            <Reveal delay={0.15} y={16}>
-              <HeroMockup session={session} />
-            </Reveal>
-          </div>
+          <Reveal delay={0.12} y={16} className="lg:-me-6">
+            <HeroMockup session={session} />
+          </Reveal>
         </div>
       </section>
 
+      {/* رحلة البداية — القسم الوحيد فعليًا متسلسل بالصفحة، لذا وحده يستحق
+          ترقيمًا وخطًا بصريًا متصلاً يمثّل "رحلة" لا بطاقات منفصلة متطابقة. */}
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="max-w-2xl">
-          <span className="text-sm font-bold text-primary">01 · {t("home.startEyebrow")}</span>
-          <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
+          <h2 className="text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
           <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-4">
-          {([Compass, ListChecks, ClipboardCheck, Check] as const).map((Icon, i) => (
-            <Reveal key={i} delay={i * 0.07}>
-              <article className="relative h-full rounded-2xl border border-border bg-card p-6 shadow-elevation-1">
-                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <span className="mt-5 block text-xs font-bold text-muted-foreground">0{i + 1}</span>
-                <h3 className="mt-2 font-bold text-foreground">
-                  {t(`home.startSteps.${i}.title`)}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {t(`home.startSteps.${i}.text`)}
-                </p>
-              </article>
-            </Reveal>
+        <div className="relative mt-12 grid gap-8 md:grid-cols-4">
+          {/* الخط الواصل بين الخطوات — يظهر من md فما فوق فقط */}
+          <div
+            aria-hidden
+            className="absolute top-6 hidden h-0.5 w-full bg-[var(--border-strong)] md:block"
+            style={{ insetInlineStart: 0 }}
+          />
+          {journeySteps.map((Icon, i) => (
+            <div key={i} className="relative flex flex-col items-start">
+              <span
+                className={cn(
+                  "relative z-10 flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] font-display text-base font-bold",
+                  i === 0 ? "bg-primary text-primary-foreground" : "bg-background text-foreground",
+                )}
+              >
+                {i + 1}
+              </span>
+              <Icon className="mt-4 size-5 text-primary" />
+              <h3 className="mt-2 font-bold text-foreground">{t(`home.startSteps.${i}.title`)}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {t(`home.startSteps.${i}.text`)}
+              </p>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-border bg-primary/5">
+      {/* المجاني — العنصر الوحيد هنا تحويلي فعليًا، فيحمل الصندوق ذا الحد
+          السميك. النص المجاور يبقى بلا صندوق حتى يحتفظ الصندوق بمعناه. */}
+      <section className="border-y-2 border-[var(--border-strong)] bg-primary/8">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <span className="text-sm font-bold text-primary">02 · {t("home.freeEyebrow")}</span>
-            <h2 className="mt-2 text-3xl font-bold text-foreground">{t("home.freeTitle")}</h2>
+            <h2 className="text-3xl font-bold text-foreground">{t("home.freeTitle")}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
               {t("home.freeSub")}
             </p>
             <p className="mt-5 text-sm font-semibold text-foreground">{t("home.trustNote")}</p>
           </div>
-          <div className="rounded-2xl border border-primary/20 bg-background p-6 shadow-elevation-1 lg:min-w-80">
+          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-background p-6 shadow-[var(--shadow-brutal)] lg:min-w-80">
             <p className="mb-4 font-bold text-foreground">{t("home.freeListTitle")}</p>
             <ul className="space-y-3">
               {[0, 1, 2, 3, 4].map((i) => (
@@ -218,72 +218,70 @@ function Landing() {
         </div>
       </section>
 
+      {/* المزايا — بلا بطاقات متطابقة. تايبوغرافيا وفواصل فقط، لأن هذا
+          محتوى وصفي بحت (لا رابط ولا بيانات حقيقية لكل عنصر)، فلا يستحق
+          صندوقًا مكرّرًا. البطاقة الرئيسية (flagship) وحدها تُبرَز. */}
       <section className="mx-auto max-w-6xl px-5 py-20">
         <h2 className="text-3xl font-bold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-        {/* Bento grid — بطاقة رئيسية أكبر (المكتبة) + بطاقة عريضة للميزة الفارقة
-            (المحاكي بالذكاء الاصطناعي) + بطاقات عادية للباقي. يتفكك لعمود/عمودين
-            بالشاشات الصغيرة عبر md:grid-cols-2، وبيصير Bento فعلي من lg وفوق. */}
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:auto-rows-fr lg:grid-cols-4">
-          {features.map((f, i) => (
-            <Reveal key={f.key} delay={(i % 3) * 0.08} className={f.span}>
-              <article
+        <div className="mt-10 divide-y-2 divide-[var(--border-strong)] border-y-2 border-[var(--border-strong)]">
+          {features.map((f) => (
+            <div
+              key={f.key}
+              className="grid gap-4 py-7 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-6"
+            >
+              <span
                 className={cn(
-                  // بدون hover-lift: بطاقات مزايا معلوماتية، مش روابط —
-                  // نفس منطق تصحيح الإحصائيات فوق.
-                  "shadow-elevation-1 flex h-full flex-col rounded-2xl border p-6",
-                  f.flagship
-                    ? "surface-mesh border-primary/30 bg-primary/5"
-                    : "border-border bg-card",
+                  "flex size-11 items-center justify-center rounded-xl",
+                  f.flagship ? "bg-primary text-primary-foreground" : "bg-primary/12 text-primary",
                 )}
               >
-                {f.Illustration ? (
-                  <f.Illustration className={cn("w-full", f.flagship ? "h-32" : "h-20")} />
-                ) : (
-                  <span
-                    className={cn(
-                      "flex size-11 items-center justify-center rounded-xl",
-                      f.flagship
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-primary/12 text-primary",
-                    )}
-                  >
-                    <f.icon className="size-5" />
-                  </span>
-                )}
+                <f.icon className="size-5" />
+              </span>
+              <div>
                 <h3
-                  className={cn(
-                    "font-bold text-foreground",
-                    f.Illustration ? "mt-3" : "mt-4",
-                    f.flagship ? "text-lg" : "text-base",
-                  )}
+                  className={cn("font-bold text-foreground", f.flagship ? "text-lg" : "text-base")}
                 >
                   {t(`home.features.${f.key}.title`)}
                 </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
                   {t(`home.features.${f.key}.text`)}
                 </p>
-              </article>
-            </Reveal>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-border bg-card/40">
-        <div className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-3">
-          {roles.map((r) => (
-            <div
-              key={r.key}
-              className="rounded-2xl border border-border bg-background p-6"
-              // بدون hover-lift: بطاقة توضيحية عن دور (طالب/معلم/ولي أمر)،
-              // مش رابط ولا زر — نفس المبدأ بكل الملف.
-            >
-              <r.icon className="size-6 text-success" />
-              <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{t(`home.roles.${r.key}.d`)}</p>
-            </div>
-          ))}
+      {/* الأدوار — بطاقة المعلّم وحدها تحمل معاينة حقيقية (بيانات فعلية من
+          الباك اند)، فتستحق الصندوق البارز. الطالب موضّح أصلًا بالـHero
+          (HeroMockup)، وولي الأمر بلا بيانات حقيقية متاحة اليوم (ربط الابن
+          غير مطبّق)، فكلاهما يبقى وصفيًا هادئًا بلا صندوق مكرّر. */}
+      <section className="border-y-2 border-[var(--border-strong)] bg-card/60">
+        <div className="mx-auto max-w-6xl px-5 py-16">
+          <div className="grid gap-10 md:grid-cols-3">
+            {roles.map((r) =>
+              r.key === "teacher" ? (
+                <div key={r.key} className="md:col-span-2">
+                  <r.icon className="size-6 text-success" />
+                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+                  <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+                    {t(`home.roles.${r.key}.d`)}
+                  </p>
+                  <TeacherPreview />
+                </div>
+              ) : (
+                <div key={r.key}>
+                  <r.icon className="size-6 text-success" />
+                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    {t(`home.roles.${r.key}.d`)}
+                  </p>
+                </div>
+              ),
+            )}
+          </div>
         </div>
       </section>
 
@@ -295,30 +293,32 @@ function Landing() {
           </div>
           <Link
             to="/blog"
-            className="hover-press inline-flex items-center rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-bold text-foreground hover:bg-secondary"
+            className={buttonVariants({
+              variant: "outline",
+              className: "h-auto px-5 py-2.5 text-sm",
+            })}
           >
             {t("blog.teaserCta")}
           </Link>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {latestPosts.map((post, i) => (
-            <Reveal key={post.slug} delay={i * 0.08}>
-              <Link
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="hover-lift shadow-elevation-1 flex h-full flex-col rounded-2xl border border-border bg-card p-6"
-              >
-                <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
-                  {bi(post.category, post.categoryEn)}
-                </span>
-                <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
-                  {bi(post.title, post.titleEn)}
-                </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                  {bi(post.excerpt, post.excerptEn)}
-                </p>
-              </Link>
-            </Reveal>
+          {latestPosts.map((post) => (
+            <Link
+              key={post.slug}
+              to="/blog/$slug"
+              params={{ slug: post.slug }}
+              className={cn(brutalCard, "flex flex-col", brutalInteractive)}
+            >
+              <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
+                {bi(post.category, post.categoryEn)}
+              </span>
+              <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
+                {bi(post.title, post.titleEn)}
+              </h3>
+              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                {bi(post.excerpt, post.excerptEn)}
+              </p>
+            </Link>
           ))}
         </div>
       </section>
@@ -329,11 +329,66 @@ function Landing() {
         <SessionCta
           to="/signup"
           label={t("home.ctaButton")}
-          className="btn-shine glow-primary hover-press mt-7 inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground"
+          className={buttonVariants({
+            variant: "default",
+            className: "mt-7 h-auto px-8 py-3.5 text-sm",
+          })}
         />
       </section>
 
-      <TestimonialsSection className="border-t border-border bg-card/40" />
+      <TestimonialsSection className="border-t-2 border-[var(--border-strong)] bg-card/60" />
     </PublicLayout>
+  );
+}
+
+/** معاينة حقيقية لثلاثة معلمين — بيانات فعلية من نفس مصدر /teachers، لا
+ * صور أو أسماء وهمية. تفشل بصمت (بدون بطاقة خطأ) لأنها معاينة تكميلية،
+ * لا وظيفة أساسية بالصفحة. */
+function TeacherPreview() {
+  const { t } = useTranslation();
+  const bi = useBi();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["backend-teachers-search", { skip: 0, pageSize: 3 }],
+    queryFn: () => searchTeachers({ skip: 0, pageSize: 3 }),
+    retry: 1,
+  });
+  const teachers = data?.data ?? [];
+
+  if (isError || (!isLoading && teachers.length === 0)) return null;
+
+  return (
+    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      {isLoading
+        ? Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-28 animate-pulse rounded-xl border-2 border-[var(--border-strong)] bg-background/60"
+            />
+          ))
+        : teachers.map((teacher) => (
+            <Link
+              key={teacher.id}
+              to="/teacher/$id"
+              params={{ id: String(teacher.id) }}
+              className={cn(
+                "flex flex-col gap-2 rounded-xl border-2 border-[var(--border-strong)] bg-background p-4",
+                brutalInteractive,
+              )}
+            >
+              <PhotoAvatar src={teacher.profileImage} alt={teacher.name ?? ""} className="size-9" />
+              <p className="truncate text-sm font-bold text-foreground">
+                {teacher.name || bi("معلّم", "Teacher")}
+              </p>
+              <p className="truncate text-xs text-muted-foreground">{teacher.subjects[0]}</p>
+            </Link>
+          ))}
+      <Link
+        to="/teachers"
+        className="col-span-full mt-1 inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+      >
+        {t("home.roles.teacher.cta")}
+        <ArrowLeft className="size-4 rtl:rotate-180" />
+      </Link>
+    </div>
   );
 }
