@@ -76,7 +76,6 @@ export const ROLE_MODULE_SCOPE: Record<string, readonly string[]> = {
   طالب: ["student", "shared"],
   معلم: ["teacher", "shared"],
   "ولي أمر": ["parent", "shared"],
-  "مشرف أكاديمي": ["supervisor", "shared"],
   "مدير عام": ["platform", "shared"],
 };
 

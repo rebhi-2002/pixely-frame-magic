@@ -25,7 +25,6 @@ const PAGE_META_KEYS: Record<string, string> = {
   "/for-teachers": "forTeachers",
   "/for-parents": "forParents",
   "/how-it-works": "howItWorks",
-  "/pricing": "pricing",
   "/contact": "contact",
   "/help": "help",
   "/privacy": "privacy",
@@ -33,12 +32,7 @@ const PAGE_META_KEYS: Record<string, string> = {
   "/blog": "blog",
   "/login": "authPages.login",
   "/signup": "authPages.signup",
-  "/forgot-password": "authPages.forgot",
-  "/reset-password": "authPages.reset",
-  "/verify-email": "authPages.verify",
   "/teacher/register": "authPages.teacherRegister",
-  "/invite": "invite",
-  "/unsubscribe": "unsubscribe",
   "/settings": "settings",
 };
 
@@ -46,42 +40,19 @@ const NOINDEX_PATHS = [
   "/403",
   "/login",
   "/signup",
-  "/forgot-password",
-  "/reset-password",
-  "/verify-email",
   "/teacher/register",
-  "/invite/",
-  "/unsubscribe",
-  "/certificate/",
   "/dashboard",
   "/admin/",
   "/teacher/dashboard",
   "/teacher/courses",
-  "/teacher/quizzes",
-  "/teacher/content",
-  "/teacher/community",
-  "/teacher/analytics",
   "/teacher/earnings",
-  "/teacher/grading",
   "/teacher/settings",
   "/teacher/profile/edit",
   "/parent/",
-  "/supervisor/",
-  "/library",
-  "/exam-simulator",
-  "/mistakes-bank",
   "/my-courses",
-  "/my-certificates",
-  "/flashcards",
-  "/bookmarks",
-  "/achievements",
   "/notifications",
-  "/referrals",
   "/schedule",
   "/settings",
-  "/community",
-  "/system-modules",
-  "/role-permissions/",
 ];
 
 function translateMeta(locale: Locale, key: string): { title: string; description: string } {
@@ -131,10 +102,6 @@ export function getSeoForPath(pathname: string, locale: Locale): SeoPayload {
     publishedTime = post.publishedAt;
   } else if (blogSlug) {
     meta = translateMeta(locale, "notFound");
-  } else if (normalizedPath.startsWith("/invite/")) {
-    meta = translateMeta(locale, "invite");
-  } else if (normalizedPath.startsWith("/certificate/")) {
-    meta = translateMeta(locale, "certificate");
   } else if (normalizedPath.startsWith("/teacher/") && !isNoIndex(normalizedPath)) {
     meta = translateMeta(locale, "teacherProfile");
   } else if (normalizedPath.startsWith("/course/") && !isNoIndex(normalizedPath)) {

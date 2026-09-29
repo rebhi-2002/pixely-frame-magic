@@ -106,7 +106,7 @@ function buildAccessTree(
 // رغم اسم الوحدة، لأنها أصلاً لوحات تحكّم إدارية: نظرة عامة، منهج، مراجعة
 // محتوى، كتالوج عام، معلمون (تحقّق/قائمة)، بلاغات، مدفوعات — مش "مساحة
 // أكاديمية" يستخدمها طالب أو معلم بنفسه).
-const ROLE_SPACE_PREFIXES = ["student_", "teacher_", "supervisor_", "parent_"] as const;
+const ROLE_SPACE_PREFIXES = ["student_", "teacher_", "parent_"] as const;
 
 export function buildFullAdminAccess(
   userId: string,

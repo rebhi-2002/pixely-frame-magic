@@ -6,7 +6,7 @@ export function useBi() {
   return <T>(ar: T, en: T): T => (locale === "en" ? en : ar);
 }
 
-export type RoleKey = "student" | "teacher" | "parent" | "supervisor" | "admin";
+export type RoleKey = "student" | "teacher" | "parent" | "admin";
 
 // أسماء الأنواع من مصدرين مختلفين لازم يتوافقوا هون: بيانات الديمو المحلية
 // (rbac-static-data.ts) وأسماء الأنواع الحقيقية المزروعة بالباك اند (راجع
@@ -19,7 +19,6 @@ const ROLE_BY_NAME: Record<string, RoleKey> = {
   طالب: "student",
   معلم: "teacher",
   "ولي أمر": "parent",
-  "مشرف أكاديمي": "supervisor",
   "مدير عام": "admin",
   // أسماء أنواع المستخدمين الحقيقية بالباك اند (UserSeed.cs)
   الطالب: "student",
@@ -32,7 +31,6 @@ export const ROLE_PAGE_PREFIXES: Record<RoleKey, readonly string[]> = {
   student: ["student_", "notifications", "account_settings"],
   teacher: ["teacher_", "notifications", "account_settings"],
   parent: ["parent_", "notifications", "account_settings"],
-  supervisor: ["supervisor_", "notifications", "account_settings"],
   admin: ["admin_", "notifications", "account_settings"],
 };
 
@@ -51,7 +49,6 @@ export const ROLE_HOME: Record<RoleKey, string> = {
   student: "/dashboard",
   teacher: "/teacher/dashboard",
   parent: "/parent/report",
-  supervisor: "/supervisor/dashboard",
   admin: "/admin/dashboard",
 };
 
@@ -64,10 +61,9 @@ export function roleHome(name?: string | null, isAdmin = false): string {
  * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
  */
 export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
-  student: ["/", "/courses", "/teachers", "/how-it-works", "/pricing", "/blog"],
+  student: ["/", "/courses", "/teachers", "/how-it-works", "/blog"],
   teacher: ["/", "/for-teachers", "/how-it-works", "/blog"],
-  parent: ["/", "/for-parents", "/teachers", "/how-it-works", "/pricing", "/blog"],
-  supervisor: ["/", "/how-it-works", "/blog"],
+  parent: ["/", "/for-parents", "/teachers", "/how-it-works", "/blog"],
   admin: ["/", "/blog"],
 };
 
