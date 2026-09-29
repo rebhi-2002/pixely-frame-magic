@@ -95,8 +95,6 @@ export function NotFoundIllustration({ className }: IllustrationProps) {
   );
 }
 
-
-
 /** رسمة "من الرفع للنشر" — تدفق مرئي (رفع → مراجعة → منشور) لصفحة "للمعلمين". */
 export function ContentFlowIllustration({ className }: IllustrationProps) {
   const { t } = useTranslation();
@@ -187,9 +185,6 @@ export function ContentFlowIllustration({ className }: IllustrationProps) {
     </svg>
   );
 }
-
-
-
 
 /**
  * رسمة "تقرير ولي الأمر" — بطاقة تقرير أسبوعي مختصر + رمز خصوصية (قفل)،

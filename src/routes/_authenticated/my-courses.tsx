@@ -16,7 +16,8 @@ export const Route = createFileRoute("/_authenticated/my-courses")({
       { title: "كورساتي | أكاديميا", description },
       {
         title: "My courses | Academia",
-        description: "All your confirmed lessons and bookings, and requests awaiting a teacher's approval.",
+        description:
+          "All your confirmed lessons and bookings, and requests awaiting a teacher's approval.",
       },
     ),
   component: () => (
@@ -31,7 +32,10 @@ function Body() {
   const queryClient = useQueryClient();
 
   const bookings = useQuery({ queryKey: ["student-my-bookings"], queryFn: getStudentMyBookings });
-  const requests = useQuery({ queryKey: ["student-my-requests"], queryFn: () => getStudentMyRequests() });
+  const requests = useQuery({
+    queryKey: ["student-my-requests"],
+    queryFn: () => getStudentMyRequests(),
+  });
 
   const isLoading = bookings.isLoading || requests.isLoading;
   const isError = bookings.isError || requests.isError;
@@ -59,7 +63,10 @@ function Body() {
   if (isLoading) {
     return (
       <AppPage title={bi("كورساتي", "My courses")} icon="BookOpen">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -68,11 +75,19 @@ function Body() {
     <AppPage
       title={bi("كورساتي", "My courses")}
       icon="BookOpen"
-      subtitle={bi(description, "All your confirmed lessons and bookings, and requests awaiting approval.")}
+      subtitle={bi(
+        description,
+        "All your confirmed lessons and bookings, and requests awaiting approval.",
+      )}
     >
-      <WelcomeBanner subtitle={[bi("متابعة دروسك وحجوزاتك.", "Keep track of your lessons and bookings.")]} />
+      <WelcomeBanner
+        subtitle={[bi("متابعة دروسك وحجوزاتك.", "Keep track of your lessons and bookings.")]}
+      />
 
-      <Panel title={bi("الدروس والحجوزات المؤكّدة", "Confirmed lessons & bookings")} icon="CheckCircle2">
+      <Panel
+        title={bi("الدروس والحجوزات المؤكّدة", "Confirmed lessons & bookings")}
+        icon="CheckCircle2"
+      >
         {bookings.data?.length ? (
           <RowList
             rows={bookings.data.map((b) => ({
@@ -86,7 +101,10 @@ function Body() {
             }))}
           />
         ) : (
-          <EmptyState icon="BookOpen" text={bi("لا يوجد دروس أو حجوزات مؤكّدة بعد.", "No confirmed lessons or bookings yet.")} />
+          <EmptyState
+            icon="BookOpen"
+            text={bi("لا يوجد دروس أو حجوزات مؤكّدة بعد.", "No confirmed lessons or bookings yet.")}
+          />
         )}
       </Panel>
 
@@ -101,7 +119,10 @@ function Body() {
             }))}
           />
         ) : (
-          <EmptyState icon="Clock" text={bi("لا يوجد طلبات معلّقة حالياً.", "No pending requests right now.")} />
+          <EmptyState
+            icon="Clock"
+            text={bi("لا يوجد طلبات معلّقة حالياً.", "No pending requests right now.")}
+          />
         )}
       </Panel>
     </AppPage>

@@ -10,7 +10,10 @@ export const Route = createFileRoute("/_authenticated/teacher/courses")({
   head: () =>
     authPageHead(
       { title: "كورساتي (معلم) | أكاديميا", description },
-      { title: "My courses (teacher) | Academia", description: "Create and manage your own courses — under development." },
+      {
+        title: "My courses (teacher) | Academia",
+        description: "Create and manage your own courses — under development.",
+      },
     ),
   component: () => (
     <Guard pageKey="teacher_courses">
@@ -22,7 +25,11 @@ export const Route = createFileRoute("/_authenticated/teacher/courses")({
 function Body() {
   const bi = useBi();
   return (
-    <AppPage title={bi("كورساتي", "My courses")} icon="BookOpen" subtitle={bi(description, description)}>
+    <AppPage
+      title={bi("كورساتي", "My courses")}
+      icon="BookOpen"
+      subtitle={bi(description, description)}
+    >
       <EmptyState
         icon="Construction"
         title={bi("قيد التطوير", "Under development")}

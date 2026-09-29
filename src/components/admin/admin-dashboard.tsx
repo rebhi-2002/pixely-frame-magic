@@ -215,7 +215,10 @@ export function AdminDashboardPage() {
   if (isLoading) {
     return (
       <AppPage title={bi("لوحة إدارة Academia", "Academia admin dashboard")} icon="LayoutDashboard">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -241,8 +244,16 @@ export function AdminDashboardPage() {
           items={[
             { icon: "Users", label: bi("المستخدمون", "Users"), value: String(totalUsers) },
             { icon: "GraduationCap", label: bi("الطلاب", "Students"), value: String(studentCount) },
-            { icon: "Presentation", label: bi("المعلمون", "Teachers"), value: String(teacherCount) },
-            { icon: "UserRound", label: bi("أولياء الأمور", "Parents"), value: String(parentCount) },
+            {
+              icon: "Presentation",
+              label: bi("المعلمون", "Teachers"),
+              value: String(teacherCount),
+            },
+            {
+              icon: "UserRound",
+              label: bi("أولياء الأمور", "Parents"),
+              value: String(parentCount),
+            },
           ]}
         />
       </div>
@@ -290,7 +301,10 @@ export function AdminDashboardPage() {
           />
         ) : (
           <p className="py-6 text-center text-sm text-muted-foreground">
-            {bi("لا توجد مهام بانتظار القرار حالياً 🎉", "No tasks awaiting a decision right now 🎉")}
+            {bi(
+              "لا توجد مهام بانتظار القرار حالياً 🎉",
+              "No tasks awaiting a decision right now 🎉",
+            )}
           </p>
         )}
       </Panel>
@@ -311,7 +325,10 @@ export function AdminDashboardPage() {
         <Panel title={bi("الكورسات حسب الحالة", "Courses by status")} icon="BookOpenCheck">
           <ComparisonChart data={coursesByStatus} />
         </Panel>
-        <Panel title={bi("الكورسات حسب طريقة التدريس", "Courses by delivery mode")} icon="Presentation">
+        <Panel
+          title={bi("الكورسات حسب طريقة التدريس", "Courses by delivery mode")}
+          icon="Presentation"
+        >
           <SplitChart data={coursesByDelivery} />
         </Panel>
       </div>

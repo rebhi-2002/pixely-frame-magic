@@ -84,7 +84,10 @@ function Body() {
   if (childrenQuery.isLoading) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -115,7 +118,10 @@ function Body() {
     <AppPage
       title={bi("تقرير الابن", "Child report")}
       icon="FileBarChart"
-      subtitle={bi(description, "Your children's attendance and exam results, straight from platform records.")}
+      subtitle={bi(
+        description,
+        "Your children's attendance and exam results, straight from platform records.",
+      )}
     >
       <WelcomeBanner
         subtitle={[bi("نظرة سريعة على أداء أبنائك.", "A quick look at your children's progress.")]}
@@ -167,7 +173,10 @@ function Body() {
 
       <Panel title={bi("سجل الحضور", "Attendance record")} icon="CalendarCheck">
         {attendanceQuery.isLoading ? (
-          <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : attendanceQuery.data?.length ? (
           <DataTable
             head={[bi("التاريخ", "Date"), bi("المجموعة", "Group"), bi("ملاحظات", "Notes")]}
@@ -178,16 +187,27 @@ function Body() {
             ])}
           />
         ) : (
-          <EmptyState icon="CalendarCheck" text={bi("لا يوجد سجل حضور بعد.", "No attendance records yet.")} />
+          <EmptyState
+            icon="CalendarCheck"
+            text={bi("لا يوجد سجل حضور بعد.", "No attendance records yet.")}
+          />
         )}
       </Panel>
 
       <Panel title={bi("نتائج الامتحانات", "Exam results")} icon="FileBarChart">
         {examsQuery.isLoading ? (
-          <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : examsQuery.data?.length ? (
           <DataTable
-            head={[bi("الامتحان", "Exam"), bi("التاريخ", "Date"), bi("النتيجة", "Score"), bi("ملاحظات", "Feedback")]}
+            head={[
+              bi("الامتحان", "Exam"),
+              bi("التاريخ", "Date"),
+              bi("النتيجة", "Score"),
+              bi("ملاحظات", "Feedback"),
+            ]}
             rows={examsQuery.data.map((r) => [
               r.examTitle,
               new Date(r.examDate).toLocaleDateString(),
@@ -196,7 +216,10 @@ function Body() {
             ])}
           />
         ) : (
-          <EmptyState icon="FileBarChart" text={bi("لا توجد نتائج امتحانات بعد.", "No exam results yet.")} />
+          <EmptyState
+            icon="FileBarChart"
+            text={bi("لا توجد نتائج امتحانات بعد.", "No exam results yet.")}
+          />
         )}
       </Panel>
     </AppPage>

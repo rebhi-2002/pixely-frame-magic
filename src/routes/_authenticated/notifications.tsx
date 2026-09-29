@@ -5,7 +5,10 @@ import { Check } from "lucide-react";
 import { AppPage, Badge, Panel, RowList, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
-import { getStudentNotifications, markStudentNotificationRead } from "@/integrations/backend/student";
+import {
+  getStudentNotifications,
+  markStudentNotificationRead,
+} from "@/integrations/backend/student";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
@@ -88,7 +91,10 @@ function Body() {
   if (isLoading) {
     return (
       <AppPage title={bi("الإشعارات", "Notifications")} icon="Bell">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -118,11 +124,7 @@ function Body() {
               value: !n.isRead ? bi("جديد", "New") : undefined,
               tone: n.isRead ? "muted" : "primary",
               actions: !n.isRead ? (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => markReadMutation.mutate(n.id)}
-                >
+                <Button size="icon" variant="ghost" onClick={() => markReadMutation.mutate(n.id)}>
                   <Check className="size-4" />
                 </Button>
               ) : undefined,

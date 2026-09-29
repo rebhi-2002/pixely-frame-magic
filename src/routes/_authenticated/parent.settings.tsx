@@ -13,7 +13,10 @@ export const Route = createFileRoute("/_authenticated/parent/settings")({
   head: () =>
     authPageHead(
       { title: "إعدادات ولي الأمر | أكاديميا", description },
-      { title: "Parent settings | Academia", description: "Children linked to your account — read-only for now." },
+      {
+        title: "Parent settings | Academia",
+        description: "Children linked to your account — read-only for now.",
+      },
     ),
   component: PageRoute,
 });
@@ -30,7 +33,10 @@ function Body() {
   const bi = useBi();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({ queryKey: ["parent-children"], queryFn: getMyChildren });
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["parent-children"],
+    queryFn: getMyChildren,
+  });
   const children = data ?? [];
 
   if (isError) {
@@ -56,7 +62,10 @@ function Body() {
   if (isLoading) {
     return (
       <AppPage title={bi("إعدادات ولي الأمر", "Parent settings")} icon="Settings">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -68,7 +77,13 @@ function Body() {
       subtitle={bi(description, description)}
     >
       <StatGrid
-        items={[{ icon: "Users", label: bi("أبناء مرتبطون", "Linked children"), value: String(children.length) }]}
+        items={[
+          {
+            icon: "Users",
+            label: bi("أبناء مرتبطون", "Linked children"),
+            value: String(children.length),
+          },
+        ]}
       />
 
       <Panel title={bi("الأبناء المرتبطون", "Linked children")} icon="Users">
@@ -105,7 +120,11 @@ function Body() {
       <Panel title={bi("روابط سريعة", "Quick links")} icon="Settings">
         <QuickLinks
           items={[
-            { to: "/parent/report", label: bi("تقرير الابن", "Child report"), icon: "FileBarChart" },
+            {
+              to: "/parent/report",
+              label: bi("تقرير الابن", "Child report"),
+              icon: "FileBarChart",
+            },
             { to: "/notifications", label: bi("الإشعارات", "Notifications"), icon: "Bell" },
             { to: "/settings", label: bi("اللغة والثيم", "Language & theme"), icon: "Palette" },
           ]}

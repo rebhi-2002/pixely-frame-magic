@@ -58,7 +58,10 @@ function Body() {
   if (isLoading) {
     return (
       <AppPage title={bi("الجدول", "Schedule")} icon="Calendar">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -67,9 +70,19 @@ function Body() {
     <AppPage
       title={bi("الجدول", "Schedule")}
       icon="Calendar"
-      subtitle={bi(description, "Your weekly schedule — group lessons and your one-on-one bookings.")}
+      subtitle={bi(
+        description,
+        "Your weekly schedule — group lessons and your one-on-one bookings.",
+      )}
     >
-      <WelcomeBanner subtitle={[bi("كل دروسك وحجوزاتك القادمة بمكان واحد.", "All your upcoming lessons and bookings in one place.")]} />
+      <WelcomeBanner
+        subtitle={[
+          bi(
+            "كل دروسك وحجوزاتك القادمة بمكان واحد.",
+            "All your upcoming lessons and bookings in one place.",
+          ),
+        ]}
+      />
 
       <Panel title={bi("الجدول القادم", "Upcoming schedule")} icon="Calendar">
         {data?.length ? (
@@ -90,7 +103,10 @@ function Body() {
             ])}
           />
         ) : (
-          <EmptyState icon="Calendar" text={bi("لا يوجد جدول قادم حالياً.", "No upcoming schedule right now.")} />
+          <EmptyState
+            icon="Calendar"
+            text={bi("لا يوجد جدول قادم حالياً.", "No upcoming schedule right now.")}
+          />
         )}
       </Panel>
     </AppPage>

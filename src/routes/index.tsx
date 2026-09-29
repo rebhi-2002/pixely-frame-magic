@@ -35,13 +35,25 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { icon: Search, key: "library", span: "lg:col-span-2 lg:row-span-2", flagship: true, Illustration: null },
+  {
+    icon: Search,
+    key: "library",
+    span: "lg:col-span-2 lg:row-span-2",
+    flagship: true,
+    Illustration: null,
+  },
   { icon: UserRound, key: "community", span: "", flagship: false, Illustration: null },
   { icon: CalendarDays, key: "tracker", span: "", flagship: false, Illustration: null },
   { icon: Video, key: "simulator", span: "lg:col-span-2", flagship: false, Illustration: null },
   { icon: Wallet, key: "mistakes", span: "lg:col-span-2", flagship: false, Illustration: null },
   { icon: Store, key: "courses", span: "lg:col-span-2", flagship: false, Illustration: null },
-  { icon: ClipboardCheck, key: "review", span: "lg:col-span-2", flagship: false, Illustration: null },
+  {
+    icon: ClipboardCheck,
+    key: "review",
+    span: "lg:col-span-2",
+    flagship: false,
+    Illustration: null,
+  },
 ] as const;
 
 /* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */

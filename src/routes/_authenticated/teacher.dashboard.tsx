@@ -14,7 +14,10 @@ export const Route = createFileRoute("/_authenticated/teacher/dashboard")({
   head: () =>
     authPageHead(
       { title: "لوحة المعلم | أكاديميا", description },
-      { title: "Teacher dashboard | Academia", description: "Your wallet balance, and quick links to your profile and schedule." },
+      {
+        title: "Teacher dashboard | Academia",
+        description: "Your wallet balance, and quick links to your profile and schedule.",
+      },
     ),
   component: () => (
     <Guard pageKey="teacher_dashboard">
@@ -52,7 +55,10 @@ function Body() {
   if (wallet.isLoading) {
     return (
       <AppPage title={bi("لوحة المعلم", "Teacher dashboard")} icon="LayoutDashboard">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -67,7 +73,11 @@ function Body() {
 
       <StatGrid
         items={[
-          { icon: "Wallet", label: bi("رصيد المحفظة", "Wallet balance"), value: `${wallet.data?.balance ?? 0} ₪` },
+          {
+            icon: "Wallet",
+            label: bi("رصيد المحفظة", "Wallet balance"),
+            value: `${wallet.data?.balance ?? 0} ₪`,
+          },
         ]}
       />
 
@@ -83,12 +93,19 @@ function Body() {
 
       <QuickLinks
         items={[
-          { icon: "UserCog", label: bi("تعديل ملفي", "Edit my profile"), to: "/teacher/profile/edit" },
-          { icon: "CalendarClock", label: bi("جدول توفّري", "My availability"), to: "/teacher/settings" },
+          {
+            icon: "UserCog",
+            label: bi("تعديل ملفي", "Edit my profile"),
+            to: "/teacher/profile/edit",
+          },
+          {
+            icon: "CalendarClock",
+            label: bi("جدول توفّري", "My availability"),
+            to: "/teacher/settings",
+          },
           { icon: "Wallet", label: bi("الأرباح", "Earnings"), to: "/teacher/earnings" },
         ]}
       />
     </AppPage>
   );
 }
-

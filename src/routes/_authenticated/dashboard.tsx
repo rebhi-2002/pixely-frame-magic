@@ -65,7 +65,10 @@ function Body() {
   if (isLoading || !dashboard) {
     return (
       <AppPage title={bi("لوحة الطالب", "Student dashboard")} icon="LayoutDashboard">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -74,21 +77,24 @@ function Body() {
     <AppPage
       title={bi("لوحة الطالب", "Student dashboard")}
       icon="LayoutDashboard"
-      subtitle={bi(description, "Your active courses, upcoming schedule, and wallet — at a glance.")}
+      subtitle={bi(
+        description,
+        "Your active courses, upcoming schedule, and wallet — at a glance.",
+      )}
     >
       {justRegistered && <OnboardingChecklist />}
 
       <WelcomeBanner
-        subtitle={[
-          `أهلاً ${dashboard.studentName} 👋`,
-          `Welcome ${dashboard.studentName} 👋`,
-        ]}
+        subtitle={[`أهلاً ${dashboard.studentName} 👋`, `Welcome ${dashboard.studentName} 👋`]}
       />
 
       {!dashboard.hasStudentProfile && (
         <EmptyState
           icon="UserCog"
-          title={bi("حسابك لسا مش مربوط بملف طالب", "Your account isn't linked to a student profile yet")}
+          title={bi(
+            "حسابك لسا مش مربوط بملف طالب",
+            "Your account isn't linked to a student profile yet",
+          )}
           description={bi(
             "بمجرد ما يربط الإدمن حسابك بملف طالب، رح تظهر كورساتك وحضورك ونتائجك هون تلقائياً.",
             "Once an admin links your account to a student profile, your courses, attendance, and results will appear here automatically.",
@@ -135,7 +141,10 @@ function Body() {
             }))}
           />
         ) : (
-          <EmptyState icon="Calendar" text={bi("لا يوجد جدول قادم حالياً.", "No upcoming schedule right now.")} />
+          <EmptyState
+            icon="Calendar"
+            text={bi("لا يوجد جدول قادم حالياً.", "No upcoming schedule right now.")}
+          />
         )}
       </Panel>
 
@@ -150,7 +159,10 @@ function Body() {
             }))}
           />
         ) : (
-          <EmptyState icon="BookOpen" text={bi("لا يوجد كورسات فعّالة بعد.", "No active courses yet.")} />
+          <EmptyState
+            icon="BookOpen"
+            text={bi("لا يوجد كورسات فعّالة بعد.", "No active courses yet.")}
+          />
         )}
       </Panel>
 

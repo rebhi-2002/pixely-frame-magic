@@ -10,7 +10,12 @@ import type { PublicSession } from "@/hooks/use-session";
  */
 const tiles = [
   { icon: Clock, tone: "bg-primary/10 text-primary", ar: "طلبات معلّقة", en: "Pending requests" },
-  { icon: CheckCircle2, tone: "bg-success/10 text-success", ar: "حجوزات مؤكّدة", en: "Confirmed bookings" },
+  {
+    icon: CheckCircle2,
+    tone: "bg-success/10 text-success",
+    ar: "حجوزات مؤكّدة",
+    en: "Confirmed bookings",
+  },
   { icon: Wallet, tone: "bg-info/10 text-info", ar: "رصيد المحفظة", en: "Wallet balance" },
 ] as const;
 

@@ -19,7 +19,10 @@ export const Route = createFileRoute("/_authenticated/teacher/profile/edit")({
   head: () =>
     authPageHead(
       { title: "تعديل ملفي | أكاديميا", description },
-      { title: "Edit my profile | Academia", description: "What students see: your bio, experience, and prices." },
+      {
+        title: "Edit my profile | Academia",
+        description: "What students see: your bio, experience, and prices.",
+      },
     ),
   component: () => (
     <Guard pageKey="teacher_profile_edit">
@@ -66,7 +69,10 @@ function Body() {
       <AppPage title={bi("تعديل ملفي", "Edit my profile")} icon="UserCog">
         <EmptyState
           icon="UserX"
-          title={bi("حسابك لسا مش مربوط بملف معلم بالباك اند", "Your account isn't linked to a teacher record on the backend yet")}
+          title={bi(
+            "حسابك لسا مش مربوط بملف معلم بالباك اند",
+            "Your account isn't linked to a teacher record on the backend yet",
+          )}
           description={bi(
             "هاي مو مشكلة بالبيانات يلي كتبتها — الباك اند حالياً ما بينشئ ملف معلم تلقائياً عند التسجيل. تواصل مع الدعم الفني لربط حسابك، وبترجع تقدر تحفظ.",
             "This isn't about what you typed — the backend doesn't auto-create a teacher record on registration yet. Contact support to link your account, then you'll be able to save.",
@@ -113,7 +119,9 @@ function Body() {
                 min={0}
                 max={60}
                 value={form.experienceYears}
-                onChange={(e) => setForm((f) => ({ ...f, experienceYears: Number(e.target.value) }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, experienceYears: Number(e.target.value) }))
+                }
               />
             </div>
             <div>
@@ -153,7 +161,10 @@ function Body() {
                 type="number"
                 value={form.hourlyPriceOnline ?? ""}
                 onChange={(e) =>
-                  setForm((f) => ({ ...f, hourlyPriceOnline: e.target.value ? Number(e.target.value) : undefined }))
+                  setForm((f) => ({
+                    ...f,
+                    hourlyPriceOnline: e.target.value ? Number(e.target.value) : undefined,
+                  }))
                 }
               />
             </div>
@@ -172,16 +183,24 @@ function Body() {
                 type="number"
                 value={form.hourlyPriceInPerson ?? ""}
                 onChange={(e) =>
-                  setForm((f) => ({ ...f, hourlyPriceInPerson: e.target.value ? Number(e.target.value) : undefined }))
+                  setForm((f) => ({
+                    ...f,
+                    hourlyPriceInPerson: e.target.value ? Number(e.target.value) : undefined,
+                  }))
                 }
               />
             </div>
           )}
           <div className="flex items-center justify-between rounded-xl border border-border p-3">
             <div>
-              <p className="text-sm font-semibold">{bi("إظهار ملفي بدليل المعلمين", "Show my profile in the directory")}</p>
+              <p className="text-sm font-semibold">
+                {bi("إظهار ملفي بدليل المعلمين", "Show my profile in the directory")}
+              </p>
               <p className="text-xs text-muted-foreground">
-                {bi("لازم يكون مفعّل حتى يقدر الطلاب يلاقوك بالبحث.", "Must be on for students to find you in search.")}
+                {bi(
+                  "لازم يكون مفعّل حتى يقدر الطلاب يلاقوك بالبحث.",
+                  "Must be on for students to find you in search.",
+                )}
               </p>
             </div>
             <Switch

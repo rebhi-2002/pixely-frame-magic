@@ -46,7 +46,10 @@ export function CourseCatalogPage() {
   if (isLoading) {
     return (
       <AppPage title={bi("كتالوج الكورسات", "Course catalog")} icon="Store">
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -89,7 +92,10 @@ export function CourseCatalogPage() {
                 c.teacherName ?? "—",
                 c.subjectName ?? "—",
                 `${c.price} ₪`,
-                <Badge key={c.id} tone={c.status === 2 ? "success" : c.status === 1 ? "muted" : "danger"}>
+                <Badge
+                  key={c.id}
+                  tone={c.status === 2 ? "success" : c.status === 1 ? "muted" : "danger"}
+                >
                   {bi(...STATUS_LABEL[c.status])}
                 </Badge>,
               ])}

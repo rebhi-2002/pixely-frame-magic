@@ -15,7 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setMyTeacherAvailability, type AvailabilitySlotInput } from "@/integrations/backend/teachers";
+import {
+  setMyTeacherAvailability,
+  type AvailabilitySlotInput,
+} from "@/integrations/backend/teachers";
 import { useBi } from "@/lib/bi";
 import { authPageHead } from "@/lib/seo";
 
@@ -25,7 +28,10 @@ export const Route = createFileRoute("/_authenticated/teacher/settings")({
   head: () =>
     authPageHead(
       { title: "الإعدادات | أكاديميا", description },
-      { title: "Settings | Academia", description: "The weekly hours you're available for bookings." },
+      {
+        title: "Settings | Academia",
+        description: "The weekly hours you're available for bookings.",
+      },
     ),
   component: () => (
     <Guard pageKey="teacher_settings">
@@ -56,7 +62,10 @@ function Body() {
   });
 
   const addSlot = () =>
-    setSlots((s) => [...s, { dayOfWeek: 0, startTime: "09:00:00", endTime: "10:00:00", teachingMode: 2 }]);
+    setSlots((s) => [
+      ...s,
+      { dayOfWeek: 0, startTime: "09:00:00", endTime: "10:00:00", teachingMode: 2 },
+    ]);
   const removeSlot = (i: number) => setSlots((s) => s.filter((_, idx) => idx !== i));
   const updateSlot = (i: number, patch: Partial<AvailabilitySlotInput>) =>
     setSlots((s) => s.map((slot, idx) => (idx === i ? { ...slot, ...patch } : slot)));
@@ -66,7 +75,10 @@ function Body() {
       <AppPage title={bi("الإعدادات", "Settings")} icon="Settings">
         <EmptyState
           icon="UserX"
-          title={bi("حسابك لسا مش مربوط بملف معلم بالباك اند", "Your account isn't linked to a teacher record yet")}
+          title={bi(
+            "حسابك لسا مش مربوط بملف معلم بالباك اند",
+            "Your account isn't linked to a teacher record yet",
+          )}
           description={bi(
             "نفس القيد بصفحة تعديل الملف — الباك اند ما بينشئ ملف معلم تلقائياً عند التسجيل حالياً. تواصل مع الدعم لربط حسابك.",
             "Same limitation as the profile page — the backend doesn't auto-create a teacher record on registration yet. Contact support to get your account linked.",
@@ -82,7 +94,11 @@ function Body() {
   }
 
   return (
-    <AppPage title={bi("الإعدادات", "Settings")} icon="Settings" subtitle={bi(description, description)}>
+    <AppPage
+      title={bi("الإعدادات", "Settings")}
+      icon="Settings"
+      subtitle={bi(description, description)}
+    >
       <Panel
         title={bi("جدول التوفّر الأسبوعي", "Weekly availability")}
         icon="CalendarClock"
@@ -96,7 +112,10 @@ function Body() {
         {slots.length ? (
           <div className="space-y-3">
             {slots.map((slot, i) => (
-              <div key={i} className="flex flex-wrap items-center gap-2 rounded-xl border border-border p-3">
+              <div
+                key={i}
+                className="flex flex-wrap items-center gap-2 rounded-xl border border-border p-3"
+              >
                 <Select
                   value={String(slot.dayOfWeek)}
                   onValueChange={(v) => updateSlot(i, { dayOfWeek: Number(v) })}
@@ -137,14 +156,22 @@ function Body() {
                     <SelectItem value="1">{bi("حضوري", "In-person")}</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => removeSlot(i)}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="text-destructive"
+                  onClick={() => removeSlot(i)}
+                >
                   <Trash2 className="size-4" />
                 </Button>
               </div>
             ))}
           </div>
         ) : (
-          <EmptyState icon="CalendarClock" text={bi("ما ضفت أوقات توفّر بعد.", "You haven't added any availability slots yet.")} />
+          <EmptyState
+            icon="CalendarClock"
+            text={bi("ما ضفت أوقات توفّر بعد.", "You haven't added any availability slots yet.")}
+          />
         )}
       </Panel>
 
