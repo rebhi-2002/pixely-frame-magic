@@ -5,7 +5,6 @@
 
 import { loadBackendUserOptions } from "./admin-users";
 import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
-import { env } from "@/lib/env";
 
 const AUTH_STORAGE_KEY = "academia.auth";
 export const AUTH_EVENT = "academia-auth-changed";
@@ -372,24 +371,6 @@ export async function register(input: RegisterInput): Promise<void> {
     isDemo: false,
     profile,
     justRegistered: true,
-  });
-}
-
-/** دخول محلي مؤقت لاختبار الأدوار التي لم يدعمها الباك إند بعد.
- * نفس شرط الظهور بالضبط يلي بيتحكم بظهور أزرار الدخول التجريبي بـlogin.tsx
- * (demoEnabled) — لازم يضلوا متطابقين وإلا الزر بيظهر بس الضغط عليه بيفشل. */
-export function loginAsDemo(userId: string): void {
-  const demoAllowed = env.ENABLE_DEMO_LOGIN;
-  if (!demoAllowed) {
-    throw new Error("الدخول التجريبي متاح في بيئة التطوير فقط");
-  }
-
-  writeStoredSession({
-    email: null,
-    loggedInAt: Date.now(),
-    userId,
-    isDemo: true,
-    profile: null,
   });
 }
 

@@ -95,3 +95,68 @@ export async function getTeacherAvailability(
   if (date) params.set("date", date);
   return apiClient.get<AvailabilitySlot[]>(`/api/Teacher/Availability?${params.toString()}`);
 }
+
+// ---------------------------------------------------------------------------
+// ملف "المعلم نفسه" (FR-T08/T09) — UpdateProfile وSetAvailability بيتعرّفوا على
+// المعلم عبر Teacher.UserId داخل الباك اند (بلا حاجة نعرف رقم Teacher.Id).
+// ⚠️ حالياً ما في مسار بالباك اند بينشئ صف Teacher مربوط بحساب تسجيل معلم جديد
+// (موثّق: docs/operations/2026-09-21-backend-requirements.md — P1-1). فلحد ما
+// ينحل، UpdateProfile/SetAvailability بيرجّعوا success:false بهدوء (مش خطأ) —
+// تعامل الواجهة مع هالحالة موجود بالصفحات (teacher.profile.edit / teacher.settings).
+
+export interface TeacherProfileInput {
+  bio?: string | null;
+  qualifications?: string | null;
+  experienceYears: number;
+  serviceArea?: string | null;
+  languages?: string | null;
+  supportsOnline: boolean;
+  supportsInPerson: boolean;
+  hourlyPriceOnline?: number | null;
+  hourlyPriceInPerson?: number | null;
+  isPublicForDiscovery: boolean;
+  subjectIds: number[];
+  gradeIds: number[];
+}
+
+export interface TeacherOpResult {
+  success: boolean;
+  message?: string | null;
+}
+
+/** تحديث ملف المعلم الخاص (FR-T08). */
+export async function updateMyTeacherProfile(input: TeacherProfileInput): Promise<TeacherOpResult> {
+  return apiClient.post<TeacherOpResult>("/api/Teacher/UpdateProfile", input);
+}
+
+export interface GradeOption {
+  id: number;
+  name: string;
+  section?: string | null;
+}
+
+/** قائمة الصفوف الحقيقية — ⚠️ ما في بيانات seed لها حالياً بالباك اند (P1-3)،
+ *  فبترجع مصفوفة فاضية لحد ما تُزرع بيانات فعلية؛ مش خطأ بالطلب نفسه. */
+export async function getGradesList(): Promise<GradeOption[]> {
+  const result = await apiClient.get<{ grades: GradeOption[] } | GradeOption[]>(
+    "/api/Teacher/CreateEditModal?id=0",
+  );
+  if (Array.isArray(result)) return result;
+  return (result as { grades?: GradeOption[] }).grades ?? [];
+}
+
+export interface AvailabilitySlotInput {
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  teachingMode: 1 | 2;
+  effectiveFrom?: string | null;
+  effectiveTo?: string | null;
+}
+
+/** تحديد أوقات توفّر المعلم الخاصة (FR-T09) — يستبدل كل الجدول بالمُرسَل. */
+export async function setMyTeacherAvailability(
+  slots: AvailabilitySlotInput[],
+): Promise<TeacherOpResult> {
+  return apiClient.post<TeacherOpResult>("/api/Teacher/SetAvailability", { slots });
+}

@@ -112,3 +112,41 @@ export async function getPublishedCourse(id: number): Promise<BackendCourseRow |
     throw err;
   }
 }
+
+/**
+ * كل الكورسات (مسودة/منشور/مؤرشف) للأدمن — /api/Course/GetAll، مقصور على الأدمن
+ * والمعلم (RequireUserTypes). ⚠️ إنشاء/تعديل كورس (CreateEdit) غير مربوط بعد لأنه
+ * يحتاج مصدر مواد/صفوف/فئات حقيقي غير موجود بالباك اند حالياً (P1-3) — راجع
+ * docs/operations/2026-09-21-backend-requirements.md.
+ */
+export async function listAllCoursesForAdmin(
+  request: PublishedCoursesPageRequest & { searchValue?: string } = {},
+): Promise<PagedResult<BackendCourseRow>> {
+  return apiClient.post<PagedResult<BackendCourseRow>>("/api/Course/GetAll", {
+    skip: request.skip ?? 0,
+    pageSize: Math.min(request.pageSize ?? PUBLISHED_PAGE_SIZE, PUBLISHED_PAGE_SIZE),
+    sortColumn: request.sortColumn,
+    sortColumnDirection: request.sortColumnDirection,
+    searchValue: request.searchValue,
+  });
+}
+
+/** كل الكورسات (أي حالة) بترقيم صفحات، لإحصائيات الأدمن — نفس نمط التقسيم
+ *  المستخدم بـlistAllPublishedCourses. */
+export async function listAllCoursesForAdminFull(maxPages = 6): Promise<PublishedCatalog> {
+  const first = await listAllCoursesForAdmin({ skip: 0 });
+  const total = first.totalCount ?? first.data.length;
+  const pagesNeeded = Math.min(Math.ceil(total / PUBLISHED_PAGE_SIZE), maxPages);
+
+  if (pagesNeeded <= 1) {
+    return { items: first.data, totalCount: total, truncated: total > first.data.length };
+  }
+
+  const rest = await Promise.all(
+    Array.from({ length: pagesNeeded - 1 }, (_, i) =>
+      listAllCoursesForAdmin({ skip: (i + 1) * PUBLISHED_PAGE_SIZE }),
+    ),
+  );
+  const items = [first, ...rest].flatMap((page) => page.data);
+  return { items, totalCount: total, truncated: total > items.length };
+}

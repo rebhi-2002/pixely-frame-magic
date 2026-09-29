@@ -23,7 +23,6 @@ export interface PublicSession {
 
 const ROLE_KEY_BY_ID: Record<string, RoleKey> = {
   "r-admin": "admin",
-  "r-supervisor": "supervisor",
   "r-teacher": "teacher",
   "r-parent": "parent",
   "r-student": "student",
