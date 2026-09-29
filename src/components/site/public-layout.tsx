@@ -11,7 +11,6 @@ import {
   MessageCircle,
   Menu,
   Route,
-  Tag,
   UserPlus,
   UserSearch,
   Users,
@@ -47,7 +46,6 @@ const navItems = [
   { to: "/courses", key: "nav.courses", icon: BookOpen },
   { to: "/teachers", key: "nav.teachers", icon: UserSearch },
   { to: "/how-it-works", key: "nav.howItWorks", icon: Route },
-  { to: "/pricing", key: "nav.pricing", icon: Tag },
   { to: "/for-teachers", key: "nav.forTeachers", icon: GraduationCap },
   { to: "/for-parents", key: "nav.forParents", icon: Users },
 ] as const;
@@ -56,7 +54,6 @@ const footerPlatform = [
   { to: "/courses", key: "nav.courses" },
   { to: "/teachers", key: "nav.teachers" },
   { to: "/how-it-works", key: "nav.howItWorks" },
-  { to: "/pricing", key: "nav.pricing" },
   { to: "/for-teachers", key: "nav.forTeachers" },
   { to: "/for-parents", key: "nav.forParents" },
   { to: "/blog", key: "nav.blog" },
@@ -68,7 +65,6 @@ const footerLegal = [
   { to: "/contact", key: "nav.contact" },
   { to: "/privacy", key: "nav.privacy" },
   { to: "/terms", key: "nav.terms" },
-  { to: "/unsubscribe", key: "nav.unsubscribe" },
 ] as const;
 
 export function BrandMark({ className = "" }: { className?: string }) {

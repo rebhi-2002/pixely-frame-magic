@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { PageHeader, Toolbar } from "@/components/admin/page-header";
+import { Pagination } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,6 +64,7 @@ export function PagesPage() {
   const { can } = useAccess();
 
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -91,6 +93,12 @@ export function PagesPage() {
       return hay.includes(q);
     });
   }, [pages, search]);
+
+  const PAGE_SIZE = 20;
+  const paged = useMemo(
+    () => filtered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE),
+    [filtered, page],
+  );
 
   // تحقق حقيقي قبل الإرسال — نفس نمط users-manager.tsx (راجع
   // full-project-report.md لسياق ليش أُضيف).
@@ -162,7 +170,10 @@ export function PagesPage() {
             <Input
               placeholder={bi("بحث بالاسم أو الرابط", "Search by name or link")}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
               className="ps-9"
             />
           </div>
@@ -219,9 +230,9 @@ export function PagesPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((p, i) => (
+                {paged.map((p, i) => (
                   <tr key={p.id} className="border-b border-border/60 last:border-0">
-                    <td className="px-4 py-3 text-muted-foreground">{i + 1}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{page * PAGE_SIZE + i + 1}</td>
                     <td className="px-4 py-3 font-semibold text-foreground">
                       {p.name}
                       <div className="text-xs font-normal text-muted-foreground">{p.name_en}</div>
@@ -287,6 +298,18 @@ export function PagesPage() {
             </table>
           )}
         </div>
+        <Pagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          totalCount={filtered.length}
+          onPageChange={setPage}
+          summary={bi(
+            `${Math.min(page * PAGE_SIZE + 1, filtered.length)}–${Math.min((page + 1) * PAGE_SIZE, filtered.length)} من ${filtered.length}`,
+            `${Math.min(page * PAGE_SIZE + 1, filtered.length)}–${Math.min((page + 1) * PAGE_SIZE, filtered.length)} of ${filtered.length}`,
+          )}
+          previousLabel={bi("السابق", "Previous")}
+          nextLabel={bi("التالي", "Next")}
+        />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

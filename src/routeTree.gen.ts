@@ -18,71 +18,36 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as ForParentsRouteImport } from './routes/for-parents'
 import { Route as ForTeachersRouteImport } from './routes/for-teachers'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TeachersRouteImport } from './routes/teachers'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
-import { Route as AuthenticatedAchievementsRouteImport } from './routes/_authenticated/achievements'
-import { Route as AuthenticatedBookmarksRouteImport } from './routes/_authenticated/bookmarks'
-import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedExamSimulatorRouteImport } from './routes/_authenticated/exam-simulator'
-import { Route as AuthenticatedFlashcardsRouteImport } from './routes/_authenticated/flashcards'
-import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
-import { Route as AuthenticatedMistakesBankRouteImport } from './routes/_authenticated/mistakes-bank'
-import { Route as AuthenticatedMyCertificatesRouteImport } from './routes/_authenticated/my-certificates'
 import { Route as AuthenticatedMyCoursesRouteImport } from './routes/_authenticated/my-courses'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
-import { Route as AuthenticatedReferralsRouteImport } from './routes/_authenticated/referrals'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedSystemModulesRouteImport } from './routes/_authenticated/system-modules'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as CertificateIdRouteImport } from './routes/certificate.$id'
 import { Route as CourseIdRouteImport } from './routes/course.$id'
-import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as TeacherRegisterRouteImport } from './routes/teacher.register'
 import { Route as AuthenticatedAdminBackendPermissionsRouteImport } from './routes/_authenticated/admin.backend-permissions'
-import { Route as AuthenticatedAdminCommunityReportsRouteImport } from './routes/_authenticated/admin.community-reports'
 import { Route as AuthenticatedAdminConstantsRouteImport } from './routes/_authenticated/admin.constants'
-import { Route as AuthenticatedAdminContentReviewRouteImport } from './routes/_authenticated/admin.content-review'
 import { Route as AuthenticatedAdminCourseCatalogRouteImport } from './routes/_authenticated/admin.course-catalog'
-import { Route as AuthenticatedAdminCurriculumRouteImport } from './routes/_authenticated/admin.curriculum'
-import { Route as AuthenticatedAdminCurriculumRequestsRouteImport } from './routes/_authenticated/admin.curriculum-requests'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
 import { Route as AuthenticatedAdminPagesRouteImport } from './routes/_authenticated/admin.pages'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
-import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
-import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin.roles'
-import { Route as AuthenticatedAdminTeachersRouteImport } from './routes/_authenticated/admin.teachers'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedParentReportRouteImport } from './routes/_authenticated/parent.report'
 import { Route as AuthenticatedParentSettingsRouteImport } from './routes/_authenticated/parent.settings'
-import { Route as AuthenticatedRolePermissionsRoleIdRouteImport } from './routes/_authenticated/role-permissions.$roleId'
-import { Route as AuthenticatedSupervisorDashboardRouteImport } from './routes/_authenticated/supervisor.dashboard'
-import { Route as AuthenticatedSupervisorReportsRouteImport } from './routes/_authenticated/supervisor.reports'
-import { Route as AuthenticatedSupervisorStudentsOverviewRouteImport } from './routes/_authenticated/supervisor.students-overview'
-import { Route as AuthenticatedSupervisorTeachersRouteImport } from './routes/_authenticated/supervisor.teachers'
-import { Route as AuthenticatedTeacherAnalyticsRouteImport } from './routes/_authenticated/teacher.analytics'
-import { Route as AuthenticatedTeacherCommunityRouteImport } from './routes/_authenticated/teacher.community'
-import { Route as AuthenticatedTeacherContentRouteImport } from './routes/_authenticated/teacher.content'
 import { Route as AuthenticatedTeacherCoursesRouteImport } from './routes/_authenticated/teacher.courses'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherEarningsRouteImport } from './routes/_authenticated/teacher.earnings'
-import { Route as AuthenticatedTeacherGradingRouteImport } from './routes/_authenticated/teacher.grading'
-import { Route as AuthenticatedTeacherQuizzesRouteImport } from './routes/_authenticated/teacher.quizzes'
 import { Route as AuthenticatedTeacherSettingsRouteImport } from './routes/_authenticated/teacher.settings'
-import { Route as AuthenticatedLibraryLessonIdRouteImport } from './routes/_authenticated/library.lesson.$id'
 import { Route as AuthenticatedTeacherProfileEditRouteImport } from './routes/_authenticated/teacher.profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -129,11 +94,6 @@ const ForTeachersRoute = ForTeachersRouteImport.update({
   path: '/for-teachers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -149,19 +109,9 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -179,65 +129,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedAchievementsRoute =
-  AuthenticatedAchievementsRouteImport.update({
-    id: '/achievements',
-    path: '/achievements',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedBookmarksRoute = AuthenticatedBookmarksRouteImport.update({
-  id: '/bookmarks',
-  path: '/bookmarks',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedExamSimulatorRoute =
-  AuthenticatedExamSimulatorRouteImport.update({
-    id: '/exam-simulator',
-    path: '/exam-simulator',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedFlashcardsRoute = AuthenticatedFlashcardsRouteImport.update({
-  id: '/flashcards',
-  path: '/flashcards',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedMistakesBankRoute =
-  AuthenticatedMistakesBankRouteImport.update({
-    id: '/mistakes-bank',
-    path: '/mistakes-bank',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedMyCertificatesRoute =
-  AuthenticatedMyCertificatesRouteImport.update({
-    id: '/my-certificates',
-    path: '/my-certificates',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedMyCoursesRoute = AuthenticatedMyCoursesRouteImport.update({
   id: '/my-courses',
   path: '/my-courses',
@@ -249,11 +145,6 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedReferralsRoute = AuthenticatedReferralsRouteImport.update({
-  id: '/referrals',
-  path: '/referrals',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -264,12 +155,6 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedSystemModulesRoute =
-  AuthenticatedSystemModulesRouteImport.update({
-    id: '/system-modules',
-    path: '/system-modules',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -280,19 +165,9 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
-const CertificateIdRoute = CertificateIdRouteImport.update({
-  id: '/certificate/$id',
-  path: '/certificate/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CourseIdRoute = CourseIdRouteImport.update({
   id: '/course/$id',
   path: '/course/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InviteCodeRoute = InviteCodeRouteImport.update({
-  id: '/invite/$code',
-  path: '/invite/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeacherIdRoute = TeacherIdRouteImport.update({
@@ -311,40 +186,16 @@ const AuthenticatedAdminBackendPermissionsRoute =
     path: '/admin/backend-permissions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminCommunityReportsRoute =
-  AuthenticatedAdminCommunityReportsRouteImport.update({
-    id: '/admin/community-reports',
-    path: '/admin/community-reports',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedAdminConstantsRoute =
   AuthenticatedAdminConstantsRouteImport.update({
     id: '/admin/constants',
     path: '/admin/constants',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminContentReviewRoute =
-  AuthenticatedAdminContentReviewRouteImport.update({
-    id: '/admin/content-review',
-    path: '/admin/content-review',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedAdminCourseCatalogRoute =
   AuthenticatedAdminCourseCatalogRouteImport.update({
     id: '/admin/course-catalog',
     path: '/admin/course-catalog',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedAdminCurriculumRoute =
-  AuthenticatedAdminCurriculumRouteImport.update({
-    id: '/admin/curriculum',
-    path: '/admin/curriculum',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedAdminCurriculumRequestsRoute =
-  AuthenticatedAdminCurriculumRequestsRouteImport.update({
-    id: '/admin/curriculum-requests',
-    path: '/admin/curriculum-requests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminDashboardRoute =
@@ -364,23 +215,6 @@ const AuthenticatedAdminPaymentsRoute =
     path: '/admin/payments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminPermissionsRoute =
-  AuthenticatedAdminPermissionsRouteImport.update({
-    id: '/admin/permissions',
-    path: '/admin/permissions',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedAdminRolesRoute = AuthenticatedAdminRolesRouteImport.update({
-  id: '/admin/roles',
-  path: '/admin/roles',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAdminTeachersRoute =
-  AuthenticatedAdminTeachersRouteImport.update({
-    id: '/admin/teachers',
-    path: '/admin/teachers',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -396,54 +230,6 @@ const AuthenticatedParentSettingsRoute =
   AuthenticatedParentSettingsRouteImport.update({
     id: '/parent/settings',
     path: '/parent/settings',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedRolePermissionsRoleIdRoute =
-  AuthenticatedRolePermissionsRoleIdRouteImport.update({
-    id: '/role-permissions/$roleId',
-    path: '/role-permissions/$roleId',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSupervisorDashboardRoute =
-  AuthenticatedSupervisorDashboardRouteImport.update({
-    id: '/supervisor/dashboard',
-    path: '/supervisor/dashboard',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSupervisorReportsRoute =
-  AuthenticatedSupervisorReportsRouteImport.update({
-    id: '/supervisor/reports',
-    path: '/supervisor/reports',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSupervisorStudentsOverviewRoute =
-  AuthenticatedSupervisorStudentsOverviewRouteImport.update({
-    id: '/supervisor/students-overview',
-    path: '/supervisor/students-overview',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSupervisorTeachersRoute =
-  AuthenticatedSupervisorTeachersRouteImport.update({
-    id: '/supervisor/teachers',
-    path: '/supervisor/teachers',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedTeacherAnalyticsRoute =
-  AuthenticatedTeacherAnalyticsRouteImport.update({
-    id: '/teacher/analytics',
-    path: '/teacher/analytics',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedTeacherCommunityRoute =
-  AuthenticatedTeacherCommunityRouteImport.update({
-    id: '/teacher/community',
-    path: '/teacher/community',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedTeacherContentRoute =
-  AuthenticatedTeacherContentRouteImport.update({
-    id: '/teacher/content',
-    path: '/teacher/content',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedTeacherCoursesRoute =
@@ -464,29 +250,11 @@ const AuthenticatedTeacherEarningsRoute =
     path: '/teacher/earnings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedTeacherGradingRoute =
-  AuthenticatedTeacherGradingRouteImport.update({
-    id: '/teacher/grading',
-    path: '/teacher/grading',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedTeacherQuizzesRoute =
-  AuthenticatedTeacherQuizzesRouteImport.update({
-    id: '/teacher/quizzes',
-    path: '/teacher/quizzes',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedTeacherSettingsRoute =
   AuthenticatedTeacherSettingsRouteImport.update({
     id: '/teacher/settings',
     path: '/teacher/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedLibraryLessonIdRoute =
-  AuthenticatedLibraryLessonIdRouteImport.update({
-    id: '/lesson/$id',
-    path: '/lesson/$id',
-    getParentRoute: () => AuthenticatedLibraryRoute,
   } as any)
 const AuthenticatedTeacherProfileEditRoute =
   AuthenticatedTeacherProfileEditRouteImport.update({
@@ -504,71 +272,36 @@ export interface FileRoutesByFullPath {
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
-  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
-  '/unsubscribe': typeof UnsubscribeRoute
-  '/verify-email': typeof VerifyEmailRoute
-  '/achievements': typeof AuthenticatedAchievementsRoute
-  '/bookmarks': typeof AuthenticatedBookmarksRoute
-  '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/exam-simulator': typeof AuthenticatedExamSimulatorRoute
-  '/flashcards': typeof AuthenticatedFlashcardsRoute
-  '/library': typeof AuthenticatedLibraryRouteWithChildren
-  '/mistakes-bank': typeof AuthenticatedMistakesBankRoute
-  '/my-certificates': typeof AuthenticatedMyCertificatesRoute
   '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/referrals': typeof AuthenticatedReferralsRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/certificate/$id': typeof CertificateIdRoute
   '/course/$id': typeof CourseIdRoute
-  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
-  '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
-  '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
-  '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
-  '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
-  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
-  '/admin/roles': typeof AuthenticatedAdminRolesRoute
-  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/parent/report': typeof AuthenticatedParentReportRoute
   '/parent/settings': typeof AuthenticatedParentSettingsRoute
-  '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
-  '/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
-  '/supervisor/reports': typeof AuthenticatedSupervisorReportsRoute
-  '/supervisor/students-overview': typeof AuthenticatedSupervisorStudentsOverviewRoute
-  '/supervisor/teachers': typeof AuthenticatedSupervisorTeachersRoute
-  '/teacher/analytics': typeof AuthenticatedTeacherAnalyticsRoute
-  '/teacher/community': typeof AuthenticatedTeacherCommunityRoute
-  '/teacher/content': typeof AuthenticatedTeacherContentRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
-  '/teacher/grading': typeof AuthenticatedTeacherGradingRoute
-  '/teacher/quizzes': typeof AuthenticatedTeacherQuizzesRoute
   '/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
-  '/library/lesson/$id': typeof AuthenticatedLibraryLessonIdRoute
   '/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRoutesByTo {
@@ -580,71 +313,36 @@ export interface FileRoutesByTo {
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
-  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
-  '/unsubscribe': typeof UnsubscribeRoute
-  '/verify-email': typeof VerifyEmailRoute
-  '/achievements': typeof AuthenticatedAchievementsRoute
-  '/bookmarks': typeof AuthenticatedBookmarksRoute
-  '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/exam-simulator': typeof AuthenticatedExamSimulatorRoute
-  '/flashcards': typeof AuthenticatedFlashcardsRoute
-  '/library': typeof AuthenticatedLibraryRouteWithChildren
-  '/mistakes-bank': typeof AuthenticatedMistakesBankRoute
-  '/my-certificates': typeof AuthenticatedMyCertificatesRoute
   '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/referrals': typeof AuthenticatedReferralsRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/system-modules': typeof AuthenticatedSystemModulesRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/certificate/$id': typeof CertificateIdRoute
   '/course/$id': typeof CourseIdRoute
-  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
-  '/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
-  '/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
-  '/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
-  '/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
-  '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
-  '/admin/roles': typeof AuthenticatedAdminRolesRoute
-  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/parent/report': typeof AuthenticatedParentReportRoute
   '/parent/settings': typeof AuthenticatedParentSettingsRoute
-  '/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
-  '/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
-  '/supervisor/reports': typeof AuthenticatedSupervisorReportsRoute
-  '/supervisor/students-overview': typeof AuthenticatedSupervisorStudentsOverviewRoute
-  '/supervisor/teachers': typeof AuthenticatedSupervisorTeachersRoute
-  '/teacher/analytics': typeof AuthenticatedTeacherAnalyticsRoute
-  '/teacher/community': typeof AuthenticatedTeacherCommunityRoute
-  '/teacher/content': typeof AuthenticatedTeacherContentRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
-  '/teacher/grading': typeof AuthenticatedTeacherGradingRoute
-  '/teacher/quizzes': typeof AuthenticatedTeacherQuizzesRoute
   '/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
-  '/library/lesson/$id': typeof AuthenticatedLibraryLessonIdRoute
   '/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRoutesById {
@@ -658,71 +356,36 @@ export interface FileRoutesById {
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
   '/for-teachers': typeof ForTeachersRoute
-  '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
-  '/unsubscribe': typeof UnsubscribeRoute
-  '/verify-email': typeof VerifyEmailRoute
-  '/_authenticated/achievements': typeof AuthenticatedAchievementsRoute
-  '/_authenticated/bookmarks': typeof AuthenticatedBookmarksRoute
-  '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/exam-simulator': typeof AuthenticatedExamSimulatorRoute
-  '/_authenticated/flashcards': typeof AuthenticatedFlashcardsRoute
-  '/_authenticated/library': typeof AuthenticatedLibraryRouteWithChildren
-  '/_authenticated/mistakes-bank': typeof AuthenticatedMistakesBankRoute
-  '/_authenticated/my-certificates': typeof AuthenticatedMyCertificatesRoute
   '/_authenticated/my-courses': typeof AuthenticatedMyCoursesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
-  '/_authenticated/referrals': typeof AuthenticatedReferralsRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
-  '/_authenticated/system-modules': typeof AuthenticatedSystemModulesRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/certificate/$id': typeof CertificateIdRoute
   '/course/$id': typeof CourseIdRoute
-  '/invite/$code': typeof InviteCodeRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
   '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
-  '/_authenticated/admin/community-reports': typeof AuthenticatedAdminCommunityReportsRoute
   '/_authenticated/admin/constants': typeof AuthenticatedAdminConstantsRoute
-  '/_authenticated/admin/content-review': typeof AuthenticatedAdminContentReviewRoute
   '/_authenticated/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
-  '/_authenticated/admin/curriculum': typeof AuthenticatedAdminCurriculumRoute
-  '/_authenticated/admin/curriculum-requests': typeof AuthenticatedAdminCurriculumRequestsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
-  '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
-  '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
-  '/_authenticated/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/parent/report': typeof AuthenticatedParentReportRoute
   '/_authenticated/parent/settings': typeof AuthenticatedParentSettingsRoute
-  '/_authenticated/role-permissions/$roleId': typeof AuthenticatedRolePermissionsRoleIdRoute
-  '/_authenticated/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
-  '/_authenticated/supervisor/reports': typeof AuthenticatedSupervisorReportsRoute
-  '/_authenticated/supervisor/students-overview': typeof AuthenticatedSupervisorStudentsOverviewRoute
-  '/_authenticated/supervisor/teachers': typeof AuthenticatedSupervisorTeachersRoute
-  '/_authenticated/teacher/analytics': typeof AuthenticatedTeacherAnalyticsRoute
-  '/_authenticated/teacher/community': typeof AuthenticatedTeacherCommunityRoute
-  '/_authenticated/teacher/content': typeof AuthenticatedTeacherContentRoute
   '/_authenticated/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
-  '/_authenticated/teacher/grading': typeof AuthenticatedTeacherGradingRoute
-  '/_authenticated/teacher/quizzes': typeof AuthenticatedTeacherQuizzesRoute
   '/_authenticated/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
-  '/_authenticated/library/lesson/$id': typeof AuthenticatedLibraryLessonIdRoute
   '/_authenticated/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRouteTypes {
@@ -736,71 +399,36 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-parents'
     | '/for-teachers'
-    | '/forgot-password'
     | '/help'
     | '/how-it-works'
     | '/login'
-    | '/pricing'
     | '/privacy'
-    | '/reset-password'
     | '/signup'
     | '/teachers'
     | '/terms'
-    | '/unsubscribe'
-    | '/verify-email'
-    | '/achievements'
-    | '/bookmarks'
-    | '/community'
     | '/dashboard'
-    | '/exam-simulator'
-    | '/flashcards'
-    | '/library'
-    | '/mistakes-bank'
-    | '/my-certificates'
     | '/my-courses'
     | '/notifications'
-    | '/referrals'
     | '/schedule'
     | '/settings'
-    | '/system-modules'
     | '/wallet'
     | '/blog/$slug'
-    | '/certificate/$id'
     | '/course/$id'
-    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
-    | '/admin/community-reports'
     | '/admin/constants'
-    | '/admin/content-review'
     | '/admin/course-catalog'
-    | '/admin/curriculum'
-    | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/pages'
     | '/admin/payments'
-    | '/admin/permissions'
-    | '/admin/roles'
-    | '/admin/teachers'
     | '/admin/users'
     | '/parent/report'
     | '/parent/settings'
-    | '/role-permissions/$roleId'
-    | '/supervisor/dashboard'
-    | '/supervisor/reports'
-    | '/supervisor/students-overview'
-    | '/supervisor/teachers'
-    | '/teacher/analytics'
-    | '/teacher/community'
-    | '/teacher/content'
     | '/teacher/courses'
     | '/teacher/dashboard'
     | '/teacher/earnings'
-    | '/teacher/grading'
-    | '/teacher/quizzes'
     | '/teacher/settings'
-    | '/library/lesson/$id'
     | '/teacher/profile/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -812,71 +440,36 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-parents'
     | '/for-teachers'
-    | '/forgot-password'
     | '/help'
     | '/how-it-works'
     | '/login'
-    | '/pricing'
     | '/privacy'
-    | '/reset-password'
     | '/signup'
     | '/teachers'
     | '/terms'
-    | '/unsubscribe'
-    | '/verify-email'
-    | '/achievements'
-    | '/bookmarks'
-    | '/community'
     | '/dashboard'
-    | '/exam-simulator'
-    | '/flashcards'
-    | '/library'
-    | '/mistakes-bank'
-    | '/my-certificates'
     | '/my-courses'
     | '/notifications'
-    | '/referrals'
     | '/schedule'
     | '/settings'
-    | '/system-modules'
     | '/wallet'
     | '/blog/$slug'
-    | '/certificate/$id'
     | '/course/$id'
-    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/admin/backend-permissions'
-    | '/admin/community-reports'
     | '/admin/constants'
-    | '/admin/content-review'
     | '/admin/course-catalog'
-    | '/admin/curriculum'
-    | '/admin/curriculum-requests'
     | '/admin/dashboard'
     | '/admin/pages'
     | '/admin/payments'
-    | '/admin/permissions'
-    | '/admin/roles'
-    | '/admin/teachers'
     | '/admin/users'
     | '/parent/report'
     | '/parent/settings'
-    | '/role-permissions/$roleId'
-    | '/supervisor/dashboard'
-    | '/supervisor/reports'
-    | '/supervisor/students-overview'
-    | '/supervisor/teachers'
-    | '/teacher/analytics'
-    | '/teacher/community'
-    | '/teacher/content'
     | '/teacher/courses'
     | '/teacher/dashboard'
     | '/teacher/earnings'
-    | '/teacher/grading'
-    | '/teacher/quizzes'
     | '/teacher/settings'
-    | '/library/lesson/$id'
     | '/teacher/profile/edit'
   id:
     | '__root__'
@@ -889,71 +482,36 @@ export interface FileRouteTypes {
     | '/courses'
     | '/for-parents'
     | '/for-teachers'
-    | '/forgot-password'
     | '/help'
     | '/how-it-works'
     | '/login'
-    | '/pricing'
     | '/privacy'
-    | '/reset-password'
     | '/signup'
     | '/teachers'
     | '/terms'
-    | '/unsubscribe'
-    | '/verify-email'
-    | '/_authenticated/achievements'
-    | '/_authenticated/bookmarks'
-    | '/_authenticated/community'
     | '/_authenticated/dashboard'
-    | '/_authenticated/exam-simulator'
-    | '/_authenticated/flashcards'
-    | '/_authenticated/library'
-    | '/_authenticated/mistakes-bank'
-    | '/_authenticated/my-certificates'
     | '/_authenticated/my-courses'
     | '/_authenticated/notifications'
-    | '/_authenticated/referrals'
     | '/_authenticated/schedule'
     | '/_authenticated/settings'
-    | '/_authenticated/system-modules'
     | '/_authenticated/wallet'
     | '/blog/$slug'
-    | '/certificate/$id'
     | '/course/$id'
-    | '/invite/$code'
     | '/teacher/$id'
     | '/teacher/register'
     | '/_authenticated/admin/backend-permissions'
-    | '/_authenticated/admin/community-reports'
     | '/_authenticated/admin/constants'
-    | '/_authenticated/admin/content-review'
     | '/_authenticated/admin/course-catalog'
-    | '/_authenticated/admin/curriculum'
-    | '/_authenticated/admin/curriculum-requests'
     | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/pages'
     | '/_authenticated/admin/payments'
-    | '/_authenticated/admin/permissions'
-    | '/_authenticated/admin/roles'
-    | '/_authenticated/admin/teachers'
     | '/_authenticated/admin/users'
     | '/_authenticated/parent/report'
     | '/_authenticated/parent/settings'
-    | '/_authenticated/role-permissions/$roleId'
-    | '/_authenticated/supervisor/dashboard'
-    | '/_authenticated/supervisor/reports'
-    | '/_authenticated/supervisor/students-overview'
-    | '/_authenticated/supervisor/teachers'
-    | '/_authenticated/teacher/analytics'
-    | '/_authenticated/teacher/community'
-    | '/_authenticated/teacher/content'
     | '/_authenticated/teacher/courses'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/earnings'
-    | '/_authenticated/teacher/grading'
-    | '/_authenticated/teacher/quizzes'
     | '/_authenticated/teacher/settings'
-    | '/_authenticated/library/lesson/$id'
     | '/_authenticated/teacher/profile/edit'
   fileRoutesById: FileRoutesById
 }
@@ -967,21 +525,14 @@ export interface RootRouteChildren {
   CoursesRoute: typeof CoursesRoute
   ForParentsRoute: typeof ForParentsRoute
   ForTeachersRoute: typeof ForTeachersRoute
-  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
-  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   TeachersRoute: typeof TeachersRoute
   TermsRoute: typeof TermsRoute
-  UnsubscribeRoute: typeof UnsubscribeRoute
-  VerifyEmailRoute: typeof VerifyEmailRoute
-  CertificateIdRoute: typeof CertificateIdRoute
   CourseIdRoute: typeof CourseIdRoute
-  InviteCodeRoute: typeof InviteCodeRoute
   TeacherIdRoute: typeof TeacherIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
 }
@@ -1051,13 +602,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForTeachersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/help': {
       id: '/help'
       path: '/help'
@@ -1079,25 +623,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -1121,81 +651,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify-email': {
-      id: '/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof VerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/achievements': {
-      id: '/_authenticated/achievements'
-      path: '/achievements'
-      fullPath: '/achievements'
-      preLoaderRoute: typeof AuthenticatedAchievementsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/bookmarks': {
-      id: '/_authenticated/bookmarks'
-      path: '/bookmarks'
-      fullPath: '/bookmarks'
-      preLoaderRoute: typeof AuthenticatedBookmarksRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/community': {
-      id: '/_authenticated/community'
-      path: '/community'
-      fullPath: '/community'
-      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/exam-simulator': {
-      id: '/_authenticated/exam-simulator'
-      path: '/exam-simulator'
-      fullPath: '/exam-simulator'
-      preLoaderRoute: typeof AuthenticatedExamSimulatorRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/flashcards': {
-      id: '/_authenticated/flashcards'
-      path: '/flashcards'
-      fullPath: '/flashcards'
-      preLoaderRoute: typeof AuthenticatedFlashcardsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/library': {
-      id: '/_authenticated/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/mistakes-bank': {
-      id: '/_authenticated/mistakes-bank'
-      path: '/mistakes-bank'
-      fullPath: '/mistakes-bank'
-      preLoaderRoute: typeof AuthenticatedMistakesBankRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/my-certificates': {
-      id: '/_authenticated/my-certificates'
-      path: '/my-certificates'
-      fullPath: '/my-certificates'
-      preLoaderRoute: typeof AuthenticatedMyCertificatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/my-courses': {
@@ -1212,13 +672,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/referrals': {
-      id: '/_authenticated/referrals'
-      path: '/referrals'
-      fullPath: '/referrals'
-      preLoaderRoute: typeof AuthenticatedReferralsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/schedule': {
       id: '/_authenticated/schedule'
       path: '/schedule'
@@ -1231,13 +684,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/system-modules': {
-      id: '/_authenticated/system-modules'
-      path: '/system-modules'
-      fullPath: '/system-modules'
-      preLoaderRoute: typeof AuthenticatedSystemModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/wallet': {
@@ -1254,25 +700,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
-    '/certificate/$id': {
-      id: '/certificate/$id'
-      path: '/certificate/$id'
-      fullPath: '/certificate/$id'
-      preLoaderRoute: typeof CertificateIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/course/$id': {
       id: '/course/$id'
       path: '/course/$id'
       fullPath: '/course/$id'
       preLoaderRoute: typeof CourseIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invite/$code': {
-      id: '/invite/$code'
-      path: '/invite/$code'
-      fullPath: '/invite/$code'
-      preLoaderRoute: typeof InviteCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teacher/$id': {
@@ -1296,13 +728,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBackendPermissionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/community-reports': {
-      id: '/_authenticated/admin/community-reports'
-      path: '/admin/community-reports'
-      fullPath: '/admin/community-reports'
-      preLoaderRoute: typeof AuthenticatedAdminCommunityReportsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/admin/constants': {
       id: '/_authenticated/admin/constants'
       path: '/admin/constants'
@@ -1310,32 +735,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminConstantsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/content-review': {
-      id: '/_authenticated/admin/content-review'
-      path: '/admin/content-review'
-      fullPath: '/admin/content-review'
-      preLoaderRoute: typeof AuthenticatedAdminContentReviewRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/admin/course-catalog': {
       id: '/_authenticated/admin/course-catalog'
       path: '/admin/course-catalog'
       fullPath: '/admin/course-catalog'
       preLoaderRoute: typeof AuthenticatedAdminCourseCatalogRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin/curriculum': {
-      id: '/_authenticated/admin/curriculum'
-      path: '/admin/curriculum'
-      fullPath: '/admin/curriculum'
-      preLoaderRoute: typeof AuthenticatedAdminCurriculumRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin/curriculum-requests': {
-      id: '/_authenticated/admin/curriculum-requests'
-      path: '/admin/curriculum-requests'
-      fullPath: '/admin/curriculum-requests'
-      preLoaderRoute: typeof AuthenticatedAdminCurriculumRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/dashboard': {
@@ -1359,27 +763,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPaymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/permissions': {
-      id: '/_authenticated/admin/permissions'
-      path: '/admin/permissions'
-      fullPath: '/admin/permissions'
-      preLoaderRoute: typeof AuthenticatedAdminPermissionsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin/roles': {
-      id: '/_authenticated/admin/roles'
-      path: '/admin/roles'
-      fullPath: '/admin/roles'
-      preLoaderRoute: typeof AuthenticatedAdminRolesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin/teachers': {
-      id: '/_authenticated/admin/teachers'
-      path: '/admin/teachers'
-      fullPath: '/admin/teachers'
-      preLoaderRoute: typeof AuthenticatedAdminTeachersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/admin/users': {
       id: '/_authenticated/admin/users'
       path: '/admin/users'
@@ -1399,62 +782,6 @@ declare module '@tanstack/react-router' {
       path: '/parent/settings'
       fullPath: '/parent/settings'
       preLoaderRoute: typeof AuthenticatedParentSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/role-permissions/$roleId': {
-      id: '/_authenticated/role-permissions/$roleId'
-      path: '/role-permissions/$roleId'
-      fullPath: '/role-permissions/$roleId'
-      preLoaderRoute: typeof AuthenticatedRolePermissionsRoleIdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/supervisor/dashboard': {
-      id: '/_authenticated/supervisor/dashboard'
-      path: '/supervisor/dashboard'
-      fullPath: '/supervisor/dashboard'
-      preLoaderRoute: typeof AuthenticatedSupervisorDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/supervisor/reports': {
-      id: '/_authenticated/supervisor/reports'
-      path: '/supervisor/reports'
-      fullPath: '/supervisor/reports'
-      preLoaderRoute: typeof AuthenticatedSupervisorReportsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/supervisor/students-overview': {
-      id: '/_authenticated/supervisor/students-overview'
-      path: '/supervisor/students-overview'
-      fullPath: '/supervisor/students-overview'
-      preLoaderRoute: typeof AuthenticatedSupervisorStudentsOverviewRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/supervisor/teachers': {
-      id: '/_authenticated/supervisor/teachers'
-      path: '/supervisor/teachers'
-      fullPath: '/supervisor/teachers'
-      preLoaderRoute: typeof AuthenticatedSupervisorTeachersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/teacher/analytics': {
-      id: '/_authenticated/teacher/analytics'
-      path: '/teacher/analytics'
-      fullPath: '/teacher/analytics'
-      preLoaderRoute: typeof AuthenticatedTeacherAnalyticsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/teacher/community': {
-      id: '/_authenticated/teacher/community'
-      path: '/teacher/community'
-      fullPath: '/teacher/community'
-      preLoaderRoute: typeof AuthenticatedTeacherCommunityRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/teacher/content': {
-      id: '/_authenticated/teacher/content'
-      path: '/teacher/content'
-      fullPath: '/teacher/content'
-      preLoaderRoute: typeof AuthenticatedTeacherContentRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/teacher/courses': {
@@ -1478,33 +805,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherEarningsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/teacher/grading': {
-      id: '/_authenticated/teacher/grading'
-      path: '/teacher/grading'
-      fullPath: '/teacher/grading'
-      preLoaderRoute: typeof AuthenticatedTeacherGradingRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/teacher/quizzes': {
-      id: '/_authenticated/teacher/quizzes'
-      path: '/teacher/quizzes'
-      fullPath: '/teacher/quizzes'
-      preLoaderRoute: typeof AuthenticatedTeacherQuizzesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/teacher/settings': {
       id: '/_authenticated/teacher/settings'
       path: '/teacher/settings'
       fullPath: '/teacher/settings'
       preLoaderRoute: typeof AuthenticatedTeacherSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/library/lesson/$id': {
-      id: '/_authenticated/library/lesson/$id'
-      path: '/lesson/$id'
-      fullPath: '/library/lesson/$id'
-      preLoaderRoute: typeof AuthenticatedLibraryLessonIdRouteImport
-      parentRoute: typeof AuthenticatedLibraryRoute
     }
     '/_authenticated/teacher/profile/edit': {
       id: '/_authenticated/teacher/profile/edit'
@@ -1516,118 +822,49 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedLibraryRouteChildren {
-  AuthenticatedLibraryLessonIdRoute: typeof AuthenticatedLibraryLessonIdRoute
-}
-
-const AuthenticatedLibraryRouteChildren: AuthenticatedLibraryRouteChildren = {
-  AuthenticatedLibraryLessonIdRoute: AuthenticatedLibraryLessonIdRoute,
-}
-
-const AuthenticatedLibraryRouteWithChildren =
-  AuthenticatedLibraryRoute._addFileChildren(AuthenticatedLibraryRouteChildren)
-
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAchievementsRoute: typeof AuthenticatedAchievementsRoute
-  AuthenticatedBookmarksRoute: typeof AuthenticatedBookmarksRoute
-  AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedExamSimulatorRoute: typeof AuthenticatedExamSimulatorRoute
-  AuthenticatedFlashcardsRoute: typeof AuthenticatedFlashcardsRoute
-  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRouteWithChildren
-  AuthenticatedMistakesBankRoute: typeof AuthenticatedMistakesBankRoute
-  AuthenticatedMyCertificatesRoute: typeof AuthenticatedMyCertificatesRoute
   AuthenticatedMyCoursesRoute: typeof AuthenticatedMyCoursesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
-  AuthenticatedReferralsRoute: typeof AuthenticatedReferralsRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
-  AuthenticatedSystemModulesRoute: typeof AuthenticatedSystemModulesRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
   AuthenticatedAdminBackendPermissionsRoute: typeof AuthenticatedAdminBackendPermissionsRoute
-  AuthenticatedAdminCommunityReportsRoute: typeof AuthenticatedAdminCommunityReportsRoute
   AuthenticatedAdminConstantsRoute: typeof AuthenticatedAdminConstantsRoute
-  AuthenticatedAdminContentReviewRoute: typeof AuthenticatedAdminContentReviewRoute
   AuthenticatedAdminCourseCatalogRoute: typeof AuthenticatedAdminCourseCatalogRoute
-  AuthenticatedAdminCurriculumRoute: typeof AuthenticatedAdminCurriculumRoute
-  AuthenticatedAdminCurriculumRequestsRoute: typeof AuthenticatedAdminCurriculumRequestsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedAdminPagesRoute: typeof AuthenticatedAdminPagesRoute
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
-  AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
-  AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
-  AuthenticatedAdminTeachersRoute: typeof AuthenticatedAdminTeachersRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedParentReportRoute: typeof AuthenticatedParentReportRoute
   AuthenticatedParentSettingsRoute: typeof AuthenticatedParentSettingsRoute
-  AuthenticatedRolePermissionsRoleIdRoute: typeof AuthenticatedRolePermissionsRoleIdRoute
-  AuthenticatedSupervisorDashboardRoute: typeof AuthenticatedSupervisorDashboardRoute
-  AuthenticatedSupervisorReportsRoute: typeof AuthenticatedSupervisorReportsRoute
-  AuthenticatedSupervisorStudentsOverviewRoute: typeof AuthenticatedSupervisorStudentsOverviewRoute
-  AuthenticatedSupervisorTeachersRoute: typeof AuthenticatedSupervisorTeachersRoute
-  AuthenticatedTeacherAnalyticsRoute: typeof AuthenticatedTeacherAnalyticsRoute
-  AuthenticatedTeacherCommunityRoute: typeof AuthenticatedTeacherCommunityRoute
-  AuthenticatedTeacherContentRoute: typeof AuthenticatedTeacherContentRoute
   AuthenticatedTeacherCoursesRoute: typeof AuthenticatedTeacherCoursesRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherEarningsRoute: typeof AuthenticatedTeacherEarningsRoute
-  AuthenticatedTeacherGradingRoute: typeof AuthenticatedTeacherGradingRoute
-  AuthenticatedTeacherQuizzesRoute: typeof AuthenticatedTeacherQuizzesRoute
   AuthenticatedTeacherSettingsRoute: typeof AuthenticatedTeacherSettingsRoute
   AuthenticatedTeacherProfileEditRoute: typeof AuthenticatedTeacherProfileEditRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAchievementsRoute: AuthenticatedAchievementsRoute,
-  AuthenticatedBookmarksRoute: AuthenticatedBookmarksRoute,
-  AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedExamSimulatorRoute: AuthenticatedExamSimulatorRoute,
-  AuthenticatedFlashcardsRoute: AuthenticatedFlashcardsRoute,
-  AuthenticatedLibraryRoute: AuthenticatedLibraryRouteWithChildren,
-  AuthenticatedMistakesBankRoute: AuthenticatedMistakesBankRoute,
-  AuthenticatedMyCertificatesRoute: AuthenticatedMyCertificatesRoute,
   AuthenticatedMyCoursesRoute: AuthenticatedMyCoursesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
-  AuthenticatedReferralsRoute: AuthenticatedReferralsRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
-  AuthenticatedSystemModulesRoute: AuthenticatedSystemModulesRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
   AuthenticatedAdminBackendPermissionsRoute:
     AuthenticatedAdminBackendPermissionsRoute,
-  AuthenticatedAdminCommunityReportsRoute:
-    AuthenticatedAdminCommunityReportsRoute,
   AuthenticatedAdminConstantsRoute: AuthenticatedAdminConstantsRoute,
-  AuthenticatedAdminContentReviewRoute: AuthenticatedAdminContentReviewRoute,
   AuthenticatedAdminCourseCatalogRoute: AuthenticatedAdminCourseCatalogRoute,
-  AuthenticatedAdminCurriculumRoute: AuthenticatedAdminCurriculumRoute,
-  AuthenticatedAdminCurriculumRequestsRoute:
-    AuthenticatedAdminCurriculumRequestsRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
   AuthenticatedAdminPagesRoute: AuthenticatedAdminPagesRoute,
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
-  AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
-  AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,
-  AuthenticatedAdminTeachersRoute: AuthenticatedAdminTeachersRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedParentReportRoute: AuthenticatedParentReportRoute,
   AuthenticatedParentSettingsRoute: AuthenticatedParentSettingsRoute,
-  AuthenticatedRolePermissionsRoleIdRoute:
-    AuthenticatedRolePermissionsRoleIdRoute,
-  AuthenticatedSupervisorDashboardRoute: AuthenticatedSupervisorDashboardRoute,
-  AuthenticatedSupervisorReportsRoute: AuthenticatedSupervisorReportsRoute,
-  AuthenticatedSupervisorStudentsOverviewRoute:
-    AuthenticatedSupervisorStudentsOverviewRoute,
-  AuthenticatedSupervisorTeachersRoute: AuthenticatedSupervisorTeachersRoute,
-  AuthenticatedTeacherAnalyticsRoute: AuthenticatedTeacherAnalyticsRoute,
-  AuthenticatedTeacherCommunityRoute: AuthenticatedTeacherCommunityRoute,
-  AuthenticatedTeacherContentRoute: AuthenticatedTeacherContentRoute,
   AuthenticatedTeacherCoursesRoute: AuthenticatedTeacherCoursesRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherEarningsRoute: AuthenticatedTeacherEarningsRoute,
-  AuthenticatedTeacherGradingRoute: AuthenticatedTeacherGradingRoute,
-  AuthenticatedTeacherQuizzesRoute: AuthenticatedTeacherQuizzesRoute,
   AuthenticatedTeacherSettingsRoute: AuthenticatedTeacherSettingsRoute,
   AuthenticatedTeacherProfileEditRoute: AuthenticatedTeacherProfileEditRoute,
 }
@@ -1655,21 +892,14 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesRoute: CoursesRoute,
   ForParentsRoute: ForParentsRoute,
   ForTeachersRoute: ForTeachersRoute,
-  ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
-  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   TeachersRoute: TeachersRoute,
   TermsRoute: TermsRoute,
-  UnsubscribeRoute: UnsubscribeRoute,
-  VerifyEmailRoute: VerifyEmailRoute,
-  CertificateIdRoute: CertificateIdRoute,
   CourseIdRoute: CourseIdRoute,
-  InviteCodeRoute: InviteCodeRoute,
   TeacherIdRoute: TeacherIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
 }

@@ -1,259 +1,158 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Pencil } from "lucide-react";
-import { AppPage, StatGrid, Panel, RowList, QuickLinks } from "@/components/app/kit";
+import { Plus, Trash2 } from "lucide-react";
+import { AppPage, Panel, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { getTeacherSettings, saveTeacherSettings } from "@/lib/account-pages.functions";
-import { useAccess } from "@/hooks/use-access";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { setMyTeacherAvailability, type AvailabilitySlotInput } from "@/integrations/backend/teachers";
 import { useBi } from "@/lib/bi";
-import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
 
-const description = "التسعير، أوقات التوفّر، بيانات الدفع، وتفضيلات الإشعارات.";
+const description = "الأوقات الأسبوعية اللي بتقدر تستقبل فيها حجوزات.";
 
 export const Route = createFileRoute("/_authenticated/teacher/settings")({
   head: () =>
     authPageHead(
-      {
-        title: "إعدادات المعلم | أكاديميا",
-        description: "التسعير، أوقات التوفّر، بيانات الدفع، وتفضيلات الإشعارات.",
-      },
-      {
-        title: "Teacher settings | Academia",
-        description: "Pricing, availability hours, payment details, and notification preferences.",
-      },
+      { title: "الإعدادات | أكاديميا", description },
+      { title: "Settings | Academia", description: "The weekly hours you're available for bookings." },
     ),
-  component: PageRoute,
-});
-
-function PageRoute() {
-  return (
+  component: () => (
     <Guard pageKey="teacher_settings">
       <Body />
     </Guard>
-  );
-}
+  ),
+});
+
+const DAYS_AR = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+const DAYS_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function Body() {
   const bi = useBi();
-  const queryClient = useQueryClient();
-  const { can } = useAccess();
-  const fetchSettings = useServerFn(getTeacherSettings);
-  const persist = useServerFn(saveTeacherSettings);
+  const [slots, setSlots] = useState<AvailabilitySlotInput[]>([]);
+  const [notLinked, setNotLinked] = useState(false);
 
-  const { data: settings, isLoading } = useQuery({
-    queryKey: ["teacher-settings"],
-    queryFn: () => fetchSettings(),
-  });
-
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    privateSessionPrice: "0",
-    availabilityLabel: "",
-    payoutMethodLabel: "",
-    notifyNewQuestion: true,
-  });
-
-  const saveMutation = useMutation({
-    mutationFn: () =>
-      persist({ data: { ...form, privateSessionPrice: Number(form.privateSessionPrice) || 0 } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["teacher-settings"] });
-      setOpen(false);
-      toast.success(bi("تم الحفظ", "Saved successfully"));
+  const save = useMutation({
+    mutationFn: () => setMyTeacherAvailability(slots),
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success(bi("تم حفظ جدول التوفّر", "Availability schedule saved"));
+        setNotLinked(false);
+      } else {
+        setNotLinked(true);
+      }
     },
-    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: () => toast.error(bi("تعذّر الحفظ، حاول مجدداً", "Failed to save, please try again")),
   });
 
-  function openDialog() {
-    if (!settings) return;
-    setForm({
-      privateSessionPrice: String(settings.privateSessionPrice),
-      availabilityLabel: settings.availabilityLabel,
-      payoutMethodLabel: settings.payoutMethodLabel,
-      notifyNewQuestion: settings.notifyNewQuestion,
-    });
-    setOpen(true);
+  const addSlot = () =>
+    setSlots((s) => [...s, { dayOfWeek: 0, startTime: "09:00:00", endTime: "10:00:00", teachingMode: 2 }]);
+  const removeSlot = (i: number) => setSlots((s) => s.filter((_, idx) => idx !== i));
+  const updateSlot = (i: number, patch: Partial<AvailabilitySlotInput>) =>
+    setSlots((s) => s.map((slot, idx) => (idx === i ? { ...slot, ...patch } : slot)));
+
+  if (notLinked) {
+    return (
+      <AppPage title={bi("الإعدادات", "Settings")} icon="Settings">
+        <EmptyState
+          icon="UserX"
+          title={bi("حسابك لسا مش مربوط بملف معلم بالباك اند", "Your account isn't linked to a teacher record yet")}
+          description={bi(
+            "نفس القيد بصفحة تعديل الملف — الباك اند ما بينشئ ملف معلم تلقائياً عند التسجيل حالياً. تواصل مع الدعم لربط حسابك.",
+            "Same limitation as the profile page — the backend doesn't auto-create a teacher record on registration yet. Contact support to get your account linked.",
+          )}
+        />
+        <div className="mt-4">
+          <Button variant="outline" onClick={() => setNotLinked(false)}>
+            {bi("رجوع", "Back")}
+          </Button>
+        </div>
+      </AppPage>
+    );
   }
 
   return (
-    <AppPage
-      title={bi("إعدادات المعلم", "Teacher settings")}
-      icon="Settings"
-      subtitle={bi(
-        description,
-        "Pricing, availability, payout details and notification preferences.",
-      )}
-    >
-      {isLoading || !settings ? (
-        <LoadingState
-          label={bi("جارٍ التحميل…", "Loading…")}
-          className="border-none bg-transparent"
-        />
-      ) : (
-        <>
-          <StatGrid
-            items={[
-              {
-                icon: "BadgePercent",
-                label: bi("سعر الحصة الخاصة", "Private session"),
-                value: bi(
-                  `${settings.privateSessionPrice} ₪`,
-                  `${settings.privateSessionPrice} ILS`,
-                ),
-              },
-              {
-                icon: "CalendarClock",
-                label: bi("أوقات التوفّر", "Availability"),
-                value: settings.availabilityLabel,
-              },
-              {
-                icon: "Banknote",
-                label: bi("طريقة السحب", "Payout method"),
-                value: settings.payoutMethodLabel,
-              },
-              {
-                icon: "BellRing",
-                label: bi("إشعار سؤال جديد", "New question alert"),
-                value: bi(
-                  settings.notifyNewQuestion ? "مفعّل" : "متوقّف",
-                  settings.notifyNewQuestion ? "On" : "Off",
-                ),
-              },
-            ]}
-          />
-
-          <Panel
-            title={bi("الإعدادات", "Settings")}
-            icon="Settings"
-            action={
-              can("teacher_settings", "edit") ? (
-                <Button size="sm" variant="outline" onClick={openDialog}>
-                  <Pencil className="size-4" />
-                  {bi("تعديل", "Edit")}
+    <AppPage title={bi("الإعدادات", "Settings")} icon="Settings" subtitle={bi(description, description)}>
+      <Panel
+        title={bi("جدول التوفّر الأسبوعي", "Weekly availability")}
+        icon="CalendarClock"
+        action={
+          <Button size="sm" variant="outline" onClick={addSlot}>
+            <Plus className="size-4" />
+            {bi("إضافة وقت", "Add slot")}
+          </Button>
+        }
+      >
+        {slots.length ? (
+          <div className="space-y-3">
+            {slots.map((slot, i) => (
+              <div key={i} className="flex flex-wrap items-center gap-2 rounded-xl border border-border p-3">
+                <Select
+                  value={String(slot.dayOfWeek)}
+                  onValueChange={(v) => updateSlot(i, { dayOfWeek: Number(v) })}
+                >
+                  <SelectTrigger className="w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DAYS_AR.map((d, idx) => (
+                      <SelectItem key={idx} value={String(idx)}>
+                        {bi(d, DAYS_EN[idx])}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="time"
+                  value={slot.startTime.slice(0, 5)}
+                  onChange={(e) => updateSlot(i, { startTime: `${e.target.value}:00` })}
+                  className="w-28"
+                />
+                <span className="text-muted-foreground">—</span>
+                <Input
+                  type="time"
+                  value={slot.endTime.slice(0, 5)}
+                  onChange={(e) => updateSlot(i, { endTime: `${e.target.value}:00` })}
+                  className="w-28"
+                />
+                <Select
+                  value={String(slot.teachingMode)}
+                  onValueChange={(v) => updateSlot(i, { teachingMode: Number(v) as 1 | 2 })}
+                >
+                  <SelectTrigger className="w-28">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2">{bi("أونلاين", "Online")}</SelectItem>
+                    <SelectItem value="1">{bi("حضوري", "In-person")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => removeSlot(i)}>
+                  <Trash2 className="size-4" />
                 </Button>
-              ) : undefined
-            }
-          >
-            <RowList
-              rows={[
-                {
-                  title: bi("سعر الحصة الخاصة", "Private session price"),
-                  meta: bi(
-                    `${settings.privateSessionPrice} ₪ / ساعة`,
-                    `${settings.privateSessionPrice} ILS / hour`,
-                  ),
-                  tone: "primary",
-                },
-                {
-                  title: bi("أوقات التوفّر", "Availability"),
-                  meta: settings.availabilityLabel,
-                  tone: "primary",
-                },
-                {
-                  title: bi("بيانات الحوالة", "Bank details"),
-                  meta: settings.payoutMethodLabel,
-                  tone: "primary",
-                },
-                {
-                  title: bi("إشعار سؤال جديد", "New question alert"),
-                  meta: bi("فوري", "Instant"),
-                  value: bi(
-                    settings.notifyNewQuestion ? "مفعّل" : "متوقّف",
-                    settings.notifyNewQuestion ? "On" : "Off",
-                  ),
-                  tone: settings.notifyNewQuestion ? "success" : "muted",
-                },
-              ]}
-            />
-          </Panel>
-
-          <Panel title={bi("روابط سريعة", "Quick links")} icon="Settings">
-            <QuickLinks
-              items={[
-                {
-                  to: "/teacher/profile/edit",
-                  label: bi("ملفي العام", "Public profile"),
-                  icon: "UserCog",
-                },
-                { to: "/teacher/earnings", label: bi("الأرباح", "Earnings"), icon: "Wallet" },
-                { to: "/settings", label: bi("اللغة والثيم", "Language & theme"), icon: "Palette" },
-              ]}
-            />
-          </Panel>
-        </>
-      )}
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="text-start">
-          <DialogHeader>
-            <DialogTitle>{bi("تعديل الإعدادات", "Edit settings")}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="ts-price">
-                {bi("سعر الحصة الخاصة (₪)", "Private session (ILS)")}
-              </Label>
-              <Input
-                id="ts-price"
-                type="number"
-                min={0}
-                value={form.privateSessionPrice}
-                onChange={(e) => setForm((f) => ({ ...f, privateSessionPrice: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="ts-payout">{bi("طريقة السحب", "Payout method")}</Label>
-              <Input
-                id="ts-payout"
-                value={form.payoutMethodLabel}
-                onChange={(e) => setForm((f) => ({ ...f, payoutMethodLabel: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-1.5 sm:col-span-2">
-              <Label htmlFor="ts-availability">{bi("أوقات التوفّر", "Availability")}</Label>
-              <Input
-                id="ts-availability"
-                value={form.availabilityLabel}
-                onChange={(e) => setForm((f) => ({ ...f, availabilityLabel: e.target.value }))}
-              />
-            </div>
-            <div className="flex items-center gap-2 sm:col-span-2">
-              <Switch
-                id="ts-notify"
-                checked={form.notifyNewQuestion}
-                onCheckedChange={(v) => setForm((f) => ({ ...f, notifyNewQuestion: v }))}
-              />
-              <Label htmlFor="ts-notify">
-                {bi("تنبيه فوري بسؤال جديد", "Instant new-question alert")}
-              </Label>
-            </div>
+              </div>
+            ))}
           </div>
-          <DialogFooter className="gap-2 sm:justify-start">
-            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
-              {bi("حفظ", "Save")}
-            </Button>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              {bi("إلغاء", "Cancel")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        ) : (
+          <EmptyState icon="CalendarClock" text={bi("ما ضفت أوقات توفّر بعد.", "You haven't added any availability slots yet.")} />
+        )}
+      </Panel>
+
+      <div className="flex justify-end">
+        <Button onClick={() => save.mutate()} disabled={save.isPending}>
+          {save.isPending ? bi("جارٍ الحفظ…", "Saving…") : bi("حفظ الجدول", "Save schedule")}
+        </Button>
+      </div>
     </AppPage>
   );
 }

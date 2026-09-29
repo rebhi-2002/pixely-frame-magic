@@ -2,12 +2,8 @@ import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   BookOpenCheck,
-  MessagesSquare,
   LineChart,
-  Timer,
   Trophy,
-  Bot,
-  XCircle,
   Users,
   LayoutDashboard,
   Check,
@@ -15,18 +11,17 @@ import {
   ClipboardCheck,
   ListChecks,
   Store,
+  Search,
+  UserRound,
+  CalendarDays,
+  Video,
+  Wallet,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
 import { HeroMockup } from "@/components/site/hero-mockup";
-import {
-  LibraryTreeIllustration,
-  ExamSimIllustration,
-  MistakeBankIllustration,
-  ReviewSessionIllustration,
-} from "@/components/site/illustrations";
 import { Reveal } from "@/components/ui/reveal";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useSession } from "@/hooks/use-session";
@@ -40,48 +35,18 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  {
-    icon: BookOpenCheck,
-    key: "library",
-    span: "lg:col-span-2 lg:row-span-2",
-    flagship: true,
-    Illustration: LibraryTreeIllustration,
-  },
-  {
-    icon: Bot,
-    key: "simulator",
-    span: "lg:col-span-2",
-    flagship: false,
-    Illustration: ExamSimIllustration,
-  },
-  { icon: MessagesSquare, key: "community", span: "", flagship: false, Illustration: null },
-  { icon: LineChart, key: "tracker", span: "", flagship: false, Illustration: null },
-  {
-    icon: XCircle,
-    key: "mistakes",
-    span: "lg:col-span-2",
-    flagship: false,
-    Illustration: MistakeBankIllustration,
-  },
-  {
-    icon: Timer,
-    key: "review",
-    span: "lg:col-span-2",
-    flagship: false,
-    Illustration: ReviewSessionIllustration,
-  },
-  {
-    icon: Store,
-    key: "courses",
-    span: "lg:col-span-2",
-    flagship: false,
-    Illustration: null,
-  },
+  { icon: Search, key: "library", span: "lg:col-span-2 lg:row-span-2", flagship: true, Illustration: null },
+  { icon: UserRound, key: "community", span: "", flagship: false, Illustration: null },
+  { icon: CalendarDays, key: "tracker", span: "", flagship: false, Illustration: null },
+  { icon: Video, key: "simulator", span: "lg:col-span-2", flagship: false, Illustration: null },
+  { icon: Wallet, key: "mistakes", span: "lg:col-span-2", flagship: false, Illustration: null },
+  { icon: Store, key: "courses", span: "lg:col-span-2", flagship: false, Illustration: null },
+  { icon: ClipboardCheck, key: "review", span: "lg:col-span-2", flagship: false, Illustration: null },
 ] as const;
 
 /* القسم 08 — أرقام عربية غربية (1، 2، 3) في كل الواجهة */
 const stats = [
-  { prefix: "", value: 4, suffix: "", key: "levels" },
+  { prefix: "", value: 2, suffix: "", key: "levels" },
   { prefix: "", value: 100, suffix: "%", key: "rtl" },
   { prefix: "", value: 3, suffix: "", key: "spaces" },
 ] as const;

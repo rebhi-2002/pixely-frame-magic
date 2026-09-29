@@ -5,21 +5,14 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { login, loginAsDemo, getStoredProfile } from "@/integrations/backend/auth";
+import { login, getStoredProfile } from "@/integrations/backend/auth";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
-import { USERS } from "@/lib/rbac-static-data";
 import { roleHome, useBi } from "@/lib/bi";
 import { Button } from "@/components/ui/button";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
-import { env } from "@/lib/env";
-
-/* أزرار دخول سريع محلية بالكامل (بدون أي نداء شبكة) للتجربة أثناء التطوير
-   فقط — تُحذف قبل النشر النهائي. راجع src/integrations/backend/auth.ts. */
-const DEMO_USERS = USERS.filter((u) => u.id !== "u-admin");
-const demoEnabled = env.ENABLE_DEMO_LOGIN;
 
 export const Route = createFileRoute("/login")({
   ssr: false,
@@ -45,13 +38,6 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [serverError, setServerError] = useState<string | null>(null);
-
-  function quickLogin(userId: string) {
-    const user = USERS.find((u) => u.id === userId);
-    loginAsDemo(userId);
-    toast.success(t("authPages.login.success"));
-    navigate({ href: roleHome(user?.role_name, user?.role_id === "r-admin"), replace: true });
-  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -130,14 +116,6 @@ function LoginPage() {
           autoComplete="current-password"
           error={errors.password}
         />
-        <div className="flex justify-end">
-          <Link
-            to="/forgot-password"
-            className="text-xs font-semibold text-primary hover:underline"
-          >
-            {t("authPages.login.forgot")}
-          </Link>
-        </div>
         {serverError && (
           <div
             role="alert"
@@ -150,38 +128,6 @@ function LoginPage() {
           {t("authPages.login.submit")}
         </Button>
       </form>
-
-      {demoEnabled && (
-        <div className="mt-6 rounded-2xl border border-dashed border-border bg-secondary/40 p-3">
-          <p className="mb-2 text-center text-xs font-bold text-muted-foreground">
-            {bi(
-              "دخول سريع للتجربة (محلي بالكامل — مؤقت)",
-              "Quick test login (fully local — temporary)",
-            )}
-          </p>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => quickLogin("u-admin")}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
-            >
-              {bi("أدمن", "Admin")}
-            </button>
-            {DEMO_USERS.map((u) => (
-              <button
-                key={u.id}
-                type="button"
-                disabled={loading}
-                onClick={() => quickLogin(u.id)}
-                className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary disabled:opacity-60"
-              >
-                {u.role_name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="mt-6 space-y-1.5 text-center text-xs text-muted-foreground">
         <p>

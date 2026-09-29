@@ -127,7 +127,7 @@ export function AppSidebar({
     >
       <SignOutOverlay pending={signingOut} />
       <div className="flex items-center justify-between gap-2 border-b border-sidebar-border px-3 py-4">
-        {!collapsed && <BrandLockup />}
+        {!collapsed && <BrandLockup tone="sidebar" />}
         {/* الجوال: زر إغلاق صريح — الطيّ غير مُتاح على الشاشات الصغيرة */}
         {onClose && (
           <Button

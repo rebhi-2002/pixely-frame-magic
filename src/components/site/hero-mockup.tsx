@@ -1,37 +1,35 @@
-import { Bell, BookOpenCheck, CheckCircle2, FlaskConical, Flame, TrendingUp } from "lucide-react";
+import { Bell, CalendarDays, CheckCircle2, Clock, Video, Wallet } from "lucide-react";
 import { useBi } from "@/lib/bi";
 import type { PublicSession } from "@/hooks/use-session";
 
-const subjects = [
-  { icon: BookOpenCheck, pct: 78, tone: "bg-primary" },
-  { icon: FlaskConical, pct: 54, tone: "bg-info" },
-  { icon: BookOpenCheck, pct: 92, tone: "bg-success" },
+/**
+ * HeroMockup — معاينة بصرية لشكل لوحة الطالب الحقيقية (بطاقات الكورسات والحجوزات
+ * والمحفظة والجدول القادم)، مبنية من عناصر الواجهة. بلا أي أرقام مختلقة: البطاقات
+ * بعناوينها فقط والصفوف أشرطة هيكلية (skeleton)، حتى ما نوهم الزائر ببيانات أو
+ * مزايا غير موجودة. الاسم الأول شخصي (من الجلسة الحقيقية) بعد تسجيل الدخول.
+ */
+const tiles = [
+  { icon: Clock, tone: "bg-primary/10 text-primary", ar: "طلبات معلّقة", en: "Pending requests" },
+  { icon: CheckCircle2, tone: "bg-success/10 text-success", ar: "حجوزات مؤكّدة", en: "Confirmed bookings" },
+  { icon: Wallet, tone: "bg-info/10 text-info", ar: "رصيد المحفظة", en: "Wallet balance" },
 ] as const;
 
-/** ارتفاعات ثابتة (px) لأعمدة النشاط الأسبوعي — تصميمية بحتة، لا تمثّل بيانات حقيقية */
-const weekBars = [22, 34, 18, 40, 28, 46, 32];
+const lessonRows = [
+  { icon: Video, w: "w-3/4" },
+  { icon: CalendarDays, w: "w-2/3" },
+  { icon: Video, w: "w-4/5" },
+] as const;
 
-/**
- * HeroMockup — معاينة بصرية حقيقية للوحة تحكم الطالب، مبنية بالكامل من عناصر
- * الواجهة (لا صورة/سكرين‌شوت). تُستخدم في الـ Hero لإعطاء إحساس "منتج حقيقي"
- * بدل نص فاضٍ.
- *
- * الاسم/الحرف الأول شخصي (من جلسة المستخدم الحقيقية) بعد تسجيل الدخول؛ الأرقام
- * والإحصائيات تبقى توضيحية (demo) لعدم وجود مصدر بيانات تحليلية حقيقي بعد —
- * تُستبدل لاحقاً بأرقام حقيقية بمجرد ربط الباك إند بهالمكوّن.
- */
 export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const bi = useBi();
   const firstName = session?.fullName?.trim().split(/\s+/)[0];
-  const displayName = firstName || bi("سارة", "Sarah");
+  const displayName = firstName || bi("طالب", "Student");
   const initial = displayName.charAt(0).toUpperCase();
   const greeting = bi(`أهلاً ${displayName} 👋`, `Hi ${displayName} 👋`);
 
   return (
     <div aria-hidden className="visual-orbit relative hidden min-h-[520px] select-none lg:block">
-      {/* البطاقة الرئيسية — إطار متصفح مصغّر بميلان خفيف لإحساس العمق */}
       <div className="glass-surface soft-glow shadow-elevation-3 relative mx-auto mt-12 w-full max-w-md rounded-3xl border border-white/10 p-4 [transform:perspective(1400px)_rotateY(-8deg)_rotateX(3deg)] transition-transform duration-700 hover:[transform:perspective(1400px)_rotateY(-3deg)_rotateX(1deg)]">
-        {/* شريط المتصفح */}
         <div className="flex items-center gap-1.5 px-1 pb-3">
           <span className="size-2.5 rounded-full bg-destructive/60" />
           <span className="size-2.5 rounded-full bg-primary/60" />
@@ -44,7 +42,6 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
           </span>
         </div>
 
-        {/* محتوى اللوحة */}
         <div className="shadow-elevation-1 space-y-4 rounded-2xl bg-background p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -54,7 +51,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
               <div>
                 <p className="text-xs font-bold text-foreground">{greeting}</p>
                 <p className="text-[10px] text-muted-foreground">
-                  {bi("جاهزة لمتابعة إنجازك اليوم", "Ready to keep your streak going")}
+                  {bi("دروسك ومحفظتك بمكان واحد", "Your lessons and wallet in one place")}
                 </p>
               </div>
             </div>
@@ -63,62 +60,41 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
             </span>
           </div>
 
-          {/* صف الإحصائيات المصغّرة */}
           <div className="grid grid-cols-3 gap-2">
-            <div className="rounded-xl bg-primary/10 p-2.5 text-center">
-              <Flame className="mx-auto size-3.5 text-primary" />
-              <p className="mt-1 font-display text-sm font-bold text-foreground">12</p>
-              <p className="text-[9px] text-muted-foreground">{bi("يوم متتالي", "day streak")}</p>
-            </div>
-            <div className="rounded-xl bg-success/10 p-2.5 text-center">
-              <TrendingUp className="mx-auto size-3.5 text-success" />
-              <p className="mt-1 font-display text-sm font-bold text-foreground">86%</p>
-              <p className="text-[9px] text-muted-foreground">{bi("نسبة الإنجاز", "completion")}</p>
-            </div>
-            <div className="rounded-xl bg-info/10 p-2.5 text-center">
-              <CheckCircle2 className="mx-auto size-3.5 text-info" />
-              <p className="mt-1 font-display text-sm font-bold text-foreground">24</p>
-              <p className="text-[9px] text-muted-foreground">{bi("درس مكتمل", "lessons done")}</p>
-            </div>
-          </div>
-
-          {/* تقدّم المواد */}
-          <div className="space-y-2.5">
-            {subjects.map((s, i) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-                  <s.icon className="size-3.5" />
-                </span>
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
-                  <div className={`h-full rounded-full ${s.tone}`} style={{ width: `${s.pct}%` }} />
-                </div>
-                <span className="w-8 text-end text-[10px] font-bold text-muted-foreground">
-                  {s.pct}%
-                </span>
+            {tiles.map((t) => (
+              <div key={t.en} className={`rounded-xl p-2.5 text-center ${t.tone}`}>
+                <t.icon className="mx-auto size-3.5" />
+                <div className="mx-auto mt-2 h-2 w-6 rounded-full bg-current opacity-25" />
+                <p className="mt-1.5 text-[9px] text-muted-foreground">{bi(t.ar, t.en)}</p>
               </div>
             ))}
           </div>
 
-          {/* نشاط الأسبوع — أعمدة CSS بحتة */}
-          <div className="flex h-14 items-end justify-between gap-1.5 border-t border-border pt-3">
-            {weekBars.map((h, i) => (
-              <div
-                key={i}
-                className={`w-full rounded-t-sm ${i === 5 ? "bg-primary" : "bg-secondary"}`}
-                style={{ height: `${h}px` }}
-              />
+          <div className="space-y-2.5">
+            <p className="text-[10px] font-bold text-foreground">
+              {bi("الجدول القادم", "Upcoming schedule")}
+            </p>
+            {lessonRows.map((r, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
+                  <r.icon className="size-3.5" />
+                </span>
+                <div className="flex-1 space-y-1.5">
+                  <div className={`h-1.5 rounded-full bg-secondary ${r.w}`} />
+                  <div className="h-1.5 w-1/3 rounded-full bg-secondary/70" />
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* بطاقات عائمة — إحساس حيوية إضافي حول الإطار الرئيسي */}
       <div className="glass-surface shadow-elevation-2 animate-float absolute -end-6 -top-6 flex items-center gap-2 rounded-2xl px-3.5 py-2.5">
         <span className="flex size-7 items-center justify-center rounded-full bg-success/15 text-success">
-          <CheckCircle2 className="size-3.5" />
+          <Video className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
-          {bi("أنجزت 12 درس هالأسبوع", "12 lessons done this week")}
+          {bi("رابط الاجتماع للدروس الأونلاين", "Meeting link for online lessons")}
         </p>
       </div>
 
@@ -127,10 +103,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         style={{ animationDelay: "1.2s" }}
       >
         <span className="flex size-7 items-center justify-center rounded-full bg-primary/15 text-primary">
-          <Flame className="size-3.5" />
+          <Wallet className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
-          {bi("سلسلة 12 يوم 🔥", "12-day streak 🔥")}
+          {bi("محفظة بسجل معاملات واضح", "Wallet with a clear history")}
         </p>
       </div>
     </div>

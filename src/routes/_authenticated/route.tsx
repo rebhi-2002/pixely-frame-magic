@@ -53,6 +53,16 @@ function AuthenticatedLayout() {
     localStorage.setItem("academia.sidebar", collapsed ? "collapsed" : "expanded");
   }, [collapsed]);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // قفل سكرول محتوى الصفحة يلي تحت الأوفرلاي طالما القائمة مفتوحة عالجوال —
+  // بدون هيك، تقدر تسحب سكرول المحتوى اللي تحت الطبقة الضبابية بالغلط.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [mobileOpen]);
   const { access, isLoading, error } = useAccess();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -127,7 +137,7 @@ function AuthenticatedLayout() {
           >
             <Menu className="size-5" />
           </Button>
-          <span className="ms-2 font-display text-sm font-bold text-foreground">Academia</span>
+          <span className="ms-2 font-display text-lg font-extrabold text-foreground">Academia</span>
         </div>
         <PageTransition>
           <Outlet />

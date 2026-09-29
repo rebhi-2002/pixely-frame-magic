@@ -40,8 +40,6 @@ export const Route = createFileRoute("/signup")({
   beforeLoad: async () => {
     if (await currentUserHome()) throw redirect({ to: "/" });
   },
-  validateSearch: (search: Record<string, unknown>): { invite?: string } =>
-    typeof search.invite === "string" ? { invite: search.invite } : {},
 
   head: (ctx) => createSeoHead("/signup", localeFromSearch(ctx.match.search)),
   component: SignupPage,

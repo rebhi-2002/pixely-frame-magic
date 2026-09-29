@@ -25,7 +25,7 @@ import {
   type PendingWithdrawalRequestDto,
 } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
-import { EmptyState } from "@/components/app/kit";
+import { EmptyState, Pagination } from "@/components/app/kit";
 import { LoadingState } from "@/components/app/feedback-states";
 
 // ملاحظة: الباك اند حاليًا بيرجّع StudentId/InstructorId (نص) بدون اسم
@@ -49,6 +49,8 @@ function TopUpSection() {
   const queryClient = useQueryClient();
   const [reviewing, setReviewing] = useState<PendingTopUpRequestDto | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 20;
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["wallet-pending-topups"],
@@ -99,7 +101,7 @@ function TopUpSection() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {rows.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE).map((r) => (
                 <tr key={r.id} className="border-b border-border/60 last:border-0">
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                     {r.studentId}
@@ -149,6 +151,20 @@ function TopUpSection() {
           </table>
         )}
       </div>
+      {!!rows?.length && (
+        <Pagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          totalCount={rows.length}
+          onPageChange={setPage}
+          summary={bi(
+            `${Math.min(page * PAGE_SIZE + 1, rows.length)}–${Math.min((page + 1) * PAGE_SIZE, rows.length)} من ${rows.length}`,
+            `${Math.min(page * PAGE_SIZE + 1, rows.length)}–${Math.min((page + 1) * PAGE_SIZE, rows.length)} of ${rows.length}`,
+          )}
+          previousLabel={bi("السابق", "Previous")}
+          nextLabel={bi("التالي", "Next")}
+        />
+      )}
 
       <Dialog open={!!reviewing} onOpenChange={(v) => !v && setReviewing(null)}>
         <DialogContent className="text-start">
@@ -195,6 +211,8 @@ function WithdrawalSection() {
   const [rejectionReason, setRejectionReason] = useState("");
   const [completing, setCompleting] = useState<PendingWithdrawalRequestDto | null>(null);
   const [transferReference, setTransferReference] = useState("");
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 20;
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["wallet-pending-withdrawals"],
@@ -268,7 +286,7 @@ function WithdrawalSection() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {rows.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE).map((r) => (
                 <tr key={r.id} className="border-b border-border/60 last:border-0">
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                     {r.instructorId}
@@ -315,6 +333,20 @@ function WithdrawalSection() {
           </table>
         )}
       </div>
+      {!!rows?.length && (
+        <Pagination
+          page={page}
+          pageSize={PAGE_SIZE}
+          totalCount={rows.length}
+          onPageChange={setPage}
+          summary={bi(
+            `${Math.min(page * PAGE_SIZE + 1, rows.length)}–${Math.min((page + 1) * PAGE_SIZE, rows.length)} من ${rows.length}`,
+            `${Math.min(page * PAGE_SIZE + 1, rows.length)}–${Math.min((page + 1) * PAGE_SIZE, rows.length)} of ${rows.length}`,
+          )}
+          previousLabel={bi("السابق", "Previous")}
+          nextLabel={bi("التالي", "Next")}
+        />
+      )}
 
       <Dialog open={!!reviewing} onOpenChange={(v) => !v && setReviewing(null)}>
         <DialogContent className="text-start">

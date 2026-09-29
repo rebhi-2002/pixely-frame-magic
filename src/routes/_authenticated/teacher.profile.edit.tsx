@@ -1,203 +1,208 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Pencil } from "lucide-react";
-import { AppPage, StatGrid, Panel, RowList } from "@/components/app/kit";
+import { AppPage, Panel, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { getTeacherProfile, saveTeacherProfile } from "@/lib/account-pages.functions";
-import { listTeacherCourses } from "@/lib/teacher-teaching.functions";
-import { useAccess } from "@/hooks/use-access";
+import { Switch } from "@/components/ui/switch";
+import { updateMyTeacherProfile, type TeacherProfileInput } from "@/integrations/backend/teachers";
 import { useBi } from "@/lib/bi";
-import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
 
-const description = "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.";
+const description = "هذا ما يراه الطلاب: نبذتك، خبرتك، وأسعارك بدليل المعلمين.";
 
 export const Route = createFileRoute("/_authenticated/teacher/profile/edit")({
   head: () =>
     authPageHead(
-      {
-        title: "ملفي العام | أكاديميا",
-        description: "هذا ما يراه الطلاب وأولياء الأمور: نبذتك، موادك، وشهاداتك الموثّقة.",
-      },
-      {
-        title: "My public profile | Academia",
-        description:
-          "What students and parents see: your bio, subjects, and verified certificates.",
-      },
+      { title: "تعديل ملفي | أكاديميا", description },
+      { title: "Edit my profile | Academia", description: "What students see: your bio, experience, and prices." },
     ),
-  component: PageRoute,
-});
-
-function PageRoute() {
-  return (
+  component: () => (
     <Guard pageKey="teacher_profile_edit">
       <Body />
     </Guard>
-  );
-}
+  ),
+});
+
+const EMPTY: TeacherProfileInput = {
+  bio: "",
+  qualifications: "",
+  experienceYears: 0,
+  serviceArea: "",
+  languages: "",
+  supportsOnline: true,
+  supportsInPerson: false,
+  hourlyPriceOnline: undefined,
+  hourlyPriceInPerson: undefined,
+  isPublicForDiscovery: false,
+  subjectIds: [],
+  gradeIds: [],
+};
 
 function Body() {
   const bi = useBi();
-  const queryClient = useQueryClient();
-  const { can } = useAccess();
-  const fetchProfile = useServerFn(getTeacherProfile);
-  const persist = useServerFn(saveTeacherProfile);
-  const fetchCourses = useServerFn(listTeacherCourses);
+  const [form, setForm] = useState<TeacherProfileInput>(EMPTY);
+  const [notLinked, setNotLinked] = useState(false);
 
-  const profileQuery = useQuery({ queryKey: ["teacher-profile"], queryFn: () => fetchProfile() });
-  const coursesQuery = useQuery({ queryKey: ["teacher-courses"], queryFn: () => fetchCourses() });
-
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ displayName: "", bio: "", subjectsLabel: "" });
-
-  const isLoading = profileQuery.isLoading || coursesQuery.isLoading;
-  const profile = profileQuery.data;
-  const students = (coursesQuery.data ?? []).reduce((s, c) => s + c.enrolledCount, 0);
-
-  const saveMutation = useMutation({
-    mutationFn: () => persist({ data: form }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["teacher-profile"] });
-      setOpen(false);
-      toast.success(bi("تم الحفظ", "Saved successfully"));
+  const save = useMutation({
+    mutationFn: () => updateMyTeacherProfile(form),
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success(bi("تم حفظ ملفك المهني", "Your professional profile was saved"));
+        setNotLinked(false);
+      } else {
+        setNotLinked(true);
+      }
     },
-    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحفظ", "Failed to save"))),
+    onError: () => toast.error(bi("تعذّر الحفظ، حاول مجدداً", "Failed to save, please try again")),
   });
 
-  function openDialog() {
-    if (!profile) return;
-    setForm({
-      displayName: profile.displayName,
-      bio: profile.bio,
-      subjectsLabel: profile.subjectsLabel,
-    });
-    setOpen(true);
+  if (notLinked) {
+    return (
+      <AppPage title={bi("تعديل ملفي", "Edit my profile")} icon="UserCog">
+        <EmptyState
+          icon="UserX"
+          title={bi("حسابك لسا مش مربوط بملف معلم بالباك اند", "Your account isn't linked to a teacher record on the backend yet")}
+          description={bi(
+            "هاي مو مشكلة بالبيانات يلي كتبتها — الباك اند حالياً ما بينشئ ملف معلم تلقائياً عند التسجيل. تواصل مع الدعم الفني لربط حسابك، وبترجع تقدر تحفظ.",
+            "This isn't about what you typed — the backend doesn't auto-create a teacher record on registration yet. Contact support to link your account, then you'll be able to save.",
+          )}
+        />
+        <div className="mt-4">
+          <Button variant="outline" onClick={() => setNotLinked(false)}>
+            {bi("رجوع للنموذج", "Back to the form")}
+          </Button>
+        </div>
+      </AppPage>
+    );
   }
 
   return (
     <AppPage
-      title={bi("ملفي العام", "Public profile")}
+      title={bi("تعديل ملفي", "Edit my profile")}
       icon="UserCog"
-      subtitle={bi(
-        description,
-        "This is what students and parents see: your bio, subjects and verified credentials.",
-      )}
+      subtitle={bi(description, "What students see: your bio, experience, and prices.")}
     >
-      {isLoading || !profile ? (
-        <LoadingState
-          label={bi("جارٍ التحميل…", "Loading…")}
-          className="border-none bg-transparent"
-        />
-      ) : (
-        <>
-          <StatGrid
-            items={[
-              {
-                icon: "BadgeCheck",
-                label: bi("حالة التوثيق", "Verification"),
-                value: bi("موثّق", "Verified"),
-              },
-              {
-                icon: "Eye",
-                label: bi("زيارات الملف", "Profile views"),
-                value: String(profile.profileViews),
-              },
-              { icon: "Star", label: bi("التقييم", "Rating"), value: String(profile.rating) },
-              { icon: "Users", label: bi("طلاب", "Students"), value: String(students) },
-            ]}
-          />
-          <Panel
-            title={bi("بيانات الملف", "Profile fields")}
-            icon="UserCog"
-            action={
-              can("teacher_profile_edit", "edit_profile") ? (
-                <Button size="sm" variant="outline" onClick={openDialog}>
-                  <Pencil className="size-4" />
-                  {bi("تعديل", "Edit")}
-                </Button>
-              ) : undefined
-            }
-          >
-            <RowList
-              rows={[
-                {
-                  title: bi("الاسم المعروض", "Display name"),
-                  meta: profile.displayName,
-                  tone: "primary",
-                },
-                { title: bi("النبذة", "Bio"), meta: profile.bio, tone: "primary" },
-                { title: bi("المواد", "Subjects"), meta: profile.subjectsLabel, tone: "primary" },
-                {
-                  title: bi("الشهادات", "Credentials"),
-                  meta: bi("بكالوريوس رياضيات — موثّقة", "BSc Mathematics — verified"),
-                  value: bi("موثّقة", "Verified"),
-                  tone: "success",
-                },
-              ]}
+      <Panel title={bi("نبذة عني", "About me")} icon="FileText">
+        <div className="space-y-4">
+          <div>
+            <Label>{bi("نبذة تعريفية", "Bio")}</Label>
+            <Textarea
+              value={form.bio ?? ""}
+              onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))}
+              rows={4}
             />
-          </Panel>
-        </>
-      )}
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="text-start">
-          <DialogHeader>
-            <DialogTitle>{bi("تعديل بيانات الملف", "Edit profile fields")}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="tp-name">{bi("الاسم المعروض", "Display name")}</Label>
+          </div>
+          <div>
+            <Label>{bi("المؤهلات العلمية", "Qualifications")}</Label>
+            <Textarea
+              value={form.qualifications ?? ""}
+              onChange={(e) => setForm((f) => ({ ...f, qualifications: e.target.value }))}
+              rows={2}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label>{bi("سنوات الخبرة", "Years of experience")}</Label>
               <Input
-                id="tp-name"
-                value={form.displayName}
-                onChange={(e) => setForm((f) => ({ ...f, displayName: e.target.value }))}
+                type="number"
+                min={0}
+                max={60}
+                value={form.experienceYears}
+                onChange={(e) => setForm((f) => ({ ...f, experienceYears: Number(e.target.value) }))}
               />
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="tp-bio">{bi("النبذة", "Bio")}</Label>
-              <Textarea
-                id="tp-bio"
-                value={form.bio}
-                onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="tp-subjects">{bi("المواد", "Subjects")}</Label>
+            <div>
+              <Label>{bi("منطقة الخدمة", "Service area")}</Label>
               <Input
-                id="tp-subjects"
-                value={form.subjectsLabel}
-                onChange={(e) => setForm((f) => ({ ...f, subjectsLabel: e.target.value }))}
+                value={form.serviceArea ?? ""}
+                onChange={(e) => setForm((f) => ({ ...f, serviceArea: e.target.value }))}
               />
             </div>
           </div>
-          <DialogFooter className="gap-2 sm:justify-start">
-            <Button
-              onClick={() => saveMutation.mutate()}
-              disabled={saveMutation.isPending || !form.displayName.trim()}
-            >
-              {bi("حفظ", "Save")}
-            </Button>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              {bi("إلغاء", "Cancel")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <div>
+            <Label>{bi("اللغات", "Languages")}</Label>
+            <Input
+              value={form.languages ?? ""}
+              onChange={(e) => setForm((f) => ({ ...f, languages: e.target.value }))}
+              placeholder={bi("مثال: العربية، الإنجليزية", "e.g. Arabic, English")}
+            />
+          </div>
+        </div>
+      </Panel>
+
+      <Panel title={bi("طريقة التدريس والأسعار", "Teaching mode & pricing")} icon="Wallet">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between rounded-xl border border-border p-3">
+            <div>
+              <p className="text-sm font-semibold">{bi("أونلاين", "Online")}</p>
+            </div>
+            <Switch
+              checked={form.supportsOnline}
+              onCheckedChange={(v) => setForm((f) => ({ ...f, supportsOnline: v }))}
+            />
+          </div>
+          {form.supportsOnline && (
+            <div>
+              <Label>{bi("سعر الساعة أونلاين", "Hourly price (online)")}</Label>
+              <Input
+                type="number"
+                value={form.hourlyPriceOnline ?? ""}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, hourlyPriceOnline: e.target.value ? Number(e.target.value) : undefined }))
+                }
+              />
+            </div>
+          )}
+          <div className="flex items-center justify-between rounded-xl border border-border p-3">
+            <p className="text-sm font-semibold">{bi("حضورياً", "In-person")}</p>
+            <Switch
+              checked={form.supportsInPerson}
+              onCheckedChange={(v) => setForm((f) => ({ ...f, supportsInPerson: v }))}
+            />
+          </div>
+          {form.supportsInPerson && (
+            <div>
+              <Label>{bi("سعر الساعة حضورياً", "Hourly price (in-person)")}</Label>
+              <Input
+                type="number"
+                value={form.hourlyPriceInPerson ?? ""}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, hourlyPriceInPerson: e.target.value ? Number(e.target.value) : undefined }))
+                }
+              />
+            </div>
+          )}
+          <div className="flex items-center justify-between rounded-xl border border-border p-3">
+            <div>
+              <p className="text-sm font-semibold">{bi("إظهار ملفي بدليل المعلمين", "Show my profile in the directory")}</p>
+              <p className="text-xs text-muted-foreground">
+                {bi("لازم يكون مفعّل حتى يقدر الطلاب يلاقوك بالبحث.", "Must be on for students to find you in search.")}
+              </p>
+            </div>
+            <Switch
+              checked={form.isPublicForDiscovery}
+              onCheckedChange={(v) => setForm((f) => ({ ...f, isPublicForDiscovery: v }))}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {bi(
+              "⚠️ اختيار المواد والصفوف لسا مش متاح — الباك اند ما عنده بيانات مواد/صفوف حقيقية بعد.",
+              "⚠️ Choosing subjects and grades isn't available yet — the backend has no real subject/grade data yet.",
+            )}
+          </p>
+        </div>
+      </Panel>
+
+      <div className="flex justify-end">
+        <Button onClick={() => save.mutate()} disabled={save.isPending}>
+          {save.isPending ? bi("جارٍ الحفظ…", "Saving…") : bi("حفظ التغييرات", "Save changes")}
+        </Button>
+      </div>
     </AppPage>
   );
 }

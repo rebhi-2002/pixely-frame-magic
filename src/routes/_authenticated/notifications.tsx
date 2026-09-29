@@ -1,32 +1,22 @@
-import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Check, Trash2, X } from "lucide-react";
+import { Check } from "lucide-react";
 import { AppPage, Badge, Panel, RowList, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { Button } from "@/components/ui/button";
-import {
-  deleteNotification,
-  listNotifications,
-  markAllNotificationsRead,
-  markNotificationRead,
-} from "@/lib/account-pages.functions";
-import { useAccess } from "@/hooks/use-access";
+import { getStudentNotifications, markStudentNotificationRead } from "@/integrations/backend/student";
+import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { authPageHead } from "@/lib/seo";
-import { LoadingState } from "@/components/app/feedback-states";
+import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 export const Route = createFileRoute("/_authenticated/notifications")({
   head: () =>
     authPageHead(
-      { title: "الإشعارات | Academia", description: "إشعارات الحساب والمهام التعليمية." },
-      {
-        title: "Notifications | Academia",
-        description: "Account and learning task notifications.",
-      },
+      { title: "الإشعارات | Academia", description: "إشعاراتك على المنصة." },
+      { title: "Notifications | Academia", description: "Your platform notifications." },
     ),
   component: NotificationsPage,
 });
@@ -42,141 +32,106 @@ function NotificationsPage() {
 function Body() {
   const bi = useBi();
   const queryClient = useQueryClient();
-  const { can } = useAccess();
-  const fetchRows = useServerFn(listNotifications);
-  const markOne = useServerFn(markNotificationRead);
-  const markAll = useServerFn(markAllNotificationsRead);
-  const remove = useServerFn(deleteNotification);
+  const { session } = useSession();
 
-  const { data: rows, isLoading } = useQuery({
-    queryKey: ["notifications"],
-    queryFn: () => fetchRows(),
+  // ⚠️ الباك اند الحقيقي عنده endpoint إشعارات للطالب فقط (/api/Student/Notifications)
+  // حالياً. للأدوار التانية (معلم/ولي أمر/أدمن) ما في endpoint إشعارات بعد.
+  const isStudent = session?.roleKey === "student";
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["student-notifications"],
+    queryFn: () => getStudentNotifications({ pageSize: 50 }),
+    enabled: isStudent,
   });
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["notifications"] });
 
-  const list = useMemo(() => rows ?? [], [rows]);
-  const today = useMemo(() => list.filter((r) => r.category === "اليوم"), [list]);
-  const earlier = useMemo(() => list.filter((r) => r.category === "سابقاً"), [list]);
-  const newCount = list.filter((r) => r.isNew).length;
-
-  const markOneMutation = useMutation({
-    mutationFn: (id: string) => markOne({ data: { id } }),
-    onSuccess: invalidate,
+  const markReadMutation = useMutation({
+    mutationFn: (id: number) => markStudentNotificationRead(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["student-notifications"] }),
     onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
   });
 
-  const markAllMutation = useMutation({
-    mutationFn: () => markAll(),
-    onSuccess: () => {
-      invalidate();
-      toast.success(bi("تم تعليم الكل كمقروء", "All marked as read"));
-    },
-    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر التحديث", "Failed to update"))),
-  });
+  if (!isStudent) {
+    return (
+      <AppPage title={bi("الإشعارات", "Notifications")} icon="Bell">
+        <EmptyState
+          icon="Bell"
+          title={bi("لسا ما بنيت الإشعارات لدورك", "Notifications aren't built for your role yet")}
+          description={bi(
+            "الباك اند حالياً بيدعم إشعارات الطالب بس. لما توصل إشعارات المعلم/ولي الأمر/الأدمن، رح تظهر هون تلقائياً.",
+            "The backend currently supports student notifications only. Once teacher/parent/admin notifications ship, they'll appear here automatically.",
+          )}
+        />
+      </AppPage>
+    );
+  }
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => remove({ data: { id } }),
-    onSuccess: invalidate,
-    onError: (e) => toast.error(getErrorMessage(e, bi("تعذّر الحذف", "Failed to delete"))),
-  });
+  if (isError) {
+    return (
+      <AppPage title={bi("الإشعارات", "Notifications")} icon="Bell">
+        <ErrorState
+          title={bi("ما قدرنا نحمّل الإشعارات", "We couldn't load your notifications")}
+          description={bi(
+            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+            "Try again. If the problem continues, check your connection or come back later.",
+          )}
+          action={
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void queryClient.invalidateQueries()}
+            />
+          }
+        />
+      </AppPage>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <AppPage title={bi("الإشعارات", "Notifications")} icon="Bell">
+        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+      </AppPage>
+    );
+  }
+
+  const rows = data?.data ?? [];
+  const unreadCount = rows.filter((n) => !n.isRead).length;
 
   return (
     <AppPage
       title={bi("الإشعارات", "Notifications")}
       icon="Bell"
-      subtitle={bi(
-        "تنبيهات الدراسة والحساب والمراجعات في مكان واحد.",
-        "Study, account, and review alerts in one place.",
-      )}
+      subtitle={bi("كل إشعاراتك في مكان واحد.", "All your notifications in one place.")}
     >
-      {isLoading ? (
-        <LoadingState
-          label={bi("جارٍ التحميل…", "Loading…")}
-          className="border-none bg-transparent"
-        />
-      ) : (
-        <>
-          <Panel
-            title={bi("اليوم", "Today")}
-            icon="Bell"
-            action={
-              <div className="flex items-center gap-2">
-                <Badge tone="primary">{newCount}</Badge>
-                {can("notifications", "edit") && newCount > 0 && (
-                  <Button size="sm" variant="outline" onClick={() => markAllMutation.mutate()}>
-                    <Check className="size-4" />
-                    {bi("تعليم الكل كمقروء", "Mark all read")}
-                  </Button>
-                )}
-              </div>
-            }
-          >
-            {today.length ? (
-              <RowList
-                rows={today.map((n) => ({
-                  title: n.title,
-                  meta: n.meta,
-                  value: n.isNew ? bi("جديد", "New") : undefined,
-                  tone: n.tone,
-                  actions: (
-                    <div className="flex items-center gap-1">
-                      {can("notifications", "edit") && n.isNew && (
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => markOneMutation.mutate(n.id)}
-                        >
-                          <Check className="size-4" />
-                        </Button>
-                      )}
-                      {can("notifications", "delete") && (
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="text-destructive"
-                          onClick={() => deleteMutation.mutate(n.id)}
-                        >
-                          <X className="size-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ),
-                }))}
-              />
-            ) : (
-              <EmptyState icon="Bell" text={bi("لا إشعارات اليوم.", "No notifications today.")} />
-            )}
-          </Panel>
-
-          <Panel title={bi("سابقاً", "Earlier")} icon="History">
-            {earlier.length ? (
-              <RowList
-                rows={earlier.map((n) => ({
-                  title: n.title,
-                  meta: n.meta,
-                  value: n.tone === "success" ? bi("إنجاز", "Achievement") : undefined,
-                  tone: n.tone,
-                  actions: can("notifications", "delete") ? (
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-destructive"
-                      onClick={() => deleteMutation.mutate(n.id)}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
-                  ) : undefined,
-                }))}
-              />
-            ) : (
-              <EmptyState
-                icon="History"
-                text={bi("لا إشعارات سابقة.", "No earlier notifications.")}
-              />
-            )}
-          </Panel>
-        </>
-      )}
+      <Panel
+        title={bi("الإشعارات", "Notifications")}
+        icon="Bell"
+        action={<Badge tone="primary">{unreadCount}</Badge>}
+      >
+        {rows.length ? (
+          <RowList
+            rows={rows.map((n) => ({
+              title: n.title,
+              meta: bi(
+                `${n.message} — ${new Date(n.createdOn).toLocaleDateString()}`,
+                `${n.message} — ${new Date(n.createdOn).toLocaleDateString()}`,
+              ),
+              value: !n.isRead ? bi("جديد", "New") : undefined,
+              tone: n.isRead ? "muted" : "primary",
+              actions: !n.isRead ? (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => markReadMutation.mutate(n.id)}
+                >
+                  <Check className="size-4" />
+                </Button>
+              ) : undefined,
+            }))}
+          />
+        ) : (
+          <EmptyState icon="Bell" text={bi("لا إشعارات حالياً.", "No notifications right now.")} />
+        )}
+      </Panel>
     </AppPage>
   );
 }

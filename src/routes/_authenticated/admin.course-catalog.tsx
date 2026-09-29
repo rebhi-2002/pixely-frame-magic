@@ -7,11 +7,11 @@ export const Route = createFileRoute("/_authenticated/admin/course-catalog")({
   head: () =>
     authPageHead(
       {
-        title: "كتالوج الكورسات العام | Academia",
+        title: "كتالوج الكورسات | Academia",
         description: "إدارة الكورسات المعروضة بصفحة الكورسات العامة.",
       },
       {
-        title: "Public course catalog | Academia",
+        title: "Course catalog | Academia",
         description: "Manage the courses shown on the public courses page.",
       },
     ),

@@ -10,14 +10,16 @@
  * azure info, coral destructive. Never hardcode colors in components.
  */
 
-/* خط العناوين: عربي = Tajawal (قرار المستخدم)، إنجليزي = يبقى كما هو */
+/* خط العناوين: عربي = Tajawal (قرار المستخدم)، إنجليزي = خط لاتيني عريض
+   عادي (Poppins) — لا علاقة له بالطابع الكوفي العربي المستخدم سابقاً بالغلط
+   (Reem Kufi، خط عربي الطابع، غير مخصص لعرض نص إنجليزي بشكل احترافي). */
 :root,
 :root[lang="ar"] {
   --font-display-family: "Tajawal", "Cairo", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root[lang="en"] {
-  --font-display-family: "Reem Kufi", ui-sans-serif, system-ui, sans-serif;
+  --font-display-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {

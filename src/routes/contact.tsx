@@ -3,7 +3,6 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Headset, Mail, MessageSquareText, Send } from "lucide-react";
 import { z } from "zod";
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { Reveal } from "@/components/ui/reveal";
@@ -46,13 +45,13 @@ function ContactPage() {
     }
     setErrors({});
     setSending(true);
-    // ملاحظة تطوير: نموذج واجهة كامل وجاهز للإنتاج. الربط الفعلي بالبريد/التخزين
-    // (Supabase Edge Function أو خدمة بريد مثل Resend) يُنفَّذ عند توصيل الـ backend.
-    window.setTimeout(() => {
-      setSending(false);
-      setDone(true);
-      toast.success(t("contact.success.title"));
-    }, 600);
+    // الباك اند ما عنده endpoint للتواصل (لا Contact ولا Email بـSwagger) — فنفتح
+    // تطبيق البريد عند المستخدم برسالة جاهزة بدل إرسال وهمي يوهمه إنها وصلت.
+    const subject = encodeURIComponent(`[${topic}] ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:support@academia.app?subject=${subject}&body=${body}`;
+    setSending(false);
+    setDone(true);
   }
 
   return (

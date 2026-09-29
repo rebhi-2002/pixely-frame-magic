@@ -24,11 +24,25 @@ export function BrandLogo({ className = "size-9" }: { className?: string }) {
  *  بيُعرض بسيط وهادئ، بدون أي حركة أو زخرفة إضافية — أنسب لهوية بصرية
  *  رسمية). الأيقونة بتاخد كامل مساحتها بأي حجم بنفس النسبة عبر كل
  *  breakpoints، فما بترجع تكبر بشاشة وتصغر بشاشة تانية بشكل غير متوقّع. */
-export function BrandLockup({ className = "" }: { className?: string }) {
+export function BrandLockup({
+  className = "",
+  tone = "page",
+}: {
+  className?: string;
+  /** "page": يتبع لون نص الصفحة العادي (الهيدر العام). "sidebar": يتبع لون
+   *  نص القائمة الجانبية الثابت (غامق دائماً بالوضعين، بعكس نص الصفحة). */
+  tone?: "page" | "sidebar";
+}) {
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
       <BrandLogo className="size-9 lg:size-8" />
-      <span className="font-display text-lg font-extrabold text-foreground">Academia</span>
+      <span
+        className={`font-display text-lg font-extrabold ${
+          tone === "sidebar" ? "text-sidebar-foreground" : "text-foreground"
+        }`}
+      >
+        Academia
+      </span>
     </span>
   );
 }

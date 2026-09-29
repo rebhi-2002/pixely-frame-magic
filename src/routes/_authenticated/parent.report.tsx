@@ -1,30 +1,27 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { UserPlus } from "lucide-react";
-import { AppPage, StatGrid, Panel, RowList, Progress, EmptyState } from "@/components/app/kit";
+import { AppPage, StatGrid, Panel, DataTable, EmptyState } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
-import { Button } from "@/components/ui/button";
 import { useBi } from "@/lib/bi";
-import { TrendChart } from "@/components/app/charts";
-import { getChildReport } from "@/lib/supervisor-oversight.functions";
+import {
+  getMyChildren,
+  getChildAttendance,
+  getChildExamResults,
+} from "@/integrations/backend/parent";
 import { authPageHead } from "@/lib/seo";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
-const description = "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.";
+const description = "الحضور ونتائج الامتحانات لأبنائك، مباشرة من سجلات المنصة.";
 
 export const Route = createFileRoute("/_authenticated/parent/report")({
   head: () =>
     authPageHead(
-      {
-        title: "تقرير الابن | أكاديميا",
-        description: "تقرير أسبوعي واضح: التزام، إتقان، ومواطن الضعف — بدون أرقام مضلّلة.",
-      },
+      { title: "تقرير الابن | أكاديميا", description },
       {
         title: "Child's report | Academia",
-        description:
-          "A clear weekly report: commitment, mastery, and weak points — without misleading numbers.",
+        description: "Your children's attendance and exam results, straight from platform records.",
       },
     ),
   component: PageRoute,
@@ -41,20 +38,30 @@ function PageRoute() {
 function Body() {
   const bi = useBi();
   const queryClient = useQueryClient();
-  const fetchReport = useServerFn(getChildReport);
-  const {
-    data: report,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["child-report"],
-    queryFn: () => fetchReport(),
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const childrenQuery = useQuery({
+    queryKey: ["parent-children"],
+    queryFn: getMyChildren,
+  });
+  const children = childrenQuery.data ?? [];
+  const activeChild = useMemo(
+    () => children.find((c) => c.studentId === selectedId) ?? children[0] ?? null,
+    [children, selectedId],
+  );
+
+  const attendanceQuery = useQuery({
+    queryKey: ["parent-child-attendance", activeChild?.studentId],
+    queryFn: () => getChildAttendance(activeChild!.studentId),
+    enabled: !!activeChild,
+  });
+  const examsQuery = useQuery({
+    queryKey: ["parent-child-exams", activeChild?.studentId],
+    queryFn: () => getChildExamResults(activeChild!.studentId),
+    enabled: !!activeChild,
   });
 
-  // مهم: هالفحص لازم قبل "!report" تحت — فشل الجلب بيخلي report=undefined
-  // بالضبط متل حالة "ما في ابن مرتبط بعد"، وبدونه كان بيظهر لولي أمر حقيقي
-  // رسالة "اربط أول ابن" غلط تمامًا وقت انقطاع فعلي بالاتصال.
-  if (isError) {
+  if (childrenQuery.isError) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
         <ErrorState
@@ -74,135 +81,123 @@ function Body() {
     );
   }
 
-  if (isLoading) {
+  if (childrenQuery.isLoading) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
-        <LoadingState
-          label={bi("جارٍ التحميل…", "Loading…")}
-          className="border-none bg-transparent"
-        />
+        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
       </AppPage>
     );
   }
 
-  if (!report) {
+  if (!children.length) {
     return (
       <AppPage
         title={bi("تقرير الابن", "Child report")}
         icon="FileBarChart"
         subtitle={bi(
-          "ما في ابن مرتبط بحسابك بعد — اربط أول ابن حتى يظهر تقريره هون.",
-          "No child is linked to your account yet — link your first child to see their report here.",
+          "ما في ابن مرتبط بحسابك بعد بالباك اند.",
+          "No child is linked to your account on the backend yet.",
         )}
       >
         <EmptyState
           icon="UserPlus"
           title={bi("لسا ما في تقرير لعرضه", "No report to show yet")}
           description={bi(
-            "اربط حساب ابنك أو بنتك من الإعدادات، وبيظهر التقرير الأسبوعي هون تلقائيًا.",
-            "Link your child's account from Settings, and their weekly report will appear here automatically.",
+            "ربط حساب الأبناء بولي الأمر ميزة لسا ما بنيت بالباك اند — لما تتوفر رح يظهر التقرير هون تلقائياً.",
+            "Linking a child's account to a parent isn't built on the backend yet — once it is, the report will appear here automatically.",
           )}
-          action={
-            <Button asChild size="sm">
-              <Link to="/parent/settings">
-                <UserPlus className="size-4" />
-                {bi("اربط ابن الآن", "Link a child now")}
-              </Link>
-            </Button>
-          }
         />
       </AppPage>
     );
   }
 
-  const avgExamScore = report.examAttempts.length
-    ? Math.round(
-        report.examAttempts.reduce((s, a) => s + a.scorePercent, 0) / report.examAttempts.length,
-      )
-    : 0;
-
   return (
     <AppPage
       title={bi("تقرير الابن", "Child report")}
       icon="FileBarChart"
-      subtitle={bi(
-        description,
-        "A clear weekly report: consistency, mastery and weak spots — no vanity metrics.",
-      )}
+      subtitle={bi(description, "Your children's attendance and exam results, straight from platform records.")}
     >
       <WelcomeBanner
-        subtitle={[
-          "تابع التزام ابنك وإتقانه أسبوعيًا، بدون أرقام مضلّلة — بس الصورة الواقعية.",
-          "Follow your child's consistency and mastery weekly — no vanity metrics, just the real picture.",
-        ]}
-        tip={["تقرير هالأسبوع جاهز", "This week's report is ready"]}
+        subtitle={[bi("نظرة سريعة على أداء أبنائك.", "A quick look at your children's progress.")]}
       />
-      <StatGrid
-        items={[
-          { icon: "User", label: bi("الابن المتابَع", "Child"), value: report.childName },
-          {
-            icon: "Flame",
-            label: bi("أيام دراسة", "Study days"),
-            value: `${report.studyDaysCount}/7`,
-          },
-          {
-            icon: "Percent",
-            label: bi("متوسط الإتقان", "Avg. mastery"),
-            value: `${report.avgMastery}%`,
-          },
-          {
-            icon: "AlertTriangle",
-            label: bi("مواد تحتاج دعم", "Needs support"),
-            value: String(report.weakSubjectsCount),
-          },
-        ]}
-      />
-      <Panel title={bi("دقائق الدراسة هذا الأسبوع", "Study minutes this week")} icon="ChartSpline">
-        <TrendChart
-          data={report.weeklyLog.map((d) => ({ label: bi(...d.day), value: d.minutes }))}
-        />
-      </Panel>
-      <Panel title={bi("إتقان المواد", "Subject mastery")} icon="LineChart">
-        {report.subjects.length ? (
-          report.subjects.map((s) => (
-            <Progress key={s.id} label={s.subjectName} value={s.progressPercent} />
-          ))
-        ) : (
-          <EmptyState
-            icon="LineChart"
-            text={bi("لا مواد مسجّلة بعد.", "No subjects logged yet.")}
-          />
-        )}
-      </Panel>
-      <Panel title={bi("ملخّص الأسبوع", "Week summary")} icon="Activity">
-        <RowList
-          rows={[
+
+      {children.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {children.map((c) => (
+            <button
+              key={c.studentId}
+              onClick={() => setSelectedId(c.studentId)}
+              className={`rounded-full border px-3 py-1 text-sm ${
+                activeChild?.studentId === c.studentId
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground"
+              }`}
+            >
+              {c.studentName}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {activeChild && (
+        <StatGrid
+          items={[
+            { icon: "User", label: bi("الابن المتابَع", "Child"), value: activeChild.studentName },
             {
-              title: bi("دقائق الدراسة", "Study minutes"),
-              meta: bi(
-                `${report.totalMinutes} دقيقة هذا الأسبوع`,
-                `${report.totalMinutes} minutes this week`,
-              ),
-              value: `${report.studyDaysCount}/7`,
-              tone: "success",
+              icon: "GraduationCap",
+              label: bi("الصف", "Grade"),
+              value: activeChild.gradeName ?? bi("غير محدد", "Not set"),
             },
             {
-              title: bi("امتحانات تدريبية", "Mock exams"),
-              meta: bi(
-                `${report.examAttempts.length} امتحانات`,
-                `${report.examAttempts.length} exams`,
-              ),
-              value: `${avgExamScore}%`,
-              tone: "primary",
+              icon: "CalendarCheck",
+              label: bi("نسبة الحضور", "Attendance rate"),
+              value: `${Math.round(activeChild.attendanceRatePercent)}%`,
             },
-            ...report.priorityMistakes.map((m) => ({
-              title: bi(`${m.subjectName} تحتاج متابعة`, `${m.subjectName} needs attention`),
-              meta: m.questionTitle,
-              value: bi("تنبيه", "Alert"),
-              tone: "danger" as const,
-            })),
+            {
+              icon: "Percent",
+              label: bi("متوسط الامتحانات", "Avg. exam score"),
+              value:
+                activeChild.averageExamScorePercent == null
+                  ? "—"
+                  : `${Math.round(activeChild.averageExamScorePercent)}%`,
+            },
           ]}
         />
+      )}
+
+      <Panel title={bi("سجل الحضور", "Attendance record")} icon="CalendarCheck">
+        {attendanceQuery.isLoading ? (
+          <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        ) : attendanceQuery.data?.length ? (
+          <DataTable
+            head={[bi("التاريخ", "Date"), bi("المجموعة", "Group"), bi("ملاحظات", "Notes")]}
+            rows={attendanceQuery.data.map((r) => [
+              new Date(r.sessionDate).toLocaleDateString(),
+              r.groupName,
+              r.notes ?? "—",
+            ])}
+          />
+        ) : (
+          <EmptyState icon="CalendarCheck" text={bi("لا يوجد سجل حضور بعد.", "No attendance records yet.")} />
+        )}
+      </Panel>
+
+      <Panel title={bi("نتائج الامتحانات", "Exam results")} icon="FileBarChart">
+        {examsQuery.isLoading ? (
+          <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        ) : examsQuery.data?.length ? (
+          <DataTable
+            head={[bi("الامتحان", "Exam"), bi("التاريخ", "Date"), bi("النتيجة", "Score"), bi("ملاحظات", "Feedback")]}
+            rows={examsQuery.data.map((r) => [
+              r.examTitle,
+              new Date(r.examDate).toLocaleDateString(),
+              `${r.scoreObtained}/${r.totalMarks}`,
+              r.feedback ?? "—",
+            ])}
+          />
+        ) : (
+          <EmptyState icon="FileBarChart" text={bi("لا توجد نتائج امتحانات بعد.", "No exam results yet.")} />
+        )}
       </Panel>
     </AppPage>
   );
