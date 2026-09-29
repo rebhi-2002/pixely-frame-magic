@@ -97,7 +97,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         className={cn(
           "sticky top-0 z-40 border-b transition-all duration-300",
           scrolled
-            ? "shadow-elevation-2 border-border bg-background/85 backdrop-blur"
+            ? "border-[var(--border-strong)] bg-background"
             : "border-transparent bg-transparent",
         )}
       >

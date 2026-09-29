@@ -10,12 +10,12 @@
  * azure info, coral destructive. Never hardcode colors in components.
  */
 
-/* خط العناوين: عربي = Tajawal (قرار المستخدم)، إنجليزي = خط لاتيني عريض
-   عادي (Poppins) — لا علاقة له بالطابع الكوفي العربي المستخدم سابقاً بالغلط
-   (Reem Kufi، خط عربي الطابع، غير مخصص لعرض نص إنجليزي بشكل احترافي). */
+/* خط العناوين: عربي = Baloo Bhaijaan 2 — خط عربي دائري بشخصية "ودّية"، بديل
+   Tajawal الذي كان قريبًا جدًا من Cairo (خط الجسم) فلا يمنح العناوين تمايزًا
+   حقيقيًا. إنجليزي = Poppins (بلا تغيير، يصلح أصلًا لهذا الطابع). */
 :root,
 :root[lang="ar"] {
-  --font-display-family: "Tajawal", "Cairo", ui-sans-serif, system-ui, sans-serif;
+  --font-display-family: "Baloo Bhaijaan 2", "Cairo", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root[lang="en"] {
@@ -80,7 +80,7 @@
 /* الوضع الغامق — الافتراضي (القسم 04 + القسم 06) */
 :root,
 :root[data-theme="dark"] {
-  --radius: 0.875rem;
+  --radius: 0.75rem;
   --ink-950: #0a0f1c;
   --ink-900: #0d1321;
   --ink-800: #141b2e;
@@ -114,6 +114,14 @@
   --border: rgba(180, 190, 210, 0.13);
   --input: rgba(180, 190, 210, 0.2);
   --ring: #f0a62e;
+  /* Neo-Brutalism الدافئ — حد صلب وظل بلا ضبابية (بديل glow-primary/glass-surface،
+     يُحذفان في patch لاحق عند تنظيف المكوّنات). الأسود يختفي على خلفية غامقة،
+     فالحد والظل هنا فاتحان بدرجة كافية للظهور، والظل بلون العنبري لإحساس دافئ
+     بدل رمادي بارد. */
+  --border-strong: rgba(243, 241, 234, 0.85);
+  --border-strong-width: 2px;
+  --shadow-brutal-color: rgba(240, 166, 46, 0.28);
+  --shadow-brutal: 4px 4px 0 0 var(--shadow-brutal-color);
   --chart-1: #f0a62e;
   --chart-2: #17a672;
   --chart-3: #3e8ede;
@@ -131,9 +139,11 @@
 
 /* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
 :root[data-theme="light"] {
-  --paper-50: #f3f5f9;
-  --paper-100: #ffffff;
-  --paper-200: #e7eaf0;
+  /* تدفئة معتدلة (قرار 2026-09-28): كريمي هادئ لا رمادي بارد ولا كريمي فاقع —
+     يحافظ على جدّية شاشات المحفظة والحجوزات مع إحساس Neo-Brutalism الدافئ. */
+  --paper-50: #f7f1e4;
+  --paper-100: #fffbf2;
+  --paper-200: #efe6d3;
   --background: var(--paper-50);
   --foreground: #1f2937;
   --card: var(--paper-100);
@@ -166,6 +176,12 @@
   --border: rgba(15, 23, 42, 0.1);
   --input: rgba(15, 23, 42, 0.16);
   --ring: #d68e1e;
+  /* Neo-Brutalism الدافئ — حد وظل صلبان بلا ضبابية، أسود قريب لضمان تباين
+     مريح على الخلفية الكريمية. */
+  --border-strong: rgba(31, 41, 55, 0.9);
+  --border-strong-width: 2px;
+  --shadow-brutal-color: rgba(31, 41, 55, 0.9);
+  --shadow-brutal: 4px 4px 0 0 var(--shadow-brutal-color);
   --chart-1: #d68e1e;
   --chart-2: #128f62;
   --chart-3: #2f74bb;
