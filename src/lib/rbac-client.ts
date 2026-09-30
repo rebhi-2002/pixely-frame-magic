@@ -32,6 +32,7 @@ function buildAccessTree(
   profile: { name: string; email: string; avatar: string | null },
   roleId: string,
   roleName: string,
+  roleKey: RoleKey | null,
   isAdmin: boolean,
   pageAllowed: (pageKey: string) => boolean,
 ): MyAccess {
@@ -118,6 +119,7 @@ export function buildFullAdminAccess(
     profile,
     "backend-admin",
     "مدير النظام",
+    "admin",
     true,
     // الأدمن له وصول كامل لصفحاته هو (admin_* + notifications/account_settings)
     // فقط — مش لمساحات الأدوار التانية. راجع Guard: حتى قبل هالتعديل كان أي
@@ -137,11 +139,17 @@ export function buildFullAdminAccess(
 export function buildRoleAccess(
   userId: string,
   profile: { name: string; email: string; avatar: string | null },
-  roleId: number,
+  roleId: number | string | null,
   roleName: string,
   roleKey: RoleKey,
 ): MyAccess {
-  return buildAccessTree(userId, profile, String(roleId), roleName, false, (pageKey) =>
-    pageMatchesRole(pageKey, roleKey),
+  return buildAccessTree(
+    userId,
+    profile,
+    String(roleId ?? ""),
+    roleName,
+    roleKey,
+    false,
+    (pageKey) => pageMatchesRole(pageKey, roleKey),
   );
 }
