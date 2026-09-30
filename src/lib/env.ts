@@ -35,7 +35,6 @@ const envSchema = z.object({
     emptyAsUndefined,
     z.string().url("لازم يكون رابط صالح (https://...)").optional(),
   ),
-  VITE_ENABLE_DEMO_LOGIN: booleanFlag,
   VITE_ENABLE_SIGNUP: booleanFlag,
   VITE_SENTRY_DSN: z.string().optional(),
   VITE_POSTHOG_KEY: z.string().optional(),
@@ -81,7 +80,6 @@ const DEFAULT_POSTHOG_HOST = "https://us.i.posthog.com";
 export const env = {
   API_BASE_URL: (raw.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL).replace(/\/+$/, ""),
   SITE_URL: (raw.VITE_SITE_URL ?? DEFAULT_SITE_URL).replace(/\/$/, ""),
-  ENABLE_DEMO_LOGIN: import.meta.env.DEV || raw.VITE_ENABLE_DEMO_LOGIN === true,
   ENABLE_SIGNUP: raw.VITE_ENABLE_SIGNUP === true,
   SENTRY_DSN: raw.VITE_SENTRY_DSN || DEFAULT_SENTRY_DSN,
   POSTHOG_KEY: raw.VITE_POSTHOG_KEY,
