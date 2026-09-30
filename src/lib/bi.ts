@@ -47,7 +47,11 @@ export function roleKeyFromName(name?: string | null, isAdmin = false): RoleKey 
 
 /** الدور من ملف المستخدم: المفتاح الثابت (roleKey) أولًا؛ الاسم/الرقم كاحتياط للجلسات القديمة فقط. */
 export function resolveRoleKey(
-  p?: { roleKey?: RoleKey | null; roleName?: string | null; roleId?: number | string | null } | null,
+  p?: {
+    roleKey?: RoleKey | null;
+    roleName?: string | null;
+    roleId?: number | string | null;
+  } | null,
 ): RoleKey {
   if (p?.roleKey) return p.roleKey;
   return roleKeyFromName(p?.roleName, p?.roleId === 1);

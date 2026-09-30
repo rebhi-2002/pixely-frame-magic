@@ -57,7 +57,10 @@ function CourseDetailPage() {
           <h1 className="text-2xl font-bold text-foreground">{t("courseDetail.notFound")}</h1>
           <Link
             to="/courses"
-            className={buttonVariants({ variant: "default", className: "mt-6 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-6 h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("nav.courses")}
           </Link>
@@ -122,7 +125,9 @@ function CourseDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="mt-4 text-3xl font-extrabold text-foreground md:text-4xl">{course.title}</h1>
+          <h1 className="mt-4 text-3xl font-extrabold text-foreground md:text-4xl">
+            {course.title}
+          </h1>
 
           <div className="mt-5 flex items-center gap-2.5">
             <PhotoAvatar className="size-9" iconClassName="size-4" />
@@ -198,7 +203,10 @@ function CourseDetailPage() {
             </p>
             <Link
               to={isSignedIn ? "/my-courses" : "/signup"}
-              className={buttonVariants({ variant: "default", className: "mt-5 flex h-auto items-center justify-center px-4 py-2.5 text-sm" })}
+              className={buttonVariants({
+                variant: "default",
+                className: "mt-5 flex h-auto items-center justify-center px-4 py-2.5 text-sm",
+              })}
             >
               {t(isSignedIn ? "courses.open" : "courses.enroll")}
             </Link>

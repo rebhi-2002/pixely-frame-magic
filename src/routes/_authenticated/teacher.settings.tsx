@@ -122,95 +122,100 @@ function Body() {
             {slots.map((slot, i) => {
               const hasRange = slot.effectiveFrom != null || slot.effectiveTo != null;
               return (
-              <div key={i} className="space-y-2 rounded-xl border border-border p-3">
-                <div className="flex flex-wrap items-center gap-2">
-                <Select
-                  value={String(slot.dayOfWeek)}
-                  onValueChange={(v) => updateSlot(i, { dayOfWeek: Number(v) })}
-                >
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {DAYS_AR.map((d, idx) => (
-                      <SelectItem key={idx} value={String(idx)}>
-                        {bi(d, DAYS_EN[idx])}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Input
-                  type="time"
-                  value={slot.startTime.slice(0, 5)}
-                  onChange={(e) => updateSlot(i, { startTime: `${e.target.value}:00` })}
-                  className="w-28"
-                />
-                <span className="text-muted-foreground">—</span>
-                <Input
-                  type="time"
-                  value={slot.endTime.slice(0, 5)}
-                  onChange={(e) => updateSlot(i, { endTime: `${e.target.value}:00` })}
-                  className="w-28"
-                />
-                <Select
-                  value={String(slot.teachingMode)}
-                  onValueChange={(v) => updateSlot(i, { teachingMode: Number(v) as 1 | 2 })}
-                >
-                  <SelectTrigger className="w-28">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="2">{bi("أونلاين", "Online")}</SelectItem>
-                    <SelectItem value="1">{bi("حضوري", "In-person")}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-destructive"
-                  onClick={() => removeSlot(i)}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-                </div>
-
-                {hasRange ? (
-                  <div className="flex flex-wrap items-center gap-2 ps-1">
-                    <span className="text-xs text-muted-foreground">
-                      {bi("سارٍ من", "Valid from")}
-                    </span>
-                    <Input
-                      type="date"
-                      value={slot.effectiveFrom?.slice(0, 10) ?? ""}
-                      onChange={(e) => updateSlot(i, { effectiveFrom: e.target.value || null })}
-                      className="w-40"
-                    />
-                    <span className="text-xs text-muted-foreground">{bi("لحد", "until")}</span>
-                    <Input
-                      type="date"
-                      value={slot.effectiveTo?.slice(0, 10) ?? ""}
-                      onChange={(e) => updateSlot(i, { effectiveTo: e.target.value || null })}
-                      className="w-40"
-                    />
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-xs text-muted-foreground"
-                      onClick={() => updateSlot(i, { effectiveFrom: null, effectiveTo: null })}
+                <div key={i} className="space-y-2 rounded-xl border border-border p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Select
+                      value={String(slot.dayOfWeek)}
+                      onValueChange={(v) => updateSlot(i, { dayOfWeek: Number(v) })}
                     >
-                      {bi("إلغاء الفترة (دائم)", "Clear (always valid)")}
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {DAYS_AR.map((d, idx) => (
+                          <SelectItem key={idx} value={String(idx)}>
+                            {bi(d, DAYS_EN[idx])}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="time"
+                      value={slot.startTime.slice(0, 5)}
+                      onChange={(e) => updateSlot(i, { startTime: `${e.target.value}:00` })}
+                      className="w-28"
+                    />
+                    <span className="text-muted-foreground">—</span>
+                    <Input
+                      type="time"
+                      value={slot.endTime.slice(0, 5)}
+                      onChange={(e) => updateSlot(i, { endTime: `${e.target.value}:00` })}
+                      className="w-28"
+                    />
+                    <Select
+                      value={String(slot.teachingMode)}
+                      onValueChange={(v) => updateSlot(i, { teachingMode: Number(v) as 1 | 2 })}
+                    >
+                      <SelectTrigger className="w-28">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2">{bi("أونلاين", "Online")}</SelectItem>
+                        <SelectItem value="1">{bi("حضوري", "In-person")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="text-destructive"
+                      onClick={() => removeSlot(i)}
+                    >
+                      <Trash2 className="size-4" />
                     </Button>
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="ps-1 text-xs font-semibold text-primary hover:underline"
-                    onClick={() => updateSlot(i, { effectiveFrom: todayIso(), effectiveTo: null })}
-                  >
-                    {bi("+ تحديد فترة صلاحية (اختياري)", "+ Set a valid-through date range (optional)")}
-                  </button>
-                )}
-              </div>
+
+                  {hasRange ? (
+                    <div className="flex flex-wrap items-center gap-2 ps-1">
+                      <span className="text-xs text-muted-foreground">
+                        {bi("سارٍ من", "Valid from")}
+                      </span>
+                      <Input
+                        type="date"
+                        value={slot.effectiveFrom?.slice(0, 10) ?? ""}
+                        onChange={(e) => updateSlot(i, { effectiveFrom: e.target.value || null })}
+                        className="w-40"
+                      />
+                      <span className="text-xs text-muted-foreground">{bi("لحد", "until")}</span>
+                      <Input
+                        type="date"
+                        value={slot.effectiveTo?.slice(0, 10) ?? ""}
+                        onChange={(e) => updateSlot(i, { effectiveTo: e.target.value || null })}
+                        className="w-40"
+                      />
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-xs text-muted-foreground"
+                        onClick={() => updateSlot(i, { effectiveFrom: null, effectiveTo: null })}
+                      >
+                        {bi("إلغاء الفترة (دائم)", "Clear (always valid)")}
+                      </Button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="ps-1 text-xs font-semibold text-primary hover:underline"
+                      onClick={() =>
+                        updateSlot(i, { effectiveFrom: todayIso(), effectiveTo: null })
+                      }
+                    >
+                      {bi(
+                        "+ تحديد فترة صلاحية (اختياري)",
+                        "+ Set a valid-through date range (optional)",
+                      )}
+                    </button>
+                  )}
+                </div>
               );
             })}
           </div>

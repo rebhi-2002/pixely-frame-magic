@@ -113,12 +113,9 @@ export function AdminDashboardPage() {
     () => (usersByType.data ?? []).reduce((sum, t) => sum + t.count, 0),
     [usersByType.data],
   );
-  const teacherCount =
-    usersByType.data?.find((t) => t.code === "teacher")?.count ?? 0;
-  const studentCount =
-    usersByType.data?.find((t) => t.code === "student")?.count ?? 0;
-  const parentCount =
-    usersByType.data?.find((t) => t.code === "parent")?.count ?? 0;
+  const teacherCount = usersByType.data?.find((t) => t.code === "teacher")?.count ?? 0;
+  const studentCount = usersByType.data?.find((t) => t.code === "student")?.count ?? 0;
+  const parentCount = usersByType.data?.find((t) => t.code === "parent")?.count ?? 0;
 
   const genderDistribution = useMemo(
     () => (usersByGender.data ?? []).map((g) => ({ label: g.name, value: g.count })),

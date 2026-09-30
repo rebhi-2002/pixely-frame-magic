@@ -75,16 +75,16 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
               >
                 <t.icon className="mx-auto size-4" />
                 <div className="mx-auto mt-2 h-2 w-7 rounded-full bg-current opacity-30" />
-                <p className="mt-1.5 text-[10px] font-semibold text-muted-foreground">{bi(t.ar, t.en)}</p>
+                <p className="mt-1.5 text-[10px] font-semibold text-muted-foreground">
+                  {bi(t.ar, t.en)}
+                </p>
                 {i === 0 && (
                   <button
                     type="button"
                     onClick={() => setConfirmed((v) => !v)}
                     className="mt-2 w-full rounded-md border border-[var(--border-strong)]/50 py-1 text-[9px] font-bold text-primary hover:bg-primary/10"
                   >
-                    {confirmed
-                      ? bi("رجوع", "Undo")
-                      : bi("تأكيد تجريبي", "Try confirming")}
+                    {confirmed ? bi("رجوع", "Undo") : bi("تأكيد تجريبي", "Try confirming")}
                   </button>
                 )}
               </div>

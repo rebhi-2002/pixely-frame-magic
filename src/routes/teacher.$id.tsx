@@ -105,7 +105,10 @@ function TeacherProfilePage() {
           <h1 className="text-2xl font-bold text-foreground">{t("teacherProfile.notFound")}</h1>
           <Link
             to="/courses"
-            className={buttonVariants({ variant: "default", className: "mt-6 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-6 h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("nav.courses")}
           </Link>
@@ -163,7 +166,10 @@ function TeacherProfilePage() {
       <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-5xl px-5 py-16">
           <div className="flex flex-wrap items-center gap-4">
-            <PhotoAvatar src={teacher.profileImage} className="size-16 rounded-2xl border-2 border-[var(--border-strong)]" />
+            <PhotoAvatar
+              src={teacher.profileImage}
+              className="size-16 rounded-2xl border-2 border-[var(--border-strong)]"
+            />
             <h1 className="text-3xl font-extrabold text-foreground">
               {teacher.name || bi("معلّم", "Teacher")}
             </h1>
@@ -205,7 +211,9 @@ function TeacherProfilePage() {
       <section className="mx-auto max-w-5xl px-5 py-14">
         {teacher.bio && (
           <>
-            <h2 className="text-xl font-extrabold text-foreground">{t("teacherProfile.aboutTitle")}</h2>
+            <h2 className="text-xl font-extrabold text-foreground">
+              {t("teacherProfile.aboutTitle")}
+            </h2>
             <p className="mt-3 leading-relaxed text-muted-foreground">{teacher.bio}</p>
           </>
         )}
@@ -302,7 +310,10 @@ function TeacherProfilePage() {
                 const slots = slotsByDay.get(dayOfWeek);
                 if (!slots || slots.length === 0) return null;
                 return (
-                  <div key={dayOfWeek} className="rounded-xl border-2 border-[var(--border-strong)] bg-card p-4">
+                  <div
+                    key={dayOfWeek}
+                    className="rounded-xl border-2 border-[var(--border-strong)] bg-card p-4"
+                  >
                     <p className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
                       <Calendar className="size-4 text-primary" />
                       {bi(dayAr, dayEn)}
@@ -367,7 +378,10 @@ function TeacherProfilePage() {
         ) : (
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {courses.map((c) => (
-              <article key={c.id} className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
+              <article
+                key={c.id}
+                className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
+              >
                 {(c.subjectName ?? c.categoryName) && (
                   <span className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary">
                     {c.subjectName ?? c.categoryName}
@@ -414,7 +428,10 @@ function TeacherProfilePage() {
           <SessionCta
             to="/signup"
             label={t("teacherProfile.cta")}
-            className={buttonVariants({ variant: "default", className: "h-auto px-7 py-3.5 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "h-auto px-7 py-3.5 text-sm",
+            })}
           />
         </div>
       </section>

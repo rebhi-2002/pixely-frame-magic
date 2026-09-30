@@ -13,7 +13,9 @@ describe("findUserTypeForRole", () => {
   it("يطابق بالـcode بغض النظر عن الرقم والاسم", () => {
     expect(findUserTypeForRole(roles, "teacher")?.id).toBe(4);
     expect(findUserTypeForRole(roles, "parent")?.id).toBe(5);
-    expect(findUserTypeForRole([{ id: 99, name: "أي اسم", code: "student" }], "student")?.id).toBe(99);
+    expect(findUserTypeForRole([{ id: 99, name: "أي اسم", code: "student" }], "student")?.id).toBe(
+      99,
+    );
   });
 
   it("احتياط بالاسم لو الباك اند لسا ما رجّع code (ولي الأمر بهمزة)", () => {

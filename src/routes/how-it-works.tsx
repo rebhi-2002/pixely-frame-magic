@@ -1,6 +1,14 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, ListChecks, ClipboardCheck, CalendarDays, Wallet, Video, Star } from "lucide-react";
+import {
+  Search,
+  ListChecks,
+  ClipboardCheck,
+  CalendarDays,
+  Wallet,
+  Video,
+  Star,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
@@ -45,7 +53,9 @@ function HowItWorks() {
                 <span
                   className={cn(
                     "relative z-10 flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] font-display text-xl font-bold",
-                    i === 0 ? "bg-primary text-primary-foreground" : "bg-background text-foreground",
+                    i === 0
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background text-foreground",
                   )}
                 >
                   {i + 1}
@@ -74,7 +84,10 @@ function HowItWorks() {
           <SessionCta
             to="/signup"
             label={t("howItWorks.cta")}
-            className={buttonVariants({ variant: "default", className: "mt-7 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-7 h-auto px-6 py-3 text-sm",
+            })}
           />
         </div>
       </section>

@@ -95,12 +95,18 @@ function AboutPage() {
           <SessionCta
             to="/signup"
             label={t("about.ctaPrimary")}
-            className={buttonVariants({ variant: "default", className: "h-auto px-7 py-3.5 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "h-auto px-7 py-3.5 text-sm",
+            })}
           />
           {!isSignedIn && (
             <Link
               to="/teacher/register"
-              className={buttonVariants({ variant: "outline", className: "h-auto px-7 py-3.5 text-sm" })}
+              className={buttonVariants({
+                variant: "outline",
+                className: "h-auto px-7 py-3.5 text-sm",
+              })}
             >
               {t("about.ctaSecondary")}
             </Link>

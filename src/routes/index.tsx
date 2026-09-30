@@ -83,7 +83,12 @@ function FeatureMiniPreview({ variant }: { variant: "library" | "tracker" | "mis
               <span className="flex size-6 items-center justify-center rounded-md bg-primary/15 text-primary">
                 <CalendarDays className="size-3.5" />
               </span>
-              <div className={cn("h-2 rounded-full bg-secondary", i === 0 ? "w-4/5" : i === 1 ? "w-3/5" : "w-2/3")} />
+              <div
+                className={cn(
+                  "h-2 rounded-full bg-secondary",
+                  i === 0 ? "w-4/5" : i === 1 ? "w-3/5" : "w-2/3",
+                )}
+              />
             </div>
           ))}
         </div>
@@ -109,7 +114,15 @@ const roles = [
 /* رحلة الطالب الحقيقية كما بالعرض التقديمي الرسمي (Slide 5: How students use
    it) — بحث → مقارنة → اختيار → حجز → دفع → حضور → تقييم. 7 خطوات فعلية،
    لا 4 كما كان سابقاً. */
-const journeySteps = [Search, ListChecks, ClipboardCheck, CalendarDays, Wallet, Video, Star] as const;
+const journeySteps = [
+  Search,
+  ListChecks,
+  ClipboardCheck,
+  CalendarDays,
+  Wallet,
+  Video,
+  Star,
+] as const;
 
 const latestPosts = blogPosts.slice(-2).reverse();
 
@@ -282,7 +295,10 @@ function Landing() {
                 "flex flex-col py-7",
                 i % 2 === 0 ? "lg:pe-10" : "lg:ps-10",
                 i % 2 === 1 && "lg:border-s-2 lg:border-[var(--border-strong)]",
-                i > 0 && (i % 2 === 0 ? "border-t-2 border-[var(--border-strong)]" : "lg:border-t-2 border-t-2 border-[var(--border-strong)]"),
+                i > 0 &&
+                  (i % 2 === 0
+                    ? "border-t-2 border-[var(--border-strong)]"
+                    : "lg:border-t-2 border-t-2 border-[var(--border-strong)]"),
               )}
             >
               <span
@@ -293,7 +309,12 @@ function Landing() {
               >
                 <f.icon className="size-5" />
               </span>
-              <h3 className={cn("mt-4 font-bold text-foreground", f.flagship ? "text-lg" : "text-base")}>
+              <h3
+                className={cn(
+                  "mt-4 font-bold text-foreground",
+                  f.flagship ? "text-lg" : "text-base",
+                )}
+              >
                 {t(`home.features.${f.key}.title`)}
               </h3>
               <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-foreground">

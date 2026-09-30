@@ -407,7 +407,7 @@ export async function verifyServerSession(): Promise<boolean> {
       email: profile.email,
       loggedInAt: current?.loggedInAt ?? Date.now(),
       userId: profile.id,
-        profile,
+      profile,
     });
     return true;
   } catch (err) {

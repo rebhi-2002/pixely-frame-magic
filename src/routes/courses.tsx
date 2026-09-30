@@ -349,7 +349,10 @@ function CoursesPage() {
                         </div>
                         <Link
                           to={isSignedIn ? "/my-courses" : "/signup"}
-                          className={buttonVariants({ variant: "default", className: "mt-5 h-auto px-4 py-2.5 text-sm" })}
+                          className={buttonVariants({
+                            variant: "default",
+                            className: "mt-5 h-auto px-4 py-2.5 text-sm",
+                          })}
                         >
                           {t(isSignedIn ? "courses.open" : "courses.enroll")}
                         </Link>
