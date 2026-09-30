@@ -89,6 +89,7 @@ export interface MyAccess {
     avatar_url: string | null;
     role_id: string | null;
     role_name: string | null;
+    role_key?: "student" | "teacher" | "parent" | "admin" | null;
   } | null;
   modules: AccessModule[];
   /** pageKey -> granted permission keys (already intersected with enabled modules) */

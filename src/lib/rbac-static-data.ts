@@ -1,25 +1,15 @@
-// بيانات ثابتة (in-memory) لمعلومات لوحة تحكم الأدمن — تحلّ محلّ جداول
-// Supabase (modules / pages / roles / permission_keys / role_permissions /
-// profiles) لحد ما الباك اند الجديد يوفّر endpoints مكافئة.
-//
-// تغطي هالبيانات الأدوار الخمسة كلهم (مدير عام / مشرف أكاديمي / معلم / ولي
-// أمر / طالب) — مو بس الأدمن. أي مستخدم (حقيقي عبر /api/Auth/Login، أو
-// حساب تجريبي محلي عبر "دخول سريع" بصفحة تسجيل الدخول) بيشوف بالضبط صفحات
-// دوره + الصلاحيات الممنوحة له (راجع src/integrations/backend/auth.ts
-// لتفاصيل كيف تُحدَّد الهوية الحالية).
+// بيانات ثابتة (in-memory) لشجرة صفحات/موديولات كل الأدوار الأربعة (مدير عام
+// / معلم / ولي أمر / طالب) بلوحات التحكم — تصف بنية القوائم الجانبية فقط
+// (تسميات/أيقونات/مسارات)، ومو بيانات وهمية: كل صفحة هون فعلياً موصولة
+// بالباك اند الحقيقي (راجع ملف التكامل المطابق تحت src/integrations/backend).
 //
 // ⚠️ قيم `key` هون لازم تطابق بالضبط قيم `pageKey` المستخدمة فعلياً بمكوّن
 // <Guard> داخل كل ملف route — لأن useCanView() و pageMatchesRole() بملف
 // src/lib/bi.ts بيتحققوا من نفس النص بالضبط (بادئة الدور: student_ / teacher_
-// / parent_ / supervisor_ / admin_). لو ضفت صفحة جديدة، خذ الـ pageKey من
-// ملف الـ route نفسه ولا تخترع قيمة جديدة.
-//
-// التعديلات اللي تصير من شاشات "وحدات النظام / الأدوار / المستخدمين /
-// مصفوفة الصلاحيات" بتنعمل على هالمصفوفات مباشرة (بالذاكرة) — بتضل شغالة
-// أثناء تشغيل السيرفر بس بترجع لقيمها الأصلية عند إعادة تشغيله. هاد متوقّع
-// لحد ما توصل endpoints حقيقية من الباك اند (احذف هذا الملف حينها).
+// / parent_ / admin_). لو ضفت صفحة جديدة، خذ الـ pageKey من ملف الـ route
+// نفسه ولا تخترع قيمة جديدة.
 
-import type { ModuleRow, PermissionKeyRow, RoleRow, UserRow } from "./rbac-types";
+import type { ModuleRow, PermissionKeyRow } from "./rbac-types";
 
 export interface StaticPageRow {
   id: string;
@@ -368,112 +358,3 @@ export const PAGES: StaticPageRow[] = [
     sort_order: 2,
   },
 ];
-
-export const ROLES: RoleRow[] = [
-  {
-    id: "r-admin",
-    name: "مدير عام",
-    description: "صلاحيات كاملة على المنصة",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "r-teacher",
-    name: "معلم",
-    description: "إدارة المحتوى والاختبارات والطلاب",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "r-parent",
-    name: "ولي أمر",
-    description: "متابعة تقارير الأبناء",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "r-student",
-    name: "طالب",
-    description: "مساحة الطالب: مكتبة، إنجاز، امتحانات",
-    created_at: new Date().toISOString(),
-  },
-];
-
-function pagesForModule(moduleId: string): StaticPageRow[] {
-  return PAGES.filter((p) => p.module_id === moduleId);
-}
-
-function fullGrant(pages: StaticPageRow[]): string[] {
-  return pages.flatMap((p) => PERMISSION_KEYS.map((k) => `${p.id}:${k.key}`));
-}
-
-/**
- * مصفوفة الصلاحيات الفعلية لكل دور — بديل جدول role_permissions بـ Supabase.
- * المفتاح: roleId، القيمة: مجموعة "pageId:permissionKey" الممنوحة.
- *
- * - "مدير عام" دايماً كل الصلاحيات على كل شي (بايباس، متل ما كان بالـ SQL
- *   الأصلي: "super admin gets everything").
- * - باقي الأدوار (مشرف/معلم/ولي أمر/طالب) مبدئياً عندها كل الصلاحيات على
- *   مساحتها الخاصة بس (نفس المبدأ يلي كان بالـ seed الأصلي: كل دور له مساحته
- *   المستقلة بالكامل). الأدمن يقدر يقيّدها لاحقاً من شاشة "مصفوفة الصلاحيات"
- *   وبتنحفظ فعلياً (راجع rbac.functions.ts::saveRolePermissions).
- */
-export const ROLE_PERMISSION_GRANTS: Record<string, Set<string>> = {
-  "r-admin": new Set(fullGrant(PAGES)),
-  "r-teacher": new Set(fullGrant([...pagesForModule("m-teacher"), ...pagesForModule("m-account")])),
-  "r-parent": new Set(fullGrant([...pagesForModule("m-parent"), ...pagesForModule("m-account")])),
-  "r-student": new Set(fullGrant([...pagesForModule("m-student"), ...pagesForModule("m-account")])),
-};
-
-// حسابات الدخول السريع (تجريبية محلياً بالكامل — لا اتصال بأي باك اند، راجع
-// src/integrations/backend/auth.ts::loginAsDemo). موجودة عشان تقدروا تجربوا
-// كل لوحات التحكم الخمسة أثناء التطوير. "الأدمن" الحقيقي (admin@Academia.com)
-// هو نفسه u-admin تحت — لما يسجّل دخول فعلي عبر /api/Auth/Login منعامل هويته
-// كـ u-admin. باقي الأربعة حسابات وهمية بالكامل.
-export const USERS: UserRow[] = [
-  {
-    id: "u-admin",
-    full_name: "الأدمن",
-    email: "admin@Academia.com",
-    phone: null,
-    gender: "male",
-    avatar_url: null,
-    is_active: true,
-    role_id: "r-admin",
-    role_name: "مدير عام",
-  },
-  {
-    id: "u-demo-teacher",
-    full_name: "معلم (تجريبي)",
-    email: null,
-    phone: null,
-    gender: "male",
-    avatar_url: null,
-    is_active: true,
-    role_id: "r-teacher",
-    role_name: "معلم",
-  },
-  {
-    id: "u-demo-parent",
-    full_name: "ولي أمر (تجريبي)",
-    email: null,
-    phone: null,
-    gender: "male",
-    avatar_url: null,
-    is_active: true,
-    role_id: "r-parent",
-    role_name: "ولي أمر",
-  },
-  {
-    id: "u-demo-student",
-    full_name: "طالب (تجريبي)",
-    email: null,
-    phone: null,
-    gender: "male",
-    avatar_url: null,
-    is_active: true,
-    role_id: "r-student",
-    role_name: "طالب",
-  },
-];
-
-export function nextId(prefix: string): string {
-  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
-}

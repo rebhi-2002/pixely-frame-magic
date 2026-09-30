@@ -1,11 +1,11 @@
-// بناء شجرة الصلاحيات بالمتصفح مباشرة لجلسات الباك اند الحقيقية (غير demo).
+// بناء شجرة الصلاحيات بالمتصفح مباشرة، لكل جلسات الباك اند الحقيقية (الديمو
+// انحذف بالكامل — راجع use-access.ts).
 //
-// السبب: getMyAccess (server function بـ rbac.functions.ts) بتشتغل على
-// سيرفر Netlify، وما بتقدر تتحقق من كوكي جلسة الباك اند (ASP.NET على
-// دومين etempurl.com منفصل) — المتصفح ما بيبعتها لطلب Netlify-to-Netlify.
-// فبدل ما نحاول نتحقق سيرفريًا من شي المتصفح نفسه شايفه أصلاً (الجلسة
-// شغالة، اتحقق منها بـ verifyServerSession عبر نداء مباشر من المتصفح
-// لـ /api/User/MyProfileModal)، منبني نفس شكل MyAccess هون محليًا.
+// السبب: TanStack Start (سيرفر Netlify) ما بيقدر يتحقق من كوكي جلسة الباك
+// اند (ASP.NET على دومين etempurl.com منفصل) — المتصفح ما بيبعتها لطلب
+// Netlify-to-Netlify. فبدل ما نحاول نتحقق سيرفريًا من شي المتصفح نفسه شايفه
+// أصلاً (الجلسة شغالة، اتحقق منها بـ verifyServerSession عبر نداء مباشر من
+// المتصفح لـ /api/User/MyProfileModal)، منبني نفس شكل MyAccess هون محليًا.
 //
 // كل دور حقيقي متأكدين منه (profile.roleId موجود فعليًا — راجع fetchUserType
 // بـauth.ts) بياخد وصول كامل لمساحته هو بس (الصفحات يلي بادئتها تطابق دوره،
@@ -50,7 +50,7 @@ function buildAccessTree(
 
     const build = (parentId: string | null): AccessPage[] =>
       modulePages
-        .filter((p) => p.parent_id === parentId)
+        .filter((p) => p.parent_id === parentId && pageAllowed(p.key))
         .map((p) => ({
           id: p.id,
           key: p.key,
@@ -94,6 +94,7 @@ function buildAccessTree(
       avatar_url: profile.avatar,
       role_id: roleId,
       role_name: roleName,
+      role_key: roleKey,
     },
     modules,
     permissions,

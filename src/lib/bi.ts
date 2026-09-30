@@ -45,12 +45,24 @@ export function roleKeyFromName(name?: string | null, isAdmin = false): RoleKey 
   return isAdmin ? "admin" : "student";
 }
 
+/** الدور من ملف المستخدم: المفتاح الثابت (roleKey) أولًا؛ الاسم/الرقم كاحتياط للجلسات القديمة فقط. */
+export function resolveRoleKey(
+  p?: { roleKey?: RoleKey | null; roleName?: string | null; roleId?: number | string | null } | null,
+): RoleKey {
+  if (p?.roleKey) return p.roleKey;
+  return roleKeyFromName(p?.roleName, p?.roleId === 1);
+}
+
 export const ROLE_HOME: Record<RoleKey, string> = {
   student: "/dashboard",
   teacher: "/teacher/dashboard",
   parent: "/parent/report",
   admin: "/admin/dashboard",
 };
+
+export function roleHomeForKey(key: RoleKey): string {
+  return ROLE_HOME[key];
+}
 
 export function roleHome(name?: string | null, isAdmin = false): string {
   return ROLE_HOME[roleKeyFromName(name, isAdmin)];

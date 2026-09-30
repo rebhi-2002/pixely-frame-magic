@@ -5,10 +5,8 @@ import {
   getStoredProfile,
   getStoredUserId,
   isAuthenticated,
-  isDemoSession,
 } from "@/integrations/backend/auth";
-import { roleHome, roleKeyFromName, type RoleKey } from "@/lib/bi";
-import { ROLES, USERS } from "@/lib/rbac-static-data";
+import { resolveRoleKey, roleHomeForKey, type RoleKey } from "@/lib/bi";
 
 export interface PublicSession {
   userId: string;
@@ -21,49 +19,23 @@ export interface PublicSession {
   home: string;
 }
 
-const ROLE_KEY_BY_ID: Record<string, RoleKey> = {
-  "r-admin": "admin",
-  "r-teacher": "teacher",
-  "r-parent": "parent",
-  "r-student": "student",
-};
-
 function buildSession(): PublicSession | null {
   if (!isAuthenticated()) return null;
-  const userId = getStoredUserId() ?? "u-admin";
+  const userId = getStoredUserId() ?? "";
   const profile = getStoredProfile();
+  if (!profile) return null;
 
-  // جلسة حقيقية من الباك اند: الدور من نوع المستخدم الفعلي. ما منرجع لـUSERS[0]
-  // (الأدمن التجريبي) لأن الـid الحقيقي (GUID) ما بيطابق بيانات الديمو — كان كل
-  // مستخدم حقيقي (حتى الطالب) بيظهر له رابط/دور "مدير عام" بالهيدر العام.
-  if (!isDemoSession() && profile) {
-    const isAdmin = profile.roleId === 1;
-    const roleKey = roleKeyFromName(profile.roleName, isAdmin);
-    return {
-      userId,
-      email: profile.email ?? getStoredEmail(),
-      fullName: profile.name,
-      avatarUrl: profile.avatar ?? null,
-      roleName: profile.roleName ?? null,
-      roleKey,
-      isAdmin,
-      home: roleHome(profile.roleName, isAdmin),
-    };
-  }
-
-  const user = USERS.find((u) => u.id === userId) ?? USERS[0];
-  const role = ROLES.find((r) => r.id === user.role_id);
-  const isAdmin = role?.name === "مدير عام";
-  const email = profile?.email ?? getStoredEmail() ?? user.email;
+  const roleKey = resolveRoleKey(profile);
+  const isAdmin = roleKey === "admin";
   return {
     userId,
-    email,
-    fullName: profile?.name ?? user.full_name,
-    avatarUrl: profile?.avatar ?? user.avatar_url,
-    roleName: role?.name ?? null,
-    roleKey: (user.role_id && ROLE_KEY_BY_ID[user.role_id]) || "student",
+    email: profile.email ?? getStoredEmail(),
+    fullName: profile.name,
+    avatarUrl: profile.avatar ?? null,
+    roleName: profile.roleName ?? null,
+    roleKey,
     isAdmin,
-    home: roleHome(role?.name, isAdmin),
+    home: roleHomeForKey(roleKey),
   };
 }
 

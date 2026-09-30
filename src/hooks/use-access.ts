@@ -1,31 +1,17 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { getMyAccess } from "@/lib/rbac.functions";
 import { buildFullAdminAccess, buildRoleAccess, emptyAccess } from "@/lib/rbac-client";
-import { roleKeyFromName } from "@/lib/bi";
-import {
-  getStoredProfile,
-  getStoredUserId,
-  isDemoSession,
-  isRealAdmin,
-} from "@/integrations/backend/auth";
+import { resolveRoleKey } from "@/lib/bi";
+import { getStoredProfile, getStoredUserId, isRealAdmin } from "@/integrations/backend/auth";
 import type { MyAccess } from "@/lib/rbac-types";
 
 export const ACCESS_QUERY_KEY = ["my-access"] as const;
 
 export function useAccess() {
-  const fetchAccess = useServerFn(getMyAccess);
-
   const query = useQuery<MyAccess>({
     queryKey: ACCESS_QUERY_KEY,
     queryFn: async () => {
-      // جلسة demo (تطوير محلي فقط): متل ما كانت — عبر server function.
-      if (isDemoSession()) return fetchAccess();
-
-      // جلسة حقيقية من الباك اند: getMyAccess (server function) ما بتقدر
-      // تتحقق من كوكي الباك اند (دومين منفصل) — راجع rbac-client.ts.
-      // نبني الصلاحيات محليًا بالمتصفح بدل ما نعتمد على نداء سيرفري
-      // بيفشل دايمًا بره وضع dev.
+      // الصلاحيات تُبنى محليًا بالمتصفح من نوع المستخدم الحقيقي (roleId جاي من
+      // fetchUserType بـauth.ts) — راجع rbac-client.ts لتفاصيل بنية الشجرة.
       const userId = getStoredUserId();
       if (!userId) return emptyAccess("");
 
@@ -41,8 +27,8 @@ export function useAccess() {
       const profile = getStoredProfile();
       // roleId معروف فعليًا (جاي من fetchUserType بـauth.ts) — منطي وصول
       // لمساحة هالدور فقط، بغض النظر شو نوعه (طالب/معلم/ولي أمر...).
-      if (profile?.roleId != null && typeof profile.roleId === "number") {
-        const roleKey = roleKeyFromName(profile.roleName, false);
+      if (profile?.roleKey || (profile?.roleId != null && typeof profile.roleId === "number")) {
+        const roleKey = resolveRoleKey(profile);
         return buildRoleAccess(
           userId,
           { name: profile.name, email: profile.email, avatar: profile.avatar ?? null },

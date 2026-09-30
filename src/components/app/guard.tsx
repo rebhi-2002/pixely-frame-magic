@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useAccess } from "@/hooks/use-access";
 import { useCanView } from "@/hooks/use-can-view";
-import { roleHome, useBi } from "@/lib/bi";
+import { roleHome, roleHomeForKey, useBi } from "@/lib/bi";
 import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 import { ForbiddenIllustration } from "@/components/site/illustrations";
 
@@ -21,7 +21,11 @@ export function Forbidden() {
         )}
       </p>
       <Link
-        to={roleHome(access?.profile?.role_name, access?.isAdmin)}
+        to={
+          access?.profile?.role_key
+            ? roleHomeForKey(access.profile.role_key)
+            : roleHome(access?.profile?.role_name, access?.isAdmin)
+        }
         className="btn-shine hover-press mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
       >
         {bi("رجوع إلى مساحتي", "Back to my space")}
