@@ -37,7 +37,7 @@ export function UserMenu({ session }: { session: PublicSession }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={session.fullName}
-        className="flex items-center gap-2 rounded-xl border border-border bg-card px-2 py-1.5 text-sm font-bold text-foreground transition-all duration-200 hover:border-primary/50 hover:shadow-sm"
+        className="flex items-center gap-2 rounded-xl border-2 border-[var(--border-strong)] bg-card px-2 py-1.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary"
       >
         <span className="grid size-7 place-items-center rounded-lg bg-primary/15 text-xs font-black text-primary">
           {initial}
@@ -49,8 +49,8 @@ export function UserMenu({ session }: { session: PublicSession }) {
       </button>
 
       {open && (
-        <div className="animate-in fade-in slide-in-from-top-1 absolute end-0 top-full z-50 mt-2 w-60 rounded-2xl border border-border bg-popover p-2 shadow-xl duration-200">
-          <div className="border-b border-border px-3 pb-2.5 pt-1.5">
+        <div className="animate-in fade-in slide-in-from-top-1 absolute end-0 top-full z-50 mt-2 w-60 rounded-2xl border-2 border-[var(--border-strong)] bg-popover p-2 shadow-[var(--shadow-brutal)] duration-200">
+          <div className="border-b-2 border-[var(--border-strong)] px-3 pb-2.5 pt-1.5">
             <p className="truncate text-sm font-bold text-foreground">{session.fullName}</p>
             <p className="truncate text-xs text-muted-foreground">
               {session.roleName ?? session.email}
@@ -76,7 +76,7 @@ export function UserMenu({ session }: { session: PublicSession }) {
             </button>
           </div>
 
-          <div className="mt-1.5 border-t border-border pt-1.5">
+          <div className="mt-1.5 border-t-2 border-[var(--border-strong)] pt-1.5">
             <button
               type="button"
               onClick={() => void signOut()}

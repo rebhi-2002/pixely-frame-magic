@@ -1,37 +1,31 @@
 import { useState } from "react";
-import { Bell, CalendarDays, CheckCircle2, Clock, Video, Wallet } from "lucide-react";
-import { useBi } from "@/lib/bi";
+import { Bell, CalendarDays, CheckCircle2, Clock, Video, Wallet, X } from "lucide-react";
+import { cn } from "@/lib/utils";import { useBi } from "@/lib/bi";
 import type { PublicSession } from "@/hooks/use-session";
 
 /**
  * HeroMockup — "اللحظة البصرية" الوحيدة المتعمّدة بالرئيسية. إعادة بناء حقيقية
  * لواجهة لوحة الطالب بـHTML/CSS (لا صورة شاشة فعلية لعدم وجود تصميم نهائي بعد،
- * ولا رسم SVG زخرفي) — نفس التقنية التي تستخدمها منتجات حقيقية (Linear، Notion)
- * لعرض واجهاتها بجودة عالية وقابلة للتفاعل. الأيقونات وظيفية (تسمّي كل بطاقة)
- * لا زخرفية. بلا أي أرقام أو بيانات مختلقة: البطاقات بعناوينها فقط، والصفوف
- * أشرطة هيكلية (skeleton). تبديل حالة الطلب المعلّق ↔ المؤكَّد تفاعل حقيقي
- * بسيط يعكس تدفّق المنصة الفعلي، لا حركة زخرفية.
+ * ولا رسم SVG زخرفي) — نفس التقنية التي تستخدمها منتجات حقيقية (Linear، Notion).
+ * الأيقونات وظيفية لا زخرفية. بلا أي أرقام مختلقة: كل الصفوف أشرطة هيكلية.
+ *
+ * التفاعل: الثلاث بطاقات فوق تبويبات حقيقية — كل واحدة تبدّل محتوى اللوحة
+ * كاملةً (لا زر واحد منعزل)، فتعكس فعليًا الفرق بين ثلاث شاشات حقيقية
+ * بالمنصة (الطلبات، الجدول، المحفظة) لا حالة تفاعل شكلية واحدة.
  */
-const tiles = [
-  { icon: Clock, tone: "bg-primary/10 text-primary", ar: "طلبات معلّقة", en: "Pending requests" },
-  {
-    icon: CheckCircle2,
-    tone: "bg-success/10 text-success",
-    ar: "حجوزات مؤكّدة",
-    en: "Confirmed bookings",
-  },
-  { icon: Wallet, tone: "bg-info/10 text-info", ar: "رصيد المحفظة", en: "Wallet balance" },
-] as const;
 
-const lessonRows = [
-  { icon: Video, w: "w-3/4" },
-  { icon: CalendarDays, w: "w-2/3" },
-  { icon: Video, w: "w-4/5" },
-] as const;
+type Tab = "pending" | "confirmed" | "wallet";
+
+const tabs = [
+  { key: "pending" as const, icon: Clock, tone: "text-primary", bgActive: "bg-primary text-primary-foreground", ar: "طلبات معلّقة", en: "Pending requests" },
+  { key: "confirmed" as const, icon: CheckCircle2, tone: "text-success", bgActive: "bg-success text-success-foreground", ar: "حجوزات مؤكّدة", en: "Confirmed bookings" },
+  { key: "wallet" as const, icon: Wallet, tone: "text-info", bgActive: "bg-info text-info-foreground", ar: "المحفظة", en: "Wallet" },
+];
 
 export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const bi = useBi();
-  const [confirmed, setConfirmed] = useState(false);
+  const [tab, setTab] = useState<Tab>("pending");
+  const [dismissed, setDismissed] = useState<number[]>([]);
   const firstName = session?.fullName?.trim().split(/\s+/)[0];
   const displayName = firstName || bi("طالب", "Student");
   const initial = displayName.charAt(0).toUpperCase();
@@ -67,49 +61,107 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-2.5">
-            {tiles.map((t, i) => (
-              <div
-                key={t.en}
-                className={`rounded-xl border-2 border-[var(--border-strong)] p-3 text-center ${t.tone}`}
-              >
-                <t.icon className="mx-auto size-4" />
-                <div className="mx-auto mt-2 h-2 w-7 rounded-full bg-current opacity-30" />
-                <p className="mt-1.5 text-[10px] font-semibold text-muted-foreground">
-                  {bi(t.ar, t.en)}
-                </p>
-                {i === 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setConfirmed((v) => !v)}
-                    className="mt-2 w-full rounded-md border border-[var(--border-strong)]/50 py-1 text-[9px] font-bold text-primary hover:bg-primary/10"
-                  >
-                    {confirmed ? bi("رجوع", "Undo") : bi("تأكيد تجريبي", "Try confirming")}
-                  </button>
+        <div role="tablist" aria-label={bi("أقسام اللوحة", "Dashboard sections")} className="grid grid-cols-3 gap-2.5">
+          {tabs.map((t) => {
+            const active = tab === t.key;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setTab(t.key)}
+                className={cn(
+                  "rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
+                  active ? t.bgActive : "bg-secondary/40 text-muted-foreground hover:bg-secondary",
                 )}
-              </div>
-            ))}
-          </div>
+              >
+                <t.icon className={cn("mx-auto size-4", active ? "" : t.tone)} />
+                <div className={cn("mx-auto mt-2 h-2 w-7 rounded-full bg-current", active ? "opacity-60" : "opacity-25")} />
+                <p className="mt-1.5 text-[10px] font-semibold">{bi(t.ar, t.en)}</p>
+              </button>
+            );
+          })}
+        </div>
 
-          <div className="space-y-2.5">
-            <p className="text-xs font-bold text-foreground">
-              {bi("الجدول القادم", "Upcoming schedule")}
-            </p>
-            {lessonRows.map((r, i) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <span className="flex size-8 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-secondary text-muted-foreground">
-                  <r.icon className="size-4" />
-                </span>
-                <div className="flex-1 space-y-1.5">
-                  <div
-                    className={`h-2 rounded-full bg-secondary transition-all ${
-                      confirmed && i === 0 ? "w-full bg-success/40" : r.w
-                    }`}
-                  />
-                  <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+          <div role="tabpanel" className="space-y-2.5">
+            {tab === "pending" && (
+              <>
+                <p className="text-xs font-bold text-foreground">
+                  {bi("طلباتك المعلّقة", "Your pending requests")}
+                </p>
+                {[0, 1].map((i) =>
+                  dismissed.includes(i) ? (
+                    <p key={i} className="rounded-lg border border-dashed border-[var(--border-strong)]/50 py-2.5 text-center text-[11px] text-muted-foreground">
+                      {bi("تم سحب الطلب", "Request withdrawn")}
+                    </p>
+                  ) : (
+                    <div key={i} className="flex items-center gap-2.5 rounded-lg border-2 border-[var(--border-strong)] bg-primary/5 p-2.5">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                        <Clock className="size-4" />
+                      </span>
+                      <div className="flex-1 space-y-1.5">
+                        <div className={cn("h-2 rounded-full bg-secondary", i === 0 ? "w-3/4" : "w-3/5")} />
+                        <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={bi("سحب الطلب", "Withdraw request")}
+                        onClick={() => setDismissed((d) => [...d, i])}
+                        className="flex size-6 shrink-0 items-center justify-center rounded-md border border-[var(--border-strong)]/50 text-muted-foreground hover:text-destructive"
+                      >
+                        <X className="size-3.5" />
+                      </button>
+                    </div>
+                  ),
+                )}
+              </>
+            )}
+
+            {tab === "confirmed" && (
+              <>
+                <p className="text-xs font-bold text-foreground">
+                  {bi("الجدول القادم", "Upcoming schedule")}
+                </p>
+                {[
+                  { icon: Video, w: "w-3/4" },
+                  { icon: CalendarDays, w: "w-2/3" },
+                  { icon: Video, w: "w-4/5" },
+                ].map((r, i) => (
+                  <div key={i} className="flex items-center gap-2.5 rounded-lg border-2 border-[var(--border-strong)] bg-success/5 p-2.5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/15 text-success">
+                      <r.icon className="size-4" />
+                    </span>
+                    <div className="flex-1 space-y-1.5">
+                      <div className={cn("h-2 rounded-full bg-secondary", r.w)} />
+                      <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {tab === "wallet" && (
+              <>
+                <div className="flex items-center justify-between rounded-lg border-2 border-[var(--border-strong)] bg-info/5 p-3">
+                  <span className="text-xs font-bold text-foreground">{bi("رصيدك الحالي", "Your balance")}</span>
+                  <div className="h-3 w-16 rounded-full bg-info/30" />
                 </div>
-              </div>
-            ))}
+            
+                <p className="text-xs font-bold text-foreground">{bi("آخر المعاملات", "Recent transactions")}</p>
+                {[0, 1].map((i) => (
+                  <div key={i} className="flex items-center gap-2.5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-secondary text-muted-foreground">
+                      <Wallet className="size-4" />
+                    </span>
+                    <div className="flex-1 space-y-1.5">
+                      <div className={cn("h-2 rounded-full bg-secondary", i === 0 ? "w-2/3" : "w-1/2")} />
+                    </div>
+                    <div className="h-2 w-10 rounded-full bg-secondary/70" />
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

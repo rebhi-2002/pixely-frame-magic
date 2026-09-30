@@ -32,6 +32,7 @@ import { useSession } from "@/hooks/use-session";
 import { useScrolled } from "@/hooks/use-scrolled";
 import { allowedPublicPaths } from "@/lib/bi";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Sheet,
   SheetContent,
@@ -122,7 +123,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <button
                   type="button"
                   aria-label={t("common.openMenu")}
-                  className="tap-target inline-flex items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+                  className="tap-target inline-flex items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
                 >
                   <Menu aria-hidden="true" className="size-5" />
                 </button>
@@ -151,12 +152,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                     </Link>
                   ))}
                 </nav>
-                <div className="mt-6 grid gap-2 border-t border-border pt-6">
+                <div className="mt-6 grid gap-2 border-t-2 border-[var(--border-strong)] pt-6">
                   {isSignedIn && session ? (
                     <Link
                       to={session.home}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
+                      className={buttonVariants({ variant: "default", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
                     >
                       <LayoutDashboard aria-hidden="true" className="size-4" />
                       {t("common.dashboard")}
@@ -166,7 +167,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       <Link
                         to="/login"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+                        className={buttonVariants({ variant: "outline", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
                       >
                         <LogIn aria-hidden="true" className="size-4" />
                         {t("common.signIn")}
@@ -174,7 +175,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       <Link
                         to="/signup"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground"
+                        className={buttonVariants({ variant: "default", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
                       >
                         <UserPlus aria-hidden="true" className="size-4" />
                         {t("common.startFree")}
@@ -189,7 +190,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <>
                 <Link
                   to={session.home}
-                  className="hover-press hidden items-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-foreground sm:inline-flex"
+                  className={buttonVariants({ variant: "default", className: "hidden h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:inline-flex" })}
                 >
                   <LayoutDashboard className="size-4" />
                   {t("common.dashboard")}
@@ -207,7 +208,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 </Link>
                 <Link
                   to="/signup"
-                  className="hover-press inline-flex items-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-foreground sm:px-4"
+                  className={buttonVariants({ variant: "default", className: "h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:px-4" })}
                 >
                   <UserPlus className="size-4" />
                   {t("common.startFree")}
@@ -222,7 +223,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         <PageTransition>{children}</PageTransition>
       </main>
 
-      <footer className="border-t border-border bg-card/40">
+      <footer className="border-t-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-3">
             <BrandMark />
@@ -242,7 +243,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={i18n.language === "ar" ? s.labelAr : s.labelEn}
-                        className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                        className="flex size-9 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-background text-muted-foreground transition-colors hover:text-primary"
                       >
                         <Icon className="size-4" />
                       </a>
@@ -254,7 +255,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="WhatsApp"
-                      className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
+                      className="flex size-9 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-background text-muted-foreground transition-colors hover:text-success"
                     >
                       <MessageCircle className="size-4" />
                     </a>
@@ -265,7 +266,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="grid grid-cols-2 gap-8 text-sm">
             <div className="space-y-2">
-              <p className="font-bold text-foreground">{t("nav.platform")}</p>
+              <p className="font-extrabold text-foreground">{t("nav.platform")}</p>
               {visible(footerPlatform).map((i) => (
                 <Link
                   key={i.to}
@@ -277,7 +278,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               ))}
             </div>
             <div className="space-y-2">
-              <p className="font-bold text-foreground">{t("nav.legal")}</p>
+              <p className="font-extrabold text-foreground">{t("nav.legal")}</p>
               {footerLegal.map((i) => (
                 <Link
                   key={i.to}
@@ -290,7 +291,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </div>
-        <div className="border-t border-border py-4 text-center text-xs text-muted-foreground">
+        <div className="border-t-2 border-[var(--border-strong)] py-4 text-center text-xs text-muted-foreground">
           {t("nav.rights", { year: new Date().getFullYear() })}
         </div>
       </footer>

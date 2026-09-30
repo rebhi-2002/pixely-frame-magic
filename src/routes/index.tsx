@@ -280,51 +280,56 @@ function Landing() {
         </div>
       </section>
 
-      {/* المزايا — بلا بطاقات متطابقة. تايبوغرافيا وفواصل فقط، لأن هذا
-          محتوى وصفي بحت (لا رابط ولا بيانات حقيقية لكل عنصر)، فلا يستحق
-          صندوقًا مكرّرًا. البطاقة الرئيسية (flagship) وحدها تُبرَز. */}
+      {/* المزايا — طبقتان صريحتان، لا 6 خلايا متوهّمة تساوي (كانت تبدو
+        كجدول). الثلاث الرئيسية بطاقات حقيقية بمعاينة، والثلاث الثانوية
+        صف مضغوط أيقونة+اسم فقط — الاختلاف البصري يعكس اختلاف الأهمية
+        الفعلي بدل التظاهر بتساوي غير موجود. */}
       <section className="mx-auto max-w-6xl px-5 py-20">
         <h2 className="text-3xl font-extrabold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-        <div className="mt-10 grid border-y-2 border-[var(--border-strong)] lg:grid-cols-2">
-          {features.map((f, i) => (
-            <div
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {features
+          .filter((f) => f.flagship)
+          .map((f) => (
+            <article
               key={f.key}
-              className={cn(
-                "flex flex-col py-7",
-                i % 2 === 0 ? "lg:pe-10" : "lg:ps-10",
-                i % 2 === 1 && "lg:border-s-2 lg:border-[var(--border-strong)]",
-                i > 0 &&
-                  (i % 2 === 0
-                    ? "border-t-2 border-[var(--border-strong)]"
-                    : "lg:border-t-2 border-t-2 border-[var(--border-strong)]"),
-              )}
+              className="flex flex-col rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
             >
-              <span
-                className={cn(
-                  "flex size-11 items-center justify-center rounded-xl",
-                  f.flagship ? "bg-primary text-primary-foreground" : "bg-primary/12 text-primary",
-                )}
-              >
+              <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                 <f.icon className="size-5" />
               </span>
-              <h3
-                className={cn(
-                  "mt-4 font-bold text-foreground",
-                  f.flagship ? "text-lg" : "text-base",
-                )}
-              >
+              <h3 className="mt-4 text-lg font-bold text-foreground">
                 {t(`home.features.${f.key}.title`)}
               </h3>
-              <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {t(`home.features.${f.key}.text`)}
               </p>
-              {f.flagship && (
-                <FeatureMiniPreview variant={f.key as "library" | "tracker" | "mistakes"} />
-              )}
-            </div>
+              <FeatureMiniPreview variant={f.key as "library" | "tracker" | "mistakes"} />
+            </article>
           ))}
+      </div>
+
+        <div className="mt-4 grid gap-3 border-2 border-[var(--border-strong)] bg-card/60 p-5 sm:grid-cols-3">
+          {features
+            .filter((f) => !f.flagship)
+            .map((f, i) => (
+              <div
+                key={f.key}
+                className={cn(
+                  "flex items-center gap-3 py-1",
+                  i > 0 && "sm:border-s-2 sm:border-[var(--border-strong)]/40 sm:ps-3",
+                )}
+              >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+                  <f.icon className="size-4" />
+                </span>
+                <div>
+                  <h3 className="text-sm font-bold text-foreground">{t(`home.features.${f.key}.title`)}</h3>
+                  <p className="text-xs text-muted-foreground">{t(`home.features.${f.key}.text`)}</p>
+                </div>
+              </div>
+            ))}
         </div>
       </section>
 
@@ -337,12 +342,11 @@ function Landing() {
           <div className="grid gap-10 md:grid-cols-3">
             {roles.map((r) =>
               r.key === "teacher" ? (
-                <div key={r.key} className="md:col-span-2">
+                <div key={r.key} className="md:col-span-2 md:border-e-2 md:border-[var(--border-strong)]/30 md:pe-10">
                   <span className="mb-2 inline-block rounded-full border-2 border-[var(--border-strong)] bg-primary px-2.5 py-0.5 text-[11px] font-bold text-primary-foreground">
                     {t("home.roles.primaryBadge")}
                   </span>
-                  <r.icon className="block size-6 text-success" />
-                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+                  <r.icon className="block size-6 text-primary" />                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
                   <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
                     {t(`home.roles.${r.key}.d`)}
                   </p>
@@ -350,7 +354,7 @@ function Landing() {
                 </div>
               ) : (
                 <div key={r.key}>
-                  <r.icon className="size-6 text-success" />
+                  <r.icon className="size-6 text-primary" />
                   <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
                     {t(`home.roles.${r.key}.d`)}
