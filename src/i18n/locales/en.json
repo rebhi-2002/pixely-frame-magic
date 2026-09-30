@@ -62,11 +62,6 @@
     "sub": "Browse teachers and courses, see their availability and prices, and follow your schedule and wallet from one place.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "See how you start",
-    "stats": {
-      "levels": "Teaching modes: online and in-person",
-      "rtl": "Arabic with full RTL",
-      "spaces": "Spaces: student, teacher, parent"
-    },
     "featuresTitle": "Everything you need to learn with a teacher",
     "featuresSub": "From finding a teacher to following attendance and results.",
     "features": {
@@ -100,6 +95,7 @@
       }
     },
     "roles": {
+      "primaryBadge": "Primary role",
       "student": {
         "t": "Student",
         "d": "A dashboard with your upcoming lessons, bookings and wallet."
@@ -138,28 +134,38 @@
         "sub": "Users, permissions, courses and payments — from the admin dashboard."
       }
     },
-    "startEyebrow": "Your first step",
-    "startTitle": "What happens after you sign up?",
-    "startSub": "Your account is ready in a few simple steps — no empty dashboard.",
+    "startTitle": "Your journey from search to rating",
+    "startSub": "A clear, step-by-step path from finding a teacher to finishing the lesson.",
     "startSteps": [
       {
-        "title": "Choose your role",
-        "text": "Student, teacher or parent — each role has its own space."
+        "title": "Search",
+        "text": "Look for teachers by subject, grade and price."
       },
       {
-        "title": "Browse teachers",
-        "text": "Search by subject, grade, price and teaching mode."
+        "title": "Compare",
+        "text": "Compare profiles, ratings and availability."
       },
       {
-        "title": "Check availability",
-        "text": "See a teacher's open hours before you decide."
+        "title": "Choose",
+        "text": "Pick the right teacher for you with confidence."
       },
       {
-        "title": "Track everything",
-        "text": "Your schedule, wallet and notifications from one dashboard."
+        "title": "Book",
+        "text": "Request the lesson at the time that suits you."
+      },
+      {
+        "title": "Pay",
+        "text": "Pay securely from your in-app wallet."
+      },
+      {
+        "title": "Attend",
+        "text": "Join your lesson online or in person."
+      },
+      {
+        "title": "Rate",
+        "text": "Rate your experience after the lesson ends."
       }
     ],
-    "freeEyebrow": "Start with zero risk",
     "freeTitle": "Start free — see Academia in action",
     "freeSub": "Creating an account and browsing teachers and courses is completely free.",
     "freeListTitle": "A free start includes:",
@@ -179,31 +185,12 @@
     },
     "h1": "How does Academia work?",
     "sub": "From your first sign-up, clear steps get you ready.",
-    "steps": {
-      "role": {
-        "t": "Pick your role",
-        "d": "Student, teacher or parent — each role opens a space with its own permissions."
-      },
-      "system": {
-        "t": "Browse teachers",
-        "d": "Search by subject, grade, area, price and teaching mode."
-      },
-      "subjects": {
-        "t": "Check availability",
-        "d": "See a teacher's profile, open hours and overall rating."
-      },
-      "goal": {
-        "t": "Follow from your dashboard",
-        "d": "Your schedule, lessons, wallet and notifications in one place."
-      }
-    },
     "cta": "Start now for free",
     "nextTitle": "What next?",
     "next": [
       "Top up your wallet by transfer and receipt; the admin reviews the request.",
       "Follow your upcoming lessons and the meeting link for online ones.",
-      "Teachers manage their profile and availability and request earnings withdrawals.",
-      "Parents follow their child's attendance and exam results."
+      "Teachers manage their profile and availability and request earnings withdrawals."
     ]
   },
   "forParents": {

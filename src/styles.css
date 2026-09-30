@@ -81,60 +81,62 @@
 :root,
 :root[data-theme="dark"] {
   --radius: 0.75rem;
-  --ink-950: #0a0f1c;
-  --ink-900: #0d1321;
-  --ink-800: #141b2e;
-  --background: var(--ink-950);
-  --foreground: #f3f1ea;
-  --card: var(--ink-800);
-  --card-foreground: #f3f1ea;
-  --popover: var(--ink-900);
-  --popover-foreground: #f3f1ea;
-  --primary: #f0a62e;
-  --primary-foreground: var(--ink-950);
-  --secondary: #1b2338;
-  --secondary-foreground: #f3f1ea;
-  --muted: #1b2338;
-  --muted-foreground: #a6b0c3;
-  --muted-3: #6e7893;
-  --accent: #202a42;
-  --accent-foreground: #f3f1ea;
+  /* الوضع الغامق الجديد: كحلي/أزرق/تركواز — مستخرجة بدقة بكسل من العرض
+     التقديمي الرسمي للمنتج (Academia_Presentation.pptx)، بدل الكحلي+العنبري
+     القديم الذي لا يعكس هوية المنتج الفعلية. */
+  --navy-950: #0a1e39;
+  --navy-900: #0d2547;
+  --navy-800: #122b52;
+  --background: var(--navy-950);
+  --foreground: #f4f6fb;
+  --card: var(--navy-800);
+  --card-foreground: #f4f6fb;
+  --popover: var(--navy-900);
+  --popover-foreground: #f4f6fb;
+  --primary: #2c5fdf;
+  --primary-foreground: #f4f6fb;
+  --secondary: #163358;
+  --secondary-foreground: #f4f6fb;
+  --muted: #163358;
+  --muted-foreground: #a9b7d1;
+  --muted-3: #7185a8;
+  --accent: #1b3a66;
+  --accent-foreground: #f4f6fb;
   --destructive: #e4573d;
-  /* WCAG AA: نص فاتح (#f3f1ea) على هالأحمر كان 3.24:1 (فاشل). نفس نمط باقي
-     الألوان الدلالية بالوضع الغامق (نص ink-950 غامق) بيوصلها لـ5.23:1. */
-  --destructive-foreground: var(--ink-950);
-  --success: #17a672;
-  --success-foreground: var(--ink-950);
-  --info: #3e8ede;
-  --info-foreground: var(--ink-950);
-  --tools: #3e8ede;
-  --tools-foreground: var(--ink-950);
-  --section: var(--ink-800);
-  --section-foreground: #f3f1ea;
-  --border: rgba(180, 190, 210, 0.13);
-  --input: rgba(180, 190, 210, 0.2);
-  --ring: #f0a62e;
-  /* Neo-Brutalism الدافئ — حد صلب وظل بلا ضبابية (بديل glow-primary/glass-surface،
-     يُحذفان في patch لاحق عند تنظيف المكوّنات). الأسود يختفي على خلفية غامقة،
-     فالحد والظل هنا فاتحان بدرجة كافية للظهور، والظل بلون العنبري لإحساس دافئ
-     بدل رمادي بارد. */
-  --border-strong: rgba(243, 241, 234, 0.85);
+  --destructive-foreground: var(--navy-950);
+  /* التركواز هو نفسه لون "مُنجَز/مكتمل" بالعرض التقديمي — إعادة استخدام صادقة
+     لنفس دلالة اللون، لا اختراع لون جديد. */
+  --success: #13b8a7;
+  --success-foreground: var(--navy-950);
+  --info: #5b82e8;
+  --info-foreground: var(--navy-950);
+  --tools: #5b82e8;
+  --tools-foreground: var(--navy-950);
+  --section: var(--navy-800);
+  --section-foreground: #f4f6fb;
+  --border: rgba(180, 195, 220, 0.14);
+  --input: rgba(180, 195, 220, 0.22);
+  --ring: #2c5fdf;
+  /* Neo-Brutalism الدافئ بالوضع الغامق — حد فاتح صلب (الكحلي الغامق يلغي أي حد
+     داكن)، وظل بلون العلامة الأزرق بدل العنبري القديم، ليتطابق مع الهوية
+     الجديدة المستخرجة من العرض التقديمي. */
+  --border-strong: rgba(244, 246, 251, 0.85);
   --border-strong-width: 2px;
-  --shadow-brutal-color: rgba(240, 166, 46, 0.28);
+  --shadow-brutal-color: rgba(44, 95, 223, 0.35);
   --shadow-brutal: 4px 4px 0 0 var(--shadow-brutal-color);
-  --chart-1: #f0a62e;
-  --chart-2: #17a672;
-  --chart-3: #3e8ede;
+  --chart-1: #2c5fdf;
+  --chart-2: #13b8a7;
+  --chart-3: #f0a62e;
   --chart-4: #e4573d;
   --chart-5: #9a6ad6;
-  --sidebar: var(--ink-900);
-  --sidebar-foreground: #f3f1ea;
-  --sidebar-primary: #f0a62e;
-  --sidebar-primary-foreground: var(--ink-950);
-  --sidebar-accent: #1b2338;
-  --sidebar-accent-foreground: #f3f1ea;
-  --sidebar-border: rgba(180, 190, 210, 0.13);
-  --sidebar-ring: #f0a62e;
+  --sidebar: var(--navy-900);
+  --sidebar-foreground: #f4f6fb;
+  --sidebar-primary: #2c5fdf;
+  --sidebar-primary-foreground: #f4f6fb;
+  --sidebar-accent: #163358;
+  --sidebar-accent-foreground: #f4f6fb;
+  --sidebar-border: rgba(180, 195, 220, 0.14);
+  --sidebar-ring: #2c5fdf;
 }
 
 /* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
