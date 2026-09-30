@@ -124,7 +124,7 @@ function Body() {
       )}
     >
       <WelcomeBanner
-        subtitle={[bi("نظرة سريعة على أداء أبنائك.", "A quick look at your children's progress.")]}
+        subtitle={["نظرة سريعة على أداء أبنائك.", "A quick look at your children's progress."]}
       />
 
       {children.length > 1 && (

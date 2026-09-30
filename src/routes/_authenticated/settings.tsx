@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { KeyRound, LogOut, Palette, Pencil, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -13,9 +12,7 @@ import { useAccess, useInvalidateAccess } from "@/hooks/use-access";
 import { Guard } from "@/components/app/guard";
 import { ROLE_NAME_EN } from "@/lib/rbac-types";
 import { useBi } from "@/lib/bi";
-import { updateOwnProfile } from "@/lib/rbac.functions";
 import {
-  isDemoSession,
   getStoredUserId,
   getStoredProfile,
   updateMyProfile,
@@ -69,18 +66,14 @@ function SettingsPage() {
   const { access, can } = useAccess();
   const { signOut, pending: signingOut } = useSignOut("/login");
   const { theme, setTheme, locale, setLocale } = usePreferences();
-  const demo = isDemoSession();
   const userId = getStoredUserId();
 
-  // خيارات الجنس الحقيقية — نفس مصدر شاشات التسجيل/الأدمن (Backend
-  // Constants)، مش قائمة ثابتة بالكود. غير مطلوبة بوضع الديمو.
+  // خيارات الجنس الحقيقية — نفس مصدر شاشات التسجيل/الأدمن (Backend Constants)،
+  // مش قائمة ثابتة بالكود.
   const { data: options } = useQuery({
     queryKey: ["signup-options"],
     queryFn: loadRegistrationOptions,
-    enabled: !demo,
   });
-
-  const demoUpdateProfile = useServerFn(updateOwnProfile);
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -92,8 +85,6 @@ function SettingsPage() {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      if (demo)
-        return demoUpdateProfile({ data: { full_name: form.full_name, email: form.email } });
       if (!userId || form.genderId == null)
         throw new Error(bi("الجنس مطلوب", "Gender is required"));
       return updateMyProfile({
@@ -245,18 +236,16 @@ function SettingsPage() {
           </h2>
           <p className="mt-3 text-sm text-muted-foreground">{t("settings.idleNote")}</p>
 
-          {!demo && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-4"
-              onClick={() => setPwOpen(true)}
-            >
-              <KeyRound className="size-4" />
-              {bi("تغيير كلمة المرور", "Change password")}
-            </Button>
-          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-4"
+            onClick={() => setPwOpen(true)}
+          >
+            <KeyRound className="size-4" />
+            {bi("تغيير كلمة المرور", "Change password")}
+          </Button>
 
           <button
             type="button"
@@ -292,37 +281,33 @@ function SettingsPage() {
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
               />
             </div>
-            {!demo && (
-              <>
-                <div className="space-y-1.5">
-                  <Label htmlFor="acc-phone">{bi("رقم الهاتف", "Phone number")}</Label>
-                  <Input
-                    id="acc-phone"
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label>{bi("الجنس", "Gender")}</Label>
-                  <Select
-                    value={form.genderId != null ? String(form.genderId) : undefined}
-                    onValueChange={(v) => setForm((f) => ({ ...f, genderId: Number(v) }))}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(options?.genders ?? []).map((g) => (
-                        <SelectItem key={g.id} value={String(g.id)}>
-                          {bi(g.name, genderNameEn(g))}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </>
-            )}
+            <div className="space-y-1.5">
+              <Label htmlFor="acc-phone">{bi("رقم الهاتف", "Phone number")}</Label>
+              <Input
+                id="acc-phone"
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>{bi("الجنس", "Gender")}</Label>
+              <Select
+                value={form.genderId != null ? String(form.genderId) : undefined}
+                onValueChange={(v) => setForm((f) => ({ ...f, genderId: Number(v) }))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={bi("اختر الجنس", "Select gender")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {(options?.genders ?? []).map((g) => (
+                    <SelectItem key={g.id} value={String(g.id)}>
+                      {bi(g.name, genderNameEn(g))}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <DialogFooter className="gap-2 sm:justify-start">
             <Button

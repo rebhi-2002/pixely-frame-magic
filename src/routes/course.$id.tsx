@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, MapPin, Radio, Star, Users, Wallet } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
@@ -56,7 +57,7 @@ function CourseDetailPage() {
           <h1 className="text-2xl font-bold text-foreground">{t("courseDetail.notFound")}</h1>
           <Link
             to="/courses"
-            className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+            className={buttonVariants({ variant: "default", className: "mt-6 h-auto px-6 py-3 text-sm" })}
           >
             {t("nav.courses")}
           </Link>
@@ -105,23 +106,23 @@ function CourseDetailPage() {
 
   return (
     <PublicLayout>
-      <section className="surface-grid border-b border-border">
+      <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-4xl px-5 py-16">
           <div className="flex flex-wrap items-center gap-2">
             {subjectName && (
-              <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+              <span className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary">
                 {subjectName}
               </span>
             )}
             {course.level && <span className="text-xs text-muted-foreground">{course.level}</span>}
             {deliveryLabel && (
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
                 <DeliveryIcon className="size-3.5" />
                 {bi(...deliveryLabel)}
               </span>
             )}
           </div>
-          <h1 className="mt-4 text-3xl font-bold text-foreground md:text-4xl">{course.title}</h1>
+          <h1 className="mt-4 text-3xl font-extrabold text-foreground md:text-4xl">{course.title}</h1>
 
           <div className="mt-5 flex items-center gap-2.5">
             <PhotoAvatar className="size-9" iconClassName="size-4" />
@@ -133,7 +134,7 @@ function CourseDetailPage() {
               {course.teacherName || bi("معلّم", "Teacher")}
             </Link>
             {typeof course.rating === "number" && (
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-foreground">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-foreground">
                 <Star className="size-3.5 fill-primary text-primary" />
                 {course.rating.toFixed(1)}
               </span>
@@ -147,7 +148,7 @@ function CourseDetailPage() {
           <div>
             {course.description && (
               <>
-                <h2 className="text-lg font-bold text-foreground">
+                <h2 className="text-lg font-extrabold text-foreground">
                   {t("courseDetail.aboutTitle")}
                 </h2>
                 <p className="mt-3 leading-relaxed text-muted-foreground">{course.description}</p>
@@ -190,14 +191,14 @@ function CourseDetailPage() {
             </div>
           </div>
 
-          <aside className="h-fit rounded-2xl border border-border bg-card p-6">
+          <aside className="h-fit rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
             <p className="inline-flex items-center gap-1.5 text-2xl font-bold text-foreground">
               <Wallet className="size-5 text-primary" />
               {course.price === 0 ? t("courses.free") : `${course.price} JOD`}
             </p>
             <Link
               to={isSignedIn ? "/my-courses" : "/signup"}
-              className="hover-press mt-5 flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              className={buttonVariants({ variant: "default", className: "mt-5 flex h-auto items-center justify-center px-4 py-2.5 text-sm" })}
             >
               {t(isSignedIn ? "courses.open" : "courses.enroll")}
             </Link>

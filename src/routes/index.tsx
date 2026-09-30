@@ -8,7 +8,6 @@ import {
   Users,
   LayoutDashboard,
   Check,
-  Compass,
   ClipboardCheck,
   ListChecks,
   Store,
@@ -18,6 +17,7 @@ import {
   Video,
   Wallet,
   ArrowLeft,
+  Star,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
@@ -50,19 +50,66 @@ export const Route = createFileRoute("/")({
 const features = [
   { icon: Search, key: "library", flagship: true },
   { icon: UserRound, key: "community", flagship: false },
-  { icon: CalendarDays, key: "tracker", flagship: false },
+  { icon: CalendarDays, key: "tracker", flagship: true },
   { icon: Video, key: "simulator", flagship: false },
-  { icon: Wallet, key: "mistakes", flagship: false },
+  { icon: Wallet, key: "mistakes", flagship: true },
   { icon: Store, key: "courses", flagship: false },
 ] as const;
 
+/** معاينة مصغّرة بنفس أسلوب HeroMockup (إعادة بناء HTML/CSS، لا صورة ولا SVG
+ * زخرفي) — تُعرض فقط لـ2-3 ميزات رئيسية حسب "Visual Budget" بملفات Claude،
+ * لا لكل الميزات السبع. */
+function FeatureMiniPreview({ variant }: { variant: "library" | "tracker" | "mistakes" }) {
+  return (
+    <div className="mt-4 w-full max-w-xs rounded-xl border-2 border-[var(--border-strong)] bg-background p-3 lg:mt-0">
+      {variant === "library" && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 rounded-lg border border-[var(--border-strong)]/40 bg-secondary px-2.5 py-1.5">
+            <Search className="size-3.5 text-muted-foreground" />
+            <div className="h-2 w-2/3 rounded-full bg-muted-foreground/30" />
+          </div>
+          {[0, 1].map((i) => (
+            <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/60 px-2.5 py-2">
+              <span className="size-6 shrink-0 rounded-full bg-primary/20" />
+              <div className="h-2 flex-1 rounded-full bg-muted-foreground/25" />
+            </div>
+          ))}
+        </div>
+      )}
+      {variant === "tracker" && (
+        <div className="space-y-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="flex size-6 items-center justify-center rounded-md bg-primary/15 text-primary">
+                <CalendarDays className="size-3.5" />
+              </span>
+              <div className={cn("h-2 rounded-full bg-secondary", i === 0 ? "w-4/5" : i === 1 ? "w-3/5" : "w-2/3")} />
+            </div>
+          ))}
+        </div>
+      )}
+      {variant === "mistakes" && (
+        <div className="flex items-center justify-between rounded-lg bg-primary/10 p-3">
+          <span className="flex size-9 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-background text-primary">
+            <Wallet className="size-4" />
+          </span>
+          <div className="h-2.5 w-16 rounded-full bg-primary/30" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 const roles = [
-  { icon: Users, key: "student" },
   { icon: BookOpenCheck, key: "teacher" },
+  { icon: Users, key: "student" },
   { icon: LineChart, key: "parent" },
 ] as const;
 
-const journeySteps = [Compass, ListChecks, ClipboardCheck, Check] as const;
+/* رحلة الطالب الحقيقية كما بالعرض التقديمي الرسمي (Slide 5: How students use
+   it) — بحث → مقارنة → اختيار → حجز → دفع → حضور → تقييم. 7 خطوات فعلية،
+   لا 4 كما كان سابقاً. */
+const journeySteps = [Search, ListChecks, ClipboardCheck, CalendarDays, Wallet, Video, Star] as const;
 
 const latestPosts = blogPosts.slice(-2).reverse();
 
@@ -91,7 +138,7 @@ function Landing() {
 
             {session && role ? (
               <>
-                <h1 className="mt-6 text-4xl font-bold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
+                <h1 className="mt-6 text-4xl font-extrabold leading-[1.25] text-foreground sm:text-5xl md:text-6xl">
                   {t(`home.signedIn.${role}.h1`)}
                 </h1>
                 <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -123,7 +170,7 @@ function Landing() {
               </>
             ) : (
               <>
-                <h1 className="mt-6 text-4xl font-bold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
+                <h1 className="mt-6 text-4xl font-extrabold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
                   {t("home.h1a")} {t("home.h1b")} {t("home.h1c")}
                 </h1>
                 <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -163,14 +210,14 @@ function Landing() {
           ترقيمًا وخطًا بصريًا متصلاً يمثّل "رحلة" لا بطاقات منفصلة متطابقة. */}
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="max-w-2xl">
-          <h2 className="text-3xl font-bold text-foreground">{t("home.startTitle")}</h2>
+          <h2 className="text-3xl font-extrabold text-foreground">{t("home.startTitle")}</h2>
           <p className="mt-3 text-muted-foreground">{t("home.startSub")}</p>
         </div>
-        <div className="relative mt-12 grid gap-8 md:grid-cols-4">
-          {/* الخط الواصل بين الخطوات — يظهر من md فما فوق فقط */}
+        <div className="relative mt-12 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-7 lg:gap-4">
+          {/* الخط الواصل بين الخطوات — يظهر من lg فما فوق فقط حيث الصفوف تصطف بخط واحد */}
           <div
             aria-hidden
-            className="absolute top-6 hidden h-0.5 w-full bg-[var(--border-strong)] md:block"
+            className="absolute top-6 hidden h-0.5 w-full bg-[var(--border-strong)] lg:block"
             style={{ insetInlineStart: 0 }}
           />
           {journeySteps.map((Icon, i) => (
@@ -184,8 +231,10 @@ function Landing() {
                 {i + 1}
               </span>
               <Icon className="mt-4 size-5 text-primary" />
-              <h3 className="mt-2 font-bold text-foreground">{t(`home.startSteps.${i}.title`)}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <h3 className="mt-2 text-sm font-bold text-foreground">
+                {t(`home.startSteps.${i}.title`)}
+              </h3>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
                 {t(`home.startSteps.${i}.text`)}
               </p>
             </div>
@@ -198,7 +247,7 @@ function Landing() {
       <section className="border-y-2 border-[var(--border-strong)] bg-primary/8">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <h2 className="text-3xl font-bold text-foreground">{t("home.freeTitle")}</h2>
+            <h2 className="text-3xl font-extrabold text-foreground">{t("home.freeTitle")}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
               {t("home.freeSub")}
             </p>
@@ -222,14 +271,19 @@ function Landing() {
           محتوى وصفي بحت (لا رابط ولا بيانات حقيقية لكل عنصر)، فلا يستحق
           صندوقًا مكرّرًا. البطاقة الرئيسية (flagship) وحدها تُبرَز. */}
       <section className="mx-auto max-w-6xl px-5 py-20">
-        <h2 className="text-3xl font-bold text-foreground">{t("home.featuresTitle")}</h2>
+        <h2 className="text-3xl font-extrabold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-        <div className="mt-10 divide-y-2 divide-[var(--border-strong)] border-y-2 border-[var(--border-strong)]">
-          {features.map((f) => (
+        <div className="mt-10 grid border-y-2 border-[var(--border-strong)] lg:grid-cols-2">
+          {features.map((f, i) => (
             <div
               key={f.key}
-              className="grid gap-4 py-7 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-6"
+              className={cn(
+                "flex flex-col py-7",
+                i % 2 === 0 ? "lg:pe-10" : "lg:ps-10",
+                i % 2 === 1 && "lg:border-s-2 lg:border-[var(--border-strong)]",
+                i > 0 && (i % 2 === 0 ? "border-t-2 border-[var(--border-strong)]" : "lg:border-t-2 border-t-2 border-[var(--border-strong)]"),
+              )}
             >
               <span
                 className={cn(
@@ -239,16 +293,15 @@ function Landing() {
               >
                 <f.icon className="size-5" />
               </span>
-              <div>
-                <h3
-                  className={cn("font-bold text-foreground", f.flagship ? "text-lg" : "text-base")}
-                >
-                  {t(`home.features.${f.key}.title`)}
-                </h3>
-                <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  {t(`home.features.${f.key}.text`)}
-                </p>
-              </div>
+              <h3 className={cn("mt-4 font-bold text-foreground", f.flagship ? "text-lg" : "text-base")}>
+                {t(`home.features.${f.key}.title`)}
+              </h3>
+              <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-foreground">
+                {t(`home.features.${f.key}.text`)}
+              </p>
+              {f.flagship && (
+                <FeatureMiniPreview variant={f.key as "library" | "tracker" | "mistakes"} />
+              )}
             </div>
           ))}
         </div>
@@ -264,7 +317,10 @@ function Landing() {
             {roles.map((r) =>
               r.key === "teacher" ? (
                 <div key={r.key} className="md:col-span-2">
-                  <r.icon className="size-6 text-success" />
+                  <span className="mb-2 inline-block rounded-full border-2 border-[var(--border-strong)] bg-primary px-2.5 py-0.5 text-[11px] font-bold text-primary-foreground">
+                    {t("home.roles.primaryBadge")}
+                  </span>
+                  <r.icon className="block size-6 text-success" />
                   <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
                   <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
                     {t(`home.roles.${r.key}.d`)}
@@ -288,7 +344,7 @@ function Landing() {
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-foreground">{t("blog.teaserTitle")}</h2>
+            <h2 className="text-3xl font-extrabold text-foreground">{t("blog.teaserTitle")}</h2>
             <p className="mt-2 max-w-xl text-muted-foreground">{t("blog.teaserSub")}</p>
           </div>
           <Link
@@ -309,7 +365,7 @@ function Landing() {
               params={{ slug: post.slug }}
               className={cn(brutalCard, "flex flex-col", brutalInteractive)}
             >
-              <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-bold text-primary">
+              <span className="w-fit rounded-full bg-primary/12 px-3 py-1 text-xs font-semibold text-primary">
                 {bi(post.category, post.categoryEn)}
               </span>
               <h3 className="mt-4 text-base font-bold leading-snug text-foreground">
@@ -324,7 +380,7 @@ function Landing() {
       </section>
 
       <section className="mx-auto max-w-4xl px-5 py-20 text-center">
-        <h2 className="text-3xl font-bold text-foreground">{t("home.ctaTitle")}</h2>
+        <h2 className="text-3xl font-extrabold text-foreground">{t("home.ctaTitle")}</h2>
         <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
         <SessionCta
           to="/signup"

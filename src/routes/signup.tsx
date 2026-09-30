@@ -11,9 +11,10 @@ import { currentUserHome } from "@/lib/session-home";
 import { FeatureStatus } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
 import { genderNameEn } from "@/lib/gender";
-import { roleHome, useBi } from "@/lib/bi";
+import { roleHomeForKey, useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
+import { findUserTypeForRole } from "@/integrations/backend/user-types";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
 import { env } from "@/lib/env";
@@ -26,14 +27,6 @@ import {
 } from "@/components/ui/select";
 
 const signupEnabled = env.ENABLE_SIGNUP;
-
-// أسماء أنواع المستخدمين متل ما هي مزروعة فعليًا بالباك اند (UserSeed.cs) —
-// بنستخدمها لمطابقة الدور المختار بالواجهة (طالب/ولي أمر) مع الـ id الصحيح
-// بدل ما نثبّت الأرقام 3/5 مباشرة بالكود.
-const BACKEND_ROLE_NAME: Record<RoleKey, string> = {
-  student: "الطالب",
-  parent: "ولي الامر",
-};
 
 export const Route = createFileRoute("/signup")({
   ssr: false,
@@ -115,11 +108,9 @@ function SignupPage() {
     }
     if (!role) return;
 
-    const roleName = BACKEND_ROLE_NAME[role];
-    // مطابقة بالاسم فقط: مطابقة بالـid كانت خطرة لأن أرقام أنواع المستخدمين بقاعدة
-    // البيانات ممكن تختلف عن الثوابت بالكود (UserSeed.cs بيزرع الطالب=2/المعلم=3)
-    // فكان ممكن مستخدم يسجّل كطالب وينحفظ معلّم. الأفضل رسالة خطأ من نوع غلط.
-    const userType = options?.roles.find((r) => r.name === roleName);
+    // المطابقة بمفتاح الدور الثابت (code) القادم من الباك اند — مش بالرقم ولا بالاسم،
+    // لأن الرقم والاسم بيختلفوا بين البيئات. ما لقينا النوع = رسالة خطأ بدل تسجيل بدور غلط.
+    const userType = findUserTypeForRole(options?.roles, role);
     if (!userType) {
       toast.error(
         bi(
@@ -149,7 +140,7 @@ function SignupPage() {
       }
       trackEvent("signup_success", { role });
       toast.success(bi("تم إنشاء الحساب بنجاح", "Account created successfully"));
-      navigate({ href: roleHome(profile?.roleName ?? roleName), replace: true });
+      navigate({ href: roleHomeForKey(profile?.roleKey ?? role), replace: true });
     } catch (err) {
       trackEvent("signup_failed", { role });
       toast.error(getErrorMessage(err, bi("تعذّر إنشاء الحساب", "Failed to create account")));

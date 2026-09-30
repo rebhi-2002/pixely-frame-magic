@@ -59,7 +59,7 @@ function TeacherCard({
             {teacher.name || bi("معلّم", "Teacher")}
           </h2>
           {typeof teacher.averageRating === "number" && teacher.ratingCount > 0 ? (
-            <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-bold text-foreground">
+            <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
               <Star className="size-3.5 fill-primary text-primary" />
               {teacher.averageRating.toFixed(1)}
               <span className="font-normal text-muted-foreground">({teacher.ratingCount})</span>
@@ -83,7 +83,7 @@ function TeacherCard({
           {teacher.subjects.slice(0, 4).map((s) => (
             <span
               key={s}
-              className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary"
+              className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary"
             >
               {s}
             </span>
@@ -93,19 +93,19 @@ function TeacherCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {teacher.supportsOnline && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
             <Radio className="size-3.5" />
             {bi("أونلاين", "Online")}
           </span>
         )}
         {teacher.supportsInPerson && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
             <MapPin className="size-3.5" />
             {bi("وجاهي", "In-person")}
           </span>
         )}
         {teacher.experienceYears > 0 && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
             <Award className="size-3.5" />
             {bi(`${teacher.experienceYears} سنة خبرة`, `${teacher.experienceYears} yrs experience`)}
           </span>
@@ -183,7 +183,7 @@ function TeachersDirectoryPage() {
     <PublicLayout>
       <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16">
-          <h1 className="text-4xl font-bold text-foreground md:text-5xl">
+          <h1 className="text-4xl font-extrabold text-foreground md:text-5xl">
             {t("teachersDirectory.h1")}
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">

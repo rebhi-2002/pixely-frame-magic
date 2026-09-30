@@ -12,17 +12,16 @@ import {
 } from "@/integrations/backend/wallet";
 import { listAllCoursesForAdminFull } from "@/integrations/backend/courses";
 import { useBi } from "@/lib/bi";
+import { parseRoleKey } from "@/integrations/backend/user-types";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
-/** أنواع المستخدمين الثابتة على الباك اند الحقيقي (UserSeed.cs) — لا يوجد endpoint
- *  لإدارتها ديناميكياً. ⚠️ الترقيم هون Admin=1, Student=3, Teacher=4, Parent=5
- *  (رقم 2 محجوز غير مستخدم بقرار الفريق) — يطابق GeneralEnums.UserTypeIds بالباك اند. */
-const REAL_USER_TYPES: { id: number; nameAr: string; nameEn: string }[] = [
-  { id: 1, nameAr: "مدير النظام", nameEn: "System admin" },
-  { id: 3, nameAr: "الطالب", nameEn: "Student" },
-  { id: 4, nameAr: "المعلم", nameEn: "Teacher" },
-  { id: 5, nameAr: "ولي الامر", nameEn: "Parent" },
-];
+// أسماء العرض حسب مفتاح الدور الثابت (code) — الأرقام بتيجي من الباك اند وبتختلف بين البيئات.
+const USER_TYPE_LABELS: Record<string, { nameAr: string; nameEn: string }> = {
+  admin: { nameAr: "مدير النظام", nameEn: "System admin" },
+  student: { nameAr: "الطالب", nameEn: "Student" },
+  teacher: { nameAr: "المعلم", nameEn: "Teacher" },
+  parent: { nameAr: "ولي الامر", nameEn: "Parent" },
+};
 
 const COURSE_STATUS_LABEL: Record<number, [string, string]> = {
   1: ["مسودة", "Draft"],
@@ -37,13 +36,21 @@ export function AdminDashboardPage() {
   // عدد كل نوع مستخدم — نداء خفيف واحد بـ pageSize=1 لكل نوع، الاعتماد فقط على totalCount.
   const usersByType = useQuery({
     queryKey: ["admin-dashboard", "users-by-type"],
-    queryFn: () =>
-      Promise.all(
-        REAL_USER_TYPES.map(async (t) => ({
-          ...t,
-          count: (await listBackendUsers({ userTypeId: t.id, pageSize: 1 })).totalCount,
-        })),
-      ),
+    queryFn: async () => {
+      const { roles } = await loadBackendUserOptions();
+      return Promise.all(
+        roles.map(async (t) => {
+          const code = parseRoleKey(t.code) ?? "";
+          const labels = USER_TYPE_LABELS[code] ?? { nameAr: t.name, nameEn: t.name };
+          return {
+            id: t.id,
+            code,
+            ...labels,
+            count: (await listBackendUsers({ userTypeId: t.id, pageSize: 1 })).totalCount,
+          };
+        }),
+      );
+    },
   });
 
   // الجنس والحالة (نشط/موقوف) — نفس أسلوب "عدّ عبر فلتر السيرفر"، بأسماء
@@ -106,9 +113,12 @@ export function AdminDashboardPage() {
     () => (usersByType.data ?? []).reduce((sum, t) => sum + t.count, 0),
     [usersByType.data],
   );
-  const teacherCount = usersByType.data?.find((t) => t.id === 4)?.count ?? 0;
-  const studentCount = usersByType.data?.find((t) => t.id === 3)?.count ?? 0;
-  const parentCount = usersByType.data?.find((t) => t.id === 5)?.count ?? 0;
+  const teacherCount =
+    usersByType.data?.find((t) => t.code === "teacher")?.count ?? 0;
+  const studentCount =
+    usersByType.data?.find((t) => t.code === "student")?.count ?? 0;
+  const parentCount =
+    usersByType.data?.find((t) => t.code === "parent")?.count ?? 0;
 
   const genderDistribution = useMemo(
     () => (usersByGender.data ?? []).map((g) => ({ label: g.name, value: g.count })),
@@ -126,7 +136,7 @@ export function AdminDashboardPage() {
     (r) => r.status === TopUpRequestStatus.PendingVerification,
   ).length;
   const pendingWithdrawalCount = (pendingWithdrawals.data ?? []).filter(
-    (r) => r.status === WithdrawalRequestStatus.PendingVerification,
+    (r) => r.status === WithdrawalRequestStatus.PendingApproval,
   ).length;
   // مبالغ الطلبات المعلّقة — محسوبة ديناميكياً بالفرونت من نفس القوائم الحقيقية
   // المجلوبة فوق (مش رقم إضافي من الباك اند).
@@ -134,7 +144,7 @@ export function AdminDashboardPage() {
     .filter((r) => r.status === TopUpRequestStatus.PendingVerification)
     .reduce((sum, r) => sum + r.amount, 0);
   const pendingWithdrawalAmount = (pendingWithdrawals.data ?? [])
-    .filter((r) => r.status === WithdrawalRequestStatus.PendingVerification)
+    .filter((r) => r.status === WithdrawalRequestStatus.PendingApproval)
     .reduce((sum, r) => sum + r.amount, 0);
 
   const paymentsByStatus = [
@@ -233,7 +243,7 @@ export function AdminDashboardPage() {
       )}
     >
       <WelcomeBanner
-        subtitle={[bi("مؤشرات تشغيل المنصة اليوم.", "Today's platform operations at a glance.")]}
+        subtitle={["مؤشرات تشغيل المنصة اليوم.", "Today's platform operations at a glance."]}
       />
 
       <div>

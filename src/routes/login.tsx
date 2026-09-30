@@ -9,7 +9,7 @@ import { login, getStoredProfile } from "@/integrations/backend/auth";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
-import { roleHome, useBi } from "@/lib/bi";
+import { resolveRoleKey, roleHomeForKey, useBi } from "@/lib/bi";
 import { Button } from "@/components/ui/button";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
@@ -66,7 +66,7 @@ function LoginPage() {
         setMonitoringUser({ id: profile.id, email: profile.email });
       }
       trackEvent("login_success", { roleId: profile?.roleId ?? null });
-      if (profile && profile.roleId == null) {
+      if (profile && profile.roleId == null && !profile.roleKey) {
         // فشل تحديد نوع الحساب (راجع فتح Console — رح تلاقي تفاصيل الخطأ
         // بـ "fetchUserType failed"). بنكمل تسجيل الدخول بس بنحذّر المستخدم
         // بدل ما نوجّهه بصمت لمساحة غلط.
@@ -81,7 +81,7 @@ function LoginPage() {
       // roleId=1 ("مدير النظام") هو الوحيد المتاح فعليًا على الباك اند حاليًا؛
       // أي نوع تاني (أو لو تعذّر جلب النوع) بيرجع لصفحة طالب افتراضية —
       // راجع fetchUserType بملف auth.ts.
-      navigate({ href: roleHome(profile?.roleName ?? null, profile?.roleId === 1), replace: true });
+      navigate({ href: roleHomeForKey(resolveRoleKey(profile)), replace: true });
     } catch (err) {
       const message = getErrorMessage(err, bi("تعذّر تسجيل الدخول", "Sign in failed"));
       trackEvent("login_failed", { message });

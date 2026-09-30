@@ -10,8 +10,9 @@ import { AuthShell, AuthField } from "@/components/site/auth-shell";
 import { currentUserHome } from "@/lib/session-home";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
+import { findUserTypeForRole } from "@/integrations/backend/user-types";
 import { genderNameEn } from "@/lib/gender";
-import { roleHome, useBi } from "@/lib/bi";
+import { roleHomeForKey, useBi } from "@/lib/bi";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
 import {
@@ -61,9 +62,6 @@ function buildSchema(bi: ReturnType<typeof useBi>) {
   });
 }
 
-// اسم نوع "المعلم" متل ما هو مزروع فعليًا بالباك اند (UserSeed.cs).
-const TEACHER_ROLE_NAME = "المعلم";
-
 function TeacherRegisterPage() {
   const { t } = useTranslation();
   const bi = useBi();
@@ -104,7 +102,7 @@ function TeacherRegisterPage() {
     }
     // مطابقة بالاسم فقط (راجع التعليق بـsignup.tsx: المطابقة بالـid خطرة لو اختلفت
     // أرقام الأنواع بقاعدة البيانات عن ثوابت الكود).
-    const userType = options?.roles.find((r) => r.name === TEACHER_ROLE_NAME);
+    const userType = findUserTypeForRole(options?.roles, "teacher");
     if (!userType) {
       toast.error(
         bi(
@@ -134,7 +132,7 @@ function TeacherRegisterPage() {
       }
       trackEvent("signup_success", { role: "teacher" });
       toast.success(bi("تم إنشاء حساب المعلّم بنجاح", "Teacher account created successfully"));
-      navigate({ href: roleHome(profile?.roleName ?? TEACHER_ROLE_NAME), replace: true });
+      navigate({ href: roleHomeForKey(profile?.roleKey ?? "teacher"), replace: true });
     } catch (err) {
       trackEvent("signup_failed", { role: "teacher" });
       toast.error(getErrorMessage(err, bi("تعذّر إنشاء الحساب", "Failed to create account")));

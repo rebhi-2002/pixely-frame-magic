@@ -30,8 +30,7 @@ describe("getOnboardingSteps", () => {
     expect(getOnboardingSteps("parent")).toEqual([]);
   });
 
-  it("المشرف والأدمن بدون خطوات (ما بُنيت لهم)", () => {
-    expect(getOnboardingSteps("supervisor")).toEqual([]);
+  it("الأدمن بدون خطوات (ما بُنيت له)", () => {
     expect(getOnboardingSteps("admin")).toEqual([]);
   });
 });

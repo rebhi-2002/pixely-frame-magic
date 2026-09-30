@@ -69,7 +69,7 @@ function Body() {
       icon="LayoutDashboard"
       subtitle={bi(description, description)}
     >
-      <WelcomeBanner subtitle={[bi("أهلاً بك 👋", "Welcome 👋")]} />
+      <WelcomeBanner subtitle={["أهلاً بك 👋", "Welcome 👋"]} />
 
       <StatGrid
         items={[

@@ -6,6 +6,7 @@ import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { OnboardingChecklist } from "@/components/app/onboarding-checklist";
 import { wasJustRegistered } from "@/integrations/backend/auth";
 import { getStudentDashboard } from "@/integrations/backend/student";
+import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
 import { authPageHead } from "@/lib/seo";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function Body() {
   const bi = useBi();
   const queryClient = useQueryClient();
+  const { session } = useSession();
   const justRegistered = wasJustRegistered();
 
   const {
@@ -82,7 +84,14 @@ function Body() {
         "Your active courses, upcoming schedule, and wallet — at a glance.",
       )}
     >
-      {justRegistered && <OnboardingChecklist />}
+      {justRegistered && session && (
+        <OnboardingChecklist
+          userId={session.userId}
+          roleKey={session.roleKey}
+          showInitially={justRegistered}
+          walletBalance={dashboard.walletBalance}
+        />
+      )}
 
       <WelcomeBanner
         subtitle={[`أهلاً ${dashboard.studentName} 👋`, `Welcome ${dashboard.studentName} 👋`]}

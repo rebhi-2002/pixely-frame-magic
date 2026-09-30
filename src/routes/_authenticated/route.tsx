@@ -7,7 +7,6 @@ import {
   clearStoredSession,
   getStoredUserId,
   isAuthenticated,
-  isDemoSession,
   verifyServerSession,
 } from "@/integrations/backend/auth";
 import { AppSidebar } from "@/components/admin/app-sidebar";
@@ -18,20 +17,10 @@ import { DashboardSkeleton } from "@/components/app/dashboard-skeleton";
 import { SESSION_EXPIRED_EVENT } from "@/integrations/backend/client";
 import { useAccess } from "@/hooks/use-access";
 import { useBi } from "@/lib/bi";
-import { env } from "@/lib/env";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const demoAllowed = env.ENABLE_DEMO_LOGIN;
-
-    // Demo routes remain available in local dev, or on a deployment where
-    // VITE_ENABLE_DEMO_LOGIN is explicitly set — same condition everywhere
-    // demo mode is checked (auth.ts, auth-middleware.ts, login.tsx).
-    if (demoAllowed && isDemoSession()) {
-      return { user: { id: getStoredUserId() ?? "u-demo" } };
-    }
-
     if (!isAuthenticated() || !(await verifyServerSession())) {
       throw redirect({ to: "/login" });
     }
@@ -70,13 +59,11 @@ function AuthenticatedLayout() {
 
   /* أي طلب للباك اند رجع 401 (الكوكي انتهت/ما وصلت) = الجلسة الفعلية انتهت رغم
      إن الواجهة لسا مخزّنة "مسجّل دخول". بدل ما تضل الصفحة عالقة بأخطاء، منمسح
-     الجلسة المحلية ونرجّع المستخدم لصفحة الدخول. جلسات الديمو ما بتتأثر (ما
-     بتنادي الباك اند). */
+     الجلسة المحلية ونرجّع المستخدم لصفحة الدخول. */
   useEffect(() => {
     let handled = false;
     const onExpired = () => {
       if (handled) return;
-      if (env.ENABLE_DEMO_LOGIN && isDemoSession()) return;
       handled = true;
       clearStoredSession();
       queryClient.clear();

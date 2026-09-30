@@ -14,6 +14,8 @@ import {
   Wallet,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, RetryButton } from "@/components/app/feedback-states";
@@ -109,9 +111,9 @@ function CoursesPage() {
 
   return (
     <PublicLayout>
-      <section className="surface-grid border-b border-border">
+      <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16">
-          <h1 className="text-4xl font-bold text-foreground md:text-5xl">{t("courses.h1")}</h1>
+          <h1 className="text-4xl font-extrabold text-foreground md:text-5xl">{t("courses.h1")}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("courses.sub")}</p>
 
           <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
@@ -122,7 +124,7 @@ function CoursesPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t("courses.searchPlaceholder")}
                 aria-label={t("courses.searchPlaceholder")}
-                className="h-11 w-full rounded-xl border border-border bg-card ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                className="h-11 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
               />
             </div>
             {subjects.length > 0 && (
@@ -132,11 +134,12 @@ function CoursesPage() {
                     key={s}
                     type="button"
                     onClick={() => setSubject(s)}
-                    className={`hover-press rounded-lg border px-3 py-2 text-xs font-bold ${
+                    className={cn(
+                      "rounded-lg border-2 px-3 py-2 text-xs font-semibold transition-colors",
                       subject === s
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-muted-foreground hover:text-foreground"
-                    }`}
+                        ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
+                        : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
+                    )}
                   >
                     {s === "__all" ? t("courses.all") : s}
                   </button>
@@ -155,11 +158,12 @@ function CoursesPage() {
                   key={l}
                   type="button"
                   onClick={() => setLevel(l)}
-                  className={`hover-press rounded-lg border px-3 py-1.5 text-xs font-bold ${
+                  className={cn(
+                    "rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-colors",
                     level === l
-                      ? "border-primary bg-primary/12 text-primary"
-                      : "border-border bg-card text-muted-foreground hover:text-foreground"
-                  }`}
+                      ? "border-[var(--border-strong)] bg-primary/12 text-primary"
+                      : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
+                  )}
                 >
                   {l === "__all" ? t("courses.all") : l}
                 </button>
@@ -178,7 +182,7 @@ function CoursesPage() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse overflow-hidden rounded-2xl border border-border bg-card"
+                className="animate-pulse overflow-hidden rounded-2xl border-2 border-[var(--border-strong)] bg-card"
               >
                 <div className="h-28 w-full bg-secondary" />
                 <div className="space-y-3 p-6">
@@ -221,11 +225,11 @@ function CoursesPage() {
             {items.length === 0 ? (
               // لا يوجد أي كورس منشور بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
               // لبحثك" تحت: صادقة وواضحة (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
-              <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
+              <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)]/60 bg-card p-10 text-center">
                 <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Sparkles aria-hidden="true" className="size-6" />
                 </span>
-                <h2 className="text-base font-bold text-foreground">
+                <h2 className="text-base font-extrabold text-foreground">
                   {t("courses.emptyCatalogTitle")}
                 </h2>
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -233,7 +237,7 @@ function CoursesPage() {
                 </p>
               </div>
             ) : filtered.length === 0 ? (
-              <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+              <p className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-8 text-center text-sm text-muted-foreground">
                 {t("courses.empty")}
               </p>
             ) : (
@@ -245,13 +249,13 @@ function CoursesPage() {
                   return (
                     <article
                       key={c.id}
-                      className="hover-lift shadow-elevation-1 flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
+                      className="flex flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-strong)] bg-card shadow-[var(--shadow-brutal)]"
                     >
                       <CourseCover subject={subjectName} accent={subjectAccent(subjectName)} />
                       <div className="flex flex-1 flex-col p-6">
                         <div className="flex items-center justify-between">
                           {subjectName && (
-                            <span className="rounded-lg bg-primary/12 px-2.5 py-1 text-xs font-bold text-primary">
+                            <span className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary">
                               {subjectName}
                             </span>
                           )}
@@ -261,7 +265,7 @@ function CoursesPage() {
                         </div>
                         {deliveryLabel && (
                           <div className="mt-2 flex items-center">
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-bold text-secondary-foreground">
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
                               <DeliveryIcon className="size-3.5" />
                               {bi(...deliveryLabel)}
                             </span>
@@ -270,7 +274,7 @@ function CoursesPage() {
                         <Link
                           to="/course/$id"
                           params={{ id: String(c.id) }}
-                          className="mt-4 block text-base font-bold text-foreground hover:text-primary"
+                          className="mt-4 block text-base font-extrabold text-foreground hover:text-primary"
                         >
                           {c.title}
                         </Link>
@@ -305,7 +309,7 @@ function CoursesPage() {
                             {c.teacherName || bi("معلّم", "Teacher")}
                           </Link>
                           {typeof c.rating === "number" && (
-                            <span className="ms-auto inline-flex items-center gap-1 text-xs font-bold text-foreground">
+                            <span className="ms-auto inline-flex items-center gap-1 text-xs font-semibold text-foreground">
                               <Star className="size-3.5 fill-primary text-primary" />
                               {c.rating.toFixed(1)}
                             </span>
@@ -345,7 +349,7 @@ function CoursesPage() {
                         </div>
                         <Link
                           to={isSignedIn ? "/my-courses" : "/signup"}
-                          className="hover-press mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+                          className={buttonVariants({ variant: "default", className: "mt-5 h-auto px-4 py-2.5 text-sm" })}
                         >
                           {t(isSignedIn ? "courses.open" : "courses.enroll")}
                         </Link>

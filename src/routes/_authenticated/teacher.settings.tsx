@@ -64,11 +64,19 @@ function Body() {
   const addSlot = () =>
     setSlots((s) => [
       ...s,
-      { dayOfWeek: 0, startTime: "09:00:00", endTime: "10:00:00", teachingMode: 2 },
+      {
+        dayOfWeek: 0,
+        startTime: "09:00:00",
+        endTime: "10:00:00",
+        teachingMode: 2,
+        effectiveFrom: null,
+        effectiveTo: null,
+      },
     ]);
   const removeSlot = (i: number) => setSlots((s) => s.filter((_, idx) => idx !== i));
   const updateSlot = (i: number, patch: Partial<AvailabilitySlotInput>) =>
     setSlots((s) => s.map((slot, idx) => (idx === i ? { ...slot, ...patch } : slot)));
+  const todayIso = () => new Date().toISOString().slice(0, 10);
 
   if (notLinked) {
     return (
@@ -111,11 +119,11 @@ function Body() {
       >
         {slots.length ? (
           <div className="space-y-3">
-            {slots.map((slot, i) => (
-              <div
-                key={i}
-                className="flex flex-wrap items-center gap-2 rounded-xl border border-border p-3"
-              >
+            {slots.map((slot, i) => {
+              const hasRange = slot.effectiveFrom != null || slot.effectiveTo != null;
+              return (
+              <div key={i} className="space-y-2 rounded-xl border border-border p-3">
+                <div className="flex flex-wrap items-center gap-2">
                 <Select
                   value={String(slot.dayOfWeek)}
                   onValueChange={(v) => updateSlot(i, { dayOfWeek: Number(v) })}
@@ -164,8 +172,47 @@ function Body() {
                 >
                   <Trash2 className="size-4" />
                 </Button>
+                </div>
+
+                {hasRange ? (
+                  <div className="flex flex-wrap items-center gap-2 ps-1">
+                    <span className="text-xs text-muted-foreground">
+                      {bi("سارٍ من", "Valid from")}
+                    </span>
+                    <Input
+                      type="date"
+                      value={slot.effectiveFrom?.slice(0, 10) ?? ""}
+                      onChange={(e) => updateSlot(i, { effectiveFrom: e.target.value || null })}
+                      className="w-40"
+                    />
+                    <span className="text-xs text-muted-foreground">{bi("لحد", "until")}</span>
+                    <Input
+                      type="date"
+                      value={slot.effectiveTo?.slice(0, 10) ?? ""}
+                      onChange={(e) => updateSlot(i, { effectiveTo: e.target.value || null })}
+                      className="w-40"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-xs text-muted-foreground"
+                      onClick={() => updateSlot(i, { effectiveFrom: null, effectiveTo: null })}
+                    >
+                      {bi("إلغاء الفترة (دائم)", "Clear (always valid)")}
+                    </Button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="ps-1 text-xs font-semibold text-primary hover:underline"
+                    onClick={() => updateSlot(i, { effectiveFrom: todayIso(), effectiveTo: null })}
+                  >
+                    {bi("+ تحديد فترة صلاحية (اختياري)", "+ Set a valid-through date range (optional)")}
+                  </button>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <EmptyState

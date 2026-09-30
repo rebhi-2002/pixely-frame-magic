@@ -77,10 +77,8 @@ function Body() {
     >
       <WelcomeBanner
         subtitle={[
-          bi(
-            "كل دروسك وحجوزاتك القادمة بمكان واحد.",
-            "All your upcoming lessons and bookings in one place.",
-          ),
+          "كل دروسك وحجوزاتك القادمة بمكان واحد.",
+          "All your upcoming lessons and bookings in one place.",
         ]}
       />
 

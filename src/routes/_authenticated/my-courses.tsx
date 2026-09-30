@@ -81,7 +81,7 @@ function Body() {
       )}
     >
       <WelcomeBanner
-        subtitle={[bi("متابعة دروسك وحجوزاتك.", "Keep track of your lessons and bookings.")]}
+        subtitle={["متابعة دروسك وحجوزاتك.", "Keep track of your lessons and bookings."]}
       />
 
       <Panel
