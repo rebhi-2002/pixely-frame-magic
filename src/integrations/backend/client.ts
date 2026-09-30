@@ -209,59 +209,20 @@ export const apiClient = {
  * نصوص تقنية زي "Failed to fetch" للواجهة.
  */
 /**
- * جميع رسائل الخطأ العربية الثابتة يلي بترميها server functions لوحات
- * الديمو (rbac.functions.ts وأخواتها). هاي الدوال تشتغل على السيرفر
- * (TanStack Start) مش بالمتصفح، فما تقدر تقرأ document.documentElement.lang
- * زي باقي الحلول — فبدل ما نمرر locale كـ parameter لكل نداء (تغيير كبير
- * يلمس عشرات نقاط الاستدعاء)، منترجم هون على مستوى العرض بس، بدون أي لمس
- * لتعريف الدوال نفسها أو أي مكان بينادها.
+ * رسائل خطأ عربية ثابتة تترجَم يدوياً للعرض بالإنجليزي — الدالة الرامية لها
+ * تشتغل أحياناً بمسار لا يقدر يقرأ document.documentElement.lang (auth.ts
+ * أثناء التحقق من الجلسة)، فمنترجمها هون على مستوى العرض بس.
  */
-const DEMO_ERROR_TRANSLATIONS: Record<string, string> = {
-  "الإشعار غير موجود": "Notification not found",
-  "الاختبار غير موجود": "Quiz not found",
-  "الامتحان غير موجود": "Exam not found",
-  "البلاغ غير موجود": "Report not found",
-  "التقرير غير موجود": "Report not found",
-  "الحدث غير موجود": "Event not found",
-  "الحركة غير موجودة": "Transaction not found",
-  "الخطأ غير موجود": "Mistake entry not found",
-  "الدخول التجريبي متاح في بيئة التطوير فقط": "Demo login is only available in development",
-  "الدعوة غير موجودة": "Invitation not found",
-  "السؤال غير موجود": "Question not found",
-  "الشارة غير موجودة": "Badge not found",
-  "الشهادة غير موجودة": "Certificate not found",
-  "الطالب غير موجود": "Student not found",
-  "الطلب غير موجود": "Request not found",
-  "العملية غير موجودة": "Operation not found",
-  "العنصر غير موجود": "Item not found",
-  "الكورس غير موجود": "Course not found",
-  "المادة غير موجودة": "Subject not found",
-  "المجموعة غير موجودة": "Group not found",
-  "المستخدم غير موجود": "User not found",
-  "المعلم غير موجود": "Teacher not found",
-  "المهمة غير موجودة": "Task not found",
-  "النتيجة غير موجودة": "Result not found",
-  "الوحدة غير موجودة": "Module not found",
-  "اليوم غير موجود": "Day not found",
-  "تسجيل المعلّمين غير متاح حالياً — قيد الربط مع الباك اند الجديد.":
-    "Teacher registration isn't available yet — being connected to the new backend.",
+const KNOWN_ERROR_TRANSLATIONS: Record<string, string> = {
   "تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي":
     "Signed in, but couldn't verify your profile",
-  "لا يوجد بريد إلكتروني لهذا المستخدم": "This user has no email address",
-  "ليس لديك صلاحية لتنفيذ هذا الإجراء": "You don't have permission to do this",
-  "نوع المستخدم غير موجود": "User type not found",
-  "هذا الإجراء متاح لمدير النظام فقط": "This action is only available to the system admin",
-  "إرسال رابط إعادة تعيين كلمة المرور غير متاح بعد — قيد ربطه بالباك اند الجديد":
-    "Sending a password reset link isn't available yet — being connected to the new backend",
-  "إنشاء حساب جديد غير متاح حالياً — قيد الربط مع الباك اند الجديد.":
-    "Creating a new account isn't available yet — being connected to the new backend.",
 };
 
 export function getErrorMessage(err: unknown, fallback: string): string {
   if (err instanceof ApiError) return err.userMessage;
   if (err instanceof Error) {
-    if (currentLang() === "en" && DEMO_ERROR_TRANSLATIONS[err.message]) {
-      return DEMO_ERROR_TRANSLATIONS[err.message];
+    if (currentLang() === "en" && KNOWN_ERROR_TRANSLATIONS[err.message]) {
+      return KNOWN_ERROR_TRANSLATIONS[err.message];
     }
     return err.message;
   }

@@ -4,6 +4,8 @@ import type { UserRow } from "@/lib/rbac-types";
 export interface BackendUserType {
   id: number;
   name: string;
+  /** مفتاح الدور الثابت (admin|student|teacher|parent). */
+  code?: string | null;
 }
 
 export interface BackendGender {

@@ -4,6 +4,8 @@
 // المحلية مؤقتة ولا تُعدّ بديلًا عن التحقق على الخادم.
 
 import { loadBackendUserOptions } from "./admin-users";
+import type { RoleKey } from "@/lib/bi";
+import { parseRoleKey } from "./user-types";
 import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
 
 const AUTH_STORAGE_KEY = "academia.auth";
@@ -31,13 +33,14 @@ export interface StoredProfile {
   avatar?: string | null;
   roleId?: number | string | null;
   roleName?: string | null;
+  /** مفتاح الدور الثابت من الباك اند (admin|student|teacher|parent) — المرجع الوحيد للتوجيه والصلاحيات. */
+  roleKey?: RoleKey | null;
 }
 
 interface StoredSession {
   email: string | null;
   loggedInAt: number;
   userId: string;
-  isDemo: boolean;
   profile: StoredProfile | null;
   /** true فقط إذا صار تسجيل الحساب بهالجلسة بالذات (لحظة التسجيل، مو
    * تسجيل دخول لاحق) — إشارة حقيقية الوحيدة المتوفرة لدينا لـ"مستخدم
@@ -55,17 +58,19 @@ type ProfileEnvelope = {
   UserTypeId?: number | null;
   userTypeName?: string | null;
   UserTypeName?: string | null;
+  userTypeCode?: string | null;
+  UserTypeCode?: string | null;
 };
 
-function roleFromEnvelope(payload: ProfileEnvelope): {
-  roleId: number | null;
-  roleName: string | null;
-} {
+type ResolvedRole = { roleId: number | null; roleName: string | null; roleKey: RoleKey | null };
+
+function roleFromEnvelope(payload: ProfileEnvelope): ResolvedRole {
   const id = payload?.userTypeId ?? payload?.UserTypeId;
   const name = payload?.userTypeName ?? payload?.UserTypeName;
   return {
     roleId: typeof id === "number" ? id : null,
     roleName: typeof name === "string" && name.length > 0 ? name : null,
+    roleKey: parseRoleKey(payload?.userTypeCode ?? payload?.UserTypeCode),
   };
 }
 
@@ -194,6 +199,7 @@ function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
     avatar: typeof raw.avatar === "string" ? raw.avatar : null,
     roleId: raw.roleId ?? null,
     roleName: typeof raw.roleName === "string" ? raw.roleName : null,
+    roleKey: parseRoleKey(raw.roleKey),
   };
 }
 
@@ -209,9 +215,7 @@ function normalizeProfile(payload: ProfileEnvelope): StoredProfile | null {
  * "fetchUserType failed" هون: غالبًا الاستجابة من CreateEditModal رجعت خطأ
  * أو شكل مختلف عن المتوقع.
  */
-async function fetchUserType(
-  userId: string,
-): Promise<{ roleId: number | null; roleName: string | null }> {
+async function fetchUserType(userId: string): Promise<ResolvedRole> {
   try {
     const modal = await apiClient.get<{
       user?: { userTypeId?: number | null; userType?: { name?: string | null } | null } | null;
@@ -226,10 +230,10 @@ async function fetchUserType(
         modal,
       );
     }
-    return { roleId, roleName };
+    return { roleId, roleName, roleKey: null };
   } catch (err) {
     console.error("[auth] fetchUserType failed — سيتم التعامل مع المستخدم كطالب افتراضيًا:", err);
-    return { roleId: null, roleName: null };
+    return { roleId: null, roleName: null, roleKey: null };
   }
 }
 
@@ -270,12 +274,9 @@ async function fetchProfilePayloadAfterAuth(kind: "login" | "register"): Promise
 
 /** الدور من ردّ MyProfileModal مباشرة (الأدق)، وإلا fallback لنداء CreateEditModal
  * (بيشتغل للأدمن بس — غير الأدمن بياخد 403 فبنرجع null). */
-async function resolveRole(
-  payload: ProfileEnvelope,
-  userId: string,
-): Promise<{ roleId: number | null; roleName: string | null }> {
+async function resolveRole(payload: ProfileEnvelope, userId: string): Promise<ResolvedRole> {
   const fromEnvelope = roleFromEnvelope(payload);
-  if (fromEnvelope.roleId != null) return fromEnvelope;
+  if (fromEnvelope.roleKey != null || fromEnvelope.roleId != null) return fromEnvelope;
   return fetchUserType(userId);
 }
 
@@ -301,12 +302,12 @@ export async function login(email: string, password: string): Promise<void> {
   const userType = await resolveRole(payload, profile.id);
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
+  profile.roleKey = userType.roleKey;
 
   writeStoredSession({
     email: profile.email,
     loggedInAt: Date.now(),
     userId: profile.id,
-    isDemo: false,
     profile,
   });
 }
@@ -318,8 +319,8 @@ export interface RegisterInput {
   password: string;
   confirmPassword: string;
   genderId: number;
-  /** نوع المستخدم (3=الطالب، 5=ولي الامر، 4=المعلم...) — راجع
-   * listBackendUserTypes() بـ admin-permissions.ts لجلبها ديناميكيًا. */
+  /** رقم نوع المستخدم من RegistrationOptions (يختلف بين البيئات) — اختره بـ findUserTypeForRole(roles, role)
+   * حسب الـcode، ما تكتب رقم بالكود. */
   userTypeId: number;
 }
 
@@ -363,24 +364,20 @@ export async function register(input: RegisterInput): Promise<void> {
   const userType = await resolveRole(payload, profile.id);
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
+  profile.roleKey = userType.roleKey;
 
   writeStoredSession({
     email: profile.email,
     loggedInAt: Date.now(),
     userId: profile.id,
-    isDemo: false,
     profile,
     justRegistered: true,
   });
 }
 
-export function isDemoSession(): boolean {
-  return readStoredSession()?.isDemo === true;
-}
-
 /** يتحقق من جلسة ASP.NET Identity من خلال endpoint الخادم. */
 export async function verifyServerSession(): Promise<boolean> {
-  if (typeof window === "undefined" || isDemoSession()) return false;
+  if (typeof window === "undefined") return false;
 
   try {
     const payload = await apiClient.get<ProfileEnvelope>("/api/User/MyProfileModal");
@@ -398,18 +395,19 @@ export async function verifyServerSession(): Promise<boolean> {
     const fromEnvelope = roleFromEnvelope(payload);
     profile.roleId = fromEnvelope.roleId ?? previous?.roleId ?? null;
     profile.roleName = fromEnvelope.roleName ?? previous?.roleName ?? null;
+    profile.roleKey = fromEnvelope.roleKey ?? previous?.roleKey ?? null;
     if (profile.roleId == null) {
       const fetched = await fetchUserType(profile.id);
       profile.roleId = fetched.roleId;
       profile.roleName = fetched.roleName;
+      profile.roleKey = profile.roleKey ?? fetched.roleKey;
     }
 
     writeStoredSession({
       email: profile.email,
       loggedInAt: current?.loggedInAt ?? Date.now(),
       userId: profile.id,
-      isDemo: false,
-      profile,
+        profile,
     });
     return true;
   } catch (err) {
@@ -427,7 +425,7 @@ export function clearStoredSession(): void {
 }
 
 export interface RegistrationOptions {
-  roles: Array<{ id: number; name: string }>;
+  roles: Array<{ id: number; name: string; code?: string | null }>;
   genders: Array<{ id: number; name: string }>;
 }
 
@@ -445,7 +443,7 @@ export async function loadRegistrationOptions(): Promise<RegistrationOptions> {
   try {
     const result = await apiClient.get<{
       genders?: Array<{ id: number; name: string }> | null;
-      userTypes?: Array<{ id: number; name: string }> | null;
+      userTypes?: Array<{ id: number; name: string; code?: string | null }> | null;
     }>("/api/Auth/RegistrationOptions");
     primary = { genders: result?.genders ?? [], roles: result?.userTypes ?? [] };
   } catch (err) {
@@ -468,12 +466,9 @@ export async function loadRegistrationOptions(): Promise<RegistrationOptions> {
 }
 
 export async function logout(): Promise<void> {
-  const wasDemo = readStoredSession()?.isDemo;
   try {
-    if (!wasDemo) {
-      // الباك إند يعرّف Logout كـ POST.
-      await apiClient.post<OperationResult>("/api/Auth/Logout");
-    }
+    // الباك إند يعرّف Logout كـ POST.
+    await apiClient.post<OperationResult>("/api/Auth/Logout");
   } catch (err) {
     if (!(err instanceof ApiError)) console.error(err);
   } finally {
@@ -506,8 +501,8 @@ export function wasJustRegistered(): boolean {
   return readStoredSession()?.justRegistered === true;
 }
 
-/** UserTypeId=1 ("مدير النظام") — الوحيد المتاح فعليًا على الباك اند حاليًا. */
+/** أدمن حقيقي = roleKey "admin" من الباك اند (الرقم 1 احتياط للجلسات القديمة بدون roleKey). */
 export function isRealAdmin(): boolean {
-  const session = readStoredSession();
-  return session?.isDemo === false && session.profile?.roleId === 1;
+  const p = readStoredSession()?.profile;
+  return p?.roleKey === "admin" || (p?.roleKey == null && p?.roleId === 1);
 }
