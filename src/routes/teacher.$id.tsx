@@ -1,7 +1,7 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Award, BookOpen, Calendar, MapPin, Radio, Star } from "lucide-react";
+import { Award, BookOpen, Calendar, Clock3, MapPin, Radio, Star } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
@@ -174,6 +174,23 @@ function TeacherProfilePage() {
               {teacher.name || bi("معلّم", "Teacher")}
             </h1>
           </div>
+
+          {/* FR-T05/T06: الحجز المباشر غير مفعّل بعد بالباك اند. زر معطَّل
+              صريح بدل إخفائه تمامًا أو ربطه بوظيفة غير موجودة — حالة صادقة
+              واضحة، لا خداع. */}
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            title={bi("الحجز المباشر غير متاح بعد", "Direct booking isn't available yet")}
+            className={buttonVariants({
+              variant: "soft",
+              className: "mt-6 h-auto cursor-not-allowed gap-2 px-6 py-3 text-sm opacity-70",
+            })}
+          >
+            <Clock3 className="size-4" />
+            {bi("الحجز المباشر قريباً", "Direct booking coming soon")}
+          </button>
 
           {/* أرقام حقيقية بس. لا "موثّق" ولا "4.8" ولا "1,240 طالب" ثابتة لكل معلم كما كان قبل:
               الباك اند ما عنده علم توثيق ولا عدد طلاب للمعلم، ولو ما في تقييمات منعرض

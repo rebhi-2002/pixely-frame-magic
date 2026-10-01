@@ -54,6 +54,7 @@ const features = [
   { icon: Video, key: "simulator", flagship: false },
   { icon: Wallet, key: "mistakes", flagship: true },
   { icon: Store, key: "courses", flagship: false },
+  { icon: ClipboardCheck, key: "review", flagship: false },
 ] as const;
 
 /** معاينة مصغّرة بنفس أسلوب HeroMockup (إعادة بناء HTML/CSS، لا صورة ولا SVG
@@ -310,7 +311,7 @@ function Landing() {
           ))}
       </div>
 
-        <div className="mt-4 grid gap-3 border-2 border-[var(--border-strong)] bg-card/60 p-5 sm:grid-cols-3">
+        <div className="mt-4 grid gap-3 border-2 border-[var(--border-strong)] bg-card/60 p-5 sm:grid-cols-2 lg:grid-cols-4">
           {features
             .filter((f) => !f.flagship)
             .map((f, i) => (
@@ -318,7 +319,7 @@ function Landing() {
                 key={f.key}
                 className={cn(
                   "flex items-center gap-3 py-1",
-                  i > 0 && "sm:border-s-2 sm:border-[var(--border-strong)]/40 sm:ps-3",
+                  i > 0 && "lg:border-s-2 lg:border-[var(--border-strong)]/40 lg:ps-3",
                 )}
               >
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">

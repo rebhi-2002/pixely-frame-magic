@@ -5,7 +5,7 @@ import { Clock, Headset, Mail, MessageSquareText, Send } from "lucide-react";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
-import { Reveal } from "@/components/ui/reveal";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export const Route = createFileRoute("/contact")({
   head: (ctx) => createSeoHead("/contact", localeFromSearch(ctx.match.search)),
@@ -56,19 +56,18 @@ function ContactPage() {
 
   return (
     <PublicLayout>
-      <section className="surface-mesh border-b border-border">
+      <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-5xl px-5 py-16">
           <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
             <MessageSquareText className="size-6" />
           </span>
-          <h1 className="mt-5 text-4xl font-bold text-foreground">{t("contact.h1")}</h1>
+          <h1 className="mt-5 text-4xl font-extrabold text-foreground">{t("contact.h1")}</h1>
           <p className="mt-3 max-w-xl text-lg text-muted-foreground">{t("contact.sub")}</p>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-5xl gap-6 px-5 py-16 lg:grid-cols-[1.3fr_0.9fr]">
-        <Reveal>
-          <div className="shadow-elevation-1 rounded-2xl border border-border bg-card p-6 sm:p-8">
+        <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8">
             {done ? (
               <div className="flex flex-col items-center py-10 text-center">
                 <span className="flex size-14 items-center justify-center rounded-full bg-success/12 text-success">
@@ -89,7 +88,7 @@ function ContactPage() {
                     setMessage("");
                     setTopic("student");
                   }}
-                  className="hover-press mt-6 rounded-xl border border-border bg-background px-5 py-2.5 text-sm font-bold text-foreground hover:bg-secondary"
+                  className={buttonVariants({ variant: "outline", className: "mt-6 h-auto px-5 py-2.5 text-sm" })}
                 >
                   {t("contact.success.again")}
                 </button>
@@ -108,7 +107,7 @@ function ContactPage() {
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
+                      className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
                     />
                     {errors.name && (
                       <p className="mt-1.5 text-xs text-destructive">{errors.name}</p>
@@ -126,7 +125,7 @@ function ContactPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
+                      className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
                     />
                     {errors.email && (
                       <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
@@ -145,7 +144,7 @@ function ContactPage() {
                     id="topic"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value as (typeof TOPIC_KEYS)[number])}
-                    className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
+                    className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
                   >
                     {TOPIC_KEYS.map((k) => (
                       <option key={k} value={k}>
@@ -168,7 +167,7 @@ function ContactPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t("contact.form.messagePlaceholder")}
-                    className="w-full resize-none rounded-xl border border-border bg-background p-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                    className="w-full resize-none rounded-xl border-2 border-[var(--border-strong)] bg-background p-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
                   />
                   {errors.message && (
                     <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>
@@ -178,7 +177,7 @@ function ContactPage() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="btn-shine hover-press inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground disabled:opacity-60 sm:w-auto"
+                  className={buttonVariants({ variant: "default", className: "h-auto w-full gap-2 px-6 py-3.5 text-sm disabled:opacity-60 sm:w-auto" })}
                 >
                   <Send className="size-4" />
                   {sending ? t("contact.form.sending") : t("contact.form.submit")}
@@ -186,11 +185,9 @@ function ContactPage() {
               </form>
             )}
           </div>
-        </Reveal>
 
-        <Reveal delay={0.08}>
-          <div className="space-y-4">
-            <div className="shadow-elevation-1 rounded-2xl border border-border bg-card p-6">
+        <div className="space-y-4">
+            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
               <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
                 <Mail className="size-5" />
               </span>
@@ -207,7 +204,7 @@ function ContactPage() {
               </a>
             </div>
 
-            <div className="shadow-elevation-1 rounded-2xl border border-border bg-card p-6">
+            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
               <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
                 <Clock className="size-5" />
               </span>
@@ -219,7 +216,7 @@ function ContactPage() {
               </p>
             </div>
 
-            <div className="shadow-elevation-1 rounded-2xl border border-border bg-card p-6">
+            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
               <span className="flex size-10 items-center justify-center rounded-xl bg-info/12 text-info">
                 <Headset className="size-5" />
               </span>
@@ -235,7 +232,6 @@ function ContactPage() {
               </Link>
             </div>
           </div>
-        </Reveal>
       </section>
     </PublicLayout>
   );
