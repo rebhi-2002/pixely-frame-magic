@@ -132,7 +132,8 @@ export function UsersPage() {
     }
     if (!form.phone.trim()) return bi("رقم الجوال مطلوب", "Phone number is required");
     if (form.gender_id == null) return bi("الجنس مطلوب", "Gender is required");
-    if (!editingId) {
+    // عند الإضافة: مطلوبة. عند التعديل: اختيارية، لكن لو كتب وحدة لازم تتطابق مع التأكيد.
+    if (!editingId || form.password || form.confirmPassword) {
       if (form.password.length < 6) {
         return bi("كلمة المرور 6 أحرف على الأقل", "Password must be at least 6 characters");
       }
@@ -443,10 +444,13 @@ export function UsersPage() {
                 </SelectContent>
               </Select>
             </div>
-            {!editingId && (
-              <>
+            <>
                 <div className="space-y-1.5">
-                  <Label htmlFor="u-password">{bi("كلمة المرور", "Password")}</Label>
+                  <Label htmlFor="u-password">
+                    {editingId
+                      ? bi("كلمة مرور جديدة (اختياري)", "New password (optional)")
+                      : bi("كلمة المرور", "Password")}
+                  </Label>
                   <Input
                     id="u-password"
                     type="password"
@@ -465,8 +469,7 @@ export function UsersPage() {
                     onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
                   />
                 </div>
-              </>
-            )}
+            </>
             <div className="space-y-1.5">
               <Label>{bi("نوع المستخدم", "User type")}</Label>
               <Select

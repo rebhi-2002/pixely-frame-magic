@@ -69,7 +69,11 @@ export function BackendPermissionsPage() {
   }, [pages, bi]);
 
   const saveMutation = useMutation({
-    mutationFn: () => saveGrantedPageIds(userTypeId as number, Array.from(checked)),
+    mutationFn: () => saveGrantedPageIds(
+        userTypeId as number,
+        Array.from(checked),
+        userTypes?.find((t) => t.id === userTypeId)?.name,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["backend-permissions", userTypeId] });
       toast.success(bi("تم حفظ الصلاحيات", "Permissions saved"));

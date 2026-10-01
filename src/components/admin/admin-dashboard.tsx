@@ -12,7 +12,7 @@ import {
 } from "@/integrations/backend/wallet";
 import { listAllCoursesForAdminFull } from "@/integrations/backend/courses";
 import { useBi } from "@/lib/bi";
-import { parseRoleKey } from "@/integrations/backend/user-types";
+import { roleKeyOfUserType } from "@/integrations/backend/user-types";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 // أسماء العرض حسب مفتاح الدور الثابت (code) — الأرقام بتيجي من الباك اند وبتختلف بين البيئات.
@@ -40,7 +40,7 @@ export function AdminDashboardPage() {
       const { roles } = await loadBackendUserOptions();
       return Promise.all(
         roles.map(async (t) => {
-          const code = parseRoleKey(t.code) ?? "";
+          const code = roleKeyOfUserType(t) ?? "";
           const labels = USER_TYPE_LABELS[code] ?? { nameAr: t.name, nameEn: t.name };
           return {
             id: t.id,
@@ -103,7 +103,7 @@ export function AdminDashboardPage() {
     courses,
   ];
   const isLoading = queries.some((q) => q.isLoading);
-
+  
   // const hasError = queries.some((q) => q.isError);
 
   // الكورسات ثانوية بهالصفحة: لو Course/GetAll فشل (500) بنعرض باقي اللوحة بدل ما نخفيها كلها.
