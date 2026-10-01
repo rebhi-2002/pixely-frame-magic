@@ -132,6 +132,7 @@ function SignupPage() {
         confirmPassword: parsed.data.password,
         genderId,
         userTypeId: userType.id,
+        roleKey: role,
       });
       const profile = getStoredProfile();
       if (profile) {

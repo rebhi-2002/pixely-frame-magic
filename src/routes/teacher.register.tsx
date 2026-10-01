@@ -124,6 +124,7 @@ function TeacherRegisterPage() {
         confirmPassword: parsed.data.password,
         genderId,
         userTypeId: userType.id,
+        roleKey: "teacher",
       });
       const profile = getStoredProfile();
       if (profile) {
