@@ -103,7 +103,11 @@ export function AdminDashboardPage() {
     courses,
   ];
   const isLoading = queries.some((q) => q.isLoading);
-  const hasError = queries.some((q) => q.isError);
+  
+  // const hasError = queries.some((q) => q.isError);
+
+  // الكورسات ثانوية بهالصفحة: لو Course/GetAll فشل (500) بنعرض باقي اللوحة بدل ما نخفيها كلها.
+  const hasError = queries.filter((q) => q !== courses).some((q) => q.isError);
 
   const roleDistribution = useMemo(
     () => (usersByType.data ?? []).map((t) => ({ label: bi(t.nameAr, t.nameEn), value: t.count })),
