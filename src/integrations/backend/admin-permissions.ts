@@ -40,9 +40,23 @@ export async function listGrantedPageIds(userTypeId: number): Promise<number[]> 
     .filter((id): id is number => typeof id === "number");
 }
 
-export async function saveGrantedPageIds(userTypeId: number, pageIds: number[]): Promise<void> {
-  await apiClient.post<{ success?: boolean; message?: string | null }>(
+export async function saveGrantedPageIds(
+  userTypeId: number,
+  pageIds: number[],
+  userTypeName?: string | null,
+): Promise<void> {
+  // الباك اند (UserPermission.UserType غير nullable) بيرفض أي عنصر بدون كائن userType
+  // برسالة "The UserType field is required" — فبنبعته مع كل عنصر (id + name من القائمة).
+  let name = userTypeName ?? null;
+  if (!name) {
+    name = (await listBackendUserTypes()).find((t) => t.id === userTypeId)?.name ?? null;
+  }
+  const userType = { id: userTypeId, name: name ?? "" };
+  const result = await apiClient.post<{ success?: boolean; message?: string | null }>(
     `/api/UserPermission/SavePermissions?userTypeId=${userTypeId}`,
-    pageIds.map((pageId) => ({ id: 0, userTypeId, pageId })),
+    pageIds.map((pageId) => ({ id: 0, userTypeId, userType, pageId })),
   );
+  if (result && result.success === false) {
+    throw new Error(result.message || "تعذّر حفظ الصلاحيات");
+  }
 }

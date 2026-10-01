@@ -1,4 +1,4 @@
-import { apiClient, throwBilingual } from "./client";
+import { apiClient, currentLang, throwBilingual } from "./client";
 import type { UserRow } from "@/lib/rbac-types";
 
 export interface BackendUserType {
@@ -129,9 +129,41 @@ function requiredId(value: number | null, label: string): number {
   return value;
 }
 
+function pickUserType(
+  list: BackendUserType[] | null | undefined,
+  id: number,
+  fallback?: BackendUserType | null,
+): { id: number; name: string } {
+  const found = list?.find((t) => t.id === id) ?? fallback ?? null;
+  return { id, name: found?.name ?? "" };
+}
+
+function pickGender(
+  list: BackendGender[] | null | undefined,
+  id: number,
+  fallback?: BackendGender | null,
+): { id: number; name: string } {
+  const found = list?.find((g) => g.id === id) ?? fallback ?? null;
+  return { id, name: found?.name ?? "" };
+}
+
+/** الباك اند حاليًا بيفرض Password/ConfirmPassword حتى عند تعديل مستخدم موجود — منوضّح
+ * السبب بدل رسالة التحقق الخام. الحل الدائم بالباك اند (راجع شرح الإصلاح). */
+function explainSaveError(message: string | null | undefined, isEdit: boolean): string {
+  if (!message) return currentLang() === "ar" ? "تعذر حفظ المستخدم" : "Failed to save user";
+  if (isEdit && /password/i.test(message)) {
+    return currentLang() === "ar"
+      ? "الخادم يطلب كلمة مرور عند التعديل. أدخل كلمة مرور جديدة مع تأكيدها، أو اطلب من مطوّر الباك اند إلغاء إلزامية كلمة المرور عند التعديل."
+      : "The server requires a password when editing. Enter a new password with confirmation, or ask the backend developer to make it optional on edit.";
+  }
+  return message;
+}
+
 export async function saveBackendUser(form: BackendUserForm): Promise<void> {
-  const existing = form.id ? await loadFormData(form.id) : null;
-  const existingUser = existing?.user;
+  // نحمّل النموذج دائمًا (حتى عند الإضافة) لأن قوائم الأنواع/الأجناس لازمة لبناء
+  // كائني userType وgender يلي الباك اند بيطلبهم (UserDto.UserType غير nullable).
+  const existing = await loadFormData(form.id);
+  const existingUser = form.id ? existing?.user : null;
   const genderId = requiredId(form.gender_id ?? existingUser?.genderId ?? null, "الجنس");
   const userTypeId = requiredId(
     form.role_id ? Number(form.role_id) : (existingUser?.userTypeId ?? null),
@@ -144,6 +176,12 @@ export async function saveBackendUser(form: BackendUserForm): Promise<void> {
       "Password and confirmation are required when adding a user",
     );
   }
+  if (form.password !== form.confirmPassword) {
+    throwBilingual("كلمتا المرور غير متطابقتين", "Passwords don't match");
+  }
+
+  const userType = pickUserType(existing?.userTypes, userTypeId, existingUser?.userType);
+  const gender = pickGender(existing?.genders, genderId, existingUser?.gender);
 
   const result = await apiClient.post<{ success: boolean; message?: string | null }>(
     "/api/User/CreateEdit",
@@ -153,17 +191,19 @@ export async function saveBackendUser(form: BackendUserForm): Promise<void> {
       email: form.email,
       phoneNumber: form.phone,
       genderId,
+      gender,
       userTypeId,
+      userType,
       isActive: form.is_active,
       avatar: existingUser?.avatar ?? null,
-      password: form.id ? null : form.password,
-      confirmPassword: form.id ? null : form.confirmPassword,
+      // عند التعديل: كلمة المرور اختيارية؛ لو فاضية منرسل null (الباك اند لازم يتجاهلها).
+      password: form.password || null,
+      confirmPassword: form.confirmPassword || null,
     },
   );
 
   if (!result.success) {
-    if (result.message) throw new Error(result.message);
-    throwBilingual("تعذر حفظ المستخدم", "Failed to save user");
+    throw new Error(explainSaveError(result.message, Boolean(form.id)));
   }
 }
 
@@ -179,6 +219,8 @@ export async function updateBackendUserStatus(id: string, isActive: boolean): Pr
 
   const genderId = requiredId(user.genderId ?? user.gender?.id ?? null, "الجنس");
   const userTypeId = requiredId(user.userTypeId ?? user.userType?.id ?? null, "نوع المستخدم");
+  const userType = pickUserType(result.userTypes, userTypeId, user.userType);
+  const gender = pickGender(result.genders, genderId, user.gender);
   const saved = await apiClient.post<{ success: boolean; message?: string | null }>(
     "/api/User/CreateEdit",
     {
@@ -187,7 +229,9 @@ export async function updateBackendUserStatus(id: string, isActive: boolean): Pr
       email: user.email,
       phoneNumber: user.phoneNumber,
       genderId,
+      gender,
       userTypeId,
+      userType,
       isActive,
       avatar: user.avatar ?? null,
       password: null,
@@ -196,8 +240,7 @@ export async function updateBackendUserStatus(id: string, isActive: boolean): Pr
   );
 
   if (!saved.success) {
-    if (saved.message) throw new Error(saved.message);
-    throwBilingual("تعذر تحديث حالة المستخدم", "Failed to update user status");
+    throw new Error(explainSaveError(saved.message, true));
   }
 }
 

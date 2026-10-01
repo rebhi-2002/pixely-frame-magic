@@ -28,12 +28,18 @@ export function cleanBackendMessage(message: string): string {
 function extractBackendMessage(data: unknown): string | undefined {
   if (!data || typeof data !== "object") return undefined;
   const { message, errors } = data as { message?: unknown; errors?: unknown };
-  if (typeof message === "string" && message.trim()) return cleanBackendMessage(message);
+  if (typeof message === "string" && message.trim()) {
+    const parts = message.split(/<br\s*\/?>/i).map((p) => p.trim());
+    return cleanBackendMessage(Array.from(new Set(parts.filter(Boolean))).join("<br>"));
+  }
   if (errors && typeof errors === "object") {
     const messages = Object.values(errors as Record<string, unknown>)
       .flatMap((value) => (Array.isArray(value) ? value : [value]))
       .filter((m): m is string => typeof m === "string" && m.trim().length > 0);
-    if (messages.length > 0) return cleanBackendMessage(messages.join("<br>"));
+    if (messages.length > 0) {
+      // نفس رسالة التحقق كانت تتكرر عشرات المرات (مرة لكل عنصر بالقائمة) — منعرضها مرة وحدة.
+      return cleanBackendMessage(Array.from(new Set(messages)).join("<br>"));
+    }
   }
   return undefined;
 }
