@@ -15,12 +15,15 @@ function LegalPage() {
   return (
     <PublicLayout>
       <section className="mx-auto max-w-3xl px-5 py-16">
-        <h1 className="text-4xl font-bold text-foreground">{t("terms.h1")}</h1>
+        <h1 className="text-4xl font-extrabold text-foreground">{t("terms.h1")}</h1>
         <p className="mt-3 text-muted-foreground">{t("terms.intro")}</p>
         <div className="mt-10 space-y-5">
           {sections.map((s) => (
-            <section key={s.t} className="rounded-2xl border border-border bg-card p-6">
-              <h2 className="text-lg font-bold text-foreground">{s.t}</h2>
+            <section
+              key={s.t}
+              className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
+            >
+              <h2 className="text-lg font-extrabold text-foreground">{s.t}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
             </section>
           ))}
