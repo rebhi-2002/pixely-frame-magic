@@ -299,7 +299,14 @@ export async function login(email: string, password: string): Promise<void> {
     throw new Error("تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي");
   }
 
-  const userType = await resolveRole(payload, profile.id);
+  const fromEnvelope = roleFromEnvelope(payload);
+  const userType: ResolvedRole =
+  fromEnvelope.roleKey != null || fromEnvelope.roleId != null
+    ? fromEnvelope
+    : input.roleKey
+      ? { roleId: input.userTypeId, roleName: null, roleKey: input.roleKey }
+      : await resolveRole(payload, profile.id);
+
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
   profile.roleKey = userType.roleKey;

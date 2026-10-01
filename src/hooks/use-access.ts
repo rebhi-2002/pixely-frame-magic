@@ -32,7 +32,7 @@ export function useAccess() {
         return buildRoleAccess(
           userId,
           { name: profile.name, email: profile.email, avatar: profile.avatar ?? null },
-          profile.roleId,
+          profile.roleId ?? null,
           profile.roleName ?? "",
           roleKey,
         );
