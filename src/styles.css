@@ -120,9 +120,11 @@
   /* Neo-Brutalism الدافئ بالوضع الغامق — حد فاتح صلب (الكحلي الغامق يلغي أي حد
      داكن)، وظل بلون العلامة الأزرق بدل العنبري القديم، ليتطابق مع الهوية
      الجديدة المستخرجة من العرض التقديمي. */
-  --border-strong: rgba(244, 246, 251, 0.85);
+  /* --border-strong: rgba(244, 246, 251, 0.85); */
+  --border-strong: rgba(243, 241, 234, 0.85);
   --border-strong-width: 2px;
-  --shadow-brutal-color: rgba(44, 95, 223, 0.35);
+  /* --shadow-brutal-color: rgba(44, 95, 223, 0.35); */
+  --shadow-brutal-color: rgba(240, 166, 46, 0.28);
   --shadow-brutal: 4px 4px 0 0 var(--shadow-brutal-color);
   --chart-1: #2c5fdf;
   --chart-2: #13b8a7;
