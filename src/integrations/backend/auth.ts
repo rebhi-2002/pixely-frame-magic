@@ -299,13 +299,8 @@ export async function login(email: string, password: string): Promise<void> {
     throw new Error("تم تسجيل الدخول، لكن تعذّر التحقق من الملف الشخصي");
   }
 
-  const fromEnvelope = roleFromEnvelope(payload);
-  const userType: ResolvedRole =
-  fromEnvelope.roleKey != null || fromEnvelope.roleId != null
-    ? fromEnvelope
-    : input.roleKey
-      ? { roleId: input.userTypeId, roleName: null, roleKey: input.roleKey }
-      : await resolveRole(payload, profile.id);
+  // تسجيل الدخول ما فيه دور مختار من المستخدم: الدور من ردّ MyProfileModal، وإلا fetchUserType.
+  const userType = await resolveRole(payload, profile.id);
 
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
@@ -329,6 +324,9 @@ export interface RegisterInput {
   /** رقم نوع المستخدم من RegistrationOptions (يختلف بين البيئات) — اختره بـ findUserTypeForRole(roles, role)
    * حسب الـcode، ما تكتب رقم بالكود. */
   userTypeId: number;
+  /** مفتاح الدور الذي اختاره المستخدم بصفحة التسجيل (student|teacher|parent). يُستخدم كاحتياط
+   * لو ما رجّع الباك اند الدور بردّ MyProfileModal (CreateEditModal للأدمن فقط). */
+  roleKey?: RoleKey | null;
 }
 
 /** الباك اند بينشئ الحساب، ينشئ Wallet تلقائيًا، ويسجّل الدخول فورًا لو نجح
@@ -368,10 +366,16 @@ export async function register(input: RegisterInput): Promise<void> {
     throw new Error("تم إنشاء الحساب، لكن تعذّر التحقق من الملف الشخصي");
   }
 
-  const userType = await resolveRole(payload, profile.id);
-  profile.roleId = userType.roleId;
+  const fromEnvelope = roleFromEnvelope(payload);
+  const userType: ResolvedRole =
+    fromEnvelope.roleKey != null || fromEnvelope.roleId != null
+      ? fromEnvelope
+      : input.roleKey
+        ? { roleId: input.userTypeId, roleName: null, roleKey: input.roleKey }
+        : await resolveRole(payload, profile.id);
+  profile.roleId = userType.roleId ?? input.userTypeId;
   profile.roleName = userType.roleName;
-  profile.roleKey = userType.roleKey;
+  profile.roleKey = userType.roleKey ?? input.roleKey ?? null;
 
   writeStoredSession({
     email: profile.email,
