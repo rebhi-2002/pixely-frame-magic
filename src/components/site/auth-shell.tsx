@@ -1,27 +1,32 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { BookOpenCheck, Eye, EyeOff, LineChart, XCircle } from "lucide-react";
+import { Search, CalendarDays, Wallet, Eye, EyeOff } from "lucide-react";
 import { BrandMark } from "@/components/site/public-layout";
 import { PreferenceToggles } from "@/components/site/preference-toggles";
-import { WelcomeIllustration } from "@/components/site/illustrations";
 import { useBi } from "@/lib/bi";
 
+/* محدَّثة لتطابق المنتج الحقيقي الحالي (سوق معلمين) بدل المنتج القديم
+   المحذوف (مكتبة ذاتية، بنك أخطاء) الذي كان هنا بالغلط. */
 const sidePoints = [
   {
-    icon: BookOpenCheck,
-    ar: "مكتبة ذكية منظّمة حسب المنهاج",
-    en: "A smart library organized by curriculum",
+    icon: Search,
+    ar: "دليل معلمين حقيقي بالمادة والسعر والتوفّر",
+    en: "A real teacher directory by subject, price and availability",
   },
-  { icon: LineChart, ar: "متابعة تقدّم يومية بدون تعقيد", en: "Simple daily progress tracking" },
   {
-    icon: XCircle,
-    ar: "بنك أخطاء يذكّرك بنقاط ضعفك",
-    en: "A mistake bank that flags your weak spots",
+    icon: CalendarDays,
+    ar: "جدول دروسك وحجوزاتك بمكان واحد",
+    en: "Your lessons and bookings schedule, in one place",
+  },
+  {
+    icon: Wallet,
+    ar: "محفظة داخلية بسجل معاملات واضح",
+    en: "An in-app wallet with a clear transaction history",
   },
 ] as const;
 
-/** غلاف موحّد لكل صفحات المصادقة (هوية أكاديميا: سطح داكن + شبكة خفيفة). */
+/** غلاف موحّد لكل صفحات المصادقة (هوية أكاديميا: خلفية كريمية + حدود صلبة). */
 export function AuthShell({
   icon,
   title,
@@ -38,7 +43,7 @@ export function AuthShell({
   const { t } = useTranslation();
   const bi = useBi();
   return (
-    <div className="surface-mesh flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <header className="flex items-center justify-between px-5 py-4">
         <BrandMark />
         <PreferenceToggles />
@@ -46,20 +51,19 @@ export function AuthShell({
 
       <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* لوحة زخرفية — تظهر بالشاشات الكبيرة بس، تعطي إحساس منتج حقيقي بدل
-              فراغ حوالين الفورم */}
+          {/* لوحة جانبية — تظهر بالشاشات الكبيرة بس، تعطي إحساس منتج حقيقي بدل
+              فراغ حوالين الفورم. تايبوغرافيا فقط، بلا رسم زخرفي (Visual Budget). */}
           <div className="hidden lg:block">
-            <WelcomeIllustration className="h-40 w-auto" />
-            <h2 className="mt-6 max-w-sm text-2xl font-bold leading-snug text-foreground">
+            <h2 className="max-w-sm text-2xl font-extrabold leading-snug text-foreground">
               {bi(
-                "كل أدوات التنظيم والتحضير بمكان واحد",
-                "Every study and exam-prep tool, in one place",
+                "لاقِ المعلم المناسب وابدأ بثقة",
+                "Find the right teacher and start with confidence",
               )}
             </h2>
             <ul className="mt-6 space-y-4">
               {sidePoints.map((p) => (
                 <li key={p.ar} className="flex items-center gap-3">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
                     <p.icon className="size-4" />
                   </span>
                   <span className="text-sm text-muted-foreground">{bi(p.ar, p.en)}</span>
@@ -69,7 +73,7 @@ export function AuthShell({
           </div>
 
           <div
-            className={`shadow-elevation-2 mx-auto w-full rounded-2xl border border-border bg-card p-6 sm:p-8 ${
+            className={`mx-auto w-full rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8 ${
               wide ? "max-w-md sm:max-w-2xl lg:max-w-none" : "max-w-md lg:max-w-md"
             }`}
           >
@@ -80,7 +84,7 @@ export function AuthShell({
                 </span>
               )}
               <div className="min-w-0">
-                <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
+                <h1 className="font-display text-xl font-extrabold text-foreground">{title}</h1>
                 {subtitle && (
                   <p className="mt-1 max-w-md text-sm leading-6 text-muted-foreground">
                     {subtitle}
@@ -144,7 +148,7 @@ export function AuthField({
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
-          className="h-11 w-full min-w-0 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20"
+          className="h-11 w-full min-w-0 rounded-xl border-2 border-[var(--border-strong)] bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20"
         />
         {isPassword && (
           <button
