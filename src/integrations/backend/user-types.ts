@@ -33,7 +33,10 @@ function normalizeRoleName(name: string): string {
 
 /** مفتاح الدور لنوع مستخدم قادم من الباك اند: بالـcode أولًا، وبالاسم كاحتياط
  * (CreateEditModal ما بيرجّع code — بس id وname — فبدون هالاحتياط كل الأدوار بتطلع ""). */
-export function roleKeyOfUserType(t: { name?: string | null; code?: string | null }): RoleKey | null {
+export function roleKeyOfUserType(t: {
+  name?: string | null;
+  code?: string | null;
+}): RoleKey | null {
   const byCode = parseRoleKey(t.code);
   if (byCode) return byCode;
   const name = normalizeRoleName(t.name ?? "");

@@ -103,7 +103,7 @@ export function AdminDashboardPage() {
     courses,
   ];
   const isLoading = queries.some((q) => q.isLoading);
-  
+
   // const hasError = queries.some((q) => q.isError);
 
   // الكورسات ثانوية بهالصفحة: لو Course/GetAll فشل (500) بنعرض باقي اللوحة بدل ما نخفيها كلها.

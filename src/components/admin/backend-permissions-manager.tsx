@@ -69,7 +69,8 @@ export function BackendPermissionsPage() {
   }, [pages, bi]);
 
   const saveMutation = useMutation({
-    mutationFn: () => saveGrantedPageIds(
+    mutationFn: () =>
+      saveGrantedPageIds(
         userTypeId as number,
         Array.from(checked),
         userTypes?.find((t) => t.id === userTypeId)?.name,

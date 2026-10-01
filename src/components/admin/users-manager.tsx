@@ -445,30 +445,30 @@ export function UsersPage() {
               </Select>
             </div>
             <>
-                <div className="space-y-1.5">
-                  <Label htmlFor="u-password">
-                    {editingId
-                      ? bi("كلمة مرور جديدة (اختياري)", "New password (optional)")
-                      : bi("كلمة المرور", "Password")}
-                  </Label>
-                  <Input
-                    id="u-password"
-                    type="password"
-                    value={form.password}
-                    onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="u-confirm-password">
-                    {bi("تأكيد كلمة المرور", "Confirm password")}
-                  </Label>
-                  <Input
-                    id="u-confirm-password"
-                    type="password"
-                    value={form.confirmPassword}
-                    onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
-                  />
-                </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="u-password">
+                  {editingId
+                    ? bi("كلمة مرور جديدة (اختياري)", "New password (optional)")
+                    : bi("كلمة المرور", "Password")}
+                </Label>
+                <Input
+                  id="u-password"
+                  type="password"
+                  value={form.password}
+                  onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="u-confirm-password">
+                  {bi("تأكيد كلمة المرور", "Confirm password")}
+                </Label>
+                <Input
+                  id="u-confirm-password"
+                  type="password"
+                  value={form.confirmPassword}
+                  onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                />
+              </div>
             </>
             <div className="space-y-1.5">
               <Label>{bi("نوع المستخدم", "User type")}</Label>
