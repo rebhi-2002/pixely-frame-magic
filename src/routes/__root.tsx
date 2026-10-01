@@ -19,11 +19,13 @@ import appCss from "../styles.css?url";
 import { AUTH_EVENT } from "@/integrations/backend/auth";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
-import { NotFoundIllustration } from "@/components/site/illustrations";
 import { currentUserHome } from "@/lib/session-home";
 import { SeoManager } from "@/components/app/seo-manager";
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { initAnalytics } from "@/lib/analytics";
+
+import { FileQuestion } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -32,16 +34,21 @@ function NotFoundComponent() {
     void currentUserHome().then((next) => setHome(next ?? "/"));
   }, []);
   return (
-    <div className="surface-mesh flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
-        <NotFoundIllustration className="mx-auto h-32 w-auto" />
-        <h1 className="mt-4 font-display text-6xl font-bold text-foreground">404</h1>
-        <h2 className="mt-3 text-xl font-bold text-foreground">{t("errors.notFoundTitle")}</h2>
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md rounded-3xl border-2 border-[var(--border-strong)] bg-card p-8 text-center shadow-[var(--shadow-brutal)]">
+        <span className="mx-auto flex size-16 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
+          <FileQuestion className="size-8" />
+        </span>
+        <h1 className="mt-4 font-display text-6xl font-extrabold text-foreground">404</h1>
+        <h2 className="mt-3 text-xl font-extrabold text-foreground">{t("errors.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
         <div className="mt-7">
           <a
             href={home}
-            className="btn-shine hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+            className={buttonVariants({
+              variant: "default",
+              className: "h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("errors.backHome")}
           </a>
@@ -59,8 +66,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-destructive/12 text-destructive">
+      <div className="max-w-md rounded-3xl border-2 border-[var(--border-strong)] bg-card p-8 text-center shadow-[var(--shadow-brutal)]">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-destructive/12 text-destructive">
           <svg viewBox="0 0 24 24" fill="none" className="size-7" aria-hidden>
             <path
               d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"
@@ -71,7 +78,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             />
           </svg>
         </span>
-        <h1 className="mt-4 text-xl font-bold text-foreground">{t("errors.crashTitle")}</h1>
+        <h1 className="mt-4 text-xl font-extrabold text-foreground">{t("errors.crashTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.crashText")}</p>
         <div className="mt-7 flex flex-wrap justify-center gap-2.5">
           <button
@@ -79,13 +86,19 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+            className={buttonVariants({
+              variant: "default",
+              className: "h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("errors.retry")}
           </button>
           <a
             href="/"
-            className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-background px-6 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+            className={buttonVariants({
+              variant: "outline",
+              className: "h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("errors.backHome")}
           </a>
