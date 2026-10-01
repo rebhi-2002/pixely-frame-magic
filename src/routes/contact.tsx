@@ -68,170 +68,170 @@ function ContactPage() {
 
       <section className="mx-auto grid max-w-5xl gap-6 px-5 py-16 lg:grid-cols-[1.3fr_0.9fr]">
         <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8">
-            {done ? (
-              <div className="flex flex-col items-center py-10 text-center">
-                <span className="flex size-14 items-center justify-center rounded-full bg-success/12 text-success">
-                  <Send className="size-6" />
-                </span>
-                <h2 className="mt-5 text-xl font-bold text-foreground">
-                  {t("contact.success.title")}
-                </h2>
-                <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                  {t("contact.success.sub")}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDone(false);
-                    setName("");
-                    setEmail("");
-                    setMessage("");
-                    setTopic("student");
-                  }}
-                  className={buttonVariants({ variant: "outline", className: "mt-6 h-auto px-5 py-2.5 text-sm" })}
-                >
-                  {t("contact.success.again")}
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-2 block text-sm font-semibold text-foreground"
-                    >
-                      {t("contact.form.name")}
-                    </label>
-                    <input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
-                    />
-                    {errors.name && (
-                      <p className="mt-1.5 text-xs text-destructive">{errors.name}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="mb-2 block text-sm font-semibold text-foreground"
-                    >
-                      {t("contact.form.email")}
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
-                    />
-                    {errors.email && (
-                      <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-
+          {done ? (
+            <div className="flex flex-col items-center py-10 text-center">
+              <span className="flex size-14 items-center justify-center rounded-full bg-success/12 text-success">
+                <Send className="size-6" />
+              </span>
+              <h2 className="mt-5 text-xl font-bold text-foreground">
+                {t("contact.success.title")}
+              </h2>
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                {t("contact.success.sub")}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setDone(false);
+                  setName("");
+                  setEmail("");
+                  setMessage("");
+                  setTopic("student");
+                }}
+                className={buttonVariants({
+                  variant: "outline",
+                  className: "mt-6 h-auto px-5 py-2.5 text-sm",
+                })}
+              >
+                {t("contact.success.again")}
+              </button>
+            </div>
+          ) : (
+            <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label
-                    htmlFor="topic"
+                    htmlFor="name"
                     className="mb-2 block text-sm font-semibold text-foreground"
                   >
-                    {t("contact.form.topic")}
+                    {t("contact.form.name")}
                   </label>
-                  <select
-                    id="topic"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value as (typeof TOPIC_KEYS)[number])}
+                  <input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
-                  >
-                    {TOPIC_KEYS.map((k) => (
-                      <option key={k} value={k}>
-                        {t(`contact.form.topics.${k}`)}
-                      </option>
-                    ))}
-                  </select>
+                  />
+                  {errors.name && <p className="mt-1.5 text-xs text-destructive">{errors.name}</p>}
                 </div>
-
                 <div>
                   <label
-                    htmlFor="message"
+                    htmlFor="email"
                     className="mb-2 block text-sm font-semibold text-foreground"
                   >
-                    {t("contact.form.message")}
+                    {t("contact.form.email")}
                   </label>
-                  <textarea
-                    id="message"
-                    rows={5}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder={t("contact.form.messagePlaceholder")}
-                    className="w-full resize-none rounded-xl border-2 border-[var(--border-strong)] bg-background p-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
                   />
-                  {errors.message && (
-                    <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>
+                  {errors.email && (
+                    <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
                   )}
                 </div>
+              </div>
 
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className={buttonVariants({ variant: "default", className: "h-auto w-full gap-2 px-6 py-3.5 text-sm disabled:opacity-60 sm:w-auto" })}
+              <div>
+                <label htmlFor="topic" className="mb-2 block text-sm font-semibold text-foreground">
+                  {t("contact.form.topic")}
+                </label>
+                <select
+                  id="topic"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value as (typeof TOPIC_KEYS)[number])}
+                  className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
                 >
-                  <Send className="size-4" />
-                  {sending ? t("contact.form.sending") : t("contact.form.submit")}
-                </button>
-              </form>
-            )}
-          </div>
+                  {TOPIC_KEYS.map((k) => (
+                    <option key={k} value={k}>
+                      {t(`contact.form.topics.${k}`)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="mb-2 block text-sm font-semibold text-foreground"
+                >
+                  {t("contact.form.message")}
+                </label>
+                <textarea
+                  id="message"
+                  rows={5}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder={t("contact.form.messagePlaceholder")}
+                  className="w-full resize-none rounded-xl border-2 border-[var(--border-strong)] bg-background p-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                />
+                {errors.message && (
+                  <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={sending}
+                className={buttonVariants({
+                  variant: "default",
+                  className:
+                    "h-auto w-full gap-2 px-6 py-3.5 text-sm disabled:opacity-60 sm:w-auto",
+                })}
+              >
+                <Send className="size-4" />
+                {sending ? t("contact.form.sending") : t("contact.form.submit")}
+              </button>
+            </form>
+          )}
+        </div>
 
         <div className="space-y-4">
-            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                <Mail className="size-5" />
-              </span>
-              <h2 className="mt-3 text-sm font-bold text-foreground">
-                {t("contact.sidebar.emailTitle")}
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.emailSub")}</p>
-              <a
-                href="mailto:support@academia.app"
-                className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
-                dir="ltr"
-              >
-                support@academia.app
-              </a>
-            </div>
-
-            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
-                <Clock className="size-5" />
-              </span>
-              <h2 className="mt-3 text-sm font-bold text-foreground">
-                {t("contact.sidebar.responseTitle")}
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {t("contact.sidebar.responseSub")}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-info/12 text-info">
-                <Headset className="size-5" />
-              </span>
-              <h2 className="mt-3 text-sm font-bold text-foreground">
-                {t("contact.sidebar.helpTitle")}
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.helpSub")}</p>
-              <Link
-                to="/help"
-                className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
-              >
-                {t("contact.sidebar.helpCta")}
-              </Link>
-            </div>
+          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+              <Mail className="size-5" />
+            </span>
+            <h2 className="mt-3 text-sm font-bold text-foreground">
+              {t("contact.sidebar.emailTitle")}
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.emailSub")}</p>
+            <a
+              href="mailto:support@academia.app"
+              className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
+              dir="ltr"
+            >
+              support@academia.app
+            </a>
           </div>
+
+          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
+              <Clock className="size-5" />
+            </span>
+            <h2 className="mt-3 text-sm font-bold text-foreground">
+              {t("contact.sidebar.responseTitle")}
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.responseSub")}</p>
+          </div>
+
+          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-info/12 text-info">
+              <Headset className="size-5" />
+            </span>
+            <h2 className="mt-3 text-sm font-bold text-foreground">
+              {t("contact.sidebar.helpTitle")}
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.helpSub")}</p>
+            <Link
+              to="/help"
+              className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
+            >
+              {t("contact.sidebar.helpCta")}
+            </Link>
+          </div>
+        </div>
       </section>
     </PublicLayout>
   );

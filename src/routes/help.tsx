@@ -81,7 +81,10 @@ function HelpPage() {
           <p className="mt-2 text-sm text-muted-foreground">{t("help.contactSub")}</p>
           <Link
             to="/contact"
-            className={buttonVariants({ variant: "default", className: "mt-5 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-5 h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("help.contactCta")}
           </Link>

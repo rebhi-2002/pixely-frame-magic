@@ -36,7 +36,10 @@ function BlogPostPage() {
           <p className="mt-3 text-muted-foreground">{t("blog.notFoundSub")}</p>
           <Link
             to="/blog"
-            className={buttonVariants({ variant: "default", className: "mt-7 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-7 h-auto px-6 py-3 text-sm",
+            })}
           >
             {t("blog.backToBlog")}
           </Link>
@@ -91,7 +94,10 @@ function BlogPostPage() {
           <SessionCta
             to="/signup"
             label={t("blog.ctaButton")}
-            className={buttonVariants({ variant: "default", className: "mt-5 h-auto px-6 py-3 text-sm" })}
+            className={buttonVariants({
+              variant: "default",
+              className: "mt-5 h-auto px-6 py-3 text-sm",
+            })}
           />
         </div>
 

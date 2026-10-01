@@ -289,27 +289,27 @@ function Landing() {
         <h2 className="text-3xl font-extrabold text-foreground">{t("home.featuresTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("home.featuresSub")}</p>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {features
-          .filter((f) => f.flagship)
-          .map((f) => (
-            <article
-              key={f.key}
-              className="flex flex-col rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
-            >
-              <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <f.icon className="size-5" />
-              </span>
-              <h3 className="mt-4 text-lg font-bold text-foreground">
-                {t(`home.features.${f.key}.title`)}
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {t(`home.features.${f.key}.text`)}
-              </p>
-              <FeatureMiniPreview variant={f.key as "library" | "tracker" | "mistakes"} />
-            </article>
-          ))}
-      </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {features
+            .filter((f) => f.flagship)
+            .map((f) => (
+              <article
+                key={f.key}
+                className="flex flex-col rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
+              >
+                <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                  <f.icon className="size-5" />
+                </span>
+                <h3 className="mt-4 text-lg font-bold text-foreground">
+                  {t(`home.features.${f.key}.title`)}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {t(`home.features.${f.key}.text`)}
+                </p>
+                <FeatureMiniPreview variant={f.key as "library" | "tracker" | "mistakes"} />
+              </article>
+            ))}
+        </div>
 
         <div className="mt-4 grid gap-3 border-2 border-[var(--border-strong)] bg-card/60 p-5 sm:grid-cols-2 lg:grid-cols-4">
           {features
@@ -326,8 +326,12 @@ function Landing() {
                   <f.icon className="size-4" />
                 </span>
                 <div>
-                  <h3 className="text-sm font-bold text-foreground">{t(`home.features.${f.key}.title`)}</h3>
-                  <p className="text-xs text-muted-foreground">{t(`home.features.${f.key}.text`)}</p>
+                  <h3 className="text-sm font-bold text-foreground">
+                    {t(`home.features.${f.key}.title`)}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {t(`home.features.${f.key}.text`)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -343,11 +347,15 @@ function Landing() {
           <div className="grid gap-10 md:grid-cols-3">
             {roles.map((r) =>
               r.key === "teacher" ? (
-                <div key={r.key} className="md:col-span-2 md:border-e-2 md:border-[var(--border-strong)]/30 md:pe-10">
+                <div
+                  key={r.key}
+                  className="md:col-span-2 md:border-e-2 md:border-[var(--border-strong)]/30 md:pe-10"
+                >
                   <span className="mb-2 inline-block rounded-full border-2 border-[var(--border-strong)] bg-primary px-2.5 py-0.5 text-[11px] font-bold text-primary-foreground">
                     {t("home.roles.primaryBadge")}
                   </span>
-                  <r.icon className="block size-6 text-primary" />                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
+                  <r.icon className="block size-6 text-primary" />{" "}
+                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
                   <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
                     {t(`home.roles.${r.key}.d`)}
                   </p>

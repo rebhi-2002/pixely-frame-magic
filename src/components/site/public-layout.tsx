@@ -157,7 +157,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                     <Link
                       to={session.home}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={buttonVariants({ variant: "default", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
+                      className={buttonVariants({
+                        variant: "default",
+                        className: "h-auto justify-center gap-2 px-4 py-3 text-sm",
+                      })}
                     >
                       <LayoutDashboard aria-hidden="true" className="size-4" />
                       {t("common.dashboard")}
@@ -167,7 +170,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       <Link
                         to="/login"
                         onClick={() => setMobileMenuOpen(false)}
-                        className={buttonVariants({ variant: "outline", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
+                        className={buttonVariants({
+                          variant: "outline",
+                          className: "h-auto justify-center gap-2 px-4 py-3 text-sm",
+                        })}
                       >
                         <LogIn aria-hidden="true" className="size-4" />
                         {t("common.signIn")}
@@ -175,7 +181,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                       <Link
                         to="/signup"
                         onClick={() => setMobileMenuOpen(false)}
-                        className={buttonVariants({ variant: "default", className: "h-auto justify-center gap-2 px-4 py-3 text-sm" })}
+                        className={buttonVariants({
+                          variant: "default",
+                          className: "h-auto justify-center gap-2 px-4 py-3 text-sm",
+                        })}
                       >
                         <UserPlus aria-hidden="true" className="size-4" />
                         {t("common.startFree")}
@@ -190,7 +199,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <>
                 <Link
                   to={session.home}
-                  className={buttonVariants({ variant: "default", className: "hidden h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:inline-flex" })}
+                  className={buttonVariants({
+                    variant: "default",
+                    className:
+                      "hidden h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:inline-flex",
+                  })}
                 >
                   <LayoutDashboard className="size-4" />
                   {t("common.dashboard")}
@@ -208,7 +221,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 </Link>
                 <Link
                   to="/signup"
-                  className={buttonVariants({ variant: "default", className: "h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:px-4" })}
+                  className={buttonVariants({
+                    variant: "default",
+                    className: "h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:px-4",
+                  })}
                 >
                   <UserPlus className="size-4" />
                   {t("common.startFree")}
