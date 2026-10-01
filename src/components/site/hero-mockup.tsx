@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Bell, CalendarDays, CheckCircle2, Clock, Video, Wallet, X } from "lucide-react";
-import { cn } from "@/lib/utils";import { useBi } from "@/lib/bi";
+import { cn } from "@/lib/utils"; import { useBi } from "@/lib/bi";
 import type { PublicSession } from "@/hooks/use-session";
 
 /**
@@ -26,6 +26,8 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const bi = useBi();
   const [tab, setTab] = useState<Tab>("pending");
   const [dismissed, setDismissed] = useState<number[]>([]);
+  const [confirmedCancelled, setConfirmedCancelled] = useState<number[]>([]);
+  const [rescheduling, setRescheduling] = useState<number | null>(null);
   const firstName = session?.fullName?.trim().split(/\s+/)[0];
   const displayName = firstName || bi("طالب", "Student");
   const initial = displayName.charAt(0).toUpperCase();
@@ -61,28 +63,28 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
             </span>
           </div>
 
-        <div role="tablist" aria-label={bi("أقسام اللوحة", "Dashboard sections")} className="grid grid-cols-3 gap-2.5">
-          {tabs.map((t) => {
-            const active = tab === t.key;
-            return (
-              <button
-                key={t.key}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setTab(t.key)}
-                className={cn(
-                  "rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
-                  active ? t.bgActive : "bg-secondary/40 text-muted-foreground hover:bg-secondary",
-                )}
-              >
-                <t.icon className={cn("mx-auto size-4", active ? "" : t.tone)} />
-                <div className={cn("mx-auto mt-2 h-2 w-7 rounded-full bg-current", active ? "opacity-60" : "opacity-25")} />
-                <p className="mt-1.5 text-[10px] font-semibold">{bi(t.ar, t.en)}</p>
-              </button>
-            );
-          })}
-        </div>
+          <div role="tablist" aria-label={bi("أقسام اللوحة", "Dashboard sections")} className="grid grid-cols-3 gap-2.5">
+            {tabs.map((t) => {
+              const active = tab === t.key;
+              return (
+                <button
+                  key={t.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setTab(t.key)}
+                  className={cn(
+                    "rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
+                    active ? t.bgActive : "bg-secondary/40 text-muted-foreground hover:bg-secondary",
+                  )}
+                >
+                  <t.icon className={cn("mx-auto size-4", active ? "" : t.tone)} />
+                  <div className={cn("mx-auto mt-2 h-2 w-7 rounded-full bg-current", active ? "opacity-60" : "opacity-25")} />
+                  <p className="mt-1.5 text-[10px] font-semibold">{bi(t.ar, t.en)}</p>
+                </button>
+              );
+            })}
+          </div>
 
           <div role="tabpanel" className="space-y-2.5">
             {tab === "pending" && (
@@ -127,17 +129,48 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   { icon: Video, w: "w-3/4" },
                   { icon: CalendarDays, w: "w-2/3" },
                   { icon: Video, w: "w-4/5" },
-                ].map((r, i) => (
-                  <div key={i} className="flex items-center gap-2.5 rounded-lg border-2 border-[var(--border-strong)] bg-success/5 p-2.5">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/15 text-success">
-                      <r.icon className="size-4" />
-                    </span>
-                    <div className="flex-1 space-y-1.5">
-                      <div className={cn("h-2 rounded-full bg-secondary", r.w)} />
-                      <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                ].map((r, i) =>
+                  confirmedCancelled.includes(i) ? (
+                    <p key={i} className="rounded-lg border border-dashed border-[var(--border-strong)]/50 py-2.5 text-center text-[11px] text-muted-foreground">
+                      {bi("تم إلغاء الحجز", "Booking cancelled")}
+                    </p>
+                  ) : (
+                    <div key={i} className="rounded-lg border-2 border-[var(--border-strong)] bg-success/5 p-2.5">
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/15 text-success">
+                          <r.icon className="size-4" />
+                        </span>
+                        <div className="flex-1 space-y-1.5">
+                          <div className={cn("h-2 rounded-full bg-secondary", r.w)} />
+                          <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                        </div>
+                      </div>
+                      {/* FR-S14/FR-S15: الطالب يلغي الحجز أو يطلب إعادة جدولة — لا
+                       مجرد عرض ثابت. */}
+                      <div className="mt-2 flex gap-1.5 ps-10">
+                        <button
+                          type="button"
+                          onClick={() => setRescheduling(i)}
+                          className="rounded-md border border-[var(--border-strong)]/50 px-2 py-1 text-[9px] font-bold text-foreground hover:bg-secondary"
+                        >
+                          {bi("إعادة جدولة", "Reschedule")}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmedCancelled((d) => [...d, i])}
+                          className="rounded-md border border-[var(--border-strong)]/50 px-2 py-1 text-[9px] font-bold text-destructive hover:bg-destructive/10"
+                        >
+                          {bi("إلغاء", "Cancel")}
+                        </button>
+                      </div>
+                      {rescheduling === i && (
+                        <p className="mt-2 ms-10 rounded-md bg-primary/10 px-2 py-1.5 text-[10px] font-semibold text-primary">
+                          {bi("أُرسل طلب إعادة الجدولة للمعلّم ✓", "Reschedule request sent to the teacher ✓")}
+                        </p>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  ),
+                )}
               </>
             )}
 
@@ -147,7 +180,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   <span className="text-xs font-bold text-foreground">{bi("رصيدك الحالي", "Your balance")}</span>
                   <div className="h-3 w-16 rounded-full bg-info/30" />
                 </div>
-            
+
                 <p className="text-xs font-bold text-foreground">{bi("آخر المعاملات", "Recent transactions")}</p>
                 {[0, 1].map((i) => (
                   <div key={i} className="flex items-center gap-2.5">
