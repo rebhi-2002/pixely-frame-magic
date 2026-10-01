@@ -90,8 +90,8 @@
         "text": "Online or in-person courses with a fixed schedule, a clear teacher, and a listed price."
       },
       "review": {
-        "title": "Parent follow-up",
-        "text": "Your child's attendance and exam results in one clear report."
+        "title": "Your attendance and results",
+        "text": "See your own attendance rate, exam results and academic progress from your dashboard."
       }
     },
     "roles": {
@@ -263,7 +263,7 @@
       },
       "income": {
         "t": "Earnings and wallet",
-        "d": "Track your balance and request a withdrawal to your bank account; the admin reviews it."
+        "d": "Track your balance and request a withdrawal to your bank account; the admin reviews it. The platform's commission rate is clear and known upfront, no surprises."
       },
       "verified": {
         "t": "Directory visibility",
