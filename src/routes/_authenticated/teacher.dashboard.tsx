@@ -136,6 +136,12 @@ function Body() {
             label: bi("جدول توفّري", "My availability"),
             to: "/teacher/settings",
           },
+          { icon: "BookOpen", label: bi("كورساتي", "My courses"), to: "/teacher/courses" },
+          {
+            icon: "CalendarCheck",
+            label: bi("طلبات الحجز", "Booking requests"),
+            to: "/teacher/bookings",
+          },
           { icon: "Wallet", label: bi("الأرباح", "Earnings"), to: "/teacher/earnings" },
         ]}
       />

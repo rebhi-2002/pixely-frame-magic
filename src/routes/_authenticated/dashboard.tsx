@@ -180,6 +180,17 @@ function Body() {
           { icon: "BookOpen", label: bi("كورساتي", "My courses"), to: "/my-courses" },
           { icon: "Calendar", label: bi("الجدول الكامل", "Full schedule"), to: "/schedule" },
           { icon: "Wallet", label: bi("محفظتي", "My wallet"), to: "/wallet" },
+          { icon: "CalendarCheck", label: bi("سجل الحضور", "Attendance"), to: "/attendance" },
+          {
+            icon: "ClipboardCheck",
+            label: bi("نتائج الامتحانات", "Exam results"),
+            to: "/exam-results",
+          },
+          {
+            icon: "TrendingUp",
+            label: bi("التقدم الأكاديمي", "Academic progress"),
+            to: "/progress",
+          },
           { icon: "Bell", label: bi("الإشعارات", "Notifications"), to: "/notifications" },
         ]}
       />
