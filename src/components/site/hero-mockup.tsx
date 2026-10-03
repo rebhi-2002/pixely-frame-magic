@@ -104,7 +104,20 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                 </p>
               </div>
             </div>
-            <span className="flex size-9 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-secondary text-muted-foreground">
+            {/* FR-S12: إشعارات الطالب (حالة الحجز، الدفع، تغييرات الجدول، التذكيرات)
+                — التمثيل الوحيد لها بالموقع كله، فلازم اسم وصول حقيقي لا أيقونة صامتة. */}
+            <span
+              role="img"
+              aria-label={bi(
+                "إشعاراتك: تأكيد الحجز، الدفع، وتغييرات الجدول",
+                "Your notifications: booking confirmations, payments, and schedule changes",
+              )}
+              title={bi(
+                "إشعاراتك: تأكيد الحجز، الدفع، وتغييرات الجدول",
+                "Your notifications: booking confirmations, payments, and schedule changes",
+              )}
+              className="flex size-9 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-secondary text-muted-foreground"
+            >
               <Bell className="size-4" />
             </span>
           </div>
