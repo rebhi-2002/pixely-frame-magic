@@ -9,6 +9,15 @@ import {
 import { useBi } from "@/lib/bi";
 import { LoadingState } from "@/components/app/feedback-states";
 
+type Bi = ReturnType<typeof useBi>;
+
+/** W1-03: شارة اتجاه الحركة (وارد/صادر) — الاتجاه حقل حقيقي بالـDTO (1=In, 2=Out). */
+function directionLabel(direction: number, bi: Bi): string {
+  if (direction === 1) return bi("وارد", "In");
+  if (direction === 2) return bi("صادر", "Out");
+  return "—";
+}
+
 function transactionTypeLabel(type: number, bi: ReturnType<typeof useBi>): string {
   switch (type) {
     case WalletTransactionType.TopUp:
@@ -16,7 +25,8 @@ function transactionTypeLabel(type: number, bi: ReturnType<typeof useBi>): strin
     case WalletTransactionType.Withdrawal:
       return bi("سحب", "Withdrawal");
     case WalletTransactionType.EnrollmentDeduction:
-      return bi("خصم اشتراك بكورس", "Course enrollment charge");
+      // Q-19: النص يغطي «اشتراك» (SRS) و«حجز» (مسار الحجز الفعلي) دون ربط بكيان محدد.
+      return bi("خصم اشتراك/حجز", "Enrollment/booking charge");
     case WalletTransactionType.InstructorCredit:
       return bi("إيداع أرباح", "Earnings credit");
     default:
@@ -75,12 +85,20 @@ export function WalletBalancePanel({ actionSlot }: { actionSlot?: React.ReactNod
               caption={bi("سجل حركات المحفظة", "Wallet transaction history")}
               head={[
                 bi("النوع", "Type"),
+                bi("الوصف", "Description"),
                 bi("المبلغ", "Amount"),
                 bi("الحالة", "Status"),
                 bi("التاريخ", "Date"),
               ]}
               rows={history.map((t) => [
-                transactionTypeLabel(t.type, bi),
+                <span key="type" className="inline-flex flex-wrap items-center gap-1.5">
+                  {transactionTypeLabel(t.type, bi)}
+                  <Badge tone={t.direction === 1 ? "success" : "muted"}>
+                    {directionLabel(t.direction, bi)}
+                  </Badge>
+                </span>,
+                // الوصف نص من الباك اند كما هو — بدون ربطه بحجز/كورس (الـDTO ما فيه معرّف مرتبط).
+                t.description?.trim() || "—",
                 <span
                   key="amount"
                   className={t.direction === 1 ? "text-success" : "text-destructive"}
