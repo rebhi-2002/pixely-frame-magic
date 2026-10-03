@@ -74,8 +74,8 @@
         "text": "Bio, qualifications, experience, overall rating, and availability on one page."
       },
       "tracker": {
-        "title": "Your schedule and lessons",
-        "text": "See your upcoming lessons and bookings, with the meeting link for online lessons."
+        "title": "Your schedule and sessions",
+        "text": "See your upcoming sessions and bookings, with the meeting link for online sessions."
       },
       "simulator": {
         "title": "Online and in-person lessons",
@@ -98,7 +98,7 @@
       "primaryBadge": "Primary role",
       "student": {
         "t": "Student",
-        "d": "A dashboard with your upcoming lessons, bookings and wallet."
+        "d": "A dashboard with your upcoming sessions, bookings and wallet."
       },
       "teacher": {
         "t": "Teacher",
@@ -135,7 +135,7 @@
       }
     },
     "startTitle": "Your journey from search to rating",
-    "startSub": "A clear, step-by-step path from finding a teacher to finishing the lesson.",
+    "startSub": "A clear, step-by-step path from finding a teacher to finishing the session.",
     "startSteps": [
       {
         "title": "Search",
@@ -151,7 +151,7 @@
       },
       {
         "title": "Book",
-        "text": "Request the lesson at the time that suits you."
+        "text": "Request the session at the time that suits you."
       },
       {
         "title": "Pay",
@@ -159,11 +159,11 @@
       },
       {
         "title": "Attend",
-        "text": "Join your lesson online or in person."
+        "text": "Join your session online or in person."
       },
       {
         "title": "Rate",
-        "text": "Rate your experience after the lesson ends."
+        "text": "Rate your experience after the session ends."
       }
     ],
     "freeTitle": "Start free — see Academia in action",
@@ -173,7 +173,7 @@
       "Create a student, parent or teacher account",
       "Browse the teacher directory and course pages",
       "View a teacher's profile and availability",
-      "A dashboard with your lessons and wallet",
+      "A dashboard with your sessions and wallet",
       "Full Arabic and English interface"
     ],
     "trustNote": "No bank card to start • Wallet payments by manual transfer • Designed Arabic-first"
@@ -189,21 +189,63 @@
     "nextTitle": "What next?",
     "next": [
       "Top up your wallet by transfer and receipt; the admin reviews the request.",
-      "Follow your upcoming lessons and the meeting link for online ones.",
+      "Follow your upcoming sessions and the meeting link for online ones.",
       "Teachers manage their profile and availability and request earnings withdrawals."
     ]
   },
   "forParents": {
     "meta": {
-      "title": "Academia for parents | Clear follow-up, no micromanaging",
-      "description": "Follow your child's attendance and exam results from one place, with read-only access."
+      "title": "Academia for parents | Full academic monitoring, read-only",
+      "description": "Follow your child's attendance, exam results and notifications from one dashboard, read-only."
     },
     "h1": "Follow your child's progress, without watching every step.",
     "h1a": "Follow your child's progress, ",
     "h1b": "without watching every step",
     "h1c": ".",
-    "sub": "Academia gives you a clear picture of your child's attendance and exam results, with read-only access.",
+    "sub": "A complete academic dashboard for every child linked to your account, with read-only access.",
     "cta": "Create a parent account",
+    "linkingTitle": "How is your child linked to your account?",
+    "linkingSub": "One step done by Academia's admin team, not you, to keep the link accurate and reliable.",
+    "linkingSteps": [
+      {
+        "t": "Create your account",
+        "d": "Sign up as a parent with your email or phone — no details about your child needed at this step."
+      },
+      {
+        "t": "Admin links the account",
+        "d": "Academia's team links your account to your child's record and sets the guardian relationship type (mother, father, or guardian)."
+      },
+      {
+        "t": "Instant access",
+        "d": "As soon as the link is set, your child's full academic data appears on your dashboard right away."
+      }
+    ],
+    "overviewTitle": "One academic overview per child",
+    "overviewSub": "A single card with the four numbers that matter most, calculated automatically from real records.",
+    "overviewItems": [
+      {
+        "t": "Name and grade",
+        "d": "Your child's name and school grade, shown clearly at the top of their dashboard."
+      },
+      {
+        "t": "Attendance rate",
+        "d": "Calculated automatically: sessions attended divided by total recorded sessions."
+      },
+      {
+        "t": "Exam average",
+        "d": "Calculated automatically from all exam results compared to each exam's full mark."
+      },
+      {
+        "t": "Unread notifications",
+        "d": "A clear counter for any new update about your child you haven't seen yet."
+      }
+    ],
+    "attendanceTitle": "Detailed attendance record",
+    "attendanceSub": "For every session: the date, group, attendance status, and any note the teacher added.",
+    "examsTitle": "Detailed exam results",
+    "examsSub": "For every exam: its title, date, the score your child got out of the full mark, and the teacher's feedback if any.",
+    "readOnlyTitle": "Read-only — a guarantee, not a limit",
+    "readOnlySub": "A parent account is deliberately view-only: you can't edit attendance, a result, or any academic record through it — only the teacher enters that data. This protects the accuracy of every number you see.",
     "benefits": {
       "report": {
         "t": "Attendance and results, clearly",
@@ -215,21 +257,25 @@
       },
       "multiKids": {
         "t": "More than one child, one account",
-        "d": "Link your children to one account and follow each one separately."
+        "d": "Link your children to one account and follow each one on their own dashboard."
       },
       "alerts": {
-        "t": "Notifications coming soon",
-        "d": "Parent notifications are under development and will be added later."
+        "t": "Real-time notifications",
+        "d": "A clear notification counter on your dashboard for every update about your child."
       }
     },
     "faq": [
       {
         "q": "Can I edit my child's data?",
-        "a": "No. A parent account is for follow-up only (read-only)."
+        "a": "No. A parent account is for follow-up only (read-only) — this protects the accuracy of the academic record."
       },
       {
         "q": "How do I link my child's account?",
-        "a": "Linking a parent to a student is under development; until it ships, linking is done with help from our support team."
+        "a": "Academia's team links your child's account to yours after sign-up, and sets the guardian relationship type (mother, father, or guardian)."
+      },
+      {
+        "q": "Can I follow more than one child on the same account?",
+        "a": "Yes — every child linked to your account gets their own dashboard under the same login."
       },
       {
         "q": "Is there an extra cost for a parent account?",
@@ -286,6 +332,30 @@
       {
         "q": "Can I create courses myself?",
         "a": "Teacher-created courses are under development and will be enabled later."
+      }
+    ],
+    "coursesTitle": "Run your courses and schedule yourself, no middleman",
+    "coursesSub": "Everything about courses, lessons and bookings is in your hands, online or in person.",
+    "coursesItems": [
+      {
+        "t": "In-person group courses",
+        "d": "Create an in-person course, form its student group, and see every student in it."
+      },
+      {
+        "t": "Online courses with a meeting platform",
+        "d": "Create an online course and link it to the meeting platform you prefer for your lessons."
+      },
+      {
+        "t": "Schedule and update lessons",
+        "d": "Set your lesson times, and update or cancel any scheduled lesson easily."
+      },
+      {
+        "t": "Accept or reject booking requests",
+        "d": "Every booking request reaches you to accept or reject with a clear reason."
+      },
+      {
+        "t": "Your rating shows after every lesson",
+        "d": "Students rate you after each session, and your overall rating shows on your public profile."
       }
     ]
   },
