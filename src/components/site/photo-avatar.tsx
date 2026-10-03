@@ -32,7 +32,7 @@ export function PhotoAvatar({
     return (
       <span
         className={cn(
-          "flex shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary",
+          "flex shrink-0 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/12 text-primary",
           className,
         )}
       >
@@ -46,7 +46,10 @@ export function PhotoAvatar({
       src={src}
       alt={alt}
       onError={() => setFailed(true)}
-      className={cn("shrink-0 rounded-full border border-border object-cover", className)}
+      className={cn(
+        "shrink-0 rounded-full border-2 border-[var(--border-strong)] object-cover",
+        className,
+      )}
     />
   );
 }

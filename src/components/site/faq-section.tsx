@@ -24,7 +24,7 @@ export function FAQSection({ i18nKey, className }: { i18nKey: string; className?
       <div className="mx-auto max-w-3xl px-5 py-16">
         <Reveal>
           <div className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
               <HelpCircle className="size-4" />
               {t("common.faqBadge")}
             </span>
@@ -38,7 +38,7 @@ export function FAQSection({ i18nKey, className }: { i18nKey: string; className?
           <Accordion
             type="single"
             collapsible
-            className="shadow-elevation-1 mt-8 rounded-2xl border border-border bg-card px-5"
+            className="mt-8 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-5 shadow-[var(--shadow-brutal)]"
           >
             {items.map((item, i) => (
               <AccordionItem key={item.q} value={`faq-${i}`} className="border-border">

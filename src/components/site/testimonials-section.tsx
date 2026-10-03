@@ -14,7 +14,7 @@ export function TestimonialsSection({ className }: { className?: string }) {
     <section className={className}>
       <div className="mx-auto max-w-5xl px-5 py-16 text-center">
         <Reveal>
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
             <MessageCircleHeart className="size-4" />
             {t("testimonials.badge")}
           </span>
@@ -27,8 +27,8 @@ export function TestimonialsSection({ className }: { className?: string }) {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/40 p-8 sm:p-10">
-            <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)]/60 bg-card p-8 sm:p-10">
+            <span className="flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/10 text-primary">
               <Quote aria-hidden="true" className="size-6" />
             </span>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">

@@ -26,6 +26,26 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BrandLockup } from "@/components/site/brand-logo";
 
+/**
+ * مسارات التفاصيل (مثل /lesson/12 أو /booking/5) ما بتبدأ بمسار صفحة بالقائمة، فكانت ما
+ * بتفتح مجموعتها. هالخريطة (WP-00 / 00-19) بتربطها بصفحة القائمة المالكة لها (العقد C-17/C-18).
+ * «/teacher/course/…» (مفرد) لا تبدأ بـ«/teacher/courses» (جمع)، لذلك مذكورة هون أيضًا.
+ */
+const DETAIL_ROUTE_OWNERS: ReadonlyArray<readonly [prefix: string, ownerPath: string]> = [
+  ["/lesson/", "/schedule"],
+  ["/booking/", "/my-courses"],
+  ["/book/", "/my-courses"],
+  ["/enrolled-course/", "/my-courses"],
+  ["/teacher/course/", "/teacher/courses"],
+];
+
+function pathMatches(pathname: string, pagePath: string): boolean {
+  if (pathname.startsWith(pagePath)) return true;
+  return DETAIL_ROUTE_OWNERS.some(
+    ([prefix, owner]) => owner === pagePath && pathname.startsWith(prefix),
+  );
+}
+
 function collectPaths(pages: AccessPage[]): string[] {
   return pages.flatMap((p) => [...(p.path ? [p.path] : []), ...collectPaths(p.children)]);
 }
@@ -66,7 +86,7 @@ export function AppSidebar({
   const activeModuleKeys = useMemo(
     () =>
       access.modules
-        .filter((m) => collectPaths(m.pages).some((p) => pathname.startsWith(p)))
+        .filter((m) => collectPaths(m.pages).some((p) => pathMatches(pathname, p)))
         .map((m) => m.key),
     [access.modules, pathname],
   );

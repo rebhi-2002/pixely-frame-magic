@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Cookie } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 const CONSENT_KEY = "academia.cookieConsent";
 
@@ -26,10 +27,10 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-label={t("cookie.title")}
-      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] mx-auto max-h-[calc(100dvh-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl border border-border bg-card/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-lg backdrop-blur md:inset-x-6 md:bottom-6 md:pb-4"
+      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] mx-auto max-h-[calc(100dvh-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl border-2 border-[var(--border-strong)] bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-brutal)] md:inset-x-6 md:bottom-6 md:pb-4"
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
           <Cookie className="size-4" />
         </span>
         <div className="min-w-0 flex-1">
@@ -45,14 +46,20 @@ export function CookieConsent() {
           <button
             type="button"
             onClick={() => decide("declined")}
-            className="rounded-xl border border-border px-3 py-2 text-xs font-bold text-muted-foreground transition-colors hover:text-foreground"
+            className={buttonVariants({
+              variant: "outline",
+              className: "h-auto px-3 py-2 text-xs",
+            })}
           >
             {t("cookie.decline")}
           </button>
           <button
             type="button"
             onClick={() => decide("accepted")}
-            className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
+            className={buttonVariants({
+              variant: "default",
+              className: "h-auto px-4 py-2 text-xs",
+            })}
           >
             {t("cookie.accept")}
           </button>

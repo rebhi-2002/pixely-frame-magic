@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Bell, CalendarDays, CheckCircle2, Clock, Video, Wallet, X } from "lucide-react";
+import {
+  Bell,
+  CalendarDays,
+  CheckCircle2,
+  Clock,
+  MapPin,
+  Plus,
+  Video,
+  Wallet,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBi } from "@/lib/bi";
 import type { PublicSession } from "@/hooks/use-session";
@@ -10,9 +20,13 @@ import type { PublicSession } from "@/hooks/use-session";
  * ولا رسم SVG زخرفي) — نفس التقنية التي تستخدمها منتجات حقيقية (Linear، Notion).
  * الأيقونات وظيفية لا زخرفية. بلا أي أرقام مختلقة: كل الصفوف أشرطة هيكلية.
  *
- * التفاعل: الثلاث بطاقات فوق تبويبات حقيقية — كل واحدة تبدّل محتوى اللوحة
- * كاملةً (لا زر واحد منعزل)، فتعكس فعليًا الفرق بين ثلاث شاشات حقيقية
- * بالمنصة (الطلبات، الجدول، المحفظة) لا حالة تفاعل شكلية واحدة.
+ * التفاعل: 3 تبويبات فعلية تبدّل محتوى اللوحة بالكامل، بإشارة بصرية إضافية
+ * للتبويب النشط (شريط علوي بلونه)، وانتقال لطيف بين اللوحات (fade/slide)
+ * بدل قفزة فجّة. كل تبويب يعكس سيناريو حقيقي من الـSRS:
+ * - معلّقة: المعلّم يراجع الطلب الآن (مؤشر نبض حي)، والطالب يقدر يسحبه.
+ * - مؤكَّدة: تمييز صريح أونلاين (رابط انضمام) من وجاهي (موقع) — FR-S06/S07،
+ *   مع إلغاء/إعادة جدولة حقيقيين — FR-S14/S15.
+ * - المحفظة: رصيد + إجراء شحن سريع حقيقي — FR-W01.
  */
 
 type Tab = "pending" | "confirmed" | "wallet";
@@ -22,6 +36,7 @@ const tabs = [
     key: "pending" as const,
     icon: Clock,
     tone: "text-primary",
+    bar: "bg-primary",
     bgActive: "bg-primary text-primary-foreground",
     ar: "طلبات معلّقة",
     en: "Pending requests",
@@ -30,6 +45,7 @@ const tabs = [
     key: "confirmed" as const,
     icon: CheckCircle2,
     tone: "text-success",
+    bar: "bg-success",
     bgActive: "bg-success text-success-foreground",
     ar: "حجوزات مؤكّدة",
     en: "Confirmed bookings",
@@ -38,10 +54,17 @@ const tabs = [
     key: "wallet" as const,
     icon: Wallet,
     tone: "text-info",
+    bar: "bg-info",
     bgActive: "bg-info text-info-foreground",
     ar: "المحفظة",
     en: "Wallet",
   },
+];
+
+const confirmedRows = [
+  { mode: "online" as const, w: "w-3/4" },
+  { mode: "inperson" as const, w: "w-2/3" },
+  { mode: "online" as const, w: "w-4/5" },
 ];
 
 export function HeroMockup({ session }: { session?: PublicSession | null }) {
@@ -50,6 +73,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const [dismissed, setDismissed] = useState<number[]>([]);
   const [confirmedCancelled, setConfirmedCancelled] = useState<number[]>([]);
   const [rescheduling, setRescheduling] = useState<number | null>(null);
+  const [topUpped, setTopUpped] = useState(false);
   const firstName = session?.fullName?.trim().split(/\s+/)[0];
   const displayName = firstName || bi("طالب", "Student");
   const initial = displayName.charAt(0).toUpperCase();
@@ -76,7 +100,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
               <div>
                 <p className="text-sm font-bold text-foreground">{greeting}</p>
                 <p className="text-xs text-muted-foreground">
-                  {bi("دروسك ومحفظتك بمكان واحد", "Your lessons and wallet in one place")}
+                  {bi("حصصك ومحفظتك بمكان واحد", "Your sessions and wallet in one place")}
                 </p>
               </div>
             </div>
@@ -100,12 +124,21 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   aria-selected={active}
                   onClick={() => setTab(t.key)}
                   className={cn(
-                    "rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
+                    "relative overflow-hidden rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
                     active
                       ? t.bgActive
                       : "bg-secondary/40 text-muted-foreground hover:bg-secondary",
                   )}
                 >
+                  {/* لمسة بصرية مخصّصة: شريط علوي بلون التبويب يظهر فقط حين يكون
+                      نشطًا — يميّز الحالة الفعّالة فعليًا لا بتغيير الخلفية وحدها. */}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute inset-x-0 top-0 h-1 transition-opacity",
+                      active ? t.bar : "opacity-0",
+                    )}
+                  />
                   <t.icon className={cn("mx-auto size-4", active ? "" : t.tone)} />
                   <div
                     className={cn(
@@ -119,7 +152,13 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
             })}
           </div>
 
-          <div role="tabpanel" className="space-y-2.5">
+          {/* key={tab} يعيد تركيب اللوحة فيُشغّل انتقال الدخول في كل تبديل —
+              حركة واحدة مقصودة هنا فقط، لا بكل الصفحة. */}
+          <div
+            key={tab}
+            role="tabpanel"
+            className="animate-in fade-in slide-in-from-bottom-1 space-y-2.5 duration-200"
+          >
             {tab === "pending" && (
               <>
                 <p className="text-xs font-bold text-foreground">
@@ -136,28 +175,39 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   ) : (
                     <div
                       key={i}
-                      className="flex items-center gap-2.5 rounded-lg border-2 border-[var(--border-strong)] bg-primary/5 p-2.5"
+                      className="rounded-lg border-2 border-[var(--border-strong)] bg-primary/5 p-2.5"
                     >
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                        <Clock className="size-4" />
-                      </span>
-                      <div className="flex-1 space-y-1.5">
-                        <div
-                          className={cn(
-                            "h-2 rounded-full bg-secondary",
-                            i === 0 ? "w-3/4" : "w-3/5",
-                          )}
-                        />
-                        <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                          <Clock className="size-4" />
+                        </span>
+                        <div className="flex-1 space-y-1.5">
+                          <div
+                            className={cn(
+                              "h-2 rounded-full bg-secondary",
+                              i === 0 ? "w-3/4" : "w-3/5",
+                            )}
+                          />
+                          <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={bi("سحب الطلب", "Withdraw request")}
+                          onClick={() => setDismissed((d) => [...d, i])}
+                          className="flex size-6 shrink-0 items-center justify-center rounded-md border border-[var(--border-strong)]/50 text-muted-foreground hover:text-destructive"
+                        >
+                          <X className="size-3.5" />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        aria-label={bi("سحب الطلب", "Withdraw request")}
-                        onClick={() => setDismissed((d) => [...d, i])}
-                        className="flex size-6 shrink-0 items-center justify-center rounded-md border border-[var(--border-strong)]/50 text-muted-foreground hover:text-destructive"
-                      >
-                        <X className="size-3.5" />
-                      </button>
+                      {i === 0 && (
+                        <p className="mt-2 inline-flex items-center gap-1.5 ps-10 text-[10px] font-semibold text-primary">
+                          <span className="relative flex size-1.5">
+                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
+                            <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
+                          </span>
+                          {bi("المعلّم يراجع طلبك الآن", "The teacher is reviewing your request")}
+                        </p>
+                      )}
                     </div>
                   ),
                 )}
@@ -169,11 +219,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                 <p className="text-xs font-bold text-foreground">
                   {bi("الجدول القادم", "Upcoming schedule")}
                 </p>
-                {[
-                  { icon: Video, w: "w-3/4" },
-                  { icon: CalendarDays, w: "w-2/3" },
-                  { icon: Video, w: "w-4/5" },
-                ].map((r, i) =>
+                {confirmedRows.map((r, i) =>
                   confirmedCancelled.includes(i) ? (
                     <p
                       key={i}
@@ -188,15 +234,23 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/15 text-success">
-                          <r.icon className="size-4" />
+                          {r.mode === "online" ? (
+                            <Video className="size-4" />
+                          ) : (
+                            <MapPin className="size-4" />
+                          )}
                         </span>
                         <div className="flex-1 space-y-1.5">
                           <div className={cn("h-2 rounded-full bg-secondary", r.w)} />
                           <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
                         </div>
+                        {/* FR-S06/FR-S07: تمييز صريح أونلاين (رابط انضمام) من
+                            وجاهي (موقع) — لا أيقونة فقط بلا فعل حقيقي. */}
+                        <span className="shrink-0 rounded-md bg-success/15 px-2 py-1 text-[9px] font-bold text-success">
+                          {r.mode === "online" ? bi("انضمام", "Join") : bi("الموقع", "Location")}
+                        </span>
                       </div>
-                      {/* FR-S14/FR-S15: الطالب يلغي الحجز أو يطلب إعادة جدولة — لا
-                       مجرد عرض ثابت. */}
+                      {/* FR-S14/FR-S15: الطالب يلغي الحجز أو يطلب إعادة جدولة. */}
                       <div className="mt-2 flex gap-1.5 ps-10">
                         <button
                           type="button"
@@ -230,11 +284,30 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
             {tab === "wallet" && (
               <>
                 <div className="flex items-center justify-between rounded-lg border-2 border-[var(--border-strong)] bg-info/5 p-3">
-                  <span className="text-xs font-bold text-foreground">
-                    {bi("رصيدك الحالي", "Your balance")}
-                  </span>
-                  <div className="h-3 w-16 rounded-full bg-info/30" />
+                  <div>
+                    <span className="text-xs font-bold text-foreground">
+                      {bi("رصيدك الحالي", "Your balance")}
+                    </span>
+                    <div className="mt-1.5 h-3 w-16 rounded-full bg-info/30" />
+                  </div>
+                  {/* FR-W01: شحن المحفظة بتحويل وإيصال — إجراء حقيقي لا زخرفة. */}
+                  <button
+                    type="button"
+                    onClick={() => setTopUpped(true)}
+                    className="flex items-center gap-1 rounded-lg border-2 border-[var(--border-strong)] bg-background px-2.5 py-1.5 text-[10px] font-bold text-info hover:bg-info/10"
+                  >
+                    <Plus className="size-3" />
+                    {bi("شحن", "Top up")}
+                  </button>
                 </div>
+                {topUpped && (
+                  <p className="rounded-md bg-success/10 px-2.5 py-1.5 text-[10px] font-semibold text-success">
+                    {bi(
+                      "أُرسل طلب الشحن، بانتظار مراجعة الإدارة ✓",
+                      "Top-up request sent, awaiting admin review ✓",
+                    )}
+                  </p>
+                )}
 
                 <p className="text-xs font-bold text-foreground">
                   {bi("آخر المعاملات", "Recent transactions")}
@@ -263,7 +336,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
           <Video className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
-          {bi("رابط الاجتماع للدروس الأونلاين", "Meeting link for online lessons")}
+          {bi("رابط الاجتماع للحصص الأونلاين", "Meeting link for online sessions")}
         </p>
       </div>
 

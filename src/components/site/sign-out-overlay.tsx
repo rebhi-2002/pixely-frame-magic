@@ -10,9 +10,9 @@ export function SignOutOverlay({ pending }: { pending: boolean }) {
     <div
       role="status"
       aria-live="polite"
-      className="animate-in fade-in fixed inset-0 z-[90] flex flex-col items-center justify-center gap-4 bg-background/80 backdrop-blur-sm duration-200"
+      className="animate-in fade-in fixed inset-0 z-[90] flex flex-col items-center justify-center gap-4 bg-background duration-200"
     >
-      <span className="relative grid size-14 place-items-center rounded-2xl bg-primary/12 text-primary">
+      <span className="relative grid size-14 place-items-center rounded-2xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
         <BrandLogo className="size-11 animate-pulse" />
       </span>
       <span className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">

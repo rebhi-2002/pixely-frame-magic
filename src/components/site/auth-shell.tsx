@@ -79,7 +79,7 @@ export function AuthShell({
           >
             <div className="mb-6 flex items-start gap-3">
               {icon && (
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
                   {icon}
                 </span>
               )}
