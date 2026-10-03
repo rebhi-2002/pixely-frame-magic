@@ -22,7 +22,7 @@ describe("findUserTypeForRole", () => {
     expect(findUserTypeForRole([{ id: 7, name: "ولي الأمر" }], "parent")?.id).toBe(7);
   });
 
-  it("ما يخمّن بالرقم: نوع غير موجود = undefined", () => {
+  it("نوع غير موجود (لا code ولا رقم 5 ولا اسم) = undefined", () => {
     expect(findUserTypeForRole([{ id: 4, name: "شي تاني" }], "parent")).toBeUndefined();
   });
 });
@@ -34,6 +34,19 @@ describe("resolveRoleKey / parseRoleKey", () => {
   it("احتياط للجلسات القديمة", () => {
     expect(resolveRoleKey({ roleName: "المعلم", roleId: 4 })).toBe("teacher");
     expect(resolveRoleKey({ roleId: 1 })).toBe("admin");
+  });
+  it("الأرقام المعتمدة: 1 أدمن، 3 طالب، 4 معلم، 5 ولي أمر (رقم نصي أو عددي)", () => {
+    expect(resolveRoleKey({ roleId: 1 })).toBe("admin");
+    expect(resolveRoleKey({ roleId: 3 })).toBe("student");
+    expect(resolveRoleKey({ roleId: 4 })).toBe("teacher");
+    expect(resolveRoleKey({ roleId: "5" })).toBe("parent");
+    expect(resolveRoleKey({ roleId: 2 })).toBe("student"); // غير معروف → الافتراضي
+  });
+  it("الرقم يتقدّم على الاسم", () => {
+    expect(resolveRoleKey({ roleName: "الطالب", roleId: 4 })).toBe("teacher");
+  });
+  it("يلاقي النوع بالرقم لو ما رجع code ولا طابق الاسم", () => {
+    expect(findUserTypeForRole([{ id: 5, name: "xyz" }], "parent")?.id).toBe(5);
   });
   it("يرفض مفاتيح غير معروفة", () => {
     expect(parseRoleKey("supervisor")).toBeNull();

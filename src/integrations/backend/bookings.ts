@@ -1,78 +1,133 @@
-// ربط جاهز (طبقة الأنواع/الدوال فقط) مع BookingController بالباك اند — تحقّقت من كل
-// حقل مباشرة من كود الباك اند (BookingDtos.cs + BookingController.cs). **لسا ما فيه أي
-// واجهة تستخدم هالملف** — مقصود، مش نسيان: عرض شاشة حجز حية للمستخدمين الحقيقيين الآن
-// خطر فعلي (راجع docs/operations/2026-09-21-remaining-integration-roadmap.md، بند
-// "Booking/Submit ضد معلم يتيم بلا UserId"). لما ينحل P0-1 وP1-1 بالباك اند، هالدوال
-// جاهزة للاستيراد المباشر بدون أي تعديل.
+// ربط BookingController بالباك اند — مواءمة كاملة مع Swagger (WP-00 / 00-01 + 00-02).
+//
+// المصدر المعتمد: Swagger_UI (2026-09-22) + SRS. أي تعليق أقدم عن «P0-1/P1-1» أو ملفات
+// docs/operations/* لا يُعتمد (راجع Discrepancies D-14).
+//
+// القواعد:
+// - كل POST بيرجع OperationResult (HTTP 200 حتى عند الفشل المنطقي) → الواجهة لازم تستدعي
+//   assertOk(result, …) من ./op-result بعد كل استدعاء كتابة.
+// - الحالات أرقام 1..6 (lib/enums.ts: BookingStatus)، لا نصوص.
+// - ردود القوائم غير موثّقة بالـSwagger → PendingResponse (WP-J يستبدلها بعد وصول العينات).
+//   ممنوع قراءة حقولها قبل ذلك.
+//
+// ⚠️ ملف مجمّد بعد إغلاق WP-00: من يحتاج دالة جديدة يرفع CR (راجع FileOwnership).
 
 import { apiClient } from "./client";
+import type { OperationResult } from "./op-result";
+import type { PendingResponse } from "./pending-json";
+import type { BookingStatus, DeliveryType } from "@/lib/enums";
 
-export type BookingStatus = "Pending" | "Confirmed" | "Completed" | "Rejected" | "Cancelled";
-// ⚠️ "Accepted" موجودة بالـenum بالباك اند لكن BookingService ما بيحطّها أبدًا —
-// Decide (قبول) بيحوّل الحالة رأسًا لـConfirmed (بعد خصم المحفظة). لا تتوقّعها بالعرض.
+export type { BookingStatus } from "@/lib/enums";
 
-export interface BookingRow {
-  id: number;
-  studentId: number;
-  teacherId: number;
-  courseId?: number | null;
-  date: string; // "YYYY-MM-DD" — بدون منطقة زمنية صريحة، راجع P2-5 بـbackend-requirements.md
-  startTime: string; // "HH:mm:ss"
-  durationMinutes: number;
-  price: number;
-  status: BookingStatus;
-  rejectionReason?: string | null;
-  createdOn: string;
-}
+// PENDING-JSON (WP-J / J-01): شكل الصف غير موثّق — انتظر العينة (Q-05).
+export type BookingRow = PendingResponse;
+// PENDING-JSON (WP-J / J-01)
+export type TeacherBookingRow = PendingResponse;
+// PENDING-JSON (WP-J / J-01)
+export type TeacherRescheduleRequestRow = PendingResponse;
 
+/** حالات طلب إعادة الجدولة المسموحة كفلتر (Swagger: 1..4). أسماؤها غير موثّقة (تُحسم بـJ-02). */
+export type RescheduleStatusFilter = 1 | 2 | 3 | 4;
+
+/** جسم Booking/Submit كما بالـSwagger. التاريخ "YYYY-MM-DD" (أو ISO)، والوقت "HH:mm[:ss]". */
 export interface BookingInput {
   teacherId: number;
-  courseId?: number | null;
+  subjectId: number;
+  gradeId: number;
+  /** 1 = حضوري، 2 = أونلاين. */
+  teachingMode: DeliveryType;
   date: string;
   startTime: string;
   durationMinutes: number;
+  studentNote?: string | null;
 }
 
-/** يرسل طلب حجز جديد (طالب/ولي أمر). */
-export async function submitBooking(input: BookingInput): Promise<BookingRow> {
-  return apiClient.post<BookingRow>("/api/Booking/Submit", input);
+export interface RescheduleDecisionInput {
+  requestId: number;
+  approve: boolean;
+  rejectionReason?: string | null;
 }
 
-/** قبول/رفض طلب حجز (معلم). القبول يخصم فورًا من محفظة الطالب ويحوّل الحالة لـConfirmed. */
+/** يرسل طلب حجز جديد (طالب). النتيجة: OperationResult — returnId = رقم الحجز عند النجاح. */
+export async function submitBooking(input: BookingInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Booking/Submit", input);
+}
+
+/**
+ * قبول/رفض طلب حجز (معلم). الحقل `accept` (وليس approve). السبب مطلوب واجهيًا عند الرفض.
+ * ملاحظة: متى يُخصم المبلغ (عند القبول أم الإرسال) بانتظار Q-06.
+ */
 export async function decideBooking(
   bookingId: number,
-  approve: boolean,
-  rejectionReason?: string,
-): Promise<BookingRow> {
-  return apiClient.post<BookingRow>("/api/Booking/Decide", { bookingId, approve, rejectionReason });
+  accept: boolean,
+  rejectionReason?: string | null,
+): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Booking/Decide", {
+    bookingId,
+    accept,
+    rejectionReason: rejectionReason ?? null,
+  });
 }
 
-/** إلغاء حجز — bookingId يُرسل كـquery param (الباك اند ما فيه [FromBody] على هالـaction). */
-export async function cancelBooking(bookingId: number): Promise<BookingRow> {
-  return apiClient.post<BookingRow>(`/api/Booking/Cancel?bookingId=${bookingId}`);
+/**
+ * إلغاء حجز — bookingId وreason كلاهما query params (الـaction بلا body).
+ * للطالب الأفضل Student/CancelBooking (student.ts → studentCancelBooking) لأنه بجسم JSON.
+ */
+export async function cancelBooking(bookingId: number, reason?: string): Promise<OperationResult> {
+  const params = new URLSearchParams({ bookingId: String(bookingId) });
+  if (reason?.trim()) params.set("reason", reason.trim());
+  return apiClient.post<OperationResult>(`/api/Booking/Cancel?${params.toString()}`);
 }
 
-/** إنهاء حصة مؤكَّدة (معلم فقط، من Confirmed → Completed). */
-export async function completeBooking(bookingId: number): Promise<BookingRow> {
-  return apiClient.post<BookingRow>(`/api/Booking/Complete?bookingId=${bookingId}`);
+/** إنهاء حصة مؤكَّدة (معلم، Confirmed → Completed). */
+export async function completeBooking(bookingId: number): Promise<OperationResult> {
+  return apiClient.post<OperationResult>(
+    `/api/Booking/Complete?bookingId=${encodeURIComponent(String(bookingId))}`,
+  );
 }
 
-/** تقييم حجز مكتمل (طالب). */
+/** تقييم حجز مكتمل (طالب). الحقول بالـSwagger: ratingValue (1..5) + review. */
 export async function rateBooking(
   bookingId: number,
-  rating: number,
-  comment?: string,
-): Promise<void> {
-  await apiClient.post("/api/Booking/Rate", { bookingId, rating, comment });
+  ratingValue: number,
+  review?: string | null,
+): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Booking/Rate", {
+    bookingId,
+    ratingValue,
+    review: review ?? null,
+  });
 }
 
-/** حجوزات المستخدم الحالي (طالب/ولي أمر). قائمة فاضية أمر طبيعي وصادق — راجع الملاحظة أعلى الملف. */
+/** حجوزات المستخدم الحالي. // PENDING-JSON: نفترض مصفوفة مسطّحة، وغيرها = قائمة فارغة. */
 export async function listMyBookings(): Promise<BookingRow[]> {
-  return apiClient.get<BookingRow[]>("/api/Booking/MyBookings");
+  const result = await apiClient.get<BookingRow[]>("/api/Booking/MyBookings");
+  return Array.isArray(result) ? result : [];
 }
 
-/** حجوزات المعلم الحالي، مع فلتر حالة اختياري. */
-export async function listTeacherBookings(status?: BookingStatus): Promise<BookingRow[]> {
-  const q = status ? `?status=${encodeURIComponent(status)}` : "";
-  return apiClient.get<BookingRow[]>(`/api/Booking/TeacherBookings${q}`);
+/** حجوزات المعلم الحالي مع فلتر حالة رقمي اختياري (1..6). // PENDING-JSON */
+export async function listTeacherBookings(status?: BookingStatus): Promise<TeacherBookingRow[]> {
+  const qs = status ? `?status=${status}` : "";
+  const result = await apiClient.get<TeacherBookingRow[]>(`/api/Booking/TeacherBookings${qs}`);
+  return Array.isArray(result) ? result : [];
+}
+
+/** طلبات إعادة الجدولة الواردة للمعلم (فلتر حالة 1..4 اختياري). // PENDING-JSON */
+export async function listTeacherRescheduleRequests(
+  status?: RescheduleStatusFilter,
+): Promise<TeacherRescheduleRequestRow[]> {
+  const qs = status ? `?status=${status}` : "";
+  const result = await apiClient.get<TeacherRescheduleRequestRow[]>(
+    `/api/Booking/TeacherRescheduleRequests${qs}`,
+  );
+  return Array.isArray(result) ? result : [];
+}
+
+/** قرار المعلم بطلب إعادة الجدولة: {requestId, approve, rejectionReason}. */
+export async function decideReschedule(input: RescheduleDecisionInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Booking/DecideReschedule", {
+    requestId: input.requestId,
+    approve: input.approve,
+    rejectionReason: input.rejectionReason ?? null,
+  });
 }

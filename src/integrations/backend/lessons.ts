@@ -1,77 +1,86 @@
-// ربط جاهز (طبقة الأنواع/الدوال فقط) مع LessonController بالباك اند — نفس ملاحظة
-// bookings.ts: بدون واجهة بعد، بانتظار P1-1 (لا صف Teacher لحساب معلم حقيقي)، لأن
-// كل هالدوال تفترض معلمًا يملك مجموعة/كورس فعليًا.
+// ربط LessonController بالباك اند — مواءمة مع Swagger (WP-00 / 00-03).
+//
+// Create / Update / ConfigureMeeting / Cancel بترجع OperationResult (وليس LessonRow) →
+// الواجهة بتستدعي assertOk(result, …) من ./op-result بعد كل استدعاء.
+// GetSchedule غير موثّق الرد → PendingResponse لحد WP-J / J-06.
+//
+// ⚠️ ملف مجمّد بعد إغلاق WP-00: من يحتاج دالة جديدة يرفع CR.
 
 import { apiClient } from "./client";
+import type { OperationResult } from "./op-result";
+import type { PendingResponse } from "./pending-json";
+import type { MeetingPlatform } from "@/lib/enums";
 
-export type MeetingPlatform = 1 | 2 | 3 | 4; // Zoom, GoogleMeet, MicrosoftTeams, Other
+// توحيد MeetingPlatform عبر lib/enums.ts (Discrepancies D-10).
+export type { MeetingPlatform } from "@/lib/enums";
 
-export interface LessonRow {
-  id: number;
+// PENDING-JSON (WP-J / J-06): شكل صف الجدول غير موثّق — انتظر العينة (Q-05).
+export type LessonRow = PendingResponse;
+
+/** جسم Lesson/Create وLesson/Update كما بالـSwagger. */
+export interface LessonInput {
+  /** موجود = تعديل (Update)، غايب = إنشاء (Create). */
+  id?: number;
   groupId: number;
   courseId: number;
   title: string;
-  scheduledDate: string; // "YYYY-MM-DD"
-  startTime: string; // "HH:mm:ss"
+  /** "YYYY-MM-DD" (أو ISO). */
+  scheduledDate: string;
+  /** "HH:mm[:ss]". */
+  startTime: string;
   durationMinutes: number;
   orderIndex: number;
   meetingPlatform?: MeetingPlatform | null;
   meetingUrl?: string | null;
   meetingInstructions?: string | null;
   room?: string | null;
-  isCancelled?: boolean;
-  cancellationReason?: string | null;
 }
 
-export interface LessonInput {
-  id?: number; // موجود = تعديل، غايب = إنشاء
-  groupId: number;
-  courseId: number;
-  title: string;
-  scheduledDate: string;
-  startTime: string;
-  durationMinutes: number;
-  orderIndex: number;
-  meetingPlatform?: MeetingPlatform;
-  meetingUrl?: string;
-  meetingInstructions?: string;
-  room?: string;
+/** إنشاء درس بمجموعة (معلم — لازم يملك الكورس). returnId = رقم الدرس عند النجاح. */
+export async function createLesson(input: LessonInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Lesson/Create", input);
 }
 
-/** إنشاء درس جديد بمجموعة (معلم — لازم يملك الكورس). */
-export async function createLesson(input: LessonInput): Promise<LessonRow> {
-  return apiClient.post<LessonRow>("/api/Lesson/Create", input);
+/** تعديل درس موجود (لدرس لم يبدأ وغير ملغى). */
+export async function updateLesson(input: LessonInput & { id: number }): Promise<OperationResult> {
+  return apiClient.put<OperationResult>("/api/Lesson/Update", input);
 }
 
-/** تعديل درس موجود. */
-export async function updateLesson(input: LessonInput & { id: number }): Promise<LessonRow> {
-  return apiClient.put<LessonRow>("/api/Lesson/Update", input);
-}
-
-/** ضبط رابط/منصّة اجتماع أونلاين لدرس. */
+/** ضبط منصّة/رابط/تعليمات اجتماع أونلاين لدرس. تحقّق من الرابط بـisHttpUrl قبل الإرسال. */
 export async function configureLessonMeeting(
   lessonId: number,
   meetingPlatform: MeetingPlatform,
   meetingUrl: string,
-  meetingInstructions?: string,
-): Promise<LessonRow> {
-  return apiClient.put<LessonRow>("/api/Lesson/ConfigureMeeting", {
+  meetingInstructions?: string | null,
+): Promise<OperationResult> {
+  return apiClient.put<OperationResult>("/api/Lesson/ConfigureMeeting", {
     lessonId,
     meetingPlatform,
     meetingUrl,
-    meetingInstructions,
+    meetingInstructions: meetingInstructions ?? null,
   });
 }
 
-/** إلغاء درس (لا يوجد Complete بهالكنترولر — راجع P2-6 بـbackend-requirements.md). */
-export async function cancelLesson(lessonId: number, reason?: string): Promise<LessonRow> {
-  return apiClient.put<LessonRow>("/api/Lesson/Cancel", { lessonId, reason });
+/** إلغاء درس مع سبب اختياري (يبقى بالسجل بحالة ملغى). */
+export async function cancelLesson(
+  lessonId: number,
+  reason?: string | null,
+): Promise<OperationResult> {
+  return apiClient.put<OperationResult>("/api/Lesson/Cancel", {
+    lessonId,
+    reason: reason ?? null,
+  });
 }
 
-/** جدول دروس كورس أو مجموعة معيّنة. */
+/**
+ * جدول دروس كورس أو مجموعة. // PENDING-JSON: نفترض مصفوفة مسطّحة، وغيرها = قائمة فارغة.
+ * بارامترات الاستعلام بالـSwagger: courseId, groupId.
+ */
 export async function getLessonSchedule(courseId?: number, groupId?: number): Promise<LessonRow[]> {
   const params = new URLSearchParams();
   if (courseId) params.set("courseId", String(courseId));
   if (groupId) params.set("groupId", String(groupId));
-  return apiClient.get<LessonRow[]>(`/api/Lesson/GetSchedule?${params.toString()}`);
+  const qs = params.toString();
+  const result = await apiClient.get<LessonRow[]>(`/api/Lesson/GetSchedule${qs ? `?${qs}` : ""}`);
+  return Array.isArray(result) ? result : [];
 }

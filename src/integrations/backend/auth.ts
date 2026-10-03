@@ -5,7 +5,7 @@
 
 import { loadBackendUserOptions } from "./admin-users";
 import type { RoleKey } from "@/lib/bi";
-import { parseRoleKey } from "./user-types";
+import { parseRoleKey, roleKeyFromTypeId } from "./user-types";
 import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
 
 const AUTH_STORAGE_KEY = "academia.auth";
@@ -67,11 +67,66 @@ type ResolvedRole = { roleId: number | null; roleName: string | null; roleKey: R
 function roleFromEnvelope(payload: ProfileEnvelope): ResolvedRole {
   const id = payload?.userTypeId ?? payload?.UserTypeId;
   const name = payload?.userTypeName ?? payload?.UserTypeName;
+  const roleId =
+    typeof id === "number"
+      ? id
+      : id != null && id !== "" && !Number.isNaN(Number(id))
+        ? Number(id)
+        : null;
   return {
-    roleId: typeof id === "number" ? id : null,
+    roleId,
     roleName: typeof name === "string" && name.length > 0 ? name : null,
-    roleKey: parseRoleKey(payload?.userTypeCode ?? payload?.UserTypeCode),
+    roleKey:
+      parseRoleKey(payload?.userTypeCode ?? payload?.UserTypeCode) ?? roleKeyFromTypeId(roleId),
   };
+}
+
+/**
+ * ذاكرة دور على الجهاز: بتعيش بعد تسجيل الخروج (مفتاح تخزين مستقل عن الجلسة).
+ * السبب: MyProfileModal ما بيرجّع الدور وCreateEditModal للأدمن بس (403 لغيره)، فبعد
+ * الخروج كان الدور بيضيع وبيرجع المستخدم "طالب" افتراضيًا. منحفظه وقت ما نعرفه
+ * (تسجيل حساب، أو ردّ سيرفر موثوق) وبنسترجعه لنفس الحساب عند الدخول التالي.
+ * ملاحظة: بتغطي نفس المتصفح بس — الحل لكل الأجهزة هو إرجاع userTypeId من الباك اند.
+ */
+const ROLE_CACHE_KEY = "academia.role-cache.v1";
+type CachedRole = { roleId: number | null; roleName: string | null; roleKey: RoleKey };
+type RoleCache = { byId: Record<string, CachedRole>; byEmail: Record<string, CachedRole> };
+
+function readRoleCache(): RoleCache {
+  if (typeof window === "undefined") return { byId: {}, byEmail: {} };
+  try {
+    const raw = JSON.parse(localStorage.getItem(ROLE_CACHE_KEY) ?? "null") as RoleCache | null;
+    return { byId: raw?.byId ?? {}, byEmail: raw?.byEmail ?? {} };
+  } catch {
+    return { byId: {}, byEmail: {} };
+  }
+}
+
+function rememberRole(userId: string | null, email: string | null, role: ResolvedRole): void {
+  const key = role.roleKey ?? roleKeyFromTypeId(role.roleId);
+  if (!key || typeof window === "undefined") return;
+  try {
+    const cache = readRoleCache();
+    const entry: CachedRole = { roleId: role.roleId, roleName: role.roleName, roleKey: key };
+    if (userId) cache.byId[userId] = entry;
+    if (email) cache.byEmail[email.trim().toLowerCase()] = entry;
+    localStorage.setItem(ROLE_CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    /* التخزين غير متاح (وضع خاص/ممتلئ) — الدور يضل من الجلسة فقط */
+  }
+}
+
+function recallRole(userId: string | null, email: string | null): ResolvedRole | null {
+  const cache = readRoleCache();
+  const hit =
+    (userId ? cache.byId[userId] : undefined) ??
+    (email ? cache.byEmail[email.trim().toLowerCase()] : undefined);
+  return hit ? { roleId: hit.roleId, roleName: hit.roleName, roleKey: hit.roleKey } : null;
+}
+
+const NO_ROLE: ResolvedRole = { roleId: null, roleName: null, roleKey: null };
+function hasRole(r: ResolvedRole): boolean {
+  return r.roleKey != null || r.roleId != null;
 }
 
 /** نتيجة عملية (OperationResult) فاشلة → Error برسالة نظيفة (بدون <br>). */
@@ -224,13 +279,14 @@ async function fetchUserType(userId: string): Promise<ResolvedRole> {
     const u = modal?.user ?? modal?.User;
     const roleId = typeof u?.userTypeId === "number" ? u.userTypeId : null;
     const roleName = typeof u?.userType?.name === "string" ? u.userType.name : null;
+    const roleKey = roleKeyFromTypeId(roleId);
     if (roleId == null) {
       console.warn(
         "[auth] fetchUserType: userTypeId غير موجود بالاستجابة — تحقق من شكل الـJSON الفعلي:",
         modal,
       );
     }
-    return { roleId, roleName, roleKey: null };
+    return { roleId, roleName, roleKey };
   } catch (err) {
     console.error("[auth] fetchUserType failed — سيتم التعامل مع المستخدم كطالب افتراضيًا:", err);
     return { roleId: null, roleName: null, roleKey: null };
@@ -276,7 +332,7 @@ async function fetchProfilePayloadAfterAuth(kind: "login" | "register"): Promise
  * (بيشتغل للأدمن بس — غير الأدمن بياخد 403 فبنرجع null). */
 async function resolveRole(payload: ProfileEnvelope, userId: string): Promise<ResolvedRole> {
   const fromEnvelope = roleFromEnvelope(payload);
-  if (fromEnvelope.roleKey != null || fromEnvelope.roleId != null) return fromEnvelope;
+  if (hasRole(fromEnvelope)) return fromEnvelope;
   return fetchUserType(userId);
 }
 
@@ -300,11 +356,17 @@ export async function login(email: string, password: string): Promise<void> {
   }
 
   // تسجيل الدخول ما فيه دور مختار من المستخدم: الدور من ردّ MyProfileModal، وإلا fetchUserType.
-  const userType = await resolveRole(payload, profile.id);
+  let userType = await resolveRole(payload, profile.id);
+  if (hasRole(userType)) {
+    rememberRole(profile.id, profile.email, userType);
+  } else {
+    // ما قدرنا نعرف الدور من السيرفر (غير الأدمن) → آخر دور معروف لنفس الحساب بهالجهاز.
+    userType = recallRole(profile.id, profile.email) ?? NO_ROLE;
+  }
 
   profile.roleId = userType.roleId;
   profile.roleName = userType.roleName;
-  profile.roleKey = userType.roleKey;
+  profile.roleKey = userType.roleKey ?? roleKeyFromTypeId(userType.roleId);
 
   writeStoredSession({
     email: profile.email,
@@ -375,7 +437,13 @@ export async function register(input: RegisterInput): Promise<void> {
         : await resolveRole(payload, profile.id);
   profile.roleId = userType.roleId ?? input.userTypeId;
   profile.roleName = userType.roleName;
-  profile.roleKey = userType.roleKey ?? input.roleKey ?? null;
+  profile.roleKey = userType.roleKey ?? input.roleKey ?? roleKeyFromTypeId(profile.roleId) ?? null;
+  // نحفظ الدور المعروف وقت التسجيل — هو المصدر الوحيد الموثوق لغير الأدمن.
+  rememberRole(profile.id, profile.email, {
+    roleId: profile.roleId,
+    roleName: profile.roleName,
+    roleKey: profile.roleKey,
+  });
 
   writeStoredSession({
     email: profile.email,
@@ -407,12 +475,26 @@ export async function verifyServerSession(): Promise<boolean> {
     profile.roleId = fromEnvelope.roleId ?? previous?.roleId ?? null;
     profile.roleName = fromEnvelope.roleName ?? previous?.roleName ?? null;
     profile.roleKey = fromEnvelope.roleKey ?? previous?.roleKey ?? null;
-    if (profile.roleId == null) {
+    if (profile.roleId == null && profile.roleKey == null) {
       const fetched = await fetchUserType(profile.id);
       profile.roleId = fetched.roleId;
       profile.roleName = fetched.roleName;
-      profile.roleKey = profile.roleKey ?? fetched.roleKey;
+      profile.roleKey = fetched.roleKey;
     }
+    if (profile.roleId == null && profile.roleKey == null) {
+      const recalled = recallRole(profile.id, profile.email);
+      if (recalled) {
+        profile.roleId = recalled.roleId;
+        profile.roleName = recalled.roleName;
+        profile.roleKey = recalled.roleKey;
+      }
+    }
+    profile.roleKey = profile.roleKey ?? roleKeyFromTypeId(profile.roleId);
+    rememberRole(profile.id, profile.email, {
+      roleId: profile.roleId,
+      roleName: profile.roleName,
+      roleKey: profile.roleKey,
+    });
 
     writeStoredSession({
       email: profile.email,
@@ -515,5 +597,5 @@ export function wasJustRegistered(): boolean {
 /** أدمن حقيقي = roleKey "admin" من الباك اند (الرقم 1 احتياط للجلسات القديمة بدون roleKey). */
 export function isRealAdmin(): boolean {
   const p = readStoredSession()?.profile;
-  return p?.roleKey === "admin" || (p?.roleKey == null && p?.roleId === 1);
+  return (p?.roleKey ?? roleKeyFromTypeId(p?.roleId)) === "admin";
 }

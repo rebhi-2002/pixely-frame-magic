@@ -11,7 +11,10 @@
 //   موثّق بـdocs/operations/2026-09-21-backend-requirements.md.
 
 import { ApiError, apiClient } from "./client";
+import type { OperationResult } from "./op-result";
+import type { PendingResponse } from "./pending-json";
 import type { PagedResult } from "./teachers";
+import type { DayOfWeek, DeliveryType } from "@/lib/enums";
 
 export type BackendCourseDeliveryType = 1 | 2; // 1=InPerson, 2=Online
 export type BackendCourseStatus = 1 | 2 | 3; // 1=Draft, 2=Published, 3=Archived
@@ -115,9 +118,7 @@ export async function getPublishedCourse(id: number): Promise<BackendCourseRow |
 
 /**
  * كل الكورسات (مسودة/منشور/مؤرشف) للأدمن — /api/Course/GetAll، مقصور على الأدمن
- * والمعلم (RequireUserTypes). ⚠️ إنشاء/تعديل كورس (CreateEdit) غير مربوط بعد لأنه
- * يحتاج مصدر مواد/صفوف/فئات حقيقي غير موجود بالباك اند حالياً (P1-3) — راجع
- * docs/operations/2026-09-21-backend-requirements.md.
+ * والمعلم (RequireUserTypes). إنشاء/تعديل كورس صار مربوطًا عبر createEditCourse أدناه.
  */
 export async function listAllCoursesForAdmin(
   request: PublishedCoursesPageRequest & { searchValue?: string } = {},
@@ -149,4 +150,89 @@ export async function listAllCoursesForAdminFull(maxPages = 6): Promise<Publishe
   );
   const items = [first, ...rest].flatMap((page) => page.data);
   return { items, totalCount: total, truncated: total > items.length };
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// WP-00 / 00-04 — دوال الكورسات الناقصة (جهة المعلم). أجسام الطلب من Swagger؛ كل رد غير
+// موثّق = PendingResponse لحد WP-J. ⚠️ مجمّد بعد إغلاق WP-00 (CR لأي إضافة).
+// ════════════════════════════════════════════════════════════════════════════════════
+
+// PENDING-JSON (WP-J / J-05): تفاصيل كورس المعلم (يفترض أن تشمل groupId — Q-02).
+export type TeacherCourseDetail = PendingResponse;
+// PENDING-JSON (WP-J / J-05): صف طالب بمجموعة (الحقول المسموحة بالعرض: اسم/هاتف/موقع فقط).
+export type GroupStudentRow = PendingResponse;
+
+/** جسم Course/CreateEdit كما بالـSwagger. */
+export interface CourseInput {
+  /** 0 أو غايب = إنشاء، موجود = تعديل. */
+  id?: number;
+  /** مطلوب بالـDTO لكن غير محسوم: هل يؤخذ من الجلسة؟ (Q-03) — لا ترسله إلا بعد التأكد. */
+  teacherId?: number;
+  subjectId: number;
+  categoryId: number;
+  title: string;
+  description?: string | null;
+  price: number;
+  deliveryType: DeliveryType;
+  maxStudents: number;
+  groupName?: string | null;
+  gradeId: number;
+  /** true = مسودة، false = نشر مباشر. */
+  saveAsDraft: boolean;
+}
+
+export interface GroupScheduleDay {
+  dayOfWeek: DayOfWeek;
+  /** "HH:mm[:ss]". */
+  startTime: string;
+}
+
+/** جسم Course/ConfigureGroupSchedule كما بالـSwagger. */
+export interface GroupScheduleInput {
+  groupId: number;
+  maxStudents: number;
+  /** "YYYY-MM-DD" (أو ISO). */
+  courseStartDate: string;
+  courseEndDate: string;
+  defaultLessonDurationMinutes: number;
+  scheduleDays: GroupScheduleDay[];
+}
+
+/** إنشاء/تعديل كورس (معلم). returnId = رقم الكورس عند النجاح. استدعِ assertOk بعدها. */
+export async function createEditCourse(input: CourseInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Course/CreateEdit", input);
+}
+
+/** ضبط جدول المجموعة المتكرر (حد أقصى، فترة الكورس، مدة الدرس، أيام الحضور + الوقت). */
+export async function configureGroupSchedule(input: GroupScheduleInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Course/ConfigureGroupSchedule", input);
+}
+
+/** طلاب مجموعة (بحث اختياري بالاسم). // PENDING-JSON: نفترض مصفوفة مسطّحة. */
+export async function getGroupStudents(
+  groupId: number,
+  keyword?: string,
+): Promise<GroupStudentRow[]> {
+  const params = new URLSearchParams({ groupId: String(groupId) });
+  if (keyword?.trim()) params.set("keyword", keyword.trim());
+  const result = await apiClient.get<GroupStudentRow[]>(
+    `/api/Course/GetGroupStudents?${params.toString()}`,
+  );
+  return Array.isArray(result) ? result : [];
+}
+
+/** تفاصيل كورس المعلم (GetMineById). // PENDING-JSON: الشكل (وgroupId) غير موثّق — Q-02/Q-05. */
+export async function getMyCourse(id: number): Promise<TeacherCourseDetail> {
+  return apiClient.get<TeacherCourseDetail>(`/api/Course/GetMineById?id=${id}`);
+}
+
+/**
+ * قائمة كورسات المعلم. ⚠️ Q-01 مفتوح: لا يوجد endpoint موثّق مخصّص للمعلم، وGetAll
+ * (RequireUserTypes) قد يرجّع كورسات كل المعلمين. لا تعرض النتيجة كـ«كورساتي» قبل حسم
+ * الفلترة (WP-J / J-05)؛ ويُسمح بتصفية محلية بـcoursesOfTeacher لو توفر teacherId.
+ */
+export async function listMyCourses(
+  request: PublishedCoursesPageRequest & { searchValue?: string } = {},
+): Promise<PagedResult<BackendCourseRow>> {
+  return listAllCoursesForAdmin(request);
 }

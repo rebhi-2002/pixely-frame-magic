@@ -2,7 +2,11 @@ import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 import { ApiError, apiClient } from "./client";
 import {
   PUBLISHED_PAGE_SIZE,
+  configureGroupSchedule,
   coursesOfTeacher,
+  createEditCourse,
+  getGroupStudents,
+  getMyCourse,
   getPublishedCourse,
   listAllPublishedCourses,
   listPublishedCoursesPage,
@@ -111,5 +115,61 @@ describe("courses.ts — الكتالوج العام (GetPublished)", () => {
     await expect(getPublishedCourse(5)).rejects.toBeInstanceOf(ApiError);
     get.mockResolvedValueOnce(course(5));
     await expect(getPublishedCourse(5)).resolves.toMatchObject({ id: 5 });
+  });
+});
+
+describe("courses.ts — دوال المعلم (WP-00 / 00-04)", () => {
+  beforeEach(() => {
+    post.mockReset().mockResolvedValue({ success: true, returnId: 21 });
+    get.mockReset().mockResolvedValue([]);
+  });
+
+  it("createEditCourse = POST /Course/CreateEdit بالحقول الموثّقة", async () => {
+    const input = {
+      subjectId: 1,
+      categoryId: 2,
+      title: "رياضيات",
+      price: 40,
+      deliveryType: 2 as const,
+      maxStudents: 10,
+      gradeId: 3,
+      saveAsDraft: true,
+    };
+    const result = await createEditCourse(input);
+    expect(post).toHaveBeenCalledWith("/api/Course/CreateEdit", input);
+    expect(result.returnId).toBe(21);
+  });
+
+  it("configureGroupSchedule = POST /Course/ConfigureGroupSchedule", async () => {
+    const input = {
+      groupId: 1,
+      maxStudents: 12,
+      courseStartDate: "2026-10-10",
+      courseEndDate: "2026-12-10",
+      defaultLessonDurationMinutes: 60,
+      scheduleDays: [{ dayOfWeek: 6 as const, startTime: "16:00" }],
+    };
+    await configureGroupSchedule(input);
+    expect(post).toHaveBeenCalledWith("/api/Course/ConfigureGroupSchedule", input);
+  });
+
+  it("getGroupStudents يرسل groupId ويضيف keyword عند وجوده فقط", async () => {
+    await getGroupStudents(5, " سارة ");
+    const params = new URLSearchParams((get.mock.calls[0][0] as string).split("?")[1]);
+    expect(params.get("groupId")).toBe("5");
+    expect(params.get("keyword")).toBe("سارة");
+    await getGroupStudents(5);
+    expect(get).toHaveBeenLastCalledWith("/api/Course/GetGroupStudents?groupId=5");
+  });
+
+  it("getGroupStudents: ردّ غير مصفوفة = فارغة", async () => {
+    get.mockResolvedValue(null);
+    expect(await getGroupStudents(5)).toEqual([]);
+  });
+
+  it("getMyCourse = GET /Course/GetMineById", async () => {
+    get.mockResolvedValue({ id: 8 });
+    await getMyCourse(8);
+    expect(get).toHaveBeenCalledWith("/api/Course/GetMineById?id=8");
   });
 });

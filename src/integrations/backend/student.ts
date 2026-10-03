@@ -3,12 +3,15 @@
 // حتى ما نخمّن شكل الرد.
 
 import { apiClient } from "./client";
+import type { OperationResult } from "./op-result";
+import type { PendingResponse } from "./pending-json";
+import type { BookingStatus, DeliveryType, MeetingPlatform } from "@/lib/enums";
 
-export type CourseDeliveryType = 1 | 2; // 1=InPerson, 2=Online
-export type MeetingPlatform = 1 | 2 | 3 | 4; // Zoom, GoogleMeet, MicrosoftTeams, Other
-export type AttendanceStatus = 1 | 2 | 3 | 4; // Present, Absent, Late, Excused
+// الأنواع الرقمية مصدرها الوحيد lib/enums.ts (Discrepancies D-10) — بنعيد تصديرها هون
+// حتى ما تنكسر الاستيرادات الحالية.
+export type { AttendanceStatus, BookingStatus, MeetingPlatform } from "@/lib/enums";
+export type CourseDeliveryType = DeliveryType; // 1=InPerson, 2=Online
 export type NotificationType = 1 | 2 | 3 | 4 | 5; // JoinRequest, Wallet, Schedule, System, Booking
-export type BookingStatus = 1 | 2 | 3 | 4 | 5 | 6; // Pending, Accepted, Rejected, Cancelled, Confirmed, Completed
 
 export interface ActiveCourseDto {
   enrollmentId: number;
@@ -136,4 +139,122 @@ export async function markStudentNotificationRead(
     `/api/Student/MarkNotificationRead?id=${id}`,
     {},
   );
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// WP-00 / 00-05 — الدوال العشر الناقصة لبوابة الطالب. بارامترات/أجسام الطلب من Swagger.
+// الردود غير الموثّقة = PendingResponse (WP-J). الاستثناء: getStudentProgress يستخدم
+// StudentProgressDto الموجود أعلاه. ⚠️ مجمّد بعد إغلاق WP-00 (CR لأي إضافة).
+// ════════════════════════════════════════════════════════════════════════════════════
+
+// PENDING-JSON (WP-J / J-02): تفاصيل حجز (هل فيها isRated/تفاصيل الدفع؟ — Q-10).
+export type StudentBookingDetail = PendingResponse;
+// PENDING-JSON (WP-J / J-02): حالة دفع الحجز.
+export type StudentBookingPayment = PendingResponse;
+// PENDING-JSON (WP-J / J-02): طلب إعادة جدولة (أسماء الحالات 1..4 غير موثّقة).
+export type StudentRescheduleRequest = PendingResponse;
+// PENDING-JSON (WP-J / J-03): تفاصيل درس.
+export type StudentLessonDetail = PendingResponse;
+// PENDING-JSON (WP-J / J-03): تفاصيل كورس مسجَّل.
+export type StudentCourseDetail = PendingResponse;
+// PENDING-JSON (WP-J / J-04): صف سجل الحضور.
+export type StudentAttendanceRow = PendingResponse;
+// PENDING-JSON (WP-J / J-04): صف نتيجة امتحان.
+export type StudentExamResultRow = PendingResponse;
+
+/** جسم Student/RequestReschedule كما بالـSwagger. */
+export interface RescheduleRequestInput {
+  bookingId: number;
+  /** "YYYY-MM-DD" (أو ISO). */
+  proposedDate: string;
+  /** "HH:mm[:ss]". */
+  proposedStartTime: string;
+  note?: string | null;
+}
+
+export interface StudentAttendanceFilter {
+  from?: Date | string;
+  to?: Date | string;
+  courseId?: number;
+}
+
+function dateParam(value: Date | string): string {
+  return value instanceof Date ? value.toISOString() : value;
+}
+
+function asArray<T>(value: T[] | null | undefined): T[] {
+  return Array.isArray(value) ? value : [];
+}
+
+/** تفاصيل حجز للطالب (403/404 لحجز لا يخصّه). */
+export async function getStudentBooking(id: number): Promise<StudentBookingDetail> {
+  return apiClient.get<StudentBookingDetail>(`/api/Student/GetBooking?id=${id}`);
+}
+
+/** حالة دفع حجز (الخصم من المحفظة). */
+export async function getStudentBookingPayment(bookingId: number): Promise<StudentBookingPayment> {
+  return apiClient.get<StudentBookingPayment>(`/api/Student/BookingPayment?bookingId=${bookingId}`);
+}
+
+/** إلغاء حجز من جهة الطالب: body {bookingId, reason}. استدعِ assertOk بعدها. */
+export async function studentCancelBooking(
+  bookingId: number,
+  reason?: string | null,
+): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Student/CancelBooking", {
+    bookingId,
+    reason: reason ?? null,
+  });
+}
+
+/** طلب إعادة جدولة حجز. استدعِ assertOk بعدها (رسائل التعارض/عدم التوفر من الباك اند). */
+export async function requestReschedule(input: RescheduleRequestInput): Promise<OperationResult> {
+  return apiClient.post<OperationResult>("/api/Student/RequestReschedule", {
+    bookingId: input.bookingId,
+    proposedDate: input.proposedDate,
+    proposedStartTime: input.proposedStartTime,
+    note: input.note ?? null,
+  });
+}
+
+/** طلبات إعادة الجدولة الخاصة بالطالب. // PENDING-JSON: نفترض مصفوفة مسطّحة. */
+export async function getMyRescheduleRequests(): Promise<StudentRescheduleRequest[]> {
+  return asArray(
+    await apiClient.get<StudentRescheduleRequest[]>("/api/Student/MyRescheduleRequests"),
+  );
+}
+
+/** تفاصيل درس للطالب. */
+export async function getStudentLesson(id: number): Promise<StudentLessonDetail> {
+  return apiClient.get<StudentLessonDetail>(`/api/Student/GetLesson?id=${id}`);
+}
+
+/** تفاصيل كورس مسجَّل للطالب. */
+export async function getStudentCourse(id: number): Promise<StudentCourseDetail> {
+  return apiClient.get<StudentCourseDetail>(`/api/Student/GetCourse?id=${id}`);
+}
+
+/** سجل الحضور (فلاتر from/to/courseId اختيارية). // PENDING-JSON */
+export async function getStudentAttendance(
+  filter: StudentAttendanceFilter = {},
+): Promise<StudentAttendanceRow[]> {
+  const params = new URLSearchParams();
+  if (filter.from) params.set("from", dateParam(filter.from));
+  if (filter.to) params.set("to", dateParam(filter.to));
+  if (filter.courseId) params.set("courseId", String(filter.courseId));
+  const qs = params.toString();
+  return asArray(
+    await apiClient.get<StudentAttendanceRow[]>(`/api/Student/Attendance${qs ? `?${qs}` : ""}`),
+  );
+}
+
+/** نتائج الامتحانات (فلتر courseId اختياري). // PENDING-JSON */
+export async function getStudentExamResults(courseId?: number): Promise<StudentExamResultRow[]> {
+  const qs = courseId ? `?courseId=${courseId}` : "";
+  return asArray(await apiClient.get<StudentExamResultRow[]>(`/api/Student/ExamResults${qs}`));
+}
+
+/** مؤشرات التقدم الأكاديمي. النوع StudentProgressDto موجود بالكود (يُتحقَّق منه بـJ-04). */
+export async function getStudentProgress(): Promise<StudentProgressDto> {
+  return apiClient.get<StudentProgressDto>("/api/Student/Progress");
 }
