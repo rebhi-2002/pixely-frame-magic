@@ -1,4 +1,5 @@
 import { usePreferences } from "@/hooks/use-preferences";
+import { roleKeyFromTypeId } from "@/integrations/backend/user-types";
 
 /** Bilingual inline text helper (ar primary, en secondary) — القسم 08. */
 export function useBi() {
@@ -54,7 +55,10 @@ export function resolveRoleKey(
   } | null,
 ): RoleKey {
   if (p?.roleKey) return p.roleKey;
-  return roleKeyFromName(p?.roleName, p?.roleId === 1);
+  // رقم النوع (1/3/4/5 من فريق الباك اند) أدق من الاسم.
+  const byId = roleKeyFromTypeId(p?.roleId);
+  if (byId) return byId;
+  return roleKeyFromName(p?.roleName, false);
 }
 
 export const ROLE_HOME: Record<RoleKey, string> = {
