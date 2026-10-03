@@ -5,7 +5,8 @@
 
 import { loadBackendUserOptions } from "./admin-users";
 import type { RoleKey } from "@/lib/bi";
-import { parseRoleKey, roleKeyFromTypeId } from "./user-types";
+import { probeRole } from "./role-probe";
+import { ROLE_TO_USER_TYPE_ID, parseRoleKey, roleKeyFromTypeId } from "./user-types";
 import { apiClient, ApiError, cleanBackendMessage, currentLang } from "./client";
 
 const AUTH_STORAGE_KEY = "academia.auth";
@@ -62,7 +63,9 @@ type ProfileEnvelope = {
   UserTypeCode?: string | null;
 };
 
-type ResolvedRole = { roleId: number | null; roleName: string | null; roleKey: RoleKey | null };
+// roleId قد يكون رقمًا أو نصًا رقميًا ("4") حسب مصدره (ردّ السيرفر/جلسة قديمة/ذاكرة الجهاز).
+type RoleId = number | string | null;
+type ResolvedRole = { roleId: RoleId; roleName: string | null; roleKey: RoleKey | null };
 
 function roleFromEnvelope(payload: ProfileEnvelope): ResolvedRole {
   const id = payload?.userTypeId ?? payload?.UserTypeId;
@@ -89,7 +92,7 @@ function roleFromEnvelope(payload: ProfileEnvelope): ResolvedRole {
  * ملاحظة: بتغطي نفس المتصفح بس — الحل لكل الأجهزة هو إرجاع userTypeId من الباك اند.
  */
 const ROLE_CACHE_KEY = "academia.role-cache.v1";
-type CachedRole = { roleId: number | null; roleName: string | null; roleKey: RoleKey };
+type CachedRole = { roleId: RoleId; roleName: string | null; roleKey: RoleKey };
 type RoleCache = { byId: Record<string, CachedRole>; byEmail: Record<string, CachedRole> };
 
 function readRoleCache(): RoleCache {
@@ -125,6 +128,16 @@ function recallRole(userId: string | null, email: string | null): ResolvedRole |
 }
 
 const NO_ROLE: ResolvedRole = { roleId: null, roleName: null, roleKey: null };
+
+/** آخر خيار: تحديد الدور من رفض/قبول endpoints الأدوار (راجع role-probe.ts) — null لو غامض. */
+async function probeResolvedRole(userId: string): Promise<ResolvedRole | null> {
+  try {
+    const key = await probeRole(userId);
+    return key ? { roleId: ROLE_TO_USER_TYPE_ID[key], roleName: null, roleKey: key } : null;
+  } catch {
+    return null;
+  }
+}
 function hasRole(r: ResolvedRole): boolean {
   return r.roleKey != null || r.roleId != null;
 }
@@ -360,8 +373,11 @@ export async function login(email: string, password: string): Promise<void> {
   if (hasRole(userType)) {
     rememberRole(profile.id, profile.email, userType);
   } else {
-    // ما قدرنا نعرف الدور من السيرفر (غير الأدمن) → آخر دور معروف لنفس الحساب بهالجهاز.
-    userType = recallRole(profile.id, profile.email) ?? NO_ROLE;
+    // ما قدرنا نعرف الدور من السيرفر (غير الأدمن) → آخر دور معروف لنفس الحساب بهالجهاز،
+    // وإلا نحدّده من رفض/قبول endpoints الأدوار (يشتغل من أي جهاز/متصفح).
+    userType =
+      recallRole(profile.id, profile.email) ?? (await probeResolvedRole(profile.id)) ?? NO_ROLE;
+    if (hasRole(userType)) rememberRole(profile.id, profile.email, userType);
   }
 
   profile.roleId = userType.roleId;
@@ -487,6 +503,14 @@ export async function verifyServerSession(): Promise<boolean> {
         profile.roleId = recalled.roleId;
         profile.roleName = recalled.roleName;
         profile.roleKey = recalled.roleKey;
+      }
+    }
+    if (profile.roleId == null && profile.roleKey == null) {
+      const probed = await probeResolvedRole(profile.id);
+      if (probed) {
+        profile.roleId = probed.roleId;
+        profile.roleName = probed.roleName;
+        profile.roleKey = probed.roleKey;
       }
     }
     profile.roleKey = profile.roleKey ?? roleKeyFromTypeId(profile.roleId);
