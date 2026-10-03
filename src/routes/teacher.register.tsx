@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { BadgeCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
+import { Button } from "@/components/ui/button";
 import { currentUserHome } from "@/lib/session-home";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
@@ -221,13 +222,9 @@ function TeacherRegisterPage() {
           )}
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="sm:col-span-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {loading ? t("common.loading") : t("authPages.teacherRegister.submit")}
-        </button>
+        <Button type="submit" loading={loading} className="sm:col-span-2 w-full">
+          {t("authPages.teacherRegister.submit")}
+        </Button>
       </form>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">

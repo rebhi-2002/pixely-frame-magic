@@ -17,7 +17,7 @@ import {
   CalendarDays,
   Video,
   Wallet,
-  ArrowLeft,
+  ArrowRight,
   Star,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -200,6 +200,9 @@ const roles = [
   { icon: Users, key: "student" },
   { icon: LineChart, key: "parent" },
 ] as const;
+
+const teacherRole = roles[0];
+const otherRoles = roles.slice(1);
 
 /* رحلة الطالب الحقيقية كما بالعرض التقديمي الرسمي (Slide 5: How students use
    it) — بحث → مقارنة → اختيار → حجز → دفع → حضور → تقييم. 7 خطوات فعلية،
@@ -433,24 +436,23 @@ function Landing() {
           غير مطبّق)، فكلاهما يبقى وصفيًا هادئًا بلا صندوق مكرّر. */}
       <section className="border-y-2 border-[var(--border-strong)] bg-card/60">
         <div className="mx-auto max-w-6xl px-5 py-16">
-          <div className="grid gap-10 md:grid-cols-3">
-            {roles.map((r) =>
-              r.key === "teacher" ? (
-                <div
-                  key={r.key}
-                  className="md:col-span-2 md:border-e-2 md:border-[var(--border-strong)]/30 md:pe-10"
-                >
-                  <span className="mb-2 inline-block rounded-full border-2 border-[var(--border-strong)] bg-primary px-2.5 py-0.5 text-[11px] font-bold text-primary-foreground">
-                    {t("home.roles.primaryBadge")}
-                  </span>
-                  <r.icon className="block size-6 text-primary" />{" "}
-                  <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
-                  <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
-                    {t(`home.roles.${r.key}.d`)}
-                  </p>
-                  <TeacherPreview />
-                </div>
-              ) : (
+          {/* شبكة 2 عمود واضحة (لا grid-cols-3 مع col-span-2 بيخلّي العنصر
+              التالت يطفر لصف جديد نص فاضي) — المعلّم بعمود أساسي 2/3،
+              والطالب وولي الأمر مكدّسين بعمود جانبي واحد 1/3. */}
+          <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
+            <div className="md:border-e-2 md:border-[var(--border-strong)]/30 md:pe-10">
+              <span className="mb-2 inline-block rounded-full border-2 border-[var(--border-strong)] bg-primary px-2.5 py-0.5 text-[11px] font-bold text-primary-foreground">
+                {t("home.roles.primaryBadge")}
+              </span>
+              <teacherRole.icon className="block size-6 text-primary" />
+              <h3 className="mt-3 font-bold text-foreground">{t("home.roles.teacher.t")}</h3>
+              <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+                {t("home.roles.teacher.d")}
+              </p>
+              <TeacherPreview />
+            </div>
+            <div className="flex flex-col gap-10">
+              {otherRoles.map((r) => (
                 <div key={r.key}>
                   <r.icon className="size-6 text-primary" />
                   <h3 className="mt-3 font-bold text-foreground">{t(`home.roles.${r.key}.t`)}</h3>
@@ -458,8 +460,8 @@ function Landing() {
                     {t(`home.roles.${r.key}.d`)}
                   </p>
                 </div>
-              ),
-            )}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -566,7 +568,7 @@ function TeacherPreview() {
         className="col-span-full mt-1 inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
       >
         {t("home.roles.teacher.cta")}
-        <ArrowLeft className="size-4 rtl:rotate-180" />
+        <ArrowRight className="size-4 rtl:rotate-180" />
       </Link>
     </div>
   );

@@ -163,12 +163,12 @@ function SignupPage() {
           />
           <Link
             to="/teacher/register"
-            className="flex items-start gap-3 rounded-2xl border border-border bg-background p-4 text-start transition-colors hover:border-primary/50"
+            className="group flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 text-start transition-colors hover:bg-secondary"
           >
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-info/12 text-info">
               <UserRound className="size-5" />
             </span>
-            <span className="min-w-0">
+            <span className="min-w-0 flex-1">
               <span className="block font-bold text-foreground">
                 {t("authPages.signup.roles.teacher.t")}
               </span>
@@ -176,6 +176,7 @@ function SignupPage() {
                 {t("authPages.signup.roles.teacher.d")}
               </span>
             </span>
+            <Check className="mt-1 size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
         </div>
 

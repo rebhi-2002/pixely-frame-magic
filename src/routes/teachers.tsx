@@ -55,9 +55,9 @@ function TeacherCard({
           className="size-14 rounded-2xl border-2 border-[var(--border-strong)]"
         />
         <div className="min-w-0 flex-1">
-          <h2 className="truncate text-base font-bold text-foreground">
+          <h3 className="truncate text-base font-bold text-foreground">
             {teacher.name || bi("معلّم", "Teacher")}
-          </h2>
+          </h3>
           {typeof teacher.averageRating === "number" && teacher.ratingCount > 0 ? (
             <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
               <Star className="size-3.5 fill-primary text-primary" />

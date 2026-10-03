@@ -61,10 +61,10 @@ function HowItWorks() {
                   {i + 1}
                 </span>
                 <div>
-                  <h2 className="inline-flex items-center gap-2 text-lg font-extrabold text-foreground">
+                  <h3 className="inline-flex items-center gap-2 text-lg font-extrabold text-foreground">
                     <Icon className="size-4 text-primary" />
                     {t(`home.startSteps.${i}.title`)}
-                  </h2>
+                  </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                     {t(`home.startSteps.${i}.text`)}
                   </p>

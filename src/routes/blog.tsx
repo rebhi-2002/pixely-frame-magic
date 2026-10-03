@@ -49,9 +49,9 @@ function BlogIndex() {
                 <span className="w-fit rounded-full border border-[var(--border-strong)]/40 bg-primary/12 px-3 py-1 text-xs font-semibold text-primary">
                   {bi(post.category, post.categoryEn)}
                 </span>
-                <h2 className="mt-4 text-lg font-extrabold leading-snug text-foreground">
+                <h3 className="mt-4 text-lg font-extrabold leading-snug text-foreground">
                   {bi(post.title, post.titleEn)}
-                </h2>
+                </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
                   {bi(post.excerpt, post.excerptEn)}
                 </p>

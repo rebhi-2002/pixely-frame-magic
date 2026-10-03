@@ -193,9 +193,9 @@ function ContactPage() {
             <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
               <Mail className="size-5" />
             </span>
-            <h2 className="mt-3 text-sm font-bold text-foreground">
+            <h3 className="mt-3 text-sm font-bold text-foreground">
               {t("contact.sidebar.emailTitle")}
-            </h2>
+            </h3>
             <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.emailSub")}</p>
             <a
               href="mailto:support@academia.app"
@@ -210,9 +210,9 @@ function ContactPage() {
             <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-success/12 text-success">
               <Clock className="size-5" />
             </span>
-            <h2 className="mt-3 text-sm font-bold text-foreground">
+            <h3 className="mt-3 text-sm font-bold text-foreground">
               {t("contact.sidebar.responseTitle")}
-            </h2>
+            </h3>
             <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.responseSub")}</p>
           </div>
 
@@ -220,9 +220,9 @@ function ContactPage() {
             <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-info/12 text-info">
               <Headset className="size-5" />
             </span>
-            <h2 className="mt-3 text-sm font-bold text-foreground">
+            <h3 className="mt-3 text-sm font-bold text-foreground">
               {t("contact.sidebar.helpTitle")}
-            </h2>
+            </h3>
             <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.helpSub")}</p>
             <Link
               to="/help"

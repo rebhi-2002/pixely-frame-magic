@@ -271,13 +271,15 @@ function CoursesPage() {
                             </span>
                           </div>
                         )}
-                        <Link
-                          to="/course/$id"
-                          params={{ id: String(c.id) }}
-                          className="mt-4 block text-base font-extrabold text-foreground hover:text-primary"
-                        >
-                          {c.title}
-                        </Link>
+                        <h3 className="mt-4">
+                          <Link
+                            to="/course/$id"
+                            params={{ id: String(c.id) }}
+                            className="block text-base font-extrabold text-foreground hover:text-primary"
+                          >
+                            {c.title}
+                          </Link>
+                        </h3>
                         {c.description && (
                           <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                             {c.description}

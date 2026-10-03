@@ -218,9 +218,9 @@ function ForParents() {
                 <b.icon className="size-6" />
               </span>
               <div className={cn(i % 2 === 1 && "sm:text-end")}>
-                <h2 className="text-lg font-extrabold text-foreground">
+                <h3 className="text-lg font-extrabold text-foreground">
                   {t(`forParents.benefits.${b.key}.t`)}
-                </h2>
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t(`forParents.benefits.${b.key}.d`)}
                 </p>
