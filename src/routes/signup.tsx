@@ -14,7 +14,7 @@ import { genderNameEn } from "@/lib/gender";
 import { roleHomeForKey, useBi } from "@/lib/bi";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { register, getStoredProfile, loadRegistrationOptions } from "@/integrations/backend/auth";
-import { findUserTypeForRole } from "@/integrations/backend/user-types";
+import { findUserTypeForRole, ROLE_TO_USER_TYPE_ID } from "@/integrations/backend/user-types";
 import { trackEvent, identifyUser } from "@/lib/analytics";
 import { setMonitoringUser } from "@/lib/monitoring";
 import { env } from "@/lib/env";
@@ -110,16 +110,11 @@ function SignupPage() {
 
     // المطابقة بمفتاح الدور الثابت (code) القادم من الباك اند — مش بالرقم ولا بالاسم،
     // لأن الرقم والاسم بيختلفوا بين البيئات. ما لقينا النوع = رسالة خطأ بدل تسجيل بدور غلط.
-    const userType = findUserTypeForRole(options?.roles, role);
-    if (!userType) {
-      toast.error(
-        bi(
-          "تعذّر تحديد نوع الحساب — حاول تحديث الصفحة.",
-          "Couldn't determine the account type — try refreshing the page.",
-        ),
-      );
-      return;
-    }
+    // الأرقام المعتمدة (1/3/4/5) احتياط لو ما انحمّلت قائمة الأنواع من الباك اند.
+    const userType = findUserTypeForRole(options?.roles, role) ?? {
+      id: ROLE_TO_USER_TYPE_ID[role],
+      name: "",
+    };
 
     setLoading(true);
     trackEvent("signup_attempt", { role });

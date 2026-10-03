@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -57,55 +58,143 @@ const features = [
   { icon: ClipboardCheck, key: "review", flagship: false },
 ] as const;
 
-/** معاينة مصغّرة بنفس أسلوب HeroMockup (إعادة بناء HTML/CSS، لا صورة ولا SVG
- * زخرفي) — تُعرض فقط لـ2-3 ميزات رئيسية حسب "Visual Budget" بملفات Claude،
- * لا لكل الميزات السبع. */
+/** معاينات مصغّرة تفاعلية فعليًا (لا سكون)، بنفس مبدأ HeroMockup: كل واحدة
+ * تعكس سلوكًا حقيقيًا من الـSRS، لا رسمًا ثابتًا. تُعرض فقط لـ2-3 ميزات
+ * رئيسية حسب "Visual Budget" بملفات Claude، لا لكل الميزات. مكوّن منفصل
+ * لكل حالة (لا شرط واحد يستدعي Hooks بترتيب متغيّر) — يحترم قواعد Hooks. */
 function FeatureMiniPreview({ variant }: { variant: "library" | "tracker" | "mistakes" }) {
+  if (variant === "library") return <LibraryPreview />;
+  if (variant === "tracker") return <TrackerPreview />;
+  return <WalletPreview />;
+}
+
+function LibraryPreview() {
+  const bi = useBi();
+  // FR-T02: فلترة المعلمين — الفلتر النشط يبرز صفًا ويُخفت الآخر فعليًا.
+  const [filter, setFilter] = useState<"online" | "inperson">("online");
   return (
     <div className="mt-4 w-full max-w-xs rounded-xl border-2 border-[var(--border-strong)] bg-background p-3 lg:mt-0">
-      {variant === "library" && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 rounded-lg border border-[var(--border-strong)]/40 bg-secondary px-2.5 py-1.5">
-            <Search className="size-3.5 text-muted-foreground" />
-            <div className="h-2 w-2/3 rounded-full bg-muted-foreground/30" />
+      <div className="flex items-center gap-2 rounded-lg border border-[var(--border-strong)]/40 bg-secondary px-2.5 py-1.5">
+        <Search className="size-3.5 text-muted-foreground" />
+        <div className="h-2 w-2/3 rounded-full bg-muted-foreground/30" />
+      </div>
+      <div className="mt-2 flex gap-1.5">
+        {(["online", "inperson"] as const).map((f) => (
+          <button
+            key={f}
+            type="button"
+            onClick={() => setFilter(f)}
+            className={cn(
+              "rounded-md border px-2 py-0.5 text-[9px] font-bold transition-colors",
+              filter === f
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-[var(--border-strong)]/40 text-muted-foreground",
+            )}
+          >
+            {f === "online" ? bi("أونلاين", "Online") : bi("وجاهي", "In-person")}
+          </button>
+        ))}
+      </div>
+      {[0, 1].map((i) => (
+        <div
+          key={i}
+          className={cn(
+            "mt-2 flex items-center gap-2 rounded-lg bg-secondary/60 px-2.5 py-2 transition-opacity",
+            (filter === "online") === (i === 0) ? "opacity-100" : "opacity-40",
+          )}
+        >
+          <span className="size-6 shrink-0 rounded-full bg-primary/20" />
+          <div className="h-2 flex-1 rounded-full bg-muted-foreground/25" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TrackerPreview() {
+  const bi = useBi();
+  // FR-S05: عرض الجدول — تبديل اليوم/الأسبوع يغيّر فعليًا عدد الصفوف الظاهرة.
+  const [range, setRange] = useState<"today" | "week">("today");
+  const rows =
+    range === "today" ? [{ w: "w-4/5" }] : [{ w: "w-4/5" }, { w: "w-3/5" }, { w: "w-2/3" }];
+  return (
+    <div className="mt-4 w-full max-w-xs rounded-xl border-2 border-[var(--border-strong)] bg-background p-3 lg:mt-0">
+      <div className="flex gap-1.5">
+        {(["today", "week"] as const).map((r) => (
+          <button
+            key={r}
+            type="button"
+            onClick={() => setRange(r)}
+            className={cn(
+              "rounded-md border px-2 py-0.5 text-[9px] font-bold transition-colors",
+              range === r
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-[var(--border-strong)]/40 text-muted-foreground",
+            )}
+          >
+            {r === "today" ? bi("اليوم", "Today") : bi("الأسبوع", "This week")}
+          </button>
+        ))}
+      </div>
+      <div className="mt-2 space-y-2">
+        {rows.map((row, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="flex size-6 items-center justify-center rounded-md border border-[var(--border-strong)] bg-primary/15 text-primary">
+              <CalendarDays className="size-3.5" />
+            </span>
+            <div className={cn("h-2 rounded-full bg-secondary", row.w)} />
           </div>
-          {[0, 1].map((i) => (
-            <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/60 px-2.5 py-2">
-              <span className="size-6 shrink-0 rounded-full bg-primary/20" />
-              <div className="h-2 flex-1 rounded-full bg-muted-foreground/25" />
-            </div>
-          ))}
-        </div>
-      )}
-      {variant === "tracker" && (
-        <div className="space-y-2">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex items-center gap-2">
-              <span className="flex size-6 items-center justify-center rounded-md bg-primary/15 text-primary">
-                <CalendarDays className="size-3.5" />
-              </span>
-              <div
-                className={cn(
-                  "h-2 rounded-full bg-secondary",
-                  i === 0 ? "w-4/5" : i === 1 ? "w-3/5" : "w-2/3",
-                )}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-      {variant === "mistakes" && (
-        <div className="flex items-center justify-between rounded-lg bg-primary/10 p-3">
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WalletPreview() {
+  const bi = useBi();
+  // FR-W06: المحفظة — تبديل بين الرصيد وسجل المعاملات، لا رقم ثابت وحيد.
+  const [view, setView] = useState<"balance" | "history">("balance");
+  return (
+    <div className="mt-4 w-full max-w-xs rounded-xl border-2 border-[var(--border-strong)] bg-background p-3 lg:mt-0">
+      <div className="flex gap-1.5">
+        {(["balance", "history"] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            onClick={() => setView(v)}
+            className={cn(
+              "rounded-md border px-2 py-0.5 text-[9px] font-bold transition-colors",
+              view === v
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-[var(--border-strong)]/40 text-muted-foreground",
+            )}
+          >
+            {v === "balance" ? bi("الرصيد", "Balance") : bi("السجل", "History")}
+          </button>
+        ))}
+      </div>
+      {view === "balance" ? (
+        <div className="mt-2 flex items-center justify-between rounded-lg bg-primary/10 p-3">
           <span className="flex size-9 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-background text-primary">
             <Wallet className="size-4" />
           </span>
           <div className="h-2.5 w-16 rounded-full bg-primary/30" />
         </div>
+      ) : (
+        <div className="mt-2 space-y-1.5">
+          {[0, 1].map((i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="size-5 shrink-0 rounded-full bg-primary/15" />
+              <div
+                className={cn("h-2 flex-1 rounded-full bg-secondary", i === 0 ? "w-2/3" : "w-1/2")}
+              />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 }
-
 const roles = [
   { icon: BookOpenCheck, key: "teacher" },
   { icon: Users, key: "student" },
@@ -322,7 +411,7 @@ function Landing() {
                   i > 0 && "lg:border-s-2 lg:border-[var(--border-strong)]/40 lg:ps-3",
                 )}
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
                   <f.icon className="size-4" />
                 </span>
                 <div>

@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { AppPage, EmptyState } from "@/components/app/kit";
+import { Button } from "@/components/ui/button";
 import { Guard } from "@/components/app/guard";
 import { useBi } from "@/lib/bi";
 import { authPageHead } from "@/lib/seo";
 
-const description = "إنشاء وإدارة كورساتك الخاصة — قيد التطوير.";
+const description = "إنشاء وإدارة كورساتك الخاصة.";
 
 export const Route = createFileRoute("/_authenticated/teacher/courses")({
   head: () =>
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/teacher/courses")({
       { title: "كورساتي (معلم) | أكاديميا", description },
       {
         title: "My courses (teacher) | Academia",
-        description: "Create and manage your own courses — under development.",
+        description: "Create and manage your own courses.",
       },
     ),
   component: () => (
@@ -30,12 +31,27 @@ function Body() {
       icon="BookOpen"
       subtitle={bi(description, description)}
     >
+      {/* T1-02: بدء إنشاء كورس — نوع الكورس بيروح كـsearch param (1 حضوري، 2 أونلاين). */}
+      <div className="mb-6 flex flex-wrap gap-3">
+        <Button asChild>
+          <Link to="/teacher/course/$id" params={{ id: "new" }} search={{ type: 1 }}>
+            {bi("إنشاء كورس حضوري", "Create an in-person course")}
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link to="/teacher/course/$id" params={{ id: "new" }} search={{ type: 2 }}>
+            {bi("إنشاء كورس أونلاين", "Create an online course")}
+          </Link>
+        </Button>
+      </div>
+
+      {/* قائمة كورسات المعلم تنتظر حسم مصدرها (Q-01) — لا نعرض قائمة قبل التأكد أنها كورساته فقط. */}
       <EmptyState
-        icon="Construction"
-        title={bi("قيد التطوير", "Under development")}
+        icon="BookOpen"
+        title={bi("قائمة كورساتك قريبًا", "Your course list is coming soon")}
         description={bi(
-          "هاي الصفحة الوحيدة يلي ما فيها ولا جزء ممكن يشتغل حالياً — السبب مختلف عن باقي الصفحات: ما في أي endpoint بالباك اند يخلّي معلم مسجّل دخول يعرف رقم ملفه الخاص (Teacher.Id)، فما فينا حتى نجيب «كورساتي» بدون ما نخمّن. لما يضاف مسار ربط حساب المعلم بملفه (P1-1) ومصدر مواد/صفوف حقيقي (P1-3)، هاي أول صفحة رح نبنيها فوراً.",
-          "This is the one page with genuinely nothing buildable right now — for a different reason than the others: there's no backend endpoint that lets a logged-in teacher discover their own Teacher.Id, so we can't even fetch \"my courses\" without guessing. Once the teacher-to-account link (P1-1) and a real subject/grade data source (P1-3) ship, this is the first page we'll build.",
+          "يمكنك إنشاء كورس جديد من الأزرار أعلاه. عرض قائمة كورساتك ينتظر تأكيد مصدر البيانات من فريق المنصّة.",
+          "You can create a new course using the buttons above. Showing your course list is waiting for the data source to be confirmed by the platform team.",
         )}
       />
     </AppPage>

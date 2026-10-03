@@ -58,7 +58,7 @@ function ContactPage() {
     <PublicLayout>
       <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-5xl px-5 py-16">
-          <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+          <span className="flex size-12 items-center justify-center rounded-2xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
             <MessageSquareText className="size-6" />
           </span>
           <h1 className="mt-5 text-4xl font-extrabold text-foreground">{t("contact.h1")}</h1>
@@ -70,7 +70,7 @@ function ContactPage() {
         <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8">
           {done ? (
             <div className="flex flex-col items-center py-10 text-center">
-              <span className="flex size-14 items-center justify-center rounded-full bg-success/12 text-success">
+              <span className="flex size-14 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-success/12 text-success">
                 <Send className="size-6" />
               </span>
               <h2 className="mt-5 text-xl font-bold text-foreground">
@@ -190,7 +190,7 @@ function ContactPage() {
 
         <div className="space-y-4">
           <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
               <Mail className="size-5" />
             </span>
             <h2 className="mt-3 text-sm font-bold text-foreground">
@@ -207,7 +207,7 @@ function ContactPage() {
           </div>
 
           <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-success/12 text-success">
+            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-success/12 text-success">
               <Clock className="size-5" />
             </span>
             <h2 className="mt-3 text-sm font-bold text-foreground">
@@ -217,7 +217,7 @@ function ContactPage() {
           </div>
 
           <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-info/12 text-info">
+            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-info/12 text-info">
               <Headset className="size-5" />
             </span>
             <h2 className="mt-3 text-sm font-bold text-foreground">

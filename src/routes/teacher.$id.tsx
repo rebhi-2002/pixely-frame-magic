@@ -9,6 +9,8 @@ import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { SessionCta } from "@/components/site/session-cta";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { useBi } from "@/lib/bi";
+import { useSession } from "@/hooks/use-session";
+import { BOOKING_FLOW_ENABLED } from "@/lib/booking-slots";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { getTeacherAvailability, getTeacherPublicProfile } from "@/integrations/backend/teachers";
 import { coursesOfTeacher, listAllPublishedCourses } from "@/integrations/backend/courses";
@@ -43,6 +45,9 @@ function shortTime(time: string): string {
 
 function TeacherProfilePage() {
   const { id } = Route.useParams();
+  const { session } = useSession();
+  // الحجز للطالب فقط (Q-07)؛ الزائر مسموح له يشوف الزر وبيتحوّل لتسجيل الدخول.
+  const canBook = !session || session.roleKey === "student";
   const { t } = useTranslation();
   const bi = useBi();
 
@@ -175,22 +180,33 @@ function TeacherProfilePage() {
             </h1>
           </div>
 
-          {/* FR-T05/T06: الحجز المباشر غير مفعّل بعد بالباك اند. زر معطَّل
-              صريح بدل إخفائه تمامًا أو ربطه بوظيفة غير موجودة — حالة صادقة
-              واضحة، لا خداع. */}
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            title={bi("الحجز المباشر غير متاح بعد", "Direct booking isn't available yet")}
-            className={buttonVariants({
-              variant: "soft",
-              className: "mt-6 h-auto cursor-not-allowed gap-2 px-6 py-3 text-sm opacity-70",
-            })}
-          >
-            <Clock3 className="size-4" />
-            {bi("الحجز المباشر قريباً", "Direct booking coming soon")}
-          </button>
+          {/* FR-T05/T06 (WP-S1 / S1-06): رابط الحجز جاهز بالكود لكنه مغلق بعلم BOOKING_FLOW_ENABLED (lib/booking-slots.ts)
+              لحد ما يكتمل إرسال الحجز (S1-05) وربط قوائم المادة/الصف (S1-03/Q-04). وهو مغلق: زر معطَّل صريح
+              بدل ربطه بوظيفة غير مكتملة — حالة صادقة واضحة، لا خداع. الرابط للطالب فقط (Q-07)، والزائر يُحوَّل لتسجيل الدخول. */}
+          {BOOKING_FLOW_ENABLED && canBook ? (
+            <Link
+              to="/book/$teacherId"
+              params={{ teacherId: id }}
+              className={buttonVariants({ className: "mt-6 h-auto gap-2 px-6 py-3 text-sm" })}
+            >
+              <Clock3 className="size-4" />
+              {bi("احجز حصة", "Book a session")}
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              title={bi("الحجز المباشر غير متاح بعد", "Direct booking isn't available yet")}
+              className={buttonVariants({
+                variant: "soft",
+                className: "mt-6 h-auto cursor-not-allowed gap-2 px-6 py-3 text-sm opacity-70",
+              })}
+            >
+              <Clock3 className="size-4" />
+              {bi("الحجز المباشر قريباً", "Direct booking coming soon")}
+            </button>
+          )}
 
           {/* أرقام حقيقية بس. لا "موثّق" ولا "4.8" ولا "1,240 طالب" ثابتة لكل معلم كما كان قبل:
               الباك اند ما عنده علم توثيق ولا عدد طلاب للمعلم، ولو ما في تقييمات منعرض

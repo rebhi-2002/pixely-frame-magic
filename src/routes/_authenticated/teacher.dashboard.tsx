@@ -1,7 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AppPage, StatGrid, Panel, EmptyState, QuickLinks } from "@/components/app/kit";
+import { AppPage, StatGrid, Panel, QuickLinks } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
+import { Button } from "@/components/ui/button";
+import { listTeacherBookings } from "@/integrations/backend/bookings";
+import { BookingStatus } from "@/lib/enums";
+import { qk } from "@/lib/query-keys";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { getMyWallet } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
@@ -31,6 +35,11 @@ function Body() {
   const queryClient = useQueryClient();
 
   const wallet = useQuery({ queryKey: ["teacher-wallet"], queryFn: getMyWallet });
+  // T5-05: عدد الطلبات المعلّقة = طول القائمة المفلترة بالحالة 1 (Pending) — لا نقرأ أي حقل من الصفوف.
+  const pending = useQuery({
+    queryKey: qk.teacherBookings(BookingStatus.Pending),
+    queryFn: () => listTeacherBookings(BookingStatus.Pending),
+  });
 
   if (wallet.isError) {
     return (
@@ -82,13 +91,37 @@ function Body() {
       />
 
       <Panel title={bi("طلبات الحجز", "Booking requests")} icon="Clock">
-        <EmptyState
-          icon="ShieldAlert"
-          text={bi(
-            "عرض طلبات الحجز هون معطّل مؤقتاً بقصد — الباك اند لسا ما فيه تحقق صلاحيات على Booking/Teacher (P0-1) وربط المعلم بحسابه (P1-1)، فعرضها الآن خطر أمني حقيقي مش نقص تقني بسيط. رح تُفعّل فور ما ينحلّوا.",
-            "Booking requests are intentionally hidden here for now — the backend still has no auth checks on Booking/Teacher (P0-1) and no teacher-to-account link (P1-1), so showing this now is a real security risk, not a small gap. It'll switch on the moment those are fixed.",
-          )}
-        />
+        {pending.isError ? (
+          // فشل هذا الجزء ما بيكسر اللوحة — بنعرض رسالة محلية وإعادة محاولة، وبلا رقم.
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
+            <span>
+              {bi("تعذّر تحميل عدد الطلبات المعلّقة.", "Couldn't load the pending requests count.")}
+            </span>
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void pending.refetch()}
+            />
+          </div>
+        ) : pending.isLoading ? (
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
+        ) : (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-foreground">
+              {pending.data && pending.data.length > 0
+                ? bi(
+                    `لديك ${pending.data.length} طلب حجز بانتظار ردّك.`,
+                    `You have ${pending.data.length} booking request(s) awaiting your response.`,
+                  )
+                : bi("لا توجد طلبات حجز معلّقة حالياً.", "No pending booking requests right now.")}
+            </p>
+            <Button asChild size="sm">
+              <Link to="/teacher/bookings">{bi("عرض طلبات الحجز", "View booking requests")}</Link>
+            </Button>
+          </div>
+        )}
       </Panel>
 
       <QuickLinks

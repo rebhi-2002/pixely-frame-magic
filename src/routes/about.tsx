@@ -52,7 +52,7 @@ function AboutPage() {
                 key={v.t}
                 className="h-full rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
               >
-                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                <span className="flex size-11 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
                   <Icon className="size-5" />
                 </span>
                 <h3 className="mt-4 font-bold text-foreground">{v.t}</h3>

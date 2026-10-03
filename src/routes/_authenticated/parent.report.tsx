@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AppPage, StatGrid, Panel, DataTable, EmptyState } from "@/components/app/kit";
+import { AppPage, StatGrid, Panel, DataTable, EmptyState, Badge } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { useBi } from "@/lib/bi";
@@ -12,6 +12,9 @@ import {
 } from "@/integrations/backend/parent";
 import { authPageHead } from "@/lib/seo";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
+import { attendanceStatusLabel, attendanceStatusTone } from "@/lib/enums";
+import { qk } from "@/lib/query-keys";
+import { isForbiddenError, summarizeUnread, unreadStatValue } from "@/lib/parent-report";
 
 const description = "الحضور ونتائج الامتحانات لأبنائك، مباشرة من سجلات المنصة.";
 
@@ -41,7 +44,7 @@ function Body() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const childrenQuery = useQuery({
-    queryKey: ["parent-children"],
+    queryKey: qk.parentChildren(),
     queryFn: getMyChildren,
   });
   const children = childrenQuery.data ?? [];
@@ -50,18 +53,21 @@ function Body() {
     [children, selectedId],
   );
 
+  const unreadSummary = useMemo(() => summarizeUnread(children), [children]);
+
   const attendanceQuery = useQuery({
-    queryKey: ["parent-child-attendance", activeChild?.studentId],
+    queryKey: qk.parentChildAttendance(activeChild?.studentId),
     queryFn: () => getChildAttendance(activeChild!.studentId),
     enabled: !!activeChild,
   });
   const examsQuery = useQuery({
-    queryKey: ["parent-child-exams", activeChild?.studentId],
+    queryKey: qk.parentChildExams(activeChild?.studentId),
     queryFn: () => getChildExamResults(activeChild!.studentId),
     enabled: !!activeChild,
   });
 
-  if (childrenQuery.isError) {
+  // P1-02: فشل إعادة الجلب مع وجود بيانات سابقة ما بيكسر اللوحة — بنعرضها مع تنبيه غير حاجب.
+  if (childrenQuery.isError && !childrenQuery.data) {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
         <ErrorState
@@ -145,6 +151,37 @@ function Body() {
         </div>
       )}
 
+      {/* P1-04 (FR-P12): ولي الأمر يتابع فقط ولا يعدّل بيانات أكاديمية. */}
+      <div
+        role="note"
+        className="flex items-start gap-2 rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground"
+      >
+        <span aria-hidden="true">ℹ️</span>
+        <span>
+          {bi(
+            "هذا التقرير للقراءة فقط: يمكنك متابعة الحضور والنتائج، لكن لا يمكنك تعديل أي بيانات أكاديمية.",
+            "This report is read-only: you can follow attendance and results, but you can't edit any academic data.",
+          )}
+        </span>
+      </div>
+
+      {(childrenQuery.isError || unreadSummary.hasMissing) && (
+        <div
+          role="status"
+          className="rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground"
+        >
+          {childrenQuery.isError
+            ? bi(
+                "تعذّر تحديث البيانات الآن — نعرض آخر نسخة وصلتنا (بما فيها عدد الإشعارات).",
+                "Couldn't refresh right now — showing the last data we received (including notification counts).",
+              )
+            : bi(
+                "تعذّر تحميل عدد الإشعارات غير المقروءة لبعض الأبناء — باقي التقرير يعمل بشكل طبيعي.",
+                "We couldn't load the unread notification count for some children — the rest of the report is unaffected.",
+              )}
+        </div>
+      )}
+
       {activeChild && (
         <StatGrid
           items={[
@@ -167,22 +204,55 @@ function Body() {
                   ? "—"
                   : `${Math.round(activeChild.averageExamScorePercent)}%`,
             },
+            // Q-11: العدد مأخوذ من بيانات كل ابن (Parent/MyChildren) — بنوضّح ذلك بالتسمية.
+            {
+              icon: "Bell",
+              label: bi("إشعارات غير مقروءة (لهذا الابن)", "Unread notifications (this child)"),
+              value: unreadStatValue(activeChild.unreadNotificationsCount),
+            },
+            ...(children.length > 1
+              ? [
+                  {
+                    icon: "BellRing",
+                    label: bi(
+                      "إشعارات غير مقروءة (كل الأبناء)",
+                      "Unread notifications (all children)",
+                    ),
+                    value: unreadSummary.hasMissing
+                      ? `${unreadSummary.total}+`
+                      : String(unreadSummary.total),
+                  },
+                ]
+              : []),
           ]}
         />
       )}
 
       <Panel title={bi("سجل الحضور", "Attendance record")} icon="CalendarCheck">
-        {attendanceQuery.isLoading ? (
+        {attendanceQuery.isError ? (
+          <QueryFailure
+            error={attendanceQuery.error}
+            onRetry={() => void attendanceQuery.refetch()}
+          />
+        ) : attendanceQuery.isLoading ? (
           <LoadingState
             label={bi("جارٍ التحميل…", "Loading…")}
             className="border-none bg-transparent"
           />
         ) : attendanceQuery.data?.length ? (
           <DataTable
-            head={[bi("التاريخ", "Date"), bi("المجموعة", "Group"), bi("ملاحظات", "Notes")]}
+            head={[
+              bi("التاريخ", "Date"),
+              bi("المجموعة", "Group"),
+              bi("الحالة", "Status"),
+              bi("ملاحظات", "Notes"),
+            ]}
             rows={attendanceQuery.data.map((r) => [
               new Date(r.sessionDate).toLocaleDateString(),
               r.groupName,
+              <Badge key="status" tone={attendanceStatusTone(r.status)}>
+                {attendanceStatusLabel(r.status, bi)}
+              </Badge>,
               r.notes ?? "—",
             ])}
           />
@@ -195,7 +265,9 @@ function Body() {
       </Panel>
 
       <Panel title={bi("نتائج الامتحانات", "Exam results")} icon="FileBarChart">
-        {examsQuery.isLoading ? (
+        {examsQuery.isError ? (
+          <QueryFailure error={examsQuery.error} onRetry={() => void examsQuery.refetch()} />
+        ) : examsQuery.isLoading ? (
           <LoadingState
             label={bi("جارٍ التحميل…", "Loading…")}
             className="border-none bg-transparent"
@@ -223,5 +295,31 @@ function Body() {
         )}
       </Panel>
     </AppPage>
+  );
+}
+
+/** P1-03: 403 = ابن غير مرتبط بحسابك → «غير مصرّح» (لا شاشة فاضية ولا كسر)؛ غيره خطأ عام مع إعادة محاولة. */
+function QueryFailure({ error, onRetry }: { error: unknown; onRetry: () => void }) {
+  const bi = useBi();
+  if (isForbiddenError(error)) {
+    return (
+      <ErrorState
+        title={bi("غير مصرّح", "Not authorized")}
+        description={bi(
+          "ما عندك صلاحية لعرض بيانات هذا الطالب — يظهر فقط الأبناء المرتبطون بحسابك.",
+          "You aren't authorized to view this student's data — only children linked to your account are shown.",
+        )}
+      />
+    );
+  }
+  return (
+    <ErrorState
+      title={bi("ما قدرنا نحمّل البيانات", "Couldn't load the data")}
+      description={bi(
+        "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+        "Try again. If the problem continues, check your connection or come back later.",
+      )}
+      action={<RetryButton label={bi("إعادة المحاولة", "Try again")} onClick={onRetry} />}
+    />
   );
 }

@@ -1,6 +1,16 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { BadgeCheck, Coins, LineChart, Upload } from "lucide-react";
+import {
+  BadgeCheck,
+  Coins,
+  LineChart,
+  Upload,
+  Users,
+  Video,
+  CalendarDays,
+  ClipboardCheck,
+  Star,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { SessionCta } from "@/components/site/session-cta";
@@ -21,8 +31,14 @@ const benefits = [
   { icon: BadgeCheck, key: "verified" },
 ] as const;
 
+const courseIcons = [Users, Video, CalendarDays, ClipboardCheck, Star] as const;
+
 function ForTeachers() {
   const { t } = useTranslation();
+  const courseItems = t("forTeachers.coursesItems", { returnObjects: true }) as {
+    t: string;
+    d: string;
+  }[];
 
   return (
     <PublicLayout>
@@ -42,6 +58,33 @@ function ForTeachers() {
             })}
           />
         </div>
+      </section>
+
+      {/* إدارة الكورسات والجدول — FR-I01 إلى FR-I11 وFR-T09/FR-T10، غير
+          ممثَّلة إطلاقًا سابقًا رغم كونها جوهر عمل المعلّم اليومي. */}
+      <section className="mx-auto max-w-4xl px-5 py-16">
+        <h2 className="text-2xl font-extrabold text-foreground">{t("forTeachers.coursesTitle")}</h2>
+        <p className="mt-2 max-w-2xl text-muted-foreground">{t("forTeachers.coursesSub")}</p>
+
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+          {courseItems.map((item, i) => {
+            const Icon = courseIcons[i];
+            return (
+              <li
+                key={item.t}
+                className="flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-5 shadow-[var(--shadow-brutal)]"
+              >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
+                  <Icon className="size-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-bold text-foreground">{item.t}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.d}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       <section className="mx-auto max-w-4xl px-5 py-16">

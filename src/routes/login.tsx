@@ -119,7 +119,7 @@ function LoginPage() {
         {serverError && (
           <div
             role="alert"
-            className="rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm font-semibold text-destructive"
+            className="rounded-xl border-2 border-destructive/40 bg-destructive/5 px-3 py-2 text-sm font-semibold text-destructive"
           >
             {serverError}
           </div>

@@ -25,9 +25,12 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TeachersRouteImport } from './routes/teachers'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedExamResultsRouteImport } from './routes/_authenticated/exam-results'
 import { Route as AuthenticatedMyCoursesRouteImport } from './routes/_authenticated/my-courses'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
@@ -42,12 +45,18 @@ import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminPagesRouteImport } from './routes/_authenticated/admin.pages'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedBookTeacherIdRouteImport } from './routes/_authenticated/book.$teacherId'
+import { Route as AuthenticatedBookingIdRouteImport } from './routes/_authenticated/booking.$id'
+import { Route as AuthenticatedEnrolledCourseIdRouteImport } from './routes/_authenticated/enrolled-course.$id'
+import { Route as AuthenticatedLessonIdRouteImport } from './routes/_authenticated/lesson.$id'
 import { Route as AuthenticatedParentReportRouteImport } from './routes/_authenticated/parent.report'
 import { Route as AuthenticatedParentSettingsRouteImport } from './routes/_authenticated/parent.settings'
+import { Route as AuthenticatedTeacherBookingsRouteImport } from './routes/_authenticated/teacher.bookings'
 import { Route as AuthenticatedTeacherCoursesRouteImport } from './routes/_authenticated/teacher.courses'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherEarningsRouteImport } from './routes/_authenticated/teacher.earnings'
 import { Route as AuthenticatedTeacherSettingsRouteImport } from './routes/_authenticated/teacher.settings'
+import { Route as AuthenticatedTeacherCourseIdRouteImport } from './routes/_authenticated/teacher.course.$id'
 import { Route as AuthenticatedTeacherProfileEditRouteImport } from './routes/_authenticated/teacher.profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -129,11 +138,22 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAttendanceRoute = AuthenticatedAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedExamResultsRoute =
+  AuthenticatedExamResultsRouteImport.update({
+    id: '/exam-results',
+    path: '/exam-results',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMyCoursesRoute = AuthenticatedMyCoursesRouteImport.update({
   id: '/my-courses',
   path: '/my-courses',
@@ -145,6 +165,11 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProgressRoute = AuthenticatedProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -220,6 +245,28 @@ const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBookTeacherIdRoute =
+  AuthenticatedBookTeacherIdRouteImport.update({
+    id: '/book/$teacherId',
+    path: '/book/$teacherId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBookingIdRoute = AuthenticatedBookingIdRouteImport.update({
+  id: '/booking/$id',
+  path: '/booking/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEnrolledCourseIdRoute =
+  AuthenticatedEnrolledCourseIdRouteImport.update({
+    id: '/enrolled-course/$id',
+    path: '/enrolled-course/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLessonIdRoute = AuthenticatedLessonIdRouteImport.update({
+  id: '/lesson/$id',
+  path: '/lesson/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedParentReportRoute =
   AuthenticatedParentReportRouteImport.update({
     id: '/parent/report',
@@ -230,6 +277,12 @@ const AuthenticatedParentSettingsRoute =
   AuthenticatedParentSettingsRouteImport.update({
     id: '/parent/settings',
     path: '/parent/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTeacherBookingsRoute =
+  AuthenticatedTeacherBookingsRouteImport.update({
+    id: '/teacher/bookings',
+    path: '/teacher/bookings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedTeacherCoursesRoute =
@@ -256,6 +309,12 @@ const AuthenticatedTeacherSettingsRoute =
     path: '/teacher/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTeacherCourseIdRoute =
+  AuthenticatedTeacherCourseIdRouteImport.update({
+    id: '/teacher/course/$id',
+    path: '/teacher/course/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTeacherProfileEditRoute =
   AuthenticatedTeacherProfileEditRouteImport.update({
     id: '/teacher/profile/edit',
@@ -279,9 +338,12 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/exam-results': typeof AuthenticatedExamResultsRoute
   '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/wallet': typeof AuthenticatedWalletRoute
@@ -296,12 +358,18 @@ export interface FileRoutesByFullPath {
   '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/book/$teacherId': typeof AuthenticatedBookTeacherIdRoute
+  '/booking/$id': typeof AuthenticatedBookingIdRoute
+  '/enrolled-course/$id': typeof AuthenticatedEnrolledCourseIdRoute
+  '/lesson/$id': typeof AuthenticatedLessonIdRoute
   '/parent/report': typeof AuthenticatedParentReportRoute
   '/parent/settings': typeof AuthenticatedParentSettingsRoute
+  '/teacher/bookings': typeof AuthenticatedTeacherBookingsRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
   '/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
+  '/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
   '/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRoutesByTo {
@@ -320,9 +388,12 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/exam-results': typeof AuthenticatedExamResultsRoute
   '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/wallet': typeof AuthenticatedWalletRoute
@@ -337,12 +408,18 @@ export interface FileRoutesByTo {
   '/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/book/$teacherId': typeof AuthenticatedBookTeacherIdRoute
+  '/booking/$id': typeof AuthenticatedBookingIdRoute
+  '/enrolled-course/$id': typeof AuthenticatedEnrolledCourseIdRoute
+  '/lesson/$id': typeof AuthenticatedLessonIdRoute
   '/parent/report': typeof AuthenticatedParentReportRoute
   '/parent/settings': typeof AuthenticatedParentSettingsRoute
+  '/teacher/bookings': typeof AuthenticatedTeacherBookingsRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
   '/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
+  '/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
   '/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRoutesById {
@@ -363,9 +440,12 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/teachers': typeof TeachersRoute
   '/terms': typeof TermsRoute
+  '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/exam-results': typeof AuthenticatedExamResultsRoute
   '/_authenticated/my-courses': typeof AuthenticatedMyCoursesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
@@ -380,12 +460,18 @@ export interface FileRoutesById {
   '/_authenticated/admin/pages': typeof AuthenticatedAdminPagesRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/book/$teacherId': typeof AuthenticatedBookTeacherIdRoute
+  '/_authenticated/booking/$id': typeof AuthenticatedBookingIdRoute
+  '/_authenticated/enrolled-course/$id': typeof AuthenticatedEnrolledCourseIdRoute
+  '/_authenticated/lesson/$id': typeof AuthenticatedLessonIdRoute
   '/_authenticated/parent/report': typeof AuthenticatedParentReportRoute
   '/_authenticated/parent/settings': typeof AuthenticatedParentSettingsRoute
+  '/_authenticated/teacher/bookings': typeof AuthenticatedTeacherBookingsRoute
   '/_authenticated/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/earnings': typeof AuthenticatedTeacherEarningsRoute
   '/_authenticated/teacher/settings': typeof AuthenticatedTeacherSettingsRoute
+  '/_authenticated/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
   '/_authenticated/teacher/profile/edit': typeof AuthenticatedTeacherProfileEditRoute
 }
 export interface FileRouteTypes {
@@ -406,9 +492,12 @@ export interface FileRouteTypes {
     | '/signup'
     | '/teachers'
     | '/terms'
+    | '/attendance'
     | '/dashboard'
+    | '/exam-results'
     | '/my-courses'
     | '/notifications'
+    | '/progress'
     | '/schedule'
     | '/settings'
     | '/wallet'
@@ -423,12 +512,18 @@ export interface FileRouteTypes {
     | '/admin/pages'
     | '/admin/payments'
     | '/admin/users'
+    | '/book/$teacherId'
+    | '/booking/$id'
+    | '/enrolled-course/$id'
+    | '/lesson/$id'
     | '/parent/report'
     | '/parent/settings'
+    | '/teacher/bookings'
     | '/teacher/courses'
     | '/teacher/dashboard'
     | '/teacher/earnings'
     | '/teacher/settings'
+    | '/teacher/course/$id'
     | '/teacher/profile/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -447,9 +542,12 @@ export interface FileRouteTypes {
     | '/signup'
     | '/teachers'
     | '/terms'
+    | '/attendance'
     | '/dashboard'
+    | '/exam-results'
     | '/my-courses'
     | '/notifications'
+    | '/progress'
     | '/schedule'
     | '/settings'
     | '/wallet'
@@ -464,12 +562,18 @@ export interface FileRouteTypes {
     | '/admin/pages'
     | '/admin/payments'
     | '/admin/users'
+    | '/book/$teacherId'
+    | '/booking/$id'
+    | '/enrolled-course/$id'
+    | '/lesson/$id'
     | '/parent/report'
     | '/parent/settings'
+    | '/teacher/bookings'
     | '/teacher/courses'
     | '/teacher/dashboard'
     | '/teacher/earnings'
     | '/teacher/settings'
+    | '/teacher/course/$id'
     | '/teacher/profile/edit'
   id:
     | '__root__'
@@ -489,9 +593,12 @@ export interface FileRouteTypes {
     | '/signup'
     | '/teachers'
     | '/terms'
+    | '/_authenticated/attendance'
     | '/_authenticated/dashboard'
+    | '/_authenticated/exam-results'
     | '/_authenticated/my-courses'
     | '/_authenticated/notifications'
+    | '/_authenticated/progress'
     | '/_authenticated/schedule'
     | '/_authenticated/settings'
     | '/_authenticated/wallet'
@@ -506,12 +613,18 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pages'
     | '/_authenticated/admin/payments'
     | '/_authenticated/admin/users'
+    | '/_authenticated/book/$teacherId'
+    | '/_authenticated/booking/$id'
+    | '/_authenticated/enrolled-course/$id'
+    | '/_authenticated/lesson/$id'
     | '/_authenticated/parent/report'
     | '/_authenticated/parent/settings'
+    | '/_authenticated/teacher/bookings'
     | '/_authenticated/teacher/courses'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/earnings'
     | '/_authenticated/teacher/settings'
+    | '/_authenticated/teacher/course/$id'
     | '/_authenticated/teacher/profile/edit'
   fileRoutesById: FileRoutesById
 }
@@ -651,11 +764,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/attendance': {
+      id: '/_authenticated/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof AuthenticatedAttendanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/exam-results': {
+      id: '/_authenticated/exam-results'
+      path: '/exam-results'
+      fullPath: '/exam-results'
+      preLoaderRoute: typeof AuthenticatedExamResultsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/my-courses': {
@@ -670,6 +797,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/progress': {
+      id: '/_authenticated/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof AuthenticatedProgressRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/schedule': {
@@ -770,6 +904,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/book/$teacherId': {
+      id: '/_authenticated/book/$teacherId'
+      path: '/book/$teacherId'
+      fullPath: '/book/$teacherId'
+      preLoaderRoute: typeof AuthenticatedBookTeacherIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/booking/$id': {
+      id: '/_authenticated/booking/$id'
+      path: '/booking/$id'
+      fullPath: '/booking/$id'
+      preLoaderRoute: typeof AuthenticatedBookingIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/enrolled-course/$id': {
+      id: '/_authenticated/enrolled-course/$id'
+      path: '/enrolled-course/$id'
+      fullPath: '/enrolled-course/$id'
+      preLoaderRoute: typeof AuthenticatedEnrolledCourseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/lesson/$id': {
+      id: '/_authenticated/lesson/$id'
+      path: '/lesson/$id'
+      fullPath: '/lesson/$id'
+      preLoaderRoute: typeof AuthenticatedLessonIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/parent/report': {
       id: '/_authenticated/parent/report'
       path: '/parent/report'
@@ -782,6 +944,13 @@ declare module '@tanstack/react-router' {
       path: '/parent/settings'
       fullPath: '/parent/settings'
       preLoaderRoute: typeof AuthenticatedParentSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/teacher/bookings': {
+      id: '/_authenticated/teacher/bookings'
+      path: '/teacher/bookings'
+      fullPath: '/teacher/bookings'
+      preLoaderRoute: typeof AuthenticatedTeacherBookingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/teacher/courses': {
@@ -812,6 +981,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher/course/$id': {
+      id: '/_authenticated/teacher/course/$id'
+      path: '/teacher/course/$id'
+      fullPath: '/teacher/course/$id'
+      preLoaderRoute: typeof AuthenticatedTeacherCourseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/teacher/profile/edit': {
       id: '/_authenticated/teacher/profile/edit'
       path: '/teacher/profile/edit'
@@ -823,9 +999,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedExamResultsRoute: typeof AuthenticatedExamResultsRoute
   AuthenticatedMyCoursesRoute: typeof AuthenticatedMyCoursesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
@@ -836,19 +1015,28 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminPagesRoute: typeof AuthenticatedAdminPagesRoute
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
+  AuthenticatedBookTeacherIdRoute: typeof AuthenticatedBookTeacherIdRoute
+  AuthenticatedBookingIdRoute: typeof AuthenticatedBookingIdRoute
+  AuthenticatedEnrolledCourseIdRoute: typeof AuthenticatedEnrolledCourseIdRoute
+  AuthenticatedLessonIdRoute: typeof AuthenticatedLessonIdRoute
   AuthenticatedParentReportRoute: typeof AuthenticatedParentReportRoute
   AuthenticatedParentSettingsRoute: typeof AuthenticatedParentSettingsRoute
+  AuthenticatedTeacherBookingsRoute: typeof AuthenticatedTeacherBookingsRoute
   AuthenticatedTeacherCoursesRoute: typeof AuthenticatedTeacherCoursesRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherEarningsRoute: typeof AuthenticatedTeacherEarningsRoute
   AuthenticatedTeacherSettingsRoute: typeof AuthenticatedTeacherSettingsRoute
+  AuthenticatedTeacherCourseIdRoute: typeof AuthenticatedTeacherCourseIdRoute
   AuthenticatedTeacherProfileEditRoute: typeof AuthenticatedTeacherProfileEditRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedExamResultsRoute: AuthenticatedExamResultsRoute,
   AuthenticatedMyCoursesRoute: AuthenticatedMyCoursesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
@@ -860,12 +1048,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminPagesRoute: AuthenticatedAdminPagesRoute,
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+  AuthenticatedBookTeacherIdRoute: AuthenticatedBookTeacherIdRoute,
+  AuthenticatedBookingIdRoute: AuthenticatedBookingIdRoute,
+  AuthenticatedEnrolledCourseIdRoute: AuthenticatedEnrolledCourseIdRoute,
+  AuthenticatedLessonIdRoute: AuthenticatedLessonIdRoute,
   AuthenticatedParentReportRoute: AuthenticatedParentReportRoute,
   AuthenticatedParentSettingsRoute: AuthenticatedParentSettingsRoute,
+  AuthenticatedTeacherBookingsRoute: AuthenticatedTeacherBookingsRoute,
   AuthenticatedTeacherCoursesRoute: AuthenticatedTeacherCoursesRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherEarningsRoute: AuthenticatedTeacherEarningsRoute,
   AuthenticatedTeacherSettingsRoute: AuthenticatedTeacherSettingsRoute,
+  AuthenticatedTeacherCourseIdRoute: AuthenticatedTeacherCourseIdRoute,
   AuthenticatedTeacherProfileEditRoute: AuthenticatedTeacherProfileEditRoute,
 }
 

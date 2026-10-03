@@ -226,7 +226,7 @@ function CoursesPage() {
               // لا يوجد أي كورس منشور بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
               // لبحثك" تحت: صادقة وواضحة (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
               <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)]/60 bg-card p-10 text-center">
-                <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span className="flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/10 text-primary">
                   <Sparkles aria-hidden="true" className="size-6" />
                 </span>
                 <h2 className="text-base font-extrabold text-foreground">

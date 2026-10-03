@@ -5,6 +5,8 @@ import { Guard } from "@/components/app/guard";
 import { getMyChildren } from "@/integrations/backend/parent";
 import { useBi } from "@/lib/bi";
 import { authPageHead } from "@/lib/seo";
+import { qk } from "@/lib/query-keys";
+import { parseUnreadCount } from "@/lib/parent-report";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
 const description = "الأبناء المرتبطون بحسابك — القراءة فقط حالياً.";
@@ -34,7 +36,7 @@ function Body() {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["parent-children"],
+    queryKey: qk.parentChildren(),
     queryFn: getMyChildren,
   });
   const children = data ?? [];
@@ -89,11 +91,17 @@ function Body() {
       <Panel title={bi("الأبناء المرتبطون", "Linked children")} icon="Users">
         {children.length ? (
           <RowList
-            rows={children.map((c) => ({
-              title: c.studentName,
-              meta: c.gradeName ?? "",
-              tone: "primary",
-            }))}
+            rows={children.map((c) => {
+              // P1-06 (Q-11): العدد من بيانات كل ابن؛ ما بنعرض شي لو ناقص.
+              const unread = parseUnreadCount(c.unreadNotificationsCount);
+              return {
+                title: c.studentName,
+                meta: c.gradeName ?? "",
+                value:
+                  unread === null ? undefined : bi(`${unread} إشعار غير مقروء`, `${unread} unread`),
+                tone: "primary" as const,
+              };
+            })}
           />
         ) : (
           <EmptyState

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AppPage, Panel } from "@/components/app/kit";
@@ -118,6 +118,33 @@ function WalletPage() {
             </Panel>
           }
         />
+
+        {/* W1-04 (Q-06/Q-19): نص صادق عن الخصم — الصياغة تتبع السياسة المعتمدة حاليًا ولا تدّعي أكثر. */}
+        <Panel title={bi("متى يُخصم المبلغ؟", "When is the amount charged?")} icon="Info">
+          <ul className="list-disc space-y-1.5 ps-5 text-sm text-muted-foreground">
+            <li>
+              {bi(
+                "عند إرسال طلب حجز، يبقى الطلب بانتظار موافقة المعلم. المنصّة هي من يحدّد لحظة الخصم، وتظهر الحركة في السجل أعلاه باسم «خصم اشتراك/حجز».",
+                "When you submit a booking request it waits for the teacher's approval. The platform decides when the charge happens, and it appears in the history above as «Enrollment/booking charge».",
+              )}
+            </li>
+            <li>
+              {bi(
+                "إذا كان رصيدك غير كافٍ قد يُرفض الطلب أو يتعذّر تأكيده — اشحن رصيدك مسبقًا لتجنّب ذلك.",
+                "If your balance is insufficient the request may be rejected or can't be confirmed — top up in advance to avoid that.",
+              )}
+            </li>
+            <li>
+              {bi(
+                "عند إلغاء حجز أو رفضه تُراجَع الحركة حسب سياسة المنصّة، وتظهر حالتها (مثلاً «مُرتجع») في السجل.",
+                "When a booking is cancelled or rejected the charge is handled per platform policy, and its status (e.g. «Reversed») shows in the history.",
+              )}
+            </li>
+          </ul>
+          <Button asChild variant="outline" size="sm" className="mt-3">
+            <Link to="/my-courses">{bi("عرض طلبات الحجز", "View my booking requests")}</Link>
+          </Button>
+        </Panel>
       </div>
     </AppPage>
   );

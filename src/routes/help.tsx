@@ -30,7 +30,7 @@ function HelpPage() {
     <PublicLayout>
       <section className="border-b-2 border-[var(--border-strong)] bg-card">
         <div className="mx-auto max-w-3xl px-5 py-16">
-          <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+          <span className="flex size-12 items-center justify-center rounded-2xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
             <LifeBuoy className="size-6" />
           </span>
           <h1 className="mt-5 text-4xl font-extrabold text-foreground">{t("help.h1")}</h1>
