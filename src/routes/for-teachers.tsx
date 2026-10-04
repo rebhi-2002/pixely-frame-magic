@@ -1,10 +1,10 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  BadgeCheck,
+  UserSearch,
   Coins,
-  LineChart,
-  Upload,
+  CalendarClock,
+  IdCard,
   Users,
   Video,
   CalendarDays,
@@ -24,11 +24,18 @@ export const Route = createFileRoute("/for-teachers")({
   component: ForTeachers,
 });
 
+/* كل أيقونة بتعبّر عن معنى العنصر الفعلي، مو مجرّد زخرفة:
+   - IdCard: الملف المهني (خبرة/مؤهلات/أسعار) — بطاقة تعريف لا رفع ملف.
+   - CalendarClock: أوقات التوفّر — جدول/وقت، مش رسم بياني تحليلي.
+   - Coins: الأرباح والمحفظة — مطابقة فعليًا، بلا تغيير.
+   - UserSearch: الظهور بدليل البحث — اكتشاف/بحث، لا رمز "توثيق" (BadgeCheck)
+     يلي ممكن يفهم غلط كشهادة رسمية غير موجودة فعليًا بالباك اند (Truth Rule). */
+
 const benefits = [
-  { icon: Upload, key: "upload" },
-  { icon: LineChart, key: "analytics" },
+  { icon: IdCard, key: "upload" },
+  { icon: CalendarClock, key: "analytics" },
   { icon: Coins, key: "income" },
-  { icon: BadgeCheck, key: "verified" },
+  { icon: UserSearch, key: "verified" },
 ] as const;
 
 const courseIcons = [Users, Video, CalendarDays, ClipboardCheck, Star] as const;

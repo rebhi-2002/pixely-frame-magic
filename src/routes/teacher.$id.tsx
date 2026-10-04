@@ -133,7 +133,11 @@ function TeacherProfilePage() {
     );
   }
 
-  if (teacherError || !teacher) {
+  // !teacher لحالها كافية هون: لو أول تحميل فشل teacher بتبقى undefined فتدخل
+  // هون صح؛ لو النجاح كان أول مرة وبعدين refetch خلفي فشل (رجوع فوكس/شبكة)،
+  // teacher بتبقى آخر قيمة ناجحة (React Query ما بيصفّرها)، فما لازم نستبدل
+  // بروفايل ظاهر فعليًا بشاشة خطأ كاملة لمجرد teacherError صار true لحظيًا.
+  if (!teacher) {
     return (
       <PublicLayout>
         <div className="mx-auto max-w-lg px-5 py-24">
@@ -388,7 +392,7 @@ function TeacherProfilePage() {
             label={bi("جارٍ تحميل الكورسات…", "Loading courses…")}
             className="mt-6 min-h-24 border-none bg-transparent"
           />
-        ) : coursesError ? (
+        ) : coursesError && courses.length === 0 ? (
           <ErrorState
             className="mt-6 min-h-24"
             title={bi("ما قدرنا نحمّل الكورسات", "Couldn't load courses")}

@@ -1,6 +1,6 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Compass, HeartHandshake, Languages, Target, Code2, ServerCog } from "lucide-react";
+import { Eye, ShieldCheck, Languages, Receipt, Code2, ServerCog } from "lucide-react";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
@@ -13,7 +13,11 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
-const valueIcons = [Compass, HeartHandshake, Languages, Target];
+/* كل أيقونة بتطابق معنى القيمة الفعلي (مو زخرفة عامة):
+   الوضوح قبل الكمّية → وضوح/شفافية بصرية، خصوصية الطالب → حماية صلاحيات
+   القراءة فقط، عربي أولاً → اللغة، شفافية مالية → سجل معاملات واضح. */
+const valueIcons = [Eye, ShieldCheck, Languages, Receipt];
+
 /* صورة + أيقونة احتياطية لكل عضو فريق، بالترتيب: فرونت، باك اند 1، باك اند 2.
    حط صورة حقيقية بنفس الاسم داخل public/team/ وبتظهر تلقائياً — عبر
    PhotoAvatar المشترك (نفس المكوّن المستخدم لصور المعلمين بصفحة الكورسات). */

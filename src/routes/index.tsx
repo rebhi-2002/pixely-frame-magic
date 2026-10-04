@@ -11,7 +11,7 @@ import {
   Check,
   ClipboardCheck,
   ListChecks,
-  Store,
+  UsersRound,
   Search,
   UserRound,
   CalendarDays,
@@ -48,13 +48,16 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
+/* Store كانت بترمز لمتجر/تسوّق، وما إلها علاقة بـ"كورسات بمجموعات" — UsersRound
+   بيكمّل العائلة البصرية مع UserRound (ملف معلم فردي) ليعبّر عن مجموعة طلاب. */
+
 const features = [
   { icon: Search, key: "library", flagship: true },
   { icon: UserRound, key: "community", flagship: false },
   { icon: CalendarDays, key: "tracker", flagship: true },
   { icon: Video, key: "simulator", flagship: false },
   { icon: Wallet, key: "mistakes", flagship: true },
-  { icon: Store, key: "courses", flagship: false },
+  { icon: UsersRound, key: "courses", flagship: false },
   { icon: ClipboardCheck, key: "review", flagship: false },
 ] as const;
 
@@ -277,7 +280,8 @@ function Landing() {
             ) : (
               <>
                 <h1 className="mt-6 text-4xl font-extrabold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
-                  {t("home.h1a")} {t("home.h1b")} {t("home.h1c")}
+                  {/* {t("home.h1a")} {t("home.h1b")} {t("home.h1c")} */}
+                  {t("home.h1a")} <span className="text-highlight">{t("home.h1b")}</span> {t("home.h1c")}
                 </h1>
                 <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
                   {t("home.sub")}
@@ -528,14 +532,20 @@ function Landing() {
 function TeacherPreview() {
   const { t } = useTranslation();
   const bi = useBi();
-  const { data, isLoading, isError } = useQuery({
+  // ما منعتمد على isError هون: الديفولت العام (router.tsx) ما عنده
+  // staleTime، يعني أي refetch خلفي (رجوع فوكس للتاب، إعادة اتصال شبكة —
+  // شائع بالموبايل) ممكن يفشل بعد نجاح أول تحميل. React Query ما بيصفّر
+  // data لما الـrefetch يفشل، فlist المعلمين القديمة الناجحة تبقى موجودة —
+  // بس كنا منخفيها كمان لمجرد ظهور isError، فالبطاقات الثلاث كانت
+  // "تظهر لحظة ثم تختفي" مع أي هفوة شبكة عابرة بعد أول عرض ناجح.
+  const { data, isLoading } = useQuery({
     queryKey: ["backend-teachers-search", { skip: 0, pageSize: 3 }],
     queryFn: () => searchTeachers({ skip: 0, pageSize: 3 }),
     retry: 1,
   });
   const teachers = data?.data ?? [];
 
-  if (isError || (!isLoading && teachers.length === 0)) return null;
+  if (!isLoading && teachers.length === 0) return null;
 
   return (
     <div className="mt-6 grid gap-3 sm:grid-cols-3">

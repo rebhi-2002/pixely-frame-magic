@@ -246,7 +246,11 @@ function TeachersDirectoryPage() {
               </div>
             ))}
           </div>
-        ) : isError ? (
+        ) : isError && teachers.length === 0 ? (
+          // isError لحالها ما بتكفي: refetch خلفي فاشل (رجوع فوكس/إعادة اتصال)
+          // بعد نجاح أول تحميل بيخلّي isError=true بس teachers لسا فيها نتائج
+          // قديمة صحيحة — نفس مبدأ إصلاح TeacherPreview بالرئيسية. نعرض شاشة
+          // الخطأ بس لو ما عنا نتائج أصلًا نعرضها.
           <ErrorState
             className="mx-auto max-w-lg p-10"
             title={bi("ما قدرنا نحمّل المعلمين", "Couldn't load teachers")}

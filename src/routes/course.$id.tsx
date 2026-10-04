@@ -80,7 +80,11 @@ function CourseDetailPage() {
     );
   }
 
-  if (isError || !course) {
+  // !course لحالها كافية: لو أول تحميل فشل course بتبقى undefined فتدخل هون
+  // صح؛ لو النجاح كان أول مرة وبعدين refetch خلفي فشل (رجوع فوكس/شبكة)، course
+  // بتبقى آخر قيمة ناجحة (React Query ما بيصفّرها عند فشل الخلفية)، فما لازم
+  // نستبدل صفحة كورس ظاهرة فعليًا بشاشة خطأ كاملة لمجرد isError صار true لحظيًا.
+  if (!course) {
     return (
       <PublicLayout>
         <div className="mx-auto max-w-lg px-5 py-24">

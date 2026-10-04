@@ -165,7 +165,7 @@ function SignupPage() {
             to="/teacher/register"
             className="group flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 text-start transition-colors hover:bg-secondary"
           >
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-info/12 text-info">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-strong)] bg-info/12 text-info">
               <UserRound className="size-5" />
             </span>
             <span className="min-w-0 flex-1">
@@ -294,13 +294,9 @@ function SignupPage() {
             onChange={setConfirmPassword}
             autoComplete="new-password"
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-          >
-            {loading ? t("common.loading") : t("authPages.signup.submit")}
-          </button>
+          <Button type="submit" loading={loading} className="w-full">
+            {t("authPages.signup.submit")}
+          </Button>
           <p className="text-center text-xs text-muted-foreground">{t("authPages.signup.terms")}</p>
         </form>
       )}
@@ -338,9 +334,9 @@ function RoleCard({
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-start gap-3 rounded-2xl border border-border bg-background p-4 text-start transition-colors hover:border-primary/50"
+      className="group flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 text-start transition-colors hover:bg-secondary"
     >
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-strong)] bg-primary/12 text-primary">
         {icon}
       </span>
       <span className="min-w-0 flex-1">

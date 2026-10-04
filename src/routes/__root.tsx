@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { TriangleAlert } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   PreferencesProvider,
@@ -24,6 +25,14 @@ import { currentUserHome } from "@/lib/session-home";
 import { SeoManager } from "@/components/app/seo-manager";
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { initAnalytics } from "@/lib/analytics";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
+
+/* 404/الخطأ العام — صفحتان عموميّتان بتظهرلهما أي زائر على أي رابط عاطل أو
+   عطل غير متوقَّع، بس كانتا لسا على الستايل القديم (surface-mesh/glass
+   elevation/btn-shine) من قبل تطبيق Warm Neo-Brutalism بالكامل — ما لحقتهم
+   أي جولة تحديث سابقة. صار الحد صلب + ظل بإزاحة بلا ضبابية مطابق لباقي
+   الموقع العام. */
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -32,17 +41,14 @@ function NotFoundComponent() {
     void currentUserHome().then((next) => setHome(next ?? "/"));
   }, []);
   return (
-    <div className="surface-mesh flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md rounded-3xl border-2 border-[var(--border-strong)] bg-card p-8 text-center shadow-[var(--shadow-brutal)]">
         <NotFoundIllustration className="mx-auto h-32 w-auto" />
         <h1 className="mt-4 font-display text-6xl font-bold text-foreground">404</h1>
         <h2 className="mt-3 text-xl font-bold text-foreground">{t("errors.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundText")}</p>
         <div className="mt-7">
-          <a
-            href={home}
-            className="btn-shine hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
-          >
+          <a href={home} className={buttonVariants({ className: "px-6 py-3 text-sm" })}>
             {t("errors.backHome")}
           </a>
         </div>
@@ -59,33 +65,25 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="shadow-elevation-2 max-w-md rounded-3xl border border-border bg-card p-8 text-center">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-destructive/12 text-destructive">
-          <svg viewBox="0 0 24 24" fill="none" className="size-7" aria-hidden>
-            <path
-              d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+      <div className="max-w-md rounded-3xl border-2 border-[var(--border-strong)] bg-card p-8 text-center shadow-[var(--shadow-brutal)]">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-destructive/12 text-destructive">
+        <TriangleAlert className="size-7" aria-hidden="true" />
         </span>
         <h1 className="mt-4 text-xl font-bold text-foreground">{t("errors.crashTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.crashText")}</p>
         <div className="mt-7 flex flex-wrap justify-center gap-2.5">
-          <button
+          <Button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="hover-press inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+            className="px-6 py-3 text-sm"
           >
             {t("errors.retry")}
-          </button>
+          </Button>
           <a
             href="/"
-            className="hover-press inline-flex items-center justify-center rounded-xl border border-border bg-background px-6 py-3 text-sm font-bold text-foreground hover:bg-secondary"
+            className={buttonVariants({ variant: "outline", className: "px-6 py-3 text-sm" })}
           >
             {t("errors.backHome")}
           </a>
