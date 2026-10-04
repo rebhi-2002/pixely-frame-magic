@@ -179,7 +179,23 @@
     "emptyDirectoryTitle": "The first teacher is on its way",
     "emptyDirectoryBody": "We're setting up the teacher list. As soon as a teacher joins and makes their profile visible, they'll show up here.",
     "viewProfile": "View profile",
-    "perHour": "/hour"
+    "perHour": "/hour",
+    "filters": {
+      "toggle": "More filters",
+      "priceLabel": "Hourly price range (JOD)",
+      "priceFrom": "From",
+      "priceTo": "To",
+      "ratingLabel": "Minimum rating",
+      "ratingAny": "Any rating",
+      "experienceLabel": "Minimum experience",
+      "experienceAny": "Any experience",
+      "dayLabel": "Available day",
+      "dayAny": "Any day",
+      "languageLabel": "Teaching language",
+      "languagePlaceholder": "e.g. Arabic",
+      "reset": "Reset filters",
+      "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    }
   },
   "teacherProfile": {
     "meta": {

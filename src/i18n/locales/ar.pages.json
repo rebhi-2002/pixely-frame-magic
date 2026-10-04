@@ -179,7 +179,23 @@
     "emptyDirectoryTitle": "أول معلّم بالطريق",
     "emptyDirectoryBody": "نجهّز حالياً قائمة المعلمين. أول ما ينضم أي معلّم ويفعّل ظهور ملفه رح يظهر هون مباشرة.",
     "viewProfile": "شوف الملف الشخصي",
-    "perHour": "/ساعة"
+    "perHour": "/ساعة",
+    "filters": {
+      "toggle": "فلاتر أكتر",
+      "priceLabel": "نطاق السعر بالساعة (دينار)",
+      "priceFrom": "من",
+      "priceTo": "إلى",
+      "ratingLabel": "التقييم الأدنى",
+      "ratingAny": "أي تقييم",
+      "experienceLabel": "سنوات الخبرة الأدنى",
+      "experienceAny": "أي خبرة",
+      "dayLabel": "اليوم المتاح",
+      "dayAny": "أي يوم",
+      "languageLabel": "لغة التدريس",
+      "languagePlaceholder": "مثلاً: عربي",
+      "reset": "إعادة ضبط الفلاتر",
+      "days": ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"]
+    }
   },
   "teacherProfile": {
     "meta": {
