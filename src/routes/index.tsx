@@ -281,7 +281,8 @@ function Landing() {
               <>
                 <h1 className="mt-6 text-4xl font-extrabold leading-[1.2] text-foreground sm:text-5xl md:text-6xl">
                   {/* {t("home.h1a")} {t("home.h1b")} {t("home.h1c")} */}
-                  {t("home.h1a")} <span className="text-highlight">{t("home.h1b")}</span> {t("home.h1c")}
+                  {t("home.h1a")} <span className="text-highlight">{t("home.h1b")}</span>{" "}
+                  {t("home.h1c")}
                 </h1>
                 <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
                   {t("home.sub")}

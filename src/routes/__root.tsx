@@ -67,7 +67,7 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md rounded-3xl border-2 border-[var(--border-strong)] bg-card p-8 text-center shadow-[var(--shadow-brutal)]">
         <span className="mx-auto flex size-14 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-destructive/12 text-destructive">
-        <TriangleAlert className="size-7" aria-hidden="true" />
+          <TriangleAlert className="size-7" aria-hidden="true" />
         </span>
         <h1 className="mt-4 text-xl font-bold text-foreground">{t("errors.crashTitle")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t("errors.crashText")}</p>

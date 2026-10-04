@@ -2,7 +2,18 @@ import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Award, MapPin, Radio, Search, Sparkles, Star, Wallet } from "lucide-react";
+import {
+  Award,
+  ChevronDown,
+  MapPin,
+  Radio,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+  Star,
+  Wallet,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
@@ -146,15 +157,58 @@ function TeachersDirectoryPage() {
   // بحث الباك اند بيصير بكل تغيير بالفلتر — نؤخّر نص البحث عشان ما يُرسل طلب بكل ضغطة زر.
   const keyword = useDebouncedValue(query.trim(), 400);
 
+  // فلاتر FR-T02 الإضافية — كل حقل هون موجود فعليًا بـTeacherSearchFilter
+  // (مطابق للـbackend DTO، راجع تعليق أول teachers.ts)، فبنرسلها للباك اند
+  // مباشرة بدل فلترة محلية بعد الصفحة (كان بيكسر pagination/total الحقيقيين).
+  // ⚠️ subjectId/gradeId استُبعدوا عمدًا: ما في endpoint حاليًا يرجّع قائمة
+  // المواد/الصفوف الحقيقية بأرقامها (IDs)، وTeacherProfileRow بيرجّع أسماء
+  // نصّية بس (subjects: string[])، فما في طريقة نربط اسم باسم رقم صحيح بدون
+  // تخمين — تخمين الـID بيكسر الفلترة بصمت أو يعرض نتائج غلط. لازم endpoint
+  // حقيقي (مثلاً Subject/GetAll، Grade/GetAll) قبل ما نضيفهم.
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [minPriceInput, setMinPriceInput] = useState("");
+  const [maxPriceInput, setMaxPriceInput] = useState("");
+  const [minRating, setMinRating] = useState<number | undefined>(undefined);
+  const [minExperience, setMinExperience] = useState<number | undefined>(undefined);
+  const [availableDay, setAvailableDay] = useState<number | undefined>(undefined);
+  const [languageInput, setLanguageInput] = useState("");
+  const language = useDebouncedValue(languageInput.trim(), 400);
+  const minPrice = useDebouncedValue(minPriceInput.trim(), 400);
+  const maxPrice = useDebouncedValue(maxPriceInput.trim(), 400);
+
+  const hasAdvancedFilters =
+    minPriceInput !== "" ||
+    maxPriceInput !== "" ||
+    minRating != null ||
+    minExperience != null ||
+    availableDay != null ||
+    languageInput !== "";
+
   const filter = useMemo(
     () => ({
       keyword: keyword || undefined,
       online: delivery === "online" ? true : undefined,
       inPerson: delivery === "inperson" ? true : undefined,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      minRating,
+      minExperienceYears: minExperience,
+      availableDay,
+      language: language || undefined,
       skip: 0,
       pageSize: limit,
     }),
-    [keyword, delivery, limit],
+    [
+      keyword,
+      delivery,
+      minPrice,
+      maxPrice,
+      minRating,
+      minExperience,
+      availableDay,
+      language,
+      limit,
+    ],
   );
 
   const { data, isLoading, isError, isFetching, refetch } = useQuery({
@@ -167,13 +221,48 @@ function TeachersDirectoryPage() {
   const teachers = data?.data ?? [];
   const total = data?.totalCount ?? teachers.length;
   const hasMore = total > teachers.length;
-  const isFiltering = !!keyword || delivery !== "__all";
+  const isFiltering = !!keyword || delivery !== "__all" || hasAdvancedFilters;
 
   // أي تغيير بالبحث/الصيغة يرجّع العدّاد للصفحة الأولى.
   const changeDelivery = (next: DeliveryFilter) => {
     setDelivery(next);
     setLimit(PAGE_SIZE);
   };
+
+  const changeMinPrice = (next: string) => {
+    setMinPriceInput(next);
+    setLimit(PAGE_SIZE);
+  };
+  const changeMaxPrice = (next: string) => {
+    setMaxPriceInput(next);
+    setLimit(PAGE_SIZE);
+  };
+  const changeMinRating = (next: number | undefined) => {
+    setMinRating(next);
+    setLimit(PAGE_SIZE);
+  };
+  const changeMinExperience = (next: number | undefined) => {
+    setMinExperience(next);
+    setLimit(PAGE_SIZE);
+  };
+  const changeAvailableDay = (next: number | undefined) => {
+    setAvailableDay(next);
+    setLimit(PAGE_SIZE);
+  };
+  const changeLanguage = (next: string) => {
+    setLanguageInput(next);
+    setLimit(PAGE_SIZE);
+  };
+  const resetAdvancedFilters = () => {
+    setMinPriceInput("");
+    setMaxPriceInput("");
+    setMinRating(undefined);
+    setMinExperience(undefined);
+    setAvailableDay(undefined);
+    setLanguageInput("");
+    setLimit(PAGE_SIZE);
+  };
+
   const changeQuery = (next: string) => {
     setQuery(next);
     setLimit(PAGE_SIZE);
@@ -223,6 +312,148 @@ function TeachersDirectoryPage() {
               ))}
             </div>
           </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((v) => !v)}
+              aria-expanded={filtersOpen}
+              className="inline-flex items-center gap-1.5 rounded-lg border-2 border-[var(--border-strong)] bg-background px-3 py-2 text-xs font-bold text-foreground hover:bg-secondary"
+            >
+              <SlidersHorizontal className="size-3.5" />
+              {t("teachersDirectory.filters.toggle")}
+              <ChevronDown
+                className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")}
+              />
+            </button>
+            {hasAdvancedFilters && (
+              <button
+                type="button"
+                onClick={resetAdvancedFilters}
+                className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-bold text-muted-foreground hover:text-destructive"
+              >
+                <RotateCcw className="size-3.5" />
+                {t("teachersDirectory.filters.reset")}
+              </button>
+            )}
+          </div>
+          {filtersOpen && (
+            <div className="mt-3 grid gap-4 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-5 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <label className="text-xs font-bold text-foreground">
+                  {t("teachersDirectory.filters.priceLabel")}
+                </label>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={0}
+                    inputMode="numeric"
+                    value={minPriceInput}
+                    onChange={(e) => changeMinPrice(e.target.value)}
+                    placeholder={t("teachersDirectory.filters.priceFrom")}
+                    aria-label={t("teachersDirectory.filters.priceFrom")}
+                    className="h-10 w-full min-w-0 rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none focus:border-primary"
+                  />
+                  <span className="text-xs text-muted-foreground">—</span>
+                  <input
+                    type="number"
+                    min={0}
+                    inputMode="numeric"
+                    value={maxPriceInput}
+                    onChange={(e) => changeMaxPrice(e.target.value)}
+                    placeholder={t("teachersDirectory.filters.priceTo")}
+                    aria-label={t("teachersDirectory.filters.priceTo")}
+                    className="h-10 w-full min-w-0 rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-foreground">
+                  {t("teachersDirectory.filters.ratingLabel")}
+                </label>
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  {[undefined, 3, 4, 4.5].map((r) => (
+                    <button
+                      key={r ?? "any"}
+                      type="button"
+                      onClick={() => changeMinRating(r)}
+                      className={cn(
+                        "rounded-lg border-2 px-2.5 py-1.5 text-xs font-bold transition-colors",
+                        minRating === r
+                          ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
+                          : "border-[var(--border-strong)] bg-card text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {r == null ? (
+                        t("teachersDirectory.filters.ratingAny")
+                      ) : (
+                        <span className="inline-flex items-center gap-1">
+                          <Star className="size-3 fill-current" />
+                          {r}+
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-foreground">
+                  {t("teachersDirectory.filters.experienceLabel")}
+                </label>
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  {[undefined, 1, 3, 5].map((y) => (
+                    <button
+                      key={y ?? "any"}
+                      type="button"
+                      onClick={() => changeMinExperience(y)}
+                      className={cn(
+                        "rounded-lg border-2 px-2.5 py-1.5 text-xs font-bold transition-colors",
+                        minExperience === y
+                          ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
+                          : "border-[var(--border-strong)] bg-card text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {y == null ? t("teachersDirectory.filters.experienceAny") : `${y}+`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-foreground">
+                  {t("teachersDirectory.filters.dayLabel")}
+                </label>
+                <select
+                  value={availableDay ?? "__any"}
+                  onChange={(e) =>
+                    changeAvailableDay(
+                      e.target.value === "__any" ? undefined : Number(e.target.value),
+                    )
+                  }
+                  className="mt-1.5 h-10 w-full rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none focus:border-primary"
+                >
+                  <option value="__any">{t("teachersDirectory.filters.dayAny")}</option>
+                  {(t("teachersDirectory.filters.days", { returnObjects: true }) as string[]).map(
+                    (label, i) => (
+                      <option key={i} value={i}>
+                        {label}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </div>
+              <div className="sm:col-span-2 lg:col-span-4">
+                <label className="text-xs font-bold text-foreground">
+                  {t("teachersDirectory.filters.languageLabel")}
+                </label>
+                <input
+                  value={languageInput}
+                  onChange={(e) => changeLanguage(e.target.value)}
+                  placeholder={t("teachersDirectory.filters.languagePlaceholder")}
+                  className="mt-1.5 h-10 w-full max-w-xs rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
