@@ -309,6 +309,7 @@
    خط سفلي متموّج بلون شفاف، إحساس "محدَّد باليد" بدل تلوين الحرف نفسه.
    يشتغل بنفس منطق text-gradient (اتجاه-agnostic لأنه underline بس). ——— */
 @utility text-highlight {
+  display: inline-block;
   position: relative;
   z-index: 0;
   &::after {
