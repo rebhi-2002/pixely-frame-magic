@@ -4,9 +4,9 @@ import { resolveRoleKey } from "@/lib/bi";
 
 // الأرقام هون متعمّدة غير متسلسلة (متل القاعدة الحية 1/3/4/5) لإثبات إن الدور ما بيعتمد عليها.
 const roles = [
-  { id: 3, name: "الطالب", code: "student" },
-  { id: 4, name: "المعلم", code: "teacher" },
-  { id: 5, name: "ولي الامر", code: "parent" },
+  { id: 2, name: "الطالب", code: "student" },
+  { id: 3, name: "المعلم", code: "teacher" },
+  { id: 4, name: "ولي الامر", code: "parent" },
 ];
 
 describe("findUserTypeForRole", () => {

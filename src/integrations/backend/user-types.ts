@@ -8,16 +8,16 @@ import type { RoleKey } from "@/lib/bi";
  */
 export const USER_TYPE_ID_TO_ROLE: Readonly<Record<number, RoleKey>> = {
   1: "admin",
-  3: "student",
-  4: "teacher",
-  5: "parent",
+  2: "student",
+  3: "teacher",
+  4: "parent",
 };
 
 export const ROLE_TO_USER_TYPE_ID: Readonly<Record<RoleKey, number>> = {
   admin: 1,
-  student: 3,
-  teacher: 4,
-  parent: 5,
+  student: 2,
+  teacher: 3,
+  parent: 4,
 };
 
 /** يقبل رقم أو نص رقمي ("4") ويرجّع الدور، أو null لو الرقم غير معروف. */
