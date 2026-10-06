@@ -1,9 +1,7 @@
 // منطق نقي لشاشة الحجز (WP-S1: S1-02 / S1-04 / S1-07) — بلا React وبلا شبكة، قابل للاختبار.
 //
 // ⚠️ افتراضات موثّقة (لم تُؤكَّد من الباك اند):
-// - أقصى مدة للحجز 480 دقيقة: مثال Swagger لحقل durationMinutes في Booking/Submit هو 480
-//   (نفس نمط ratingValue=5 بمثال Rate)، فاعتُبر الحد الأقصى. الباك اند هو المرجع النهائي وأي
-//   رفض منه بيُعرض برسالته.
+// - مدة الحجز 15..480 دقيقة: مؤكَّدة من كود الباك اند (BookingInputDto [Range(15, 480)]).
 // - الوقت المتاح = ضمن فترة توفّر المعلم لنفس يوم الأسبوع والوضع (حضوري/أونلاين).
 
 import { combineDateTime } from "./format";
@@ -11,16 +9,15 @@ import { DeliveryType } from "./enums";
 import type { AvailabilitySlot } from "@/integrations/backend/teachers";
 
 /**
- * علم تشغيل مسار الحجز بصفحة المعلم العامة (S1-06). false = يبقى الزر معطّلاً بنصه الصادق.
- * اقلبه إلى true فقط عند اكتمال إرسال الحجز (S1-05) وربط قوائم المادة/الصف (S1-03 / Q-04)،
- * وإلا وعدنا المستخدم بوظيفة غير مكتملة.
+ * علم تشغيل مسار الحجز بصفحة المعلم العامة (S1-06). فُعِّل (true) بعد تأكيد كود الباك اند أن Booking/Submit
+ * لا يتطلب subjectId/gradeId (اختياريان) وبعد توصيل الإرسال بشاشة الحجز (S1-05). false = يرجع الزر المعطّل.
  */
-export const BOOKING_FLOW_ENABLED = false;
+export const BOOKING_FLOW_ENABLED = true;
 
-export const MIN_BOOKING_MINUTES = 30;
+export const MIN_BOOKING_MINUTES = 15; // BookingInputDto: [Range(15, 480)] (مؤكَّد من كود الباك اند)
 export const MAX_BOOKING_MINUTES = 480;
 /** خيارات المدة المعروضة بالواجهة (دقائق) — كلها ضمن الحدّين. */
-export const DURATION_OPTIONS = [30, 45, 60, 90, 120, 180] as const;
+export const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120, 180] as const;
 /** خطوة توليد أوقات البدء. */
 export const START_STEP_MINUTES = 30;
 export const MAX_NOTE_LENGTH = 500;

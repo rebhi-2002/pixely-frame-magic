@@ -4,7 +4,6 @@
 
 import { apiClient } from "./client";
 import type { OperationResult } from "./op-result";
-import type { PendingResponse } from "./pending-json";
 import type { BookingStatus, DeliveryType, MeetingPlatform } from "@/lib/enums";
 
 // الأنواع الرقمية مصدرها الوحيد lib/enums.ts (Discrepancies D-10) — بنعيد تصديرها هون
@@ -147,20 +146,125 @@ export async function markStudentNotificationRead(
 // StudentProgressDto الموجود أعلاه. ⚠️ مجمّد بعد إغلاق WP-00 (CR لأي إضافة).
 // ════════════════════════════════════════════════════════════════════════════════════
 
-// PENDING-JSON (WP-J / J-02): تفاصيل حجز (هل فيها isRated/تفاصيل الدفع؟ — Q-10).
-export type StudentBookingDetail = PendingResponse;
-// PENDING-JSON (WP-J / J-02): حالة دفع الحجز.
-export type StudentBookingPayment = PendingResponse;
-// PENDING-JSON (WP-J / J-02): طلب إعادة جدولة (أسماء الحالات 1..4 غير موثّقة).
-export type StudentRescheduleRequest = PendingResponse;
-// PENDING-JSON (WP-J / J-03): تفاصيل درس.
-export type StudentLessonDetail = PendingResponse;
-// PENDING-JSON (WP-J / J-03): تفاصيل كورس مسجَّل.
-export type StudentCourseDetail = PendingResponse;
-// PENDING-JSON (WP-J / J-04): صف سجل الحضور.
-export type StudentAttendanceRow = PendingResponse;
-// PENDING-JSON (WP-J / J-04): صف نتيجة امتحان.
-export type StudentExamResultRow = PendingResponse;
+// J-02/J-03/J-04 — أنواع مأخوذة حرفيًا من DTOs كود الباك اند (Acadimia.Infrastructure/Dtos): ASP.NET Core
+// بيسلسل camelCase، والـenums أرقام، وDateTime ISO، وTimeSpan "HH:mm:ss". ⚠️ مصدرها الكود وليس تشغيلًا حيًا.
+
+/** BookingDto — رد Student/GetBooking وBooking/MyBookings وBooking/TeacherBookings. */
+export interface StudentBookingDetail {
+  id: number;
+  teacherId: number;
+  teacherName: string | null;
+  /** string (معرّف المستخدم)، ليس رقمًا. */
+  studentId: string;
+  studentName: string | null;
+  subjectId: number | null;
+  subjectName: string | null;
+  teachingMode: CourseDeliveryType;
+  date: string;
+  startTime: string;
+  durationMinutes: number;
+  price: number;
+  /** BookingStatus: 1 Pending · 2 Accepted · 3 Rejected · 4 Cancelled · 5 Confirmed · 6 Completed. */
+  status: number;
+  studentNote: string | null;
+  rejectionReason: string | null;
+  paidOn: string | null;
+  cancellationReason: string | null;
+  createdOn: string;
+}
+
+/** BookingPaymentStatus: 1 Unpaid · 2 Paid · 3 Refunded. */
+export interface StudentBookingPayment {
+  bookingId: number;
+  bookingStatus: number;
+  price: number;
+  paymentStatus: number;
+  paidOn: string | null;
+  walletBalance: number;
+  hasSufficientBalance: boolean;
+  needsTopUp: boolean;
+}
+
+/** RescheduleRequestDto. status: 1 Pending · 2 Approved · 3 Rejected · 4 Cancelled. */
+export interface StudentRescheduleRequest {
+  id: number;
+  bookingId: number;
+  teacherName: string | null;
+  studentName: string | null;
+  originalDate: string;
+  originalStartTime: string;
+  proposedDate: string;
+  proposedStartTime: string;
+  note: string | null;
+  status: number;
+  rejectionReason: string | null;
+  createdOn: string;
+}
+
+/** StudentLessonDetailDto — الدرس متداخل بحقل lesson (وليس مسطّحًا). */
+export interface StudentLessonDetail {
+  lesson: StudentScheduleItemDto;
+  groupName: string | null;
+  meetingInstructions: string | null;
+  /** false = الموقع غير متوفر (حضوري بلا قاعة). */
+  locationAvailable: boolean | null;
+  cancellationReason: string | null;
+}
+
+export interface StudentGroupScheduleDay {
+  day: number;
+  startTime: string;
+}
+export interface StudentGroupInfo {
+  groupId: number;
+  name: string;
+  courseStartDate: string | null;
+  courseEndDate: string | null;
+  lessonDurationMinutes: number;
+  days: StudentGroupScheduleDay[];
+}
+/** StudentCourseDetailDto. */
+export interface StudentCourseDetail {
+  courseId: number;
+  title: string;
+  description: string | null;
+  deliveryType: CourseDeliveryType;
+  teacherName: string | null;
+  subjectName: string | null;
+  groups: StudentGroupInfo[];
+  lessons: StudentScheduleItemDto[];
+}
+
+/** StudentAttendanceRowDto. status: 1 Present · 2 Absent · 3 Late · 4 Excused. */
+export interface StudentAttendanceRow {
+  sessionDate: string;
+  groupName: string;
+  courseTitle: string | null;
+  status: number;
+  notes: string | null;
+}
+/** StudentAttendanceDto — كائن واحد (ليس مصفوفة) فيه الإحصاءات والسجلات. */
+export interface StudentAttendance {
+  attendanceRatePercent: number | null;
+  totalSessions: number;
+  present: number;
+  absent: number;
+  late: number;
+  excused: number;
+  records: StudentAttendanceRow[];
+}
+
+/** StudentExamResultDto. */
+export interface StudentExamResultRow {
+  examId: number;
+  examTitle: string;
+  examDate: string;
+  courseTitle: string | null;
+  scoreObtained: number;
+  totalMarks: number;
+  percentage: number | null;
+  feedback: string | null;
+}
 
 /** جسم Student/RequestReschedule كما بالـSwagger. */
 export interface RescheduleRequestInput {
@@ -217,7 +321,7 @@ export async function requestReschedule(input: RescheduleRequestInput): Promise<
   });
 }
 
-/** طلبات إعادة الجدولة الخاصة بالطالب. // PENDING-JSON: نفترض مصفوفة مسطّحة. */
+/** طلبات إعادة الجدولة الخاصة بالطالب (قائمة RescheduleRequestDto). */
 export async function getMyRescheduleRequests(): Promise<StudentRescheduleRequest[]> {
   return asArray(
     await apiClient.get<StudentRescheduleRequest[]>("/api/Student/MyRescheduleRequests"),
@@ -234,21 +338,28 @@ export async function getStudentCourse(id: number): Promise<StudentCourseDetail>
   return apiClient.get<StudentCourseDetail>(`/api/Student/GetCourse?id=${id}`);
 }
 
-/** سجل الحضور (فلاتر from/to/courseId اختيارية). // PENDING-JSON */
-export async function getStudentAttendance(
-  filter: StudentAttendanceFilter = {},
-): Promise<StudentAttendanceRow[]> {
+/** سجل الحضور + الإحصاءات (فلاتر from/to/courseId اختيارية). الرد كائن StudentAttendanceDto. */
+export async function getStudentAttendance(filter: StudentAttendanceFilter = {}): Promise<StudentAttendance> {
   const params = new URLSearchParams();
   if (filter.from) params.set("from", dateParam(filter.from));
   if (filter.to) params.set("to", dateParam(filter.to));
   if (filter.courseId) params.set("courseId", String(filter.courseId));
   const qs = params.toString();
-  return asArray(
-    await apiClient.get<StudentAttendanceRow[]>(`/api/Student/Attendance${qs ? `?${qs}` : ""}`),
+  const data = await apiClient.get<Partial<StudentAttendance> | null>(
+    `/api/Student/Attendance${qs ? `?${qs}` : ""}`,
   );
+  return {
+    attendanceRatePercent: data?.attendanceRatePercent ?? null,
+    totalSessions: data?.totalSessions ?? 0,
+    present: data?.present ?? 0,
+    absent: data?.absent ?? 0,
+    late: data?.late ?? 0,
+    excused: data?.excused ?? 0,
+    records: asArray(data?.records),
+  };
 }
 
-/** نتائج الامتحانات (فلتر courseId اختياري). // PENDING-JSON */
+/** نتائج الامتحانات (فلتر courseId اختياري). */
 export async function getStudentExamResults(courseId?: number): Promise<StudentExamResultRow[]> {
   const qs = courseId ? `?courseId=${courseId}` : "";
   return asArray(await apiClient.get<StudentExamResultRow[]>(`/api/Student/ExamResults${qs}`));

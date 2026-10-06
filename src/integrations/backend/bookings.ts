@@ -14,17 +14,20 @@
 
 import { apiClient } from "./client";
 import type { OperationResult } from "./op-result";
-import type { PendingResponse } from "./pending-json";
+import type { StudentBookingDetail, StudentRescheduleRequest } from "./student";
 import type { BookingStatus, DeliveryType } from "@/lib/enums";
 
 export type { BookingStatus } from "@/lib/enums";
 
 // PENDING-JSON (WP-J / J-01): شكل الصف غير موثّق — انتظر العينة (Q-05).
-export type BookingRow = PendingResponse;
+/** BookingDto (Booking/MyBookings) — نفس شكل StudentBookingDetail. */
+export type BookingRow = StudentBookingDetail;
 // PENDING-JSON (WP-J / J-01)
-export type TeacherBookingRow = PendingResponse;
+/** BookingDto (Booking/TeacherBookings). */
+export type TeacherBookingRow = StudentBookingDetail;
 // PENDING-JSON (WP-J / J-01)
-export type TeacherRescheduleRequestRow = PendingResponse;
+/** RescheduleRequestDto (Booking/TeacherRescheduleRequests). */
+export type TeacherRescheduleRequestRow = StudentRescheduleRequest;
 
 /** حالات طلب إعادة الجدولة المسموحة كفلتر (Swagger: 1..4). أسماؤها غير موثّقة (تُحسم بـJ-02). */
 export type RescheduleStatusFilter = 1 | 2 | 3 | 4;
@@ -32,8 +35,10 @@ export type RescheduleStatusFilter = 1 | 2 | 3 | 4;
 /** جسم Booking/Submit كما بالـSwagger. التاريخ "YYYY-MM-DD" (أو ISO)، والوقت "HH:mm[:ss]". */
 export interface BookingInput {
   teacherId: number;
-  subjectId: number;
-  gradeId: number;
+  /** اختياري بالباك اند (BookingInputDto.SubjectId nullable). */
+  subjectId?: number | null;
+  /** اختياري بالباك اند (BookingInputDto.GradeId nullable). */
+  gradeId?: number | null;
   /** 1 = حضوري، 2 = أونلاين. */
   teachingMode: DeliveryType;
   date: string;

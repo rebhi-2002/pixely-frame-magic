@@ -42,9 +42,12 @@ export function decideRoleFromProbes(results: ProbeResults): ProbedRole | null {
   return reached.length === 1 ? reached[0] : null;
 }
 
-async function probeOne(path: string): Promise<ProbeOutcome> {
+type ProbeFetcher = (path: string) => Promise<unknown>;
+const defaultFetcher: ProbeFetcher = (path) => apiClient.get<unknown>(path);
+
+async function probeOne(path: string, fetcher: ProbeFetcher): Promise<ProbeOutcome> {
   try {
-    await apiClient.get<unknown>(path);
+    await fetcher(path);
     return "reached";
   } catch (err) {
     return classifyProbeError(err);
@@ -57,14 +60,18 @@ const inFlight = new Map<string, Promise<ProbedRole | null>>();
  * يجرّب الأدوار الثلاثة ويرجّع الدور أو null. نتيجة كل مستخدم تُحسب مرة واحدة بالجلسة
  * الحالية (حتى لو نُدي أكثر من مرة) كي ما تتكرر الطلبات.
  */
-export function probeRole(userId: string): Promise<ProbedRole | null> {
+export function probeRole(
+  userId: string,
+  /** للاختبار: دالة جلب بديلة (الافتراضي apiClient.get). */
+  fetcher: ProbeFetcher = defaultFetcher,
+): Promise<ProbedRole | null> {
   const existing = inFlight.get(userId);
   if (existing) return existing;
   const task = (async () => {
     const [student, parent, teacher] = await Promise.all([
-      probeOne(ROLE_PROBE_PATHS.student),
-      probeOne(ROLE_PROBE_PATHS.parent),
-      probeOne(ROLE_PROBE_PATHS.teacher),
+      probeOne(ROLE_PROBE_PATHS.student, fetcher),
+      probeOne(ROLE_PROBE_PATHS.parent, fetcher),
+      probeOne(ROLE_PROBE_PATHS.teacher, fetcher),
     ]);
     return decideRoleFromProbes({ student, parent, teacher });
   })();

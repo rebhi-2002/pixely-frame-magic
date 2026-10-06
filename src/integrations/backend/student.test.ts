@@ -86,6 +86,26 @@ describe("student.ts — الدوال العشر الجديدة", () => {
     expect(get).toHaveBeenLastCalledWith("/api/Student/Attendance");
   });
 
+  it("getStudentAttendance يطبّع كائن الباك اند ويحمي من الحقول الناقصة", async () => {
+    get.mockResolvedValue({
+      attendanceRatePercent: 80,
+      totalSessions: 5,
+      present: 4,
+      absent: 1,
+      records: [{ sessionDate: "2026-10-01T00:00:00", groupName: "أ", courseTitle: null, status: 1, notes: null }],
+    });
+    const result = await getStudentAttendance();
+    expect(result.attendanceRatePercent).toBe(80);
+    expect(result.late).toBe(0);
+    expect(result.excused).toBe(0);
+    expect(result.records).toHaveLength(1);
+    get.mockResolvedValue(null);
+    const empty = await getStudentAttendance();
+    expect(empty.attendanceRatePercent).toBeNull();
+    expect(empty.totalSessions).toBe(0);
+    expect(empty.records).toEqual([]);
+  });
+
   it("getStudentExamResults مع/بدون courseId", async () => {
     await getStudentExamResults(4);
     expect(get).toHaveBeenCalledWith("/api/Student/ExamResults?courseId=4");

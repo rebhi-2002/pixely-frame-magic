@@ -8,14 +8,23 @@
 
 import { apiClient } from "./client";
 import type { OperationResult } from "./op-result";
-import type { PendingResponse } from "./pending-json";
 import type { MeetingPlatform } from "@/lib/enums";
 
 // توحيد MeetingPlatform عبر lib/enums.ts (Discrepancies D-10).
 export type { MeetingPlatform } from "@/lib/enums";
 
 // PENDING-JSON (WP-J / J-06): شكل صف الجدول غير موثّق — انتظر العينة (Q-05).
-export type LessonRow = PendingResponse;
+/** LessonScheduleRowDto (Lesson/GetSchedule). platformOrRoom نص واحد (قاعة أو منصة). */
+export interface LessonRow {
+  lessonId: number;
+  courseType: number | null;
+  topic: string;
+  date: string;
+  day: number;
+  startTime: string;
+  durationMinutes: number;
+  platformOrRoom: string;
+}
 
 /** جسم Lesson/Create وLesson/Update كما بالـSwagger. */
 export interface LessonInput {

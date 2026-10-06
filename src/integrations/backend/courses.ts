@@ -12,7 +12,6 @@
 
 import { ApiError, apiClient } from "./client";
 import type { OperationResult } from "./op-result";
-import type { PendingResponse } from "./pending-json";
 import type { PagedResult } from "./teachers";
 import type { DayOfWeek, DeliveryType } from "@/lib/enums";
 
@@ -158,9 +157,29 @@ export async function listAllCoursesForAdminFull(maxPages = 6): Promise<Publishe
 // ════════════════════════════════════════════════════════════════════════════════════
 
 // PENDING-JSON (WP-J / J-05): تفاصيل كورس المعلم (يفترض أن تشمل groupId — Q-02).
-export type TeacherCourseDetail = PendingResponse;
+/** CourseListItemDto (Course/GetMineById وعناصر Course/GetAll). ⚠️ لا يحتوي groupId (انظر Q-02). */
+export interface TeacherCourseDetail {
+  id: number;
+  title: string;
+  description: string | null;
+  price: number;
+  deliveryType: BackendCourseDeliveryType;
+  /** CourseStatus: 1 Draft · 2 Published · 3 Archived. */
+  status: number;
+  maxStudents: number;
+  teacherId: number;
+  teacherName: string | null;
+  subjectName: string | null;
+  categoryName: string | null;
+}
 // PENDING-JSON (WP-J / J-05): صف طالب بمجموعة (الحقول المسموحة بالعرض: اسم/هاتف/موقع فقط).
-export type GroupStudentRow = PendingResponse;
+/** StudentGroupRosterDto. */
+export interface GroupStudentRow {
+  studentId: number;
+  name: string;
+  phoneNumber: string;
+  location: string | null;
+}
 
 /** جسم Course/CreateEdit كما بالـSwagger. */
 export interface CourseInput {
@@ -168,7 +187,8 @@ export interface CourseInput {
   id?: number;
   /** مطلوب بالـDTO لكن غير محسوم: هل يؤخذ من الجلسة؟ (Q-03) — لا ترسله إلا بعد التأكد. */
   teacherId?: number;
-  subjectId: number;
+  /** اختياري بالباك اند (CourseInputDto.SubjectId nullable). */
+  subjectId?: number | null;
   categoryId: number;
   title: string;
   description?: string | null;

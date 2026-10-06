@@ -1,5 +1,6 @@
 import i18n, { type Locale } from "@/i18n";
-import { getBlogPost } from "@/content/blog-posts";
+import { blogPosts, getBlogPost } from "@/content/blog-posts";
+import ogManifest from "./og-manifest.json";
 import { env } from "@/lib/env";
 
 export const SITE_URL = env.SITE_URL;
@@ -35,6 +36,54 @@ const PAGE_META_KEYS: Record<string, string> = {
   "/teacher/register": "authPages.teacherRegister",
   "/settings": "settings",
 };
+
+/** مفتاح صورة المشاركة لكل مسار — الملفات بـ public/og/<key>-<ar|en>.png (يولّدها
+ *  scripts/og/generate_og.py). صفحة خاصة (noindex) انشارت → بطاقة الرئيسية؛ مسار مجهول → "غير موجودة". */
+const OG_KEYS: Record<string, string> = {
+  "/": "home",
+  "/about": "about",
+  "/courses": "courses",
+  "/teachers": "teachers",
+  "/for-teachers": "for-teachers",
+  "/for-parents": "for-parents",
+  "/how-it-works": "how-it-works",
+  "/contact": "contact",
+  "/help": "help",
+  "/privacy": "privacy",
+  "/terms": "terms",
+  "/blog": "blog",
+  "/login": "login",
+  "/signup": "signup",
+  "/teacher/register": "teacher-register",
+};
+
+export const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const;
+/** لون شريط المتصفح بالموبايل/PWA = خلفية الثيم الفاتح الافتراضي (#F7F1E4): أريح للعين.
+ *  بعد التحميل بيتبدّل تلقائيًا مع الثيم عبر PreferencesProvider (غامق/أزرق → #D0E0FB). */
+export const BRAND_THEME_COLOR = "#F7F1E4";
+
+/** المفاتيح اللي لها بطاقة فعلية (ar + en) — يكتبها scripts/og/generate_og.py. */
+const OG_AVAILABLE = new Set<string>(ogManifest.keys);
+
+/** يرجع المفتاح لو بطاقته موجودة، وإلا بطاقة الاحتياط — فما في صورة مكسورة أبدًا. */
+function ogKeyOr(key: string, fallback: string): string {
+  if (OG_AVAILABLE.has(key)) return key;
+  return OG_AVAILABLE.has(fallback) ? fallback : "default";
+}
+
+function ogImageFor(pathname: string, locale: Locale, blogIndex: number): string {
+  let key: string;
+  if (blogIndex >= 0) key = ogKeyOr(`blog-${blogIndex + 1}`, "blog"); // مقال جديد بلا بطاقة → بطاقة المدونة
+  else if (pathname.startsWith("/blog/")) key = "not-found";
+  else if (pathname.startsWith("/teacher/") && !isNoIndex(pathname)) key = "teacher";
+  else if (pathname.startsWith("/course/") && !isNoIndex(pathname)) key = "course";
+  else if (OG_KEYS[pathname]) key = OG_KEYS[pathname];
+  // صفحة مسجّلة بالميتا بدون بطاقة، أو خاصة (noindex) → بطاقة الاحتياط.
+  // مسار مجهول تمامًا = صفحة 404 فعليًا (ميتاه "غير موجودة") → بطاقة 404 المطابقة لعنوانه.
+  else if (PAGE_META_KEYS[pathname] || isNoIndex(pathname)) key = "default";
+  else key = "not-found";
+  return `${SITE_URL}/og/${ogKeyOr(key, "default")}-${locale}.png`;
+}
 
 const NOINDEX_PATHS = [
   "/403",
@@ -122,7 +171,7 @@ export function getSeoForPath(pathname: string, locale: Locale): SeoPayload {
     alternate,
     type,
     indexable: !isNoIndex(normalizedPath),
-    image: `${SITE_URL}/og-image.svg`,
+    image: ogImageFor(normalizedPath, locale, post ? blogPosts.indexOf(post) : -1),
     publishedTime,
   };
 }
@@ -161,7 +210,7 @@ export function createSeoHead(pathname: string, locale: Locale = "ar") {
             "@type": "Organization",
             name: "Academia",
             url: SITE_URL,
-            logo: `${SITE_URL}/og-image.svg`,
+            logo: `${SITE_URL}/icons/icon-512.png`,
           },
         };
 
@@ -178,10 +227,16 @@ export function createSeoHead(pathname: string, locale: Locale = "ar") {
       { property: "og:locale", content: localeCode },
       { property: "og:locale:alternate", content: alternateLocale },
       { property: "og:image", content: payload.image },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: String(OG_IMAGE_SIZE.width) },
+      { property: "og:image:height", content: String(OG_IMAGE_SIZE.height) },
+      { property: "og:image:alt", content: payload.title },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: payload.title },
       { name: "twitter:description", content: payload.description },
       { name: "twitter:image", content: payload.image },
+      { name: "twitter:image:alt", content: payload.title },
+      { name: "theme-color", content: BRAND_THEME_COLOR },
       ...(payload.publishedTime
         ? [{ property: "article:published_time", content: payload.publishedTime }]
         : []),
@@ -258,7 +313,6 @@ export function applySeo(payload: SeoPayload) {
   document.title = payload.title;
   upsertMeta("name", "description", payload.description);
   upsertMeta("name", "robots", payload.indexable ? "index, follow" : "noindex, nofollow");
-  upsertMeta("name", "theme-color", "#1E2761");
   upsertMeta("name", "application-name", "Academia");
   upsertMeta("property", "og:type", payload.type);
   upsertMeta("property", "og:title", payload.title);
@@ -268,6 +322,11 @@ export function applySeo(payload: SeoPayload) {
   upsertMeta("property", "og:locale", payload.locale === "en" ? "en_US" : "ar");
   upsertMeta("property", "og:locale:alternate", payload.locale === "en" ? "ar" : "en_US");
   upsertMeta("property", "og:image", payload.image);
+  upsertMeta("property", "og:image:type", "image/png");
+  upsertMeta("property", "og:image:width", String(OG_IMAGE_SIZE.width));
+  upsertMeta("property", "og:image:height", String(OG_IMAGE_SIZE.height));
+  upsertMeta("property", "og:image:alt", payload.title);
+  upsertMeta("name", "twitter:image:alt", payload.title);
   upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", payload.title);
   upsertMeta("name", "twitter:description", payload.description);

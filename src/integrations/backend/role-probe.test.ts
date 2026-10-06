@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
-import { ApiError, apiClient } from "./client";
+import { describe, expect, it } from "vitest";
+import { ApiError } from "./client";
 import {
   ROLE_PROBE_PATHS,
   classifyProbeError,
@@ -8,12 +8,6 @@ import {
   type ProbeResults,
 } from "./role-probe";
 
-vi.mock("./client", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./client")>();
-  return { ...actual, apiClient: { get: vi.fn(), post: vi.fn() } };
-});
-
-const get = apiClient.get as unknown as Mock;
 const err = (status: number) => new ApiError("x", status, "http");
 
 describe("classifyProbeError", () => {
@@ -52,30 +46,31 @@ describe("decideRoleFromProbes", () => {
 });
 
 describe("probeRole", () => {
-  beforeEach(() => get.mockReset());
-
+  // دوال جلب عادية (بدون vi.fn) — اختبارات الأدوار الفاشلة سابقًا كانت ترمي ApiError من داخل mock.
   it("معلم: الطالب وولي الأمر 403 والمعلم 500", async () => {
-    get.mockImplementation(async (path: string) => {
+    const fetcher = async (path: string): Promise<unknown> => {
       if (path === ROLE_PROBE_PATHS.teacher) throw err(500);
       throw err(403);
-    });
-    expect(await probeRole("u-teacher")).toBe("teacher");
+    };
+    expect(await probeRole("u-teacher", fetcher)).toBe("teacher");
   });
 
   it("طالب: endpoint الطالب ينجح والباقي 403", async () => {
-    get.mockImplementation(async (path: string) => {
+    const fetcher = async (path: string): Promise<unknown> => {
       if (path === ROLE_PROBE_PATHS.student) return {};
       throw err(403);
-    });
-    expect(await probeRole("u-student")).toBe("student");
+    };
+    expect(await probeRole("u-student", fetcher)).toBe("student");
   });
 
   it("تُحسب مرة واحدة لكل مستخدم", async () => {
-    get.mockImplementation(async () => {
+    let calls = 0;
+    const fetcher = async (): Promise<unknown> => {
+      calls += 1;
       throw err(403);
-    });
-    await probeRole("u-once");
-    await probeRole("u-once");
-    expect(get).toHaveBeenCalledTimes(3);
+    };
+    await probeRole("u-once", fetcher);
+    await probeRole("u-once", fetcher);
+    expect(calls).toBe(3);
   });
 });
