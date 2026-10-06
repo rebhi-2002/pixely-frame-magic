@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import {
   clearStoredSession,
   getStoredUserId,

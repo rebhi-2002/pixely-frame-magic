@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getStudentSchedule, type StudentScheduleItemDto } from "@/integrations/backend/student";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { DeliveryType, dayOfWeekLabel, deliveryTypeLabel } from "@/lib/enums";
 import { formatDate, formatTime } from "@/lib/format";
 import { qk } from "@/lib/query-keys";
@@ -67,7 +68,7 @@ function Body() {
   const hasFilters = Boolean(from || to || mode);
   const filterKey = { from, to, mode };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: qk.studentSchedule(filterKey),
     queryFn: () =>
       getStudentSchedule({
@@ -153,10 +154,7 @@ function Body() {
         {isError ? (
           <ErrorState
             title={bi("ما قدرنا نحمّل الجدول", "We couldn't load the schedule")}
-            description={bi(
-              "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-              "Try again. If the problem continues, check your connection or come back later.",
-            )}
+            description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), error, bi)}
             action={
               <RetryButton
                 label={bi("إعادة المحاولة", "Try again")}

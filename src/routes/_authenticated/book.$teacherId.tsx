@@ -1,10 +1,11 @@
-// شاشة حجز حصة (WP-S1). المنفَّذ الآن (بلا JSON): S1-01 تحميل المعلم والتوفّر، S1-02 اختيار الوضع/التاريخ/الوقت/المدة،
-// S1-04 تقدير السعر وفحص الرصيد، S1-07 ملاحظة الطالب والتحقق، وS1-06 (رابط الصفحة العامة) خلف علم BOOKING_FLOW_ENABLED.
-// ⛔ لم يُنفَّذ بعد (يعتمد على قرارات/بيانات الباك اند): S1-03 اختيار المادة/الصف (subjectId/gradeId — Q-04) وS1-05
-// إرسال الحجز (Booking/Submit يتطلبهما). لذلك زر الإرسال معطَّل بنص صادق — ولا نرسل ids مخمّنة.
+// شاشة حجز حصة (WP-S1): S1-01 تحميل المعلم والتوفّر، S1-02 اختيار الوضع/التاريخ/الوقت/المدة، S1-04 تقدير السعر وفحص
+// الرصيد، S1-05 إرسال الحجز (Booking/Submit)، S1-07 ملاحظة الطالب والتحقق.
+// S1-03 (اختيار المادة/الصف) أُلغيت: كود الباك اند يؤكد أن BookingInputDto.SubjectId/GradeId اختياريان (nullable).
+// السعر يُحسب بالباك اند من سعر المعلم؛ ما بنرسل سعرًا. أي رفض (تعارض، توفّر، رصيد…) بيُعرض برسالته داخل الشاشة.
 import { useState } from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { AppPage, EmptyState, Panel } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
@@ -15,6 +16,9 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { submitBooking } from "@/integrations/backend/bookings";
+import { getErrorMessage } from "@/integrations/backend/client";
+import { assertOk, getReturnId } from "@/integrations/backend/op-result";
 import { getTeacherAvailability, getTeacherPublicProfile } from "@/integrations/backend/teachers";
 import { getMyWallet } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
@@ -31,7 +35,8 @@ import {
 } from "@/lib/booking-slots";
 import { DeliveryType, deliveryTypeLabel, type Bi } from "@/lib/enums";
 import { formatMoney } from "@/lib/format";
-import { qk } from "@/lib/query-keys";
+import { invalidateBookingQueries, qk } from "@/lib/query-keys";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { authPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/book/$teacherId")({
@@ -99,6 +104,36 @@ function Body() {
     enabled: validId,
   });
   const walletQuery = useQuery({ queryKey: qk.myWallet(), queryFn: getMyWallet });
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // الإرسال: القيم تُمرَّر وقت الضغط (mutate(variables)) لأن mode/draft تُحسب بعد الـearly returns.
+  const submit = useMutation({
+    mutationFn: async (draft: { mode: DeliveryType; date: string; startTime: string; durationMinutes: number; note: string }) => {
+      const result = await submitBooking({
+        teacherId,
+        teachingMode: draft.mode,
+        date: draft.date,
+        startTime: draft.startTime,
+        durationMinutes: draft.durationMinutes,
+        studentNote: draft.note.trim() || null,
+      });
+      assertOk(result, "تعذّر إرسال طلب الحجز", "Couldn't send the booking request");
+      return getReturnId(result);
+    },
+    onSuccess: (bookingId: number | null) => {
+      invalidateBookingQueries(queryClient, bookingId ?? undefined, teacherId);
+      toast.success(
+        bi(
+          "تم إرسال طلب الحجز — بانتظار موافقة المعلم.",
+          "Booking request sent — awaiting the teacher's approval.",
+        ),
+      );
+      void navigate({ to: "/my-courses" });
+    },
+    onError: (e: unknown) =>
+      setSubmitError(getErrorMessage(e, bi("تعذّر إرسال طلب الحجز", "Couldn't send the booking request"))),
+  });
 
   const title = bi("حجز حصة", "Book a session");
 
@@ -355,17 +390,28 @@ function Body() {
         </Panel>
       )}
 
+      {submitError && (
+        <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {submitError}
+        </p>
+      )}
+
       <div className="flex flex-wrap items-center gap-3">
-        {/* S1-05: يُوصَل هنا Booking/Submit بعد حسم subjectId/gradeId (S1-03 / Q-04). مغلق الآن عمدًا. */}
-        <Button type="button" disabled={!BOOKING_FLOW_ENABLED || errors.length > 0}>
+        <Button
+          type="button"
+          loading={submit.isPending}
+          disabled={!BOOKING_FLOW_ENABLED || errors.length > 0 || mode === null}
+          onClick={() => {
+            setSubmitError(null);
+            if (mode === null || errors.length > 0) return;
+            submit.mutate({ mode, date, startTime, durationMinutes: duration, note });
+          }}
+        >
           {bi("إرسال طلب الحجز", "Send booking request")}
         </Button>
-        {!BOOKING_FLOW_ENABLED && (
+        {errors.length > 0 && (
           <span className="text-xs text-muted-foreground">
-            {bi(
-              "مغلق مؤقتًا حتى يكتمل ربط المادة والصف.",
-              "Temporarily disabled until subject/grade are connected.",
-            )}
+            {bi("أكمل التاريخ والوقت المتاح لتفعيل الإرسال.", "Pick a date and an available time to enable sending.")}
           </span>
         )}
       </div>

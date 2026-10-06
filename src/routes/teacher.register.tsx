@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { BadgeCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";

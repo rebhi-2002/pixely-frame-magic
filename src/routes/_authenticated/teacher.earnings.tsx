@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { AppPage, Panel, DataTable, Badge, EmptyState } from "@/components/app/kit";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { Guard } from "@/components/app/guard";
@@ -12,6 +12,7 @@ import { WalletBalancePanel } from "@/components/wallet/wallet-balance-panel";
 import { getTransactionHistory, submitWithdrawalRequest } from "@/integrations/backend/wallet";
 import { getErrorMessage } from "@/integrations/backend/client";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { authPageHead } from "@/lib/seo";
 import { EARNINGS_WINDOW_SIZE, WITHDRAWAL_STAGES, pickInstructorCredits } from "@/lib/earnings";
 import { qk } from "@/lib/query-keys";
@@ -148,10 +149,7 @@ function TeacherEarningsPage() {
           {creditsQuery.isError ? (
             <ErrorState
               title={bi("ما قدرنا نحمّل الإيداعات", "Couldn't load earnings credits")}
-              description={bi(
-                "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-                "Try again. If the problem continues, check your connection or come back later.",
-              )}
+              description={withLoadErrorDetail(bi("جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), creditsQuery.error, bi)}
               action={
                 <RetryButton
                   label={bi("إعادة المحاولة", "Try again")}

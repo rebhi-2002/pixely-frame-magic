@@ -9,6 +9,7 @@ import { qk } from "@/lib/query-keys";
 import { WelcomeBanner } from "@/components/app/welcome-banner";
 import { getMyWallet } from "@/integrations/backend/wallet";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { authPageHead } from "@/lib/seo";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
@@ -95,7 +96,11 @@ function Body() {
           // فشل هذا الجزء ما بيكسر اللوحة — بنعرض رسالة محلية وإعادة محاولة، وبلا رقم.
           <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
             <span>
-              {bi("تعذّر تحميل عدد الطلبات المعلّقة.", "Couldn't load the pending requests count.")}
+              {withLoadErrorDetail(
+                bi("تعذّر تحميل عدد الطلبات المعلّقة.", "Couldn't load the pending requests count."),
+                pending.error,
+                bi,
+              )}
             </span>
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -80,6 +80,7 @@ function LibraryPreview() {
       <div className="flex items-center gap-2 rounded-lg border border-[var(--border-strong)]/40 bg-secondary px-2.5 py-1.5">
         <Search className="size-3.5 text-muted-foreground" />
         <div className="h-2 w-2/3 rounded-full bg-muted-foreground/30" />
+        <span aria-hidden className="caret-blink -ms-1 h-3.5 w-px bg-primary" />
       </div>
       <div className="mt-2 flex gap-1.5">
         {(["online", "inperson"] as const).map((f) => (
@@ -100,9 +101,10 @@ function LibraryPreview() {
       </div>
       {[0, 1].map((i) => (
         <div
-          key={i}
+          key={`${filter}-${i}`}
+          style={{ "--i": i } as CSSProperties}
           className={cn(
-            "mt-2 flex items-center gap-2 rounded-lg bg-secondary/60 px-2.5 py-2 transition-opacity",
+            "row-in mt-2 flex items-center gap-2 rounded-lg bg-secondary/60 px-2.5 py-2 transition-opacity",
             (filter === "online") === (i === 0) ? "opacity-100" : "opacity-40",
           )}
         >
@@ -141,7 +143,11 @@ function TrackerPreview() {
       </div>
       <div className="mt-2 space-y-2">
         {rows.map((row, i) => (
-          <div key={i} className="flex items-center gap-2">
+          <div
+            key={`${range}-${i}`}
+            style={{ "--i": i } as CSSProperties}
+            className="row-in flex items-center gap-2"
+          >
             <span className="flex size-6 items-center justify-center rounded-md border border-[var(--border-strong)] bg-primary/15 text-primary">
               <CalendarDays className="size-3.5" />
             </span>
@@ -181,12 +187,16 @@ function WalletPreview() {
           <span className="flex size-9 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-background text-primary">
             <Wallet className="size-4" />
           </span>
-          <div className="h-2.5 w-16 rounded-full bg-primary/30" />
+          <div className="bar-grow h-2.5 w-16 rounded-full bg-primary/30" />
         </div>
       ) : (
         <div className="mt-2 space-y-1.5">
           {[0, 1].map((i) => (
-            <div key={i} className="flex items-center gap-2">
+            <div
+              key={i}
+              style={{ "--i": i } as CSSProperties}
+              className="row-in flex items-center gap-2"
+            >
               <span className="size-5 shrink-0 rounded-full bg-primary/15" />
               <div
                 className={cn("h-2 flex-1 rounded-full bg-secondary", i === 0 ? "w-2/3" : "w-1/2")}
@@ -435,6 +445,29 @@ function Landing() {
         </div>
       </section>
 
+      {/* فاصل القيمة — جملة واحدة كبيرة تكسر إيقاع الأقسام النصية المتتالية، ومن نفس
+          نصوص الموقع (قيمة "الوضوح قبل الكمّية" بصفحة عنّا) فما في ادّعاء جديد.
+          text-highlight = نفس الماركر بعنوان الـHero. */}
+      <section className="relative overflow-hidden border-y-2 border-[var(--border-strong)] bg-primary/10">
+        <div className="mx-auto max-w-4xl px-5 py-16 text-center md:py-20">
+          <Reveal>
+            <p className="font-display text-4xl font-extrabold leading-snug text-foreground md:text-6xl">
+              <span className="text-highlight">{t("home.statement.title")}</span>
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+              {t("home.statement.sub")}
+            </p>
+            <Link
+              to="/about"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+            >
+              {t("home.statement.cta")}
+              <ArrowRight className="size-4 rtl:rotate-180" />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
       {/* الأدوار — بطاقة المعلّم وحدها تحمل معاينة حقيقية (بيانات فعلية من
           الباك اند)، فتستحق الصندوق البارز. الطالب موضّح أصلًا بالـHero
           (HeroMockup)، وولي الأمر بلا بيانات حقيقية متاحة اليوم (ربط الابن
@@ -509,20 +542,37 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-5 py-20 text-center">
-        <h2 className="text-3xl font-extrabold text-foreground">{t("home.ctaTitle")}</h2>
-        <p className="mt-3 text-muted-foreground">{t("home.ctaSub")}</p>
-        <SessionCta
-          to="/signup"
-          label={t("home.ctaButton")}
-          className={buttonVariants({
-            variant: "default",
-            className: "mt-7 h-auto px-8 py-3.5 text-sm",
-          })}
-        />
-      </section>
-
+      {/* الترتيب: المدونة ← قصص الطلاب ← بلوك الدعوة ← الفوتر. الدعوة هي ختام الصفحة،
+          وقسم القصص (بانتظار محتوى حقيقي) بوسط الصفحة مو بآخرها. */}
       <TestimonialsSection className="border-t-2 border-[var(--border-strong)] bg-card/60" />
+
+      {/* بلوك الدعوة الختامية: لون الموقع الأساسي + حد وظل صلبين (نفس لغة البطاقات)،
+          والزر بخلفية البطاقة ليبرز على لون البلوك بالثيمين. */}
+      <section className="mx-auto max-w-6xl px-5 py-16 md:py-20">
+        <div className="relative overflow-hidden rounded-3xl border-2 border-[var(--border-strong)] bg-primary px-6 py-14 text-center text-primary-foreground shadow-[8px_8px_0_0_var(--shadow-brutal-color)] md:px-12 md:py-20">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -end-8 -top-8 size-32 rounded-full border-2 border-[var(--border-strong)] bg-card/20"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-10 -start-6 size-28 rotate-12 rounded-2xl border-2 border-[var(--border-strong)] bg-card/15"
+          />
+          <h2 className="relative text-3xl font-extrabold md:text-5xl">{t("home.ctaTitle")}</h2>
+          <p className="relative mx-auto mt-4 max-w-xl text-base text-primary-foreground/85 md:text-lg">
+            {t("home.ctaSub")}
+          </p>
+          <SessionCta
+            to="/signup"
+            label={t("home.ctaButton")}
+            className={buttonVariants({
+              variant: "outline",
+              className:
+                "relative mt-8 h-auto bg-card px-8 py-3.5 text-sm font-bold text-foreground shadow-[4px_4px_0_0_var(--shadow-brutal-color)] hover:bg-secondary",
+            })}
+          />
+        </div>
+      </section>
     </PublicLayout>
   );
 }

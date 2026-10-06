@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { GraduationCap, UserRound, Users, ArrowLeft, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthShell, AuthField } from "@/components/site/auth-shell";
@@ -165,7 +165,7 @@ function SignupPage() {
             to="/teacher/register"
             className="group flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 text-start transition-colors hover:bg-secondary"
           >
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-strong)] bg-info/12 text-info">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-strong)] bg-primary/12 text-primary">
               <UserRound className="size-5" />
             </span>
             <span className="min-w-0 flex-1">

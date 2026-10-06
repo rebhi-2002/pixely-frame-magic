@@ -8,6 +8,7 @@ import { wasJustRegistered } from "@/integrations/backend/auth";
 import { getStudentDashboard } from "@/integrations/backend/student";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { authPageHead } from "@/lib/seo";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 
@@ -39,6 +40,7 @@ function Body() {
     data: dashboard,
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ["student-dashboard"],
     queryFn: getStudentDashboard,
@@ -49,10 +51,7 @@ function Body() {
       <AppPage title={bi("لوحة الطالب", "Student dashboard")} icon="LayoutDashboard">
         <ErrorState
           title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
-          description={bi(
-            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-            "Try again. If the problem continues, check your connection or come back later.",
-          )}
+          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), error, bi)}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

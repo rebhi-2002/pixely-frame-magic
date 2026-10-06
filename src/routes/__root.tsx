@@ -115,7 +115,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
 
         { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-        { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
+        { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
+        { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png", sizes: "180x180" },
       ],
       scripts: seo.scripts,
     };
@@ -189,7 +190,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CookieConsent />
-        <Toaster position="top-center" richColors />
+        <Toaster />
       </PreferencesProvider>
     </QueryClientProvider>
   );

@@ -8,6 +8,7 @@ import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback
 import { Guard } from "@/components/app/guard";
 import { getStudentProgress } from "@/integrations/backend/student";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { buildProgressView, percentText } from "@/lib/progress";
 import { qk } from "@/lib/query-keys";
 import { authPageHead } from "@/lib/seo";
@@ -44,10 +45,7 @@ function Body() {
       {query.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل تقدمك", "We couldn't load your progress")}
-          description={bi(
-            "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-            "Try again. If the problem continues, check your connection or come back later.",
-          )}
+          description={withLoadErrorDetail(bi("جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), query.error, bi)}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

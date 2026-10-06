@@ -2,7 +2,7 @@ import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { z } from "zod";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { login, getStoredProfile } from "@/integrations/backend/auth";
