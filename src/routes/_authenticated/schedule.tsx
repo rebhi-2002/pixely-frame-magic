@@ -154,7 +154,14 @@ function Body() {
         {isError ? (
           <ErrorState
             title={bi("ما قدرنا نحمّل الجدول", "We couldn't load the schedule")}
-            description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), error, bi)}
+            description={withLoadErrorDetail(
+              bi(
+                "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+                "Try again. If the problem continues, check your connection or come back later.",
+              ),
+              error,
+              bi,
+            )}
             action={
               <RetryButton
                 label={bi("إعادة المحاولة", "Try again")}

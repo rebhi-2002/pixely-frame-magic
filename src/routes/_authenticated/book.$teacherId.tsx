@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { AppPage, EmptyState, Panel } from "@/components/app/kit";
 import { Guard } from "@/components/app/guard";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
@@ -109,7 +109,13 @@ function Body() {
 
   // الإرسال: القيم تُمرَّر وقت الضغط (mutate(variables)) لأن mode/draft تُحسب بعد الـearly returns.
   const submit = useMutation({
-    mutationFn: async (draft: { mode: DeliveryType; date: string; startTime: string; durationMinutes: number; note: string }) => {
+    mutationFn: async (draft: {
+      mode: DeliveryType;
+      date: string;
+      startTime: string;
+      durationMinutes: number;
+      note: string;
+    }) => {
       const result = await submitBooking({
         teacherId,
         teachingMode: draft.mode,
@@ -132,7 +138,9 @@ function Body() {
       void navigate({ to: "/my-courses" });
     },
     onError: (e: unknown) =>
-      setSubmitError(getErrorMessage(e, bi("تعذّر إرسال طلب الحجز", "Couldn't send the booking request"))),
+      setSubmitError(
+        getErrorMessage(e, bi("تعذّر إرسال طلب الحجز", "Couldn't send the booking request")),
+      ),
   });
 
   const title = bi("حجز حصة", "Book a session");
@@ -411,7 +419,10 @@ function Body() {
         </Button>
         {errors.length > 0 && (
           <span className="text-xs text-muted-foreground">
-            {bi("أكمل التاريخ والوقت المتاح لتفعيل الإرسال.", "Pick a date and an available time to enable sending.")}
+            {bi(
+              "أكمل التاريخ والوقت المتاح لتفعيل الإرسال.",
+              "Pick a date and an available time to enable sending.",
+            )}
           </span>
         )}
       </div>

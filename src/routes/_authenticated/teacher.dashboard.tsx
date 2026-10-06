@@ -97,7 +97,10 @@ function Body() {
           <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
             <span>
               {withLoadErrorDetail(
-                bi("تعذّر تحميل عدد الطلبات المعلّقة.", "Couldn't load the pending requests count."),
+                bi(
+                  "تعذّر تحميل عدد الطلبات المعلّقة.",
+                  "Couldn't load the pending requests count.",
+                ),
                 pending.error,
                 bi,
               )}

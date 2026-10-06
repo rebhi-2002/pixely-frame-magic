@@ -41,7 +41,10 @@ export const Route = createFileRoute("/_authenticated/teacher/course/$id")({
   validateSearch: (search) => searchSchema.parse(search),
   head: () =>
     authPageHead(
-      { title: "الكورس | أكاديميا", description: "إدارة الكورس: التفاصيل والمجموعة والطلاب والدروس." },
+      {
+        title: "الكورس | أكاديميا",
+        description: "إدارة الكورس: التفاصيل والمجموعة والطلاب والدروس.",
+      },
       {
         title: "Course | Academia",
         description: "Manage the course: details, group, students and lessons.",
@@ -82,11 +85,7 @@ function Body() {
 
   if (isNew) {
     return (
-      <AppPage
-        title={bi("كورس جديد", "New course")}
-        icon="BookOpen"
-        actions={<BackToCourses />}
-      >
+      <AppPage title={bi("كورس جديد", "New course")} icon="BookOpen" actions={<BackToCourses />}>
         <CourseDetailsTab
           course={null}
           defaultDeliveryType={deliveryTypeFromParam(search.type)}
@@ -137,7 +136,10 @@ function Body() {
   if (courseQuery.isLoading) {
     return (
       <AppPage title={title} icon="BookOpen" actions={<BackToCourses />}>
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       </AppPage>
     );
   }
@@ -149,14 +151,18 @@ function Body() {
         <EmptyState
           icon="SearchX"
           title={bi("الكورس غير موجود", "Course not found")}
-          description={bi("ما لقينا هذا الكورس ضمن كورساتك.", "We couldn't find this course among yours.")}
+          description={bi(
+            "ما لقينا هذا الكورس ضمن كورساتك.",
+            "We couldn't find this course among yours.",
+          )}
         />
       </AppPage>
     );
   }
 
   const tab: CourseTab = search.tab ?? "details";
-  const onChanged = () => void queryClient.invalidateQueries({ queryKey: qk.teacherCourse(courseId) });
+  const onChanged = () =>
+    void queryClient.invalidateQueries({ queryKey: qk.teacherCourse(courseId) });
 
   return (
     <AppPage title={title} icon="BookOpen" actions={<BackToCourses />}>

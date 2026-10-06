@@ -51,7 +51,14 @@ function Body() {
       <AppPage title={bi("لوحة الطالب", "Student dashboard")} icon="LayoutDashboard">
         <ErrorState
           title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
-          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), error, bi)}
+          description={withLoadErrorDetail(
+            bi(
+              "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+              "Try again. If the problem continues, check your connection or come back later.",
+            ),
+            error,
+            bi,
+          )}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

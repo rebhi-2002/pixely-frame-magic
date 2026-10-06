@@ -47,7 +47,7 @@ function Body() {
     queryKey: qk.parentChildren(),
     queryFn: getMyChildren,
   });
-  const children = childrenQuery.data ?? [];
+  const children = useMemo(() => childrenQuery.data ?? [], [childrenQuery.data]);
   const activeChild = useMemo(
     () => children.find((c) => c.studentId === selectedId) ?? children[0] ?? null,
     [children, selectedId],

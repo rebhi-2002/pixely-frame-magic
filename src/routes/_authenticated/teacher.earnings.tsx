@@ -149,7 +149,14 @@ function TeacherEarningsPage() {
           {creditsQuery.isError ? (
             <ErrorState
               title={bi("ما قدرنا نحمّل الإيداعات", "Couldn't load earnings credits")}
-              description={withLoadErrorDetail(bi("جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), creditsQuery.error, bi)}
+              description={withLoadErrorDetail(
+                bi(
+                  "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+                  "Try again. If the problem continues, check your connection or come back later.",
+                ),
+                creditsQuery.error,
+                bi,
+              )}
               action={
                 <RetryButton
                   label={bi("إعادة المحاولة", "Try again")}
