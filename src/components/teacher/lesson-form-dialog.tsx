@@ -6,7 +6,7 @@
 // props جديدة لـlessons-tab (B/C): lesson (للتعديل)، values تُبنى من صف الجدول بعد وصول JSON.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

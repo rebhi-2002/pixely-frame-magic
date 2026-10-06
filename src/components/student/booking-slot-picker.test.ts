@@ -147,6 +147,7 @@ describe("validateBookingDraft", () => {
   });
   it("مدة خارج الحدود", () => {
     expect(validateBookingDraft({ ...ok, durationMinutes: 10 }, slots, now)).toContain("duration");
+    expect(validateBookingDraft({ ...ok, durationMinutes: 15 }, slots, now)).not.toContain("duration");
     expect(validateBookingDraft({ ...ok, durationMinutes: 481 }, slots, now)).toContain("duration");
   });
   it("ملاحظة طويلة", () => {

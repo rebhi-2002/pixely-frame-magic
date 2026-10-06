@@ -3,7 +3,7 @@
 // رسائل سياسة الإلغاء بتجي من الباك اند وبتُعرض كما هي (Q-08) — ما منخمّن موعدًا نهائيًا ولا استرجاعًا.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

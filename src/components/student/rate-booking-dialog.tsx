@@ -4,7 +4,7 @@
 // بيحتاجوا حقولًا من GetBooking (JSON، Q-10) — مؤجَّلين لـWP-J.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

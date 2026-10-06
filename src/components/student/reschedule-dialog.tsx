@@ -3,7 +3,7 @@
 // قبل موافقة المعلم. تعارض/عدم توفّر المعلم = رسالة الباك اند (Q-09) وبتبقى النافذة مفتوحة لاقتراح وقت آخر.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

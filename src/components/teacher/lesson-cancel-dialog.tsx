@@ -2,7 +2,7 @@
 // الدرس بيبقى بالسجل بحالة «ملغى» (مش بيُحذف). رسالة الباك اند بتظهر داخل النافذة لو فشل الإلغاء.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { ConfirmDialog } from "@/components/app/confirm-dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";

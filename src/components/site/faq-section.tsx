@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Reveal } from "@/components/ui/reveal";
 
 type FaqItem = { q: string; a: string };
 
@@ -22,36 +21,32 @@ export function FAQSection({ i18nKey, className }: { i18nKey: string; className?
   return (
     <section className={className}>
       <div className="mx-auto max-w-3xl px-5 py-16">
-        <Reveal>
-          <div className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
-              <HelpCircle className="size-4" />
-              {t("common.faqBadge")}
-            </span>
-            <h2 className="mt-4 text-2xl font-bold text-foreground sm:text-3xl">
-              {t("common.faqTitle")}
-            </h2>
-          </div>
-        </Reveal>
+        <div className="text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
+            <HelpCircle className="size-4" />
+            {t("common.faqBadge")}
+          </span>
+          <h2 className="mt-4 text-2xl font-bold text-foreground sm:text-3xl">
+            {t("common.faqTitle")}
+          </h2>
+        </div>
 
-        <Reveal delay={0.08}>
-          <Accordion
-            type="single"
-            collapsible
-            className="mt-8 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-5 shadow-[var(--shadow-brutal)]"
-          >
-            {items.map((item, i) => (
-              <AccordionItem key={item.q} value={`faq-${i}`} className="border-border">
-                <AccordionTrigger className="text-start text-sm font-bold text-foreground hover:no-underline">
-                  {item.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                  {item.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </Reveal>
+        <Accordion
+          type="single"
+          collapsible
+          className="mt-8 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-5 shadow-[var(--shadow-brutal)]"
+        >
+          {items.map((item, i) => (
+            <AccordionItem key={item.q} value={`faq-${i}`} className="border-border">
+              <AccordionTrigger className="text-start text-sm font-bold text-foreground hover:no-underline">
+                {item.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                {item.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </section>
   );

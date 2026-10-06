@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import {
   Bell,
   CalendarDays,
@@ -67,6 +67,10 @@ const confirmedRows = [
   { mode: "online" as const, w: "w-4/5" },
 ];
 
+/** ترتيب دخول العنصر (يقرأه .hero-rise من styles.css). */
+const stagger = (i: number) => ({ "--i": i }) as CSSProperties;
+const floatDelay = (d: string) => ({ "--d": d }) as CSSProperties;
+
 export function HeroMockup({ session }: { session?: PublicSession | null }) {
   const bi = useBi();
   const [tab, setTab] = useState<Tab>("pending");
@@ -82,7 +86,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
   return (
     <div className="relative mx-auto w-full max-w-lg select-none">
       <div className="rounded-3xl border-2 border-[var(--border-strong)] bg-card p-3 shadow-[8px_8px_0_0_var(--shadow-brutal-color)] sm:p-4">
-        <div className="flex items-center gap-1.5 px-1 pb-3">
+        <div className="hero-rise flex items-center gap-1.5 px-1 pb-3" style={stagger(0)}>
           <span className="size-2.5 rounded-full bg-destructive/70" />
           <span className="size-2.5 rounded-full bg-primary/70" />
           <span className="size-2.5 rounded-full bg-success/70" />
@@ -92,7 +96,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         </div>
 
         <div className="space-y-4 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 sm:p-5">
-          <div className="flex items-center justify-between">
+          <div className="hero-rise flex items-center justify-between" style={stagger(1)}>
             <div className="flex items-center gap-2.5">
               <span className="flex size-10 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/15 text-sm font-bold text-primary">
                 {initial}
@@ -125,7 +129,8 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
           <div
             role="tablist"
             aria-label={bi("أقسام اللوحة", "Dashboard sections")}
-            className="grid grid-cols-3 gap-2.5"
+            className="hero-rise grid grid-cols-3 gap-2.5"
+            style={stagger(2)}
           >
             {tabs.map((t) => {
               const active = tab === t.key;
@@ -344,7 +349,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         </div>
       </div>
 
-      <div className="absolute -end-4 -top-5 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-end-8">
+      <div style={floatDelay("0.7s")} className="hero-float absolute -end-4 -top-5 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-end-8">
         <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-success/15 text-success">
           <Video className="size-3.5" />
         </span>
@@ -353,12 +358,30 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         </p>
       </div>
 
-      <div className="absolute -bottom-5 -start-4 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-start-8">
+      <div style={floatDelay("0.9s")} className="hero-float absolute -bottom-5 -start-4 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-start-8">
         <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-primary/15 text-primary">
           <Wallet className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
           {bi("محفظة بسجل معاملات واضح", "Wallet with a clear history")}
+        </p>
+      </div>
+      {/* ملصق عائم ثالث: تذكير قبل الحصة (FR-S12). نص وظيفي فقط — بلا اسم معلّم
+          ولا وقت مختلق، حسب مبدأ "بلا بيانات وهمية" بهذا المكوّن. يظهر من lg لأن
+          العرض الأضيق ما فيه مساحة جانبية له بدون تغطية المحتوى. */}
+      <div
+        style={floatDelay("1.1s")}
+        className="hero-float absolute -end-6 top-[56%] hidden items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] lg:flex xl:-end-10"
+      >
+        <span className="relative flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-info/15 text-info">
+          <Bell className="size-3.5" />
+          <span
+            aria-hidden
+            className="absolute -end-0.5 -top-0.5 size-2 rounded-full border border-card bg-destructive"
+          />
+        </span>
+        <p className="text-[11px] font-bold text-foreground">
+          {bi("تذكير قبل موعد حصتك", "Reminder before your session")}
         </p>
       </div>
     </div>

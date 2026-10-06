@@ -1,41 +1,53 @@
 /**
- * علامة Academia — قبعة تخرج فوق جبل/حرف A (الشعار المعتمد، راجع
- * docs/design/brand-guidelines.md). هاي هي الصورة الرسمية الأصلية نفسها
- * (public/brand/logo-mark.png) مش رسمة SVG معاد بناؤها — عشان تطلع مطابقة
- * 100% للهوية البصرية المعتمدة بألوانها وتدرّجها الذهبي الأصلي بالضبط.
+ * علامة Academia — قبعة تخرج فوق حرف A بأسلوب Warm Neo-Brutalism (ذهبي + كحلي،
+ * أسطح مسطّحة وظل صلب). SVG حقيقي (public/brand/logo-mark.svg، ~2.6KB) مُتتبَّع
+ * من الصورة المعتمدة — يكبّر بدون تبكسل، وبنفس الألوان بكل الثيمات: الذهبي والكحلي
+ * جزء من الهوية نفسها فما بيتبدّلوا مع الثيم. النص المرافق (BrandLockup) هو يلي
+ * بيتبع لون الصفحة.
  *
- * ليش <img> مش SVG بـ currentColor متل الشعار القديم؟ لأن هالشعار قرار
- * تصميم بتدرّج ذهبي ثابت (راجع لوحة الهوية) — بيبقى نفسه بالضبط بالوضع
- * الغامق والفاتح عمداً (الذهبي واضح على الاثنين)، عكس الشعار القديم يلي كان
- * لونه الواحد يتغيّر مع الثيم. النص المرافق (Academia بـBrandLockup) هو
- * يلي بيتغيّر لونه مع الثيم (`text-foreground`)، مش الأيقونة.
- *
- * الملف الأصلي بدقة كافية (320×299px) تغطي أي حجم عرض واقعي بالتطبيق
- * (هيدر/سايدبار حتى ~110px على شاشات retina) بدون تكبير يسبب تبكسل —
- * المتصفح بيصغّرها بس (downscale)، وهاي عملية آمنة بصرياً دائماً.
+ * على الخلفيات الكحلية (القائمة الجانبية) الجزء الكحلي من العلامة بيضيع، فبنحطها
+ * على لوح كريمي بحد صلب (`plate`) — نفس لغة الأزرار والبطاقات.
  */
-export function BrandLogo({ className = "size-9" }: { className?: string }) {
-  return <img src="/brand/logo-mark.png" alt="" className={`${className} object-contain`} />;
+export function BrandLogo({
+  className = "size-9",
+  plate = false,
+}: {
+  className?: string;
+  /** لوح كريمي خلف العلامة — للخلفيات الغامقة (القائمة الجانبية). */
+  plate?: boolean;
+}) {
+  const img = (
+    <img
+      src="/brand/logo-mark.svg"
+      alt=""
+      width={1111}
+      height={1061}
+      className={`${plate ? "size-full" : className} object-contain`}
+    />
+  );
+  if (!plate) return img;
+  return (
+    <span
+      className={`inline-grid shrink-0 place-items-center rounded-lg border-2 border-[var(--border-strong)] bg-[#f7f1e4] p-1 ${className}`}
+    >
+      {img}
+    </span>
+  );
 }
 
-/** العلامة + الاسم الرسمي الثابت — عرض بسيط بدون صندوق خلفية ملوّن ولا
- *  حركة hover (كانت "الميلان" hover:rotate + الصندوق المدوّر خاصّين
- *  بشخصية الماسكوت الكرتونية القديمة؛ شعار الصورة الثابتة الحالي (crest)
- *  بيُعرض بسيط وهادئ، بدون أي حركة أو زخرفة إضافية — أنسب لهوية بصرية
- *  رسمية). الأيقونة بتاخد كامل مساحتها بأي حجم بنفس النسبة عبر كل
- *  breakpoints، فما بترجع تكبر بشاشة وتصغر بشاشة تانية بشكل غير متوقّع. */
+/** العلامة + الاسم الرسمي الثابت — عرض بسيط بدون حركة hover. */
 export function BrandLockup({
   className = "",
   tone = "page",
 }: {
   className?: string;
-  /** "page": يتبع لون نص الصفحة العادي (الهيدر العام). "sidebar": يتبع لون
-   *  نص القائمة الجانبية الثابت (غامق دائماً بالوضعين، بعكس نص الصفحة). */
+  /** "page": يتبع لون نص الصفحة (الهيدر العام). "sidebar": يتبع لون نص القائمة
+   *  الجانبية الثابت، والعلامة على لوح كريمي لأن خلفيتها كحلية. */
   tone?: "page" | "sidebar";
 }) {
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
-      <BrandLogo className="size-9 lg:size-8" />
+      <BrandLogo className="size-9 lg:size-8" plate={tone === "sidebar"} />
       <span
         className={`font-display text-lg font-extrabold ${
           tone === "sidebar" ? "text-sidebar-foreground" : "text-foreground"

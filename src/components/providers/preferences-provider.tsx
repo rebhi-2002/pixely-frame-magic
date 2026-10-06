@@ -5,16 +5,24 @@ import { PreferencesContext, type PreferencesValue } from "@/hooks/use-preferenc
 
 export type ThemePref = "auto" | "light" | "dark";
 
+/** الثيم الافتراضي: فاتح (مو "auto" ومو غامق) — لغة افتراضية: عربي. */
+export const DEFAULT_THEME: ThemePref = "light";
+export const DEFAULT_LOCALE: Locale = "ar";
+/** لون شريط المتصفح بالموبايل = خلفية الثيم الفعلية (أريح للعين وبدون حد غريب). */
+export const THEME_COLORS = { light: "#F7F1E4", dark: "#D0E0FB" } as const;
+
 export const THEME_STORAGE_KEY = "academia.theme";
 export const LOCALE_STORAGE_KEY = "academia.locale";
 
 /** Inline, runs before hydration so there is no flash of the wrong theme/dir. */
 export const preferencesBootScript = `(function(){try{
-var t=localStorage.getItem("${THEME_STORAGE_KEY}")||"auto";
-var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+var t=localStorage.getItem("${THEME_STORAGE_KEY}")||"light";
+var d=t==="dark"||(t==="auto"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
 var r=document.documentElement;
 r.setAttribute("data-theme",d?"dark":"light");
 r.classList.toggle("dark",d);
+var m=document.querySelector('meta[name="theme-color"]');
+if(m)m.setAttribute("content",d?"${THEME_COLORS.dark}":"${THEME_COLORS.light}");
 var q=new URLSearchParams(window.location.search).get("lang");
 var l=q==="ar"||q==="en"?q:(localStorage.getItem("${LOCALE_STORAGE_KEY}")||"ar");
 if(l!=="ar"&&l!=="en")l="ar";
@@ -27,7 +35,7 @@ function resolveDark(pref: ThemePref) {
   if (pref === "light") return false;
   return typeof window !== "undefined"
     ? window.matchMedia("(prefers-color-scheme: dark)").matches
-    : true;
+    : false;
 }
 
 /**
@@ -48,56 +56,69 @@ function syncLocaleUrl(locale: Locale) {
 }
 
 function readStoredTheme(): ThemePref {
-  if (typeof window === "undefined") return "auto";
+  if (typeof window === "undefined") return DEFAULT_THEME;
   const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemePref | null;
-  return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
+  return stored === "light" || stored === "dark" || stored === "auto" ? stored : DEFAULT_THEME;
 }
 
 function readStoredLocale(): Locale {
-  if (typeof window === "undefined") return "ar";
+  if (typeof window === "undefined") return DEFAULT_LOCALE;
   const queryLocale = new URLSearchParams(window.location.search).get("lang");
   if (queryLocale && SUPPORTED_LOCALES.includes(queryLocale as Locale)) {
     return queryLocale as Locale;
   }
   const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
-  return stored && SUPPORTED_LOCALES.includes(stored) ? stored : "ar";
+  return stored && SUPPORTED_LOCALES.includes(stored) ? stored : DEFAULT_LOCALE;
 }
 
 function PreferencesState({ children }: { children: ReactNode }) {
   const { i18n: instance } = useTranslation();
-  // القراءة المباشرة (lazy initializer) بدل useEffect منفصل — كان في سباق (race)
-  // بين effect قراءة localStorage وeffect متابعة تفضيل نظام التشغيل: كلاهما
-  // يعمل بنفس الـ commit الأول، وeffect النظام كان يكتب فوق القيمة المحفوظة
-  // الصحيحة قبل ما توصل، فيرجع الثيم لـdark حتى لو localStorage فيها "light".
-  const [theme, setThemeState] = useState<ThemePref>(readStoredTheme);
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() =>
-    resolveDark(readStoredTheme()) ? "dark" : "light",
-  );
-  const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
+  // أول render لازم يطابق HTML السيرفر حرفيًا (ثيم فاتح + عربي)، وإلا React بيرمي
+  // خطأ hydration #418 ويعيد رسم الصفحة كلها. فما بنقرأ localStorage/matchMedia
+  // أثناء الـrender: بنبدأ بالافتراضي ونزامن بعد الـmount بـeffect واحد (يحدّد
+  // الثيم واللغة المحفوظين سوا — فما في سباق بين effects). الـboot script
+  // بيطبّق data-theme/lang/dir الصحيحة قبل أي رسم، فما في وميض بصري.
+  const [theme, setThemeState] = useState<ThemePref>(DEFAULT_THEME);
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const [switchingLocale, setSwitchingLocale] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const storedTheme = readStoredTheme();
+    setThemeState(storedTheme);
+    setResolvedTheme(resolveDark(storedTheme) ? "dark" : "light");
+    setLocaleState(readStoredLocale());
+    setHydrated(true);
+  }, []);
 
   // Follow the device when the user never chose manually.
   useEffect(() => {
-    if (theme !== "auto") return;
+    if (!hydrated || theme !== "auto") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const apply = () => setResolvedTheme(mq.matches ? "dark" : "light");
     apply();
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
-  }, [theme]);
+  }, [theme, hydrated]);
 
   useEffect(() => {
+    if (!hydrated) return;
     const root = document.documentElement;
     root.setAttribute("data-theme", resolvedTheme);
     root.classList.toggle("dark", resolvedTheme === "dark");
-  }, [resolvedTheme]);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", THEME_COLORS[resolvedTheme]);
+  }, [resolvedTheme, hydrated]);
 
   useEffect(() => {
+    if (!hydrated) return;
     const root = document.documentElement;
     root.setAttribute("lang", locale);
     root.setAttribute("dir", LOCALE_DIR[locale]);
     if (instance.language !== locale) void instance.changeLanguage(locale);
-  }, [locale, instance]);
+  }, [locale, instance, hydrated]);
 
   const setTheme = useCallback((pref: ThemePref) => {
     setThemeState(pref);

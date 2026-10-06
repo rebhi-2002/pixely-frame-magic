@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Save } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";

@@ -5,6 +5,7 @@ import { Panel, StatGrid } from "@/components/app/kit";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { getStudentProgress } from "@/integrations/backend/student";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { buildProgressView, percentText } from "@/lib/progress";
 import { qk } from "@/lib/query-keys";
 
@@ -18,10 +19,7 @@ export function AttendanceRateCard() {
       {progress.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل نسبة الحضور", "We couldn't load your attendance rate")}
-          description={bi(
-            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-            "Try again. If the problem continues, check your connection or come back later.",
-          )}
+          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), progress.error, bi)}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

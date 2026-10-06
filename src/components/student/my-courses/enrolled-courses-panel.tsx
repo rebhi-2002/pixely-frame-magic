@@ -7,6 +7,7 @@ import { Badge, EmptyState, Panel } from "@/components/app/kit";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { getStudentDashboard } from "@/integrations/backend/student";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { deliveryTypeLabel } from "@/lib/enums";
 import { qk } from "@/lib/query-keys";
 
@@ -21,10 +22,7 @@ export function EnrolledCoursesPanel() {
       {dashboard.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل كورساتك", "We couldn't load your courses")}
-          description={bi(
-            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-            "Try again. If the problem continues, check your connection or come back later.",
-          )}
+          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), dashboard.error, bi)}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

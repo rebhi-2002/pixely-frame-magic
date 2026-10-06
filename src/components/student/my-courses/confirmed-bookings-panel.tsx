@@ -6,6 +6,7 @@ import { ScheduleRow } from "@/components/student/my-courses/schedule-row";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { getStudentMyBookings } from "@/integrations/backend/student";
 import { useBi } from "@/lib/bi";
+import { withLoadErrorDetail } from "@/lib/load-error";
 import { qk } from "@/lib/query-keys";
 
 export function ConfirmedBookingsPanel() {
@@ -21,10 +22,7 @@ export function ConfirmedBookingsPanel() {
       {bookings.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل كورساتك", "We couldn't load your courses")}
-          description={bi(
-            "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
-            "Try again. If the problem continues, check your connection or come back later.",
-          )}
+          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), bookings.error, bi)}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}
