@@ -25,7 +25,9 @@ describe("validateDecision", () => {
   });
   it("حد طول السبب", () => {
     expect(validateDecision("reject", "x".repeat(MAX_REJECTION_REASON))).toEqual([]);
-    expect(validateDecision("reject", "x".repeat(MAX_REJECTION_REASON + 1))).toEqual(["reason_too_long"]);
+    expect(validateDecision("reject", "x".repeat(MAX_REJECTION_REASON + 1))).toEqual([
+      "reason_too_long",
+    ]);
   });
 });
 
@@ -34,6 +36,9 @@ describe("toDecisionArgs", () => {
     expect(toDecisionArgs("accept", "نص قديم")).toEqual({ accept: true, rejectionReason: null });
   });
   it("الرفض يرسل السبب مقصوصًا", () => {
-    expect(toDecisionArgs("reject", "  مشغول  ")).toEqual({ accept: false, rejectionReason: "مشغول" });
+    expect(toDecisionArgs("reject", "  مشغول  ")).toEqual({
+      accept: false,
+      rejectionReason: "مشغول",
+    });
   });
 });

@@ -339,7 +339,9 @@ export async function getStudentCourse(id: number): Promise<StudentCourseDetail>
 }
 
 /** سجل الحضور + الإحصاءات (فلاتر from/to/courseId اختيارية). الرد كائن StudentAttendanceDto. */
-export async function getStudentAttendance(filter: StudentAttendanceFilter = {}): Promise<StudentAttendance> {
+export async function getStudentAttendance(
+  filter: StudentAttendanceFilter = {},
+): Promise<StudentAttendance> {
   const params = new URLSearchParams();
   if (filter.from) params.set("from", dateParam(filter.from));
   if (filter.to) params.set("to", dateParam(filter.to));

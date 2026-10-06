@@ -92,7 +92,15 @@ describe("student.ts — الدوال العشر الجديدة", () => {
       totalSessions: 5,
       present: 4,
       absent: 1,
-      records: [{ sessionDate: "2026-10-01T00:00:00", groupName: "أ", courseTitle: null, status: 1, notes: null }],
+      records: [
+        {
+          sessionDate: "2026-10-01T00:00:00",
+          groupName: "أ",
+          courseTitle: null,
+          status: 1,
+          notes: null,
+        },
+      ],
     });
     const result = await getStudentAttendance();
     expect(result.attendanceRatePercent).toBe(80);

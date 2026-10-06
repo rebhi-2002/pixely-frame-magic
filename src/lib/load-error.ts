@@ -34,7 +34,10 @@ export function loadErrorDetail(error: unknown, bi: Bi): string {
     );
   }
   if (status === 404) {
-    return bi("رمز 404: العنوان أو البيانات غير موجودة.", "Code 404: the address or data wasn't found.");
+    return bi(
+      "رمز 404: العنوان أو البيانات غير موجودة.",
+      "Code 404: the address or data wasn't found.",
+    );
   }
   if (status >= 500) {
     return bi(

@@ -73,7 +73,8 @@ function ogKeyOr(key: string, fallback: string): string {
 
 function ogImageFor(pathname: string, locale: Locale, blogIndex: number): string {
   let key: string;
-  if (blogIndex >= 0) key = ogKeyOr(`blog-${blogIndex + 1}`, "blog"); // مقال جديد بلا بطاقة → بطاقة المدونة
+  if (blogIndex >= 0)
+    key = ogKeyOr(`blog-${blogIndex + 1}`, "blog"); // مقال جديد بلا بطاقة → بطاقة المدونة
   else if (pathname.startsWith("/blog/")) key = "not-found";
   else if (pathname.startsWith("/teacher/") && !isNoIndex(pathname)) key = "teacher";
   else if (pathname.startsWith("/course/") && !isNoIndex(pathname)) key = "course";
