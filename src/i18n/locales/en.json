@@ -59,6 +59,11 @@
     "h1a": "Find the right teacher",
     "h1b": "and start with confidence",
     "h1c": "with Academia.",
+    "statement": {
+      "title": "Clarity over quantity",
+      "sub": "A clear teacher profile: experience, qualifications, prices and availability.",
+      "cta": "Meet our values"
+    },
     "sub": "Browse teachers and courses, see their availability and prices, and follow your schedule and wallet from one place.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "See how you start",
@@ -75,7 +80,7 @@
       },
       "tracker": {
         "title": "Your schedule and sessions",
-        "text": "See your upcoming sessions and bookings, with the meeting link for online sessions."
+        "text": "See your upcoming sessions and bookings, with the meeting link for online sessions, and cancel or request a reschedule for any eligible session before it starts."
       },
       "simulator": {
         "title": "Online and in-person lessons",
@@ -391,6 +396,10 @@
     "forbiddenText": "This page requires a permission your account doesn't have."
   },
   "privacy": {
+    "meta": {
+      "title": "Privacy policy | Academia",
+      "description": "How Academia collects, uses and protects your data, in plain language."
+    },
     "h1": "Privacy Policy",
     "intro": "Initial draft pending final legal review — written in plain language because it's genuinely about you.",
     "sections": [
@@ -429,6 +438,10 @@
     ]
   },
   "terms": {
+    "meta": {
+      "title": "Terms of use | Academia",
+      "description": "The terms that apply when you use Academia as a student, teacher or parent."
+    },
     "h1": "Terms of Service",
     "intro": "By using Academia (and its related apps), you agree to the following terms. Initial draft pending final legal review — subject to updates.",
     "sections": [

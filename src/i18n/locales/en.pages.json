@@ -114,22 +114,22 @@
       }
     ],
     "teamTitle": "The team",
-    "teamSub": "A 3-person founding team building the platform from scratch — frontend and backend together.",
+    "teamSub": "A founding team of three, building the platform from scratch: frontend, backend, and documentation together.",
     "team": [
       {
         "n": "Rebhe Ibrahim",
         "t": "Co-founder — Frontend & product",
-        "d": "Builds the student experience and the interface, down to the last interaction detail."
+        "d": "Built the student experience and the interface, down to the last interaction detail."
       },
       {
         "n": "Ahmed Alkhaldi",
-        "t": "Co-founder — Architecture & database",
-        "d": "Builds the technical infrastructure and database."
+        "t": "Co-founder — Documentation & backend support",
+        "d": "Wrote the project's system requirements document and supported part of the backend."
       },
       {
         "n": "Ziad Alnumailat",
-        "t": "Co-founder — Security & infrastructure",
-        "d": "Builds platform security and infrastructure."
+        "t": "Co-founder — Backend development",
+        "d": "Built the platform's entire backend: the API, the database, and everything needed to run it."
       }
     ],
     "ctaTitle": "Want to be part of the story?",
@@ -221,7 +221,7 @@
     "searchPlaceholder": "Search help…",
     "empty": "No results. Try another word or contact support.",
     "contactTitle": "Still need help?",
-    "contactSub": "Our support team replies within one business day.",
+    "contactSub": "Our support team replies within 1–2 business days.",
     "contactCta": "Contact support",
     "topics": [
       {
@@ -264,6 +264,10 @@
           {
             "q": "What's the difference between a course and a private lesson?",
             "a": "A course is for a group with a fixed schedule and a listed price; a private lesson is with one teacher, based on their availability."
+          },
+          {
+            "q": "Can I cancel or reschedule a booked session?",
+            "a": "Yes. From your dashboard you can cancel any eligible session before it starts, under the applicable cancellation policy, or request a reschedule — the teacher approves the new time before it's confirmed."
           }
         ]
       },
