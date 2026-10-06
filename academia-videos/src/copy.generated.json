@@ -1,0 +1,132 @@
+{
+  "ar": {
+    "home": {
+      "badge": "منصة دروس خصوصية وكورسات",
+      "startTitle": "رحلتك من البحث إلى التقييم",
+      "startSub": "مسار واضح خطوة بخطوة من اكتشاف المعلم إلى إنهاء الحصة، بلا التباس.",
+      "startSteps": [
+        {
+          "title": "بحث",
+          "text": "دوّر عن معلمين حسب المادة والصف والسعر."
+        },
+        {
+          "title": "مقارنة",
+          "text": "قارن بين الملفات والتقييمات وأوقات التوفّر."
+        },
+        {
+          "title": "اختيار",
+          "text": "اختر المعلّم المناسب لك بثقة."
+        },
+        {
+          "title": "حجز",
+          "text": "اطلب حجز الحصة بالوقت المناسب لك."
+        },
+        {
+          "title": "دفع",
+          "text": "ادفع بأمان من محفظتك داخل المنصة."
+        },
+        {
+          "title": "حضور",
+          "text": "احضر حصتك أونلاين أو وجاهياً."
+        },
+        {
+          "title": "تقييم",
+          "text": "قيّم تجربتك بعد انتهاء الحصة."
+        }
+      ],
+      "ctaTitle": "جاهز تلاقي معلمك؟",
+      "ctaSub": "أنشئ حسابك مجاناً وتصفّح المعلمين والكورسات خلال دقائق.",
+      "ctaButton": "ابدأ مجاناً"
+    },
+    "forTeachers": {
+      "h1": "علّم بأوقاتك، ووصل لطلاب أكتر.",
+      "cta": "سجّل كمعلّم",
+      "benefits": {
+        "upload": {
+          "t": "ملفك المهني",
+          "d": "نبذة ومؤهلات وخبرة ومنطقة خدمة ولغات وأسعار أونلاين ووجاهي."
+        },
+        "analytics": {
+          "t": "أوقات توفّرك",
+          "d": "حدّد أيام وساعات استقبال الطلاب، أونلاين أو وجاهي."
+        },
+        "income": {
+          "t": "أرباح ومحفظة",
+          "d": "تابع رصيدك وقدّم طلب سحب لحسابك البنكي، والإدارة تراجعه. نسبة عمولة المنصة واضحة ومعروفة مسبقًا، بلا مفاجآت."
+        },
+        "verified": {
+          "t": "ظهور بالدليل",
+          "d": "فعّل ظهور ملفك بدليل المعلمين حتى يلاقيك الطلاب."
+        }
+      }
+    },
+    "nav": {
+      "tagline": "منصة عربية تربط الطلاب وأولياء الأمور بمعلمين وكورسات أونلاين ووجاهية."
+    }
+  },
+  "en": {
+    "home": {
+      "badge": "Private lessons and courses platform",
+      "startTitle": "Your journey from search to rating",
+      "startSub": "A clear, step-by-step path from finding a teacher to finishing the session.",
+      "startSteps": [
+        {
+          "title": "Search",
+          "text": "Look for teachers by subject, grade and price."
+        },
+        {
+          "title": "Compare",
+          "text": "Compare profiles, ratings and availability."
+        },
+        {
+          "title": "Choose",
+          "text": "Pick the right teacher for you with confidence."
+        },
+        {
+          "title": "Book",
+          "text": "Request the session at the time that suits you."
+        },
+        {
+          "title": "Pay",
+          "text": "Pay securely from your in-app wallet."
+        },
+        {
+          "title": "Attend",
+          "text": "Join your session online or in person."
+        },
+        {
+          "title": "Rate",
+          "text": "Rate your experience after the session ends."
+        }
+      ],
+      "ctaTitle": "Ready to find your teacher?",
+      "ctaSub": "Create a free account and browse teachers and courses in minutes.",
+      "ctaButton": "Start for free"
+    },
+    "forTeachers": {
+      "h1": "Teach on your schedule, reach more students.",
+      "cta": "Sign up as a teacher",
+      "benefits": {
+        "upload": {
+          "t": "Your professional profile",
+          "d": "Bio, qualifications, experience, service area, languages, and online and in-person prices."
+        },
+        "analytics": {
+          "t": "Your availability",
+          "d": "Set the days and hours you accept students, online or in person."
+        },
+        "income": {
+          "t": "Earnings and wallet",
+          "d": "Track your balance and request a withdrawal to your bank account; the admin reviews it. The platform's commission rate is clear and known upfront, no surprises."
+        },
+        "verified": {
+          "t": "Directory visibility",
+          "d": "Turn on directory visibility so students can find you."
+        }
+      }
+    },
+    "nav": {
+      "tagline": "An Arabic platform connecting students and parents with teachers and online or in-person courses."
+    }
+  }
+}
