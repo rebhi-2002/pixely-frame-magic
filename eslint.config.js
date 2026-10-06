@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi", ".vercel"] },
+  { ignores: ["dist", ".output", ".vinxi", ".vercel", "academia-videos"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -30,6 +30,11 @@ export default tseslint.config(
                 "TanStack Start does not use the Next.js `server-only` package. Rename the module to `*.server.ts` or mark it with `@tanstack/react-start/server-only`.",
             },
             {
+              name: "sonner",
+              message:
+                "Use `toast` from '@/lib/notify' — one unified look/position/duration for all notifications.",
+            },
+            {
               name: "@sentry/tanstackstart-react",
               message:
                 "No static Sentry imports outside src/instrument.client.ts — they end up in the SSR bundle and take down every page (500 ERR_MODULE_NOT_FOUND) when the package is missing from the serverless function. Use dynamic import() with catch (see src/lib/server-sentry.ts).",
@@ -40,6 +45,11 @@ export default tseslint.config(
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
     },
+  },
+  {
+    // الملفان الوحيدان المسموح لهما باستيراد sonner: غلاف الإشعارات ومكوّن الـToaster.
+    files: ["src/lib/notify.ts", "src/components/ui/sonner.tsx"],
+    rules: { "no-restricted-imports": "off" },
   },
   {
     // الملف الوحيد المسموح له بـimport ثابت لـSentry: نقطة دخول المتصفح فقط.

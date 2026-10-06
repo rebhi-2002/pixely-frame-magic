@@ -7,8 +7,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0A0F1C",
-  "theme_color": "#1E2761",
+  "background_color": "#F7F1E4",
+  "theme_color": "#F7F1E4",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
@@ -29,6 +29,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
