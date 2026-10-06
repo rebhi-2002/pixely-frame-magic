@@ -18,14 +18,20 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const warnings = [];
-const exists = (p) => access(path.join(root, p)).then(() => true, () => false);
+const exists = (p) =>
+  access(path.join(root, p)).then(
+    () => true,
+    () => false,
+  );
 const read = (p) => readFile(path.join(root, p), "utf8");
 
 /** يستخرج { "/path": "value" } من كائن TS اسمه name بملف seo.ts */
 function objectLiteral(src, name) {
   const m = src.match(new RegExp(`const ${name}[^=]*=\\s*\\{([\\s\\S]*?)\\n\\};`));
   if (!m) throw new Error(`ما لقيت ${name} بـsrc/lib/seo.ts — عدّل الفحص إذا غيّرت اسمه`);
-  return Object.fromEntries([...m[1].matchAll(/"(\/[^"]*)"\s*:\s*"([^"]+)"/g)].map((x) => [x[1], x[2]]));
+  return Object.fromEntries(
+    [...m[1].matchAll(/"(\/[^"]*)"\s*:\s*"([^"]+)"/g)].map((x) => [x[1], x[2]]),
+  );
 }
 function arrayLiteral(src, name) {
   const m = src.match(new RegExp(`const ${name}[^=]*=\\s*\\[([\\s\\S]*?)\\];`));
@@ -49,7 +55,10 @@ const isNoIndex = (p) => noindex.some((n) => p === n || p.startsWith(n));
 
 const locales = {};
 for (const l of ["ar", "en"]) {
-  locales[l] = merge(JSON.parse(await read(`src/i18n/locales/${l}.json`)), JSON.parse(await read(`src/i18n/locales/${l}.pages.json`)));
+  locales[l] = merge(
+    JSON.parse(await read(`src/i18n/locales/${l}.json`)),
+    JSON.parse(await read(`src/i18n/locales/${l}.pages.json`)),
+  );
 }
 
 // ---- الصفحات من ملفات src/routes ----
@@ -58,9 +67,16 @@ const dynamicRoutes = [];
 for (const f of await readdir(path.join(root, "src/routes"), { withFileTypes: true })) {
   if (!f.isFile() || !/\.tsx?$/.test(f.name) || /\.(test|spec)\./.test(f.name)) continue;
   const name = f.name.replace(/\.tsx?$/, "");
-  if (name.startsWith("_") || name === "index" && false) continue;
+  if (name.startsWith("_") || (name === "index" && false)) continue;
   if (name.includes("$")) {
-    dynamicRoutes.push("/" + name.split(".").filter((x) => !x.startsWith("$")).join("/") + "/");
+    dynamicRoutes.push(
+      "/" +
+        name
+          .split(".")
+          .filter((x) => !x.startsWith("$"))
+          .join("/") +
+        "/",
+    );
   } else {
     staticRoutes.push(name === "index" ? "/" : "/" + name.split(".").join("/"));
   }
@@ -73,36 +89,62 @@ for (const route of staticRoutes) {
   if (isNoIndex(route)) continue; // خاصة: بطاقة الاحتياط
   const key = metaKeys[route];
   if (!key) {
-    errors.push(`${route}: غير مسجّلة بـPAGE_META_KEYS (src/lib/seo.ts) — عنوانها بيطلع "غير موجودة"`);
+    errors.push(
+      `${route}: غير مسجّلة بـPAGE_META_KEYS (src/lib/seo.ts) — عنوانها بيطلع "غير موجودة"`,
+    );
   } else {
     for (const l of ["ar", "en"]) {
       const meta = dig(locales[l], `${key}.meta`);
-      if (!meta?.title || !meta?.description) errors.push(`${route}: ناقص ${key}.meta.title/description بترجمة ${l}`);
+      if (!meta?.title || !meta?.description)
+        errors.push(`${route}: ناقص ${key}.meta.title/description بترجمة ${l}`);
     }
   }
   const og = ogKeys[route];
-  if (!og) errors.push(`${route}: غير مسجّلة بـOG_KEYS (src/lib/seo.ts) — بتاخد بطاقة الاحتياط بدل بطاقتها`);
-  else for (const l of ["ar", "en"]) if (!(await exists(`public/og/${og}-${l}.png`))) errors.push(`${route}: ناقصة public/og/${og}-${l}.png — شغّل python3 scripts/og/generate_og.py (وأضف الصفحة لجدول PAGES)`);
-  if (!sitemapPaths.includes(route)) errors.push(`${route}: غير موجودة بـpublicPaths بـscripts/generate-sitemap.mjs`);
+  if (!og)
+    errors.push(
+      `${route}: غير مسجّلة بـOG_KEYS (src/lib/seo.ts) — بتاخد بطاقة الاحتياط بدل بطاقتها`,
+    );
+  else
+    for (const l of ["ar", "en"])
+      if (!(await exists(`public/og/${og}-${l}.png`)))
+        errors.push(
+          `${route}: ناقصة public/og/${og}-${l}.png — شغّل python3 scripts/og/generate_og.py (وأضف الصفحة لجدول PAGES)`,
+        );
+  if (!sitemapPaths.includes(route))
+    errors.push(`${route}: غير موجودة بـpublicPaths بـscripts/generate-sitemap.mjs`);
 }
 
 for (const prefix of dynamicRoutes) {
-  if (!seo.includes(`"${prefix}"`)) errors.push(`المسار الديناميكي ${prefix}* ما له معالجة بـsrc/lib/seo.ts (ميتا + بطاقة)`);
+  if (!seo.includes(`"${prefix}"`))
+    errors.push(`المسار الديناميكي ${prefix}* ما له معالجة بـsrc/lib/seo.ts (ميتا + بطاقة)`);
 }
-for (const l of ["ar", "en"]) if (!(await exists(`public/og/default-${l}.png`))) errors.push(`ناقصة بطاقة الاحتياط public/og/default-${l}.png`);
+for (const l of ["ar", "en"])
+  if (!(await exists(`public/og/default-${l}.png`)))
+    errors.push(`ناقصة بطاقة الاحتياط public/og/default-${l}.png`);
 
 // ---- مقالات المدونة ----
 const posts = (await read("src/content/blog-posts.ts")).match(/^\s{4}slug: /gm)?.length ?? 0;
-for (let i = 1; i <= posts; i++) for (const l of ["ar", "en"]) if (!(await exists(`public/og/blog-${i}-${l}.png`))) warnings.push(`مقال #${i}: ناقصة public/og/blog-${i}-${l}.png (بيستعمل بطاقة المدونة مؤقتًا) — شغّل python3 scripts/og/generate_og.py`);
+for (let i = 1; i <= posts; i++)
+  for (const l of ["ar", "en"])
+    if (!(await exists(`public/og/blog-${i}-${l}.png`)))
+      warnings.push(
+        `مقال #${i}: ناقصة public/og/blog-${i}-${l}.png (بيستعمل بطاقة المدونة مؤقتًا) — شغّل python3 scripts/og/generate_og.py`,
+      );
 
 // ---- sitemap ----
-for (const p of sitemapPaths) if (!staticRoutes.includes(p)) warnings.push(`sitemap: ${p} ما له ملف بـsrc/routes (رابط 404 لمحركات البحث؟)`);
+for (const p of sitemapPaths)
+  if (!staticRoutes.includes(p))
+    warnings.push(`sitemap: ${p} ما له ملف بـsrc/routes (رابط 404 لمحركات البحث؟)`);
 
 const strict = process.env.CI === "true" || process.env.CI === "1";
 for (const w of warnings) console.warn(`⚠ ${w}`);
 for (const e of errors) console.error(`✗ ${e}`);
 if (errors.length || (strict && warnings.length)) {
-  console.error(`\nفحص الـSEO: ${errors.length} خطأ${strict ? `، ${warnings.length} تحذير (CI)` : ""}`);
+  console.error(
+    `\nفحص الـSEO: ${errors.length} خطأ${strict ? `، ${warnings.length} تحذير (CI)` : ""}`,
+  );
   process.exit(1);
 }
-console.log(`✓ فحص الـSEO: ${staticRoutes.length} صفحة ثابتة، ${dynamicRoutes.length} ديناميكية — كلها مسجّلة${warnings.length ? ` (${warnings.length} تحذير)` : ""}`);
+console.log(
+  `✓ فحص الـSEO: ${staticRoutes.length} صفحة ثابتة، ${dynamicRoutes.length} ديناميكية — كلها مسجّلة${warnings.length ? ` (${warnings.length} تحذير)` : ""}`,
+);
