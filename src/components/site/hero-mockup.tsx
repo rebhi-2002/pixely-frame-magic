@@ -349,7 +349,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         </div>
       </div>
 
-      <div style={floatDelay("0.7s")} className="hero-float absolute -end-4 -top-5 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-end-8">
+      <div
+        style={floatDelay("0.7s")}
+        className="hero-float absolute -end-4 -top-5 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-end-8"
+      >
         <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-success/15 text-success">
           <Video className="size-3.5" />
         </span>
@@ -358,7 +361,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         </p>
       </div>
 
-      <div style={floatDelay("0.9s")} className="hero-float absolute -bottom-5 -start-4 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-start-8">
+      <div
+        style={floatDelay("0.9s")}
+        className="hero-float absolute -bottom-5 -start-4 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-start-8"
+      >
         <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-primary/15 text-primary">
           <Wallet className="size-3.5" />
         </span>

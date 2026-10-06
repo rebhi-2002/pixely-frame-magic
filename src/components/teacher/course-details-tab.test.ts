@@ -39,8 +39,12 @@ describe("validateCourseForm", () => {
   });
   it("العنوان: مسافات فقط = مطلوب، وطويل = رفض", () => {
     expect(validateCourseForm({ ...valid, title: "   " }).title).toBe("title_required");
-    expect(validateCourseForm({ ...valid, title: "x".repeat(COURSE_TITLE_MAX + 1) }).title).toBe("title_too_long");
-    expect(validateCourseForm({ ...valid, title: "x".repeat(COURSE_TITLE_MAX) }).title).toBeUndefined();
+    expect(validateCourseForm({ ...valid, title: "x".repeat(COURSE_TITLE_MAX + 1) }).title).toBe(
+      "title_too_long",
+    );
+    expect(
+      validateCourseForm({ ...valid, title: "x".repeat(COURSE_TITLE_MAX) }).title,
+    ).toBeUndefined();
   });
   it("السعر: صفر مقبول، سالب/نص/أكثر من منزلتين مرفوض", () => {
     expect(validateCourseForm({ ...valid, price: "0" }).price).toBeUndefined();
@@ -51,11 +55,15 @@ describe("validateCourseForm", () => {
   });
   it("السعة: عدد صحيح ≥ 1", () => {
     expect(validateCourseForm({ ...valid, maxStudents: "0" }).maxStudents).toBe("capacity_invalid");
-    expect(validateCourseForm({ ...valid, maxStudents: "2.5" }).maxStudents).toBe("capacity_invalid");
+    expect(validateCourseForm({ ...valid, maxStudents: "2.5" }).maxStudents).toBe(
+      "capacity_invalid",
+    );
     expect(validateCourseForm({ ...valid, maxStudents: "1" }).maxStudents).toBeUndefined();
   });
   it("الوصف الطويل مرفوض", () => {
-    expect(validateCourseForm({ ...valid, description: "x".repeat(2001) }).description).toBe("description_too_long");
+    expect(validateCourseForm({ ...valid, description: "x".repeat(2001) }).description).toBe(
+      "description_too_long",
+    );
   });
 });
 

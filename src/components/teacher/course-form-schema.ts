@@ -83,7 +83,8 @@ export function validateCourseForm(values: CourseFormValues): CourseFormErrors {
   if (!title) errors.title = "title_required";
   else if (title.length > COURSE_TITLE_MAX) errors.title = "title_too_long";
 
-  if (values.description.length > COURSE_DESCRIPTION_MAX) errors.description = "description_too_long";
+  if (values.description.length > COURSE_DESCRIPTION_MAX)
+    errors.description = "description_too_long";
 
   if (parseIntStrict(values.subjectId) === null) errors.subjectId = "subject_required";
   if (parseIntStrict(values.categoryId) === null) errors.categoryId = "category_required";

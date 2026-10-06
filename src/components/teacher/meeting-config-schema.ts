@@ -16,10 +16,7 @@ export interface MeetingFormValues {
 }
 
 export type MeetingFormErrorCode =
-  | "platform_required"
-  | "url_required"
-  | "url_invalid"
-  | "instructions_too_long";
+  "platform_required" | "url_required" | "url_invalid" | "instructions_too_long";
 
 export type MeetingFormErrors = Partial<
   Record<"meetingPlatform" | "meetingUrl" | "meetingInstructions", MeetingFormErrorCode>

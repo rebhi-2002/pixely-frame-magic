@@ -78,6 +78,7 @@ export function issuesFor(
   dayIndex?: number,
 ): GroupScheduleIssue[] {
   return issues.filter(
-    (issue) => codes.includes(issue.code) && (dayIndex === undefined || issue.dayIndex === dayIndex),
+    (issue) =>
+      codes.includes(issue.code) && (dayIndex === undefined || issue.dayIndex === dayIndex),
   );
 }

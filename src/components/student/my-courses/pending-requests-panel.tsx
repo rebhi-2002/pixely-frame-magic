@@ -40,7 +40,14 @@ export function PendingRequestsPanel() {
       {requests.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل كورساتك", "We couldn't load your courses")}
-          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), requests.error, bi)}
+          description={withLoadErrorDetail(
+            bi(
+              "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+              "Try again. If the problem continues, check your connection or come back later.",
+            ),
+            requests.error,
+            bi,
+          )}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

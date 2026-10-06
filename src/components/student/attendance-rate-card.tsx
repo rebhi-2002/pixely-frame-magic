@@ -19,7 +19,14 @@ export function AttendanceRateCard() {
       {progress.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل نسبة الحضور", "We couldn't load your attendance rate")}
-          description={withLoadErrorDetail(bi("جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.", "Try again. If the problem continues, check your connection or come back later."), progress.error, bi)}
+          description={withLoadErrorDetail(
+            bi(
+              "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
+              "Try again. If the problem continues, check your connection or come back later.",
+            ),
+            progress.error,
+            bi,
+          )}
           action={
             <RetryButton
               label={bi("إعادة المحاولة", "Try again")}

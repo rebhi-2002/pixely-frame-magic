@@ -19,7 +19,9 @@ export function resolveCourseDeliveryType(
 }
 
 /** الحد الأقصى الحالي للطلاب بالمجموعة لتعبئة النموذج عند التعديل. null = غير معروف. */
-export function resolveGroupMaxStudents(_course: TeacherCourseDetail | null | undefined): number | null {
+export function resolveGroupMaxStudents(
+  _course: TeacherCourseDetail | null | undefined,
+): number | null {
   return null;
 }
 
@@ -38,7 +40,9 @@ export interface CourseDraftValues {
   groupName: string;
   deliveryType: DeliveryType;
 }
-export function courseToDraft(_course: TeacherCourseDetail | null | undefined): CourseDraftValues | null {
+export function courseToDraft(
+  _course: TeacherCourseDetail | null | undefined,
+): CourseDraftValues | null {
   return null;
 }
 
@@ -53,4 +57,8 @@ export interface CourseLookups {
   categories: LookupOption[];
 }
 /** مصدر المادة والتصنيف (Q-04). الصفوف تأتي من getGradesList الحقيقية، فمش هون. */
-export const COURSE_LOOKUPS_UNAVAILABLE: CourseLookups = { available: false, subjects: [], categories: [] };
+export const COURSE_LOOKUPS_UNAVAILABLE: CourseLookups = {
+  available: false,
+  subjects: [],
+  categories: [],
+};

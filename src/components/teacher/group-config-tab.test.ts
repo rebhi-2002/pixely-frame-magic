@@ -35,18 +35,26 @@ describe("validateGroupSchedule (T2-03)", () => {
     expect(isGroupScheduleValid(base)).toBe(true);
   });
   it("نهاية قبل البداية", () => {
-    expect(validateGroupSchedule({ ...base, courseEndDate: "2026-10-01" }).map((i) => i.code)).toContain("end_before_start");
+    expect(
+      validateGroupSchedule({ ...base, courseEndDate: "2026-10-01" }).map((i) => i.code),
+    ).toContain("end_before_start");
   });
   it("بداية ونهاية بنفس اليوم مقبولة", () => {
     expect(isGroupScheduleValid({ ...base, courseEndDate: "2026-11-01" })).toBe(true);
   });
   it("مدة وسعة غير صالحتين", () => {
-    const codes = validateGroupSchedule({ ...base, defaultLessonDurationMinutes: 0, maxStudents: 0 }).map((i) => i.code);
+    const codes = validateGroupSchedule({
+      ...base,
+      defaultLessonDurationMinutes: 0,
+      maxStudents: 0,
+    }).map((i) => i.code);
     expect(codes).toContain("duration_invalid");
     expect(codes).toContain("capacity_invalid");
   });
   it("لا أيام", () => {
-    expect(validateGroupSchedule({ ...base, scheduleDays: [] }).map((i) => i.code)).toEqual(["days_required"]);
+    expect(validateGroupSchedule({ ...base, scheduleDays: [] }).map((i) => i.code)).toEqual([
+      "days_required",
+    ]);
   });
   it("يوم مكرر ووقت غير صالح", () => {
     const issues = validateGroupSchedule({
@@ -76,12 +84,21 @@ describe("toGroupScheduleInput (T2-01/02)", () => {
     });
   });
   it("قيم غير مفهومة تبقى غير صالحة (لا تُحوَّل لـ0)", () => {
-    const input = toGroupScheduleInput(7, { ...valid, maxStudents: "abc", days: [{ key: "x", dayOfWeek: "", startTime: "" }] });
+    const input = toGroupScheduleInput(7, {
+      ...valid,
+      maxStudents: "abc",
+      days: [{ key: "x", dayOfWeek: "", startTime: "" }],
+    });
     expect(Number.isNaN(input.maxStudents)).toBe(true);
     expect(input.scheduleDays[0].dayOfWeek).toBe(-1);
   });
   it("يرفض يوم الأسبوع خارج 0..6", () => {
-    expect(toGroupScheduleInput(1, { ...valid, days: [{ key: "x", dayOfWeek: "7", startTime: "10:00" }] }).scheduleDays[0].dayOfWeek).toBe(-1);
+    expect(
+      toGroupScheduleInput(1, {
+        ...valid,
+        days: [{ key: "x", dayOfWeek: "7", startTime: "10:00" }],
+      }).scheduleDays[0].dayOfWeek,
+    ).toBe(-1);
   });
 });
 
@@ -111,7 +128,9 @@ describe("issuesFor / newDayRow", () => {
       { code: "capacity_invalid" as const },
     ];
     expect(issuesFor(issues, ["capacity_invalid"])).toHaveLength(1);
-    expect(issuesFor(issues, ["day_duplicate", "time_invalid"], 1)).toEqual([{ code: "day_duplicate", dayIndex: 1 }]);
+    expect(issuesFor(issues, ["day_duplicate", "time_invalid"], 1)).toEqual([
+      { code: "day_duplicate", dayIndex: 1 },
+    ]);
     expect(issuesFor(issues, ["time_invalid"], 1)).toEqual([]);
   });
   it("مفاتيح الصفوف فريدة", () => {

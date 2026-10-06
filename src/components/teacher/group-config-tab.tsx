@@ -7,7 +7,7 @@
 // صادق، وتعبئة القيم الحالية للتعديل (T2-04) غير مفعّلة. ما نخمّن groupId.
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Panel } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,9 +46,15 @@ function issueText(code: GroupScheduleErrorCode, bi: Bi): string {
     case "end_before_start":
       return bi("تاريخ النهاية قبل تاريخ البداية", "The end date is before the start date");
     case "duration_invalid":
-      return bi("مدة الدرس لازم تكون عددًا صحيحًا أكبر من صفر", "Lesson duration must be a whole number above zero");
+      return bi(
+        "مدة الدرس لازم تكون عددًا صحيحًا أكبر من صفر",
+        "Lesson duration must be a whole number above zero",
+      );
     case "capacity_invalid":
-      return bi("الحد الأقصى للطلاب لازم يكون عددًا صحيحًا 1 أو أكثر", "Max students must be a whole number, 1 or more");
+      return bi(
+        "الحد الأقصى للطلاب لازم يكون عددًا صحيحًا 1 أو أكثر",
+        "Max students must be a whole number, 1 or more",
+      );
     case "days_required":
       return bi("أضف يومًا واحدًا على الأقل", "Add at least one day");
     case "day_invalid":
@@ -102,7 +108,9 @@ export function GroupConfigTab({ course, onChanged }: GroupConfigTabProps) {
     },
     // T2-05: تعارض مع دروس مجدولة / رفض الباك اند → رسالته داخل النموذج، والنموذج يبقى كما هو للتعديل.
     onError: (e: unknown) =>
-      setError(getErrorMessage(e, bi("تعذّر حفظ جدول المجموعة", "Couldn't save the group schedule"))),
+      setError(
+        getErrorMessage(e, bi("تعذّر حفظ جدول المجموعة", "Couldn't save the group schedule")),
+      ),
   });
 
   const title =
@@ -147,7 +155,9 @@ export function GroupConfigTab({ course, onChanged }: GroupConfigTabProps) {
             {fieldErrors(show(["capacity_invalid"]))}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="gc-duration">{bi("مدة الدرس الافتراضية (دقيقة)", "Default lesson duration (min)")}</Label>
+            <Label htmlFor="gc-duration">
+              {bi("مدة الدرس الافتراضية (دقيقة)", "Default lesson duration (min)")}
+            </Label>
             <Input
               id="gc-duration"
               inputMode="numeric"
@@ -237,14 +247,19 @@ export function GroupConfigTab({ course, onChanged }: GroupConfigTabProps) {
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => setValues((previous) => ({ ...previous, days: [...previous.days, newDayRow()] }))}
+            onClick={() =>
+              setValues((previous) => ({ ...previous, days: [...previous.days, newDayRow()] }))
+            }
           >
             {bi("إضافة يوم", "Add a day")}
           </Button>
         </div>
 
         {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}

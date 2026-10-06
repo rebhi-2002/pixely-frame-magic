@@ -8,7 +8,7 @@
 import { useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { EmptyState, Panel } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +58,10 @@ function errorText(code: CourseFormErrorCode, bi: Bi): string {
     case "title_required":
       return bi("اسم الكورس مطلوب", "The course name is required");
     case "title_too_long":
-      return bi(`الاسم طويل (الحد ${COURSE_TITLE_MAX} حرفًا)`, `The name is too long (max ${COURSE_TITLE_MAX})`);
+      return bi(
+        `الاسم طويل (الحد ${COURSE_TITLE_MAX} حرفًا)`,
+        `The name is too long (max ${COURSE_TITLE_MAX})`,
+      );
     case "description_too_long":
       return bi(
         `الوصف طويل (الحد ${COURSE_DESCRIPTION_MAX} حرفًا)`,
@@ -71,9 +74,15 @@ function errorText(code: CourseFormErrorCode, bi: Bi): string {
     case "grade_required":
       return bi("اختر الصف", "Choose a grade");
     case "price_invalid":
-      return bi("أدخل سعرًا صحيحًا (صفر أو أكثر، حتى منزلتين عشريتين)", "Enter a valid price (0 or more, up to 2 decimals)");
+      return bi(
+        "أدخل سعرًا صحيحًا (صفر أو أكثر، حتى منزلتين عشريتين)",
+        "Enter a valid price (0 or more, up to 2 decimals)",
+      );
     case "capacity_invalid":
-      return bi("الحد الأقصى للطلاب لازم يكون عددًا صحيحًا 1 أو أكثر", "Max students must be a whole number, 1 or more");
+      return bi(
+        "الحد الأقصى للطلاب لازم يكون عددًا صحيحًا 1 أو أكثر",
+        "Max students must be a whole number, 1 or more",
+      );
     case "group_name_required":
       return bi("اسم/رقم المجموعة مطلوب", "The group name/number is required");
     case "group_name_too_long":
@@ -84,7 +93,11 @@ function errorText(code: CourseFormErrorCode, bi: Bi): string {
   }
 }
 
-export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: CourseDetailsTabProps) {
+export function CourseDetailsTab({
+  course,
+  onChanged,
+  defaultDeliveryType,
+}: CourseDetailsTabProps) {
   const bi = useBi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -135,7 +148,8 @@ export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: Cou
     },
     onSuccess: ({ courseId, saveAsDraft }: { courseId: number | null; saveAsDraft: boolean }) => {
       void queryClient.invalidateQueries({ queryKey: qk.teacherCourses() });
-      if (courseId !== null) void queryClient.invalidateQueries({ queryKey: qk.teacherCourse(courseId) });
+      if (courseId !== null)
+        void queryClient.invalidateQueries({ queryKey: qk.teacherCourse(courseId) });
       toast.success(
         saveAsDraft
           ? bi("تم حفظ الكورس كمسودة.", "The course was saved as a draft.")
@@ -146,7 +160,8 @@ export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: Cou
         void navigate({ to: "/teacher/course/$id", params: { id: String(courseId) } });
       }
     },
-    onError: (e: unknown) => setError(getErrorMessage(e, bi("تعذّر حفظ الكورس", "Couldn't save the course"))),
+    onError: (e: unknown) =>
+      setError(getErrorMessage(e, bi("تعذّر حفظ الكورس", "Couldn't save the course"))),
   });
 
   if (editing && draft === null) {
@@ -303,7 +318,10 @@ export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: Cou
               ))}
             </select>,
             !gradesQuery.isLoading && grades.length === 0
-              ? bi("لا توجد صفوف مسجّلة بالنظام بعد.", "No grades are registered in the system yet.")
+              ? bi(
+                  "لا توجد صفوف مسجّلة بالنظام بعد.",
+                  "No grades are registered in the system yet.",
+                )
               : undefined,
           )}
         </div>
@@ -359,7 +377,10 @@ export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: Cou
         )}
 
         {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}
@@ -374,7 +395,12 @@ export function CourseDetailsTab({ course, onChanged, defaultDeliveryType }: Cou
           >
             {bi("حفظ كمسودة", "Save as draft")}
           </Button>
-          <Button type="button" loading={save.isPending} disabled={!lookups.available} onClick={() => submit(false)}>
+          <Button
+            type="button"
+            loading={save.isPending}
+            disabled={!lookups.available}
+            onClick={() => submit(false)}
+          >
             {bi("حفظ ونشر", "Save & publish")}
           </Button>
         </div>

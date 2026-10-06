@@ -2,7 +2,7 @@
 // props صريحة (bookingId)؛ وضعها بصف قائمة الطلبات ينتظر T5-01 (NE-01). أي رفض من الباك اند يُعرض داخل النافذة.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,7 +25,12 @@ export interface CompleteBookingDialogProps {
   onDone?: () => void;
 }
 
-export function CompleteBookingDialog({ bookingId, open, onOpenChange, onDone }: CompleteBookingDialogProps) {
+export function CompleteBookingDialog({
+  bookingId,
+  open,
+  onOpenChange,
+  onDone,
+}: CompleteBookingDialogProps) {
   const bi = useBi();
   const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +50,12 @@ export function CompleteBookingDialog({ bookingId, open, onOpenChange, onDone }:
     },
     onSuccess: (id: number) => {
       invalidateBookingQueries(queryClient, id);
-      toast.success(bi("تم إنهاء الحصة. يمكن للطالب الآن تقييمها.", "The session was completed. The student can now rate it."));
+      toast.success(
+        bi(
+          "تم إنهاء الحصة. يمكن للطالب الآن تقييمها.",
+          "The session was completed. The student can now rate it.",
+        ),
+      );
       onDone?.();
       onOpenChange(false);
     },
@@ -54,7 +64,10 @@ export function CompleteBookingDialog({ bookingId, open, onOpenChange, onDone }:
   });
 
   return (
-    <Dialog open={open} onOpenChange={(next) => (complete.isPending ? undefined : onOpenChange(next))}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => (complete.isPending ? undefined : onOpenChange(next))}
+    >
       <DialogContent className="text-start">
         <DialogHeader>
           <DialogTitle>{bi("إنهاء الحصة", "Complete session")}</DialogTitle>
@@ -67,7 +80,10 @@ export function CompleteBookingDialog({ bookingId, open, onOpenChange, onDone }:
         </DialogHeader>
 
         {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}
@@ -83,7 +99,11 @@ export function CompleteBookingDialog({ bookingId, open, onOpenChange, onDone }:
           >
             {bi("نعم، أُنهيت", "Yes, complete it")}
           </Button>
-          <Button variant="outline" disabled={complete.isPending} onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            disabled={complete.isPending}
+            onClick={() => onOpenChange(false)}
+          >
             {bi("رجوع", "Back")}
           </Button>
         </DialogFooter>

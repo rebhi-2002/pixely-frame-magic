@@ -3,7 +3,7 @@
 // سريع داخل قائمة الدروس (lessons-tab) ينتظر قائمة الدروس T4-01 (NE-12). الرابط http/https فقط.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,7 +34,11 @@ import { MeetingPlatform, meetingPlatformLabel, type Bi } from "@/lib/enums";
 export interface MeetingConfigDialogProps {
   lessonId: number | null | undefined;
   /** القيم الحالية لتعبئة النموذج (اختيارية — يمرّرها من يعرف صف الدرس). */
-  initial?: { meetingPlatform?: number | null; meetingUrl?: string | null; meetingInstructions?: string | null };
+  initial?: {
+    meetingPlatform?: number | null;
+    meetingUrl?: string | null;
+    meetingInstructions?: string | null;
+  };
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSaved?: () => void;
@@ -50,7 +54,10 @@ function errorText(code: MeetingFormErrorCode, bi: Bi): string {
     case "url_required":
       return bi("رابط الاجتماع مطلوب", "The meeting link is required");
     case "url_invalid":
-      return bi("الرابط لازم يبدأ بـhttp:// أو https://", "The link must start with http:// or https://");
+      return bi(
+        "الرابط لازم يبدأ بـhttp:// أو https://",
+        "The link must start with http:// or https://",
+      );
     case "instructions_too_long":
       return bi(
         `التعليمات طويلة (الحد ${MEETING_INSTRUCTIONS_MAX} حرفًا)`,
@@ -59,7 +66,13 @@ function errorText(code: MeetingFormErrorCode, bi: Bi): string {
   }
 }
 
-export function MeetingConfigDialog({ lessonId, initial, open, onOpenChange, onSaved }: MeetingConfigDialogProps) {
+export function MeetingConfigDialog({
+  lessonId,
+  initial,
+  open,
+  onOpenChange,
+  onSaved,
+}: MeetingConfigDialogProps) {
   const bi = useBi();
   const queryClient = useQueryClient();
   const [values, setValues] = useState<MeetingFormValues>(emptyMeetingValues);
@@ -92,7 +105,8 @@ export function MeetingConfigDialog({ lessonId, initial, open, onOpenChange, onS
         throw new Error(bi("رقم الدرس غير متوفر", "The lesson number is unavailable"));
       }
       const args = toMeetingArgs(values);
-      if (!args) throw new Error(bi("بيانات الاجتماع غير صالحة", "The meeting details aren't valid"));
+      if (!args)
+        throw new Error(bi("بيانات الاجتماع غير صالحة", "The meeting details aren't valid"));
       const result = await configureLessonMeeting(
         lessonId,
         args.meetingPlatform,
@@ -109,7 +123,9 @@ export function MeetingConfigDialog({ lessonId, initial, open, onOpenChange, onS
       onOpenChange(false);
     },
     onError: (e: unknown) =>
-      setError(getErrorMessage(e, bi("تعذّر حفظ بيانات الاجتماع", "Couldn't save the meeting details"))),
+      setError(
+        getErrorMessage(e, bi("تعذّر حفظ بيانات الاجتماع", "Couldn't save the meeting details")),
+      ),
   });
 
   return (
@@ -136,13 +152,16 @@ export function MeetingConfigDialog({ lessonId, initial, open, onOpenChange, onS
             disabled={save.isPending}
           >
             <option value="">{bi("اختر المنصة", "Choose a platform")}</option>
-            {[MeetingPlatform.Zoom, MeetingPlatform.GoogleMeet, MeetingPlatform.MicrosoftTeams, MeetingPlatform.Other].map(
-              (platform) => (
-                <option key={platform} value={platform}>
-                  {meetingPlatformLabel(platform, bi)}
-                </option>
-              ),
-            )}
+            {[
+              MeetingPlatform.Zoom,
+              MeetingPlatform.GoogleMeet,
+              MeetingPlatform.MicrosoftTeams,
+              MeetingPlatform.Other,
+            ].map((platform) => (
+              <option key={platform} value={platform}>
+                {meetingPlatformLabel(platform, bi)}
+              </option>
+            ))}
           </select>
           {shown("meetingPlatform") && (
             <p role="alert" className="text-xs text-destructive">
@@ -186,7 +205,10 @@ export function MeetingConfigDialog({ lessonId, initial, open, onOpenChange, onS
         </div>
 
         {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}

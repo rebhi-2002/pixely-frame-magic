@@ -4,7 +4,7 @@
 // داخل النافذة ولا يُؤكَّد الحجز.
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,7 +36,13 @@ export interface DecideBookingDialogProps {
   onDone?: () => void;
 }
 
-export function DecideBookingDialog({ bookingId, decision, open, onOpenChange, onDone }: DecideBookingDialogProps) {
+export function DecideBookingDialog({
+  bookingId,
+  decision,
+  open,
+  onOpenChange,
+  onDone,
+}: DecideBookingDialogProps) {
   const bi = useBi();
   const queryClient = useQueryClient();
   const [reason, setReason] = useState("");
@@ -90,10 +96,17 @@ export function DecideBookingDialog({ bookingId, decision, open, onOpenChange, o
   });
 
   return (
-    <Dialog open={open} onOpenChange={(next) => (submit.isPending ? undefined : onOpenChange(next))}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => (submit.isPending ? undefined : onOpenChange(next))}
+    >
       <DialogContent className="text-start">
         <DialogHeader>
-          <DialogTitle>{accepting ? bi("قبول طلب الحجز", "Accept booking request") : bi("رفض طلب الحجز", "Reject booking request")}</DialogTitle>
+          <DialogTitle>
+            {accepting
+              ? bi("قبول طلب الحجز", "Accept booking request")
+              : bi("رفض طلب الحجز", "Reject booking request")}
+          </DialogTitle>
           <DialogDescription>
             {accepting
               ? bi(
@@ -134,7 +147,10 @@ export function DecideBookingDialog({ bookingId, decision, open, onOpenChange, o
         )}
 
         {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          >
             {error}
           </p>
         )}
@@ -150,7 +166,9 @@ export function DecideBookingDialog({ bookingId, decision, open, onOpenChange, o
               if (errors.length === 0) submit.mutate();
             }}
           >
-            {accepting ? bi("تأكيد القبول", "Confirm acceptance") : bi("تأكيد الرفض", "Confirm rejection")}
+            {accepting
+              ? bi("تأكيد القبول", "Confirm acceptance")
+              : bi("تأكيد الرفض", "Confirm rejection")}
           </Button>
           <Button variant="outline" disabled={submit.isPending} onClick={() => onOpenChange(false)}>
             {bi("رجوع", "Back")}

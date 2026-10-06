@@ -161,7 +161,7 @@ export function AdminDashboardPage() {
 
   // إحصائيات الكورسات — كلها محسوبة بالفرونت من القائمة الحقيقية الكاملة
   // (Course/GetAll)، بما إن الباك اند ما بيرجّع الإحصائية جاهزة.
-  const courseRows = courses.data?.items ?? [];
+  const courseRows = useMemo(() => courses.data?.items ?? [], [courses.data?.items]);
   const coursesByStatus = useMemo(() => {
     const counts = new Map<number, number>();
     for (const c of courseRows) counts.set(c.status, (counts.get(c.status) ?? 0) + 1);
