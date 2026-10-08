@@ -30,7 +30,6 @@ import { PageTransition } from "@/components/site/page-transition";
 import { UserMenu } from "@/components/site/user-menu";
 import { useSession } from "@/hooks/use-session";
 import { useScrolled } from "@/hooks/use-scrolled";
-import { allowedPublicPaths } from "@/lib/bi";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button-variants";
 import {
@@ -81,10 +80,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const { session, isSignedIn } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
-  const allowed = allowedPublicPaths(session?.roleKey ?? null);
-  const visible = <T extends { to: string }>(items: readonly T[]) =>
-    allowed ? items.filter((i) => allowed.includes(i.to)) : items;
-  const nav = visible(navItems);
+  // صفحات عامة: تظهر روابطها لكل الأدوار (والزوّار) بلا تصفية.
+  const nav = navItems;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -102,28 +99,28 @@ export function PublicLayout({ children }: { children: ReactNode }) {
             : "border-transparent bg-transparent",
         )}
       >
-        <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <BrandMark />
-          <nav className="hidden items-center gap-1 lg:flex">
+        <div className="mx-auto flex h-[4.5rem] w-full max-w-6xl items-center justify-between gap-4 px-5">
+          <BrandMark className="shrink-0" />
+          <nav className="hidden min-w-0 items-center gap-1 rtl:lg:flex ltr:xl:flex">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
                 activeProps={{ className: "bg-secondary text-foreground" }}
-                className="nav-underline rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                className="nav-underline whitespace-nowrap rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
               >
                 {t(item.key)}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button
                   type="button"
                   aria-label={t("common.openMenu")}
-                  className="tap-target inline-flex items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+                  className="tap-target inline-flex items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground rtl:lg:hidden ltr:xl:hidden"
                 >
                   <Menu aria-hidden="true" className="size-5" />
                 </button>
@@ -202,7 +199,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   className={buttonVariants({
                     variant: "default",
                     className:
-                      "hidden h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm sm:inline-flex",
+                      "hidden h-auto gap-2 whitespace-nowrap px-3 py-2 text-sm xl:inline-flex",
                   })}
                 >
                   <LayoutDashboard className="size-4" />
@@ -239,7 +236,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
         <PageTransition>{children}</PageTransition>
       </main>
 
-      <footer className="border-t-2 border-[var(--border-strong)] bg-card">
+      <footer className="scope-ink border-t-2 border-[var(--border-strong)]">
+        <div aria-hidden className="stripe-tri" />
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-3">
             <BrandMark />
@@ -282,8 +280,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="grid grid-cols-2 gap-8 text-sm">
             <div className="space-y-2">
-              <p className="font-extrabold text-foreground">{t("nav.platform")}</p>
-              {visible(footerPlatform).map((i) => (
+              <p className="flex items-center gap-2 font-extrabold text-foreground">
+                <span aria-hidden className="h-[3px] w-4 rounded-full bg-[var(--brand)]" />
+                {t("nav.platform")}
+              </p>
+              {footerPlatform.map((i) => (
                 <Link
                   key={i.to}
                   to={i.to}
@@ -294,7 +295,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               ))}
             </div>
             <div className="space-y-2">
-              <p className="font-extrabold text-foreground">{t("nav.legal")}</p>
+              <p className="flex items-center gap-2 font-extrabold text-foreground">
+                <span aria-hidden className="h-[3px] w-4 rounded-full bg-[var(--brand)]" />
+                {t("nav.legal")}
+              </p>
               {footerLegal.map((i) => (
                 <Link
                   key={i.to}

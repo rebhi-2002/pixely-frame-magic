@@ -36,26 +36,23 @@ const tabs = [
     key: "pending" as const,
     icon: Clock,
     tone: "text-primary",
-    bar: "bg-primary",
-    bgActive: "bg-primary text-primary-foreground",
+    bgActive: "bg-[var(--brand)] text-[var(--ink)]",
     ar: "طلبات معلّقة",
     en: "Pending requests",
   },
   {
     key: "confirmed" as const,
     icon: CheckCircle2,
-    tone: "text-success",
-    bar: "bg-success",
-    bgActive: "bg-success text-success-foreground",
+    tone: "text-[var(--accent-2-text)]",
+    bgActive: "bg-[var(--accent-2)] text-white",
     ar: "حجوزات مؤكّدة",
     en: "Confirmed bookings",
   },
   {
     key: "wallet" as const,
     icon: Wallet,
-    tone: "text-info",
-    bar: "bg-info",
-    bgActive: "bg-info text-info-foreground",
+    tone: "text-primary",
+    bgActive: "bg-primary text-primary-foreground",
     ar: "المحفظة",
     en: "Wallet",
   },
@@ -85,17 +82,17 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
 
   return (
     <div className="relative mx-auto w-full max-w-lg select-none">
-      <div className="rounded-3xl border-2 border-[var(--border-strong)] bg-card p-3 shadow-[8px_8px_0_0_var(--shadow-brutal-color)] sm:p-4">
+      <div className="rounded-3xl border-2 border-[var(--border-strong)] bg-background p-3 shadow-[8px_8px_0_0_var(--shadow-brutal-color)] sm:p-4">
         <div className="hero-rise flex items-center gap-1.5 px-1 pb-3" style={stagger(0)}>
-          <span className="size-2.5 rounded-full bg-destructive/70" />
-          <span className="size-2.5 rounded-full bg-primary/70" />
-          <span className="size-2.5 rounded-full bg-success/70" />
-          <span className="ms-3 flex-1 truncate rounded-full border border-[var(--border-strong)]/40 bg-background px-3 py-1 text-[11px] text-muted-foreground">
+          <span className="size-2.5 rounded-full bg-primary" />
+          <span className="size-2.5 rounded-full bg-[var(--brand)]" />
+          <span className="size-2.5 rounded-full bg-[var(--accent-2)]" />
+          <span className="ms-3 flex-1 truncate rounded-full border border-[var(--border-strong)]/40 bg-card px-3 py-1 text-[11px] text-muted-foreground">
             academia.app/dashboard
           </span>
         </div>
 
-        <div className="space-y-4 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-4 sm:p-5">
+        <div className="space-y-4 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-4 sm:p-5">
           <div className="hero-rise flex items-center justify-between" style={stagger(1)}>
             <div className="flex items-center gap-2.5">
               <span className="flex size-10 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/15 text-sm font-bold text-primary">
@@ -143,20 +140,9 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   onClick={() => setTab(t.key)}
                   className={cn(
                     "relative overflow-hidden rounded-xl border-2 border-[var(--border-strong)] p-3 text-center transition-colors",
-                    active
-                      ? t.bgActive
-                      : "bg-secondary/40 text-muted-foreground hover:bg-secondary",
+                    active ? t.bgActive : "bg-background text-muted-foreground hover:bg-secondary",
                   )}
                 >
-                  {/* لمسة بصرية مخصّصة: شريط علوي بلون التبويب يظهر فقط حين يكون
-                      نشطًا — يميّز الحالة الفعّالة فعليًا لا بتغيير الخلفية وحدها. */}
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "absolute inset-x-0 top-0 h-1 transition-opacity",
-                      active ? t.bar : "opacity-0",
-                    )}
-                  />
                   <t.icon className={cn("mx-auto size-4", active ? "" : t.tone)} />
                   <div
                     className={cn(
@@ -193,20 +179,20 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   ) : (
                     <div
                       key={i}
-                      className="rounded-lg border-2 border-[var(--border-strong)] bg-primary/5 p-2.5"
+                      className="rounded-lg border-2 border-[var(--border-strong)] bg-card p-2.5 shadow-[3px_3px_0_0_var(--shadow-brutal-color)]"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-[var(--brand)] text-[var(--ink)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]">
                           <Clock className="size-4" />
                         </span>
                         <div className="flex-1 space-y-1.5">
                           <div
                             className={cn(
-                              "h-2 rounded-full bg-secondary",
+                              "h-2 rounded-full bg-[var(--ink)]/15",
                               i === 0 ? "w-3/4" : "w-3/5",
                             )}
                           />
-                          <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                          <div className="h-2 w-1/3 rounded-full bg-[var(--ink)]/10" />
                         </div>
                         <button
                           type="button"
@@ -218,10 +204,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                         </button>
                       </div>
                       {i === 0 && (
-                        <p className="mt-2 inline-flex items-center gap-1.5 ps-10 text-[10px] font-semibold text-primary">
+                        <p className="mt-2 inline-flex items-center gap-1.5 ps-10 text-[10px] font-bold text-[var(--accent-2-text)]">
                           <span className="relative flex size-1.5">
-                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
-                            <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
+                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--accent-2)] opacity-60" />
+                            <span className="relative inline-flex size-1.5 rounded-full bg-[var(--accent-2)]" />
                           </span>
                           {bi("المعلّم يراجع طلبك الآن", "The teacher is reviewing your request")}
                         </p>
@@ -248,10 +234,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                   ) : (
                     <div
                       key={i}
-                      className="rounded-lg border-2 border-[var(--border-strong)] bg-success/5 p-2.5"
+                      className="rounded-lg border-2 border-[var(--border-strong)] bg-card p-2.5 shadow-[3px_3px_0_0_var(--shadow-brutal-color)]"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/15 text-success">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-[var(--brand)] text-[var(--ink)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]">
                           {r.mode === "online" ? (
                             <Video className="size-4" />
                           ) : (
@@ -259,12 +245,12 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                           )}
                         </span>
                         <div className="flex-1 space-y-1.5">
-                          <div className={cn("h-2 rounded-full bg-secondary", r.w)} />
-                          <div className="h-2 w-1/3 rounded-full bg-secondary/70" />
+                          <div className={cn("h-2 rounded-full bg-[var(--ink)]/15", r.w)} />
+                          <div className="h-2 w-1/3 rounded-full bg-[var(--ink)]/10" />
                         </div>
                         {/* FR-S06/FR-S07: تمييز صريح أونلاين (رابط انضمام) من
                             وجاهي (موقع) — لا أيقونة فقط بلا فعل حقيقي. */}
-                        <span className="shrink-0 rounded-md bg-success/15 px-2 py-1 text-[9px] font-bold text-success">
+                        <span className="shrink-0 rounded-full border border-[var(--border-strong)] bg-card px-2 py-1 text-[9px] font-bold text-[var(--accent-2-text)]">
                           {r.mode === "online" ? bi("انضمام", "Join") : bi("الموقع", "Location")}
                         </span>
                       </div>
@@ -301,18 +287,18 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
 
             {tab === "wallet" && (
               <>
-                <div className="flex items-center justify-between rounded-lg border-2 border-[var(--border-strong)] bg-info/5 p-3">
+                <div className="flex items-center justify-between rounded-lg border-2 border-[var(--border-strong)] bg-card p-3 shadow-[3px_3px_0_0_var(--shadow-brutal-color)]">
                   <div>
                     <span className="text-xs font-bold text-foreground">
                       {bi("رصيدك الحالي", "Your balance")}
                     </span>
-                    <div className="mt-1.5 h-3 w-16 rounded-full bg-info/30" />
+                    <div className="mt-1.5 h-3 w-16 rounded-full bg-[var(--ink)]/20" />
                   </div>
                   {/* FR-W01: شحن المحفظة بتحويل وإيصال — إجراء حقيقي لا زخرفة. */}
                   <button
                     type="button"
                     onClick={() => setTopUpped(true)}
-                    className="flex items-center gap-1 rounded-lg border-2 border-[var(--border-strong)] bg-background px-2.5 py-1.5 text-[10px] font-bold text-info hover:bg-info/10"
+                    className="flex items-center gap-1 rounded-lg border-2 border-[var(--border-strong)] bg-[var(--brand)] px-2.5 py-1.5 text-[10px] font-bold text-[var(--ink)] hover:brightness-95"
                   >
                     <Plus className="size-3" />
                     {bi("شحن", "Top up")}
@@ -337,7 +323,10 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
                     </span>
                     <div className="flex-1 space-y-1.5">
                       <div
-                        className={cn("h-2 rounded-full bg-secondary", i === 0 ? "w-2/3" : "w-1/2")}
+                        className={cn(
+                          "h-2 rounded-full bg-[var(--ink)]/15",
+                          i === 0 ? "w-2/3" : "w-1/2",
+                        )}
                       />
                     </div>
                     <div className="h-2 w-10 rounded-full bg-secondary/70" />
@@ -353,7 +342,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         style={floatDelay("0.7s")}
         className="hero-float absolute -end-4 -top-5 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-end-8"
       >
-        <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-success/15 text-success">
+        <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-[var(--brand)] text-[var(--ink)]">
           <Video className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
@@ -365,7 +354,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         style={floatDelay("0.9s")}
         className="hero-float absolute -bottom-5 -start-4 flex items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] sm:-start-8"
       >
-        <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-primary/15 text-primary">
+        <span className="flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-[var(--brand)] text-[var(--ink)]">
           <Wallet className="size-3.5" />
         </span>
         <p className="text-[11px] font-bold text-foreground">
@@ -379,7 +368,7 @@ export function HeroMockup({ session }: { session?: PublicSession | null }) {
         style={floatDelay("1.1s")}
         className="hero-float absolute -end-6 top-[56%] hidden items-center gap-2 rounded-2xl border-2 border-[var(--border-strong)] bg-card px-3.5 py-2.5 shadow-[4px_4px_0_0_var(--shadow-brutal-color)] lg:flex xl:-end-10"
       >
-        <span className="relative flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-info/15 text-info">
+        <span className="relative flex size-7 items-center justify-center rounded-full border border-[var(--border-strong)]/40 bg-[var(--accent-2)] text-white">
           <Bell className="size-3.5" />
           <span
             aria-hidden

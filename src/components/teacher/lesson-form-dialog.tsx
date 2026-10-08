@@ -36,6 +36,8 @@ import { qk } from "@/lib/query-keys";
 import {
   LESSON_DURATION_MAX,
   LESSON_DURATION_MIN,
+  LESSON_TITLE_MAX,
+  LESSON_TITLE_MIN,
   canEditLesson,
   deriveLessonDay,
   emptyLessonValues,
@@ -53,7 +55,8 @@ export interface LessonFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   courseId: number;
-  groupId: number;
+  /** اختياري (Q-02b): الدرس يُنشأ بـcourseId وحده؛ مرّره فقط لو معروفًا. */
+  groupId?: number | null;
   /** حضوري/أونلاين — من بيانات الكورس عند الأب. */
   deliveryType: DeliveryType;
   /** موجود = تعديل درس، غايب = إنشاء. القيم تبنيها lessons-tab من صف الجدول (بعد JSON). */
@@ -146,7 +149,7 @@ export function LessonFormDialog({
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!editable) return;
-    const found = validateLessonForm(values, deliveryType);
+    const found = validateLessonForm(values, deliveryType, { editing: isEdit });
     setErrors(found);
     if (hasErrors(found)) return;
     save.mutate();
@@ -156,6 +159,11 @@ export function LessonFormDialog({
     switch (code) {
       case "title_required":
         return bi("موضوع الدرس مطلوب", "Lesson title is required");
+      case "title_length":
+        return bi(
+          `عنوان الدرس بين ${LESSON_TITLE_MIN} و${LESSON_TITLE_MAX} حرفًا`,
+          `The title must be ${LESSON_TITLE_MIN}–${LESSON_TITLE_MAX} characters`,
+        );
       case "date_invalid":
         return bi("التاريخ غير صالح", "Invalid date");
       case "time_invalid":
@@ -201,7 +209,12 @@ export function LessonFormDialog({
           </DialogTitle>
           <DialogDescription>
             {online
-              ? bi("درس أونلاين — أضف رابط الاجتماع.", "Online lesson — add the meeting link.")
+              ? isEdit
+                ? bi(
+                    "درس أونلاين — اترك المنصة والرابط فارغين للإبقاء على بيانات الاجتماع الحالية.",
+                    "Online lesson — leave platform and link empty to keep the current meeting details.",
+                  )
+                : bi("درس أونلاين — أضف رابط الاجتماع.", "Online lesson — add the meeting link.")
               : bi("درس حضوري.", "In-person lesson.")}
           </DialogDescription>
         </DialogHeader>

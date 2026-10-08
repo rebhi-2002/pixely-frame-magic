@@ -30,17 +30,22 @@ export function CookieConsent() {
       className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] mx-auto max-h-[calc(100dvh-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl border-2 border-[var(--border-strong)] bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-brutal)] md:inset-x-6 md:bottom-6 md:pb-4"
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
-          <Cookie className="size-4" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-foreground">{t("cookie.title")}</p>
-          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            {t("cookie.text")}{" "}
-            <Link to="/privacy" className="font-semibold text-primary hover:underline">
-              {t("cookie.more")}
-            </Link>
-          </p>
+        <div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row md:items-center md:gap-3">
+          <div className="flex items-center gap-3 md:contents">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-[var(--brand)] text-[var(--ink)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]">
+              <Cookie className="size-4" />
+            </span>
+            <p className="text-sm font-bold text-foreground md:hidden">{t("cookie.title")}</p>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="hidden text-sm font-bold text-foreground md:block">{t("cookie.title")}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              {t("cookie.text")}{" "}
+              <Link to="/privacy" className="font-semibold text-primary hover:underline">
+                {t("cookie.more")}
+              </Link>
+            </p>
+          </div>
         </div>
         <div className="flex shrink-0 gap-2">
           <button

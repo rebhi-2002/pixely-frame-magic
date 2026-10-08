@@ -28,8 +28,13 @@ export interface LessonFormValues {
   meetingInstructions: string;
 }
 
+/** حدود عنوان الدرس بالباك اند (LessonInputDto.Title). */
+export const LESSON_TITLE_MIN = 3;
+export const LESSON_TITLE_MAX = 250;
+
 export type LessonFormErrorCode =
   | "title_required"
+  | "title_length"
   | "date_invalid"
   | "time_invalid"
   | "duration_range"
@@ -76,10 +81,16 @@ function parseIntStrict(text: string): number | null {
 export function validateLessonForm(
   values: LessonFormValues,
   deliveryType: DeliveryType,
+  options: { editing?: boolean } = {},
 ): LessonFormErrors {
   const errors: LessonFormErrors = {};
 
-  if (!values.title.trim()) errors.title = "title_required";
+  const title = values.title.trim();
+  if (!title) errors.title = "title_required";
+  // الباك اند: [StringLength(250, MinimumLength = 3)] على Title.
+  else if (title.length < LESSON_TITLE_MIN || title.length > LESSON_TITLE_MAX) {
+    errors.title = "title_length";
+  }
 
   if (combineDateTime(values.scheduledDate, "00:00") === null)
     errors.scheduledDate = "date_invalid";
@@ -93,7 +104,10 @@ export function validateLessonForm(
   const order = parseIntStrict(values.orderIndex);
   if (order === null || order < 1) errors.orderIndex = "order_invalid";
 
-  if (deliveryType === DeliveryType.Online) {
+  // التعديل: الباك اند يترك بيانات الاجتماع كما هي لو أُرسلت null (Lesson/Update) → فارغان معًا مقبول.
+  const keepMeeting =
+    options.editing === true && !values.meetingPlatform.trim() && !values.meetingUrl.trim();
+  if (deliveryType === DeliveryType.Online && !keepMeeting) {
     const platform = parseIntStrict(values.meetingPlatform);
     if (platform === null || platform < MeetingPlatform.Zoom || platform > MeetingPlatform.Other) {
       errors.meetingPlatform = "platform_required";
@@ -131,14 +145,15 @@ export function canEditLesson(
 /** يبني جسم Lesson/Create أو Update. حقول الحضوري/الأونلاين بتتبع نوع التوصيل (الآخر null). */
 export function toLessonInput(
   values: LessonFormValues,
-  ids: { courseId: number; groupId: number; lessonId?: number },
+  ids: { courseId: number; groupId?: number | null; lessonId?: number },
   deliveryType: DeliveryType,
 ): LessonInput {
   const online = deliveryType === DeliveryType.Online;
   const platform = parseIntStrict(values.meetingPlatform);
   return {
     ...(ids.lessonId !== undefined ? { id: ids.lessonId } : {}),
-    groupId: ids.groupId,
+    // groupId اختياري (Q-02b): يُرسل فقط لو معروفًا ولا نخمّنه.
+    ...(typeof ids.groupId === "number" ? { groupId: ids.groupId } : {}),
     courseId: ids.courseId,
     title: values.title.trim(),
     scheduledDate: values.scheduledDate,
@@ -146,8 +161,28 @@ export function toLessonInput(
     durationMinutes: parseIntStrict(values.durationMinutes) ?? 0,
     orderIndex: parseIntStrict(values.orderIndex) ?? 0,
     meetingPlatform: online && platform !== null ? (platform as MeetingPlatform) : null,
-    meetingUrl: online ? values.meetingUrl.trim() : null,
+    // فاضي → null (يبقي الرابط الحالي عند التعديل ولا يخالف [Url] عند الإنشاء).
+    meetingUrl: online ? values.meetingUrl.trim() || null : null,
     meetingInstructions: online ? values.meetingInstructions.trim() || null : null,
     room: online ? null : values.room.trim() || null,
+  };
+}
+
+/**
+ * قيم نموذج التعديل من صف الجدول (LessonRow). الصف لا يحمل بيانات الاجتماع ولا القاعة → تُترك فارغة
+ * (Lesson/Update يبقي الاجتماع الحالي لو null، ولا يحدّث القاعة أصلًا). orderIndex يتجاهله Update.
+ */
+export function lessonRowToValues(
+  row: { topic: string; date: string; startTime: string; durationMinutes: number },
+  orderIndex: number,
+): LessonFormValues {
+  const dateOnly = /^(\d{4}-\d{2}-\d{2})/.exec(row.date)?.[1] ?? "";
+  const time = formatTime(row.startTime);
+  return {
+    ...emptyLessonValues(orderIndex),
+    title: row.topic,
+    scheduledDate: dateOnly,
+    startTime: time === "—" ? "" : time,
+    durationMinutes: String(row.durationMinutes > 0 ? row.durationMinutes : 60),
   };
 }
