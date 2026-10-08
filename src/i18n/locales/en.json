@@ -100,7 +100,8 @@
       }
     },
     "roles": {
-      "primaryBadge": "Primary role",
+      "titleA": "Student, parent, teacher — each one has",
+      "titleHl": "their place",
       "student": {
         "t": "Student",
         "d": "A dashboard with your upcoming sessions, bookings and wallet."
@@ -108,7 +109,8 @@
       "teacher": {
         "t": "Teacher",
         "d": "Manage your profile and availability, and track earnings and withdrawal requests.",
-        "cta": "See all teachers"
+        "cta": "See all teachers",
+        "browse": "Browse teacher profiles: specialty, availability, and stated price."
       },
       "parent": {
         "t": "Parent",
@@ -139,7 +141,8 @@
         "sub": "Users, permissions, courses and payments — from the admin dashboard."
       }
     },
-    "startTitle": "Your journey from search to rating",
+    "startTitleA": "Your journey",
+    "startTitleB": "from search to rating",
     "startSub": "A clear, step-by-step path from finding a teacher to finishing the session.",
     "startSteps": [
       {
@@ -171,7 +174,8 @@
         "text": "Rate your experience after the session ends."
       }
     ],
-    "freeTitle": "Start free — see Academia in action",
+    "freeTitleHl": "Start free",
+    "freeTitleRest": "— see Academia in action",
     "freeSub": "Creating an account and browsing teachers and courses is completely free.",
     "freeListTitle": "A free start includes:",
     "freeItems": [
@@ -181,7 +185,11 @@
       "A dashboard with your sessions and wallet",
       "Full Arabic and English interface"
     ],
-    "trustNote": "No bank card to start • Wallet payments by manual transfer • Designed Arabic-first"
+    "trustItems": [
+      "No bank card to start",
+      "Wallet payments by manual transfer",
+      "Designed Arabic-first"
+    ]
   },
   "howItWorks": {
     "meta": {
@@ -492,8 +500,7 @@
   "testimonials": {
     "badge": "Coming soon",
     "title": "Stories from students and teachers",
-    "sub": "We're still building the Academia community. Once our first users are in, real stories will show up right here.",
-    "placeholder": "Reviews from our students and teachers will appear here soon."
+    "sub": "We're still building the Academia community. Once our first users are in, real stories will show up right here."
   },
   "illustrations": {
     "chapter": "Chapter",
