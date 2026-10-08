@@ -26,7 +26,8 @@ const pick = (src, paths) => {
   return out;
 };
 const PATHS = [
-  "home.badge", "home.startTitle", "home.startSub", "home.startSteps", "home.ctaTitle", "home.ctaSub", "home.ctaButton",
+  "home.badge", "home.h1a", "home.h1b", "home.h1c", "home.sub", "home.statement", "home.roles", "home.features",
+  "home.startTitle", "home.startSub", "home.startSteps", "home.ctaTitle", "home.ctaSub", "home.ctaButton",
   "forTeachers.h1", "forTeachers.cta", "forTeachers.benefits",
   "nav.tagline",
 ];

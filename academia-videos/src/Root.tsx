@@ -1,6 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { BUMPER_FRAMES, LogoBumper } from "./LogoBumper";
+import { FILM_FPS, MarketingFilm, filmFrames } from "./film/Film";
 import { StudentJourney, journeyFrames } from "./StudentJourney";
 import { TeacherPitch, teacherFrames } from "./TeacherPitch";
 import { FPS, SITE_URL } from "./theme";
@@ -31,6 +32,7 @@ export const RemotionRoot: React.FC = () => (
         />
       </React.Fragment>
     ))}
+    <Composition id="MarketingFilm-ar" component={MarketingFilm} durationInFrames={filmFrames()} fps={FILM_FPS} width={1920} height={1080} />
     <Composition id="LogoBumper" component={LogoBumper} durationInFrames={BUMPER_FRAMES} fps={FPS} width={1080} height={1080} defaultProps={{ lang: "ar" as const }} />
   </>
 );

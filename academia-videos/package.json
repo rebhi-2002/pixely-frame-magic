@@ -12,18 +12,22 @@
     "render:teacher-ar": "remotion render src/index.ts TeacherPitch-ar out/teacher-pitch-ar.mp4",
     "render:teacher-en": "remotion render src/index.ts TeacherPitch-en out/teacher-pitch-en.mp4",
     "render:bumper": "remotion render src/index.ts LogoBumper out/logo-bumper.mp4",
-    "render:all": "npm run render:journey-ar && npm run render:journey-en && npm run render:teacher-ar && npm run render:teacher-en && npm run render:bumper",
-    "typecheck": "tsc --noEmit"
+    "render:all": "npm run render:film && npm run render:journey-ar && npm run render:journey-en && npm run render:teacher-ar && npm run render:teacher-en && npm run render:bumper",
+    "typecheck": "tsc --noEmit",
+    "render:film": "remotion render src/index.ts MarketingFilm-ar out/academia-film-ar.mp4"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.0",
-    "@remotion/google-fonts": "^4.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "remotion": "^4.0.0"
+    "@remotion/cli": "4.0.534",
+    "@remotion/google-fonts": "4.0.534",
+    "@remotion/sfx": "4.0.534",
+    "@remotion/transitions": "4.0.534",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.534"
   },
   "devDependencies": {
-    "@types/react": "^18.3.0",
+    "@types/react": "^19.3.0",
     "typescript": "^5.5.0"
   }
 }

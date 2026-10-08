@@ -14,3 +14,6 @@ export const C = {
 
 export const SITE_URL = "academia-platform.vercel.app"; // غيّره لما ينتقل الموقع لدومين مخصّص
 export const FPS = 30;
+
+/** حط ملف الموسيقى (ترخيصها عليك) بـpublic/audio/music.mp3 ثم اقلب هذا لـtrue. */
+export const HAS_MUSIC = false;
