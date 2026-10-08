@@ -155,5 +155,64 @@ export function dayOfWeekLabel(day: number | null | undefined, bi: Bi): string {
   }
 }
 
-// ملاحظة: RescheduleStatus (طلبات إعادة الجدولة 1..4) غير موثّق أسماؤه بـSwagger — يُضاف
-// بـWP-J (J-02) بعد وصول العينات. لا تخمّن أسماءه هون.
+// ------------------------------------------------------------ RescheduleStatus
+// RescheduleRequestStatus بالباك اند (كود الباك اند، القسم 7 بالـHANDOFF): 1 Pending · 2 Approved · 3 Rejected · 4 Cancelled.
+export const RescheduleStatus = { Pending: 1, Approved: 2, Rejected: 3, Cancelled: 4 } as const;
+export type RescheduleStatus = (typeof RescheduleStatus)[keyof typeof RescheduleStatus];
+
+export function rescheduleStatusLabel(status: number | null | undefined, bi: Bi): string {
+  switch (status) {
+    case RescheduleStatus.Pending:
+      return bi("بانتظار المعلم", "Awaiting teacher");
+    case RescheduleStatus.Approved:
+      return bi("تمت الموافقة", "Approved");
+    case RescheduleStatus.Rejected:
+      return bi("مرفوض", "Rejected");
+    case RescheduleStatus.Cancelled:
+      return bi("ملغى", "Cancelled");
+    default:
+      return "—";
+  }
+}
+
+export function rescheduleStatusTone(status: number | null | undefined): Tone {
+  switch (status) {
+    case RescheduleStatus.Approved:
+      return "success";
+    case RescheduleStatus.Rejected:
+    case RescheduleStatus.Cancelled:
+      return "danger";
+    case RescheduleStatus.Pending:
+      return "primary";
+    default:
+      return "muted";
+  }
+}
+
+// ----------------------------------------------------------- BookingPaymentStatus
+export const BookingPaymentStatus = { Unpaid: 1, Paid: 2, Refunded: 3 } as const;
+export type BookingPaymentStatus = (typeof BookingPaymentStatus)[keyof typeof BookingPaymentStatus];
+
+export function paymentStatusLabel(status: number | null | undefined, bi: Bi): string {
+  switch (status) {
+    case BookingPaymentStatus.Unpaid:
+      return bi("غير مدفوع", "Unpaid");
+    case BookingPaymentStatus.Paid:
+      return bi("مدفوع", "Paid");
+    case BookingPaymentStatus.Refunded:
+      return bi("مُسترجَع", "Refunded");
+    default:
+      return "—";
+  }
+}
+
+export function paymentStatusTone(status: number | null | undefined): Tone {
+  switch (status) {
+    case BookingPaymentStatus.Paid:
+      return "success";
+    case BookingPaymentStatus.Refunded:
+      return "primary";
+    default:
+      return "muted";
+  }
+}

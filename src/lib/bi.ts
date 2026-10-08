@@ -77,8 +77,8 @@ export function roleHome(name?: string | null, isAdmin = false): string {
 }
 
 /**
- * البند 9 — الروابط العامة المسموحة لكل دور بعد تسجيل الدخول.
- * لا نعرض رابطاً يؤدي إلى صفحة خارج مساحة الدور (سوق الكورسات للطالب فقط… إلخ).
+ * الروابط العامة المسموحة لكل دور — تُستعمل الآن لزر "تصفّح الكورسات" بالـHero فقط (الهيدر والفوتر وبطاقات الأدوار تعرض الصفحات العامة للجميع).
+
  */
 export const PUBLIC_NAV_FOR_ROLE: Record<RoleKey, readonly string[]> = {
   student: ["/", "/courses", "/teachers", "/how-it-works", "/blog"],
