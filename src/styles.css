@@ -27,13 +27,15 @@
   --font-display: var(--font-display-family);
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  /* سُلّم التدوير مضاعِف (مو جمع ثابت): مقبض --radius الواحد يقلّب كل الزوايا بنسبة،
+     فتبديل التصميم لاحقًا (حاد ↔ ناعم) ما بيحتاج لمس أي مكوّن. مع 0.125rem: lg=2px, 2xl≈3px. */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --radius-xl: calc(var(--radius) * 1.25);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.5);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -89,7 +91,7 @@
      كمرساة بصرية، وتمييزها بـLight Blue / Light Teal. */
 :root,
 :root[data-theme="dark"] {
-  --radius: 0.75rem;
+  --radius: 0.5rem; /* لوحة 14: صدأ + سماوي. مقبض واحد لكل الزوايا */
   --navy-950: #0b1e39; /* Academia Navy */
   --navy-900: #13284a; /* Deep Navy */
   --navy-800: #1e3a66; /* Navy Surface */
@@ -143,33 +145,47 @@
   --sidebar-accent-foreground: #f4f6f9;
   --sidebar-border: rgba(158, 193, 255, 0.2);
   --sidebar-ring: #5fe0c7;
+  /* توكنز الهوية المشتركة — مقروءة من text-highlight وأي شكل لاحق */
+  --ink: #0b1e39;
+  --ink-foreground: #f4f6f9;
+  --brand: #9ec1ff;
+  --accent-2: #0e8074;
+  --accent-2-text: #0e8074;
+  --hl-color: var(--foreground);
+  --hl-stroke: var(--brand);
+  --hl-bg: transparent;
+  --hl-border: 0 solid transparent;
+  --hl-shadow: none;
+  --hl-pad-x: 0.06em;
+  --hl-stroke-w: 0.085em;
+  --hl-radius: 0;
 }
 
 /* الوضع الفاتح (القسم 04 — التوكِنز الرسمية الكاملة) */
 :root[data-theme="light"] {
   /* تدفئة معتدلة (قرار 2026-09-28): كريمي هادئ لا رمادي بارد ولا كريمي فاقع —
      يحافظ على جدّية شاشات المحفظة والحجوزات مع إحساس Neo-Brutalism الدافئ. */
-  --paper-50: #f7f1e4;
-  --paper-100: #fffbf2;
-  --paper-200: #efe6d3;
+  --paper-50: #f6eee3;
+  --paper-100: #fffaf2;
+  --paper-200: #ede1cf;
   --background: var(--paper-50);
-  --foreground: #1f2937;
+  --foreground: #231813;
   --card: var(--paper-100);
-  --card-foreground: #1f2937;
+  --card-foreground: #231813;
   --popover: var(--paper-100);
-  --popover-foreground: #1f2937;
+  --popover-foreground: #231813;
   /* WCAG AA: كانت #d68e1e بنسبة تباين 2.71:1 (فاشلة)؛ عدّلناها لـ5.26:1 على أبيض
      مع الحفاظ على نفس العائلة اللونية (كهرماني/ذهبي) لهوية العلامة التجارية. */
-  --primary: #976006;
+  --primary: #a8431a; /* صدأ — نص الزر الأبيض 6.0:1 */
   --primary-foreground: #ffffff;
   --secondary: var(--paper-200);
-  --secondary-foreground: #1f2937;
+  --secondary-foreground: #231813;
   --muted: var(--paper-200);
-  --muted-foreground: #52606d;
-  --muted-3: #8a94a3;
+  --muted-foreground: #5c4b40;
+  --muted-3: #8f7e70;
   --accent: var(--paper-200);
-  --accent-foreground: #1f2937;
-  --destructive: #c9402a;
+  --accent-foreground: #231813;
+  --destructive: #b3213a;
   --destructive-foreground: #ffffff;
   /* WCAG AA: كانت #128f62 بنسبة 3.75-4.09:1 (فاشلة كنص عادي). عدّلناها لـ4.71-5.14:1. */
   --success: #0f7d55;
@@ -180,32 +196,47 @@
   --tools: #2f74bb;
   --tools-foreground: #ffffff;
   --section: var(--paper-200);
-  --section-foreground: #1f2937;
-  --border: rgba(15, 23, 42, 0.1);
-  --input: rgba(15, 23, 42, 0.16);
-  --ring: #d68e1e;
+  --section-foreground: #231813;
+  --border: rgba(35, 24, 19, 0.14);
+  --input: rgba(35, 24, 19, 0.18);
+  --ring: #a8431a;
   /* Neo-Brutalism الدافئ — حد وظل صلبان بلا ضبابية، أسود قريب لضمان تباين
      مريح على الخلفية الكريمية. */
-  --border-strong: rgba(31, 41, 55, 0.9);
+  --border-strong: #231813;
   --border-strong-width: 2px;
-  --shadow-brutal-color: rgba(31, 41, 55, 0.9);
+  --shadow-brutal-color: #231813;
   --shadow-brutal: 4px 4px 0 0 var(--shadow-brutal-color);
   --toast-warning: #b45309;
-  --highlight: #f6c04f;
-  --highlight-foreground: #1f2937;
-  --chart-1: #d68e1e;
+  --highlight: #f0b43c;
+  --highlight-foreground: #231813;
+  --chart-1: #a8431a;
   --chart-2: #128f62;
   --chart-3: #2f74bb;
   --chart-4: #c9402a;
   --chart-5: #7a4fbe;
   --sidebar: #0d1321;
   --sidebar-foreground: #f3f1ea;
-  --sidebar-primary: #f0a62e;
+  --sidebar-primary: #f0b43c;
   --sidebar-primary-foreground: #0a0f1c;
   --sidebar-accent: #1b2338;
   --sidebar-accent-foreground: #f3f1ea;
   --sidebar-border: rgba(180, 190, 210, 0.13);
-  --sidebar-ring: #f0a62e;
+  --sidebar-ring: #f0b43c;
+  /* ——— توكنز الهوية (اللوحة المختارة: كوبالت + أصفر) ——— */
+  --ink: #231813;
+  --ink-foreground: #f6eee3;
+  --brand: #f0b43c;
+  --accent-2: #2b6fa6;
+  --accent-2-text: #2b6fa6;
+  /* text-highlight: كلمة بلون الأساسي + ضربة ماركر أصفر شفافة */
+  --hl-color: #231813;
+  --hl-stroke: #f0b43c;
+  --hl-bg: transparent;
+  --hl-border: 0 solid transparent;
+  --hl-shadow: none;
+  --hl-pad-x: 0.06em;
+  --hl-stroke-w: 0.085em;
+  --hl-radius: 0;
 }
 
 /* القسم 06 + القسم 10 — احترام prefers-reduced-motion بشكل مستقل عن الثيم */
@@ -312,14 +343,39 @@
   -webkit-background-clip: text;
 }
 
-/* ——— تمييز "ماركر" بأسلوب Warm Neo-Brutalism: كتلة لون صلبة خلف الكلمة بحد 2px وظل
-   صلب بلا ضبابية (نفس لغة الأزرار والبطاقات)، بدل الخط السفلي الناعم القديم.
-   - اللون من توكنز الثيم: كهرماني دافئ بالفاتح، Light Teal بالأزرق الفاتح — والنص
-     داخله بلون حبر ثابت (--highlight-foreground) لأن الخلفية فاتحة بالثيمين (تباين >7:1).
-   - inline (مو inline-block) + box-decoration-break: clone: لو انقسمت الكلمة على
-     سطرين بالموبايل كل جزء بياخد حده وظله كاملين بدل ما يفيض أو ينقطع.
-   - بدون حركة: ثابت، ويتبع الاتجاه (padding-inline). ——— */
+/* ——— text-highlight: تمييز كلمة داخل العنوان ———
+   الشكل كله من توكنز --hl-* (انظر آخر كل ثيم أعلاه)، فتبديل التصميم لاحقًا = تغيير قيم التوكنز بس.
+   الافتراضي: كلمة بلون الهوية + ضربة ماركر نصف شفافة بثلث الخط السفلي.
+     data-tone="accent" → اللون الثاني      .text-highlight-box → الصندوق الصلب (حد + ظل)
+   inline + box-decoration-break: clone ليكسر بسلاسة بين سطرين بالموبايل. */
 @utility text-highlight {
+  /* أسلوب يحيى تك: الكلمة بلون النص، وتحتها خطّان بالقلم (الثاني أقصر) بنهايات متلاشية.
+     الشكل كله من --hl-color / --hl-stroke / --hl-stroke-w، فتبديل التصميم = تغيير القيم. */
+  color: var(--hl-color);
+  background-color: var(--hl-bg);
+  background-image:
+    linear-gradient(to right, transparent, var(--hl-stroke) 6%, var(--hl-stroke) 94%, transparent),
+    linear-gradient(to right, transparent, var(--hl-stroke) 8%, var(--hl-stroke) 92%, transparent);
+  background-size:
+    100% var(--hl-stroke-w),
+    64% calc(var(--hl-stroke-w) * 0.6);
+  background-position:
+    0 96%,
+    26% 100%;
+  background-repeat: no-repeat;
+  border: var(--hl-border);
+  border-radius: var(--hl-radius);
+  box-shadow: var(--hl-shadow);
+  padding-inline: var(--hl-pad-x);
+  padding-bottom: 0.16em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  &[data-tone="accent"] {
+    --hl-stroke: var(--accent-2);
+  }
+}
+
+@utility text-highlight-box {
   color: var(--highlight-foreground);
   background-color: var(--highlight);
   border: max(2px, 0.045em) solid var(--border-strong);
@@ -330,6 +386,54 @@
   margin-inline: 0.05em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+/* ═══ خلفيات الأقسام (Section Bands) — كلها مشتقة من التوكنز، فتتبدّل مع أي لوحة ═════════
+   إيقاع الصفحة: paper (بدون كلاس) ← band-hero ← band-sun ← band-sky ← scope-ink.
+   كل خلفية تُمزج مع --background بدل شفافية فوق الأساسي (كانت تعطي وردي/بنفسجي باهت). */
+@utility band-hero {
+  /* شكل لوحة 14 في المختبر: ورقة مسطّحة بلا توهّج؛ الحضور للشريط الثلاثي والنافذة. */
+  background-color: var(--background);
+}
+/* الشريط الثلاثي العلوي (ذهبي/أزرق/حبر) كما في معاينة المختبر. */
+@utility stripe-tri {
+  height: 4px;
+  background: linear-gradient(
+    to left,
+    var(--brand) 0 40%,
+    var(--accent-2) 40% 80%,
+    var(--stripe-end, var(--ink)) 80%
+  );
+}
+@utility band-sun {
+  background-color: color-mix(in oklab, var(--brand) 16%, var(--background));
+}
+@utility band-sky {
+  /* سماء صافية: الأزرق (accent-2) فوق الأبيض لا فوق الورق الدافئ — بالأخير يطلع رمادي بارد.
+     بالثيم الداكن يُمزج فوق الخلفية. */
+  background-color: color-mix(in oklab, var(--accent-2) 14%, white);
+  &:is(.dark *) {
+    background-color: color-mix(in oklab, var(--accent-2) 14%, var(--background));
+  }
+}
+/* نطاق داكن: يعيد تعريف التوكنز لأبنائه فيبقى كل نص/زر/تمييز مقروءًا بلا تعديل */
+@utility scope-ink {
+  --background: var(--ink);
+  --foreground: var(--ink-foreground);
+  --card: color-mix(in oklab, var(--ink) 88%, white);
+  --card-foreground: var(--ink-foreground);
+  --muted-foreground: color-mix(in oklab, var(--ink-foreground) 74%, var(--ink));
+  --border-strong: color-mix(in oklab, var(--ink-foreground) 55%, var(--ink));
+  --primary: var(--brand);
+  --primary-foreground: var(--ink);
+  --hl-color: var(--ink-foreground);
+  --hl-stroke: var(--brand);
+  /* ظل الأزرار والشريط الثلاثي بلون الورق فوق الخلفية الداكنة */
+  --shadow-brutal-color: var(--ink-foreground);
+  --shadow-brutal: 4px 4px 0 0 var(--ink-foreground);
+  --stripe-end: var(--ink-foreground);
+  background-color: var(--ink);
+  color: var(--ink-foreground);
 }
 
 /* ——— خلفية Mesh غنية لقسم الـ Hero — أعمق وأكثر حيوية من surface-grid ——— */

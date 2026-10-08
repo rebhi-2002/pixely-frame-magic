@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { PublicLayout } from "@/components/site/public-layout";
+import { PageHeader } from "@/components/site/page-header";
 import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, RetryButton } from "@/components/app/feedback-states";
 import { useSession } from "@/hooks/use-session";
@@ -39,33 +40,19 @@ export const Route = createFileRoute("/courses")({
   component: CoursesPage,
 });
 
-// شريط لوني علوي حسب المادة — يكسر تكرار البطاقات البيضاء المتطابقة،
-// ويعطي تصنيف بصري سريع. الغلاف تدرّج لوني + أول حرف (بدل صورة): الباك اند ما
-// عنده حقل صورة غلاف للكورس، وصور محلية بمسار id كانت رح تطابق كورسات مختلفة.
+// لون المادة من لوحة 14 (ذهبي/أزرق/صدئي) — ثابت للمادة نفسها (hash)، بلا معنى سوى
+// التمييز البصري. شريط علوي سميك + مربع بالحرف الأول؛ الباك اند ما عنده صورة غلاف
+// للكورس، فبلا غلاف فارغ يستهلك ربع البطاقة.
 const SUBJECT_ACCENTS = [
-  "bg-primary",
-  "bg-success",
-  "bg-info",
-  "bg-destructive/70",
-  "bg-secondary-foreground/60",
+  { border: "border-t-[var(--brand)]", tile: "bg-[var(--brand)] text-[var(--ink)]" },
+  { border: "border-t-[var(--accent-2)]", tile: "bg-[var(--accent-2)] text-white" },
+  { border: "border-t-primary", tile: "bg-primary text-primary-foreground" },
 ] as const;
 
 function subjectAccent(subject: string) {
   let hash = 0;
   for (let i = 0; i < subject.length; i++) hash = (hash * 31 + subject.charCodeAt(i)) >>> 0;
   return SUBJECT_ACCENTS[hash % SUBJECT_ACCENTS.length];
-}
-
-function CourseCover({ subject, accent }: { subject: string; accent: string }) {
-  return (
-    <div className={`flex h-28 w-full items-center justify-center ${accent}/15`}>
-      <span
-        className={`font-display text-3xl font-bold opacity-40 ${accent.replace("bg-", "text-")}`}
-      >
-        {subject ? subject.charAt(0) : "؟"}
-      </span>
-    </div>
-  );
 }
 
 function CoursesPage() {
@@ -111,67 +98,62 @@ function CoursesPage() {
 
   return (
     <PublicLayout>
-      <section className="border-b-2 border-[var(--border-strong)] bg-card">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <h1 className="text-4xl font-extrabold text-foreground md:text-5xl">{t("courses.h1")}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("courses.sub")}</p>
-
-          <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={t("courses.searchPlaceholder")}
-                aria-label={t("courses.searchPlaceholder")}
-                className="h-11 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
-              />
-            </div>
-            {subjects.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {["__all", ...subjects].map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setSubject(s)}
-                    className={cn(
-                      "rounded-lg border-2 px-3 py-2 text-xs font-semibold transition-colors",
-                      subject === s
-                        ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
-                        : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {s === "__all" ? t("courses.all") : s}
-                  </button>
-                ))}
-              </div>
-            )}
+      <PageHeader title={t("courses.h1")} sub={t("courses.sub")}>
+        <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("courses.searchPlaceholder")}
+              aria-label={t("courses.searchPlaceholder")}
+              className="h-11 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background ps-9 pe-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+            />
           </div>
-
-          {levels.length > 0 && (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-muted-foreground">
-                {t("courses.branchLabel")}
-              </span>
-              {["__all", ...levels].map((l) => (
+          {subjects.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {["__all", ...subjects].map((s) => (
                 <button
-                  key={l}
+                  key={s}
                   type="button"
-                  onClick={() => setLevel(l)}
+                  onClick={() => setSubject(s)}
                   className={cn(
-                    "rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-colors",
-                    level === l
-                      ? "border-[var(--border-strong)] bg-primary/12 text-primary"
+                    "rounded-lg border-2 px-3 py-2 text-xs font-semibold transition-colors",
+                    subject === s
+                      ? "border-[var(--border-strong)] bg-primary text-primary-foreground"
                       : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {l === "__all" ? t("courses.all") : l}
+                  {s === "__all" ? t("courses.all") : s}
                 </button>
               ))}
             </div>
           )}
         </div>
-      </section>
+
+        {levels.length > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground">
+              {t("courses.branchLabel")}
+            </span>
+            {["__all", ...levels].map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLevel(l)}
+                className={cn(
+                  "rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-colors",
+                  level === l
+                    ? "border-[var(--border-strong)] bg-primary/12 text-primary"
+                    : "border-[var(--border-strong)] bg-background text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {l === "__all" ? t("courses.all") : l}
+              </button>
+            ))}
+          </div>
+        )}
+      </PageHeader>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
         {isLoading ? (
@@ -226,9 +208,9 @@ function CoursesPage() {
           <div key={`${subject}-${level}-${filtered.length}`} className="panel-swap">
             {items.length === 0 ? (
               // لا يوجد أي كورس منشور بعد بكل الكتالوج — حالة مختلفة عن "لا نتائج
-              // لبحثك" تحت: صادقة وواضحة (بطاقة بحدود متقطّعة + أيقونة، بدون بيانات وهمية).
-              <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)]/60 bg-card p-10 text-center">
-                <span className="flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/10 text-primary">
+              // لبحثك" تحت: صادقة وواضحة (بطاقة بحدّ حبر + أيقونة ذهبية، بدون بيانات وهمية).
+              <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-10 text-center shadow-[var(--shadow-brutal)]">
+                <span className="flex size-12 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-[var(--brand)] text-[var(--ink)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]">
                   <Sparkles aria-hidden="true" className="size-6" />
                 </span>
                 <h2 className="text-base font-extrabold text-foreground">
@@ -239,7 +221,7 @@ function CoursesPage() {
                 </p>
               </div>
             ) : filtered.length === 0 ? (
-              <p className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-8 text-center text-sm text-muted-foreground">
+              <p className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-8 text-center text-sm text-muted-foreground shadow-[var(--shadow-brutal)]">
                 {t("courses.empty")}
               </p>
             ) : (
@@ -248,16 +230,28 @@ function CoursesPage() {
                   const subjectName = subjectOf(c);
                   const DeliveryIcon = DELIVERY_ICON[c.deliveryType] ?? Radio;
                   const deliveryLabel = DELIVERY_LABEL[c.deliveryType];
+                  const accent = subjectAccent(subjectName);
                   return (
                     <article
                       key={c.id}
-                      className="flex flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-strong)] bg-card shadow-[var(--shadow-brutal)]"
+                      className={cn(
+                        "flex flex-col rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]",
+                        accent.border,
+                      )}
                     >
-                      <CourseCover subject={subjectName} accent={subjectAccent(subjectName)} />
-                      <div className="flex flex-1 flex-col p-6">
-                        <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            "grid size-10 shrink-0 place-items-center rounded-xl border-2 border-[var(--border-strong)] font-display text-lg font-bold shadow-[2px_2px_0_0_var(--shadow-brutal-color)]",
+                            accent.tile,
+                          )}
+                        >
+                          {subjectName ? subjectName.charAt(0) : "؟"}
+                        </span>
+                        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1.5">
                           {subjectName && (
-                            <span className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary">
+                            <span className="rounded-full border-2 border-[var(--border-strong)] bg-background px-3 py-0.5 text-xs font-bold text-foreground">
                               {subjectName}
                             </span>
                           )}
@@ -266,61 +260,61 @@ function CoursesPage() {
                           )}
                         </div>
                         {deliveryLabel && (
-                          <div className="mt-2 flex items-center">
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
-                              <DeliveryIcon className="size-3.5" />
-                              {bi(...deliveryLabel)}
-                            </span>
-                          </div>
+                          <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                            <DeliveryIcon className="size-3.5" />
+                            {bi(...deliveryLabel)}
+                          </span>
                         )}
-                        <h3 className="mt-4">
-                          <Link
-                            to="/course/$id"
-                            params={{ id: String(c.id) }}
-                            className="block text-base font-extrabold text-foreground hover:text-primary"
-                          >
-                            {c.title}
-                          </Link>
-                        </h3>
-                        {c.description && (
-                          <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                            {c.description}
-                          </p>
-                        )}
+                      </div>
+                      <h3 className="mt-4">
+                        <Link
+                          to="/course/$id"
+                          params={{ id: String(c.id) }}
+                          className="block text-base font-extrabold text-foreground hover:text-primary"
+                        >
+                          {c.title}
+                        </Link>
+                      </h3>
+                      {c.description && (
+                        <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                          {c.description}
+                        </p>
+                      )}
 
-                        {c.tags && c.tags.length > 0 && (
-                          <div className="mt-3 flex flex-wrap gap-1.5">
-                            {c.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        <div className="mt-3 flex items-center gap-2.5">
-                          {/* صورة المعلم: CourseListItemDto ما فيه profileImage — الأيقونة البديلة
-                              أصدق من صورة محلية بمسار id قد تطابق معلمًا مختلفًا. */}
-                          <PhotoAvatar className="size-7" iconClassName="size-3.5" />
-                          <Link
-                            to="/teacher/$id"
-                            params={{ id: String(c.teacherId) }}
-                            className="text-sm font-semibold text-primary hover:underline"
-                          >
-                            {c.teacherName || bi("معلّم", "Teacher")}
-                          </Link>
-                          {typeof c.rating === "number" && (
-                            <span className="ms-auto inline-flex items-center gap-1 text-xs font-semibold text-foreground">
-                              <Star className="size-3.5 fill-primary text-primary" />
-                              {c.rating.toFixed(1)}
+                      {c.tags && c.tags.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {c.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-md bg-secondary px-2 py-0.5 text-micro font-medium text-secondary-foreground"
+                            >
+                              {tag}
                             </span>
-                          )}
+                          ))}
                         </div>
+                      )}
 
-                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+                      <div className="mt-3 flex items-center gap-2.5">
+                        {/* صورة المعلم: CourseListItemDto ما فيه profileImage — الأيقونة البديلة
+                            أصدق من صورة محلية بمسار id قد تطابق معلمًا مختلفًا. */}
+                        <PhotoAvatar className="size-7" iconClassName="size-3.5" />
+                        <Link
+                          to="/teacher/$id"
+                          params={{ id: String(c.teacherId) }}
+                          className="text-sm font-semibold text-primary hover:underline"
+                        >
+                          {c.teacherName || bi("معلّم", "Teacher")}
+                        </Link>
+                        {typeof c.rating === "number" && (
+                          <span className="ms-auto inline-flex items-center gap-1 text-xs font-semibold text-foreground">
+                            <Star className="size-3.5 fill-primary text-primary" />
+                            {c.rating.toFixed(1)}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-auto pt-4">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
                           {typeof c.lessonsCount === "number" && (
                             <span className="inline-flex items-center gap-1.5">
                               <BookOpen className="size-4" />
@@ -346,16 +340,17 @@ function CoursesPage() {
                               </span>
                             )
                           )}
-                          <span className="inline-flex items-center gap-1.5">
-                            <Wallet className="size-4 text-primary" />
-                            {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
-                          </span>
                         </div>
+                        {/* السعر المعلن = أهم معلومة للقرار، فيأخذ صفه ووزنه. */}
+                        <p className="mt-3 flex items-center gap-2 text-lg font-extrabold text-foreground">
+                          <Wallet aria-hidden="true" className="size-5 text-primary" />
+                          {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+                        </p>
                         <Link
                           to={isSignedIn ? "/my-courses" : "/signup"}
                           className={buttonVariants({
                             variant: "default",
-                            className: "mt-5 h-auto px-4 py-2.5 text-sm",
+                            className: "mt-4 h-auto w-full px-4 py-2.5 text-sm",
                           })}
                         >
                           {t(isSignedIn ? "courses.open" : "courses.enroll")}
