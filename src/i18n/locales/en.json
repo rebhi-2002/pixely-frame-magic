@@ -62,11 +62,11 @@
     "statement": {
       "title": "Clarity over quantity",
       "sub": "A clear teacher profile: experience, qualifications, prices and availability.",
-      "cta": "Meet our values"
+      "cta": "Our values"
     },
     "sub": "Browse teachers and courses, see their availability and prices, and follow your schedule and wallet from one place.",
     "ctaPrimary": "Start free",
-    "ctaSecondary": "See how you start",
+    "ctaSecondary": "See how to get started",
     "featuresTitle": "Everything you need to learn with a teacher",
     "featuresSub": "From finding a teacher to following attendance and results.",
     "features": {
@@ -197,8 +197,18 @@
       "description": "Simple steps: sign up and pick your role, browse teachers and courses, check availability, and follow your schedule and wallet."
     },
     "h1": "How does Academia work?",
+    "h1Hl": "Academia",
     "sub": "From your first sign-up, clear steps get you ready.",
     "cta": "Start now for free",
+    "details": [
+      "Search by teacher name, subject or grade, or browse the whole directory without a search term.",
+      "Filter by hourly price, rating, experience, language, available days and teaching mode (online or in-person).",
+      "Open the teacher's profile: qualifications, subjects, grades, prices, rating and availability.",
+      "Pick the mode, date, time and duration. The booking is confirmed by the teacher's approval, or automatically if the teacher enabled that for this slot. If the slot gets taken, we ask you to pick another.",
+      "The session fee is deducted from your wallet. If your balance is not enough, the booking stays unconfirmed and you're directed to top up your wallet.",
+      "Follow your upcoming sessions and each session's details: the meeting link for online, the location for in-person.",
+      "Your rating counts toward the teacher's average and appears on their profile."
+    ],
     "nextTitle": "What next?",
     "next": [
       "Top up your wallet by transfer and receipt; the admin reviews the request.",
@@ -259,24 +269,6 @@
     "examsSub": "For every exam: its title, date, the score your child got out of the full mark, and the teacher's feedback if any.",
     "readOnlyTitle": "Read-only — a guarantee, not a limit",
     "readOnlySub": "A parent account is deliberately view-only: you can't edit attendance, a result, or any academic record through it — only the teacher enters that data. This protects the accuracy of every number you see.",
-    "benefits": {
-      "report": {
-        "t": "Attendance and results, clearly",
-        "d": "Attendance rate, average exam score, and the session and result history in one report."
-      },
-      "privacy": {
-        "t": "Read-only access",
-        "d": "Parents follow but never change anything — the account is built for academic follow-up only."
-      },
-      "multiKids": {
-        "t": "More than one child, one account",
-        "d": "Link your children to one account and follow each one on their own dashboard."
-      },
-      "alerts": {
-        "t": "Real-time notifications",
-        "d": "A clear notification counter on your dashboard for every update about your child."
-      }
-    },
     "faq": [
       {
         "q": "Can I edit my child's data?",
@@ -329,10 +321,11 @@
         "d": "Turn on directory visibility so students can find you."
       }
     },
+    "benefitsTitle": "Your profile, availability and earnings",
     "faq": [
       {
         "q": "How do I get a teacher account?",
-        "a": "Sign up with the \"Start as a teacher\" button, fill in your basic details, then complete your professional profile from your dashboard."
+        "a": "Sign up with the \"Sign up as a teacher\" button, fill in your basic details, then complete your professional profile from your dashboard."
       },
       {
         "q": "How do I get paid?",
@@ -409,6 +402,7 @@
       "description": "How Academia collects, uses and protects your data, in plain language."
     },
     "h1": "Privacy Policy",
+    "h1Hl": "Privacy",
     "intro": "Initial draft pending final legal review — written in plain language because it's genuinely about you.",
     "sections": [
       {
@@ -425,7 +419,7 @@
       },
       {
         "t": "Data Security",
-        "d": "Passwords are stored hashed, and login sessions are protected with secure cookies. [TBD: update with any further security measure once actually added to the platform]"
+        "d": "Passwords are stored hashed. We protect sign-in sessions and end them automatically after two hours of inactivity. [TBD: update with any further security measure once actually added to the platform]"
       },
       {
         "t": "Minors' Data",
@@ -437,11 +431,11 @@
       },
       {
         "t": "Cookies",
-        "d": "Essential cookies are used for sign-in and saving your preferences (language, theme), with your consent via the site's cookie banner."
+        "d": "Essential cookies and your browser's local storage are used for sign-in and saving your preferences (language, theme), with your consent via the site's cookie banner."
       },
       {
         "t": "Contact Us",
-        "d": "[TBD: a dedicated email or contact point for privacy inquiries]"
+        "d": "For any privacy question, or to request a copy of your data or delete your account, write to support@academia.app or through the Contact page. [TBD: a dedicated email or contact point for privacy inquiries]"
       }
     ]
   },
