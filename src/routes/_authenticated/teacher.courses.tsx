@@ -40,7 +40,12 @@ function Body() {
   const lang = bi<"ar" | "en">("ar", "en");
   const query = useQuery({
     queryKey: qk.teacherCourses(),
-    queryFn: () => listMyCourses({ pageSize: PUBLISHED_PAGE_SIZE, sortColumn: "Id", sortColumnDirection: "desc" }),
+    queryFn: () =>
+      listMyCourses({
+        pageSize: PUBLISHED_PAGE_SIZE,
+        sortColumn: "Id",
+        sortColumnDirection: "desc",
+      }),
   });
   const rows = query.data ? sortCoursesForTeacher(query.data.data) : null;
 
@@ -77,11 +82,17 @@ function Body() {
               bi,
             )}
             action={
-              <RetryButton label={bi("إعادة المحاولة", "Try again")} onClick={() => void query.refetch()} />
+              <RetryButton
+                label={bi("إعادة المحاولة", "Try again")}
+                onClick={() => void query.refetch()}
+              />
             }
           />
         ) : !rows ? (
-          <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+          <LoadingState
+            label={bi("جارٍ التحميل…", "Loading…")}
+            className="border-none bg-transparent"
+          />
         ) : rows.length === 0 ? (
           <EmptyState
             icon="BookOpen"

@@ -70,24 +70,29 @@ export function GroupStudentsTab({ course }: GroupStudentsTabProps) {
       {query.isError ? (
         <ErrorState
           title={bi("ما قدرنا نحمّل الطلاب", "We couldn't load the students")}
-          description={withLoadErrorDetail(
-            bi("جرّب مرة ثانية.", "Try again."),
-            query.error,
-            bi,
-          )}
+          description={withLoadErrorDetail(bi("جرّب مرة ثانية.", "Try again."), query.error, bi)}
           action={
-            <RetryButton label={bi("إعادة المحاولة", "Try again")} onClick={() => void query.refetch()} />
+            <RetryButton
+              label={bi("إعادة المحاولة", "Try again")}
+              onClick={() => void query.refetch()}
+            />
           }
         />
       ) : !query.data ? (
-        <LoadingState label={bi("جارٍ التحميل…", "Loading…")} className="border-none bg-transparent" />
+        <LoadingState
+          label={bi("جارٍ التحميل…", "Loading…")}
+          className="border-none bg-transparent"
+        />
       ) : query.data.length === 0 ? (
         <EmptyState
           icon="Users"
           text={
             keyword
               ? bi("لا توجد نتائج مطابقة.", "No matching students.")
-              : bi("لا يوجد طلاب مسجّلون بالمجموعة بعد.", "No students are enrolled in this group yet.")
+              : bi(
+                  "لا يوجد طلاب مسجّلون بالمجموعة بعد.",
+                  "No students are enrolled in this group yet.",
+                )
           }
         />
       ) : (
