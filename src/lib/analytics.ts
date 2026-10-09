@@ -1,5 +1,10 @@
-import posthog from "posthog-js";
 import { env } from "@/lib/env";
+
+// أداء: posthog-js (مع core-js وغيره ≈100KB+) كان يدخل الحزمة الأولى لكل زائر. صار يُحمَّل ديناميكيًا
+// فقط بعد موافقة الكوكيز، فزائر الصفحة العامة الذي لم يوافق لا يحمّله أبدًا.
+type PostHog = typeof import("posthog-js").default;
+let posthog: PostHog | null = null;
+let initializing = false;
 
 const CONSENT_KEY = "academia.cookieConsent";
 let consentGranted = false;
@@ -15,23 +20,37 @@ function tryInitPosthog(): void {
   if (!consentGranted) return;
 
   // في حال كان معرّف سابقاً وتغيرت حالة الموافقة من الرفض إلى القبول
-  if (initialized) {
+  if (initialized && posthog) {
     if (posthog.has_opted_out_capturing()) {
       posthog.opt_in_capturing();
     }
     return;
   }
+  if (initializing) return;
 
   const key = env.POSTHOG_KEY;
   if (!key) return;
 
-  posthog.init(key, {
-    api_host: env.POSTHOG_HOST,
-    person_profiles: "identified_only",
-    capture_pageview: true,
-    capture_pageleave: true,
-  });
-  initialized = true;
+  initializing = true;
+  void import("posthog-js")
+    .then(({ default: client }) => {
+      // قد يسحب المستخدم موافقته أثناء التحميل
+      if (!consentGranted) return;
+      client.init(key, {
+        api_host: env.POSTHOG_HOST,
+        person_profiles: "identified_only",
+        capture_pageview: true,
+        capture_pageleave: true,
+      });
+      posthog = client;
+      initialized = true;
+    })
+    .catch(() => {
+      // فشل تحميل التحليلات لا يكسر الموقع
+    })
+    .finally(() => {
+      initializing = false;
+    });
 }
 
 export function initAnalytics(): void {
@@ -44,7 +63,7 @@ export function initAnalytics(): void {
       consentGranted = (e as CustomEvent<string>).detail === "accepted";
       if (consentGranted) {
         tryInitPosthog();
-      } else if (initialized) {
+      } else if (initialized && posthog) {
         posthog.opt_out_capturing();
       }
     });
@@ -65,19 +84,19 @@ export function trackEvent(name: AnalyticsEventName, props?: Record<string, unkn
   if (!consentGranted) return;
 
   if (env.DEV) console.info("[analytics]", name, props ?? {});
-  if (initialized) posthog.capture(name, props);
+  if (initialized && posthog) posthog.capture(name, props);
 }
 
 export function identifyUser(userId: string, traits?: Record<string, unknown>): void {
   if (!consentGranted) return;
 
   if (env.DEV) console.info("[analytics] identify", userId, traits ?? {});
-  if (initialized) posthog.identify(userId, traits);
+  if (initialized && posthog) posthog.identify(userId, traits);
 }
 
 export function resetAnalytics(): void {
   if (env.DEV) console.info("[analytics] reset");
-  if (initialized) posthog.reset();
+  if (initialized && posthog) posthog.reset();
 }
 
 // // تتبّع الاستخدام (Product analytics) عبر PostHog.
@@ -137,12 +156,12 @@ export function resetAnalytics(): void {
 //   if (!consentGranted) return;
 
 //   if (env.DEV) console.info("[analytics]", name, props ?? {});
-//   if (initialized) posthog.capture(name, props);
+//   if (initialized && posthog) posthog.capture(name, props);
 // }
 
 // export function identifyUser(userId: string, traits?: Record<string, unknown>): void {
 //   if (!consentGranted) return;
 
 //   if (env.DEV) console.info("[analytics] identify", userId, traits ?? {});
-//   if (initialized) posthog.identify(userId, traits);
+//   if (initialized && posthog) posthog.identify(userId, traits);
 // }

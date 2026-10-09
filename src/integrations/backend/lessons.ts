@@ -30,7 +30,8 @@ export interface LessonRow {
 export interface LessonInput {
   /** موجود = تعديل (Update)، غايب = إنشاء (Create). */
   id?: number;
-  groupId: number;
+  /** اختياري: Lesson/Create يكفيه courseId (GroupId/CourseId كلاهما nullable بالباك اند)؛ يُرسل فقط لو معروفًا. */
+  groupId?: number | null;
   courseId: number;
   title: string;
   /** "YYYY-MM-DD" (أو ISO). */

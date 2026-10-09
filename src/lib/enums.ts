@@ -216,3 +216,31 @@ export function paymentStatusTone(status: number | null | undefined): Tone {
       return "muted";
   }
 }
+
+// ----------------------------------------------------------------- CourseStatus
+export const CourseStatus = { Draft: 1, Published: 2, Archived: 3 } as const;
+export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus];
+
+export function courseStatusLabel(status: number | null | undefined, bi: Bi): string {
+  switch (status) {
+    case CourseStatus.Draft:
+      return bi("مسودة", "Draft");
+    case CourseStatus.Published:
+      return bi("منشور", "Published");
+    case CourseStatus.Archived:
+      return bi("مؤرشف", "Archived");
+    default:
+      return "—";
+  }
+}
+
+export function courseStatusTone(status: number | null | undefined): Tone {
+  switch (status) {
+    case CourseStatus.Published:
+      return "success";
+    case CourseStatus.Draft:
+      return "primary";
+    default:
+      return "muted";
+  }
+}
