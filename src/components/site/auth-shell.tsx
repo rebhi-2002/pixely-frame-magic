@@ -56,7 +56,7 @@ export function AuthShell({
           <div className="hidden lg:block">
             <h2 className="max-w-sm text-2xl font-extrabold leading-snug text-foreground">
               {bi(
-                "لاقِ المعلم المناسب وابدأ بثقة",
+                "اعثر على المعلم المناسب وابدأ بثقة",
                 "Find the right teacher and start with confidence",
               )}
             </h2>

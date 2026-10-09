@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,14 @@ export function PhotoAvatar({
   iconClassName,
 }: PhotoAvatarProps) {
   const [failed, setFailed] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // الصورة تُرسَم من الـSSR قبل ما يتركّب React، فيفوتها حدث onError. نفحصها
+  // عند التركيب: لو انتهى تحميلها بدون أبعاد (ملف غير موجود) → الأيقونة البديلة.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth === 0) setFailed(true);
+  }, [src]);
 
   if (failed || !src) {
     return (
@@ -43,6 +51,7 @@ export function PhotoAvatar({
 
   return (
     <img
+      ref={imgRef}
       src={src}
       alt={alt}
       onError={() => setFailed(true)}

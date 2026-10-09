@@ -22,8 +22,8 @@ export function FAQSection({ i18nKey, className }: { i18nKey: string; className?
     <section className={className}>
       <div className="mx-auto max-w-3xl px-5 py-16">
         <div className="text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-primary/12 px-4 py-1.5 text-sm font-bold text-primary">
-            <HelpCircle className="size-4" />
+          <span className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--border-strong)] bg-background px-4 py-1.5 text-sm font-bold text-foreground">
+            <HelpCircle className="size-4 text-primary" />
             {t("common.faqBadge")}
           </span>
           <h2 className="mt-4 text-2xl font-bold text-foreground sm:text-3xl">

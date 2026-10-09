@@ -27,7 +27,7 @@ export function CourseCatalogPage() {
     return (
       <AppPage title={bi("كتالوج الكورسات", "Course catalog")} icon="Store">
         <ErrorState
-          title={bi("ما قدرنا نحمّل الكورسات", "We couldn't load the courses")}
+          title={bi("تعذّر تحميل الكورسات", "We couldn't load the courses")}
           description={bi(
             "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
             "Try again. If the problem continues, check your connection or come back later.",

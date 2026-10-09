@@ -18,7 +18,7 @@ export function AttendanceRateCard() {
     <Panel title={bi("نسبة الحضور", "Attendance rate")} icon="CalendarCheck">
       {progress.isError ? (
         <ErrorState
-          title={bi("ما قدرنا نحمّل نسبة الحضور", "We couldn't load your attendance rate")}
+          title={bi("تعذّر تحميل نسبة الحضور", "We couldn't load your attendance rate")}
           description={withLoadErrorDetail(
             bi(
               "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

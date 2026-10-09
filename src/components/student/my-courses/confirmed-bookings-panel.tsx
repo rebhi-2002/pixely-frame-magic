@@ -21,7 +21,7 @@ export function ConfirmedBookingsPanel() {
     >
       {bookings.isError ? (
         <ErrorState
-          title={bi("ما قدرنا نحمّل كورساتك", "We couldn't load your courses")}
+          title={bi("تعذّر تحميل كورساتك", "We couldn't load your courses")}
           description={withLoadErrorDetail(
             bi(
               "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

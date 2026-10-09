@@ -11,8 +11,12 @@ export function CookieConsent() {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
+  // أداء: البانر نص كبير ظاهر فور الـhydration فكان هو عنصر LCP على الجوال (5.8s). نؤخّر إظهاره قليلًا
+  // كي يكون LCP هو عنوان الصفحة المرسوم من الـHTML. لا تتبّع قبل الموافقة أصلًا فالتأخير آمن.
   useEffect(() => {
-    if (!localStorage.getItem(CONSENT_KEY)) setVisible(true);
+    if (localStorage.getItem(CONSENT_KEY)) return;
+    const timer = window.setTimeout(() => setVisible(true), 3000);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const decide = (value: "accepted" | "declined") => {

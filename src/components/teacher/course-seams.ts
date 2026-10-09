@@ -1,5 +1,5 @@
 // «Seams» لبيانات الكورس غير الموثّقة بالـSwagger (WP-J / J-05 — Q-02/Q-03/Q-04).
-// كل دالة هون ترجّع «غير معروف» عمدًا، لأن TeacherCourseDetail = PendingResponse ولا نقرأ حقول ردود
+// الدوال هون ترجّع «غير معروف» عمدًا إلا resolveCourseDeliveryType (صار ممكنًا من DTO الباك اند)، لأن TeacherCourseDetail = PendingResponse ولا نقرأ حقول ردود
 // غير موثّقة (القاعدة: لا JSON مُخمَّن). عند وصول عينة GetMineById ينفّذ WP-J هالدوال فقط — ومكوّنات
 // T1/T2/T3/T4 (التي تستدعيها) ما بتتغيّر. ⛔ لا تضف هون منطقًا مخمَّنًا.
 
@@ -11,11 +11,12 @@ export function resolveGroupId(_course: TeacherCourseDetail | null | undefined):
   return null;
 }
 
-/** نوع توصيل الكورس (حضوري/أونلاين) من تفاصيله. null = غير معروف → عناوين محايدة. */
+/** نوع توصيل الكورس (حضوري/أونلاين) من CourseListItemDto.deliveryType (J-05). null = قيمة غير صالحة → عناوين محايدة. */
 export function resolveCourseDeliveryType(
-  _course: TeacherCourseDetail | null | undefined,
+  course: TeacherCourseDetail | null | undefined,
 ): DeliveryType | null {
-  return null;
+  const value = course?.deliveryType;
+  return value === 1 || value === 2 ? value : null;
 }
 
 /** الحد الأقصى الحالي للطلاب بالمجموعة لتعبئة النموذج عند التعديل. null = غير معروف. */
