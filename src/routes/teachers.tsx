@@ -16,13 +16,14 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
-import { PhotoAvatar } from "@/components/site/photo-avatar";
+import { PageHeader } from "@/components/site/page-header";
 import { ErrorState, RetryButton } from "@/components/app/feedback-states";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useBi } from "@/lib/bi";
+import { formatMoney } from "@/lib/format";
 import { searchTeachers, type TeacherProfileRow } from "@/integrations/backend/teachers";
 
 export const Route = createFileRoute("/teachers")({
@@ -43,6 +44,48 @@ function hourlyPrice(teacher: TeacherProfileRow, delivery: DeliveryFilter): numb
   return online ?? inPerson;
 }
 
+// لون المعلّم من لوحة 14 (ذهبي/أزرق/صدئي) — ثابت للمعلّم نفسه (hash على الاسم)، بلا معنى
+// سوى التمييز البصري. نفس منطق بطاقات الكورسات: شريط علوي سميك + بلاط الأفاتار.
+const TEACHER_ACCENTS = [
+  { border: "border-t-[var(--brand)]", tile: "bg-[var(--brand)] text-[var(--ink)]" },
+  { border: "border-t-[var(--accent-2)]", tile: "bg-[var(--accent-2)] text-white" },
+  { border: "border-t-primary", tile: "bg-primary text-primary-foreground" },
+] as const;
+
+function teacherAccent(key: string) {
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  return TEACHER_ACCENTS[hash % TEACHER_ACCENTS.length];
+}
+
+/** صورة المعلّم الحقيقية إن وُجدت، وإلا بلاط ملوّن بأول حرف من اسمه (بدون أي بيانات وهمية). */
+function TeacherAvatar({
+  src,
+  name,
+  tileClass,
+}: {
+  src?: string | null;
+  name: string;
+  tileClass: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const frame =
+    "size-14 shrink-0 rounded-2xl border-2 border-[var(--border-strong)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]";
+  if (failed || !src) {
+    return (
+      <span
+        aria-hidden="true"
+        className={cn("grid place-items-center font-display text-2xl font-bold", frame, tileClass)}
+      >
+        {name.trim().charAt(0) || "؟"}
+      </span>
+    );
+  }
+  return (
+    <img src={src} alt="" onError={() => setFailed(true)} className={cn("object-cover", frame)} />
+  );
+}
+
 function TeacherCard({
   teacher,
   delivery,
@@ -53,22 +96,20 @@ function TeacherCard({
   const { t } = useTranslation();
   const bi = useBi();
   const price = hourlyPrice(teacher, delivery);
+  const displayName = teacher.name || bi("معلّم", "Teacher");
+  const accent = teacherAccent(displayName);
 
   return (
     <article
       className={cn(
-        "flex flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]",
+        "flex flex-col rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]",
+        accent.border,
       )}
     >
       <div className="flex items-start gap-3">
-        <PhotoAvatar
-          src={teacher.profileImage}
-          className="size-14 rounded-2xl border-2 border-[var(--border-strong)]"
-        />
+        <TeacherAvatar src={teacher.profileImage} name={displayName} tileClass={accent.tile} />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-base font-bold text-foreground">
-            {teacher.name || bi("معلّم", "Teacher")}
-          </h3>
+          <h3 className="truncate text-base font-extrabold text-foreground">{displayName}</h3>
           {typeof teacher.averageRating === "number" && teacher.ratingCount > 0 ? (
             <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
               <Star className="size-3.5 fill-primary text-primary" />
@@ -94,7 +135,7 @@ function TeacherCard({
           {teacher.subjects.slice(0, 4).map((s) => (
             <span
               key={s}
-              className="rounded-lg border border-[var(--border-strong)]/40 bg-primary/12 px-2.5 py-1 text-xs font-semibold text-primary"
+              className="rounded-full border-2 border-[var(--border-strong)] bg-background px-3 py-0.5 text-xs font-bold text-foreground"
             >
               {s}
             </span>
@@ -104,41 +145,42 @@ function TeacherCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {teacher.supportsOnline && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
             <Radio className="size-3.5" />
             {bi("أونلاين", "Online")}
           </span>
         )}
         {teacher.supportsInPerson && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
             <MapPin className="size-3.5" />
             {bi("وجاهي", "In-person")}
           </span>
         )}
         {teacher.experienceYears > 0 && (
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2 py-1 text-micro font-semibold text-secondary-foreground">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
             <Award className="size-3.5" />
             {bi(`${teacher.experienceYears} سنة خبرة`, `${teacher.experienceYears} yrs experience`)}
           </span>
         )}
       </div>
 
-      <div className="mt-auto flex items-center justify-between pt-5">
-        {price != null ? (
-          <span className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
+      <div className="mt-auto pt-4">
+        {price != null && (
+          <p className="mb-3 inline-flex items-center gap-1.5 text-lg font-extrabold text-foreground">
             <Wallet className="size-4 text-primary" />
-            {price} JOD
+            {formatMoney(price, bi<"ar" | "en">("ar", "en"))}
             <span className="text-xs font-normal text-muted-foreground">
               {t("teachersDirectory.perHour")}
             </span>
-          </span>
-        ) : (
-          <span />
+          </p>
         )}
         <Link
           to="/teacher/$id"
           params={{ id: String(teacher.id) }}
-          className={buttonVariants({ variant: "default", className: "h-auto px-4 py-2 text-sm" })}
+          className={buttonVariants({
+            variant: "default",
+            className: "flex h-auto w-full px-4 py-2.5 text-sm",
+          })}
         >
           {t("teachersDirectory.viewProfile")}
         </Link>
@@ -270,15 +312,12 @@ function TeachersDirectoryPage() {
 
   return (
     <PublicLayout>
-      <section className="border-b-2 border-[var(--border-strong)] bg-card">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <h1 className="text-4xl font-extrabold text-foreground md:text-5xl">
-            {t("teachersDirectory.h1")}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            {t("teachersDirectory.sub")}
-          </p>
-
+      <PageHeader
+        title={t("teachersDirectory.h1")}
+        highlight={t("teachersDirectory.h1Hl")}
+        sub={t("teachersDirectory.sub")}
+      >
+        <div>
           <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -338,7 +377,7 @@ function TeachersDirectoryPage() {
             )}
           </div>
           {filtersOpen && (
-            <div className="mt-3 grid gap-4 rounded-2xl border-2 border-[var(--border-strong)] bg-background p-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-3 grid gap-5 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-5 shadow-[var(--shadow-brutal)] sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <label className="text-xs font-bold text-foreground">
                   {t("teachersDirectory.filters.priceLabel")}
@@ -441,7 +480,7 @@ function TeachersDirectoryPage() {
                   )}
                 </select>
               </div>
-              <div className="sm:col-span-2 lg:col-span-4">
+              <div>
                 <label className="text-xs font-bold text-foreground">
                   {t("teachersDirectory.filters.languageLabel")}
                 </label>
@@ -449,13 +488,13 @@ function TeachersDirectoryPage() {
                   value={languageInput}
                   onChange={(e) => changeLanguage(e.target.value)}
                   placeholder={t("teachersDirectory.filters.languagePlaceholder")}
-                  className="mt-1.5 h-10 w-full max-w-xs rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+                  className="mt-1.5 h-10 w-full rounded-lg border-2 border-[var(--border-strong)] bg-card px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
                 />
               </div>
             </div>
           )}
         </div>
-      </section>
+      </PageHeader>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
         {isLoading ? (
@@ -463,7 +502,7 @@ function TeachersDirectoryPage() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse space-y-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6"
+                className="animate-pulse space-y-3 rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] bg-card p-6"
               >
                 <div className="flex items-center gap-3">
                   <div className="size-14 rounded-2xl bg-secondary" />
@@ -484,9 +523,9 @@ function TeachersDirectoryPage() {
           // الخطأ بس لو ما عنا نتائج أصلًا نعرضها.
           <ErrorState
             className="mx-auto max-w-lg p-10"
-            title={bi("ما قدرنا نحمّل المعلمين", "Couldn't load teachers")}
+            title={bi("تعذّر تحميل المعلمين", "Couldn't load teachers")}
             description={bi(
-              "ممكن في مشكلة اتصال مؤقتة بالخادم. جرّب تاني بعد شوي.",
+              "ربما هناك مشكلة اتصال مؤقتة بالخادم. حاول مرة أخرى بعد قليل.",
               "There might be a temporary server connection issue. Please try again shortly.",
             )}
             action={
@@ -498,11 +537,11 @@ function TeachersDirectoryPage() {
             }
           />
         ) : teachers.length === 0 ? (
-          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[var(--border-strong)] bg-card p-10 text-center">
-            <span className="flex size-12 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-primary/10 text-primary">
+          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-10 text-center shadow-[var(--shadow-brutal)]">
+            <span className="flex size-12 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-[var(--brand)] text-[var(--ink)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]">
               <Sparkles aria-hidden="true" className="size-6" />
             </span>
-            <h2 className="text-base font-bold text-foreground">
+            <h2 className="text-base font-extrabold text-foreground">
               {isFiltering
                 ? t("teachersDirectory.empty")
                 : t("teachersDirectory.emptyDirectoryTitle")}

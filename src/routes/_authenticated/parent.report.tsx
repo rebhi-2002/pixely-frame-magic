@@ -71,7 +71,7 @@ function Body() {
     return (
       <AppPage title={bi("تقرير الابن", "Child report")} icon="FileBarChart">
         <ErrorState
-          title={bi("ما قدرنا نحمّل التقرير", "Couldn't load the report")}
+          title={bi("تعذّر تحميل التقرير", "Couldn't load the report")}
           description={bi(
             "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
             "Try again. If the problem continues, check your connection or come back later.",
@@ -314,7 +314,7 @@ function QueryFailure({ error, onRetry }: { error: unknown; onRetry: () => void 
   }
   return (
     <ErrorState
-      title={bi("ما قدرنا نحمّل البيانات", "Couldn't load the data")}
+      title={bi("تعذّر تحميل البيانات", "Couldn't load the data")}
       description={bi(
         "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
         "Try again. If the problem continues, check your connection or come back later.",

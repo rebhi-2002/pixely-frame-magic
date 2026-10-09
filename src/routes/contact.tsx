@@ -1,11 +1,13 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Clock, Headset, Mail, MessageSquareText, Send } from "lucide-react";
+import { Clock, Headset, Mail, Send } from "lucide-react";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
+import { PageHeader } from "@/components/site/page-header";
 import { PublicLayout } from "@/components/site/public-layout";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
   head: (ctx) => createSeoHead("/contact", localeFromSearch(ctx.match.search)),
@@ -13,6 +15,22 @@ export const Route = createFileRoute("/contact")({
 });
 
 const TOPIC_KEYS = ["student", "teacher", "school", "press", "other"] as const;
+
+/* دورة اللوحة 14: ذهبي / سماوي / صدأ */
+const TILES = [
+  "bg-[var(--brand)] text-[var(--ink)]",
+  "bg-[var(--accent-2)] text-white",
+  "bg-primary text-primary-foreground",
+] as const;
+const TOP_BORDERS = [
+  "border-t-[var(--brand)]",
+  "border-t-[var(--accent-2)]",
+  "border-t-primary",
+] as const;
+const TILE_FRAME =
+  "flex shrink-0 items-center justify-center border-2 border-[var(--border-strong)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]";
+const FIELD =
+  "w-full rounded-xl border-2 border-[var(--border-strong)] bg-background text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary";
 
 const schema = z.object({
   name: z.string().trim().min(2),
@@ -47,7 +65,7 @@ function ContactPage() {
     setSending(true);
     // الباك اند ما عنده endpoint للتواصل (لا Contact ولا Email بـSwagger) — فنفتح
     // تطبيق البريد عند المستخدم برسالة جاهزة بدل إرسال وهمي يوهمه إنها وصلت.
-    const subject = encodeURIComponent(`[${topic}] ${name}`);
+    const subject = encodeURIComponent(`[${t(`contact.form.topics.${topic}`)}] ${name}`);
     const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
     window.location.href = `mailto:support@academia.app?subject=${subject}&body=${body}`;
     setSending(false);
@@ -56,21 +74,13 @@ function ContactPage() {
 
   return (
     <PublicLayout>
-      <section className="border-b-2 border-[var(--border-strong)] bg-card">
-        <div className="mx-auto max-w-5xl px-5 py-16">
-          <span className="flex size-12 items-center justify-center rounded-2xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
-            <MessageSquareText className="size-6" />
-          </span>
-          <h1 className="mt-5 text-4xl font-extrabold text-foreground">{t("contact.h1")}</h1>
-          <p className="mt-3 max-w-xl text-lg text-muted-foreground">{t("contact.sub")}</p>
-        </div>
-      </section>
+      <PageHeader title={t("contact.h1")} highlight={t("contact.h1Hl")} sub={t("contact.sub")} />
 
-      <section className="mx-auto grid max-w-5xl gap-6 px-5 py-16 lg:grid-cols-[1.3fr_0.9fr]">
-        <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8">
+      <section className="mx-auto max-w-6xl px-5 py-14">
+        <div className="rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] border-t-primary bg-card p-6 shadow-[var(--shadow-brutal)] sm:p-8">
           {done ? (
             <div className="flex flex-col items-center py-10 text-center">
-              <span className="flex size-14 items-center justify-center rounded-full border-2 border-[var(--border-strong)] bg-success/12 text-success">
+              <span className={cn(TILE_FRAME, "size-14 rounded-2xl", TILES[0])}>
                 <Send className="size-6" />
               </span>
               <h2 className="mt-5 text-xl font-bold text-foreground">
@@ -97,79 +107,94 @@ function ContactPage() {
               </button>
             </div>
           ) : (
-            <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-semibold text-foreground"
-                  >
-                    {t("contact.form.name")}
-                  </label>
-                  <input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
-                  />
-                  {errors.name && <p className="mt-1.5 text-xs text-destructive">{errors.name}</p>}
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="grid gap-5 lg:grid-cols-2 lg:gap-8">
+                <div className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="mb-2 block text-sm font-semibold text-foreground"
+                    >
+                      {t("contact.form.name")}
+                    </label>
+                    <input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      aria-invalid={!!errors.name}
+                      className={cn(FIELD, "h-12 px-4")}
+                    />
+                    {errors.name && (
+                      <p role="alert" className="mt-1.5 text-xs text-destructive">
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-semibold text-foreground"
+                    >
+                      {t("contact.form.email")}
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      aria-invalid={!!errors.email}
+                      className={cn(FIELD, "h-12 px-4")}
+                    />
+                    {errors.email && (
+                      <p role="alert" className="mt-1.5 text-xs text-destructive">
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="topic"
+                      className="mb-2 block text-sm font-semibold text-foreground"
+                    >
+                      {t("contact.form.topic")}
+                    </label>
+                    <select
+                      id="topic"
+                      value={topic}
+                      onChange={(e) => setTopic(e.target.value as (typeof TOPIC_KEYS)[number])}
+                      className={cn(FIELD, "h-12 px-3")}
+                    >
+                      {TOPIC_KEYS.map((k) => (
+                        <option key={k} value={k}>
+                          {t(`contact.form.topics.${k}`)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                <div>
+
+                <div className="flex flex-col">
                   <label
-                    htmlFor="email"
+                    htmlFor="message"
                     className="mb-2 block text-sm font-semibold text-foreground"
                   >
-                    {t("contact.form.email")}
+                    {t("contact.form.message")}
                   </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
+                  <textarea
+                    id="message"
+                    rows={8}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={t("contact.form.messagePlaceholder")}
+                    aria-invalid={!!errors.message}
+                    className={cn(FIELD, "min-h-40 flex-1 resize-none p-4")}
                   />
-                  {errors.email && (
-                    <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
+                  {errors.message && (
+                    <p role="alert" className="mt-1.5 text-xs text-destructive">
+                      {errors.message}
+                    </p>
                   )}
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="topic" className="mb-2 block text-sm font-semibold text-foreground">
-                  {t("contact.form.topic")}
-                </label>
-                <select
-                  id="topic"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value as (typeof TOPIC_KEYS)[number])}
-                  className="h-12 w-full rounded-xl border-2 border-[var(--border-strong)] bg-background px-4 text-sm text-foreground outline-none focus:border-primary"
-                >
-                  {TOPIC_KEYS.map((k) => (
-                    <option key={k} value={k}>
-                      {t(`contact.form.topics.${k}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="mb-2 block text-sm font-semibold text-foreground"
-                >
-                  {t("contact.form.message")}
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder={t("contact.form.messagePlaceholder")}
-                  className="w-full resize-none rounded-xl border-2 border-[var(--border-strong)] bg-background p-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
-                />
-                {errors.message && (
-                  <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>
-                )}
               </div>
 
               <button
@@ -178,59 +203,70 @@ function ContactPage() {
                 className={buttonVariants({
                   variant: "default",
                   className:
-                    "h-auto w-full gap-2 px-6 py-3.5 text-sm disabled:opacity-60 sm:w-auto",
+                    "mt-6 h-auto w-full gap-2 px-8 py-3.5 text-sm disabled:opacity-60 sm:w-auto",
                 })}
               >
-                <Send className="size-4" />
+                <Send className="size-4 rtl:-scale-x-100" />
                 {sending ? t("contact.form.sending") : t("contact.form.submit")}
               </button>
             </form>
           )}
         </div>
+      </section>
 
-        <div className="space-y-4">
-          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
-              <Mail className="size-5" />
-            </span>
-            <h3 className="mt-3 text-sm font-bold text-foreground">
-              {t("contact.sidebar.emailTitle")}
-            </h3>
-            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.emailSub")}</p>
-            <a
-              href="mailto:support@academia.app"
-              className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
-              dir="ltr"
+      <section className="mx-auto max-w-6xl px-5 pb-16">
+        <h2 className="text-2xl font-extrabold text-foreground">{t("contact.otherTitle")}</h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {[
+            {
+              Icon: Mail,
+              title: t("contact.sidebar.emailTitle"),
+              sub: t("contact.sidebar.emailSub"),
+              action: (
+                <a
+                  href="mailto:support@academia.app"
+                  className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
+                  dir="ltr"
+                >
+                  support@academia.app
+                </a>
+              ),
+            },
+            {
+              Icon: Clock,
+              title: t("contact.sidebar.responseTitle"),
+              sub: t("contact.sidebar.responseSub"),
+              action: null,
+            },
+            {
+              Icon: Headset,
+              title: t("contact.sidebar.helpTitle"),
+              sub: t("contact.sidebar.helpSub"),
+              action: (
+                <Link
+                  to="/help"
+                  className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
+                >
+                  {t("contact.sidebar.helpCta")}
+                </Link>
+              ),
+            },
+          ].map(({ Icon, title, sub, action }, i) => (
+            <article
+              key={title}
+              className={cn(
+                "h-full rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]",
+                TOP_BORDERS[i % TOP_BORDERS.length],
+              )}
             >
-              support@academia.app
-            </a>
-          </div>
-
-          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-success/12 text-success">
-              <Clock className="size-5" />
-            </span>
-            <h3 className="mt-3 text-sm font-bold text-foreground">
-              {t("contact.sidebar.responseTitle")}
-            </h3>
-            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.responseSub")}</p>
-          </div>
-
-          <div className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
-            <span className="flex size-10 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] bg-info/12 text-info">
-              <Headset className="size-5" />
-            </span>
-            <h3 className="mt-3 text-sm font-bold text-foreground">
-              {t("contact.sidebar.helpTitle")}
-            </h3>
-            <p className="mt-1 text-xs text-muted-foreground">{t("contact.sidebar.helpSub")}</p>
-            <Link
-              to="/help"
-              className="mt-3 inline-block text-sm font-bold text-primary hover:underline"
-            >
-              {t("contact.sidebar.helpCta")}
-            </Link>
-          </div>
+              <span className={cn(TILE_FRAME, "size-11 rounded-xl", TILES[i % TILES.length])}>
+                <Icon className="size-5" />
+              </span>
+              <h3 className="mt-4 font-bold text-foreground">{title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{sub}</p>
+              {action}
+            </article>
+          ))}
         </div>
       </section>
     </PublicLayout>

@@ -9,6 +9,7 @@ import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { SessionCta } from "@/components/site/session-cta";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { useBi } from "@/lib/bi";
+import { formatMoney } from "@/lib/format";
 import { useSession } from "@/hooks/use-session";
 import { BOOKING_FLOW_ENABLED } from "@/lib/booking-slots";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -142,9 +143,9 @@ function TeacherProfilePage() {
       <PublicLayout>
         <div className="mx-auto max-w-lg px-5 py-24">
           <ErrorState
-            title={bi("ما قدرنا نحمّل الصفحة", "Couldn't load this page")}
+            title={bi("تعذّر تحميل الصفحة", "Couldn't load this page")}
             description={bi(
-              "ممكن في مشكلة اتصال مؤقتة. جرّب تاني بعد شوي.",
+              "ربما هناك مشكلة اتصال مؤقتة. حاول مرة أخرى بعد قليل.",
               "There might be a temporary connection issue. Please try again shortly.",
             )}
             action={
@@ -323,12 +324,14 @@ function TeacherProfilePage() {
                 <dd className="mt-1 space-y-0.5 text-sm text-foreground">
                   {teacher.hourlyPriceOnline != null && (
                     <p>
-                      {bi("أونلاين", "Online")}: {teacher.hourlyPriceOnline} JOD
+                      {bi("أونلاين", "Online")}:{" "}
+                      {formatMoney(teacher.hourlyPriceOnline, bi<"ar" | "en">("ar", "en"))}
                     </p>
                   )}
                   {teacher.hourlyPriceInPerson != null && (
                     <p>
-                      {bi("وجاهي", "In-person")}: {teacher.hourlyPriceInPerson} JOD
+                      {bi("وجاهي", "In-person")}:{" "}
+                      {formatMoney(teacher.hourlyPriceInPerson, bi<"ar" | "en">("ar", "en"))}
                     </p>
                   )}
                 </dd>
@@ -395,8 +398,8 @@ function TeacherProfilePage() {
         ) : coursesError && courses.length === 0 ? (
           <ErrorState
             className="mt-6 min-h-24"
-            title={bi("ما قدرنا نحمّل الكورسات", "Couldn't load courses")}
-            description={bi("جرّب تاني بعد شوي.", "Please try again shortly.")}
+            title={bi("تعذّر تحميل الكورسات", "Couldn't load courses")}
+            description={bi("حاول مرة أخرى بعد قليل.", "Please try again shortly.")}
             action={
               <RetryButton
                 label={bi("إعادة المحاولة", "Retry")}
@@ -408,7 +411,7 @@ function TeacherProfilePage() {
         ) : courses.length === 0 ? (
           <p className="mt-6 rounded-2xl border-2 border-dashed border-[var(--border-strong)]/60 bg-card p-6 text-center text-sm text-muted-foreground">
             {bi(
-              "ما في كورسات منشورة لهذا المعلّم بعد.",
+              "لا توجد كورسات منشورة لهذا المعلّم بعد.",
               "No published courses from this teacher yet.",
             )}
           </p>
@@ -439,7 +442,9 @@ function TeacherProfilePage() {
                   </p>
                 )}
                 <p className="mt-2 text-sm font-semibold text-foreground">
-                  {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+                  {c.price === 0
+                    ? t("courses.free")
+                    : formatMoney(c.price, bi<"ar" | "en">("ar", "en"))}
                 </p>
               </article>
             ))}

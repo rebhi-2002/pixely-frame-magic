@@ -44,7 +44,7 @@ function Body() {
     >
       {query.isError ? (
         <ErrorState
-          title={bi("ما قدرنا نحمّل تقدمك", "We couldn't load your progress")}
+          title={bi("تعذّر تحميل تقدمك", "We couldn't load your progress")}
           description={withLoadErrorDetail(
             bi(
               "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

@@ -1,34 +1,12 @@
 import { createSeoHead, localeFromSearch } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
-import { PublicLayout } from "@/components/site/public-layout";
+import { LegalPage } from "@/components/site/legal-page";
 
 export const Route = createFileRoute("/privacy")({
   head: (ctx) => createSeoHead("/privacy", localeFromSearch(ctx.match.search)),
-  component: LegalPage,
+  component: PrivacyPage,
 });
 
-function LegalPage() {
-  const { t } = useTranslation();
-  const sections = t("privacy.sections", { returnObjects: true }) as { t: string; d: string }[];
-
-  return (
-    <PublicLayout>
-      <section className="mx-auto max-w-3xl px-5 py-16">
-        <h1 className="text-4xl font-extrabold text-foreground">{t("privacy.h1")}</h1>
-        <p className="mt-3 text-muted-foreground">{t("privacy.intro")}</p>
-        <div className="mt-10 space-y-5">
-          {sections.map((s) => (
-            <section
-              key={s.t}
-              className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
-            >
-              <h2 className="text-lg font-extrabold text-foreground">{s.t}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-            </section>
-          ))}
-        </div>
-      </section>
-    </PublicLayout>
-  );
+function PrivacyPage() {
+  return <LegalPage ns="privacy" />;
 }

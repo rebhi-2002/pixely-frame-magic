@@ -148,7 +148,7 @@ function TeacherEarningsPage() {
           </p>
           {creditsQuery.isError ? (
             <ErrorState
-              title={bi("ما قدرنا نحمّل الإيداعات", "Couldn't load earnings credits")}
+              title={bi("تعذّر تحميل الإيداعات", "Couldn't load earnings credits")}
               description={withLoadErrorDetail(
                 bi(
                   "جرّب مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

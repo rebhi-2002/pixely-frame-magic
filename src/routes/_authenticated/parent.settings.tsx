@@ -45,7 +45,7 @@ function Body() {
     return (
       <AppPage title={bi("إعدادات ولي الأمر", "Parent settings")} icon="Settings">
         <ErrorState
-          title={bi("ما قدرنا نحمّل الصفحة", "We couldn't load the page")}
+          title={bi("تعذّر تحميل الصفحة", "We couldn't load the page")}
           description={bi(
             "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
             "Try again. If the problem continues, check your connection or come back later.",

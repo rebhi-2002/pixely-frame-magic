@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PublicLayout } from "@/components/site/public-layout";
+import { PageHeader } from "@/components/site/page-header";
 import { SessionCta } from "@/components/site/session-cta";
 import { FAQSection } from "@/components/site/faq-section";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
@@ -38,6 +39,13 @@ const benefits = [
   { icon: UserSearch, key: "verified" },
 ] as const;
 
+// بلاط الأيقونات من لوحة 14 (ذهبي/أزرق/صدئي) بالتناوب — تمييز بصري فقط.
+const TILES = [
+  "bg-[var(--brand)] text-[var(--ink)]",
+  "bg-[var(--accent-2)] text-white",
+  "bg-primary text-primary-foreground",
+] as const;
+
 const courseIcons = [Users, Video, CalendarDays, ClipboardCheck, Star] as const;
 
 function ForTeachers() {
@@ -49,31 +57,28 @@ function ForTeachers() {
 
   return (
     <PublicLayout>
-      <section className="border-b-2 border-[var(--border-strong)] bg-card">
-        {" "}
-        <div className="mx-auto max-w-5xl px-5 py-20">
-          <h1 className="max-w-2xl text-4xl font-extrabold leading-tight text-foreground sm:text-5xl">
-            {t("forTeachers.h1")}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("forTeachers.sub")}</p>
-          <SessionCta
-            to="/signup"
-            label={t("forTeachers.cta")}
-            className={buttonVariants({
-              variant: "default",
-              className: "mt-8 h-auto px-7 py-3.5 text-sm",
-            })}
-          />
-        </div>
-      </section>
+      <PageHeader
+        title={t("forTeachers.h1")}
+        highlight={t("forTeachers.h1b")}
+        sub={t("forTeachers.sub")}
+      >
+        <SessionCta
+          to="/signup"
+          label={t("forTeachers.cta")}
+          className={buttonVariants({
+            variant: "default",
+            className: "mt-8 h-auto px-7 py-3.5 text-sm",
+          })}
+        />
+      </PageHeader>
 
       {/* إدارة الكورسات والجدول — FR-I01 إلى FR-I11 وFR-T09/FR-T10، غير
           ممثَّلة إطلاقًا سابقًا رغم كونها جوهر عمل المعلّم اليومي. */}
-      <section className="mx-auto max-w-4xl px-5 py-16">
+      <section className="mx-auto max-w-6xl px-5 py-16">
         <h2 className="text-2xl font-extrabold text-foreground">{t("forTeachers.coursesTitle")}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t("forTeachers.coursesSub")}</p>
 
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {courseItems.map((item, i) => {
             const Icon = courseIcons[i];
             return (
@@ -81,12 +86,17 @@ function ForTeachers() {
                 key={item.t}
                 className="flex items-start gap-3 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-5 shadow-[var(--shadow-brutal)]"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border-2 border-[var(--border-strong)] bg-primary/12 text-primary">
-                  <Icon className="size-4" />
+                <span
+                  className={cn(
+                    "flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-[var(--border-strong)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]",
+                    TILES[i % TILES.length],
+                  )}
+                >
+                  <Icon className="size-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-foreground">{item.t}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.d}</p>
+                  <p className="text-sm font-extrabold text-foreground">{item.t}</p>
+                  <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{item.d}</p>
                 </div>
               </li>
             );
@@ -94,29 +104,36 @@ function ForTeachers() {
         </ul>
       </section>
 
-      <section className="mx-auto max-w-4xl px-5 py-16">
-        <div className="space-y-3">
-          {benefits.map((b, i) => (
-            <div
-              key={b.key}
-              className={cn(
-                "flex flex-col items-start gap-5 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)] sm:flex-row sm:items-center",
-                i % 2 === 1 && "sm:flex-row-reverse",
-              )}
-            >
-              <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl border-2 border-[var(--border-strong)] bg-success/12 text-success">
-                <b.icon className="size-6" />
-              </span>
-              <div className={cn(i % 2 === 1 && "sm:text-end")}>
-                <h3 className="text-lg font-extrabold text-foreground">
-                  {t(`forTeachers.benefits.${b.key}.t`)}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                  {t(`forTeachers.benefits.${b.key}.d`)}
-                </p>
+      <section className="band-sky border-t-2 border-[var(--border-strong)]">
+        <div className="mx-auto max-w-6xl px-5 py-16">
+          <h2 className="text-2xl font-extrabold text-foreground">
+            {t("forTeachers.benefitsTitle")}
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {benefits.map((b, i) => (
+              <div
+                key={b.key}
+                className="flex flex-col items-start gap-4 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]"
+              >
+                <span
+                  className={cn(
+                    "flex size-14 shrink-0 items-center justify-center rounded-2xl border-2 border-[var(--border-strong)] shadow-[2px_2px_0_0_var(--shadow-brutal-color)]",
+                    TILES[i % TILES.length],
+                  )}
+                >
+                  <b.icon className="size-6" />
+                </span>
+                <div>
+                  <h3 className="text-lg font-extrabold text-foreground">
+                    {t(`forTeachers.benefits.${b.key}.t`)}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {t(`forTeachers.benefits.${b.key}.d`)}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

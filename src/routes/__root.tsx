@@ -17,6 +17,13 @@ import {
 } from "@/components/providers/preferences-provider";
 
 import appCss from "../styles.css?url";
+
+// أداء: ملف خطوط Google كان <link rel="stylesheet"> يحجب أول رسم (≈750ms على 4G بطيء).
+// الآن يُحقن بسكربت صغير (الروابط المحقونة بالسكربت لا تحجب الرسم) مع <noscript> احتياطي،
+// والـdisplay=swap يُظهر النص فورًا بخط النظام ثم يبدّل.
+const FONTS_HREF =
+  "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap";
+const fontsLoaderScript = `(function(){var l=document.createElement("link");l.rel="stylesheet";l.href=${JSON.stringify(FONTS_HREF)};document.head.appendChild(l);})();`;
 import { AUTH_EVENT } from "@/integrations/backend/auth";
 import { IdleLogoutWatcher } from "@/hooks/use-idle-logout";
 import { CookieConsent } from "@/components/site/cookie-consent";
@@ -109,10 +116,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "stylesheet", href: appCss },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Poppins:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
-        },
 
         { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
         { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
@@ -134,6 +137,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         {/* القسم 06 — تطبيق الثيم/اللغة المحفوظين قبل الرسم لتفادي الوميض */}
         <script dangerouslySetInnerHTML={{ __html: preferencesBootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: fontsLoaderScript }} />
+        <noscript>
+          <link rel="stylesheet" href={FONTS_HREF} />
+        </noscript>
       </head>
       <body>
         {children}

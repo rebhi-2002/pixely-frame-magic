@@ -9,6 +9,7 @@ import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, LoadingState, RetryButton } from "@/components/app/feedback-states";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
+import { formatMoney } from "@/lib/format";
 import { getPublishedCourse, type BackendCourseDeliveryType } from "@/integrations/backend/courses";
 
 export const Route = createFileRoute("/course/$id")({
@@ -89,9 +90,9 @@ function CourseDetailPage() {
       <PublicLayout>
         <div className="mx-auto max-w-lg px-5 py-24">
           <ErrorState
-            title={bi("ما قدرنا نحمّل الصفحة", "Couldn't load this page")}
+            title={bi("تعذّر تحميل الصفحة", "Couldn't load this page")}
             description={bi(
-              "ممكن في مشكلة اتصال مؤقتة. جرّب تاني بعد شوي.",
+              "ربما هناك مشكلة اتصال مؤقتة. حاول مرة أخرى بعد قليل.",
               "There might be a temporary connection issue. Please try again shortly.",
             )}
             action={
@@ -203,7 +204,9 @@ function CourseDetailPage() {
           <aside className="h-fit rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 shadow-[var(--shadow-brutal)]">
             <p className="inline-flex items-center gap-1.5 text-2xl font-bold text-foreground">
               <Wallet className="size-5 text-primary" />
-              {course.price === 0 ? t("courses.free") : `${course.price} JOD`}
+              {course.price === 0
+                ? t("courses.free")
+                : formatMoney(course.price, bi<"ar" | "en">("ar", "en"))}
             </p>
             <Link
               to={isSignedIn ? "/my-courses" : "/signup"}

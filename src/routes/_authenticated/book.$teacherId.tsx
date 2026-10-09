@@ -161,7 +161,7 @@ function Body() {
     return (
       <AppPage title={title} icon="CalendarClock">
         <ErrorState
-          title={bi("ما قدرنا نحمّل بيانات المعلم", "We couldn't load the teacher's details")}
+          title={bi("تعذّر تحميل بيانات المعلم", "We couldn't load the teacher's details")}
           description={bi(
             "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
             "Try again. If the problem continues, check your connection or come back later.",

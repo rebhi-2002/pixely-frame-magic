@@ -72,7 +72,7 @@ function Body() {
     return (
       <AppPage title={bi("الإشعارات", "Notifications")} icon="Bell">
         <ErrorState
-          title={bi("ما قدرنا نحمّل الإشعارات", "We couldn't load your notifications")}
+          title={bi("تعذّر تحميل الإشعارات", "We couldn't load your notifications")}
           description={bi(
             "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",
             "Try again. If the problem continues, check your connection or come back later.",

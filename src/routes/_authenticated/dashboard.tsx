@@ -50,7 +50,7 @@ function Body() {
     return (
       <AppPage title={bi("لوحة الطالب", "Student dashboard")} icon="LayoutDashboard">
         <ErrorState
-          title={bi("ما قدرنا نحمّل اللوحة", "We couldn't load the dashboard")}
+          title={bi("تعذّر تحميل اللوحة", "We couldn't load the dashboard")}
           description={withLoadErrorDetail(
             bi(
               "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

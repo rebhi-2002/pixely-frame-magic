@@ -9,6 +9,7 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { usePreferences } from "@/hooks/use-preferences";
 import { blogPosts, getBlogPost } from "@/content/blog-posts";
 import { useBi } from "@/lib/bi";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/blog/$slug")({
   head: (ctx) => {
@@ -58,37 +59,43 @@ function BlogPostPage() {
 
   return (
     <PublicLayout>
-      <article className="mx-auto max-w-2xl px-5 py-14">
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-primary"
-        >
-          <ArrowRight className="size-4 rtl:rotate-180" />
-          {t("blog.backToBlog")}
-        </Link>
+      {/* رأس المقال: ورق مسطّح + الشريط الثلاثي (نفس لغة بقية الصفحات)، وعمود القراءة تحته. */}
+      <header className="band-hero relative border-b-2 border-[var(--border-strong)]">
+        <div aria-hidden className="stripe-tri" />
+        <div className="mx-auto max-w-2xl px-5 py-12">
+          <Link
+            to="/blog"
+            className="flex w-fit items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-primary"
+          >
+            <ArrowRight className="size-4 rtl:rotate-180" />
+            {t("blog.backToBlog")}
+          </Link>
 
-        <span className="mt-6 inline-block w-fit rounded-full border border-[var(--border-strong)]/40 bg-primary/12 px-3 py-1 text-xs font-semibold text-primary">
-          {bi(post.category, post.categoryEn)}
-        </span>
-        <h1 className="mt-4 text-3xl font-extrabold leading-[1.35] text-foreground sm:text-4xl">
-          {bi(post.title, post.titleEn)}
-        </h1>
-        <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <CalendarDays className="size-3.5" />
-            {fmt.format(new Date(post.publishedAt))}
+          <span className="mt-6 block w-fit rounded-full border-2 border-[var(--border-strong)] bg-background px-3 py-0.5 text-xs font-bold text-foreground">
+            {bi(post.category, post.categoryEn)}
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Clock3 className="size-3.5" />
-            {t("blog.readMinutes", { count: post.readMinutes })}
-          </span>
+          <h1 className="mt-4 text-3xl font-extrabold leading-[1.35] text-foreground sm:text-4xl">
+            {bi(post.title, post.titleEn)}
+          </h1>
+          <div className="mt-4 flex items-center gap-4 text-xs font-semibold text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarDays className="size-3.5" />
+              {fmt.format(new Date(post.publishedAt))}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Clock3 className="size-3.5" />
+              {t("blog.readMinutes", { count: post.readMinutes })}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <article className="mx-auto max-w-2xl px-5 py-12">
+        <div>
+          <BlogRenderer blocks={bi(post.body, post.bodyEn)} />
         </div>
 
-        <div className="mt-9">
-          <BlogRenderer blocks={post.body} />
-        </div>
-
-        <div className="mt-12 rounded-2xl border-2 border-[var(--border-strong)] bg-card p-6 text-center shadow-[var(--shadow-brutal)]">
+        <div className="mt-12 rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] border-t-[var(--brand)] bg-card p-6 text-center shadow-[var(--shadow-brutal)]">
           <h2 className="text-lg font-extrabold text-foreground">{t("blog.ctaTitle")}</h2>
           <p className="mt-1.5 text-sm text-muted-foreground">{t("blog.ctaSub")}</p>
           <SessionCta
@@ -105,16 +112,20 @@ function BlogPostPage() {
           <div className="mt-14">
             <h2 className="text-lg font-extrabold text-foreground">{t("blog.moreTitle")}</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {others.map((o) => (
+              {others.map((o, i) => (
                 <Link
                   key={o.slug}
                   to="/blog/$slug"
                   params={{ slug: o.slug }}
-                  className="rounded-2xl border-2 border-[var(--border-strong)] bg-card p-5 shadow-[var(--shadow-brutal)]"
+                  className={cn(
+                    "flex items-start justify-between gap-3 rounded-2xl border-2 border-t-[8px] border-[var(--border-strong)] bg-card p-5 shadow-[var(--shadow-brutal)] transition-all duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--shadow-brutal-color)]",
+                    i === 0 ? "border-t-[var(--accent-2)]" : "border-t-[var(--brand)]",
+                  )}
                 >
                   <p className="text-sm font-bold leading-snug text-foreground">
                     {bi(o.title, o.titleEn)}
                   </p>
+                  <ArrowRight className="mt-0.5 size-4 shrink-0 text-primary rtl:rotate-180" />
                 </Link>
               ))}
             </div>

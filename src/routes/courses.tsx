@@ -22,6 +22,7 @@ import { PhotoAvatar } from "@/components/site/photo-avatar";
 import { ErrorState, RetryButton } from "@/components/app/feedback-states";
 import { useSession } from "@/hooks/use-session";
 import { useBi } from "@/lib/bi";
+import { formatMoney } from "@/lib/format";
 import {
   listAllPublishedCourses,
   type BackendCourseDeliveryType,
@@ -98,7 +99,7 @@ function CoursesPage() {
 
   return (
     <PublicLayout>
-      <PageHeader title={t("courses.h1")} sub={t("courses.sub")}>
+      <PageHeader title={t("courses.h1")} highlight={t("courses.h1Hl")} sub={t("courses.sub")}>
         <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -191,9 +192,9 @@ function CoursesPage() {
           // نتائج قديمة صحيحة — ما منستبدلها بشاشة خطأ كاملة لمجرد هفوة شبكة عابرة.
           <ErrorState
             className="mx-auto max-w-lg p-10"
-            title={bi("ما قدرنا نحمّل الكورسات", "Couldn't load courses")}
+            title={bi("تعذّر تحميل الكورسات", "Couldn't load courses")}
             description={bi(
-              "ممكن في مشكلة اتصال مؤقتة بالخادم. جرّب تاني بعد شوي.",
+              "ربما هناك مشكلة اتصال مؤقتة بالخادم. حاول مرة أخرى بعد قليل.",
               "There might be a temporary server connection issue. Please try again shortly.",
             )}
             action={
@@ -344,7 +345,9 @@ function CoursesPage() {
                         {/* السعر المعلن = أهم معلومة للقرار، فيأخذ صفه ووزنه. */}
                         <p className="mt-3 flex items-center gap-2 text-lg font-extrabold text-foreground">
                           <Wallet aria-hidden="true" className="size-5 text-primary" />
-                          {c.price === 0 ? t("courses.free") : `${c.price} JOD`}
+                          {c.price === 0
+                            ? t("courses.free")
+                            : formatMoney(c.price, bi<"ar" | "en">("ar", "en"))}
                         </p>
                         <Link
                           to={isSignedIn ? "/my-courses" : "/signup"}

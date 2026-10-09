@@ -153,7 +153,7 @@ function Body() {
       <Panel title={bi("الجدول القادم", "Upcoming schedule")} icon="Calendar">
         {isError ? (
           <ErrorState
-            title={bi("ما قدرنا نحمّل الجدول", "We couldn't load the schedule")}
+            title={bi("تعذّر تحميل الجدول", "We couldn't load the schedule")}
             description={withLoadErrorDetail(
               bi(
                 "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

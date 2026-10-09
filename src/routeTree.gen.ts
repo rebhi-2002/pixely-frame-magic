@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as ForParentsRouteImport } from './routes/for-parents'
@@ -34,6 +33,7 @@ import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CourseIdRouteImport } from './routes/course.$id'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
@@ -76,11 +76,6 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -185,10 +180,15 @@ const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CourseIdRoute = CourseIdRouteImport.update({
   id: '/course/$id',
@@ -326,7 +326,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
@@ -351,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/course/$id': typeof CourseIdRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/blog/': typeof BlogIndexRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
@@ -376,7 +376,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
@@ -401,6 +400,7 @@ export interface FileRoutesByTo {
   '/course/$id': typeof CourseIdRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/blog': typeof BlogIndexRoute
   '/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
@@ -428,7 +428,6 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/403': typeof R403Route
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRoute
   '/for-parents': typeof ForParentsRoute
@@ -453,6 +452,7 @@ export interface FileRoutesById {
   '/course/$id': typeof CourseIdRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/teacher/register': typeof TeacherRegisterRoute
+  '/blog/': typeof BlogIndexRoute
   '/_authenticated/admin/backend-permissions': typeof AuthenticatedAdminBackendPermissionsRoute
   '/_authenticated/admin/constants': typeof AuthenticatedAdminConstantsRoute
   '/_authenticated/admin/course-catalog': typeof AuthenticatedAdminCourseCatalogRoute
@@ -480,7 +480,6 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
-    | '/blog'
     | '/contact'
     | '/courses'
     | '/for-parents'
@@ -505,6 +504,7 @@ export interface FileRouteTypes {
     | '/course/$id'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/blog/'
     | '/admin/backend-permissions'
     | '/admin/constants'
     | '/admin/course-catalog'
@@ -530,7 +530,6 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/about'
-    | '/blog'
     | '/contact'
     | '/courses'
     | '/for-parents'
@@ -555,6 +554,7 @@ export interface FileRouteTypes {
     | '/course/$id'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/blog'
     | '/admin/backend-permissions'
     | '/admin/constants'
     | '/admin/course-catalog'
@@ -581,7 +581,6 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/403'
     | '/about'
-    | '/blog'
     | '/contact'
     | '/courses'
     | '/for-parents'
@@ -606,6 +605,7 @@ export interface FileRouteTypes {
     | '/course/$id'
     | '/teacher/$id'
     | '/teacher/register'
+    | '/blog/'
     | '/_authenticated/admin/backend-permissions'
     | '/_authenticated/admin/constants'
     | '/_authenticated/admin/course-catalog'
@@ -633,7 +633,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R403Route: typeof R403Route
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRoute
   ForParentsRoute: typeof ForParentsRoute
@@ -645,9 +644,11 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   TeachersRoute: typeof TeachersRoute
   TermsRoute: typeof TermsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   CourseIdRoute: typeof CourseIdRoute
   TeacherIdRoute: typeof TeacherIdRoute
   TeacherRegisterRoute: typeof TeacherRegisterRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -678,13 +679,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -827,12 +821,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWalletRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/course/$id': {
       id: '/course/$id'
@@ -1066,22 +1067,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R403Route: R403Route,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRoute,
   ForParentsRoute: ForParentsRoute,
@@ -1093,9 +1083,11 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   TeachersRoute: TeachersRoute,
   TermsRoute: TermsRoute,
+  BlogSlugRoute: BlogSlugRoute,
   CourseIdRoute: CourseIdRoute,
   TeacherIdRoute: TeacherIdRoute,
   TeacherRegisterRoute: TeacherRegisterRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

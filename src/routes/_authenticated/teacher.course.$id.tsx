@@ -113,7 +113,7 @@ function Body() {
     return (
       <AppPage title={title} icon="BookOpen" actions={<BackToCourses />}>
         <ErrorState
-          title={bi("ما قدرنا نحمّل الكورس", "We couldn't load the course")}
+          title={bi("تعذّر تحميل الكورس", "We couldn't load the course")}
           description={withLoadErrorDetail(
             bi(
               "جرّب التحديث مرة ثانية. إذا استمرت المشكلة، تأكد من اتصالك أو ارجع لاحقاً.",

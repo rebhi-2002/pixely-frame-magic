@@ -383,7 +383,13 @@ function Landing() {
                 <div className="pt-0.5 lg:pt-0">
                   <h3 className="flex items-center gap-1.5 text-sm font-extrabold text-foreground lg:mt-4">
                     <Icon aria-hidden className="size-4 shrink-0 text-primary" />
-                    {t(`home.startSteps.${i}.title`)}
+                    <Link
+                      to="/how-it-works"
+                      hash={`step-${i + 1}`}
+                      className="hover:text-primary hover:underline"
+                    >
+                      {t(`home.startSteps.${i}.title`)}
+                    </Link>
                   </h3>
                   <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground lg:text-xs">
                     {t(`home.startSteps.${i}.text`)}
