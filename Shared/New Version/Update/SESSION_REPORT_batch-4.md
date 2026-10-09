@@ -1,6 +1,7 @@
 WP: T1 / T3 / T4 | الجلسة: Claude — دفعة 4 (الأولوية 2) | التاريخ: 2026-10-07
 
 المهام:
+
 - T1-01 (قائمة كورسات المعلم): قيد المراجعة — teacher.courses.tsx (Course/GetAll؛ Q-01: يفلتر بالباك اند، لم يُجرَّب حيًا)
 - T1-07 (إكمال shell): جزئي — resolveCourseDeliveryType صار يعمل من DTO؛ courseToDraft/resolveGroupId تنتظر B-2/B-5
 - T4-01 (قائمة الدروس) + T4-02/03 (إضافة) + T4-05 (اجتماع) + T4-06 (إلغاء): قيد المراجعة — lessons-tab.tsx
