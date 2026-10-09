@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const siteUrl = (process.env.VITE_SITE_URL || "https://pixely-frame-magic.vercel.app").replace(
   /\/$/,
@@ -12,19 +12,15 @@ const publicPaths = [
   "/for-teachers",
   "/for-parents",
   "/how-it-works",
-  "/pricing",
   "/contact",
   "/help",
   "/privacy",
   "/terms",
   "/blog",
 ];
-const blogSlugs = [
-  "جدول-مذاكرة-يضبط-فعلاً",
-  "الاستدعاء-النشط-وليش-القراءة-مش-كافية",
-  "مادة-بتكرهها-كيف-تتحملها-لنهاية-السنة",
-  "بنك-الأخطاء-أذكى-أداة-ما-بتستخدمها",
-];
+// الـslugs تُقرأ من المصدر الوحيد (src/content/blog-posts.ts) كي لا تتأخر الـsitemap عن المقالات.
+const blogSource = await readFile("src/content/blog-posts.ts", "utf8");
+const blogSlugs = [...blogSource.matchAll(/^\s{4}slug: "([^"]+)"/gm)].map((m) => m[1]);
 // صفحات المعلمين (/teacher/:id) مش مُدرجة هون عمدًا: معرّفاتها أرقام من الباك اند ومش قائمة ثابتة.
 // (كانت هون 6 روابط وهمية بأسماء slug ما بتطابق أي معلم حقيقي — كانت بتعطي 404/"غير موجود" لمحركات البحث.)
 // لما نحتاجها بالـsitemap: جلبها وقت البناء من Teacher/Search (يتطلب الباك اند شغّال وقت البناء).

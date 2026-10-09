@@ -78,7 +78,9 @@ for (const f of await readdir(path.join(root, "src/routes"), { withFileTypes: tr
         "/",
     );
   } else {
-    staticRoutes.push(name === "index" ? "/" : "/" + name.split(".").join("/"));
+    // "x.index" = صفحة القائمة لمسار x (مثل blog.index → /blog)، مثلما "index" وحدها = "/".
+    const base = name.replace(/\.index$/, "");
+    staticRoutes.push(base === "index" ? "/" : "/" + base.split(".").join("/"));
   }
 }
 
