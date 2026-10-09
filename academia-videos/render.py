@@ -38,7 +38,7 @@ def render_frame(gf, bufA, bufB):
     out = out * (1 - CH_A) + CH_RGB
     return np.clip(out * 255 + 0.5, 0, 255).astype(np.uint8)[..., ::-1]
 
-def main(start=0, end=None, out="/home/claude/film/out.mp4", preview=None):
+def main(start=0, end=None, out=os.path.join(HERE, "academia-promo.mp4"), preview=None):
     end = S.TOTAL if end is None else end
     bufA = np.zeros((H, W, 3), np.float32); bufB = np.zeros((H, W, 3), np.float32)
     if preview:

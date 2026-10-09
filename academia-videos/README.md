@@ -17,4 +17,8 @@ python3 render.py preview 5 143 400   # لقطات اختبار PNG لفريما
 - النصوص: `copy.json` (منسوخة من نصوص الموقع) و`scenes.py`.
 - المدّة/الترتيب: `SCENES` و`TRANS` و`T` آخر `scenes.py`.
 - الصوت: `build_events()` بـ`audio.py` (توقيت كل مؤثر) و`music()` للموسيقى.
-- الخط: `og_primitives.py` بيستعمل DejaVu Sans Bold للعربي لأنه المتوفر؛ ضع `Cairo-Bold.ttf` و`BalooBhaijaan2-Bold.ttf` بجانب الملف (مجلد `fonts/`) لتصير بخطوط الموقع.
+- **الخطوط (مطلوبة — ضعها بمجلد `fonts/`، ملفات TTF ثابتة static):**
+  - إنجليزي/أرقام: `Poppins-Bold.ttf` و`Poppins-Medium.ttf` (Google Fonts).
+  - عربي: `Cairo-Bold.ttf` و`BalooBhaijaan2-Bold.ttf` (خطوط الموقع)، أو بديلها `DejaVuSans-Bold.ttf` و`DejaVuSans.ttf`.
+  - على لينكس لو الخطوط مثبّتة بالنظام (DejaVu/Poppins) بيلقاها لحاله؛ على ويندوز/ماك لازم تحطها بـ`fonts/`، وإلا بيطلع خطأ يذكر اسم الملف الناقص.
+- **تشكيل العربي** يحتاج Pillow مع libraqm: تأكد بـ`python -c "from PIL import features; print(features.check('raqm'))"` (لازم True).
